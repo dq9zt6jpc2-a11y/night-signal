@@ -24,6 +24,10 @@ Safari書き出しの `safari_export/`、パスワードCSV、支払いカード
   - Safari書き出しや秘密情報を除外
 - `.nojekyll`
   - GitHub Pagesで静的ファイルをそのまま配信するためのファイル
+- ローカルGitリポジトリ
+  - 初回コミット: `7b7f05b Prepare NIGHT SIGNAL cloud publishing`
+- GitHubアップロード用ZIP
+  - `/private/tmp/night-signal-github-ready.zip`
 
 ## 注意
 
@@ -34,3 +38,6 @@ Safari書き出しの `safari_export/`、パスワードCSV、支払いカード
 1. Codexのクラウド/ワークツリー自動実行で調査し、結果をGitHubへ反映する
 2. VPSやクラウドサーバーで調査プロセスを常駐または定期実行し、`site/` を更新する
 
+## 現在のブロッカー
+
+GitHubアプリから見えるリポジトリがまだありません。新規リポジトリ `night-signal` などを作成し、`owner/repo` を確認できれば、ローカルコミットをpushしてGitHub Pages公開へ進めます。
