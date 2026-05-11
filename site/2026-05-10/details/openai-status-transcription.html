@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OpenAI status transcription | NIGHT SIGNAL</title>
+  <link rel="stylesheet" href="_style.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../index.html#openai">一覧へ戻る</a>
+    <article class="article">
+      <div class="kicker">OpenAI / 運用状況</div>
+      <h1>OpenAI Status: 文字起こし障害に加え、Responses API停止やログイン障害も発生（いずれも復旧）</h1>
+      <h2>30秒概要</h2>
+      <div class="summary-lead">OpenAI Statusでは、ChatGPT/Codexの文字起こし障害のほか、直近数日でResponses API（`GET /v1/responses`）停止やログイン関連の障害が記録されている。いずれも「復旧済み」だが、日常利用やプロダクト運用の観点では、機能リリースと同じ優先度で監視対象。</div>
+      <h2>本文要約</h2>
+      <p>OpenAI Statusは、ChatGPTとCodexの一部で文字起こし失敗が増加したインシデントを掲載し、原因特定→緩和→監視を経て復旧したとしています。音声入力/文字起こしを使うワークフローでは、障害を自分の設定やデバイス要因と誤認しやすいため、Status確認は実務上のショートカットになります。</p>
+      <p>さらにStatusの履歴を見ると、直近ではAPI側の障害（例: `GET /v1/responses`が停止してリクエストを処理できない、API Platformのログイン/アカウント作成の不安定化、Web UIの共有リンク作成障害など）が断続的に記録されています。生成AIは「機能が増えるほど依存度が増す」ため、リリースノートだけでなく稼働状況（障害・復旧・再発防止）を同じ強度で追う必要があります。</p>
+      <div class="source">
+        原文確認:
+        <a href="https://status.openai.com/incidents/01KR1Q0SWZESWXQVWQRKRDJCHK">OpenAI Status</a>
+        /
+        <a href="https://status.openai.com/history">Status履歴</a>
+      </div>
+      <div class="return-row"><a class="back" href="../index.html#openai">一覧へ戻る</a></div>
+    </article>
+  </main>
+</body>
+</html>

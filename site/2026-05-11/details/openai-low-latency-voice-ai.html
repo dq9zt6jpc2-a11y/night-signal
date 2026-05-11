@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OpenAI low-latency voice infra | NIGHT SIGNAL</title>
+  <link rel="stylesheet" href="_style.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../index.html#openai">一覧へ戻る</a>
+    <article class="article">
+      <div class="kicker">OpenAI / Engineering / Realtime</div>
+      <h1>低遅延ボイスAIをスケールさせる設計: WebRTCを「Relay + Transceiver」へ分割</h1>
+      <h2>30秒概要</h2>
+      <div class="summary-lead">OpenAIはボイスAI（ChatGPT Voice / Realtime API）を自然な会話速度で動かすため、WebRTC基盤を再設計した。ポイントは「小さい公開UDP面」と「セッション所有権の安定」を両立させるため、パケット転送だけを担うRelay（ステートレス寄り）と、ICE/DTLS/SRTPなど状態を持って終端するTransceiverを分け、ICE ufragを使って“最初のパケット”から所有インスタンスへルーティングする構成。</div>
+      <h2>本文要約</h2>
+      <p>OpenAIは2026年5月4日のEngineering投稿で、低遅延ボイスAIをグローバル規模で提供する際のインフラ課題と、その解決としてWebRTCスタックの再アーキテクチャを説明しました。自然な音声対話には、接続確立の速さ、安定したメディア往復遅延（ジッタ・損失を含む）が必須で、Realtime APIやエージェント系ワークフローでも同じ要件が効きます。</p>
+      <p>一般的なWebRTCの「セッションごとにポートを割り当てる」前提は、Kubernetes/クラウドの運用と相性が悪く、巨大な公開UDPポートレンジ、セキュリティ面の負荷、オートスケール時の安定性の問題を招きやすい、というのが出発点です。OpenAIはWebRTC終端方式としてSFU（選択転送）も検討した上で、セッションの大半が1:1であること、遅延感度が高いことから、終端を担うTransceiverモデルを選択しています。</p>
+      <p>その上で「パケットの入口」をRelayに集約し、RelayはSTUN等からICE ufragを読み取り、あらかじめ埋め込んだルーティング情報に従って、当該セッションを所有するTransceiverへ最初のパケットから転送します。TransceiverがICE/DTLS/SRTP等の状態を持って終端し、以後のメディア・制御パケットも同じ所有先へ通すことで、セッション所有権の問題を解きます。</p>
+      <p>さらに、地理的に分散したGlobal Relayと、Cloudflareによるgeo/proximity steeringで、最初のインターネットホップを短縮し、体感遅延を下げる狙いも説明されています。ボイスAIの品質はモデルだけでなくネットワーク/終端/ルーティング設計で大きく左右されるため、Realtime APIやボイス機能をプロダクトに組み込む場合、この種の「運用・設計の変化」はAPI機能更新と同じレベルでウォッチ対象になります。</p>
+      <div class="source">
+        原文確認:
+        <a href="https://openai.com/index/delivering-low-latency-voice-ai-at-scale/">OpenAI</a>
+        /
+        <a href="https://news.ycombinator.com/item?id=48013919">Hacker News（話題化の兆候）</a>
+      </div>
+      <div class="return-row"><a class="back" href="../index.html#openai">一覧へ戻る</a></div>
+    </article>
+  </main>
+</body>
+</html>
+

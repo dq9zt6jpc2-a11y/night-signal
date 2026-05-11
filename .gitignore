@@ -1,0 +1,14 @@
+safari_export/
+*.zip
+.env
+.DS_Store
+__pycache__/
+*.pyc
+
+# Private Safari export artifacts. Never publish these.
+**/パスワード.csv
+**/パスワード.csv
+**/支払い用カード.json
+**/支払い用カード.json
+**/履歴.json
+
