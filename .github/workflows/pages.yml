@@ -6,8 +6,8 @@ on:
     branches:
       - main
   schedule:
-    # 22:10 JST
-    - cron: "10 13 * * *"
+    # 21:50 JST
+    - cron: "50 12 * * *"
 
 permissions:
   contents: read
