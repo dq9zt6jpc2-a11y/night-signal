@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>抽出ログ 2026-05-12 | NIGHT SIGNAL</title>
+  <link rel="stylesheet" href="_style.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../index.html">一覧へ戻る</a>
+    <article class="article">
+      <div class="kicker">Coverage Log</div>
+      <h1>2026年5月12日版の抽出ログ</h1>
+      <p>2026年5月12日 00:20（JST）時点の更新。直近24〜72時間の新規・変更点を先に集める「変化点インボックス」を作成し、その後にカテゴリへ割り当て、作業用ページ（<code>night-brief-web-sample-2026-05-12.html</code> と <code>details/</code>）を更新した。</p>
+
+      <h2>今日の手順（最重要）</h2>
+      <ul>
+        <li>最初にカテゴリ別カードを作らず、直近の変化点だけを集める「変化点インボックス」を作成。</li>
+        <li>各候補に、日付 / 発信元 / 一次情報への近さ / 地域 / 影響カテゴリ / 採用・保留・除外 / 理由 を付与。</li>
+        <li>その後、OpenAI/SoftBank/Honda/F1/SpaceX/India/Vietnam/投資へ分類し、詳細ページのソースを一次に寄せた。</li>
+      </ul>
+
+      <h2>変化点インボックス（直近24〜72時間）</h2>
+      <ul>
+        <li><strong>2026-05-11</strong> / SoftBank（国産バッテリー事業開始） / 発信元: SoftBankニュースリリースPDF / 一次: 公式（一次） / 地域: 日本（堺） / 影響: AI電力・データセンター投資 / 判定: 採用 / 理由: 事業開始と量産ロードマップ、売上目標が明示された。<br>
+          参照: <a href="https://www.softbank.jp/corp/set/data/news/press/sbkk/2026/20260511_01/pdf/20260511_01.pdf">SoftBank PDF</a></li>
+        <li><strong>2026-05-11</strong> / OpenAI（FSU銃撃関連の提訴） / 発信元: AP / 一次: 報道（一次級） / 地域: 米国 / 影響: 安全・法務・規制 / 判定: 採用 / 理由: 安全ガードレールと責任論が再燃。<br>
+          参照: <a href="https://apnews.com/article/1a8071ee49ad0220348d3eb55f60e648">AP</a></li>
+        <li><strong>2026-05-10</strong> / インド（ECB-RBI MoU更新） / 発信元: ECB Press Release / 一次: 公式（一次） / 地域: 欧州・インド / 影響: 金融協力・対外関係 / 判定: 採用 / 理由: 2015年版を更新し、情報交換枠組みを再設定。<br>
+          参照: <a href="https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.pr260510~e8a674e2fb.en.html">ECB</a></li>
+        <li><strong>2026-05-08</strong> / Honda（営業赤字報道への公式コメント） / 発信元: Honda開示PDF / 一次: 公式（一次） / 地域: 日本 / 影響: 決算・EV戦略再評価 / 判定: 採用 / 理由: 「未発表」「予想レンジ内」「5/14公表予定」を明示し、一次確定ゲートを設定できる。<br>
+          参照: <a href="https://global.honda/en/investors/library/filings/auto_20260508520937/pdfFile.pdf">Honda PDF</a></li>
+        <li><strong>2026-05-08</strong> / F1（2027へ向けた規則の進化的変更の協議） / 発信元: FIA / 一次: 公式（一次） / 地域: グローバル / 影響: PU規則・Honda / 判定: 採用 / 理由: 運用負担（ハーベスティング）議論が早期に議題化。<br>
+          参照: <a href="https://www.fia.com/news/f1-proposals-agreed-principle-further-evolutionary-changes-2026-fia-formula-1-regulations">FIA</a></li>
+        <li><strong>2026-05-08</strong> / インド（外貨準備が大幅減） / 発信元: ET/Business Standard等 / 一次: RBI原表の固定は弱い（未確認リスク） / 地域: インド / 影響: 為替・資本流出・金 / 判定: 採用 / 理由: 週次で大きな変動（-$7.794B）。</li>
+        <li><strong>2026-05-07〜05-08</strong> / OpenAI（Status: 音声/モデル/APIの障害） / 発信元: OpenAI Status / 一次: 公式（一次） / 地域: グローバル / 影響: 運用・可用性 / 判定: 採用 / 理由: 音声/モデル/APIで断続的なインシデントが発生し復旧。<br>
+          参照: <a href="https://status.openai.com/">OpenAI Status</a></li>
+      </ul>
+
+      <h2>異常値スキャン（数字の急変）</h2>
+      <ul>
+        <li>Honda（中国）: GAC Hondaの4月販売が前年比-72.42%（報道ベース）。合弁別の急変は採用候補として優先度を上げる。</li>
+        <li>Honda（月次）: 3月の中国生産は前年比70.6%（-29%）、アジアは71.1%。10%以上の変化として“前兆”扱いで採用。</li>
+        <li>インド（外貨準備）: 週次で-$7.794Bの変化。一次原表の固定が弱いため、次回はRBI原表URLを必ず特定する。</li>
+      </ul>
+
+      <h2>今日追加したカード/詳細</h2>
+      <ul>
+        <li>OpenAI提訴カードを追加: <code>details/openai-fsu-lawsuit.html</code></li>
+        <li>F1規則（2027向け）カードを追加: <code>details/f1-2027-engine-changes.html</code></li>
+        <li>Hondaの5/14確定ゲートを追加: <code>details/honda-results-schedule.html</code></li>
+        <li>Honda月次（3月）の異常値カードを追加: <code>details/honda-production-sales-march-2026.html</code></li>
+        <li>インドのECB-RBI MoUを追加: <code>details/india-ecb-rbi-mou.html</code></li>
+        <li>SoftBankバッテリー事業の一次（公式PDF）へ寄せて更新: <code>details/softbank-battery-ai-power.html</code></li>
+      </ul>
+
+      <h2>継続採用した材料（直近7日）</h2>
+      <ul>
+        <li>GPT‑Realtime‑2 / Realtime Translate / Realtime Whisper: OpenAIのAPI・音声ラインの大型更新。前回抜けたため、必須確認軸として継続採用。</li>
+        <li>Starship Flight 12: 5月15日予定のため、打ち上げ直前まで継続監視。</li>
+        <li>Honda PU振動改善とAston Martin性能課題: Miami後の技術課題として継続監視。</li>
+        <li>インド外貨準備・E-way bill・ルピー: インド経済の強さと外部圧力を同時に見る材料として継続。</li>
+        <li>ベトナムFDI/PMI/Intel半導体: 直近で大きな新規材料は少ないが、製造業と半導体人材の軸として継続。</li>
+      </ul>
+
+      <h2>未確認リスク</h2>
+      <ul>
+        <li>SpaceX: Flight 12個別のFAAライセンス本文（許可書類）を一次で固定できていない（プロセスページは確認済み）。</li>
+        <li>インド: 外貨準備の一次原表（RBIの週次データURL）をこのログ内で固定できていない。</li>
+        <li>ベトナム: FDI 1〜4月の一次原表（政府統計/省庁の原表）を固定できていない（Q1は一次確認済み）。</li>
+        <li>SNS/XとYouTubeの横断（公式アカウント + キーパーソン + 専門チャンネル）は継続課題（ノイズが多い）。</li>
+      </ul>
+
+      <h2>公開前ゲート（チェック）</h2>
+      <ul>
+        <li>公式・IR・一次情報: SoftBank（PDF）、Honda（PDF/IR時刻）、ECB（Press Release）、FIA（声明）、OpenAI Statusを確認。</li>
+        <li>主要報道・専門メディア: AP、Space.com、Formula1.com、主要経済報道を確認。</li>
+        <li>市場・指標: 外貨準備（一次原表は未固定だが複数主要報道で数値一致を確認）。</li>
+        <li>除外記録: “除外”は今回まだ薄い。次回はSNS/YouTubeで拾ったノイズを明確に除外ログ化する。</li>
+      </ul>
+
+      <h2>自動更新の注意</h2>
+      <p>このリポジトリでは、作業用サンプル（<code>night-brief-web-sample-YYYY-MM-DD.html</code>）と <code>details/</code> を更新した後、<code>python3 scripts/sync_site.py YYYY-MM-DD</code> で <code>site/</code> に同期する。同期後、固定URL（<code>site/index.html</code>）の日付が当日になっていることを必ず確認する。</p>
+    </article>
+  </main>
+</body>
+</html>

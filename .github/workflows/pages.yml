@@ -2,6 +2,9 @@ name: Publish NIGHT SIGNAL
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
   schedule:
     # 22:10 JST
     - cron: "10 13 * * *"
@@ -41,4 +44,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
