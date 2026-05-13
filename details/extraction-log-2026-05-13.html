@@ -12,47 +12,63 @@
     <article class="article">
       <div class="kicker">Coverage Log</div>
       <h1>2026年5月13日版の抽出ログ</h1>
-      <p>2026年5月13日 22:45 JST時点の復旧版。自動生成成果物が残っていなかったため、手動で13日版を作成し、固定URLへ公開する。今回の問題は、GitHub Pagesのpublishは走ったが、日次リサーチ生成本体が成果物を作成していなかったこと。</p>
+      <p>2026年5月13日 22:46（JST）時点の更新。まず直近24〜72時間の変化点を横断で集め（変化点インボックス）、その後にカテゴリへ分類した。今回は、SBGの2026年3月期決算（一次PDF）、B.LEAGUE CS準々決勝でのブレックス敗退（公式試合ページ/メディア）、インド4月CPI（PIB/MoSPI一次）、米4月CPI（BLS一次）、F1の2026規則“適応支援”拡張報道（Motorsport.com + FIA公式）を中心に更新した。</p>
 
-      <h2>自動更新不具合の分析</h2>
+      <h2>今日の手順（最重要）</h2>
       <ul>
-        <li>site配下に2026-05-13/index.htmlが存在せず、night-brief-web-sample-2026-05-13.htmlも未作成だった。</li>
-        <li>GitHub ActionsにはscheduleのPublish実行があったが、これは既存ファイルを公開するだけで、日次リサーチ生成ではなかった。</li>
-        <li>Codex automationはACTIVEだが、memory.mdに13日実行記録がなく、成果物も残っていない。</li>
-        <li>再発防止: 毎日22:00前に「当日サンプルHTML」「site/YYYY-MM-DD/index.html」「site/index.htmlの日付」「GitHub Pagesの当日表示」を必須ゲートにする。1つでも欠けたら公開失敗扱い。</li>
+        <li>最初にカテゴリ別カードを作らず、直近の変化点だけを集める「変化点インボックス」を作成。</li>
+        <li>各候補に、日付 / 発信元 / 一次情報への近さ / 地域 / 影響カテゴリ / 採用・保留・除外 / 理由 を付与。</li>
+        <li>その後、OpenAI/SoftBank/Honda/F1/SpaceX/アジア経済/宇都宮ブレックス/投資へ分類。</li>
       </ul>
 
-      <h2>情報源カバレッジ</h2>
+      <h2>情報源カバレッジのセルフチェック</h2>
       <ul>
-        <li>OpenAI: OpenAI StatusでCodex 5.5障害を確認。公式発表/Statusを優先し、製品大型発表は新規なし。</li>
-        <li>SoftBank/Arm: SoftBank公式IR、FY2025決算資料、海外主要報道でOpenAI評価益を確認。</li>
-        <li>Honda: Honda IRで5/14決算時刻、SMM/Gasgoo等で中国4月販売急減を確認。</li>
-        <li>F1/Honda F1: F1-Gate Aston Martin/Hondaを直接巡回。13日大型新規は限定的、5/12のPU/ERS論点を継続最重要。</li>
-        <li>SpaceX: NASA CRS-34、Space.com、Starship Flight 12日程報道を確認。</li>
-        <li>アジア経済: インドIT株、インドCPI、ベトナム統計/半導体軸を確認。</li>
-        <li>宇都宮ブレックス: Basketball King、B.LEAGUE掲載、B.LEAGUE日程を確認。</li>
-        <li>投資: DRAM/メモリETF、半導体利確、SoftBank/OpenAI評価益を確認。</li>
+        <li>SoftBank/Arm: SBG一次（連結財務報告PDF）を採用。Arm IRは直近リリースの有無を再確認（大きな追加材料は未検出）。SNS/Xと決算動画の視聴は未完。</li>
+        <li>OpenAI: Platform Deprecations（dall-e shutdown date）とStatusの確認を継続。開発者コミュニティ/YouTubeの深掘りは未完。</li>
+        <li>Honda: IR（決算時刻）と、報道対応の公式PDFを維持。決算前の新規一次は薄く、次の確定点は5/14 13:25〜13:30（JST）。</li>
+        <li>F1/Honda F1: Motorsport.com（規則/コスト上限）とFIA公式ニュースを確認。反証検索（FIA文書/承認手続きの一次固定）は未完。</li>
+        <li>SpaceX: NASA（CRS-34）とNRO、Next Spaceflight等の予定情報を確認。打ち上げ成否とドッキングは次回の一次確認が必要。</li>
+        <li>アジア経済: インドCPIはPIB/MoSPI一次で固定。ベトナムはNSO一次（IIP/CPI）を維持。為替/原油/物流などデータ横断は未完。</li>
+        <li>宇都宮ブレックス: B.LEAGUEの試合ページ（ScheduleKey）とメディアニュースでCS敗退を一次で固定。会見動画/選手SNSの確認は未完。</li>
+        <li>投資: 米4月CPIはBLS一次で固定。ETFフロー等は専門媒体を参照。指数の当日値更新までは未実施。</li>
       </ul>
 
-      <h2>採用した主な材料</h2>
+      <h2>変化点インボックス（直近24〜72時間）</h2>
       <ul>
-        <li>2026-05-13 / SoftBank FY2025決算 / 採用 / OpenAI評価益、Vision Fund反転、Arm/AI投資。</li>
-        <li>2026-05-13 / OpenAI Codex 5.5障害 / 採用 / Codex運用に直結、10:20復旧。</li>
-        <li>2026-05-14予定 / Honda決算 / 採用 / 明日一次情報が確定、前夜ゲート。</li>
-        <li>2026-05-12/13 / Honda中国販売48%減 / 採用 / 決算前の最大リスク材料。</li>
-        <li>2026-05-13 / Starship Flight 12 5/19予定 / 採用 / 予定更新。</li>
-        <li>2026-05-13 / CRS-34 18:50 EDT予定 / 採用 / ISS補給ミッション。</li>
-        <li>2026-05-12/13 / 宇都宮ブレックス ジェレット退団 / 採用 / 編成重要材料。</li>
-        <li>2026-05-13 / DRAM ETF熱狂と半導体利確 / 採用 / AI投資テーマの強弱。</li>
+        <li><strong>2026-05-13</strong> / SoftBank Group（2026年3月期決算） / 発信元: SBG IR / 一次: 公式PDF（一次） / 地域: 日本 / 影響: SoftBank/Arm/AI投資、投資損益、財務余力 / 判定: 採用 / 理由: 当日最大の確定情報。通期・4Qの投資利益/純利益を一次で固定できる。<br>
+          参照: <a href="https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2025_01_en.pdf">SBG Financial Report PDF</a></li>
+        <li><strong>2026-05-13</strong> / F1（2026 PUの適応支援拡張） / 発信元: Motorsport.com / 一次: 専門媒体（一次文書は未固定） / 地域: グローバル / 影響: Honda PU/ERS、開発速度、コスト上限 / 判定: 採用 / 理由: Honda供給開始年のルール運用に直結。FIA公式ニュースで周辺状況も補強。<br>
+          参照: <a href="https://www.motorsport.com/f1/news/fia-tweaks-2026-engine-cost-cap-rules-as-adaptation-help-expanded/10728274/">Motorsport.com</a> / <a href="https://www.fia.com/news/fia-announces-evolutionary-changes-2026-f1-technical-regulations">FIA</a></li>
+        <li><strong>2026-05-10</strong> / 宇都宮ブレックス（CS準々決勝敗退） / 発信元: B.LEAGUE / 一次: 公式試合ページ・メディア（一次） / 地域: 栃木・Bリーグ / 影響: 来季編成、契約、会見・コメント / 判定: 採用 / 理由: カテゴリの最大材料。シリーズ結果を一次で固定できる。<br>
+          参照: <a href="https://www.bleague.jp/media_news/detail/id%3D612910">B.LEAGUE Media</a> / <a href="https://www.bleague.jp/game_detail/?ScheduleKey=506083&tab=2">B.LEAGUE GAME2</a></li>
+        <li><strong>2026-05-12</strong> / インド（4月CPI） / 発信元: PIB（MoSPI） / 一次: 公式（一次） / 地域: インド / 影響: 金利、為替、アジア市場 / 判定: 採用 / 理由: 数値を一次で固定し、米CPI・原油と並べて見られる。<br>
+          参照: <a href="https://pib.gov.in/PressReleasePage.aspx?PRID=2021930">PIB Press Release</a></li>
+        <li><strong>2026-05-12</strong> / 米国（4月CPI） / 発信元: BLS / 一次: 公式（一次） / 地域: 米国 / 影響: 金利、AI株、半導体ETF / 判定: 採用 / 理由: 当日最大の米マクロ。既存詳細ページを継続利用。<br>
+          参照: <a href="https://www.bls.gov/news.release/cpi.nr0.htm">BLS CPI Summary</a></li>
+        <li><strong>2026-05-12</strong> / OpenAI（DALL-E API停止） / 発信元: OpenAI Platform / 一次: 公式（一次） / 地域: グローバル / 影響: API運用、画像生成 / 判定: 採用 / 理由: モデルID固定の運用事故を生みやすい確定情報。<br>
+          参照: <a href="https://developers.openai.com/api/docs/deprecations">OpenAI Deprecations</a></li>
+        <li><strong>2026-05-13</strong> / SpaceX（CRS-34予定） / 発信元: NASA / 一次: 公式（一次） / 地域: 米国 / 影響: 打ち上げ、ISS補給 / 判定: 保留（予定） / 理由: 本日時点では打ち上げ前。成否・ドッキングを次回で一次確認する。<br>
+          参照: <a href="https://www.nasa.gov/news-release/nasa-spacex-launch-coverage-4th-station-resupply-launch-arrival/">NASA</a></li>
       </ul>
 
-      <h2>未確認リスク</h2>
+      <h2>未確認リスク（明示）</h2>
       <ul>
-        <li>SNS/XとYouTubeは復旧版のため横断深掘りが不足。公式/主要媒体/専門媒体を優先した。</li>
-        <li>SoftBank決算の全PDF数値は要約段階。詳細な財務表の精査は明日以降の通常版で深掘りする。</li>
-        <li>Honda決算は5/14発表前のため、数字は前夜確認に留める。</li>
-        <li>CRS-34は作成時点で予定情報。実際の打ち上げ結果は次回確認。</li>
+        <li>SoftBank: 決算説明会の質疑・資料（内訳/NAV/投資計画）を一次で十分に抽出できていない。</li>
+        <li>F1: “適応支援（追加開発機会）”の一次文書（規則改定・承認プロセス）を固定できていない。</li>
+        <li>SpaceX: CRS-34は予定情報。打ち上げ・ドッキングの実績確認が未完。</li>
+        <li>SNS/X: キーパーソン横断（Son/Altman/SpaceX/HRC/ドライバー等）の深掘りは未実施（検索レベル）。</li>
+        <li>YouTube/会見: ブレックスの試合後会見、F1技術解説、SpaceX現地映像の視聴までは未実施。</li>
       </ul>
+
+      <h2>公開前ゲート（チェック）</h2>
+      <ul>
+        <li>公式・IR・一次情報: SBG（PDF）、BLS（CPI）、PIB/MoSPI（インドCPI）、OpenAI Deprecations、B.LEAGUE（試合ページ/メディア）を確認。</li>
+        <li>主要報道・専門媒体: Motorsport.com（F1規則）、MarketWatch等（ETFテーマ）を確認。</li>
+        <li>予定表: Honda（決算時刻）、SpaceX（CRS-34時刻）を当日版へ反映。</li>
+      </ul>
+
+      <h2>自動更新の注意</h2>
+      <p>このリポジトリでは、作業用サンプル（<code>night-brief-web-sample-YYYY-MM-DD.html</code>）と <code>details/</code> を更新した後、<code>python3 scripts/sync_site.py YYYY-MM-DD</code> で <code>site/</code> に同期する。同期後、固定URL（<code>site/index.html</code>）の日付が当日になっていることを必ず確認する。</p>
     </article>
   </main>
 </body>
