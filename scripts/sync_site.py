@@ -27,15 +27,8 @@ def detect_issue_date() -> str:
     if len(sys.argv) > 1:
         return sys.argv[1]
 
-    samples: list[tuple[datetime, Path]] = []
-    for path in ROOT.glob("night-brief-web-sample-*.html"):
-        date_text = path.stem.replace("night-brief-web-sample-", "")
-        try:
-            samples.append((datetime.strptime(date_text, "%Y-%m-%d"), path))
-        except ValueError:
-            continue
-    if samples:
-        return max(samples)[0].strftime("%Y-%m-%d")
+    # Default to today's issue date. Falling back to the newest existing sample
+    # hides failed daily generation by republishing yesterday's page.
     return datetime.now().strftime("%Y-%m-%d")
 
 
