@@ -85,6 +85,8 @@
       <p>抽出ログは作業メモではなく、抜け漏れを防ぐための検査表として扱います。ログの項目自体が不十分なら、情報収集を完了扱いにしてはいけません。</p>
       <ul>
         <li>各カテゴリで、確認した検索語、媒体、発生源、主要報道、専門媒体、SNS/X、YouTube/動画、データ、予定表、反証検索を明記する。</li>
+        <li>抽出ログには <code>coverage-manifest</code> JSONを必ず埋め込む。各カテゴリについて、official、major_media、specialist_media、sns_x、youtube_video、data_numeric、schedule_calendar、counter_search、adopted、held、excluded、unresolved、search_terms、freshness_check、critical_unresolved を記録する。</li>
+        <li><code>scripts/quality_gate.py</code> はこのJSONを検査する。カテゴリや情報源クラスが欠ける、検索語がない、freshness_checkがない、critical_unresolvedが残る場合は公開失敗にする。</li>
         <li>採用した情報だけでなく、保留候補、除外候補、除外理由、未確認クラスを残す。後から「なぜ載せなかったか」を説明できない場合はログ不足とみなす。</li>
         <li>カテゴリ固有の重要軸が入っているかを確認する。例: アジア経済なら統計・企業投資・工場建設・日系企業・為替・物流、宇都宮ブレックスなら試合結果・選手コメント・監督発言・怪我・契約・アリーナ/地域行政を必須軸にする。</li>
         <li>当日大きなニュースがないカテゴリでも、公式、主要報道、SNS/X、YouTube、データ、予定表を確認した結果なのかをログに残す。空欄や「特になし」だけでは不足。</li>

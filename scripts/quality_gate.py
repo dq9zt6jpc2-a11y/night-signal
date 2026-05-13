@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import re
 import sys
+import json
 from datetime import datetime
 from pathlib import Path
 
@@ -37,6 +38,24 @@ REQUIRED_COVERAGE_TERMS = [
     "保留",
     "除外",
     "未確認",
+]
+
+REQUIRED_SOURCE_CLASSES = [
+    "official",
+    "major_media",
+    "specialist_media",
+    "sns_x",
+    "youtube_video",
+    "data_numeric",
+    "schedule_calendar",
+    "counter_search",
+]
+
+REQUIRED_DECISION_CLASSES = [
+    "adopted",
+    "held",
+    "excluded",
+    "unresolved",
 ]
 
 
@@ -94,6 +113,41 @@ def validate_extraction_log(extraction_log_html: str) -> None:
 
     if "未確認" not in extraction_log_html and "重大リスク" not in extraction_log_html:
         fail("extraction log does not classify unresolved risk")
+
+    manifest_match = re.search(
+        r'<script type="application/json" id="coverage-manifest">(.*?)</script>',
+        extraction_log_html,
+        flags=re.S,
+    )
+    if not manifest_match:
+        fail("extraction log missing coverage-manifest JSON")
+    try:
+        manifest = json.loads(manifest_match.group(1))
+    except json.JSONDecodeError as exc:
+        fail(f"coverage-manifest JSON is invalid: {exc}")
+
+    categories = manifest.get("categories")
+    if not isinstance(categories, dict):
+        fail("coverage-manifest missing categories object")
+
+    for category in REQUIRED_CATEGORIES:
+        entry = categories.get(category)
+        if not isinstance(entry, dict):
+            fail(f"coverage-manifest missing category entry: {category}")
+        for source_class in REQUIRED_SOURCE_CLASSES:
+            value = entry.get(source_class)
+            if not isinstance(value, list) or not value:
+                fail(f"{category} missing source evidence: {source_class}")
+        for decision_class in REQUIRED_DECISION_CLASSES:
+            value = entry.get(decision_class)
+            if not isinstance(value, list):
+                fail(f"{category} missing decision list: {decision_class}")
+        if not entry.get("search_terms"):
+            fail(f"{category} missing search_terms")
+        if not entry.get("freshness_check"):
+            fail(f"{category} missing freshness_check")
+        if entry.get("critical_unresolved"):
+            fail(f"{category} has critical unresolved risks: {entry['critical_unresolved']}")
 
 
 def validate(issue_date: str) -> None:
