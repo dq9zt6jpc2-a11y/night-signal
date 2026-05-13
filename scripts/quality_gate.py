@@ -11,8 +11,33 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE_ROOT = ROOT / "site"
-MAX_CARD_AGE_DAYS = 3
-MIN_FRESH_CARDS = 8
+MAX_CARD_AGE_DAYS = 2
+MIN_FRESH_CARDS = 12
+
+REQUIRED_CATEGORIES = [
+    "OpenAI",
+    "SoftBank",
+    "Honda",
+    "F1",
+    "SpaceX",
+    "アジア経済",
+    "宇都宮ブレックス",
+    "投資",
+]
+
+REQUIRED_COVERAGE_TERMS = [
+    "公式",
+    "主要報道",
+    "専門媒体",
+    "SNS/X",
+    "YouTube",
+    "データ",
+    "予定",
+    "反証",
+    "保留",
+    "除外",
+    "未確認",
+]
 
 
 def issue_date_from_args() -> str:
@@ -42,7 +67,9 @@ def card_blocks(html: str) -> list[str]:
 
 
 def card_dates(card: str) -> list[str]:
-    return re.findall(r"\b20\d{2}-\d{2}-\d{2}\b", card)
+    # Only visible metadata dates count. Links such as
+    # href="2026-05-13/details/..." are publication paths, not item dates.
+    return re.findall(r"<span class=\"pill[^\"]*\">(20\d{2}-\d{2}-\d{2})</span>", card)
 
 
 def card_title(card: str) -> str:
@@ -51,6 +78,22 @@ def card_title(card: str) -> str:
         return "(no title)"
     text = re.sub(r"<.*?>", "", match.group(1))
     return re.sub(r"\s+", " ", text).strip()
+
+
+def validate_extraction_log(extraction_log_html: str) -> None:
+    missing_categories = [term for term in REQUIRED_CATEGORIES if term not in extraction_log_html]
+    if missing_categories:
+        fail("extraction log missing categories: " + ", ".join(missing_categories))
+
+    missing_terms = [term for term in REQUIRED_COVERAGE_TERMS if term not in extraction_log_html]
+    if missing_terms:
+        fail("extraction log missing coverage terms: " + ", ".join(missing_terms))
+
+    if "採用" not in extraction_log_html:
+        fail("extraction log does not record adopted items")
+
+    if "未確認" not in extraction_log_html and "重大リスク" not in extraction_log_html:
+        fail("extraction log does not classify unresolved risk")
 
 
 def validate(issue_date: str) -> None:
@@ -63,7 +106,8 @@ def validate(issue_date: str) -> None:
     sample_html = read(sample)
     root_html = read(root_index)
     dated_html = read(dated_index)
-    read(extraction_log)
+    extraction_log_html = read(extraction_log)
+    validate_extraction_log(extraction_log_html)
 
     expected_title = f"NIGHT SIGNAL | {issue_date}"
     if expected_title not in sample_html or expected_title not in root_html or expected_title not in dated_html:
