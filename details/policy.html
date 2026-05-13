@@ -8,7 +8,7 @@
 </head>
 <body>
   <main>
-    <a class="back" href="../night-brief-web-sample-2026-05-12.html">一覧へ戻る</a>
+    <a class="back" href="../night-brief-web-sample-2026-05-13.html">一覧へ戻る</a>
     <article class="article">
       <div class="kicker">Policy</div>
       <h1>NIGHT SIGNAL 運用方針</h1>
@@ -37,6 +37,7 @@
       </ul>
       <p>調査したつもりで終わらせないため、抽出ログには各カテゴリごとに「実際に確認した検索軸・媒体・一次情報・主要報道・SNS/X/YouTube確認状況」を残す。証跡がないカテゴリは調査完了扱いにしない。</p>
       <p>カード削除後の再探索を必須にする。鮮度チェックで古いカードを削除した結果、カテゴリが0件または基準未満になった場合は、そのカテゴリを空欄で公開せず、カテゴリ別ウォッチリストを直接巡回し直す。削除は完了ではなく、再発見ゲートの開始点として扱う。</p>
+      <p>予定情報は、イベント日を過ぎた瞬間に結果情報へ上書き確認する。試合、レース、打ち上げ、決算、統計発表、製品発表は、予定表だけでは採用しない。公式結果、試合詳細、発表資料、主要報道、関係者コメントの順に確認し、予定のまま残っていたら公開前失敗とする。</p>
 
       <h2>情報源カバレッジ</h2>
       <p>根本対策は、掲載件数や当日追加数を見ることではなく、重要情報が発生し得る場所を実際に確認したかを検査することです。各カテゴリは、以下の情報源クラスを確認し、確認できなかったクラスは未確認としてログに残してから採用判断に進みます。</p>
@@ -56,8 +57,8 @@
       <h2>カテゴリ別ウォッチリスト</h2>
       <p>検索エンジンの結果だけに依存しない。毎回、各カテゴリの代表的な発生源・専門媒体を直接巡回し、直近日付の記事一覧や公式更新欄を確認する。直接巡回で見つかった候補は、採用・保留・除外のいずれかを抽出ログに残す。</p>
       <ul>
-        <li>OpenAI / AI: OpenAI公式、Platform Docs、Deprecations、Status、Sam Altman/関係者発信、主要AI専門媒体、開発者コミュニティ、Hacker News、主要日本語IT媒体を確認する。</li>
-        <li>ソフトバンク / Arm: SoftBank Group IR、SoftBank Corpニュース、Arm IR、OpenAI/Stargate関連発表、Reuters、Bloomberg、日経、WSJ、半導体/データセンター専門媒体を確認する。</li>
+        <li>OpenAI / AI: OpenAI公式、Platform Docs、Deprecations、Status、Sam Altman/関係者発信、主要AI専門媒体、セキュリティ専門媒体、開発者コミュニティ、Hacker News、主要日本語IT媒体を確認する。検索語はOpenAIだけでなく、Codex、Daybreak、Trusted Access、Cyber、Realtime、Deployment Company、Sam Altman、関係役員、競合名を個別に走らせる。</li>
+        <li>ソフトバンク / Arm: SoftBank Group IR、SoftBank Corpニュース、Arm IR、OpenAI/Stargate関連発表、Reuters、Bloomberg、日経、WSJ、半導体/データセンター専門媒体を確認する。決算日は、純利益、投資利益、Vision Fund、OpenAI評価益、NAV、負債、流動性、追加投資、説明会Q&Aの数字を本文へ入れるまで完了扱いにしない。</li>
         <li>Honda / 自動車: Honda Global/JP、IR、決算・月次販売/生産、TDnet、Reuters、日経、MarkLines、SMM、中国/北米/インド/ASEAN現地媒体、自動車専門媒体を確認する。</li>
         <li>F1 / Honda F1: F1-Gate、Formula1-Data、Motorsport.com日本版、autosport web、Formula1.com、FIA、Aston Martin、Honda Racing/HRC、The Race、RaceFans、技術解説動画を直接確認する。検索語はAston Martin、Honda PU、HRC、ERS、回生、harvesting、振動、冷却、カナダGP、アップデート、アロンソ、ストロール、Newey、Cowellを含める。</li>
         <li>SpaceX / 宇宙: SpaceX公式、FAA/FCC/NASA/NRO、Next Spaceflight、NASASpaceflight、Spaceflight Now、Everyday Astronaut、現地観測動画、天候・レンジ予定を確認する。</li>
@@ -85,6 +86,8 @@
         <li>採用した情報だけでなく、保留候補、除外候補、除外理由、未確認クラスを残す。後から「なぜ載せなかったか」を説明できない場合はログ不足とみなす。</li>
         <li>カテゴリ固有の重要軸が入っているかを確認する。例: アジア経済なら統計・企業投資・工場建設・日系企業・為替・物流、宇都宮ブレックスなら試合結果・選手コメント・監督発言・怪我・契約・アリーナ/地域行政を必須軸にする。</li>
         <li>当日大きなニュースがないカテゴリでも、公式、主要報道、SNS/X、YouTube、データ、予定表を確認した結果なのかをログに残す。空欄や「特になし」だけでは不足。</li>
+        <li>未確認クラスが残っている場合は、未確認のまま公開できる軽微リスクか、公開前に必ず潰す重大リスクかを分ける。重大リスク（決算本文、イベント結果、公式発表、固有名詞ニュース、SNSで大きく話題化した件）は未確認のまま完成扱いにしない。</li>
+        <li>前回版と比べて当日追加が少ない場合、件数だけでなく「新規発生源・予定結果・SNS/X・YouTube・専門媒体・反証検索」を再走査する。単に“今日は少ない”と判断しない。</li>
         <li>公開前にログを読み返し、この項目でユーザーが後から「どこまで調べたか」「何が未確認か」「なぜこのカードが採用されたか」を確認できるかセルフチェックする。不十分ならログ項目を増やしてから公開する。</li>
       </ul>
 
@@ -115,6 +118,10 @@
         <li>各カテゴリで情報源カバレッジの証跡がない。</li>
         <li>Web/公式/主要報道だけで終わり、SNS/X、YouTube/動画、データ、予定表、反証検索の確認有無が記録されていない。</li>
         <li>OpenAI公式、主要日本語IT媒体、主要海外媒体のいずれにも大型ニュースがあるのに採用または保留に入っていない。</li>
+        <li>OpenAI、Honda、F1、SpaceX、SoftBank、ブレックスなどで、ユーザーの関心語に近い新固有名詞（例: Daybreak、Codex Security、Honda PU、Aston Martin、名古屋D、OpenAI評価益）が話題化しているのに、その語で直接検索した証跡がない。</li>
+        <li>決算・IRが出ているのに、主要数字、セグメント別の読み方、投資/負債/NAV/ガイダンス、説明会資料の確認が本文へ反映されていない。</li>
+        <li>イベント日を過ぎた予定カードが、結果ページや主要報道で上書きされずに残っている。</li>
+        <li>当日版成果物（固定URL、日付別URL、抽出ログ、詳細ページ）がないのに、前日版を再公開して更新完了にしている。</li>
         <li>トップまたはカテゴリ欄に3日超の情報が多数残り、背景資料の明記もなく新規情報より目立っている。</li>
         <li>古いカードを削除した結果、カテゴリが空欄または極端に薄くなったのに、カテゴリ別ウォッチリストの再巡回証跡がない。</li>
         <li>同じ前日版のカードを並べ替えただけで、16:00以降の調査結果や未確認リスクが反映されていない。</li>
