@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OpenAI DALL-E API停止 | NIGHT SIGNAL</title>
+  <link rel="stylesheet" href="_style.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../night-brief-web-sample-2026-05-12.html#openai">一覧へ戻る</a>
+    <article class="article">
+      <div class="kicker">OpenAI / API運用</div>
+      <h1>DALL-E 2/3 APIの停止日。画像生成ワークフローはgpt-image系へ移行確認</h1>
+      <h2>30秒概要</h2>
+      <div class="summary-lead">OpenAI PlatformのDeprecationsでは、dall-e-2とdall-e-3のshutdown dateが2026年5月12日。APIでモデルIDを固定しているプロダクトは、gpt-image-1またはgpt-image-1-miniなどへの移行が済んでいないと当日障害になる。</div>
+      <h2>本文要約</h2>
+      <p>OpenAIのDeprecationsページは、2025年11月14日にDALL-E model snapshotsの非推奨化を通知し、2026年5月12日にdall-e-2とdall-e-3を停止すると明記しています。推奨置き換え先はgpt-image-1またはgpt-image-1-miniです。</p>
+      <p>影響を受けるのは、ChatGPT上で画像生成を使う一般ユーザーよりも、APIでdall-e-2やdall-e-3を直接指定しているアプリケーションです。生成、編集、バリエーションなどの処理でモデルIDをハードコードしている場合、5月12日以降にAPIエラーや機能停止につながります。</p>
+      <p>移行時は、単純にモデル名を置き換えるだけでなく、(1)プロンプトの出力傾向、(2)サイズ/品質/料金、(3)既存ユーザーが期待する画風や文字描画、(4)失敗時の再試行/フォールバック、(5)キャッシュ済みテンプレートのテストを確認する必要があります。画像生成はユーザー目線で品質差が見えやすいため、当日停止後に直すより、代表プロンプトでの比較を残しておくのが安全です。</p>
+      <div class="note-box">運用チェック: APIログでdall-e-2/dall-e-3の呼び出しが残っていないか、モデル設定が環境変数・DB・管理画面・サンプルコードに分散していないかを確認。</div>
+      <div class="source">
+        原文確認:
+        <a href="https://platform.openai.com/docs/deprecations">OpenAI API Deprecations</a>
+        <a href="https://platform.openai.com/docs/guides/image-generation">OpenAI Image generation guide</a>
+        <a href="https://help.openai.com/en/articles/8555480">OpenAI Help: DALL-E 3 API</a>
+      </div>
+      <div class="return-row"><a class="back" href="../night-brief-web-sample-2026-05-12.html#openai">一覧へ戻る</a></div>
+    </article>
+  </main>
+</body>
+</html>
