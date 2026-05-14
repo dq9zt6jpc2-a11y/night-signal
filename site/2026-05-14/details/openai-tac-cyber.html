@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trusted Access for Cyber / GPT-5.5-Cyber | NIGHT SIGNAL</title>
+  <link rel="stylesheet" href="_style.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../index.html#openai">一覧へ戻る</a>
+    <article class="article">
+      <div class="kicker">OpenAI / セキュリティ / 規制・運用</div>
+      <h1>Trusted Access for Cyber（TAC）を軸に、GPT‑5.5の防衛側能力を「本人確認+段階的アクセス」で拡張</h1>
+      <h2>30秒概要</h2>
+      <div class="summary-lead">OpenAIは2026年5月7日、GPT‑5.5のサイバー領域利用を「Trusted Access for Cyber（TAC）」で段階的に提供し、検証済みの防衛側利用では拒否を減らしつつ、悪用（侵入・窃取・持続化など）は引き続き遮断する枠組みを詳説。加えて、より許容度の高いGPT‑5.5‑Cyberを限定プレビューとして導入し、アカウント保護（phishing耐性）を必須条件に組み込んだ。</div>
+      <h2>本文要約</h2>
+      <p>OpenAIの説明では、TACは「誰が」「どの環境で」「何の目的で」使うかを本人確認・組織確認の枠組みに結びつけて、サイバー防衛の正当な業務に限って摩擦（拒否）を下げる設計です。対象は脆弱性の特定・トリアージ、マルウェア解析、バイナリ解析、検知ルール作成、パッチ検証などの防衛ワークフローで、悪用につながる要求（資格情報窃取、ステルス/永続化、第三者システムへの攻撃・展開など）はブロックを維持するとしています。</p>
+      <p>重要なのは、同じ「GPT‑5.5」でもアクセスレベルで挙動を分ける点です。OpenAIは、通常のGPT‑5.5（標準）、TAC付きGPT‑5.5（検証済み防衛利用に向けたより精密なガードレール）、GPT‑5.5‑Cyber（より許容度が高いが、より強い検証とアカウント制御を前提）の3段階を提示しています。能力そのものを無制限に上げるのではなく、許容度と検証/監視をセットで動かして、実務で詰まりやすい防衛側の作業だけを前に進めるアプローチです。</p>
+      <p>運用面では、TACの利用条件としてphishing耐性の認証を要求し、個人のTAC利用者は2026年6月1日からAdvanced Account Securityの有効化が求められるとしています（組織はSSOでの宣誓など代替条件あり）。ここは、モデルの性能よりも「規制・監査・セキュリティ要件が、プロダクトの利用条件として組み込まれていく」変化点です。</p>
+      <p>さらにOpenAIは、脆弱性がオープンソース経由で拡散しやすい点を踏まえ、Codex Security（脅威モデル作成→発見→検証→パッチ提案までの一連）や、Codex環境で使うセキュリティ系プラグイン/支援策にも言及しています。AIの「安全利用」はポリシーだけでなく、本人確認・アクセス制御・監視・ワークフロー統合（開発/運用）へ具体化している、という位置づけです。</p>
+      <div class="source">
+        原文確認:
+        <a href="https://openai.com/index/gpt-5-5-with-trusted-access-for-cyber/">OpenAI公式（Scaling Trusted Access for Cyber）</a>
+        /
+        <a href="https://openai.com/index/trusted-access-for-cyber/">OpenAI公式（Trusted Access for Cyberの背景）</a>
+      </div>
+      <div class="return-row"><a class="back" href="../index.html#openai">一覧へ戻る</a></div>
+    </article>
+  </main>
+</body>
+</html>

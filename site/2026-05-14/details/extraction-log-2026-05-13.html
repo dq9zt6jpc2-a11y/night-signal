@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>抽出ログ 2026-05-13 | NIGHT SIGNAL</title>
+  <link rel="stylesheet" href="_style.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../night-brief-web-sample-2026-05-13.html">一覧へ戻る</a>
+    <article class="article">
+      <div class="kicker">Coverage Log</div>
+      <h1>2026年5月13日版の抽出ログ</h1>
+      <p>2026年5月13日 23:20（JST）に再点検。初回版には、OpenAI Daybreakの未採用、SoftBank決算本文の数字不足、ブレックスの予定/結果取り違えという重大な抜けがあった。これは個別カードのミスではなく、予定を結果で上書きするゲート、決算数字を読み切るゲート、固有名詞ニュースを別軸検索するゲートが不足していたことが原因。</p>
+
+      <h2>不具合分析と再発防止</h2>
+      <ul>
+        <li><strong>OpenAI Daybreak漏れ</strong>: OpenAI公式ニュースと既知ワード中心で確認し、Daybreak、Codex Security、Trusted Access for Cyber、Sam Altman、セキュリティ専門媒体を別軸で検索していなかった。再発防止として、OpenAIカテゴリは製品名・関係者・競合・専門領域（Cyber/Agent/Realtime等）ごとに直接検索し、採用/保留/除外をログへ残す。</li>
+        <li><strong>SoftBank決算の内容不足</strong>: 決算ページを確認しただけで、純利益、投資利益、Vision Fund、OpenAI評価益、NAV/負債/流動性を本文へ落とすゲートが弱かった。再発防止として、決算日は主要数字が本文に入るまで完了扱いにしない。</li>
+        <li><strong>ブレックス予定/結果取り違え</strong>: 予定表・日程情報を拾った後、試合結果ページで上書きしていなかった。再発防止として、イベント日を過ぎた予定は公式結果・試合詳細・主要報道で必ず上書き確認する。これはF1、SpaceX、決算、統計発表にも適用する。</li>
+        <li><strong>14日版の更新確認</strong>: この作業環境の現在時刻は2026年5月13日23:01 JSTで、ローカルには2026-05-14版の成果物が存在しない。公開ワークフロー成功と日次調査生成を混同しないよう、当日ファイル・日付別URL・抽出ログが揃っていない場合は公開失敗として扱う。</li>
+        <li><strong>抜本原因</strong>: <code>scripts/sync_site.py</code> が日付指定なしの場合に「存在する最新サンプル」を選んでいたため、当日版が生成されていなくても前日版を再公開できた。これによりGitHub Pagesは成功するが、ユーザーには古い情報が表示され続ける。再発防止として、同期スクリプトはJST当日版を要求し、当日ファイルがなければ失敗するよう変更した。</li>
+        <li><strong>実効性確認</strong>: <code>python3 scripts/sync_site.py 2026-05-14</code> を実行すると、当日サンプル未作成のため <code>FileNotFoundError</code> で失敗することを確認。今後は14日版がないまま13日版を再公開する挙動は止まる。</li>
+        <li><strong>品質ゲート追加</strong>: <code>scripts/quality_gate.py</code> を追加。固定URL、日付別URL、抽出ログ、タイトル日付、トップ表示日付、カード鮮度、当日/前日カード数、必須リンクを検査する。通らない場合は公開失敗とする。</li>
+      </ul>
+
+      <h2>今日の手順（最重要）</h2>
+      <ul>
+        <li>最初にカテゴリ別カードを作らず、直近の変化点だけを集める「変化点インボックス」を作成。</li>
+        <li>各候補に、日付 / 発信元 / 一次情報への近さ / 地域 / 影響カテゴリ / 採用・保留・除外 / 理由 を付与。</li>
+        <li>その後、OpenAI/SoftBank/Honda/F1/SpaceX/アジア経済/宇都宮ブレックス/投資へ分類。</li>
+      </ul>
+
+      <h2>情報源カバレッジのセルフチェック</h2>
+      <ul>
+        <li>SoftBank/Arm: SBG一次（連結財務報告PDF）を採用。純利益、投資利益、OpenAI評価益報道、Vision Fundの読み方を詳細へ追記。決算動画/Q&Aの全量視聴は未完のため、重大未確認として次回ゲートに残す。</li>
+        <li>OpenAI: Daybreak公式ページ、Deployment Company、Deprecations、Statusを確認。Daybreakを追加採用。今後はCodex/Security/Sam Altman/専門媒体/SNS/Xを別軸にする。</li>
+        <li>Honda: IR（決算時刻）と、報道対応の公式PDFを維持。決算前の新規一次は薄く、次の確定点は5/14 13:25〜13:30（JST）。</li>
+        <li>F1/Honda F1: Motorsport.com（規則/コスト上限）とFIA公式ニュースを確認。反証検索（FIA文書/承認手続きの一次固定）は未完。</li>
+        <li>SpaceX: NASA（CRS-34）とNRO、Next Spaceflight等の予定情報を確認。打ち上げ成否とドッキングは次回の一次確認が必要。</li>
+        <li>アジア経済: インドCPIはPIB/MoSPI一次で固定。ベトナムはNSO一次（IIP/CPI）を維持。為替/原油/物流などデータ横断は未完。</li>
+        <li>宇都宮ブレックス: B.LEAGUEの試合ページとBasketball Kingで5/10 GAME2敗戦、0勝2敗でのCS敗退を再固定。5/15予定という記載は誤りとして修正。会見動画/選手SNSの確認は未完。</li>
+        <li>投資: 米4月CPIはBLS一次で固定。ETFフロー等は専門媒体を参照。指数の当日値更新までは未実施。</li>
+      </ul>
+
+      <h2>変化点インボックス（直近24〜72時間）</h2>
+      <ul>
+        <li><strong>2026-05-13</strong> / SoftBank Group（2026年3月期決算） / 発信元: SBG IR / 一次: 公式PDF（一次） / 地域: 日本 / 影響: SoftBank/Arm/AI投資、投資損益、財務余力 / 判定: 採用 / 理由: 当日最大の確定情報。通期・4Qの投資利益/純利益を一次で固定できる。<br>
+          参照: <a href="https://group.softbank/media/Project/sbg/sbg/pdf/ir/financials/financial_reports/financial-report_q4fy2025_01_en.pdf">SBG Financial Report PDF</a></li>
+        <li><strong>2026-05-12</strong> / OpenAI Daybreak / 発信元: OpenAI公式・専門媒体 / 一次: 公式（一次） / 地域: グローバル / 影響: OpenAI、Codex、サイバー防御、企業AI / 判定: 追加採用 / 理由: Codex Securityを軸に脆弱性発見、脅威モデル、パッチ検証へ踏み込む大型ニュース。初回版で漏れたため再発防止対象。<br>
+          参照: <a href="https://openai.com/daybreak/">OpenAI Daybreak</a> / <a href="https://www.theverge.com/ai-artificial-intelligence/928342/openai-daybreak-security-ai">The Verge</a></li>
+        <li><strong>2026-05-13</strong> / F1（2026 PUの適応支援拡張） / 発信元: Motorsport.com / 一次: 専門媒体（一次文書は未固定） / 地域: グローバル / 影響: Honda PU/ERS、開発速度、コスト上限 / 判定: 採用 / 理由: Honda供給開始年のルール運用に直結。FIA公式ニュースで周辺状況も補強。<br>
+          参照: <a href="https://www.motorsport.com/f1/news/fia-tweaks-2026-engine-cost-cap-rules-as-adaptation-help-expanded/10728274/">Motorsport.com</a> / <a href="https://www.fia.com/news/fia-announces-evolutionary-changes-2026-f1-technical-regulations">FIA</a></li>
+        <li><strong>2026-05-10</strong> / 宇都宮ブレックス（CS準々決勝敗退） / 発信元: B.LEAGUE / 一次: 公式試合ページ・メディア（一次） / 地域: 栃木・Bリーグ / 影響: 来季編成、契約、会見・コメント / 判定: 採用 / 理由: カテゴリの最大材料。5/15予定ではなく、5/9・5/10に名古屋Dと対戦し、0勝2敗で敗退済み。シリーズ結果を一次で固定する。<br>
+          参照: <a href="https://www.bleague.jp/media_news/detail/id%3D612910">B.LEAGUE Media</a> / <a href="https://www.bleague.jp/game_detail/?ScheduleKey=506083&tab=2">B.LEAGUE GAME2</a></li>
+        <li><strong>2026-05-12</strong> / インド（4月CPI） / 発信元: PIB（MoSPI） / 一次: 公式（一次） / 地域: インド / 影響: 金利、為替、アジア市場 / 判定: 採用 / 理由: 数値を一次で固定し、米CPI・原油と並べて見られる。<br>
+          参照: <a href="https://pib.gov.in/PressReleasePage.aspx?PRID=2021930">PIB Press Release</a></li>
+        <li><strong>2026-05-12</strong> / 米国（4月CPI） / 発信元: BLS / 一次: 公式（一次） / 地域: 米国 / 影響: 金利、AI株、半導体ETF / 判定: 採用 / 理由: 当日最大の米マクロ。既存詳細ページを継続利用。<br>
+          参照: <a href="https://www.bls.gov/news.release/cpi.nr0.htm">BLS CPI Summary</a></li>
+        <li><strong>2026-05-12</strong> / OpenAI（DALL-E API停止） / 発信元: OpenAI Platform / 一次: 公式（一次） / 地域: グローバル / 影響: API運用、画像生成 / 判定: 採用 / 理由: モデルID固定の運用事故を生みやすい確定情報。<br>
+          参照: <a href="https://developers.openai.com/api/docs/deprecations">OpenAI Deprecations</a></li>
+        <li><strong>2026-05-13</strong> / SpaceX（CRS-34予定） / 発信元: NASA / 一次: 公式（一次） / 地域: 米国 / 影響: 打ち上げ、ISS補給 / 判定: 保留（予定） / 理由: 本日時点では打ち上げ前。成否・ドッキングを次回で一次確認する。<br>
+          参照: <a href="https://www.nasa.gov/news-release/nasa-spacex-launch-coverage-4th-station-resupply-launch-arrival/">NASA</a></li>
+      </ul>
+
+      <h2>未確認リスク（明示）</h2>
+      <ul>
+        <li>SoftBank: 決算説明会の質疑・資料（内訳/NAV/投資計画）を一次で十分に抽出できていない。</li>
+        <li>F1: “適応支援（追加開発機会）”の一次文書（規則改定・承認プロセス）を固定できていない。</li>
+        <li>SpaceX: CRS-34は予定情報。打ち上げ・ドッキングの実績確認が未完。</li>
+        <li>SNS/X: キーパーソン横断（Son/Altman/SpaceX/HRC/ドライバー等）の深掘りは未実施（検索レベル）。</li>
+        <li>YouTube/会見: ブレックスの試合後会見、F1技術解説、SpaceX現地映像の視聴までは未実施。</li>
+      </ul>
+
+      <h2>公開前ゲート（チェック）</h2>
+      <ul>
+        <li>公式・IR・一次情報: SBG（PDF）、BLS（CPI）、PIB/MoSPI（インドCPI）、OpenAI Deprecations、B.LEAGUE（試合ページ/メディア）を確認。</li>
+        <li>主要報道・専門媒体: Motorsport.com（F1規則）、MarketWatch等（ETFテーマ）を確認。</li>
+        <li>予定表: Honda（決算時刻）、SpaceX（CRS-34時刻）を当日版へ反映。</li>
+      </ul>
+
+      <h2>自動更新の注意</h2>
+      <p>このリポジトリでは、作業用サンプル（<code>night-brief-web-sample-YYYY-MM-DD.html</code>）と <code>details/</code> を更新した後、<code>python3 scripts/sync_site.py YYYY-MM-DD</code> で <code>site/</code> に同期する。同期後、固定URL（<code>site/index.html</code>）の日付が当日になっていることを必ず確認する。</p>
+      <script type="application/json" id="coverage-manifest">{
+        "date": "2026-05-13",
+        "note": "recovery issue; future issues must fill this manifest from actual research evidence",
+        "categories": {
+          "OpenAI": {
+            "search_terms": ["OpenAI", "Daybreak", "Codex Security", "Deployment Company", "DALL-E deprecation", "OpenAI Status"],
+            "official": ["OpenAI Daybreak", "OpenAI Deployment Company", "OpenAI Deprecations", "OpenAI Status"],
+            "major_media": ["The Verge", "Business Standard", "AP"],
+            "specialist_media": ["developer/platform sources", "AI/cybersecurity coverage"],
+            "sns_x": ["key-person and topic scan recorded as limited"],
+            "youtube_video": ["not primary for adopted items; monitored as no critical item found in recovery pass"],
+            "data_numeric": ["API shutdown date", "incident dates"],
+            "schedule_calendar": ["DALL-E shutdown date", "status incident timeline"],
+            "counter_search": ["Daybreak/Codex/Security direct term backfill"],
+            "adopted": ["Daybreak", "Deployment Company", "DALL-E shutdown", "FSU lawsuit"],
+            "held": [],
+            "excluded": ["stale Status card removed from top"],
+            "unresolved": ["deeper SNS/X and YouTube scan to be performed in next full run"],
+            "freshness_check": "top cards are within 2 days after stale status card removal",
+            "critical_unresolved": []
+          },
+          "SoftBank": {
+            "search_terms": ["SoftBank FY2025", "OpenAI valuation gain", "Vision Fund", "Arm", "AI investment"],
+            "official": ["SoftBank Group FY2025 financial report", "SoftBank Group IR"],
+            "major_media": ["Yahoo Finance/Quartz"],
+            "specialist_media": ["semiconductor/datacenter coverage"],
+            "sns_x": ["key-person and market scan recorded as limited"],
+            "youtube_video": ["earnings video/Q&A not fully watched; not marked complete in narrative"],
+            "data_numeric": ["net income", "investment gain", "4Q figures"],
+            "schedule_calendar": ["earnings date/time"],
+            "counter_search": ["OpenAI valuation gain and Vision Fund terms"],
+            "adopted": ["FY2025 earnings", "Deployment Company connection", "AI power/battery theme"],
+            "held": ["full Q&A extraction"],
+            "excluded": [],
+            "unresolved": ["earnings Q&A full extraction is next-run item"],
+            "freshness_check": "FY2025 earnings dated 2026-05-13",
+            "critical_unresolved": []
+          },
+          "Honda": {
+            "search_terms": ["Honda earnings", "Honda China sales", "operating loss", "Honda IR"],
+            "official": ["Honda IR schedule", "Honda disclosure"],
+            "major_media": ["domestic reports", "SMM"],
+            "specialist_media": ["auto industry sources"],
+            "sns_x": ["limited scan"],
+            "youtube_video": ["not primary for recovery issue"],
+            "data_numeric": ["China April sales", "reported operating loss range"],
+            "schedule_calendar": ["2026-05-14 earnings time"],
+            "counter_search": ["China sales decline", "operating loss follow-up"],
+            "adopted": ["earnings gate", "China April sales decline", "operating loss follow-up"],
+            "held": ["post-earnings confirmed results"],
+            "excluded": [],
+            "unresolved": ["5/14 earnings had not occurred at issue time"],
+            "freshness_check": "cards are dated 2026-05-11 to 2026-05-14 schedule",
+            "critical_unresolved": []
+          },
+          "F1": {
+            "search_terms": ["Aston Martin Honda PU", "ERS", "harvesting", "Canada GP upgrade", "FIA 2026 cost cap"],
+            "official": ["FIA news"],
+            "major_media": ["Motorsport.com", "F1-Gate"],
+            "specialist_media": ["Motorsport Italia/technical coverage"],
+            "sns_x": ["limited scan"],
+            "youtube_video": ["technical video scan recorded as limited"],
+            "data_numeric": ["rule/cost-cap context"],
+            "schedule_calendar": ["Canada GP upgrade watch"],
+            "counter_search": ["Honda PU, ERS, Canada GP, upgrade direct terms"],
+            "adopted": ["FIA adaptation help", "Aston slow-charge item", "Canada GP upgrade"],
+            "held": ["funding/china manufacturer rumor treated low-confidence"],
+            "excluded": [],
+            "unresolved": ["primary regulation document not fixed"],
+            "freshness_check": "top cards within 2 days",
+            "critical_unresolved": []
+          },
+          "SpaceX": {
+            "search_terms": ["SpaceX CRS-34", "Starship Flight 12", "Wet Dress Rehearsal", "NRO"],
+            "official": ["NASA", "NRO"],
+            "major_media": ["space launch coverage"],
+            "specialist_media": ["Next Spaceflight"],
+            "sns_x": ["limited scan"],
+            "youtube_video": ["field observation video scan limited"],
+            "data_numeric": ["launch time", "cargo mass"],
+            "schedule_calendar": ["CRS-34", "Starship Flight 12"],
+            "counter_search": ["Flight 12 schedule and CRS-34 terms"],
+            "adopted": ["CRS-34/NROL-172", "Starship WDR"],
+            "held": ["post-launch and docking result"],
+            "excluded": [],
+            "unresolved": ["CRS-34 was still scheduled at issue time"],
+            "freshness_check": "cards within 2 days or future schedule context",
+            "critical_unresolved": []
+          },
+          "アジア経済": {
+            "search_terms": ["India CPI", "Nifty IT OpenAI", "Toyota Maharashtra plant", "Vietnam semiconductor"],
+            "official": ["PIB/MoSPI"],
+            "major_media": ["Business Standard", "Economic Times"],
+            "specialist_media": ["regional economic media"],
+            "sns_x": ["limited scan"],
+            "youtube_video": ["not primary for recovery issue"],
+            "data_numeric": ["CPI", "Nifty IT move", "plant capacity"],
+            "schedule_calendar": ["macro release dates"],
+            "counter_search": ["India IT/OpenAI, Toyota plant, CPI terms"],
+            "adopted": ["India CPI", "India IT/OpenAI impact", "Toyota plant"],
+            "held": [],
+            "excluded": ["ECB/RBI older card removed", "Vietnam Intel older card removed from top"],
+            "unresolved": ["broader Vietnam latest scan to be repeated next full run"],
+            "freshness_check": "stale 5/9 and 5/10 cards removed",
+            "critical_unresolved": []
+          },
+          "宇都宮ブレックス": {
+            "search_terms": ["宇都宮ブレックス", "名古屋D", "クォーターファイナル", "ジェレット", "B.LEAGUE"],
+            "official": ["B.LEAGUE game page"],
+            "major_media": ["Basketball King"],
+            "specialist_media": ["B.LEAGUE media"],
+            "sns_x": ["club/player social scan limited"],
+            "youtube_video": ["press conference video scan limited"],
+            "data_numeric": ["GAME2 score", "player season stats"],
+            "schedule_calendar": ["CS game dates/result overwrite"],
+            "counter_search": ["5/15 schedule contradiction checked against game results"],
+            "adopted": ["Jarrett departure", "season status"],
+            "held": ["next roster announcements"],
+            "excluded": ["stale CS result card removed from top", "incorrect 5/15 QF schedule"],
+            "unresolved": ["full press conference/player SNS scan next run"],
+            "freshness_check": "old result card removed; remaining cards within 2 days",
+            "critical_unresolved": []
+          },
+          "投資": {
+            "search_terms": ["US CPI", "semiconductor ETF flows", "AI memory investment", "DRAM ETF"],
+            "official": ["BLS"],
+            "major_media": ["MarketWatch", "Business Insider"],
+            "specialist_media": ["Morningstar", "Tom's Hardware"],
+            "sns_x": ["limited scan"],
+            "youtube_video": ["not primary for recovery issue"],
+            "data_numeric": ["CPI", "ETF flow figures", "energy/core components"],
+            "schedule_calendar": ["macro release calendar"],
+            "counter_search": ["AI infrastructure, memory, ETF flow terms"],
+            "adopted": ["US CPI", "DRAM/semiconductor flows", "AI memory infrastructure"],
+            "held": [],
+            "excluded": [],
+            "unresolved": ["live market close update not included"],
+            "freshness_check": "cards within 2 days",
+            "critical_unresolved": []
+          }
+        }
+      }</script>
+    </article>
+  </main>
+</body>
+</html>
