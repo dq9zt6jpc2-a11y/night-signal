@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import shutil
 import sys
+import re
 from datetime import datetime
 from pathlib import Path
 
@@ -41,11 +42,11 @@ SITE_DETAILS = SITE_ISSUE / "details"
 def rewrite_detail_links(html: str) -> str:
     # Working detail pages link back to the local editable sample HTML.
     # Published detail pages must link back to the dated issue index.html.
-    html = html.replace(f"../night-brief-web-sample-{ISSUE_DATE}.html", "../index.html")
-    # Backward-compat: older drafts hard-coded the sample date.
-    if "night-brief-web-sample-" in html:
-        html = html.replace("../night-brief-web-sample-2026-05-10.html", "../index.html")
-    return html
+    #
+    # Detail pages can contain hard-coded sample dates (e.g. when copied from a
+    # previous day). Rewrite *any* night-brief-web-sample-YYYY-MM-DD.html link
+    # to ../index.html while preserving fragments such as #openai.
+    return re.sub(r"\.\./night-brief-web-sample-\d{4}-\d{2}-\d{2}\.html", "../index.html", html)
 
 
 def rewrite_root_links(html: str) -> str:
