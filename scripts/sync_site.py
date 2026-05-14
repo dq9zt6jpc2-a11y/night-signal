@@ -60,6 +60,16 @@ def rewrite_issue_index_links(html: str) -> str:
     return html
 
 
+def linked_detail_names(html: str) -> set[str]:
+    names = {
+        match.group(1)
+        for match in re.finditer(r'href="(?:\d{4}-\d{2}-\d{2}/)?details/([^"#?]+\.html)', html)
+    }
+    names.add("policy.html")
+    names.add(f"extraction-log-{ISSUE_DATE}.html")
+    return names
+
+
 def issue_dirs() -> list[Path]:
     dated = []
     for path in SITE_ROOT.iterdir():
@@ -113,15 +123,20 @@ def main() -> int:
     if not SAMPLE.exists():
         raise FileNotFoundError(f"Sample page not found: {SAMPLE}")
     SITE_ROOT.mkdir(parents=True, exist_ok=True)
+    if SITE_ISSUE.exists():
+        shutil.rmtree(SITE_ISSUE)
     SITE_DETAILS.mkdir(parents=True, exist_ok=True)
-    (SITE_ISSUE / "index.html").write_text(rewrite_issue_index_links(SAMPLE.read_text(encoding="utf-8")), encoding="utf-8")
-    for source in DETAILS.iterdir():
-        if source.is_file():
-            target = SITE_DETAILS / source.name
-            if source.suffix == ".html":
-                target.write_text(rewrite_detail_links(source.read_text(encoding="utf-8")), encoding="utf-8")
-            else:
-                shutil.copyfile(source, target)
+    sample_html = SAMPLE.read_text(encoding="utf-8")
+    (SITE_ISSUE / "index.html").write_text(rewrite_issue_index_links(sample_html), encoding="utf-8")
+    for name in sorted(linked_detail_names(sample_html)):
+        source = DETAILS / name
+        if not source.exists():
+            raise FileNotFoundError(f"Linked detail page not found: {source}")
+        target = SITE_DETAILS / name
+        target.write_text(rewrite_detail_links(source.read_text(encoding="utf-8")), encoding="utf-8")
+    stylesheet = DETAILS / "_style.css"
+    if stylesheet.exists():
+        shutil.copyfile(stylesheet, SITE_DETAILS / stylesheet.name)
     prune_old_issues()
     write_root_latest()
     print(SITE_ISSUE / "index.html")

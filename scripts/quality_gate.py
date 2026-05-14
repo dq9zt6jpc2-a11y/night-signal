@@ -6,6 +6,7 @@ from __future__ import annotations
 import re
 import sys
 import json
+from urllib.parse import unquote
 from datetime import datetime
 from pathlib import Path
 
@@ -97,6 +98,49 @@ def card_title(card: str) -> str:
         return "(no title)"
     text = re.sub(r"<.*?>", "", match.group(1))
     return re.sub(r"\s+", " ", text).strip()
+
+
+def local_href_targets(html: str, base: Path) -> list[Path]:
+    targets = []
+    for href in re.findall(r'href="([^"]+)"', html):
+        if href.startswith(("#", "http://", "https://", "mailto:", "tel:")):
+            continue
+        path = unquote(href.split("#", 1)[0].split("?", 1)[0])
+        if not path:
+            continue
+        targets.append((base / path).resolve())
+    return targets
+
+
+def validate_local_links(issue_date: str) -> None:
+    html_files = [SITE_ROOT / "index.html", SITE_ROOT / issue_date / "index.html"]
+    html_files.extend(sorted((SITE_ROOT / issue_date / "details").glob("*.html")))
+    missing = []
+    for html_file in html_files:
+        html = read(html_file)
+        for target in local_href_targets(html, html_file.parent):
+            try:
+                target.relative_to(ROOT)
+            except ValueError:
+                continue
+            if not target.exists():
+                missing.append(f"{html_file.relative_to(ROOT)} -> {target.relative_to(ROOT)}")
+    if missing:
+        fail("broken local links: " + "; ".join(missing[:12]))
+
+
+def validate_detail_scope(issue_date: str, root_html: str, dated_html: str) -> None:
+    linked = set(re.findall(rf'href="{issue_date}/details/([^"#?]+\.html)', root_html))
+    linked.update(re.findall(r'href="details/([^"#?]+\.html)', dated_html))
+    linked.add("policy.html")
+    linked.add(f"extraction-log-{issue_date}.html")
+    actual = {path.name for path in (SITE_ROOT / issue_date / "details").glob("*.html")}
+    extra = actual - linked
+    missing = linked - actual
+    if missing:
+        fail("published issue missing linked detail pages: " + ", ".join(sorted(missing)))
+    if extra:
+        fail("published issue contains unlinked stale detail pages: " + ", ".join(sorted(extra)[:12]))
 
 
 def validate_extraction_log(extraction_log_html: str) -> None:
@@ -211,6 +255,9 @@ def validate(issue_date: str) -> None:
     for link in required_links:
         if link not in root_html:
             fail(f"missing required root link: {link}")
+
+    validate_detail_scope(issue_date, root_html, dated_html)
+    validate_local_links(issue_date)
 
     print(f"QUALITY GATE PASSED: {issue_date}, cards={len(cards)}, fresh={fresh_count}")
 
