@@ -1,0 +1,23 @@
+name: NIGHT SIGNAL Preflight
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 20:30 JST and 21:30 JST
+    - cron: "30 11 * * *"
+    - cron: "30 12 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check today's generated issue
+        run: |
+          ISSUE_DATE="$(TZ=Asia/Tokyo date +%F)"
+          python3 scripts/pre22_audit.py "$ISSUE_DATE"
