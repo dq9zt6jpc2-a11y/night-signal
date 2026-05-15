@@ -72,6 +72,41 @@ REQUIRED_DECISION_CLASSES = [
     "unresolved",
 ]
 
+REQUIRED_SEARCH_TERM_GROUPS = {
+    "OpenAI": [
+        ["openai"],
+        ["daybreak", "deployment", "codex", "realtime", "sam"],
+    ],
+    "SoftBank": [
+        ["softbank", "ソフトバンク"],
+        ["arm", "vision", "openai", "ai"],
+    ],
+    "Honda": [
+        ["honda", "ホンダ"],
+        ["ev", "china", "earnings", "loss", "販売", "決算", "赤字"],
+    ],
+    "F1": [
+        ["honda", "aston", "ホンダ"],
+        ["aduo", "pu", "power unit", "fia", "ers", "回生"],
+    ],
+    "SpaceX": [
+        ["spacex"],
+        ["crs", "starship", "nasa", "dragon"],
+    ],
+    "アジア経済": [
+        ["india", "インド"],
+        ["vietnam", "ベトナム", "asean"],
+    ],
+    "宇都宮ブレックス": [
+        ["宇都宮", "brex", "ブレックス"],
+        ["b.league", "試合", "日程", "名古屋", "結果"],
+    ],
+    "投資": [
+        ["etf", "株", "market", "fund", "指数"],
+        ["fed", "金利", "flows", "ai", "semiconductor", "半導体"],
+    ],
+}
+
 TITLE_POLICY_LEAK_TERMS = [
     "一次で固定",
     "一次資料",
@@ -240,12 +275,19 @@ def validate_extraction_log(extraction_log_html: str) -> None:
             value = entry.get(source_class)
             if not isinstance(value, list) or not value:
                 fail(f"{category} missing source evidence: {source_class}")
+            if any(not isinstance(item, str) or len(item.strip()) < 4 for item in value):
+                fail(f"{category} has weak source evidence: {source_class}")
         for decision_class in REQUIRED_DECISION_CLASSES:
             value = entry.get(decision_class)
             if not isinstance(value, list):
                 fail(f"{category} missing decision list: {decision_class}")
-        if not entry.get("search_terms"):
+        search_terms = entry.get("search_terms")
+        if not isinstance(search_terms, list) or not search_terms:
             fail(f"{category} missing search_terms")
+        search_blob = " ".join(str(term).lower() for term in search_terms)
+        for group in REQUIRED_SEARCH_TERM_GROUPS[category]:
+            if not any(term.lower() in search_blob for term in group):
+                fail(f"{category} search_terms missing required axis: {'/'.join(group)}")
         if not entry.get("freshness_check"):
             fail(f"{category} missing freshness_check")
         if entry.get("critical_unresolved"):

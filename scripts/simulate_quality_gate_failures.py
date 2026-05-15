@@ -97,6 +97,37 @@ def mutate_manifest(tmp: Path, category: str, key: str, value) -> None:
     write(path, html[: match.start(2)] + json.dumps(manifest, ensure_ascii=False, indent=2) + html[match.end(2) :])
 
 
+def clear_each_source_class_simulations() -> None:
+    categories = ["OpenAI", "SoftBank", "Honda", "F1", "SpaceX", "アジア経済", "宇都宮ブレックス", "投資"]
+    source_classes = [
+        "official",
+        "major_media",
+        "specialist_media",
+        "sns_x",
+        "youtube_video",
+        "data_numeric",
+        "schedule_calendar",
+        "counter_search",
+    ]
+    for category in categories:
+        for source_class in source_classes:
+            assert_fail(
+                f"{category} missing {source_class}",
+                lambda tmp, c=category, s=source_class: mutate_manifest(tmp, c, s, []),
+                f"{category} missing source evidence: {source_class}",
+            )
+
+
+def clear_search_terms_simulations() -> None:
+    categories = ["OpenAI", "SoftBank", "Honda", "F1", "SpaceX", "アジア経済", "宇都宮ブレックス", "投資"]
+    for category in categories:
+        assert_fail(
+            f"{category} missing search_terms",
+            lambda tmp, c=category: mutate_manifest(tmp, c, "search_terms", []),
+            f"{category} missing search_terms",
+        )
+
+
 def main() -> int:
     baseline = copy_fixture()
     assert_pass("baseline current issue", baseline)
@@ -146,6 +177,21 @@ def main() -> int:
         lambda tmp: mutate_manifest(tmp, "OpenAI", "official", []),
         "OpenAI missing source evidence: official",
     )
+
+    assert_fail(
+        "category-specific search axis missing",
+        lambda tmp: mutate_manifest(tmp, "アジア経済", "search_terms", ["India CPI April 2026"]),
+        "アジア経済 search_terms missing required axis",
+    )
+
+    assert_fail(
+        "critical unresolved risk blocks publication",
+        lambda tmp: mutate_manifest(tmp, "OpenAI", "critical_unresolved", ["official announcement not checked"]),
+        "OpenAI has critical unresolved risks",
+    )
+
+    clear_each_source_class_simulations()
+    clear_search_terms_simulations()
 
     print("ALL QUALITY GATE SIMULATIONS PASSED")
     return 0
