@@ -163,7 +163,7 @@ def main() -> int:
     assert_fail(
         "broken local detail link",
         lambda tmp: mutate_root_and_dated(tmp, lambda html: html.replace("details/softbank-2026-05-15.html", "details/missing.html", 1)),
-        "published issue missing linked detail pages",
+        "missing file: site/2026-05-15/details/missing.html",
     )
 
     assert_fail(
@@ -176,6 +176,24 @@ def main() -> int:
         "coverage manifest source evidence missing",
         lambda tmp: mutate_manifest(tmp, "OpenAI", "official", []),
         "OpenAI missing source evidence: official",
+    )
+
+    assert_fail(
+        "detail page too thin",
+        lambda tmp: write(
+            tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-15.html",
+            '<html><head><title>SoftBank</title></head><body><main><a class="back" href="../index.html#softbank">一覧へ戻る</a><article><h1>SoftBank</h1><p>薄い要約。</p><div class="source">原文確認:<a href="https://example.com">source</a></div></article></main></body></html>',
+        ),
+        "detail pages too thin",
+    )
+
+    assert_fail(
+        "detail heading policy wording leak",
+        lambda tmp: write(
+            tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-15.html",
+            read(tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-15.html").replace("<h1>", "<h1>一次で固定 ", 1),
+        ),
+        "detail headings contain policy/checklist wording",
     )
 
     assert_fail(

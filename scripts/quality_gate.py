@@ -39,6 +39,7 @@ REQUIRED_SECTIONS = {
 }
 
 MIN_CARDS_PER_SECTION = 2
+MIN_DETAIL_TEXT_CHARS = 300
 
 REQUIRED_COVERAGE_TERMS = [
     "公式",
@@ -120,6 +121,16 @@ TITLE_POLICY_LEAK_TERMS = [
     "直検索",
     "カバレッジ",
     "品質ゲート",
+]
+
+DETAIL_POLICY_LEAK_TERMS = TITLE_POLICY_LEAK_TERMS + [
+    "今夜やること",
+    "今夜のチェックリスト",
+    "今夜の運用ルール",
+    "機械的",
+    "監査メモ",
+    "復旧版",
+    "当日版が未生成",
 ]
 
 
@@ -212,6 +223,39 @@ def validate_detail_scope(issue_date: str, root_html: str, dated_html: str) -> N
         fail("published issue missing linked detail pages: " + ", ".join(sorted(missing)))
     if extra:
         fail("published issue contains unlinked stale detail pages: " + ", ".join(sorted(extra)[:12]))
+
+
+def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) -> None:
+    linked = set(re.findall(rf'href="{issue_date}/details/([^"#?]+\.html)', root_html))
+    linked.update(re.findall(r'href="details/([^"#?]+\.html)', dated_html))
+    excluded = {"policy.html", f"extraction-log-{issue_date}.html"}
+    weak = []
+    leaked = []
+    missing_source = []
+    missing_back = []
+    for name in sorted(linked - excluded):
+        path = SITE_ROOT / issue_date / "details" / name
+        html = read(path)
+        plain = re.sub(r"<[^>]+>", "", html)
+        plain = re.sub(r"\s+", "", plain)
+        if len(plain) < MIN_DETAIL_TEXT_CHARS:
+            weak.append(f"{name}: {len(plain)} chars")
+        headings = " ".join(re.findall(r"<(?:title|h1|h2)[^>]*>(.*?)</(?:title|h1|h2)>", html, flags=re.S))
+        heading_text = re.sub(r"<[^>]+>", "", headings)
+        if any(term in heading_text for term in DETAIL_POLICY_LEAK_TERMS):
+            leaked.append(name)
+        if 'class="source"' not in html or "原文確認" not in html:
+            missing_source.append(name)
+        if 'class="back"' not in html or "../index.html" not in html:
+            missing_back.append(name)
+    if weak:
+        fail("detail pages too thin: " + "; ".join(weak[:8]))
+    if leaked:
+        fail("detail headings contain policy/checklist wording: " + ", ".join(leaked[:8]))
+    if missing_source:
+        fail("detail pages missing source block: " + ", ".join(missing_source[:8]))
+    if missing_back:
+        fail("detail pages missing back link: " + ", ".join(missing_back[:8]))
 
 
 def validate_category_sections(root_html: str) -> None:
@@ -357,6 +401,7 @@ def validate(issue_date: str) -> None:
         fail(f"too few fresh cards dated {issue_date} or previous day: {fresh_count} < {MIN_FRESH_CARDS}")
 
     validate_category_sections(root_html)
+    validate_detail_quality(issue_date, root_html, dated_html)
 
     required_links = [
         f"{issue_date}/details/extraction-log-{issue_date}.html",
