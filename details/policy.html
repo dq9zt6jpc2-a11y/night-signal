@@ -143,6 +143,7 @@
         <li>公開前品質ゲートは、日付一致、古いカード、当日/前日カード数、抽出ログのcoverage-manifest、カテゴリ別情報源クラス、ローカルリンク切れ、未リンクの古い詳細ページを検査する。</li>
         <li>commit/push後は <code>python3 scripts/publication_audit.py YYYY-MM-DD</code> を実行する。この監査は、未コミット差分、未pushコミット、remote HEAD不一致、公開URLの日付不一致を失敗扱いにする。</li>
         <li>公開前コマンドは必ず直列で実行する。<code>sync_site.py</code> は日付別フォルダを作り直すため、同期中に品質ゲートを並列実行してはいけない。順序は sync → quality_gate → pre22_audit → commit → push → publication_audit とする。</li>
+        <li>ゲート自体の妥当性は <code>python3 scripts/simulate_quality_gate_failures.py</code> で確認する。見出しへの作業語混入、カテゴリ欠落、カテゴリ1件化、古い日付、リンク切れ、未リンク詳細ページ混入、coverage-manifest不足を意図的に作り、すべて失敗することを確認する。</li>
         <li>品質ゲートやpre-22監査が失敗した場合、公開成功扱いにしない。復旧版を作る場合も、同じゲートを通す。</li>
         <li>別作業フォルダや一時クローンで復旧した場合でも、最終成果物は必ず本番リポジトリへコミット・pushし、GitHub Pagesの成功まで確認する。一時フォルダ内の成功は公開成功ではない。</li>
       </ul>
