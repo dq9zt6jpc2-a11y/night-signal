@@ -27,6 +27,19 @@ REQUIRED_CATEGORIES = [
     "投資",
 ]
 
+REQUIRED_SECTIONS = {
+    "softbank": "SoftBank",
+    "openai": "OpenAI",
+    "honda": "Honda",
+    "f1": "F1",
+    "spacex": "SpaceX",
+    "asia": "アジア経済",
+    "brex": "宇都宮ブレックス",
+    "investment": "投資",
+}
+
+MIN_CARDS_PER_SECTION = 2
+
 REQUIRED_COVERAGE_TERMS = [
     "公式",
     "主要報道",
@@ -57,6 +70,21 @@ REQUIRED_DECISION_CLASSES = [
     "held",
     "excluded",
     "unresolved",
+]
+
+TITLE_POLICY_LEAK_TERMS = [
+    "一次で固定",
+    "一次資料",
+    "一次更新",
+    "数字を固定",
+    "完了扱い",
+    "補助線",
+    "採用は一次",
+    "採用前",
+    "保留に落と",
+    "直検索",
+    "カバレッジ",
+    "品質ゲート",
 ]
 
 
@@ -100,6 +128,14 @@ def card_title(card: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+def page_titles(html: str) -> list[str]:
+    titles = []
+    for match in re.finditer(r"<h3>(.*?)</h3>", section_before_history(html), flags=re.S):
+        text = re.sub(r"<.*?>", "", match.group(1))
+        titles.append(re.sub(r"\s+", " ", text).strip())
+    return titles
+
+
 def local_href_targets(html: str, base: Path) -> list[Path]:
     targets = []
     for href in re.findall(r'href="([^"]+)"', html):
@@ -141,6 +177,28 @@ def validate_detail_scope(issue_date: str, root_html: str, dated_html: str) -> N
         fail("published issue missing linked detail pages: " + ", ".join(sorted(missing)))
     if extra:
         fail("published issue contains unlinked stale detail pages: " + ", ".join(sorted(extra)[:12]))
+
+
+def validate_category_sections(root_html: str) -> None:
+    body = section_before_history(root_html)
+    missing = []
+    too_thin = []
+    for section_id, label in REQUIRED_SECTIONS.items():
+        match = re.search(
+            rf'<section class="section" id="{section_id}">(.*?)(?=<section class="section" id=|\Z)',
+            body,
+            flags=re.S,
+        )
+        if not match:
+            missing.append(label)
+            continue
+        count = len(re.findall(r'<article class="card[^"]*">', match.group(1)))
+        if count < MIN_CARDS_PER_SECTION:
+            too_thin.append(f"{label}: {count}")
+    if missing:
+        fail("missing category sections: " + ", ".join(missing))
+    if too_thin:
+        fail("category sections below minimum cards: " + ", ".join(too_thin))
 
 
 def validate_extraction_log(extraction_log_html: str) -> None:
@@ -219,6 +277,14 @@ def validate(issue_date: str) -> None:
     if not cards:
         fail("no cards found before history")
 
+    leaked_titles = [
+        title
+        for title in page_titles(root_html)
+        if any(term in title for term in TITLE_POLICY_LEAK_TERMS)
+    ]
+    if leaked_titles:
+        fail("card titles contain policy/checklist wording: " + "; ".join(leaked_titles[:8]))
+
     stale: list[str] = []
     fresh_count = 0
     undated: list[str] = []
@@ -247,6 +313,8 @@ def validate(issue_date: str) -> None:
         fail("stale cards found: " + "; ".join(stale[:8]))
     if fresh_count < MIN_FRESH_CARDS:
         fail(f"too few fresh cards dated {issue_date} or previous day: {fresh_count} < {MIN_FRESH_CARDS}")
+
+    validate_category_sections(root_html)
 
     required_links = [
         f"{issue_date}/details/extraction-log-{issue_date}.html",

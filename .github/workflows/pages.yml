@@ -48,3 +48,20 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Verify public page date
+        run: |
+          ISSUE_DATE="$(TZ=Asia/Tokyo date +%F)"
+          DISPLAY_DATE="${ISSUE_DATE//-/.}"
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+            ROOT_HTML="$(curl -fsSL https://dq9zt6jpc2-a11y.github.io/night-signal/ || true)"
+            DATED_HTML="$(curl -fsSL "https://dq9zt6jpc2-a11y.github.io/night-signal/${ISSUE_DATE}/index.html" || true)"
+            if [[ "$ROOT_HTML" == *"NIGHT SIGNAL | ${ISSUE_DATE}"* && "$ROOT_HTML" == *"${DISPLAY_DATE}"* && "$DATED_HTML" == *"NIGHT SIGNAL | ${ISSUE_DATE}"* ]]; then
+              echo "Public page verified for ${ISSUE_DATE}"
+              exit 0
+            fi
+            echo "Public page not current yet; retry ${attempt}/10"
+            sleep 15
+          done
+          echo "Public page did not show ${ISSUE_DATE}" >&2
+          exit 1
