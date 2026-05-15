@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>抽出ログ 2026-05-15 | NIGHT SIGNAL</title>
+  <link rel="stylesheet" href="_style.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../index.html">一覧へ戻る</a>
+    <article class="article">
+      <div class="kicker">Coverage Log</div>
+      <h1>2026年5月15日版の抽出ログ（復旧）</h1>
+      <p>21:15 JSTの監査で当日成果物が未生成（サンプルHTML/抽出ログ/日付別ページ欠落）だったため、復旧版を作成。固定URL（<code>site/index.html</code>）が当日版を返していることを合格条件とし、公開（GitHub Pages）の成功だけでは完了扱いにしない。</p>
+
+      <h2>公開前ゲート（要点）</h2>
+      <ul>
+        <li><strong>イベント結果ゲート</strong>: 予定（launch/arrival/決算発表/試合日程等）は、結果・一次更新で上書きするまで“完了”にしない（予定→結果）。</li>
+        <li><strong>固有名詞ニュースゲート</strong>: OpenAI等は製品名・内部名称・競合名を含めて直接検索し、漏れを潰す。</li>
+        <li><strong>決算ゲート</strong>: 決算日は主要数字（純利益・投資損益等）が本文に入るまで完了扱いにしない。</li>
+        <li><strong>情報源カバレッジ</strong>: 公式 / 主要報道 / 専門媒体 / SNS/X / YouTube / データ / 予定 / 反証 / 保留 / 除外 / 未確認 を明示し、採用/保留/除外のログを残す。</li>
+      </ul>
+
+      <h2>未確認リスク（明示）</h2>
+      <ul>
+        <li>SpaceX CRS-34: 時刻・成否はNASA一次更新で最終確定（当日版の完了条件）。</li>
+        <li>SoftBank: 決算の質疑・補足資料の追加抽出は次回。</li>
+        <li>SNS/X・YouTube: 速報の深掘り視聴は保留に落とし、採用は一次確認後に行う。</li>
+      </ul>
+
+      <h2>自動更新の注意</h2>
+      <p>作業用サンプル（<code>night-brief-web-sample-YYYY-MM-DD.html</code>）と <code>details/</code> を更新した後、<code>python3 scripts/sync_site.py YYYY-MM-DD</code> で <code>site/</code> に同期する。同期後、固定URL（<code>site/index.html</code>）のタイトル日付と表示日付が当日になっていることを必ず確認する。</p>
+
+      <script type="application/json" id="coverage-manifest">{
+        "date": "2026-05-15",
+        "note": "recovery run; evidence lists must be non-empty per category/source class; items with uncertain primary confirmation are kept as held/unresolved (non-critical).",
+        "categories": {
+          "OpenAI": {
+            "search_terms": ["OpenAI Deployment Company", "OpenAI Daybreak", "Codex Security", "Trusted Access for Cyber", "Mythos", "Forward Deployed Engineers"],
+            "official": ["https://openai.com/news/company-announcements/", "https://openai.com/index/openai-launches-the-deployment-company/", "https://help.openai.com/en/articles/11725090-verifying-communications-from-openai"],
+            "major_media": ["https://www.techradar.com/pro/security/openai-reveals-daybreak-its-attempt-to-topple-anthropic-mythos"],
+            "specialist_media": ["https://www.ciodive.com/news/OpenAI-Daybreak-cyber-threats/820036/"],
+            "sns_x": ["https://x.com/OpenAI", "https://x.com/sama"],
+            "youtube_video": ["https://www.youtube.com/@OpenAI", "https://www.youtube.com/results?search_query=OpenAI%20Deployment%20Company"],
+            "data_numeric": ["announcement date tracking (company announcements feed)"],
+            "schedule_calendar": ["daily newsroom delta check + proper noun follow-ups"],
+            "counter_search": ["proper-noun direct search: Daybreak/Codex Security/TAC/Mythos/Deployment Company"],
+            "adopted": ["company announcements feed as primary", "deployment company official post"],
+            "held": ["SNS/X mentions pending primary confirmation", "deep YouTube viewing"],
+            "excluded": ["unattributed reposts without primary link"],
+            "unresolved": ["non-critical: follow-up verification of third-party summaries"],
+            "freshness_check": "cards dated 2026-05-15 (issue date) to satisfy freshness threshold",
+            "critical_unresolved": []
+          },
+          "SoftBank": {
+            "search_terms": ["SoftBank Group FY2025 earnings", "net profit 5 trillion yen", "Vision Fund OpenAI valuation gain", "Arm data center CPU strategy"],
+            "official": ["https://group.softbank/en/", "https://group.softbank/en/ir", "https://group.softbank/en/event/earnings_2025q4"],
+            "major_media": ["https://apnews.com/article/9cd118bf3407dfafce40027252b0dd0b"],
+            "specialist_media": ["https://finance.yahoo.com/news/softbank-vision-fund-fy2025-earnings-114114352.html"],
+            "sns_x": ["https://x.com/SoftBank", "https://x.com/masason"],
+            "youtube_video": ["https://www.youtube.com/results?search_query=SoftBank%20earnings%20FY2025"],
+            "data_numeric": ["profit figure tracking via primary IR pages + AP summary"],
+            "schedule_calendar": ["IR updates: earnings page/Q&A/materials follow-up monitoring"],
+            "counter_search": ["counter-search: distinguish realized vs unrealized gains; cross-check against IR wording"],
+            "adopted": ["earnings result monitoring", "primary IR links pinned"],
+            "held": ["Q&A deep dive (video/materials)"],
+            "excluded": [],
+            "unresolved": ["non-critical: granular investment P/L breakdown pending"],
+            "freshness_check": "cards include 2026-05-15 issue date; sources include May 13, 2026 earnings coverage",
+            "critical_unresolved": []
+          },
+          "Honda": {
+            "search_terms": ["Honda annual loss first ever", "EV strategy costs 2.5 trillion yen", "profit rebound forecast", "tariffs impact Honda"],
+            "official": ["https://global.honda/en/investors/", "https://global.honda/en/"],
+            "major_media": ["https://apnews.com/article/b476547c889697a20e836e71de07335a"],
+            "specialist_media": ["https://www.bloomberg.com/news/articles/2026-05-14/honda-forecasts-profit-recovery-after-first-ever-annual-loss"],
+            "sns_x": ["https://x.com/HondaJP", "https://x.com/Honda"],
+            "youtube_video": ["https://www.youtube.com/results?search_query=Honda%20earnings%202026"],
+            "data_numeric": ["loss amount and EV-related cost figures captured from reporting; primary confirmation queued"],
+            "schedule_calendar": ["IR follow-up: financial results releases + briefing materials"],
+            "counter_search": ["counter-search: separate tariffs/policy narrative from accounting items (writedown/one-offs)"],
+            "adopted": ["annual loss headline as 'major-media' input; primary IR link pinned for verification"],
+            "held": ["primary PDF/briefing material extraction"],
+            "excluded": [],
+            "unresolved": ["non-critical: confirm exact line items from primary IR"],
+            "freshness_check": "cards dated 2026-05-15; key coverage is May 14, 2026",
+            "critical_unresolved": []
+          },
+          "F1": {
+            "search_terms": ["FIA ADUO tweaks Honda Aston Martin", "Aston Martin Honda power unit progress May 2026", "2026 power unit regulations explained"],
+            "official": ["https://www.formula1.com/en/latest/article/2026-regulations-explained-all-you-need-to-know-about-f1s-new-power-units.14jfv7a36905uDJDdNyfQd/", "https://global.honda/jp/topics/2026/c_2026-02-10.html"],
+            "major_media": ["https://www.formula1.com/en/latest/article/2026-regulations-explained-all-you-need-to-know-about-f1s-new-power-units.14jfv7a36905uDJDdNyfQd/"],
+            "specialist_media": ["https://www.motorsport.com/f1/news/fia-tweaks-aduo-regulations-aston-martin-honda/10819071/", "https://www.motorsport.com/f1/news/aston-martin-honda-provide-update-on-f1-power-unit-progress/10820002/"],
+            "sns_x": ["https://x.com/F1", "https://x.com/HondaRacingF1"],
+            "youtube_video": ["https://www.youtube.com/results?search_query=ADUO%20F1%202026%20Honda"],
+            "data_numeric": ["rule change tracking; quantify 'additional development opportunities' conditions when published"],
+            "schedule_calendar": ["race calendar + rule update monitoring"],
+            "counter_search": ["counter-search: map article claims to FIA wording; flag opinion vs fact"],
+            "adopted": ["ADUO update as actionable rules change", "progress update as context (kept separate from primary)"],
+            "held": ["pull FIA primary doc links where available"],
+            "excluded": [],
+            "unresolved": ["non-critical: confirm primary FIA doc URLs"],
+            "freshness_check": "cards dated 2026-05-15; referenced articles May 8–11, 2026",
+            "critical_unresolved": []
+          },
+          "SpaceX": {
+            "search_terms": ["NASA SpaceX CRS-34 launch time", "CRS-34 docking time", "Dragon arrival May 2026 NASA blog"],
+            "official": ["https://www.nasa.gov/mission/nasa-spacex-crs-34/", "https://www.nasa.gov/event/nasas-spacex-crs-34/", "https://www.nasa.gov/blogs/commercialcrew/2026/05/12/station-hums-with-advanced-research-as-dragon-nears-launch/"],
+            "major_media": ["https://www.space.com/space-exploration/launches-spacecraft/spacex-dragon-cargo-launch-iss-crs-34"],
+            "specialist_media": ["https://www.nasa.gov/blogs/commercialcrew/"],
+            "sns_x": ["https://x.com/SpaceX", "https://x.com/NASA"],
+            "youtube_video": ["https://www.youtube.com/results?search_query=NASA%20SpaceX%20CRS-34%20launch"],
+            "data_numeric": ["payload mass (~6,500 pounds) referenced via NASA/Space.com coverage"],
+            "schedule_calendar": ["NASA event schedule page used as schedule-of-record"],
+            "counter_search": ["counter-search: time conversion (ET/JST) and confirm 'launch vs docking' are not conflated"],
+            "adopted": ["primary NASA mission/event/blog pages pinned"],
+            "held": ["final docking confirmation capture (primary update)"],
+            "excluded": [],
+            "unresolved": ["non-critical: post-event recap extraction once final times are fixed"],
+            "freshness_check": "cards dated 2026-05-15; primary pages updated within the week",
+            "critical_unresolved": []
+          },
+          "アジア経済": {
+            "search_terms": ["India CPI April 2026 3.48", "MoSPI CPI release April 2026", "macro calendar Asia May 2026"],
+            "official": ["https://www.mospi.gov.in/", "https://esankhyiki.mospi.gov.in/"],
+            "major_media": ["https://www.hindustantimes.com/india-news/cpi-inflation-rises-to-3-48-in-apr-on-food-price-gains-101778648147643.html"],
+            "specialist_media": ["https://www.teamleaseregtech.com/updates/article/55805/mospi-issued-the-cpi-inflation-data-for-april-2026/"],
+            "sns_x": ["https://x.com/MoSPI_goi", "https://x.com/pib_india"],
+            "youtube_video": ["https://www.youtube.com/results?search_query=India%20CPI%20April%202026%203.48"],
+            "data_numeric": ["India CPI (Apr 2026) 3.48% YoY fixed from release summaries; primary pointer logged"],
+            "schedule_calendar": ["MoSPI release cadence + macro calendar tracking"],
+            "counter_search": ["counter-search: reconcile headline vs rural/urban splits across sources"],
+            "adopted": ["India CPI headline + primary pointers"],
+            "held": ["broader Asia macro delta scan (Vietnam/China) when signal appears"],
+            "excluded": [],
+            "unresolved": ["non-critical: collect additional primary release PDFs"],
+            "freshness_check": "cards dated 2026-05-15; CPI release May 12–13, 2026",
+            "critical_unresolved": []
+          },
+          "宇都宮ブレックス": {
+            "search_terms": ["宇都宮ブレックス 日程 結果", "B.LEAGUE 宇都宮ブレックス 2026 5月", "宇都宮ブレックス ゲームレポート", "BREX YouTube"],
+            "official": ["https://www.utsunomiyabrex.com/", "https://www.bleague.jp/club_detail/?TeamID=703", "https://www.bleague.jp/schedule/B.LEAGUE"],
+            "major_media": ["https://basketballking.jp/stats/japan/championship/match"],
+            "specialist_media": ["https://www.jsports.co.jp/"],
+            "sns_x": ["https://x.com/utsunomiyabrex", "https://x.com/BLEAGUE_JP"],
+            "youtube_video": ["https://www.bleague.jp/video_detail/?id=591968", "https://www.youtube.com/results?search_query=%E5%AE%87%E9%83%BD%E5%AE%AE%E3%83%96%E3%83%AC%E3%83%83%E3%82%AF%E3%82%B9%20%E3%83%8F%E3%82%A4%E3%83%A9%E3%82%A4%E3%83%88"],
+            "data_numeric": ["schedule/result entries verified on official pages (as schedule-of-record)"],
+            "schedule_calendar": ["B.LEAGUE schedule page used as schedule-of-record"],
+            "counter_search": ["counter-search: ensure any '予定' card is overwritten by official result after game"],
+            "adopted": ["official schedule watch + overwrite rule"],
+            "held": ["deep video watching (post-game)"],
+            "excluded": [],
+            "unresolved": ["non-critical: pending next official update as schedule changes"],
+            "freshness_check": "cards dated 2026-05-15; references include May schedule pages",
+            "critical_unresolved": []
+          },
+          "投資": {
+            "search_terms": ["How major US stock indexes fared 5/14/2026", "Dow 50,000 Cisco record", "weekly fund flows ICI April 2026", "economic calendar next data"],
+            "official": ["https://www.ici.org/topics/weekly-estimated-flow-reports", "https://www.cmegroup.com/market-data/economic-calendar.html"],
+            "major_media": ["https://apnews.com/article/8420bff41dc5aa6e8a3eadfe4d3bb291", "https://apnews.com/article/d3ef3c2cfc7ae85a9c9f7b3d42b20a2e"],
+            "specialist_media": ["https://www.etf.com/sections/weekly-etf-flows"],
+            "sns_x": ["https://x.com/Reuters", "https://x.com/WSJmarkets"],
+            "youtube_video": ["https://www.youtube.com/results?search_query=market%20wrap%20May%202026"],
+            "data_numeric": ["index moves summarized from AP recaps; fund flow numbers referenced from ICI reports"],
+            "schedule_calendar": ["CME economic calendar used to pin next data points"],
+            "counter_search": ["counter-search: separate 'price move' from 'story'; cross-check flows vs price"],
+            "adopted": ["AP market recap as major-media baseline", "ICI as primary flow pointer"],
+            "held": ["deeper sector/earnings attribution"],
+            "excluded": [],
+            "unresolved": ["non-critical: confirm additional data sources for rates/FX"],
+            "freshness_check": "cards dated 2026-05-15; US close is May 14, 2026 (timezone-aware)",
+            "critical_unresolved": []
+          }
+        }
+      }</script>
+    </article>
+  </main>
+</body>
+</html>
+
