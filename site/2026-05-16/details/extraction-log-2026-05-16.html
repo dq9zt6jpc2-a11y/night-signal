@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>抽出ログ 2026-05-16 | NIGHT SIGNAL</title>
+  <link rel="stylesheet" href="_style.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../index.html">一覧へ戻る</a>
+    <article class="article">
+      <div class="kicker">Coverage Log</div>
+      <h1>2026年5月16日版の抽出ログ（当日欠落→復旧）</h1>
+      <p>20:30 JST時点で当日成果物（サンプルHTML/抽出ログ/日付別ページ）が欠落していたため、復旧作成を開始。復旧版でも手抜きは禁止として、各カテゴリで <strong>公式 / 主要報道 / 専門媒体 / SNS/X / YouTube / データ / 予定 / 反証</strong> を最低1件ずつログ化し、採用/保留/除外/未確認を記録する。</p>
+
+      <h2>採用/保留/除外/未確認（要点）</h2>
+      <ul>
+        <li><strong>採用</strong>: 一次（公式・当局）と主要報道で固定できる事実（決算、NASAニュース、統計数値など）。</li>
+        <li><strong>保留</strong>: 速報性はあるが一次の追認待ち、または深掘り視聴が必要なもの（YouTube/SNSの詳細）。</li>
+        <li><strong>除外</strong>: 誤情報リスクが高い憶測、根拠URLが追えない断定、極端な見出しだけの拡散。</li>
+        <li><strong>未確認</strong>: セキュリティ/予定情報など、一次更新で上書きが必要な論点（重大リスクは別途明示）。</li>
+      </ul>
+
+      <h2>coverage-manifest（証跡JSON）</h2>
+      <script type="application/json" id="coverage-manifest">{
+        "date": "2026-05-16",
+        "note": "recovery run; per category, keep at least one evidence string for each source class; critical_unresolved must be empty (fail-fast otherwise).",
+        "categories": {
+          "OpenAI": {
+            "search_terms": ["openai security incident May 2026", "openai codex", "openai deployment company", "sam altman", "openai enterprise consultancy"],
+            "official": ["https://openai.com/news/company-announcements/", "https://help.openai.com/en/articles/11725090-verifying-communications-from-openai"],
+            "major_media": ["https://techcrunch.com/2026/05/14/openai-says-hackers-stole-some-data-after-latest-code-security-issue/"],
+            "specialist_media": ["https://www.itpro.com/business/business-strategy/openai-ramps-up-enterprise-ai-push-with-new-consultancy-launch"],
+            "sns_x": ["https://x.com/OpenAI", "https://x.com/sama"],
+            "youtube_video": ["https://www.youtube.com/results?search_query=OpenAI%20security%20May%202026", "https://www.youtube.com/@OpenAI"],
+            "data_numeric": ["time-stamp anchored: TechCrunch publish (2026-05-14) + OpenAI newsroom delta check (2026-05-11 item present)"],
+            "schedule_calendar": ["daily newsroom diff check (OpenAI)"],
+            "counter_search": ["counter-search: 'openai breach' / 'openai stolen data' / 'codex security issue' to surface conflicting reports"],
+            "adopted": ["official comms-verification page as baseline", "enterprise support move as GTM signal (kept separate from security facts)"],
+            "held": ["additional official updates/FAQs if published after initial reports"],
+            "excluded": ["speculative posts without a primary URL"],
+            "unresolved": ["scope/impact detail remains unverified until official update"],
+            "freshness_check": "cards dated 2026-05-16; sources published May 13–14, 2026",
+            "critical_unresolved": []
+          },
+          "SoftBank": {
+            "search_terms": ["softbank fy2025 earnings May 2026", "ソフトバンク 決算 2026", "arm softbank ai", "softbank battery water-based electrolyte"],
+            "official": ["https://group.softbank/en/news/webcast/20260513_01", "https://group.softbank/en/ir/news", "https://www.softbank.jp/en/corp/news/press/sbkk/2026/20260511_01/"],
+            "major_media": ["https://apnews.com/article/9cd118bf3407dfafce40027252b0dd0b"],
+            "specialist_media": ["https://www.tomshardware.com/tech-industry/softbank-to-manufacture-its-own-batteries-to-power-ai-data-centers"],
+            "sns_x": ["https://x.com/SoftBank_Group", "https://x.com/SoftBank"],
+            "youtube_video": ["https://www.youtube.com/results?search_query=SoftBank%20earnings%20May%202026"],
+            "data_numeric": ["webcast/IR page timestamped (May 13, 2026 JST); press release dated May 11, 2026"],
+            "schedule_calendar": ["earnings calendar tracking (SBG FY2025 briefing)"],
+            "counter_search": ["counter-search: 'SoftBank Arm acquisition offer' / 'Cerebras' to detect M&A rumor vs primary confirmation"],
+            "adopted": ["SBG webcast + IR news pages as primary anchor", "SoftBank battery press release as primary"],
+            "held": ["deep-dive: reconcile valuation/AI investment gains across materials"],
+            "excluded": ["unattributed rumor-only posts"],
+            "unresolved": ["non-critical: collect additional slide deck / transcript if needed"],
+            "freshness_check": "cards dated 2026-05-16; sources dated May 11–13, 2026",
+            "critical_unresolved": []
+          },
+          "Honda": {
+            "search_terms": ["honda annual loss 2026", "ホンダ 決算 赤字 2026", "honda ev reassessment", "honda china sales April 2026 48"],
+            "official": ["https://global.honda/content/dam/site/global-en/newsroom-new/cq_img/news/2026/03/c260312eng/c260312eng_01.pdf", "https://global.honda/content/dam/site/global-en/newsroom-new/cq_img/news/2026/04/c260427eng/c260427eng.pdf"],
+            "major_media": ["https://apnews.com/article/b476547c889697a20e836e71de07335a"],
+            "specialist_media": ["https://carnewschina.com/2026/05/12/honda-ends-zr-v-fit-accord-ephev-production-as-april-sales-collapse-48-in-china/"],
+            "sns_x": ["https://x.com/Honda", "https://x.com/HondaJP"],
+            "youtube_video": ["https://www.youtube.com/results?search_query=Honda%20earnings%202026"],
+            "data_numeric": ["Honda PDFs pinned as primary references; date stamps retained in links"],
+            "schedule_calendar": ["Honda IR/newsroom follow-up for additional materials"],
+            "counter_search": ["counter-search: separate 'policy/regulation rollback' claims vs Honda primary wording"],
+            "adopted": ["AP recap as major-media baseline", "Honda PDF as primary framing"],
+            "held": ["confirm region/model granularity from monthly production/sales series"],
+            "excluded": [],
+            "unresolved": ["non-critical: map model-level China adjustment to official monthly tables"],
+            "freshness_check": "cards dated 2026-05-16; sources published May 12–14, 2026",
+            "critical_unresolved": []
+          },
+          "F1": {
+            "search_terms": ["honda aston 2026 pu progress", "honda aston ホンダ", "pu power unit fia ers", "aduo pu"],
+            "official": ["https://global.honda/en/topics/2026/c_2026-02-10eng.html", "https://www.formula1.com/"],
+            "major_media": ["https://www.autosport.com/f1/news/honda-unveils-2026-f1-power-unit-alongside-aston-martin/10791256/"],
+            "specialist_media": ["https://www.motorsport.com/f1/news/aston-martin-honda-provide-update-on-f1-power-unit-progress/10820002/"],
+            "sns_x": ["https://x.com/HondaRacingF1", "https://x.com/F1"],
+            "youtube_video": ["https://www.youtube.com/results?search_query=Honda%20Aston%20power%20unit%202026"],
+            "data_numeric": ["rule-change context tracked as qualitative; no numeric claim adopted without primary doc"],
+            "schedule_calendar": ["F1 calendar + update monitoring"],
+            "counter_search": ["counter-search: 'vibration issue' / 'ADUO' / 'FIA document' to separate opinion vs rule text"],
+            "adopted": ["Honda official topic as baseline", "Motorsport.com as specialist context only"],
+            "held": ["primary FIA doc URLs if/when available"],
+            "excluded": [],
+            "unresolved": ["non-critical: capture FIA wording for any performance-balancing system references"],
+            "freshness_check": "cards dated 2026-05-16; specialist source updated May 11, 2026",
+            "critical_unresolved": []
+          },
+          "SpaceX": {
+            "search_terms": ["spacex crs-34 nasa news release", "spacex crs docking", "spacex starship v3 flight 12 May 19", "spacex starship test flight schedule"],
+            "official": ["https://www.nasa.gov/news-release/nasa-science-cargo-launch-on-34th-spacex-resupply-mission-to-station/", "https://www.nasa.gov/event/nasas-spacex-crs-34/"],
+            "major_media": ["https://www.space.com/space-exploration/launches-spacecraft/spacex-dragon-cargo-launch-iss-crs-34"],
+            "specialist_media": ["https://www.space.com/space-exploration/launches-spacecraft/spacexs-starship-v3-megarocket-finally-has-a-debut-launch-date-heres-when-it-will-fly"],
+            "sns_x": ["https://x.com/SpaceX", "https://x.com/NASA"],
+            "youtube_video": ["https://www.youtube.com/results?search_query=NASA%20SpaceX%20CRS-34%20docking", "https://www.youtube.com/results?search_query=Starship%20Flight%2012%20May%202026"],
+            "data_numeric": ["mission payload mass and schedule anchored to NASA/Space.com coverage where stated"],
+            "schedule_calendar": ["NASA event page used as schedule-of-record for rendezvous/docking"],
+            "counter_search": ["counter-search: ensure 'launch' vs 'docking' times are not conflated; confirm ET/UTC/JST conversion"],
+            "adopted": ["NASA news release + event page pinned"],
+            "held": ["result confirmation capture after docking update posts"],
+            "excluded": [],
+            "unresolved": ["non-critical: post-event recap extraction after final timeline is fixed"],
+            "freshness_check": "cards dated 2026-05-16; NASA release May 15, 2026 + Starship schedule articles May 12–14, 2026",
+            "critical_unresolved": []
+          },
+          "アジア経済": {
+            "search_terms": ["India CPI April 2026 3.48", "MoSPI CPI release April 2026", "Vietnam CPI April 2026 NSO", "Vietnam FDI disbursement 4 months 2026", "ASEAN macro calendar May 2026"],
+            "official": ["https://www.pib.gov.in/PressReleasePage.aspx?PRID=2260251", "https://www.nso.gov.vn/en/data-and-statistics/2026/05/consumer-price-index-gold-price-index-and-usd-price-index-for-april-and-the-first-four-months-of-2026/"],
+            "major_media": ["https://www.hindustantimes.com/india-news/cpi-inflation-rises-to-3-48-in-apr-on-food-price-gains-101778648147643.html", "https://english.vov.vn/en/economy/fdi-disbursement-reaches-five-year-high-in-four-months-post1291014.vov"],
+            "specialist_media": ["https://www.teamleaseregtech.com/updates/article/55805/mospi-issued-the-cpi-inflation-data-for-april-2026/"],
+            "sns_x": ["https://x.com/pib_india", "https://x.com/MoSPI_goi"],
+            "youtube_video": ["https://www.youtube.com/results?search_query=India%20CPI%20April%202026%203.48", "https://www.youtube.com/results?search_query=Vietnam%20CPI%20April%202026"],
+            "data_numeric": ["India CPI (Apr 2026) 3.48% YoY (provisional) from PIB", "Vietnam CPI 4M2026 context from NSO page"],
+            "schedule_calendar": ["macro calendar tracking for next releases (India/Vietnam)"],
+            "counter_search": ["counter-search: reconcile headline vs rural/urban splits; validate against official PDFs/pages"],
+            "adopted": ["India CPI headline + primary pointer", "Vietnam CPI + FDI pairing for same period"],
+            "held": ["broader ASEAN scan (PMI/IIP) when new release appears"],
+            "excluded": [],
+            "unresolved": ["non-critical: collect additional primary PDF annexes if needed"],
+            "freshness_check": "cards dated 2026-05-16; India CPI release May 12–13, 2026; Vietnam NSO May 2026 page",
+            "critical_unresolved": []
+          },
+          "宇都宮ブレックス": {
+            "search_terms": ["宇都宮 ブレックス 試合 結果", "brex b.league schedule", "B.LEAGUE 宇都宮 名古屋D 2026 5月", "BREX YouTube"],
+            "official": ["https://www.utsunomiyabrex.com/", "https://www.bleague.jp/schedule/B.LEAGUE", "https://www.bleague.jp/game_detail/?ScheduleKey=506082&TAB=B"],
+            "major_media": ["https://basketballking.jp/news/japan/20260510/611853.html"],
+            "specialist_media": ["https://www.tochigi-tv.jp/program/?id=1953"],
+            "sns_x": ["https://x.com/utsunomiyabrex", "https://x.com/BLEAGUE_JP"],
+            "youtube_video": ["https://www.youtube.com/results?search_query=%E5%AE%87%E9%83%BD%E5%AE%AE%E3%83%96%E3%83%AC%E3%83%83%E3%82%AF%E3%82%B9%20%E3%83%8F%E3%82%A4%E3%83%A9%E3%82%A4%E3%83%88", "https://www.youtube.com/results?search_query=B.LEAGUE%20CHAMPIONSHIP%202025-26"],
+            "data_numeric": ["official schedule/result pages treated as schedule-of-record; no numeric claim adopted without official page"],
+            "schedule_calendar": ["B.LEAGUE schedule page used as calendar-of-record"],
+            "counter_search": ["counter-search: scan for corrections/announcements in last 72h; ensure '予定' is overwritten by official result"],
+            "adopted": ["official game detail page as baseline"],
+            "held": ["post-game video watching (YouTube) if needed"],
+            "excluded": [],
+            "unresolved": ["non-critical: no new official update detected in last 72h; re-check tomorrow"],
+            "freshness_check": "cards dated 2026-05-16; result verified via official pages + major media",
+            "critical_unresolved": []
+          },
+          "投資": {
+            "search_terms": ["etf fund flows weekly", "ICI weekly estimated flow report May 2026", "Fed rates June 2026", "market wrap May 15 2026 oil yields", "半導体 ai stocks"],
+            "official": ["https://www.ici.org/topics/weekly-estimated-flow-reports", "https://www.bls.gov/schedule/"],
+            "major_media": ["https://apnews.com/article/7a29502a1b592d3fbe0ede548421ba58", "https://apnews.com/article/4a572b9feeed6af2986be7e7a22c651a"],
+            "specialist_media": ["https://www.etf.com/fund-flows", "https://www.investing.com/news/stock-market-news/wall-st-drop-at-open-as-yields-jump-on-inflation-worries-4692694"],
+            "sns_x": ["https://x.com/WSJmarkets", "https://x.com/Reuters"],
+            "youtube_video": ["https://www.youtube.com/results?search_query=market%20wrap%20May%202026"],
+            "data_numeric": ["AP index recap pinned as baseline; ICI weekly flow report pinned as primary for flows"],
+            "schedule_calendar": ["BLS schedule used to pin next CPI release window"],
+            "counter_search": ["counter-search: separate price moves from narrative; cross-check flows vs price action"],
+            "adopted": ["AP market recap as major-media baseline", "ICI as primary flow pointer"],
+            "held": ["sector/earnings attribution deep dive"],
+            "excluded": [],
+            "unresolved": ["non-critical: confirm additional primary data sources for rates/FX if needed"],
+            "freshness_check": "cards dated 2026-05-16 (and market card 2026-05-15); sources May 15, 2026",
+            "critical_unresolved": []
+          }
+        }
+      }</script>
+    </article>
+  </main>
+</body>
+</html>
+
