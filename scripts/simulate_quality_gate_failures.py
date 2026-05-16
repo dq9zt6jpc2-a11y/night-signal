@@ -171,6 +171,18 @@ def main() -> int:
     )
 
     assert_fail(
+        "card detail title mismatch",
+        lambda tmp: write(
+            tmp / "site" / ISSUE_DATE / "details" / "openai-2026-05-16.html",
+            read(tmp / "site" / ISSUE_DATE / "details" / "openai-2026-05-16.html").replace(
+                "ChatGPT家計管理プレビューと安全更新を確認",
+                "ChatGPTに家計管理プレビュー。米国Pro向けに口座連携を開始",
+            ),
+        ),
+        "card/detail title mismatch",
+    )
+
+    assert_fail(
         "missing category section",
         lambda tmp: mutate_root_and_dated(tmp, remove_investment_section_once),
         "missing category sections",

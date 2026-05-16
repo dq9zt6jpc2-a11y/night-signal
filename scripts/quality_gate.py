@@ -156,6 +156,38 @@ HEADLINE_ABSTRACT_LEAK_TERMS = [
 
 HEADLINE_FORBIDDEN_CHARS = ["→", "“", "”"]
 GENERIC_HEADLINE_STARTS = ["何が", "なぜ", "どう見る", "読み方", "ポイント"]
+DETAIL_ALIGNMENT_KEYWORDS = [
+    "ChatGPT",
+    "家計",
+    "口座",
+    "安全",
+    "リスク",
+    "SoftBank",
+    "Arm",
+    "データセンター",
+    "Honda",
+    "EV",
+    "HV",
+    "ADUO",
+    "FIA",
+    "CRS-34",
+    "Falcon",
+    "Dragon",
+    "ISS",
+    "Starship",
+    "Flight 12",
+    "ベトナム",
+    "IIP",
+    "インド",
+    "外貨準備",
+    "名古屋",
+    "ジェレット",
+    "米株",
+    "ファンド",
+    "ETF",
+    "ICI",
+    "フロー",
+]
 
 
 def issue_date_from_args() -> str:
@@ -198,6 +230,13 @@ def card_title(card: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+def card_detail_href(card: str) -> str | None:
+    match = re.search(r'href="([^"]*details/([^"#?]+\.html))', card)
+    if not match:
+        return None
+    return match.group(2)
+
+
 def page_titles(html: str) -> list[str]:
     titles = []
     for match in re.finditer(r"<h3>(.*?)</h3>", section_before_history(html), flags=re.S):
@@ -228,6 +267,45 @@ def validate_reader_facing_headlines(context: str, headings: list[str]) -> None:
             failures.append(f"{heading} [generic start]")
     if failures:
         fail(f"{context} headings are not reader-facing: " + "; ".join(failures[:8]))
+
+
+def alignment_keywords(title: str) -> list[str]:
+    return [keyword for keyword in DETAIL_ALIGNMENT_KEYWORDS if keyword in title]
+
+
+def validate_card_detail_alignment(issue_date: str, root_html: str, dated_html: str) -> None:
+    cards = card_blocks(root_html) + card_blocks(dated_html)
+    by_detail: dict[str, set[str]] = {}
+    for card in cards:
+        name = card_detail_href(card)
+        if not name:
+            continue
+        by_detail.setdefault(name, set()).add(card_title(card))
+
+    failures = []
+    for name, titles in sorted(by_detail.items()):
+        if name in {"policy.html", f"extraction-log-{issue_date}.html"}:
+            continue
+        path = SITE_ROOT / issue_date / "details" / name
+        html = read(path)
+        primary = " ".join(heading_texts(html, ("title", "h1")))
+        body = " ".join(heading_texts(html, ("title", "h1", "h2")))
+        summary_match = re.search(r'<div class="summary-lead">(.*?)</div>', html, flags=re.S)
+        if summary_match:
+            body += " " + re.sub(r"<.*?>", "", summary_match.group(1))
+        for title in sorted(titles):
+            keywords = alignment_keywords(title)
+            if not keywords:
+                continue
+            primary_hits = [keyword for keyword in keywords if keyword in primary]
+            body_hits = [keyword for keyword in keywords if keyword in body]
+            required_primary_hits = min(2, len(keywords))
+            if len(primary_hits) < required_primary_hits or len(body_hits) < required_primary_hits:
+                failures.append(
+                    f"{title} -> {name} (primary hits: {primary_hits or '-'}, expected: {keywords})"
+                )
+    if failures:
+        fail("card/detail title mismatch: " + "; ".join(failures[:8]))
 
 
 def local_href_targets(html: str, base: Path) -> list[Path]:
@@ -459,6 +537,7 @@ def validate(issue_date: str) -> None:
 
     validate_category_sections(root_html)
     validate_detail_quality(issue_date, root_html, dated_html)
+    validate_card_detail_alignment(issue_date, root_html, dated_html)
 
     required_links = [
         f"{issue_date}/details/extraction-log-{issue_date}.html",
