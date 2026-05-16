@@ -183,6 +183,30 @@ def main() -> int:
     )
 
     assert_fail(
+        "detail checklist section heading leak",
+        lambda tmp: write(
+            tmp / "site" / ISSUE_DATE / "details" / "brex-2026-05-16.html",
+            read(tmp / "site" / ISSUE_DATE / "details" / "brex-2026-05-16.html").replace("<h2>本文</h2>", "<h2>チェック観点</h2>", 1),
+        ),
+        "detail pages use checklist/next-step section headings",
+    )
+
+    assert_fail(
+        "detail summary too thin",
+        lambda tmp: write(
+            tmp / "site" / ISSUE_DATE / "details" / "brex-2026-05-16.html",
+            re.sub(
+                r'<div class="summary-lead">.*?</div>',
+                '<div class="summary-lead">名古屋D戦とジェレット退団を確認する。</div>',
+                read(tmp / "site" / ISSUE_DATE / "details" / "brex-2026-05-16.html"),
+                count=1,
+                flags=re.S,
+            ),
+        ),
+        "detail summaries are too thin",
+    )
+
+    assert_fail(
         "missing category section",
         lambda tmp: mutate_root_and_dated(tmp, remove_investment_section_once),
         "missing category sections",

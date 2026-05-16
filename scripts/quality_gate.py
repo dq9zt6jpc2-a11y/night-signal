@@ -188,6 +188,15 @@ DETAIL_ALIGNMENT_KEYWORDS = [
     "ICI",
     "フロー",
 ]
+DETAIL_FORBIDDEN_SECTION_HEADINGS = [
+    "チェック観点",
+    "次の確認",
+    "次の予定",
+    "読むポイント",
+    "今回の要点",
+    "一次で押さえる点",
+]
+MIN_SUMMARY_LEAD_CHARS = 180
 
 
 def issue_date_from_args() -> str:
@@ -357,6 +366,8 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
     excluded = {"policy.html", f"extraction-log-{issue_date}.html"}
     weak = []
     leaked = []
+    checklist_headings = []
+    weak_summaries = []
     missing_source = []
     missing_back = []
     for name in sorted(linked - excluded):
@@ -370,6 +381,17 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
         heading_text = re.sub(r"<[^>]+>", "", headings)
         if any(term in heading_text for term in DETAIL_POLICY_LEAK_TERMS):
             leaked.append(name)
+        h2_texts = heading_texts(html, ("h2",))
+        if any(any(term in heading for term in DETAIL_FORBIDDEN_SECTION_HEADINGS) for heading in h2_texts):
+            checklist_headings.append(name)
+        summary_match = re.search(r'<div class="summary-lead">(.*?)</div>', html, flags=re.S)
+        if not summary_match:
+            weak_summaries.append(f"{name}: missing summary")
+        else:
+            summary_text = re.sub(r"<[^>]+>", "", summary_match.group(1))
+            summary_text = re.sub(r"\s+", "", summary_text)
+            if len(summary_text) < MIN_SUMMARY_LEAD_CHARS:
+                weak_summaries.append(f"{name}: {len(summary_text)} chars")
         validate_reader_facing_headlines(
             f"detail page {name}",
             heading_texts(html, ("title", "h1")),
@@ -382,6 +404,10 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
         fail("detail pages too thin: " + "; ".join(weak[:8]))
     if leaked:
         fail("detail headings contain policy/checklist wording: " + ", ".join(leaked[:8]))
+    if checklist_headings:
+        fail("detail pages use checklist/next-step section headings: " + ", ".join(checklist_headings[:8]))
+    if weak_summaries:
+        fail("detail summaries are too thin: " + "; ".join(weak_summaries[:8]))
     if missing_source:
         fail("detail pages missing source block: " + ", ".join(missing_source[:8]))
     if missing_back:
