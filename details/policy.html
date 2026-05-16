@@ -69,6 +69,7 @@
         <li>複数カードが同じ詳細ページへリンクする場合、詳細ページのtitle、h1、30秒概要は、リンク元すべてのカード見出しに対応させる。片方のカードだけを受ける見出しにしない。</li>
         <li>各カテゴリは原則2件以上のカードを置く。2件未満は品質ゲートで失敗させる。</li>
         <li>詳細ページは日本語で読める要約にする。英語原文へ直接飛ばさず、まず日本語詳細ページへ誘導する。</li>
+        <li>新規の詳細ページは原則として <code>python3 scripts/render_detail.py detail.json</code> で作成する。自由HTMLの手書きで「チェック観点」「次の確認」などの作業見出しを作らない。</li>
         <li>詳細ページは30秒概要を本文の中心にする。「チェック観点」「次の確認」「次の予定」のような作業見出しで情報を後ろへ逃がさない。</li>
         <li>要約は短さより情報不足回避を優先する。重要な数字、日時、関係者、背景、前回からの変化、今後の日程は30秒概要に入れる。</li>
         <li>参照先にグラフや表がある場合は、その内容を日本語で説明する。依頼がない限り自作図解は作らない。</li>
@@ -88,6 +89,7 @@
       <p>方針文だけでは再発防止にならないため、公開前に必ず機械的なゲートを通します。</p>
       <ul>
         <li><code>python3 scripts/sync_site.py YYYY-MM-DD</code>: 当日版をsiteへ同期する。過去号へのフォールバックは禁止。</li>
+        <li><code>python3 scripts/render_detail.py detail.json</code>: 詳細ページを許可された構造だけで生成する。作業見出しや薄い概要は作成時点で失敗させる。</li>
         <li><code>python3 scripts/quality_gate.py YYYY-MM-DD</code>: 日付、鮮度、カテゴリ件数、読者向け見出し、カードと詳細ページの整合、詳細概要の厚み、リンク、詳細ページ、coverage-manifest、カテゴリ固有検索軸を検査する。</li>
         <li><code>python3 scripts/pre22_audit.py YYYY-MM-DD</code>: 当日成果物と品質ゲートを公開前に確認する。</li>
         <li>commit/push後に <code>python3 scripts/publication_audit.py YYYY-MM-DD</code> を実行し、未コミット差分、未push、remote不一致、公開URLの日付不一致を失敗扱いにする。</li>
