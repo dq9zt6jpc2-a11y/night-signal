@@ -2,10 +2,6 @@ name: NIGHT SIGNAL Preflight
 
 on:
   workflow_dispatch:
-  schedule:
-    # 20:30 JST and 21:30 JST
-    - cron: "30 11 * * *"
-    - cron: "30 12 * * *"
 
 permissions:
   contents: read
