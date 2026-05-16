@@ -133,6 +133,30 @@ DETAIL_POLICY_LEAK_TERMS = TITLE_POLICY_LEAK_TERMS + [
     "当日版が未生成",
 ]
 
+HEADLINE_ABSTRACT_LEAK_TERMS = [
+    "個人の文脈",
+    "安全の文脈",
+    "同じ地図",
+    "CPUの現場",
+    "投資枠とインフラ",
+    "ロスター更新",
+    "打ち上げ結果",
+    "製品”と“資本",
+    "扱い始める",
+    "温度感",
+    "前に出す",
+    "同じ線",
+    "現物",
+    "足回り",
+    "見る日",
+    "読む日",
+    "意味",
+    "更新導線",
+]
+
+HEADLINE_FORBIDDEN_CHARS = ["→", "“", "”"]
+GENERIC_HEADLINE_STARTS = ["何が", "なぜ", "どう見る", "読み方", "ポイント"]
+
 
 def issue_date_from_args() -> str:
     if len(sys.argv) > 1:
@@ -180,6 +204,30 @@ def page_titles(html: str) -> list[str]:
         text = re.sub(r"<.*?>", "", match.group(1))
         titles.append(re.sub(r"\s+", " ", text).strip())
     return titles
+
+
+def heading_texts(html: str, tags: tuple[str, ...]) -> list[str]:
+    tag_pattern = "|".join(tags)
+    texts = []
+    for match in re.finditer(rf"<({tag_pattern})[^>]*>(.*?)</\1>", html, flags=re.S):
+        text = re.sub(r"<.*?>", "", match.group(2))
+        texts.append(re.sub(r"\s+", " ", text).strip())
+    return texts
+
+
+def validate_reader_facing_headlines(context: str, headings: list[str]) -> None:
+    failures = []
+    for heading in headings:
+        if any(term in heading for term in HEADLINE_ABSTRACT_LEAK_TERMS):
+            failures.append(f"{heading} [abstract phrase]")
+            continue
+        if any(char in heading for char in HEADLINE_FORBIDDEN_CHARS):
+            failures.append(f"{heading} [quote/arrow shorthand]")
+            continue
+        if any(heading.startswith(prefix) for prefix in GENERIC_HEADLINE_STARTS):
+            failures.append(f"{heading} [generic start]")
+    if failures:
+        fail(f"{context} headings are not reader-facing: " + "; ".join(failures[:8]))
 
 
 def local_href_targets(html: str, base: Path) -> list[Path]:
@@ -244,6 +292,10 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
         heading_text = re.sub(r"<[^>]+>", "", headings)
         if any(term in heading_text for term in DETAIL_POLICY_LEAK_TERMS):
             leaked.append(name)
+        validate_reader_facing_headlines(
+            f"detail page {name}",
+            heading_texts(html, ("title", "h1")),
+        )
         if 'class="source"' not in html or "原文確認" not in html:
             missing_source.append(name)
         if 'class="back"' not in html or "../index.html" not in html:
@@ -370,6 +422,11 @@ def validate(issue_date: str) -> None:
     ]
     if leaked_titles:
         fail("card titles contain policy/checklist wording: " + "; ".join(leaked_titles[:8]))
+
+    validate_reader_facing_headlines(
+        "root page",
+        heading_texts(section_before_history(root_html), ("h1", "h3")),
+    )
 
     stale: list[str] = []
     fresh_count = 0

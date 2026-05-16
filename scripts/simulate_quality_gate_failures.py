@@ -17,7 +17,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ISSUE_DATE = "2026-05-15"
+ISSUE_DATE = "2026-05-16"
+SOFTBANK_CARD_TITLE = "<h3>SoftBank（9434）"
 
 
 def copy_fixture() -> Path:
@@ -137,9 +138,36 @@ def main() -> int:
         "title policy wording leak",
         lambda tmp: mutate_root_and_dated(
             tmp,
-            lambda html: html.replace("<h3>SoftBank Group", "<h3>一次で固定 SoftBank Group", 1),
+            lambda html: html.replace(SOFTBANK_CARD_TITLE, "<h3>一次で固定 SoftBank（9434）", 1),
         ),
         "card titles contain policy/checklist wording",
+    )
+
+    assert_fail(
+        "abstract headline wording leak",
+        lambda tmp: mutate_root_and_dated(
+            tmp,
+            lambda html: html.replace(SOFTBANK_CARD_TITLE, "<h3>投資枠とインフラを同じ地図で読む SoftBank（9434）", 1),
+        ),
+        "headings are not reader-facing",
+    )
+
+    assert_fail(
+        "headline arrow shorthand leak",
+        lambda tmp: mutate_root_and_dated(
+            tmp,
+            lambda html: html.replace(SOFTBANK_CARD_TITLE, "<h3>SoftBank（9434）: 投資枠→AI-RAN→堺DC", 1),
+        ),
+        "headings are not reader-facing",
+    )
+
+    assert_fail(
+        "detail headline quote shorthand leak",
+        lambda tmp: write(
+            tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-16.html",
+            read(tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-16.html").replace("<h1>", "<h1>“投資枠”と“CPUの現場” ", 1),
+        ),
+        "headings are not reader-facing",
     )
 
     assert_fail(
@@ -156,14 +184,14 @@ def main() -> int:
 
     assert_fail(
         "stale visible card date",
-        lambda tmp: mutate_root_and_dated(tmp, lambda html: html.replace(">2026-05-15<", ">2026-05-10<", 1)),
+        lambda tmp: mutate_root_and_dated(tmp, lambda html: html.replace(">2026-05-16<", ">2026-05-10<", 1)),
         "stale cards found",
     )
 
     assert_fail(
         "broken local detail link",
-        lambda tmp: mutate_root_and_dated(tmp, lambda html: html.replace("details/softbank-2026-05-15.html", "details/missing.html", 1)),
-        "missing file: site/2026-05-15/details/missing.html",
+        lambda tmp: mutate_root_and_dated(tmp, lambda html: html.replace("details/softbank-2026-05-16.html", "details/missing.html", 1)),
+        "missing file: site/2026-05-16/details/missing.html",
     )
 
     assert_fail(
@@ -181,7 +209,7 @@ def main() -> int:
     assert_fail(
         "detail page too thin",
         lambda tmp: write(
-            tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-15.html",
+            tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-16.html",
             '<html><head><title>SoftBank</title></head><body><main><a class="back" href="../index.html#softbank">一覧へ戻る</a><article><h1>SoftBank</h1><p>薄い要約。</p><div class="source">原文確認:<a href="https://example.com">source</a></div></article></main></body></html>',
         ),
         "detail pages too thin",
@@ -190,8 +218,8 @@ def main() -> int:
     assert_fail(
         "detail heading policy wording leak",
         lambda tmp: write(
-            tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-15.html",
-            read(tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-15.html").replace("<h1>", "<h1>一次で固定 ", 1),
+            tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-16.html",
+            read(tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-16.html").replace("<h1>", "<h1>一次で固定 ", 1),
         ),
         "detail headings contain policy/checklist wording",
     )
