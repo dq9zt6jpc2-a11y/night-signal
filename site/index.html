@@ -10,11 +10,13 @@
       --ink: #0b1118;
       --muted: #687386;
       --panel: #ffffff;
+      --panel-soft: #f7f9fb;
       --line: #d8dee7;
       --blue: #1f5eff;
       --red: #b7352d;
       --teal: #087b73;
       --amber: #a86a17;
+      --green: #2f6f46;
       --night: #071019;
       --shadow: 0 18px 44px rgba(12, 22, 34, 0.10);
     }
@@ -37,7 +39,7 @@
       position: sticky;
       top: 0;
       z-index: 10;
-      background: rgba(238, 241,  244, 0.74);
+      background: rgba(238, 241, 244, 0.74);
       backdrop-filter: blur(18px);
       border-bottom: 1px solid var(--line);
     }
@@ -77,7 +79,7 @@
       color: white;
       border-radius: 12px;
       padding: 34px;
-      min-height: 320px;
+      min-height: 360px;
       box-shadow: 0 28px 80px rgba(7,16,25,0.24);
       display: grid;
       align-content: space-between;
@@ -110,27 +112,51 @@
       position: relative;
       z-index: 1;
     }
-    .edition, .date {
+    .edition {
       color: #9fb4ca;
       font-size: 11px;
       font-weight: 900;
       letter-spacing: 0.14em;
       text-transform: uppercase;
     }
+    .date {
+      color: #9fb4ca;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
     h1 {
       margin: 24px 0 16px;
       max-width: 920px;
-      font-size: clamp(38px, 6vw, 68px);
+      font-size: clamp(42px, 6vw, 76px);
       line-height: 0.98;
+      letter-spacing: 0;
     }
     .hero p {
       margin: 0;
-      max-width: 840px;
+      max-width: 760px;
       color: #dce5ef;
       font-size: 15px;
       line-height: 1.75;
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 26px;
       position: relative;
       z-index: 1;
+    }
+    .hero-chip {
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.06);
+      color: #dce5ef;
+      border-radius: 5px;
+      padding: 7px 10px;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
     }
     .section { margin-top: 32px; }
     .section-head {
@@ -142,7 +168,7 @@
       padding-top: 14px;
       border-top: 1px solid #9aa7b8;
     }
-    h2 { margin: 0; font-size: 23px; line-height: 1.2; }
+    h2 { margin: 0; font-size: 23px; line-height: 1.2; letter-spacing: 0; }
     .section-head p {
       margin: 0;
       color: var(--muted);
@@ -151,6 +177,8 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
+    .cards { display: grid; gap: 14px; }
+    .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; }
     .priority {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -159,95 +187,82 @@
     .priority-card {
       background: var(--panel);
       border: 1px solid var(--line);
+      border-top: 4px solid var(--blue);
       border-radius: 10px;
       padding: 18px;
       box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
     }
-    .priority-card::after {
-      content: "";
-      position: absolute;
-      inset: auto 0 0 0;
-      height: 3px;
-      background: linear-gradient(90deg, #a8322a, #a86a17, #087b73, #1f5eff);
-      opacity: 0.45;
-    }
+    .priority-card.hot { border-top-color: var(--red); }
+    .priority-card.signal { border-top-color: var(--teal); }
+    .priority-card.macro { border-top-color: var(--amber); }
     .rank {
-      width: 32px;
-      height: 32px;
-      border-radius: 9px;
-      display: grid;
-      place-items: center;
-      font-weight: 900;
-      color: #fff;
-      background: var(--night);
-      border: 1px solid rgba(255,255,255,0.12);
-    }
-    .priority-card h3 { margin: 10px 0 8px; font-size: 18px; }
-    .priority-card p { margin: 0; color: #344054; font-size: 14px; }
-    .tag {
-      margin-top: 12px;
       display: inline-flex;
       align-items: center;
-      padding: 6px 10px;
-      border-radius: 7px;
-      border: 1px solid #b9c8dc;
-      background: #eef4ff;
-      font-size: 13px;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      background: var(--night);
+      color: white;
+      font-size: 12px;
+      font-weight: 900;
     }
-    .cards { display: grid; gap: 14px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .card {
-      min-height: 232px;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-left: 6px solid var(--blue);
-      border-radius: 10px;
-      padding: 17px;
+    .priority-card h3 { margin: 0 0 8px; font-size: 19px; line-height: 1.32; }
+    .priority-card p { margin: 0 0 12px; color: #344054; font-size: 14px; }
+    .topic {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .meta {
       display: flex;
-      flex-direction: column;
-      box-shadow: var(--shadow);
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
     }
-    .card.hot { border-left-color: var(--red); }
-    .card.signal { border-left-color: var(--teal); }
-    .card.macro { border-left-color: var(--amber); }
-    .meta { display: flex; gap: 8px; margin-bottom: 10px; }
     .pill {
       display: inline-flex;
       align-items: center;
-      padding: 5px 10px;
+      gap: 8px;
       border-radius: 999px;
+      padding: 4px 10px;
+      border: 1px solid #cfd7e4;
+      background: #f6f8fc;
+      color: #334155;
       font-size: 11px;
       font-weight: 900;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      background: #f1f5f9;
-      border: 1px solid #d8dee7;
-      color: #334155;
     }
-    .pill.red { background: #fff1f1; border-color: #f1b3ae; color: #7a1a14; }
-    .pill.teal { background: #e9fbf8; border-color: #98dbd3; color: #0c4a43; }
-    .pill.amber { background: #fff7e8; border-color: #f0d2a1; color: #6b3c09; }
-    .card h3 { margin: 0 0 8px; font-size: 18px; line-height: 1.35; }
-    .card p { margin: 0; color: #344054; font-size: 14px; }
-    .link {
-      margin-top: auto;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      width: fit-content;
-      min-height: 32px;
-      padding: 5px 11px;
-      border-radius: 7px;
-      border: 1px solid #b9c8dc;
-      background: #eef4ff;
-      font-size: 13px;
+    .pill.hot { border-color: rgba(183, 53, 45, 0.45); background: rgba(183, 53, 45, 0.08); color: #8a1f19; }
+    .pill.signal { border-color: rgba(8, 123, 115, 0.45); background: rgba(8, 123, 115, 0.09); color: #04655f; }
+    .pill.macro { border-color: rgba(168, 106, 23, 0.48); background: rgba(168, 106, 23, 0.10); color: #7f4c09; }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      display: grid;
+      align-content: start;
     }
-    @media (max-width: 900px) {
-      .bar { align-items: flex-start; flex-direction: column; }
-      nav { justify-content: flex-start; }
+    .card.hot { border-top: 4px solid var(--red); }
+    .card.signal { border-top: 4px solid var(--teal); }
+    .card.macro { border-top: 4px solid var(--amber); }
+    .card h3 { margin: 0 0 8px; font-size: 17px; line-height: 1.33; }
+    .card p { margin: 0 0 12px; color: #344054; font-size: 13px; line-height: 1.7; }
+    .link { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 900; }
+    .link::after { content: "→"; }
+    @media (max-width: 980px) {
+      .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .priority { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
       .cards { grid-template-columns: 1fr; }
+      .hero { padding: 26px; }
+      h1 { margin-top: 18px; }
+      .bar { padding: 12px 16px; }
+      main { padding: 20px 16px 52px; }
     }
   </style>
 </head>
@@ -256,17 +271,17 @@
     <div class="bar">
       <div class="brand">
         <strong>NIGHT SIGNAL</strong>
-        <span>2026.05.16</span>
+        <span>Daily Brief · Tokyo / 17:30</span>
       </div>
-      <nav aria-label="カテゴリ">
+      <nav>
         <a href="#softbank">SoftBank</a>
-        <a href="#openai">OpenAI / AI</a>
+        <a href="#openai">OpenAI</a>
         <a href="#honda">Honda</a>
         <a href="#f1">F1</a>
         <a href="#spacex">SpaceX</a>
-        <a href="#asia">Asia</a>
-        <a href="#brex">BREX</a>
-        <a href="#investment">Investment</a>
+        <a href="#asia">アジア</a>
+        <a href="#brex">ブレックス</a>
+        <a href="#investment">投資</a>
         <a href="2026-05-16/details/extraction-log-2026-05-16.html">抽出ログ</a>
         <a href="2026-05-16/details/policy.html">方針</a>
       </nav>
@@ -276,212 +291,191 @@
   <main>
     <section class="hero">
       <div class="hero-top">
-        <div class="date">INTELLIGENCE NOTES</div>
-        <div class="edition">Tokyo / 20:30</div>
+        <div class="edition">Daily brief</div>
+        <div class="date">2026.05.16</div>
       </div>
-      <div>
-        <h1>Quiet signals, clear view.</h1>
-        <p>生成が欠けた当日版の復旧。OpenAIのセキュリティ示唆、SoftBankの決算とAIインフラ（電池）、Hondaの損失と戦略転換、SpaceX（CRS-34/Starship V3）、アジア統計（インドCPI/ベトナムCPI・FDI）、BREXの最新確認、マーケットのリスク材料を、出典クラス横断で短く固定する。</p>
+      <div style="position: relative; z-index: 1;">
+        <h1>何が発表され、次に何を確認するか</h1>
+        <p>OpenAIは米国Pro向けの家計管理プレビューと安全更新。SoftBankは通信子会社の新中計とArm決算。Hondaは赤字の内訳と次期見通し。SpaceXはCRS-34の打ち上げ成功と次のドッキング予定を分けて確認する。</p>
+        <div class="hero-meta">
+          <span class="hero-chip">OpenAI: Finances preview / safety summaries</span>
+          <span class="hero-chip">SoftBank: 新中計と投資枠 / Arm record</span>
+          <span class="hero-chip">Honda: EV損失と関税の整理</span>
+          <span class="hero-chip">SpaceX: CRS-34 launch (result) / docking (schedule)</span>
+        </div>
       </div>
     </section>
 
-    <section class="section">
-      <div class="section-head">
-        <h2>Tonight's Edit</h2>
-        <p>今夜の全体像</p>
-      </div>
+    <section class="section" id="priority">
+      <div class="section-head"><h2>今日の最重要（4）</h2><p>priority</p></div>
       <div class="priority">
-        <article class="priority-card">
+        <article class="priority-card hot">
           <span class="rank">1</span>
-          <h3>OpenAI：セキュリティの“事実”と“波及”を分離</h3>
-          <p>「何が起きたか（一次/本人発表）」と「影響範囲（推測）」を分け、当日版の信頼性を守る。</p>
+          <h3>ChatGPTに家計管理プレビュー。米国Pro向けに口座連携を開始</h3>
+          <p>銀行・カード口座をPlaid経由でつなぎ、残高や取引をChatGPTで確認できる機能。対象ユーザー、データ削除、学習設定を先に見る。</p>
           <a class="tag" href="#openai">OpenAI</a>
         </article>
-        <article class="priority-card">
+        <article class="priority-card hot">
           <span class="rank">2</span>
-          <h3>SoftBank：決算（投資益）と電力インフラ（電池）を同じ線で見る</h3>
-          <p>評価益・投資利益の説明責任と、データセンター電力/蓄電の“現物”投資が同時に動く。</p>
-          <a class="tag" href="#softbank">SoftBank</a>
-        </article>
-        <article class="priority-card">
-          <span class="rank">3</span>
-          <h3>Honda：年次損失は“EVだけ”ではない。地域/生産調整も同時観測</h3>
-          <p>北米規制、費用構造、中国の販売/生産調整を並べ、見出し単独で結論を出さない。</p>
+          <h3>Hondaの赤字は「EV損失」「関税」「地域」で分解して読む</h3>
+          <p>赤字だけで終わらせず、調整後利益、次期の黒字計画、3年の立て直しシナリオに落とす。</p>
           <a class="tag" href="#honda">Honda</a>
         </article>
-        <article class="priority-card">
-          <span class="rank">4</span>
-          <h3>SpaceX：CRS-34はNASA公式で結果確認、Starshipは予定を別カードで管理</h3>
-          <p>“予定→結果”の上書きを徹底し、誤差の入りやすい時刻・成否を分離する。</p>
+        <article class="priority-card macro">
+          <span class="rank">3</span>
+          <h3>CRS-34は打ち上げ成功。次は5月17日のISSドッキング予定</h3>
+          <p>打ち上げ結果と次の予定を分けて記録する。次に確認するのはNASA中継開始時刻と実際のドッキング成否。</p>
           <a class="tag" href="#spacex">SpaceX</a>
+        </article>
+        <article class="priority-card signal">
+          <span class="rank">4</span>
+          <h3>FIAのADUO制度: 新規PUメーカーに与える開発猶予を確認</h3>
+          <p>2026年以降の新規PUメーカー向け制度。対象、判定条件、使える開発枠をFIA文書ベースで確認する。</p>
+          <a class="tag" href="#f1">F1</a>
         </article>
       </div>
     </section>
 
     <section class="section" id="softbank">
-      <div class="section-head">
-        <h2>SoftBank</h2>
-        <p>AI投資 / インフラ</p>
-      </div>
+      <div class="section-head"><h2>SoftBank / Arm / AI投資</h2><p>最新採用2件</p></div>
       <div class="cards">
         <article class="card hot">
-          <div class="meta"><span class="pill">2026-05-16</span><span class="pill red">EARNINGS</span></div>
-          <h3>SoftBank Group FY2025決算：AI投資利益の“説明責任”を前に出す</h3>
-          <p>数字のハイライトだけでなく、投資益の内訳・評価の根拠（OpenAI/Arm等）を一次資料で確認する。</p>
-          <a class="link" href="2026-05-16/details/softbank-fy2025-earnings-ai-gains-2026-05-16.html">詳細</a>
+          <div class="meta"><span class="pill hot">2026-05-16</span><span class="pill">IR</span><span class="pill hot">中計</span></div>
+          <h3>SoftBank（9434）: 新中期計画でAI向け投資と設備投資を説明</h3>
+          <p>通信子会社の決算要旨とQ&Aで、2026-2028年度の戦略投資枠、設備投資の増加要因、堺AIデータセンターやAI-RANの位置付けを確認する。</p>
+          <a class="link" href="2026-05-16/details/softbank-2026-05-16.html">日本語で読む</a>
         </article>
-        <article class="card signal">
-          <div class="meta"><span class="pill">2026-05-16</span><span class="pill teal">INFRA</span></div>
-          <h3>SoftBank：AI時代の電力インフラとして国産バッテリー事業を発表</h3>
-          <p>水系（非可燃）電解質の亜鉛ハロゲン系電池。安全性と量産ロードマップが“AIデータセンター”に直結。</p>
-          <a class="link" href="2026-05-16/details/softbank-aqueous-zinc-halogen-battery-2026-05-16.html">詳細</a>
+        <article class="card">
+          <div class="meta"><span class="pill">2026-05-16</span><span class="pill">公式</span><span class="pill">Arm</span></div>
+          <h3>Arm: Q4/FY26で最高売上、データセンターとAI需要が押し上げ</h3>
+          <p>売上1.49Bドル、ロイヤルティ/ライセンスの内訳、データセンター寄与（YoY）を一次で固定。Arm AGI CPUの位置付けも確認。</p>
+          <a class="link" href="2026-05-16/details/softbank-2026-05-16.html">日本語で読む</a>
         </article>
       </div>
     </section>
 
     <section class="section" id="openai">
-      <div class="section-head">
-        <h2>OpenAI</h2>
-        <p>Security / Enterprise</p>
-      </div>
+      <div class="section-head"><h2>OpenAI / AI</h2><p>最新採用2件</p></div>
       <div class="cards">
         <article class="card hot">
-          <div class="meta"><span class="pill">2026-05-16</span><span class="pill red">SECURITY</span></div>
-          <h3>OpenAI：コード系セキュリティ問題の後、データ流出があったと報道</h3>
-          <p>“漏れたのは何か/どこまでか”は断定しない。一次の発表と報道の差分を固定し、後追いで上書きする。</p>
-          <a class="link" href="2026-05-16/details/openai-security-incident-2026-05-16.html">詳細</a>
+          <div class="meta"><span class="pill hot">2026-05-16</span><span class="pill">公式</span><span class="pill hot">新機能</span></div>
+          <h3>ChatGPT家計管理プレビュー: 米国Pro向けに口座連携を開始</h3>
+          <p>Plaid経由で銀行・カード口座を接続し、残高や取引を確認して質問できる機能。対象範囲、データ削除、学習設定を整理する。</p>
+          <a class="link" href="2026-05-16/details/openai-2026-05-16.html">日本語で読む</a>
         </article>
         <article class="card signal">
-          <div class="meta"><span class="pill">2026-05-16</span><span class="pill teal">GO-TO-MARKET</span></div>
-          <h3>OpenAI：企業向けの“人/運用”側を補強（新たなコンサル/支援の動き）</h3>
-          <p>モデル更新だけでなく、導入・定着・ガバナンス側の支援が拡張しているかを追う。</p>
-          <a class="link" href="2026-05-16/details/openai-consultancy-enterprise-2026-05-16.html">詳細</a>
+          <div class="meta"><span class="pill signal">2026-05-16</span><span class="pill">公式</span><span class="pill signal">安全</span></div>
+          <h3>ChatGPT安全更新: 会話の流れからリスク兆候を拾い、応答を調整</h3>
+          <p>単発の発言ではなく“文脈”で危険兆候を識別する仕組みを説明。Codexモバイル連携（preview）も併せて確認。</p>
+          <a class="link" href="2026-05-16/details/openai-2026-05-16.html">日本語で読む</a>
         </article>
       </div>
     </section>
 
     <section class="section" id="honda">
-      <div class="section-head">
-        <h2>Honda</h2>
-        <p>Earnings / Strategy</p>
-      </div>
+      <div class="section-head"><h2>Honda / 自動車</h2><p>最新採用2件</p></div>
       <div class="cards">
         <article class="card hot">
-          <div class="meta"><span class="pill">2026-05-16</span><span class="pill red">EARNINGS</span></div>
-          <h3>Honda：通期で初の最終赤字。EV関連コストの影響を数で読む</h3>
-          <p>“EV不振”という言葉でまとめない。損失の構造（見直し/減損/需要/政策）を一次と発言から整理。</p>
-          <a class="link" href="2026-05-16/details/honda-annual-loss-ev-reassessment-2026-05-16.html">詳細</a>
+          <div class="meta"><span class="pill hot">2026-05-16</span><span class="pill">公式</span><span class="pill hot">決算</span></div>
+          <h3>Honda FY2026（2026/3期）: 売上/営業損益/当期損益と、調整後利益</h3>
+          <p>EV関連損失・追加関税の影響・販売台数を整理し、来期の黒字計画（営業/当期）と“前提”を読む。</p>
+          <a class="link" href="2026-05-16/details/honda-2026-05-16.html">日本語で読む</a>
         </article>
-        <article class="card macro">
-          <div class="meta"><span class="pill">2026-05-16</span><span class="pill amber">CHINA</span></div>
-          <h3>Honda：4月の中国販売/生産調整の報道。モデル別の縮小が進むかを監視</h3>
-          <p>“地域×モデル×在庫”で見ないと誤解する。一次（生産・販売統計）と突き合わせて追う。</p>
-          <a class="link" href="2026-05-16/details/honda-china-sales-production-adjustment-2026-05-16.html">詳細</a>
+        <article class="card">
+          <div class="meta"><span class="pill">2026-05-16</span><span class="pill">主要報道</span><span class="pill">解説</span></div>
+          <h3>Honda赤字報道: EV損失、HV重視、投資見直しを分けて読む</h3>
+          <p>見出しで終わらせず、どの損失がいつ計上され、どの投資を見直し、今後3年で何を立て直すのかを確認する。</p>
+          <a class="link" href="2026-05-16/details/honda-2026-05-16.html">日本語で読む</a>
         </article>
       </div>
     </section>
 
     <section class="section" id="f1">
-      <div class="section-head">
-        <h2>F1</h2>
-        <p>Honda / Aston Martin</p>
-      </div>
+      <div class="section-head"><h2>F1 / Honda F1</h2><p>最新採用2件</p></div>
       <div class="cards">
-        <article class="card signal">
-          <div class="meta"><span class="pill">2026-05-16</span><span class="pill teal">POWER UNIT</span></div>
-          <h3>Aston Martin×Honda：2026年PU進捗のアップデート（外部報道）</h3>
-          <p>“改善した/課題がある”の表現は粒度が荒い。何が計測で、何がコメントかを分けて読む。</p>
-          <a class="link" href="2026-05-16/details/f1-aston-honda-power-unit-progress-2026-05-16.html">詳細</a>
+        <article class="card hot">
+          <div class="meta"><span class="pill hot">2026-05-16</span><span class="pill">公式</span><span class="pill hot">規則</span></div>
+          <h3>FIA: ADUO制度の判定条件と開発猶予を一次文書で確認</h3>
+          <p>新規PUメーカー向けの制度。ICE中心の指数で判定し、ERSは別扱い。どの条件で追加開発枠が使えるかを整理する。</p>
+          <a class="link" href="2026-05-16/details/f1-2026-05-16.html">日本語で読む</a>
         </article>
-        <article class="card">
-          <div class="meta"><span class="pill">2026-05-16</span><span class="pill">WORKS</span></div>
-          <h3>Honda：Aston MartinワークスのRA626H（公式トピックで確認）</h3>
-          <p>規則変更（2026）とワークス体制の一次説明を固定し、噂と混ぜない。</p>
-          <a class="link" href="2026-05-16/details/f1-honda-works-aston-martin-ra626h-2026-05-16.html">詳細</a>
+        <article class="card signal">
+          <div class="meta"><span class="pill signal">2026-05-16</span><span class="pill">Honda</span><span class="pill signal">用語</span></div>
+          <h3>Honda公式説明で、ADUOの確認タイミングと条件を読む</h3>
+          <p>ホンダ視点の説明を一次として、ニュースの解釈ブレを減らす。何戦ごとに判定し、どの差なら猶予が出るかを確認する。</p>
+          <a class="link" href="2026-05-16/details/f1-2026-05-16.html">日本語で読む</a>
         </article>
       </div>
     </section>
 
     <section class="section" id="spacex">
-      <div class="section-head">
-        <h2>SpaceX</h2>
-        <p>NASA / Starship</p>
-      </div>
+      <div class="section-head"><h2>SpaceX / 宇宙</h2><p>最新採用2件</p></div>
       <div class="cards">
         <article class="card hot">
-          <div class="meta"><span class="pill">2026-05-16</span><span class="pill red">RESULT</span></div>
-          <h3>CRS-34：Falcon 9/Dragon補給ミッション（NASA公式で確認）</h3>
-          <p>打ち上げ時刻・ドッキング予定・視聴導線を一次で固定し、事後は結果・帰還で上書き。</p>
-          <a class="link" href="2026-05-16/details/spacex-crs34-launch-nasa-2026-05-16.html">詳細</a>
+          <div class="meta"><span class="pill hot">2026-05-16</span><span class="pill">NASA</span><span class="pill hot">結果</span></div>
+          <h3>CRS-34: Falcon 9/Dragonの打ち上げ成功。ISS到着は5月17日予定</h3>
+          <p>打ち上げ結果はNASA情報で確定。次はNASAの中継開始時刻と、実際にISSへドッキングしたかを分けて確認する。</p>
+          <a class="link" href="2026-05-16/details/spacex-2026-05-16.html">日本語で読む</a>
         </article>
         <article class="card">
-          <div class="meta"><span class="pill">2026-05-16</span><span class="pill">SCHEDULE</span></div>
-          <h3>Starship V3：Flight 12の“予定”は別管理（発表/延期/窓の変動に備える）</h3>
-          <p>予定情報は揺れる。公式発表・専門媒体・SNSの差分を記録して追う。</p>
-          <a class="link" href="2026-05-16/details/spacex-starship-v3-flight12-target-2026-05-16.html">詳細</a>
+          <div class="meta"><span class="pill">2026-05-16</span><span class="pill">専門媒体</span><span class="pill">次回</span></div>
+          <h3>Starship Flight 12（V3）: NETと観測情報が錯綜、公式更新で時刻固定へ</h3>
+          <p>スケジュール系サイトは差が出やすい。公式/規制/レンジ情報の最新を優先し、飛んだかどうかを取り違えない。</p>
+          <a class="link" href="2026-05-16/details/spacex-2026-05-16.html">日本語で読む</a>
         </article>
       </div>
     </section>
 
     <section class="section" id="asia">
-      <div class="section-head">
-        <h2>アジア経済</h2>
-        <p>Macro / Data</p>
-      </div>
+      <div class="section-head"><h2>アジア経済</h2><p>最新採用2件</p></div>
       <div class="cards">
-        <article class="card macro">
-          <div class="meta"><span class="pill">2026-05-16</span><span class="pill amber">DATA</span></div>
-          <h3>インドCPI（Apr 2026）：前年比 3.48%（政府一次発表）</h3>
-          <p>“数字そのもの”と“解釈記事”を分離。次回の統計発表までの市場反応を監視。</p>
-          <a class="link" href="2026-05-16/details/asia-india-cpi-apr-2026-348-2026-05-16.html">詳細</a>
+        <article class="card hot">
+          <div class="meta"><span class="pill hot">2026-05-16</span><span class="pill">データ</span><span class="pill hot">ベトナム</span></div>
+          <h3>ベトナムIIP（4月）: +9.9%（YoY）と製造業の勢いを確認</h3>
+          <p>数字は一次/準一次で固定し、FDI・輸出・為替のどこに波及するかを短く整理する。</p>
+          <a class="link" href="2026-05-16/details/asia-2026-05-16.html">日本語で読む</a>
         </article>
         <article class="card macro">
-          <div class="meta"><span class="pill">2026-05-16</span><span class="pill amber">VIETNAM</span></div>
-          <h3>ベトナム：CPI（4月）とFDI（1–4月）の“同時確認”で温度感を掴む</h3>
-          <p>統計は分断すると誤る。物価（CPI）と投資（FDI）を同じ時点で固定する。</p>
-          <a class="link" href="2026-05-16/details/asia-vietnam-cpi-fdi-apr-2026-2026-05-16.html">詳細</a>
+          <div class="meta"><span class="pill macro">2026-05-16</span><span class="pill">データ</span><span class="pill macro">インド</span></div>
+          <h3>インド外貨準備: 週次で増減が大きい局面、RBI発表ベースで追う</h3>
+          <p>見出しの“増減”より、内訳（FCA/金/SDR/IMF）と背景（介入/為替/商品）を確認する。</p>
+          <a class="link" href="2026-05-16/details/asia-2026-05-16.html">日本語で読む</a>
         </article>
       </div>
     </section>
 
     <section class="section" id="brex">
-      <div class="section-head">
-        <h2>宇都宮ブレックス</h2>
-        <p>B.LEAGUE</p>
-      </div>
+      <div class="section-head"><h2>宇都宮ブレックス</h2><p>最新採用2件</p></div>
       <div class="cards">
-        <article class="card">
-          <div class="meta"><span class="pill">2026-05-16</span><span class="pill">CHECK</span></div>
-          <h3>B1CS：宇都宮×名古屋D（QF）結果を“公式/主要報道”で再確認</h3>
-          <p>直近72時間で新情報が出ていないかを反証検索。結果カードの誤りを最優先で潰す。</p>
-          <a class="link" href="2026-05-16/details/brex-b1cs-qf-game2-result-check-2026-05-16.html">詳細</a>
+        <article class="card hot">
+          <div class="meta"><span class="pill hot">2026-05-16</span><span class="pill">公式</span><span class="pill hot">結果</span></div>
+          <h3>CS名古屋D戦: 試合結果・レポート・主要スタッツを“結果”で固定</h3>
+          <p>予定カードは残さない。試合ページ（ScheduleKey）とクラブレポートの両方で確認し、次の動きへ。</p>
+          <a class="link" href="2026-05-16/details/brex-2026-05-16.html">日本語で読む</a>
         </article>
-        <article class="card signal">
-          <div class="meta"><span class="pill">2026-05-16</span><span class="pill teal">WATCH</span></div>
-          <h3>BREX：公式/リーグの更新導線（SNS・動画・日程）を固定して“次”に備える</h3>
-          <p>試合がない日は“更新導線”の固定が価値。SNS/Xと動画、日程ページを毎日同じ順で見る。</p>
-          <a class="link" href="2026-05-16/details/brex-schedule-watch-next-up-2026-05-16.html">詳細</a>
+        <article class="card">
+          <div class="meta"><span class="pill">2026-05-16</span><span class="pill">公式</span><span class="pill">契約</span></div>
+          <h3>グラント・ジェレット退団: 契約満了発表を確認</h3>
+          <p>宇都宮のシーズン終了後の確定情報として、ジェレットの契約満了・退団を記録。移籍先の噂は公式発表が出るまで扱わない。</p>
+          <a class="link" href="2026-05-16/details/brex-2026-05-16.html">日本語で読む</a>
         </article>
       </div>
     </section>
 
     <section class="section" id="investment">
-      <div class="section-head">
-        <h2>投資</h2>
-        <p>Markets / Rates</p>
-      </div>
+      <div class="section-head"><h2>投資</h2><p>最新採用2件</p></div>
       <div class="cards">
         <article class="card hot">
-          <div class="meta"><span class="pill">2026-05-15</span><span class="pill red">MARKET</span></div>
-          <h3>米株：原油高→債券市場の警戒→株の下落（主要報道で整理）</h3>
-          <p>“AIで上がった/下がった”で雑にしない。金利・原油・セクターの因果を短く固定。</p>
-          <a class="link" href="2026-05-16/details/investment-market-drop-oil-bonds-2026-05-16.html">詳細</a>
+          <div class="meta"><span class="pill hot">2026-05-16</span><span class="pill">主要報道</span><span class="pill hot">市況</span></div>
+          <h3>米株（5/15）: 高油価→金利→AI/テックの調整、指数値を固定</h3>
+          <p>“AIが売られた”で終わらせず、金利・原油・指数の数字を押さえ、次のマクロ材料へ接続する。</p>
+          <a class="link" href="2026-05-16/details/investment-2026-05-16.html">日本語で読む</a>
         </article>
-        <article class="card macro">
-          <div class="meta"><span class="pill">2026-05-16</span><span class="pill amber">DATA</span></div>
-          <h3>資金フロー：ICI週次推計を一次で押さえ、価格変動と分けて読む</h3>
-          <p>価格のニュースは速いが、フローは“資金の意志”を示す。一次の週次レポートを固定。</p>
-          <a class="link" href="2026-05-16/details/investment-fund-flows-ici-weekly-2026-05-16.html">詳細</a>
+        <article class="card">
+          <div class="meta"><span class="pill">2026-05-16</span><span class="pill">データ</span><span class="pill">フロー</span></div>
+          <h3>ファンド/ETFフロー: ICIの週次推計で資金の向きを確認</h3>
+          <p>価格とフローはズレる。長期資金の向きと短期のテーマ循環（AI/半導体/エネルギー）を分けて見る。</p>
+          <a class="link" href="2026-05-16/details/investment-2026-05-16.html">日本語で読む</a>
         </article>
       </div>
     </section>
