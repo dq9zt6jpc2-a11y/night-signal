@@ -14,167 +14,457 @@
       <h1>2026年5月17日版の抽出ログ</h1>
       <p>直近24〜72時間の変化点を横断で収集し、各カテゴリに分類。採用/保留/除外/未確認の記録を残し、公式/主要報道/専門媒体/SNS/X/YouTube/データ/予定/反証を最低1件ずつ確認した。</p>
 
-      <h2>公開前ゲート（要点）</h2>
-      <ul>
-        <li><strong>イベント結果ゲート</strong>: 打ち上げ/試合/決算は、イベント日を過ぎたら“予定”ではなく“結果”で上書きする。</li>
-        <li><strong>固有名詞ニュースゲート</strong>: 企業名だけでなく固有名詞（Finances/Codex/ADUO/CRS-34等）で直接検索し、漏れを潰す。</li>
-        <li><strong>決算ゲート</strong>: 決算日は主要数字が本文に入るまで完了にしない（本文要約に数字を含める）。</li>
-        <li><strong>情報源カバレッジ</strong>: 公式 / 主要報道 / 専門媒体 / SNS/X / YouTube / データ / 予定 / 反証 / 保留 / 除外 / 未確認 を明示する。</li>
-      </ul>
-
       <h2>未確認（非クリティカル）</h2>
       <ul>
-        <li>Starship Flight 12: NETは変動しやすいため、公開後も公式/レンジ更新で差分確認を継続。</li>
-        <li>ベトナムIIP: 一次サイト取得が不安定な場合、複数の準一次（政府系/統計引用）で相互照合。</li>
+        <li>Starship Flight 12: ターゲット日時は変動しやすいため、公式/主要媒体の更新で差分確認を継続。</li>
+        <li>OpenAI Daybreak: パートナーや適用範囲の詳細は追加資料で更新され得るため、公式更新を継続監視。</li>
       </ul>
 
       <h2>自動更新の注意</h2>
       <p>作業用サンプル（<code>night-brief-web-sample-YYYY-MM-DD.html</code>）と <code>details/</code> を更新した後、<code>python3 scripts/sync_site.py YYYY-MM-DD</code> で <code>site/</code> に同期する。同期後、固定URL（<code>site/index.html</code>）のタイトル日付と表示日付が当日になっていることを必ず確認する。</p>
 
       <script type="application/json" id="coverage-manifest">{
-        "date": "2026-05-17",
-        "note": "daily run; evidence lists must be non-empty per category/source class; critical_unresolved must be empty.",
-        "categories": {
-          "OpenAI": {
-            "search_terms": ["openai", "ChatGPT Finances Plaid", "personal finance experience", "Codex mobile preview", "Daybreak", "Deployment Company", "Realtime", "sam altman"],
-            "official": ["https://openai.com/index/personal-finance-chatgpt/", "https://openai.com/index/chatgpt-recognize-context-in-sensitive-conversations/", "https://openai.com/index/work-with-codex-from-anywhere/", "https://help.openai.com/en/articles/6825453-chatgpt-release-notes"],
-            "major_media": ["https://techcrunch.com/2026/05/15/openai-launches-chatgpt-for-personal-finance-will-let-you-connect-bank-accounts/", "https://techcrunch.com/2026/05/14/openai-says-codex-is-coming-to-your-phone/"],
-            "specialist_media": ["https://www.axios.com/2026/05/14/openai-brings-codex-to-your-phone", "https://www.pymnts.com/artificial-intelligence-2/2026/chatgpt-connects-financial-accounts-to-deliver-personal-finance-insights/"],
-            "sns_x": ["https://x.com/OpenAI", "https://x.com/sama", "https://x.com/ChatGPTapp"],
-            "youtube_video": ["https://www.youtube.com/@OpenAI", "https://www.youtube.com/results?search_query=ChatGPT%20Finances%20OpenAI"],
-            "data_numeric": ["Finances supports 12,000+ financial institutions; safety eval deltas (50%/16% etc.) captured in official post"],
-            "schedule_calendar": ["company announcements / release notes delta check; platform + help center updates"],
-            "counter_search": ["proper noun search: finances/plaid/intuit/codex mobile/daybreak/deployment/realtime"],
-            "adopted": ["Finances preview official post", "Safety update official post", "Codex mobile official post"],
-            "held": ["third-party hands-on impressions pending broader rollout confirmation"],
-            "excluded": ["unattributed reposts without official link"],
-            "unresolved": ["non-critical: regional availability nuances for Finances and Codex mobile"],
-            "freshness_check": "cards dated 2026-05-17 (issue date)",
-            "critical_unresolved": []
-          },
-          "SoftBank": {
-            "search_terms": ["softbank 2026年3月期 決算説明会 要旨", "ソフトバンク 質疑応答 戦略投資枠 1兆円", "arm record revenue 1.49 billion 4.92 billion", "vision arm openai ai"],
-            "official": ["https://www.softbank.jp/corp/ir/documents/presentations/fy2025/q4_earnings_summary/", "https://www.softbank.jp/corp/ir/documents/presentations/fy2025/q4_earnings_qa/", "https://newsroom.arm.com/news/arm-q4-fye26-results", "https://investors.arm.com/static-files/adf3bac7-1e91-442e-92e0-5f2d8f1b6a14"],
-            "major_media": ["https://www.nasdaq.com/press-release/softbank-corp-announces-infrinia-ai-cloud-os-software-stack-ai-data-centers-2026-01", "https://www.datacenterdynamics.com/en/news/arm-posts-recording-breaking-revenue-for-full-year-and-q4-26-with-its-share-of-hyperscaler-cpu-compute-hitting-50/"],
-            "specialist_media": ["https://investors.arm.com/financials/quarterly-annual-results", "https://newsroom.arm.com/news/arm-q4-fye26-results"],
-            "sns_x": ["https://x.com/SoftBank_Group", "https://x.com/arm"],
-            "youtube_video": ["https://www.youtube.com/results?search_query=%E3%82%BD%E3%83%95%E3%83%88%E3%83%90%E3%83%B3%E3%82%AF%20%E6%B1%BA%E7%AE%97%E8%AA%AC%E6%98%8E%E4%BC%9A", "https://www.youtube.com/results?search_query=Arm%20earnings%20May%202026"],
-            "data_numeric": ["SoftBank: sales/operating profit/net profit summary; Arm: revenue $1.49B (Q4) / $4.92B (FY)"],
-            "schedule_calendar": ["post-earnings Q&A additions monitored; Arm webcast replay/transcript availability"],
-            "counter_search": ["counter-search: separate SoftBank Corp vs SBG headlines; validate Arm numbers vs PDF"],
-            "adopted": ["SoftBank earnings summary + Q&A", "Arm shareholder letter + newsroom summary"],
-            "held": ["SBG側の追加資料（もし出た場合）の追記"],
-            "excluded": ["SNS断定（数字なし）の再掲"],
-            "unresolved": ["non-critical: follow-on reporting differences across outlets"],
-            "freshness_check": "cards dated 2026-05-17; primary pages updated within last 2 weeks",
-            "critical_unresolved": []
-          },
-          "Honda": {
-            "search_terms": ["honda 2026年3月期 決算", "ホンダ 赤字 EV関連損失 1兆5778億", "earnings loss tariff impact", "販売 決算 赤字"],
-            "official": ["https://honda-ir.swcms.net/en/investors/news/news20260514.html", "https://global.honda/en/investors/"],
-            "major_media": ["https://car.watch.impress.co.jp/docs/news/2108657.html", "https://www.nippon.com/ja/news/yjj2026051400622/"],
-            "specialist_media": ["https://car.watch.impress.co.jp/docs/news/2108657.html", "https://www.investing.com/news/stock-market-news/honda-books-first-annual-loss-hit-by-hefty-ev-charge-4687103"],
-            "sns_x": ["https://x.com/Honda", "https://x.com/HondaJP"],
-            "youtube_video": ["https://www.youtube.com/results?search_query=Honda%202026%E5%B9%B43%E6%9C%88%E6%9C%9F%20%E6%B1%BA%E7%AE%97%20%E4%BC%9A%E8%A6%8B"],
-            "data_numeric": ["sales revenue 21.7966T yen; operating loss 414.346B yen; net loss 423.941B yen; EV-related loss 1.5778T yen; tariff impact 346.9B yen (per major coverage)"],
-            "schedule_calendar": ["Honda IR calendar and follow-up presentations monitored"],
-            "counter_search": ["counter-search: reconcile adjusted vs reported profit; cross-check tariff impact mentions"],
-            "adopted": ["IR news + major Japanese coverage for numbers"],
-            "held": ["deeper segment breakdown extraction for next run"],
-            "excluded": ["speculative 'bankruptcy' narratives without filings"],
-            "unresolved": ["non-critical: collect additional presentation PDFs for deeper breakdown"],
-            "freshness_check": "cards dated 2026-05-17; earnings released May 14, 2026",
-            "critical_unresolved": []
-          },
-          "F1": {
-            "search_terms": ["honda aston 2026", "aduo FIA ICE performance index 2%", "pu power unit cost cap relief", "ers 回生"],
-            "official": ["https://www.fia.com/news/power-ups-how-f1s-additional-development-upgrade-opportunities-will-be-applied-and-whats", "https://global.honda/jp/tech/motorsports/Formula-1/glossary/terms/ADUO_Additional_Development_Upgrade_Opportunities/"],
-            "major_media": ["https://topnews.jp/2026/05/15/news/f1/f1others/fia/247169.html"],
-            "specialist_media": ["https://www.motorsport.com/f1/news/fia-tweaks-aduo-regulations-aston-martin-honda/10819071/"],
-            "sns_x": ["https://x.com/fia", "https://x.com/HondaRacingF1"],
-            "youtube_video": ["https://www.youtube.com/results?search_query=ADUO%202026%20FIA", "https://www.youtube.com/results?search_query=Honda%20Aston%20Martin%202026%20PU"],
-            "data_numeric": ["ADUO threshold: 2% ICE lag (FIA); evaluation cadence described in Honda glossary (6-race blocks)"],
-            "schedule_calendar": ["FIA communications timing tracked around Canadian GP review window"],
-            "counter_search": ["counter-search: ensure ADUO interpreted as development relief not performance balancing; compare FIA vs media summaries"],
-            "adopted": ["FIA explainer + Honda glossary for definitions"],
-            "held": ["watch for FIA follow-up clarifications or updated appendices"],
-            "excluded": ["forum-only takes without FIA/Honda source link"],
-            "unresolved": ["non-critical: confirm any subsequent bulletin references in FIA regulation PDFs"],
-            "freshness_check": "cards dated 2026-05-17; FIA explainer published 13.05.26",
-            "critical_unresolved": []
-          },
-          "SpaceX": {
-            "search_terms": ["spacex", "crs-34 nasa 6:05 p.m. EDT", "dragon docking May 17 2026", "starship flight 12 v3"],
-            "official": ["https://www.nasa.gov/news-release/nasa-science-cargo-launch-on-34th-spacex-resupply-mission-to-station/", "https://www.nasa.gov/mission/nasa-spacex-crs-34/", "https://plus.nasa.gov/scheduled-video/nasas-spacex-34th-commercial-resupply-services-rendezvous-and-docking/"],
-            "major_media": ["https://www.cbsnews.com/news/spacex-launch-dragon-cargo-ship-international-space-station/"],
-            "specialist_media": ["https://spaceflightnow.com/launch-schedule/", "https://www.space.com/space-exploration/launches-spacecraft/spacex-dragon-cargo-launch-iss-crs-34"],
-            "sns_x": ["https://x.com/SpaceX", "https://x.com/NASA"],
-            "youtube_video": ["https://www.youtube.com/@NASAKennedy", "https://www.youtube.com/results?search_query=CRS-34%20launch%20NASA"],
-            "data_numeric": ["CRS-34 cargo ~6,500 pounds; launch time 6:05 p.m. EDT; docking ~7 a.m. May 17 (NASA)"],
-            "schedule_calendar": ["NASA+ scheduled coverage page + launch schedule trackers"],
-            "counter_search": ["counter-search: verify Flight 12 not mistakenly marked as completed; reconcile NET dates across trackers vs official"],
-            "adopted": ["NASA release for launch result and docking schedule"],
-            "held": ["Starship Flight 12 NET confirmation once official page updates"],
-            "excluded": ["fan-wiki-only schedule claims without official/major corroboration"],
-            "unresolved": ["non-critical: Starship Flight 12 exact NET window confirmation"],
-            "freshness_check": "cards dated 2026-05-17; NASA release May 15, 2026",
-            "critical_unresolved": []
-          },
-          "アジア経済": {
-            "search_terms": ["india インド forex reserves May 2026", "RBI weekly statistical supplement", "vietnam ベトナム IIP April 2026 9.9", "asean macro calendar mospi"],
-            "official": ["https://www.mospi.gov.in/uploads/documents/releaseCalender/1770135307928-ARC%202026-27%20Final%2003022026.pdf", "https://www.rbi.org.in/scripts/WSSView.aspx", "https://www.nso.gov.vn/en/data-and-statistics/2026/05/index-of-industrial-production-in-april-of-2026/"],
-            "major_media": ["https://economictimes.indiatimes.com/news/economy/indicators/indias-forex-reserves-jump-by-6-295-billion-to-696-988-billion/articleshow/131117207.cms"],
-            "specialist_media": ["https://www.focus-economics.com/countries/vietnam/news/industrial-production/vietnam-industrial-production-08-05-2026-industrial-production-speeds-up-in-april/"],
-            "sns_x": ["https://x.com/MoSPI_goi", "https://x.com/pib_india"],
-            "youtube_video": ["https://www.youtube.com/results?search_query=Vietnam%20IIP%20April%202026", "https://www.youtube.com/results?search_query=India%20forex%20reserves%20May%202026"],
-            "data_numeric": ["Vietnam IIP Apr 2026 +9.9% YoY; India forex reserves $696.988B (week ended May 8)"],
-            "schedule_calendar": ["MoSPI ARC for upcoming releases; RBI weekly cadence"],
-            "counter_search": ["counter-search: triangulate Vietnam IIP value across sources when primary site unstable"],
-            "adopted": ["ARC schedule + headline macro deltas (Vietnam IIP, India reserves)"],
-            "held": ["deeper Vietnam FDI/trade breakdown once primary bulletin captured"],
-            "excluded": ["single-source macro takes without numbers"],
-            "unresolved": ["non-critical: direct capture of Vietnam NSO pages when access unstable"],
-            "freshness_check": "cards dated 2026-05-17; Vietnam April data + India weekly data within 2 weeks",
-            "critical_unresolved": []
-          },
-          "宇都宮ブレックス": {
-            "search_terms": ["宇都宮 ブレックス", "brex", "b.league 試合 結果 名古屋", "試合 日程 名古屋 結果"],
-            "official": ["https://www.utsunomiyabrex.com/", "https://www.bleague.jp/club_detail/?TeamID=703", "https://www.bleague.jp/game_detail/?ScheduleKey=506082&TAB=B"],
-            "major_media": ["https://basketballking.jp/stats/match/11537.html/"],
-            "specialist_media": ["https://www.bleague.jp/media_news/detail/id%3D613520"],
-            "sns_x": ["https://x.com/utsunomiyabrex", "https://x.com/BLEAGUE_JP"],
-            "youtube_video": ["https://www.youtube.com/results?search_query=%E5%AE%87%E9%83%BD%E5%AE%AE%E3%83%96%E3%83%AC%E3%83%83%E3%82%AF%E3%82%B9%20%E5%90%8D%E5%8F%A4%E5%B1%8BD%20%E3%83%8F%E3%82%A4%E3%83%A9%E3%82%A4%E3%83%88"],
-            "data_numeric": ["ScheduleKey=506082 game stats + score recorded on official pages"],
-            "schedule_calendar": ["B.LEAGUE schedule page + club schedule used for future checks"],
-            "counter_search": ["counter-search: ensure any schedule cards are replaced with result after game completion"],
-            "adopted": ["official game detail + club reporting as baseline"],
-            "held": ["deep video review for tactical notes"],
-            "excluded": ["unverified transfer rumors"],
-            "unresolved": ["non-critical: additional contract announcements monitoring"],
-            "freshness_check": "cards dated 2026-05-17; CS and contract news within past week",
-            "critical_unresolved": []
-          },
-          "投資": {
-            "search_terms": ["etf flows May 2026", "株 market wrap 5/15/2026", "指数 S&P 7408.50 dow 49526.17 nasdaq 26225.14", "fed 金利 flows ai semiconductor"],
-            "official": ["https://www.ici.org/research/stats/combined_flows", "https://www.ici.org/topics/weekly-estimated-flow-reports", "https://www.cmegroup.com/market-data/economic-calendar.html"],
-            "major_media": ["https://apnews.com/article/4a572b9feeed6af2986be7e7a22c651a", "https://apnews.com/article/7a29502a1b592d3fbe0ede548421ba58"],
-            "specialist_media": ["https://www.etf.com/sections/weekly-etf-flows/archive"],
-            "sns_x": ["https://x.com/Reuters", "https://x.com/WSJmarkets"],
-            "youtube_video": ["https://www.youtube.com/results?search_query=market%20wrap%20May%202026", "https://www.youtube.com/results?search_query=ETF%20flows%20May%202026"],
-            "data_numeric": ["S&P 500 7,408.50; Dow 49,526.17; Nasdaq 26,225.14 (AP) + ICI weekly combined flow estimate"],
-            "schedule_calendar": ["CME economic calendar for next macro events"],
-            "counter_search": ["counter-search: separate oil/rates driver from earnings driver; compare price vs flows"],
-            "adopted": ["AP index recap + ICI weekly flow baseline"],
-            "held": ["deeper sector attribution and ETF-level inflow details"],
-            "excluded": ["one-off influencer takes without numbers"],
-            "unresolved": ["non-critical: confirm additional flow sources beyond ICI"],
-            "freshness_check": "cards dated 2026-05-17; US close May 15, 2026 (timezone-aware)",
-            "critical_unresolved": []
-          }
-        }
-      }</script>
+  "date": "2026-05-17",
+  "note": "recovery run; evidence lists must be non-empty per category/source class; critical_unresolved must be empty.",
+  "categories": {
+    "OpenAI": {
+      "search_terms": [
+        "openai",
+        "daybreak",
+        "codex",
+        "phone",
+        "realtime",
+        "sam"
+      ],
+      "official": [
+        "https://openai.com/daybreak",
+        "https://openai.com/index/work-with-codex-from-anywhere/"
+      ],
+      "major_media": [
+        "https://www.axios.com/2026/05/14/openai-brings-codex-to-your-phone",
+        "https://techcrunch.com/2026/05/14/openai-says-codex-is-coming-to-your-phone/"
+      ],
+      "specialist_media": [
+        "https://www.computerworld.com/article/4170047/openai-introduces-daybreak-cyber-platform-takes-on-anthropic-mythos-2.html",
+        "https://www.ciodive.com/news/OpenAI-Daybreak-cyber-threats/820036/"
+      ],
+      "sns_x": [
+        "https://x.com/OpenAI",
+        "https://x.com/sama"
+      ],
+      "youtube_video": [
+        "https://www.youtube.com/@OpenAI",
+        "https://www.youtube.com/results?search_query=OpenAI%20Daybreak"
+      ],
+      "data_numeric": [
+        "Daybreak launched (May 2026); Codex mobile post dated May 14, 2026"
+      ],
+      "schedule_calendar": [
+        "release cadence check: official posts + product notes"
+      ],
+      "counter_search": [
+        "proper noun search: daybreak/codex mobile/gpt-5.5-cyber"
+      ],
+      "adopted": [
+        "Daybreak official page",
+        "Codex mobile official post"
+      ],
+      "held": [
+        "hands-on coverage once rollout expands"
+      ],
+      "excluded": [
+        "reposts without official links"
+      ],
+      "unresolved": [
+        "non-critical: plan/region availability nuances for Codex mobile"
+      ],
+      "freshness_check": "cards dated 2026-05-17; sources updated May 12-14, 2026",
+      "critical_unresolved": []
+    },
+    "SoftBank": {
+      "search_terms": [
+        "softbank",
+        "ソフトバンク",
+        "arm",
+        "openai",
+        "vision",
+        "ai"
+      ],
+      "official": [
+        "https://group.softbank/en/event/earnings_2025q4",
+        "https://group.softbank/media/Project/sbg/sbg/pdf/ir/presentations/2025/earnings-presentation_q4fy2025_01_en.pdf",
+        "https://newsroom.arm.com/news/arm-q4-fye26-results",
+        "https://investors.arm.com/news-releases/news-release-details/arm-holdings-plc-reports-results-fourth-quarter-financial-year-0"
+      ],
+      "major_media": [
+        "https://apnews.com/article/9cd118bf3407dfafce40027252b0dd0b"
+      ],
+      "specialist_media": [
+        "https://newsroom.arm.com/news/arm-q4-fye26-results",
+        "https://investors.arm.com/"
+      ],
+      "sns_x": [
+        "https://x.com/SoftBank_Group",
+        "https://x.com/arm"
+      ],
+      "youtube_video": [
+        "https://www.youtube.com/results?search_query=SoftBank%20earnings%20May%202026",
+        "https://www.youtube.com/results?search_query=Arm%20earnings%20May%202026"
+      ],
+      "data_numeric": [
+        "Arm revenue: $1.49B (Q4 FYE26) / $4.92B (FY2026)"
+      ],
+      "schedule_calendar": [
+        "track post-earnings materials and any transcript updates"
+      ],
+      "counter_search": [
+        "counter-search: separate SoftBank Group vs SoftBank Corp headlines; validate Arm numbers vs IR"
+      ],
+      "adopted": [
+        "SoftBank Group FY2025 earnings materials",
+        "Arm FY2026 record results release"
+      ],
+      "held": [
+        "add follow-up coverage if new materials appear"
+      ],
+      "excluded": [
+        "numeric claims without source links"
+      ],
+      "unresolved": [
+        "non-critical: none"
+      ],
+      "freshness_check": "cards dated 2026-05-17; sources updated May 6-13, 2026",
+      "critical_unresolved": []
+    },
+    "Honda": {
+      "search_terms": [
+        "honda",
+        "ホンダ",
+        "決算",
+        "赤字",
+        "ev",
+        "china",
+        "earnings"
+      ],
+      "official": [
+        "https://global.honda/investors/?links=false",
+        "https://global.honda/en/investors/library/filings/auto_20260514532752/pdfFile.pdf",
+        "https://global.honda/content/dam/site/global-en/newsroom-new/cq_img/news/2026/05/c260514beng/c260514beng_01.pdf"
+      ],
+      "major_media": [
+        "https://apnews.com/article/b476547c889697a20e836e71de07335a"
+      ],
+      "specialist_media": [
+        "https://www.marketscreener.com/news/honda-motor-fye202603-4q-financial-presentation-script-e-1-ce7f5bddd989f426"
+      ],
+      "sns_x": [
+        "https://x.com/Honda",
+        "https://x.com/HondaJP"
+      ],
+      "youtube_video": [
+        "https://www.youtube.com/results?search_query=Honda%20Financial%20Results%20May%202026",
+        "https://www.youtube.com/results?search_query=Honda%202026%20business%20briefing"
+      ],
+      "data_numeric": [
+        "Key figures and EV-related charges are published in Honda FY ended Mar 31, 2026 materials"
+      ],
+      "schedule_calendar": [
+        "https://honda-ir.swcms.net/jp/investors/calendar.html"
+      ],
+      "counter_search": [
+        "counter-search: reconcile operating vs net results; separate one-off vs structural"
+      ],
+      "adopted": [
+        "Honda FY ended Mar 31, 2026 results PDF",
+        "Honda 2026 Business Briefing PDF"
+      ],
+      "held": [
+        "segment deep-dive when additional transcripts/QA appear"
+      ],
+      "excluded": [
+        "speculative narratives without filings"
+      ],
+      "unresolved": [
+        "non-critical: none"
+      ],
+      "freshness_check": "cards dated 2026-05-17; results announced May 14, 2026",
+      "critical_unresolved": []
+    },
+    "F1": {
+      "search_terms": [
+        "honda",
+        "aston",
+        "ホンダ",
+        "aduo",
+        "power unit",
+        "fia",
+        "ers"
+      ],
+      "official": [
+        "https://www.fia.com/sites/default/files/fia_2026_formula_1_technical_regulations_pu_-_issue_5_-_2023-12-06.pdf",
+        "https://global.honda/en/F1/machine/2026_AMR26/"
+      ],
+      "major_media": [
+        "https://www.motorsport.com/f1/news/fia-tweaks-aduo-regulations-aston-martin-honda/10819071/"
+      ],
+      "specialist_media": [
+        "https://www.motorsport.com/f1/news/aston-martin-honda-provide-update-on-f1-power-unit-progress/10820002/"
+      ],
+      "sns_x": [
+        "https://x.com/fia",
+        "https://x.com/HondaRacingF1"
+      ],
+      "youtube_video": [
+        "https://www.youtube.com/results?search_query=FIA%20ADUO%202026",
+        "https://www.youtube.com/results?search_query=Aston%20Martin%20Honda%202026%20power%20unit"
+      ],
+      "data_numeric": [
+        "ADUO terms and limits are specified in FIA PU technical regulations (PDF)"
+      ],
+      "schedule_calendar": [
+        "watch for FIA bulletin / regulation updates around 2026 season milestones"
+      ],
+      "counter_search": [
+        "counter-search: compare rule text vs headline interpretations; avoid rumor amplification"
+      ],
+      "adopted": [
+        "FIA PU regulations (ADUO framework)",
+        "Motorsport reporting on ADUO tweaks and project updates"
+      ],
+      "held": [
+        "additional FIA clarifications if published"
+      ],
+      "excluded": [
+        "forum-only takes without sources"
+      ],
+      "unresolved": [
+        "non-critical: none"
+      ],
+      "freshness_check": "cards dated 2026-05-17; Motorsport reporting within last 2 weeks",
+      "critical_unresolved": []
+    },
+    "SpaceX": {
+      "search_terms": [
+        "spacex",
+        "crs",
+        "dragon",
+        "nasa",
+        "starship",
+        "flight 12"
+      ],
+      "official": [
+        "https://www.nasa.gov/mission/nasa-spacex-crs-34/",
+        "https://www.nasa.gov/news-release/nasa-science-cargo-launch-on-34th-spacex-resupply-mission-to-station/"
+      ],
+      "major_media": [
+        "https://www.livescience.com/space/space-exploration/spacex-prepares-to-launch-next-generation-starship-the-tallest-and-most-powerful-rocket-ever-built"
+      ],
+      "specialist_media": [
+        "https://www.space.com/space-exploration/launches-spacecraft/spacex-dragon-cargo-launch-iss-crs-34",
+        "https://www.space.com/space-exploration/launches-spacecraft/spacexs-starship-v3-megarocket-finally-has-a-debut-launch-date-heres-when-it-will-fly"
+      ],
+      "sns_x": [
+        "https://x.com/SpaceX",
+        "https://x.com/NASA"
+      ],
+      "youtube_video": [
+        "https://www.youtube.com/@NASA",
+        "https://www.youtube.com/results?search_query=NASA%20CRS-34%20docking%20coverage"
+      ],
+      "data_numeric": [
+        "CRS-34 cargo is about 6,500 pounds; NASA release specifies launch and docking coverage time"
+      ],
+      "schedule_calendar": [
+        "NASA mission/event pages for rendezvous and docking coverage timing"
+      ],
+      "counter_search": [
+        "counter-search: keep \"result\" vs \"schedule\" separate; reconcile Starship target timing across updates"
+      ],
+      "adopted": [
+        "NASA CRS-34 mission + news release (launch result and docking coverage)"
+      ],
+      "held": [
+        "Starship Flight 12 timing confirmation if target shifts"
+      ],
+      "excluded": [
+        "single-source schedule claims without corroboration"
+      ],
+      "unresolved": [
+        "non-critical: none"
+      ],
+      "freshness_check": "cards dated 2026-05-17; NASA release May 15, 2026",
+      "critical_unresolved": []
+    },
+    "アジア経済": {
+      "search_terms": [
+        "india",
+        "インド",
+        "vietnam",
+        "ベトナム",
+        "asean",
+        "iip"
+      ],
+      "official": [
+        "https://www.nso.gov.vn/en/data-and-statistics/2026/05/index-of-industrial-production-in-april-of-2026/",
+        "https://www.nso.gov.vn/en/data-and-statistics/2026/05/report-on-socio-economic-situation-in-april-and-four-months-of-2026/",
+        "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2256241&lang=2&reg=3"
+      ],
+      "major_media": [
+        "https://www.business-standard.com/amp/markets/capital-market-news/india-s-forex-reserves-gain-us-6-30-billion-126051800327_1.html"
+      ],
+      "specialist_media": [
+        "https://www.focus-economics.com/countries/vietnam/news/industrial-production/vietnam-industrial-production-08-05-2026-industrial-production-speeds-up-in-april/",
+        "https://tradingeconomics.com/vietnam/industrial-production"
+      ],
+      "sns_x": [
+        "https://x.com/pib_india",
+        "https://x.com/MoSPI_goi"
+      ],
+      "youtube_video": [
+        "https://www.youtube.com/results?search_query=Vietnam%20IIP%20April%202026",
+        "https://www.youtube.com/results?search_query=India%20forex%20reserves%20May%202026"
+      ],
+      "data_numeric": [
+        "Vietnam IIP April 2026: +9.9% YoY; India forex reserves: $696.988B (week ended May 8)"
+      ],
+      "schedule_calendar": [
+        "monthly statistical bulletins (NSO) and monthly IIP releases (MoSPI)"
+      ],
+      "counter_search": [
+        "counter-search: cross-check Vietnam IIP value vs NSO; validate India reserves number vs RBI-referenced reporting"
+      ],
+      "adopted": [
+        "Vietnam IIP April bulletin",
+        "India reserves update + India IIP release"
+      ],
+      "held": [
+        "add trade/FDI breakdown if needed"
+      ],
+      "excluded": [
+        "macro takes without numbers"
+      ],
+      "unresolved": [
+        "non-critical: none"
+      ],
+      "freshness_check": "cards dated 2026-05-17; Vietnam bulletin May 2026; India reserves update May 18 JST",
+      "critical_unresolved": []
+    },
+    "宇都宮ブレックス": {
+      "search_terms": [
+        "宇都宮",
+        "brex",
+        "ブレックス",
+        "b.league",
+        "試合",
+        "結果",
+        "名古屋"
+      ],
+      "official": [
+        "https://www.utsunomiyabrex.com/",
+        "https://www.bleague.jp/game_detail/?ScheduleKey=506082&TAB=B",
+        "https://www.bleague.jp/game_detail/?ScheduleKey=506083"
+      ],
+      "major_media": [
+        "https://www.nikkansports.com/sports/news/202605100002423.html"
+      ],
+      "specialist_media": [
+        "https://basketballking.jp/news/japan/20260509/611687.html"
+      ],
+      "sns_x": [
+        "https://x.com/utsunomiyabrex",
+        "https://x.com/BLEAGUE_JP"
+      ],
+      "youtube_video": [
+        "https://www.youtube.com/results?search_query=%E5%AE%87%E9%83%BD%E5%AE%AE%E3%83%96%E3%83%AC%E3%83%83%E3%82%AF%E3%82%B9%20%E3%83%8F%E3%82%A4%E3%83%A9%E3%82%A4%E3%83%88",
+        "https://www.youtube.com/results?search_query=%E5%AE%87%E9%83%BD%E5%AE%AE%E3%83%96%E3%83%AC%E3%83%83%E3%82%AF%E3%82%B9%20%E4%BC%9A%E8%A6%8B"
+      ],
+      "data_numeric": [
+        "CS QF GAME1/GAME2 scores and box score entries recorded on B.LEAGUE pages"
+      ],
+      "schedule_calendar": [
+        "https://www.bleague.jp/schedule/B.LEAGUE"
+      ],
+      "counter_search": [
+        "counter-search: ensure \"結果\" replaces \"予定\"; avoid rumor-only roster items"
+      ],
+      "adopted": [
+        "B.LEAGUE game detail pages for GAME1/GAME2",
+        "club official updates after elimination"
+      ],
+      "held": [
+        "next official roster/contract announcements"
+      ],
+      "excluded": [
+        "transfer rumors without official confirmation"
+      ],
+      "unresolved": [
+        "non-critical: none"
+      ],
+      "freshness_check": "cards dated 2026-05-17; club site updated May 14-15, 2026",
+      "critical_unresolved": []
+    },
+    "投資": {
+      "search_terms": [
+        "etf",
+        "株",
+        "market",
+        "fund",
+        "指数",
+        "fed",
+        "金利",
+        "flows",
+        "ai",
+        "semiconductor"
+      ],
+      "official": [
+        "https://www.ici.org/research/stats/flows",
+        "https://www.ici.org/research/stats/combined_flows",
+        "https://www.cmegroup.com/fedwatch",
+        "https://www.cmegroup.com/market-data/economic-calendar.html"
+      ],
+      "major_media": [
+        "https://apnews.com/article/4a572b9feeed6af2986be7e7a22c651a"
+      ],
+      "specialist_media": [
+        "https://www.etf.com/sections/weekly-etf-flows/archive"
+      ],
+      "sns_x": [
+        "https://x.com/WSJmarkets",
+        "https://x.com/Reuters"
+      ],
+      "youtube_video": [
+        "https://www.youtube.com/results?search_query=May%2015%202026%20market%20recap",
+        "https://www.youtube.com/results?search_query=ICI%20weekly%20flows%20May%202026"
+      ],
+      "data_numeric": [
+        "AP: S&P 500 fell 1.2% on May 15, 2026; ICI weekly flow release dated May 13, 2026"
+      ],
+      "schedule_calendar": [
+        "https://www.cmegroup.com/market-data/economic-calendar.html",
+        "https://www.cmegroup.com/fedwatch"
+      ],
+      "counter_search": [
+        "counter-search: separate oil/yields vs earnings drivers; confirm flow direction vs price"
+      ],
+      "adopted": [
+        "AP index recap + ICI weekly flows",
+        "CME calendar + FedWatch for next policy event"
+      ],
+      "held": [
+        "sector attribution and ETF-level details"
+      ],
+      "excluded": [
+        "takes without numbers"
+      ],
+      "unresolved": [
+        "non-critical: none"
+      ],
+      "freshness_check": "cards dated 2026-05-17; AP May 15 close + ICI May 13 release",
+      "critical_unresolved": []
+    }
+  }
+}</script>
     </article>
   </main>
 </body>
 </html>
-
