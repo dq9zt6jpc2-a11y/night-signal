@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import subprocess
 import sys
+import re
 import urllib.request
 from datetime import datetime
 from pathlib import Path
@@ -82,6 +83,31 @@ def read_public(url: str) -> str:
         fail(f"cannot read public URL {url}: {exc}")
 
 
+def read_local(path: Path) -> str:
+    if not path.exists():
+        fail(f"missing local file: {path.relative_to(ROOT)}")
+    return path.read_text(encoding="utf-8")
+
+
+def visible_text(html: str) -> str:
+    html = re.sub(r"<script\b.*?</script>", "", html, flags=re.S | re.I)
+    html = re.sub(r"<style\b.*?</style>", "", html, flags=re.S | re.I)
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html)).strip()
+
+
+def local_card_titles(issue_date: str) -> list[str]:
+    html = read_local(ROOT / "site" / "index.html")
+    body = html.split('<section class="section" id="history">', 1)[0]
+    titles = []
+    for match in re.finditer(r"<h3>(.*?)</h3>", body, flags=re.S):
+        title = visible_text(match.group(1))
+        if title and title not in titles:
+            titles.append(title)
+    if len(titles) < 8:
+        fail(f"local site/index.html has too few card titles for {issue_date}: {len(titles)}")
+    return titles
+
+
 def ensure_public_url(issue_date: str) -> None:
     root_html = read_public(PUBLIC_ROOT)
     dated_html = read_public(f"{PUBLIC_ROOT}{issue_date}/index.html")
@@ -91,6 +117,10 @@ def ensure_public_url(issue_date: str) -> None:
         fail(f"public root does not show {issue_date}")
     if expected not in dated_html:
         fail(f"public dated issue does not show {issue_date}")
+
+    missing_titles = [title for title in local_card_titles(issue_date)[:8] if title not in root_html]
+    if missing_titles:
+        fail("public root date is current but content is stale; missing local titles: " + "; ".join(missing_titles))
 
 
 def main() -> int:

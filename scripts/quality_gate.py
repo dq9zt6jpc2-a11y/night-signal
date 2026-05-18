@@ -6,6 +6,7 @@ from __future__ import annotations
 import re
 import sys
 import json
+import difflib
 from urllib.parse import unquote
 from datetime import datetime
 from pathlib import Path
@@ -15,6 +16,24 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE_ROOT = ROOT / "site"
 MAX_CARD_AGE_DAYS = 2
 MIN_FRESH_CARDS = 12
+MIN_CHANGED_CARDS_VS_PREVIOUS = 6
+MAX_UNCHANGED_CARD_RATIO_VS_PREVIOUS = 0.70
+MAX_ISSUE_SIMILARITY_VS_PREVIOUS = 0.94
+EXPECTED_HERO_TITLE = "NIGHT SIGNAL"
+EXPECTED_HERO_CONCEPT_TERMS = ["一次情報", "変化点", "判断"]
+HERO_DAILY_TOPIC_TERMS = [
+    "OpenAI",
+    "SoftBank",
+    "Honda",
+    "SpaceX",
+    "TanStack",
+    "CRS-34",
+    "Starship",
+    "Dragon",
+    "Codex",
+    "ホンダ",
+    "ソフトバンク",
+]
 
 REQUIRED_CATEGORIES = [
     "OpenAI",
@@ -198,6 +217,25 @@ DETAIL_FORBIDDEN_SECTION_HEADINGS = [
 ]
 MIN_SUMMARY_LEAD_CHARS = 180
 
+READER_PROCESS_LEAK_TERMS = [
+    "今日の再抽出",
+    "今日の更新",
+    "本日の更新",
+    "本日の修正",
+    "前日コピー",
+    "日付だけ",
+    "主軸に切り替え",
+    "本線に更新",
+    "差し替え",
+    "品質ゲート",
+    "監査メモ",
+    "作業を書",
+    "修正しました",
+    "再公開",
+    "復旧版",
+    "カードを",
+]
+
 
 def issue_date_from_args() -> str:
     if len(sys.argv) > 1:
@@ -261,6 +299,98 @@ def heading_texts(html: str, tags: tuple[str, ...]) -> list[str]:
         text = re.sub(r"<.*?>", "", match.group(2))
         texts.append(re.sub(r"\s+", " ", text).strip())
     return texts
+
+
+def visible_text(html: str) -> str:
+    html = re.sub(r"<script\b.*?</script>", "", html, flags=re.S | re.I)
+    html = re.sub(r"<style\b.*?</style>", "", html, flags=re.S | re.I)
+    text = re.sub(r"<[^>]+>", " ", html)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def normalize_for_similarity(text: str) -> str:
+    text = visible_text(text)
+    text = re.sub(r"20\d{2}[-/.]\d{2}[-/.]\d{2}", "<date>", text)
+    text = re.sub(r"20\d{2}年\d{1,2}月\d{1,2}日", "<date>", text)
+    text = re.sub(r"night-brief-web-sample-<date>\.html", "night-brief-web-sample-<date>.html", text)
+    text = re.sub(r"\b\d{4,}\b", "<num>", text)
+    return text.lower()
+
+
+def card_signature(card: str) -> str:
+    title = card_title(card)
+    paragraphs = []
+    for match in re.finditer(r"<p[^>]*>(.*?)</p>", card, flags=re.S):
+        paragraphs.append(visible_text(match.group(1)))
+    return normalize_for_similarity(title + " " + " ".join(paragraphs))
+
+
+def previous_issue_sample(issue_date: str) -> Path | None:
+    candidates = []
+    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
+    for path in ROOT.glob("night-brief-web-sample-*.html"):
+        match = re.fullmatch(r"night-brief-web-sample-(\d{4}-\d{2}-\d{2})\.html", path.name)
+        if not match:
+            continue
+        candidate_dt = datetime.strptime(match.group(1), "%Y-%m-%d").date()
+        if candidate_dt < issue_dt:
+            candidates.append((candidate_dt, path))
+    if not candidates:
+        return None
+    return sorted(candidates)[-1][1]
+
+
+def validate_reader_process_language(context: str, html: str) -> None:
+    text = visible_text(html)
+    leaks = [term for term in READER_PROCESS_LEAK_TERMS if term in text]
+    if leaks:
+        fail(f"{context} contains production/process wording: " + ", ".join(leaks[:8]))
+
+
+def validate_stable_hero(context: str, html: str) -> None:
+    hero_match = re.search(r'<section class="hero">(.*?)</section>', html, flags=re.S)
+    if not hero_match:
+        fail(f"{context} missing hero section")
+    hero = hero_match.group(1)
+    h1_match = re.search(r"<h1>(.*?)</h1>", hero, flags=re.S)
+    if not h1_match:
+        fail(f"{context} missing hero h1")
+    hero_title = visible_text(h1_match.group(1))
+    if hero_title != EXPECTED_HERO_TITLE:
+        fail(f"{context} hero h1 must be stable concept title '{EXPECTED_HERO_TITLE}', not daily news: {hero_title}")
+    hero_text = visible_text(hero)
+    missing = [term for term in EXPECTED_HERO_CONCEPT_TERMS if term not in hero_text]
+    if missing:
+        fail(f"{context} hero concept copy missing terms: " + ", ".join(missing))
+    daily_terms = [term for term in HERO_DAILY_TOPIC_TERMS if term in hero_text]
+    if daily_terms:
+        fail(f"{context} hero must describe the product concept, not daily topics: " + ", ".join(daily_terms[:8]))
+
+
+def validate_daily_delta(issue_date: str, sample_html: str) -> None:
+    previous_path = previous_issue_sample(issue_date)
+    if not previous_path:
+        return
+    previous_html = read(previous_path)
+    current_cards = [card_signature(card) for card in card_blocks(sample_html)]
+    previous_cards = set(card_signature(card) for card in card_blocks(previous_html))
+    if not current_cards or not previous_cards:
+        return
+    unchanged = sum(1 for signature in current_cards if signature in previous_cards)
+    changed = len(current_cards) - unchanged
+    unchanged_ratio = unchanged / len(current_cards)
+    if changed < MIN_CHANGED_CARDS_VS_PREVIOUS or unchanged_ratio > MAX_UNCHANGED_CARD_RATIO_VS_PREVIOUS:
+        fail(
+            "issue appears copied from previous day: "
+            f"changed cards {changed}/{len(current_cards)}, unchanged ratio {unchanged_ratio:.0%} "
+            f"against {previous_path.name}"
+        )
+
+    current_body = normalize_for_similarity(section_before_history(sample_html))
+    previous_body = normalize_for_similarity(section_before_history(previous_html))
+    similarity = difflib.SequenceMatcher(None, current_body, previous_body).ratio()
+    if similarity > MAX_ISSUE_SIMILARITY_VS_PREVIOUS:
+        fail(f"issue body too similar to previous day ({similarity:.1%}) against {previous_path.name}")
 
 
 def validate_reader_facing_headlines(context: str, headings: list[str]) -> None:
@@ -396,6 +526,7 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
             f"detail page {name}",
             heading_texts(html, ("title", "h1")),
         )
+        validate_reader_process_language(f"detail page {name}", html)
         if 'class="source"' not in html or "原文確認" not in html:
             missing_source.append(name)
         if 'class="back"' not in html or "../index.html" not in html:
@@ -436,7 +567,12 @@ def validate_category_sections(root_html: str) -> None:
         fail("category sections below minimum cards: " + ", ".join(too_thin))
 
 
-def validate_extraction_log(extraction_log_html: str) -> None:
+def validate_extraction_log(issue_date: str, extraction_log_html: str) -> None:
+    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
+    expected_japanese_date = f"{issue_dt.year}年{issue_dt.month}月{issue_dt.day}日版"
+    if expected_japanese_date not in extraction_log_html:
+        fail(f"extraction log heading does not show {expected_japanese_date}")
+
     missing_categories = [term for term in REQUIRED_CATEGORIES if term not in extraction_log_html]
     if missing_categories:
         fail("extraction log missing categories: " + ", ".join(missing_categories))
@@ -462,6 +598,9 @@ def validate_extraction_log(extraction_log_html: str) -> None:
         manifest = json.loads(manifest_match.group(1))
     except json.JSONDecodeError as exc:
         fail(f"coverage-manifest JSON is invalid: {exc}")
+
+    if manifest.get("date") != issue_date:
+        fail(f"coverage-manifest date mismatch: {manifest.get('date')} != {issue_date}")
 
     categories = manifest.get("categories")
     if not isinstance(categories, dict):
@@ -505,7 +644,8 @@ def validate(issue_date: str) -> None:
     root_html = read(root_index)
     dated_html = read(dated_index)
     extraction_log_html = read(extraction_log)
-    validate_extraction_log(extraction_log_html)
+    validate_extraction_log(issue_date, extraction_log_html)
+    validate_daily_delta(issue_date, sample_html)
 
     expected_title = f"NIGHT SIGNAL | {issue_date}"
     if expected_title not in sample_html or expected_title not in root_html or expected_title not in dated_html:
@@ -514,6 +654,12 @@ def validate(issue_date: str) -> None:
     display_date = issue_date.replace("-", ".")
     if display_date not in root_html:
         fail(f"root page does not display {display_date}")
+
+    validate_stable_hero("sample page", sample_html)
+    validate_stable_hero("root page", root_html)
+    validate_stable_hero("dated issue page", dated_html)
+    validate_reader_process_language("root page", section_before_history(root_html))
+    validate_reader_process_language("dated issue page", section_before_history(dated_html))
 
     cards = card_blocks(root_html)
     if not cards:

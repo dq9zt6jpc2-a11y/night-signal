@@ -27,9 +27,9 @@ jobs:
 
       - name: Prepare site
         run: |
-          ISSUE_DATE="$(ls night-brief-web-sample-*.html | sed -E 's/night-brief-web-sample-([0-9]{4}-[0-9]{2}-[0-9]{2})\.html/\1/' | sort | tail -n 1)"
-          if [[ -z "$ISSUE_DATE" ]]; then
-            echo "No generated NIGHT SIGNAL issue found" >&2
+          ISSUE_DATE="$(TZ=Asia/Tokyo date +%F)"
+          if [[ ! -f "night-brief-web-sample-${ISSUE_DATE}.html" ]]; then
+            echo "Today's NIGHT SIGNAL issue is missing: night-brief-web-sample-${ISSUE_DATE}.html" >&2
             exit 1
           fi
           python3 scripts/sync_site.py "$ISSUE_DATE"
@@ -58,7 +58,7 @@ jobs:
           for attempt in 1 2 3 4 5 6 7 8 9 10; do
             ROOT_HTML="$(curl -fsSL https://dq9zt6jpc2-a11y.github.io/night-signal/ || true)"
             DATED_HTML="$(curl -fsSL "https://dq9zt6jpc2-a11y.github.io/night-signal/${ISSUE_DATE}/index.html" || true)"
-            if [[ "$ROOT_HTML" == *"NIGHT SIGNAL | ${ISSUE_DATE}"* && "$ROOT_HTML" == *"${DISPLAY_DATE}"* && "$DATED_HTML" == *"NIGHT SIGNAL | ${ISSUE_DATE}"* ]]; then
+            if [[ "$ROOT_HTML" == *"NIGHT SIGNAL | ${ISSUE_DATE}"* && "$ROOT_HTML" == *"${DISPLAY_DATE}"* && "$ROOT_HTML" == *"<h1>NIGHT SIGNAL</h1>"* && "$DATED_HTML" == *"NIGHT SIGNAL | ${ISSUE_DATE}"* ]]; then
               echo "Public page verified for ${ISSUE_DATE}"
               exit 0
             fi
