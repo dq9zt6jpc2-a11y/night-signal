@@ -26,6 +26,7 @@
 
       <h2>調査設計</h2>
       <p>最初にカテゴリ別カードを作らない。まず直近24〜72時間の変化点インボックスを横断で作り、その後にカテゴリへ分類します。</p>
+      <p>毎日の収集範囲は <code>config/night_signal_coverage.json</code> を正とする。カテゴリ、探索軸、情報源クラス、最低限の根拠数はこの契約から外さず、当日の都合で省略しない。</p>
       <ul>
         <li>発生源: 公式サイト、IR、適時開示、Docs、Status、規制当局、統計機関、企業公式SNS。</li>
         <li>主要報道: Reuters、Bloomberg、日経、WSJ、FT、AP、主要現地紙、日本語主要メディア。</li>
@@ -35,6 +36,16 @@
         <li>データ: 株価、出来高、ETF/ファンドフロー、為替、金利、PMI、FDI、外貨準備、販売/生産台数、試合結果、打ち上げ予定。</li>
         <li>予定表: 決算、統計、API更新、F1、打ち上げ、試合、規制判断、中央銀行イベント。</li>
         <li>反証検索: 企業名だけでなく、子会社、人物、製品、略称、現地語、競合名、イベント名で検索し、採用候補が本当に主要論点か確認する。</li>
+      </ul>
+
+      <h2>構造化収集契約</h2>
+      <p>網羅性は記事本文ではなく、抽出ログの <code>coverage-manifest</code> で証明する。各カテゴリは「調べた検索軸」「見た情報源」「採用/保留/除外/未確認」「掲載カード」を同じJSONに残す。</p>
+      <ul>
+        <li>各カテゴリは <code>collection_status: complete</code> になるまで公開しない。</li>
+        <li><code>published_card_titles</code> はトップページのカード見出しと完全一致させる。カードだけ更新して抽出ログが古い状態を失敗にする。</li>
+        <li><code>search_axes</code> はカテゴリごとに3軸以上を必須にする。例: OpenAIなら公式/製品、企業導入/インフラ、安全/規制。投資なら市場価格、資金フロー、金利/マクロ予定。</li>
+        <li>URL根拠はカテゴリごとに8件以上、異なるホスト5件以上を最低ラインにする。公式だけ、SNSだけ、単一メディアだけでは通さない。</li>
+        <li><code>last_checked_jst</code> は当日の日付で記録する。日付だけ差し替えた過去ログを失敗にする。</li>
       </ul>
 
       <h2>対象カテゴリ</h2>
@@ -78,9 +89,10 @@
       <h2>抽出ログ</h2>
       <p>抽出ログは作業メモではなく、抜け漏れを防ぐ検査表です。各カテゴリごとに <code>coverage-manifest</code> JSONを必ず埋め込みます。</p>
       <ul>
+        <li>必須トップレベル項目: contract_version、date、last_checked_jst、categories。</li>
         <li>必須情報源クラス: official、major_media、specialist_media、sns_x、youtube_video、data_numeric、schedule_calendar、counter_search。</li>
         <li>必須判断リスト: adopted、held、excluded、unresolved。</li>
-        <li>必須項目: search_terms、freshness_check、critical_unresolved。</li>
+        <li>必須項目: collection_status、published_card_titles、search_axes、search_terms、freshness_check、critical_unresolved。</li>
         <li>カテゴリ固有の探索軸を必ず含める。例: アジア経済ならIndiaとVietnam/ASEAN、F1ならHonda/AstonとPU/FIA、ブレックスなら宇都宮/BREXとB.LEAGUE/試合。</li>
         <li>重大未確認リスクが残る場合は公開しない。決算本文、イベント結果、公式発表、固有名詞ニュース、SNSで大きく話題化した件は重大リスクとして扱う。</li>
       </ul>
@@ -90,10 +102,11 @@
       <ul>
         <li><code>python3 scripts/sync_site.py YYYY-MM-DD</code>: 当日版をsiteへ同期する。過去号へのフォールバックは禁止。</li>
         <li><code>python3 scripts/render_detail.py detail.json</code>: 詳細ページを許可された構造だけで生成する。作業見出しや薄い概要は作成時点で失敗させる。</li>
+        <li><code>python3 scripts/coverage_audit.py YYYY-MM-DD</code>: 構造化収集契約に沿って、探索軸、情報源の多様性、掲載カードと抽出ログの一致を確認する。</li>
         <li><code>python3 scripts/quality_gate.py YYYY-MM-DD</code>: 日付、鮮度、カテゴリ件数、読者向け見出し、カードと詳細ページの整合、詳細概要の厚み、リンク、詳細ページ、coverage-manifest、カテゴリ固有検索軸を検査する。</li>
         <li><code>python3 scripts/pre22_audit.py YYYY-MM-DD</code>: 当日成果物と品質ゲートを公開前に確認する。</li>
         <li>commit/push後に <code>python3 scripts/publication_audit.py YYYY-MM-DD</code> を実行し、未コミット差分、未push、remote不一致、公開URLの日付不一致を失敗扱いにする。</li>
-        <li>コマンドは必ず直列で実行する。順序は sync → quality_gate → pre22_audit → commit → push → publication_audit。</li>
+        <li>コマンドは必ず直列で実行する。順序は sync → coverage_audit → quality_gate → pre22_audit → commit → push → publication_audit。</li>
       </ul>
 
       <h2>ゲート検証</h2>
@@ -103,6 +116,7 @@
         <li>見出しへの作業語混入、抽象語・比喩・矢印・引用符による曖昧化、カード見出しと詳細ページ見出し/概要の不一致、薄い概要、チェックリスト見出し、カテゴリ欠落、カテゴリ1件化、古い日付、リンク切れ、未リンク詳細ページ混入、coverage-manifest不足は失敗する。</li>
         <li>8カテゴリすべてで、8種類の情報源クラス欠落を失敗させる。</li>
         <li>8カテゴリすべてで、search_terms欠落を失敗させる。</li>
+        <li>8カテゴリすべてで、published_card_titles不一致、search_axes欠落、URL根拠不足、情報源ホスト不足を失敗させる。</li>
         <li>カテゴリ固有の探索軸不足、重大未確認リスク残存を失敗させる。</li>
       </ul>
 

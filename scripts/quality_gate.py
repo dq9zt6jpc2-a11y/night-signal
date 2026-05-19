@@ -647,7 +647,6 @@ def validate(issue_date: str) -> None:
     dated_html = read(dated_index)
     extraction_log_html = read(extraction_log)
     validate_extraction_log(issue_date, extraction_log_html)
-    validate_coverage_contract(issue_date, root_html, extraction_log_html)
     validate_daily_delta(issue_date, sample_html)
 
     expected_title = f"NIGHT SIGNAL | {issue_date}"
@@ -711,6 +710,7 @@ def validate(issue_date: str) -> None:
         fail(f"too few fresh cards dated {issue_date} or previous day: {fresh_count} < {MIN_FRESH_CARDS}")
 
     validate_category_sections(root_html)
+    validate_coverage_contract(issue_date, root_html, extraction_log_html)
     validate_detail_quality(issue_date, root_html, dated_html)
     validate_card_detail_alignment(issue_date, root_html, dated_html)
 
