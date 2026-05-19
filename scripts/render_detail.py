@@ -5,11 +5,10 @@ This is the preferred creation path for detail pages. It intentionally exposes
 only the reader-facing sections we want to publish:
 
 - 30秒概要
-- 本文
 - 原文確認
 
-Authoring checklist sections such as "チェック観点" or "次の確認" is not
-supported here, so they are not created in the first place.
+Authoring checklist sections, extra body sections, and broad source bundles are
+not supported here, so they are not created in the first place.
 """
 
 from __future__ import annotations
@@ -24,6 +23,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DETAILS = ROOT / "details"
 MIN_SUMMARY_CHARS = 180
+MAX_SOURCE_LINKS = 4
 FORBIDDEN_TEXT = [
     "チェック観点",
     "次の確認",
@@ -31,6 +31,13 @@ FORBIDDEN_TEXT = [
     "読むポイント",
     "今回の要点",
     "一次で押さえる点",
+    "最新採用",
+    "再確認",
+    "上書き",
+    "落とし込",
+    "固定し",
+    "混ぜない",
+    "作業",
 ]
 
 
@@ -60,6 +67,8 @@ def reject_forbidden(label: str, text: str) -> None:
 
 
 def render_sources(sources: list[Any]) -> str:
+    if len(sources) > MAX_SOURCE_LINKS:
+        fail(f"sources must be narrowed to {MAX_SOURCE_LINKS} links or fewer")
     links = []
     for item in sources:
         if not isinstance(item, dict):
@@ -79,23 +88,20 @@ def render(data: dict[str, Any]) -> str:
     title = required_str(data, "title")
     h1 = required_str(data, "h1")
     summary = required_str(data, "summary")
-    paragraphs = [str(value).strip() for value in required_list(data, "body_paragraphs")]
     sources = required_list(data, "sources")
+    if data.get("body_paragraphs"):
+        fail("body_paragraphs are no longer supported; integrate reader-facing facts into summary")
 
     for label, text in [
         ("title", title),
         ("h1", h1),
         ("summary", summary),
-        ("body", "\n".join(paragraphs)),
     ]:
         reject_forbidden(label, text)
 
     if len(summary.replace(" ", "").replace("\n", "")) < MIN_SUMMARY_CHARS:
         fail(f"summary is too thin: {len(summary)} chars")
-    if any(not paragraph for paragraph in paragraphs):
-        fail("body_paragraphs must not contain empty paragraphs")
 
-    body = "\n".join(f"      <p>{html.escape(paragraph)}</p>" for paragraph in paragraphs)
     source_links = render_sources(sources)
     escaped_title = html.escape(title)
     escaped_kicker = html.escape(kicker)
@@ -121,9 +127,6 @@ def render(data: dict[str, Any]) -> str:
 
       <h2>30秒概要</h2>
       <div class="summary-lead">{escaped_summary}</div>
-
-      <h2>本文</h2>
-{body}
 
       <div class="source">
         原文確認:

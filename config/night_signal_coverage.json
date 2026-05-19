@@ -1,5 +1,5 @@
 {
-  "contract_version": "2026-05-19.1",
+  "contract_version": "2026-05-19.2",
   "description": "NIGHT SIGNAL daily collection contract. A public issue must prove that every category was searched across stable axes before publication.",
   "source_classes": {
     "official": {
@@ -53,6 +53,8 @@
   "minimum_distinct_url_hosts_per_category": 5,
   "minimum_url_evidence_per_category": 8,
   "minimum_search_queries_per_axis": 2,
+  "minimum_new_or_changed_items_per_category": 2,
+  "minimum_no_change_checks_per_category": 1,
   "categories": [
     {
       "label": "OpenAI",

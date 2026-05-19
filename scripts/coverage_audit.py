@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+import html as html_lib
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlparse
@@ -19,6 +20,10 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[1]
 SITE_ROOT = ROOT / "site"
 CONFIG_PATH = ROOT / "config" / "night_signal_coverage.json"
+URL_RE = re.compile(r"https?://[^\s\"'<>)]+")
+JAPANESE_RE = re.compile(r"[\u3040-\u30ff\u3400-\u9fff]")
+SNS_HOSTS = {"x.com", "twitter.com"}
+YOUTUBE_HOSTS = {"youtube.com", "youtu.be"}
 
 
 def fail(message: str) -> None:
@@ -41,7 +46,7 @@ def issue_date_from_args() -> str:
 def visible_text(html: str) -> str:
     html = re.sub(r"<script\b.*?</script>", "", html, flags=re.S | re.I)
     html = re.sub(r"<style\b.*?</style>", "", html, flags=re.S | re.I)
-    text = re.sub(r"<[^>]+>", " ", html)
+    text = html_lib.unescape(re.sub(r"<[^>]+>", " ", html))
     return re.sub(r"\s+", " ", text).strip()
 
 
@@ -94,6 +99,34 @@ def normalize_url_host(url: str) -> str | None:
     return parsed.netloc.lower().removeprefix("www.")
 
 
+def normalize_url(url: str) -> str:
+    return url.strip().rstrip("/")
+
+
+def urls_in(values: list[str]) -> list[str]:
+    urls: list[str] = []
+    for value in values:
+        if normalize_url_host(value):
+            urls.append(value)
+            continue
+        urls.extend(URL_RE.findall(value))
+    return urls
+
+
+def has_japanese(text: str) -> bool:
+    return bool(JAPANESE_RE.search(text))
+
+
+def host_matches(url: str, expected_hosts: set[str]) -> bool:
+    host = normalize_url_host(url)
+    return bool(host and any(host == expected or host.endswith("." + expected) for expected in expected_hosts))
+
+
+def require_channel_url(category: str, key: str, values: list[str], expected_hosts: set[str], label: str) -> None:
+    if not any(host_matches(url, expected_hosts) for url in urls_in(values)):
+        fail(f"{category} {key} must include {label} URL evidence")
+
+
 def string_list(entry: dict, key: str, category: str) -> list[str]:
     value = entry.get(key)
     if not isinstance(value, list):
@@ -133,6 +166,10 @@ def validate_sources(contract: dict, category: str, entry: dict) -> tuple[int, s
             fail(f"{category} {source_class} must include URL evidence")
         if rule.get("must_contain_digit") and not any(re.search(r"\d", item) for item in values):
             fail(f"{category} {source_class} must include numeric evidence")
+        if source_class == "sns_x":
+            require_channel_url(category, source_class, values, SNS_HOSTS, "SNS/X")
+        if source_class == "youtube_video":
+            require_channel_url(category, source_class, values, YOUTUBE_HOSTS, "YouTube")
     return total_urls, hosts
 
 
@@ -180,6 +217,98 @@ def validate_card_manifest_alignment(root_html: str, category_config: dict, entr
         )
 
 
+def card_detail_by_title(root_html: str, category_config: dict) -> dict[str, str]:
+    section_id = category_config["section_id"]
+    body = section_before_history(root_html)
+    match = re.search(
+        rf'<section class="section" id="{re.escape(section_id)}">(.*?)(?=<section class="section" id=|\Z)',
+        body,
+        flags=re.S,
+    )
+    if not match:
+        fail(f"root page missing section for detail mapping: {section_id}")
+    mapping: dict[str, str] = {}
+    for article in re.findall(r'<article class="card[^"]*">(.*?)</article>', match.group(1), flags=re.S):
+        h3 = re.search(r"<h3>(.*?)</h3>", article, flags=re.S)
+        href = re.search(r'href="(?:\d{4}-\d{2}-\d{2}/)?details/([^"#?]+\.html)"', article)
+        if h3 and href:
+            mapping[visible_text(h3.group(1))] = href.group(1)
+    return mapping
+
+
+def source_urls_from_detail(issue_date: str, detail_name: str) -> set[str]:
+    html = read(SITE_ROOT / issue_date / "details" / detail_name)
+    source_match = re.search(r'<div class="source">(.*?)</div>', html, flags=re.S)
+    if not source_match:
+        fail(f"detail page missing source block for coverage item: {detail_name}")
+    return {
+        normalize_url(html_lib.unescape(match))
+        for match in re.findall(r'href="([^"]+)"', source_match.group(1))
+        if normalize_url_host(html_lib.unescape(match))
+    }
+
+
+def validate_new_or_changed_items(contract: dict, issue_date: str, root_html: str, category_config: dict, entry: dict) -> None:
+    category = category_config["label"]
+    expected_titles = card_titles_by_section(root_html, category_config["section_id"])
+    detail_by_title = card_detail_by_title(root_html, category_config)
+    items = entry.get("new_or_changed_items")
+    minimum = int(contract.get("minimum_new_or_changed_items_per_category", 1))
+    if not isinstance(items, list) or len(items) < minimum:
+        fail(f"{category} needs at least {minimum} new_or_changed_items")
+
+    item_titles: list[str] = []
+    for index, item in enumerate(items, start=1):
+        if not isinstance(item, dict):
+            fail(f"{category} new_or_changed_items[{index}] must be an object")
+        title = item.get("title")
+        summary = item.get("summary")
+        sources = item.get("sources")
+        if not isinstance(title, str) or title not in expected_titles:
+            fail(f"{category} new_or_changed_items[{index}] title must match a published card")
+        if not isinstance(summary, str) or len(re.sub(r"\s+", "", summary)) < 60:
+            fail(f"{category} new_or_changed_items[{index}] summary is too thin")
+        if not isinstance(summary, str) or not has_japanese(summary):
+            fail(f"{category} new_or_changed_items[{index}] summary must be Japanese")
+        if not isinstance(sources, list) or not sources or any(not isinstance(source, str) for source in sources):
+            fail(f"{category} new_or_changed_items[{index}] sources must be a non-empty string list")
+        source_urls = [normalize_url(url) for url in urls_in(sources)]
+        if not source_urls:
+            fail(f"{category} new_or_changed_items[{index}] must include URL sources")
+        detail_urls = source_urls_from_detail(issue_date, detail_by_title[title])
+        if not any(url in detail_urls for url in source_urls):
+            fail(f"{category} new_or_changed_items[{index}] sources must overlap linked detail page sources")
+        item_titles.append(title)
+
+    if item_titles != expected_titles:
+        fail(f"{category} new_or_changed_items must mirror published cards: items={item_titles}, page={expected_titles}")
+
+
+def validate_no_change_checks(contract: dict, category: str, entry: dict) -> None:
+    minimum = int(contract.get("minimum_no_change_checks_per_category", 1))
+    checks = entry.get("no_change_checks")
+    if not isinstance(checks, list) or len(checks) < minimum:
+        fail(f"{category} needs at least {minimum} no_change_checks")
+    for index, check in enumerate(checks, start=1):
+        if not isinstance(check, dict):
+            fail(f"{category} no_change_checks[{index}] must be an object")
+        axis = check.get("axis")
+        result = check.get("result")
+        sources = check.get("sources")
+        if not isinstance(axis, str) or len(axis.strip()) < 4:
+            fail(f"{category} no_change_checks[{index}] axis is too weak")
+        if not isinstance(result, str) or len(re.sub(r"\s+", "", result)) < 30:
+            fail(f"{category} no_change_checks[{index}] result is too thin")
+        if not isinstance(result, str) or not has_japanese(result):
+            fail(f"{category} no_change_checks[{index}] result must be Japanese")
+        if not isinstance(sources, list) or not sources or any(not isinstance(source, str) for source in sources):
+            fail(f"{category} no_change_checks[{index}] sources must be a non-empty string list")
+        if not urls_in(sources):
+            fail(f"{category} no_change_checks[{index}] must include URL evidence")
+        require_channel_url(category, f"no_change_checks[{index}]", sources, SNS_HOSTS, "SNS/X")
+        require_channel_url(category, f"no_change_checks[{index}]", sources, YOUTUBE_HOSTS, "YouTube")
+
+
 def validate_coverage_contract(issue_date: str, root_html: str, extraction_log_html: str) -> None:
     contract = load_contract()
     manifest = extract_manifest(extraction_log_html)
@@ -207,6 +336,8 @@ def validate_coverage_contract(issue_date: str, root_html: str, extraction_log_h
         if entry.get("collection_status") != "complete":
             fail(f"{category} collection_status must be complete")
         validate_card_manifest_alignment(root_html, category_config, entry)
+        validate_new_or_changed_items(contract, issue_date, root_html, category_config, entry)
+        validate_no_change_checks(contract, category, entry)
         validate_search_axes(contract, category_config, entry)
         total_urls, hosts = validate_sources(contract, category, entry)
         if total_urls < int(contract["minimum_url_evidence_per_category"]):

@@ -77,12 +77,13 @@
         <li>見出しでは、抽象語や編集者だけが分かる比喩を禁止する。「個人の文脈」「同じ地図」「CPUの現場」「投資枠とインフラ」「ロスター更新」「打ち上げ結果」「扱い始める」「温度感」「足回り」「意味」などで読者に解釈を委ねない。</li>
         <li>見出しでは、矢印（→）で因果を詰めない。引用符（“ ”）で抽象語を強調しない。必要な因果は本文で一文に分けて説明する。</li>
         <li>「一次で固定」「完了扱い」「補助線」「採用前確認」「直検索」「品質ゲート」などの作業語を見出しに入れない。</li>
-        <li>複数カードが同じ詳細ページへリンクする場合、詳細ページのtitle、h1、30秒概要は、リンク元すべてのカード見出しに対応させる。片方のカードだけを受ける見出しにしない。</li>
+        <li>通常カードは1件1詳細ページにする。違う内容のカードを同じ詳細ページへリンクしない。参照先が広がる場合は、無理に1つへまとめずカードと詳細ページを分ける。</li>
         <li>各カテゴリは原則2件以上のカードを置く。2件未満は品質ゲートで失敗させる。</li>
-        <li>詳細ページは日本語で読める要約にする。英語原文へ直接飛ばさず、まず日本語詳細ページへ誘導する。</li>
+        <li>詳細ページは日本語で読める概要にする。構造は「30秒概要」と「原文確認」だけにし、別見出しの本文や作業メモを置かない。</li>
         <li>新規の詳細ページは原則として <code>python3 scripts/render_detail.py detail.json</code> で作成する。自由HTMLの手書きで「チェック観点」「次の確認」などの作業見出しを作らない。</li>
-        <li>詳細ページは30秒概要を本文の中心にする。「チェック観点」「次の確認」「次の予定」のような作業見出しで情報を後ろへ逃がさない。</li>
+        <li>30秒概要の後に追加本文を置かない。重要な数字、日時、関係者、背景、前回からの変化、今後の日程は30秒概要へ統合する。</li>
         <li>要約は短さより情報不足回避を優先する。重要な数字、日時、関係者、背景、前回からの変化、今後の日程は30秒概要に入れる。</li>
+        <li>原文確認は論点に直接関係する参照先だけに絞り、詳細ページ1件あたり最大4リンクまでにする。別論点の根拠は別カードへ分ける。</li>
         <li>参照先にグラフや表がある場合は、その内容を日本語で説明する。依頼がない限り自作図解は作らない。</li>
       </ul>
 
@@ -92,7 +93,9 @@
         <li>必須トップレベル項目: contract_version、date、last_checked_jst、categories。</li>
         <li>必須情報源クラス: official、major_media、specialist_media、sns_x、youtube_video、data_numeric、schedule_calendar、counter_search。</li>
         <li>必須判断リスト: adopted、held、excluded、unresolved。</li>
-        <li>必須項目: collection_status、published_card_titles、search_axes、search_terms、freshness_check、critical_unresolved。</li>
+        <li>必須項目: collection_status、published_card_titles、new_or_changed_items、no_change_checks、search_axes、search_terms、freshness_check、critical_unresolved。</li>
+        <li><code>new_or_changed_items</code> は公開カードと同じ順番・同じ見出しにし、各項目に日本語概要と参照URLを入れる。参照URLはリンク先詳細ページの原文確認にも含める。</li>
+        <li><code>no_change_checks</code> には、Web/SNS/X/YouTubeを見たうえで採用しなかった軸、変化なしと判断した軸、保留した軸をURL付きで残す。</li>
         <li>カテゴリ固有の探索軸を必ず含める。例: アジア経済ならIndiaとVietnam/ASEAN、F1ならHonda/AstonとPU/FIA、ブレックスなら宇都宮/BREXとB.LEAGUE/試合。</li>
         <li>重大未確認リスクが残る場合は公開しない。決算本文、イベント結果、公式発表、固有名詞ニュース、SNSで大きく話題化した件は重大リスクとして扱う。</li>
       </ul>
@@ -102,8 +105,8 @@
       <ul>
         <li><code>python3 scripts/sync_site.py YYYY-MM-DD</code>: 当日版をsiteへ同期する。過去号へのフォールバックは禁止。</li>
         <li><code>python3 scripts/render_detail.py detail.json</code>: 詳細ページを許可された構造だけで生成する。作業見出しや薄い概要は作成時点で失敗させる。</li>
-        <li><code>python3 scripts/coverage_audit.py YYYY-MM-DD</code>: 構造化収集契約に沿って、探索軸、情報源の多様性、掲載カードと抽出ログの一致を確認する。</li>
-        <li><code>python3 scripts/quality_gate.py YYYY-MM-DD</code>: 日付、鮮度、カテゴリ件数、読者向け見出し、カードと詳細ページの整合、詳細概要の厚み、リンク、詳細ページ、coverage-manifest、カテゴリ固有検索軸、詳細ページの前日コピーを検査する。</li>
+        <li><code>python3 scripts/coverage_audit.py YYYY-MM-DD</code>: 構造化収集契約に沿って、探索軸、情報源の多様性、掲載カードと抽出ログの一致、新規/変化項目の概要と参照先、変化なし確認の証跡を確認する。</li>
+        <li><code>python3 scripts/quality_gate.py YYYY-MM-DD</code>: 日付、鮮度、カテゴリ件数、読者向け見出し、カードと詳細ページの整合、通常カードの詳細リンク重複、概要だけの詳細構造、参照リンク数、リンク、coverage-manifest、カテゴリ固有検索軸、詳細ページの前日コピーを検査する。</li>
         <li><code>python3 scripts/pre22_audit.py YYYY-MM-DD</code>: 当日成果物と品質ゲートを公開前に確認する。</li>
         <li>commit/push後に <code>python3 scripts/publication_audit.py YYYY-MM-DD</code> を実行し、未コミット差分、未push、remote不一致、公開URLの日付不一致を失敗扱いにする。</li>
         <li>コマンドは必ず直列で実行する。順序は sync → coverage_audit → quality_gate → pre22_audit → commit → push → publication_audit。</li>
@@ -113,7 +116,7 @@
       <p><code>python3 scripts/simulate_quality_gate_failures.py</code> で、ゲート自体が落とすべき不具合を落とすか確認します。</p>
       <ul>
         <li>正常な現行版は通る。</li>
-        <li>見出しへの作業語混入、抽象語・比喩・矢印・引用符による曖昧化、カード見出しと詳細ページ見出し/概要の不一致、薄い概要、チェックリスト見出し、カテゴリ欠落、カテゴリ1件化、古い日付、リンク切れ、未リンク詳細ページ混入、coverage-manifest不足は失敗する。</li>
+        <li>見出しへの作業語混入、抽象語・比喩・矢印・引用符による曖昧化、カード見出しと詳細ページ見出し/概要の不一致、薄い概要、概要後の本文混入、参照リンク過多、詳細リンク重複、チェックリスト見出し、カテゴリ欠落、カテゴリ1件化、古い日付、リンク切れ、未リンク詳細ページ混入、coverage-manifest不足は失敗する。</li>
         <li>日付だけ変えて詳細ページ本文が前日とほぼ同じ場合は失敗する。</li>
         <li>8カテゴリすべてで、8種類の情報源クラス欠落を失敗させる。</li>
         <li>8カテゴリすべてで、search_terms欠落を失敗させる。</li>

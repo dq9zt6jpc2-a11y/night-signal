@@ -7,6 +7,7 @@ import re
 import sys
 import json
 import difflib
+import html as html_lib
 from urllib.parse import unquote
 from datetime import datetime
 from pathlib import Path
@@ -46,6 +47,7 @@ REQUIRED_SECTIONS = {
 
 MIN_CARDS_PER_SECTION = 2
 MIN_DETAIL_TEXT_CHARS = 300
+MAX_SOURCE_LINKS_PER_DETAIL = 4
 
 REQUIRED_COVERAGE_TERMS = [
     "公式",
@@ -77,6 +79,7 @@ TITLE_POLICY_LEAK_TERMS = [
     "直検索",
     "カバレッジ",
     "品質ゲート",
+    "最新採用",
 ]
 
 DETAIL_POLICY_LEAK_TERMS = TITLE_POLICY_LEAK_TERMS + [
@@ -108,12 +111,25 @@ HEADLINE_ABSTRACT_LEAK_TERMS = [
     "読む日",
     "意味",
     "更新導線",
+    "進捗",
+    "再確認",
+    "上書き",
+    "落とし込",
+    "固定する",
+    "確認する",
+    "読む",
+    "見る",
 ]
 
 HEADLINE_FORBIDDEN_CHARS = ["→", "“", "”"]
 GENERIC_HEADLINE_STARTS = ["何が", "なぜ", "どう見る", "読み方", "ポイント"]
 DETAIL_ALIGNMENT_KEYWORDS = [
     "ChatGPT",
+    "OpenAI",
+    "Dell",
+    "Codex",
+    "TanStack",
+    "証明書",
     "家計",
     "口座",
     "安全",
@@ -121,24 +137,45 @@ DETAIL_ALIGNMENT_KEYWORDS = [
     "SoftBank",
     "Arm",
     "データセンター",
+    "バッテリー",
+    "電源",
+    "災害",
     "Honda",
     "EV",
     "HV",
+    "赤字",
+    "関税",
+    "中国",
+    "販売",
+    "生産",
     "ADUO",
     "FIA",
+    "カナダ",
+    "Aston",
+    "PU",
     "CRS-34",
     "Falcon",
     "Dragon",
     "ISS",
     "Starship",
     "Flight 12",
+    "Starlink",
     "ベトナム",
     "IIP",
     "インド",
+    "CPI",
+    "RBI",
     "外貨準備",
     "名古屋",
     "ジェレット",
+    "ニュービル",
+    "D.J.",
+    "コロネル",
+    "スタッフ",
     "米株",
+    "S&P",
+    "Nasdaq",
+    "Dow",
     "ファンド",
     "ETF",
     "ICI",
@@ -171,6 +208,18 @@ READER_PROCESS_LEAK_TERMS = [
     "再公開",
     "復旧版",
     "カードを",
+    "5/19版では",
+    "版では",
+    "作業",
+    "チェックリスト",
+    "読むポイント",
+    "次の確認",
+    "上書きする",
+    "混ぜない",
+    "落とし込",
+    "固定し",
+    "確認として",
+    "最新採用",
 ]
 
 
@@ -200,6 +249,10 @@ def card_blocks(html: str) -> list[str]:
     return re.findall(r"<article class=\"(?:card|priority-card)[^\"]*\">.*?</article>", body, flags=re.S)
 
 
+def normal_card_blocks(html: str) -> list[str]:
+    return [card for card in card_blocks(html) if "priority-card" not in card]
+
+
 def card_dates(card: str) -> list[str]:
     # Only visible metadata dates count. Links such as
     # href="2026-05-13/details/..." are publication paths, not item dates.
@@ -210,7 +263,7 @@ def card_title(card: str) -> str:
     match = re.search(r"<h3>(.*?)</h3>", card, flags=re.S)
     if not match:
         return "(no title)"
-    text = re.sub(r"<.*?>", "", match.group(1))
+    text = html_lib.unescape(re.sub(r"<.*?>", "", match.group(1)))
     return re.sub(r"\s+", " ", text).strip()
 
 
@@ -224,7 +277,7 @@ def card_detail_href(card: str) -> str | None:
 def page_titles(html: str) -> list[str]:
     titles = []
     for match in re.finditer(r"<h3>(.*?)</h3>", section_before_history(html), flags=re.S):
-        text = re.sub(r"<.*?>", "", match.group(1))
+        text = html_lib.unescape(re.sub(r"<.*?>", "", match.group(1)))
         titles.append(re.sub(r"\s+", " ", text).strip())
     return titles
 
@@ -233,7 +286,7 @@ def heading_texts(html: str, tags: tuple[str, ...]) -> list[str]:
     tag_pattern = "|".join(tags)
     texts = []
     for match in re.finditer(rf"<({tag_pattern})[^>]*>(.*?)</\1>", html, flags=re.S):
-        text = re.sub(r"<.*?>", "", match.group(2))
+        text = html_lib.unescape(re.sub(r"<.*?>", "", match.group(2)))
         texts.append(re.sub(r"\s+", " ", text).strip())
     return texts
 
@@ -241,7 +294,7 @@ def heading_texts(html: str, tags: tuple[str, ...]) -> list[str]:
 def visible_text(html: str) -> str:
     html = re.sub(r"<script\b.*?</script>", "", html, flags=re.S | re.I)
     html = re.sub(r"<style\b.*?</style>", "", html, flags=re.S | re.I)
-    text = re.sub(r"<[^>]+>", " ", html)
+    text = html_lib.unescape(re.sub(r"<[^>]+>", " ", html))
     return re.sub(r"\s+", " ", text).strip()
 
 
@@ -421,6 +474,28 @@ def validate_card_detail_alignment(issue_date: str, root_html: str, dated_html: 
         fail("card/detail title mismatch: " + "; ".join(failures[:8]))
 
 
+def linked_detail_names(issue_date: str, root_html: str, dated_html: str) -> set[str]:
+    linked = set(re.findall(rf'href="{issue_date}/details/([^"#?]+\.html)', root_html))
+    linked.update(re.findall(r'href="details/([^"#?]+\.html)', dated_html))
+    return linked
+
+
+def validate_unique_detail_links(context: str, html: str) -> None:
+    by_detail: dict[str, set[str]] = {}
+    for card in normal_card_blocks(html):
+        name = card_detail_href(card)
+        if not name:
+            continue
+        by_detail.setdefault(name, set()).add(card_title(card))
+    duplicates = [
+        f"{name}: " + " / ".join(sorted(titles))
+        for name, titles in sorted(by_detail.items())
+        if len(titles) > 1
+    ]
+    if duplicates:
+        fail(f"{context} duplicate detail links; split unrelated topics into separate detail pages: " + "; ".join(duplicates[:8]))
+
+
 def local_href_targets(html: str, base: Path) -> list[Path]:
     targets = []
     for href in re.findall(r'href="([^"]+)"', html):
@@ -451,8 +526,7 @@ def validate_local_links(issue_date: str) -> None:
 
 
 def validate_detail_scope(issue_date: str, root_html: str, dated_html: str) -> None:
-    linked = set(re.findall(rf'href="{issue_date}/details/([^"#?]+\.html)', root_html))
-    linked.update(re.findall(r'href="details/([^"#?]+\.html)', dated_html))
+    linked = linked_detail_names(issue_date, root_html, dated_html)
     linked.add("policy.html")
     linked.add(f"extraction-log-{issue_date}.html")
     actual = {path.name for path in (SITE_ROOT / issue_date / "details").glob("*.html")}
@@ -465,14 +539,15 @@ def validate_detail_scope(issue_date: str, root_html: str, dated_html: str) -> N
 
 
 def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) -> None:
-    linked = set(re.findall(rf'href="{issue_date}/details/([^"#?]+\.html)', root_html))
-    linked.update(re.findall(r'href="details/([^"#?]+\.html)', dated_html))
+    linked = linked_detail_names(issue_date, root_html, dated_html)
     excluded = {"policy.html", f"extraction-log-{issue_date}.html"}
     weak = []
     leaked = []
     checklist_headings = []
+    overview_only_failures = []
     weak_summaries = []
     missing_source = []
+    too_many_sources = []
     missing_back = []
     for name in sorted(linked - excluded):
         path = SITE_ROOT / issue_date / "details" / name
@@ -488,14 +563,24 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
         h2_texts = heading_texts(html, ("h2",))
         if any(any(term in heading for term in DETAIL_FORBIDDEN_SECTION_HEADINGS) for heading in h2_texts):
             checklist_headings.append(name)
+        if h2_texts != ["30秒概要"]:
+            overview_only_failures.append(f"{name}: h2={h2_texts or '-'}")
         summary_match = re.search(r'<div class="summary-lead">(.*?)</div>', html, flags=re.S)
         if not summary_match:
             weak_summaries.append(f"{name}: missing summary")
         else:
-            summary_text = re.sub(r"<[^>]+>", "", summary_match.group(1))
+            summary_text = visible_text(summary_match.group(1))
             summary_text = re.sub(r"\s+", "", summary_text)
             if len(summary_text) < MIN_SUMMARY_LEAD_CHARS:
                 weak_summaries.append(f"{name}: {len(summary_text)} chars")
+        source_match = re.search(r'<div class="source">(.*?)</div>', html, flags=re.S)
+        if summary_match and source_match:
+            between = html[summary_match.end() : source_match.start()]
+            if visible_text(between):
+                overview_only_failures.append(f"{name}: body exists between summary and sources")
+            source_links = re.findall(r"<a\b", source_match.group(1), flags=re.I)
+            if len(source_links) > MAX_SOURCE_LINKS_PER_DETAIL:
+                too_many_sources.append(f"{name}: {len(source_links)} links")
         validate_reader_facing_headlines(
             f"detail page {name}",
             heading_texts(html, ("title", "h1")),
@@ -511,10 +596,14 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
         fail("detail headings contain policy/checklist wording: " + ", ".join(leaked[:8]))
     if checklist_headings:
         fail("detail pages use checklist/next-step section headings: " + ", ".join(checklist_headings[:8]))
+    if overview_only_failures:
+        fail("detail pages must be overview-only: " + "; ".join(overview_only_failures[:8]))
     if weak_summaries:
         fail("detail summaries are too thin: " + "; ".join(weak_summaries[:8]))
     if missing_source:
         fail("detail pages missing source block: " + ", ".join(missing_source[:8]))
+    if too_many_sources:
+        fail("detail pages have too many source links; split or narrow references: " + "; ".join(too_many_sources[:8]))
     if missing_back:
         fail("detail pages missing back link: " + ", ".join(missing_back[:8]))
 
@@ -678,6 +767,8 @@ def validate(issue_date: str) -> None:
         fail(f"too few fresh cards dated {issue_date} or previous day: {fresh_count} < {MIN_FRESH_CARDS}")
 
     validate_category_sections(root_html)
+    validate_unique_detail_links("root page", root_html)
+    validate_unique_detail_links("dated issue page", dated_html)
     validate_coverage_contract(issue_date, root_html, extraction_log_html)
     validate_detail_quality(issue_date, root_html, dated_html)
     validate_card_detail_alignment(issue_date, root_html, dated_html)
