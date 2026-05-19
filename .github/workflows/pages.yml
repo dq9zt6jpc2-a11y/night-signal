@@ -33,6 +33,7 @@ jobs:
             exit 1
           fi
           python3 scripts/sync_site.py "$ISSUE_DATE"
+          python3 scripts/coverage_audit.py "$ISSUE_DATE"
           python3 scripts/quality_gate.py "$ISSUE_DATE"
           cp .nojekyll site/.nojekyll
           echo "ISSUE_DATE=$ISSUE_DATE" >> "$GITHUB_ENV"
