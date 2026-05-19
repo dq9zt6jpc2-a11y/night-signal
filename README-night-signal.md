@@ -56,12 +56,21 @@ python3 scripts/send_line.py "https://公開URL/2026-05-10/"
 
 ## 本番の毎晩処理
 
-1. 最新情報を収集
-2. 既存・新規を含めて、直近72時間を中心に網羅的に調査
-3. 迷う材料は落とさず掲載候補に入れる
-4. 日本語記事を優先して確認
-5. 日本語記事がない場合は英語記事を本文まで読み、日本語要約を作成
-6. `site/YYYY-MM-DD/` にHTML生成
-7. `python3 scripts/sync_site.py` で `site/index.html` と日付別履歴へ同期
-8. 公開先へアップロード
-9. LINEでURLを送信
+1. `config/night_signal_coverage.json` のカテゴリと探索軸に沿って最新情報を収集する
+2. 既存・新規を含めて、直近24〜72時間を中心に網羅的に調査する
+3. 各カテゴリで公式、主要報道、専門媒体、SNS/X、YouTube、データ、予定、反証を確認する
+4. 迷う材料は落とさず、抽出ログの `held` / `unresolved` に残す
+5. 日本語記事を優先して確認し、日本語記事がない場合は英語記事を本文まで読み、日本語要約を作成する
+6. トップページ、詳細ページ、抽出ログの `coverage-manifest` を更新する
+7. `published_card_titles` とトップページのカード見出しを一致させる
+8. `python3 scripts/sync_site.py YYYY-MM-DD` で `site/index.html` と日付別履歴へ同期する
+9. `python3 scripts/coverage_audit.py YYYY-MM-DD` と `python3 scripts/quality_gate.py YYYY-MM-DD` を通す
+10. `python3 scripts/pre22_audit.py YYYY-MM-DD` を通してからcommit/pushする
+11. `python3 scripts/publication_audit.py YYYY-MM-DD` で公開URLまで確認する
+
+## 再発防止の中核
+
+- 収集範囲の正は `config/night_signal_coverage.json`。
+- 抽出ログは作業メモではなく、網羅収集の証跡。
+- `scripts/coverage_audit.py` は、検索軸、情報源の多様性、URL根拠数、掲載カードと抽出ログの一致を検査する。
+- `scripts/quality_gate.py` は `coverage_audit.py` を内包しているため、構造化収集契約を満たさない当日版は公開できない。

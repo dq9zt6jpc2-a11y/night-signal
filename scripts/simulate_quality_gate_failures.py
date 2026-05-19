@@ -17,15 +17,18 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ISSUE_DATE = "2026-05-16"
-SOFTBANK_CARD_TITLE = "<h3>SoftBank（9434）"
+ISSUE_DATE = "2026-05-19"
+SOFTBANK_CARD_TITLE = "<h3>AIデータセンター電源"
 
 
 def copy_fixture() -> Path:
     tmp = Path(tempfile.mkdtemp(prefix="night-signal-gate-"))
     (tmp / "scripts").mkdir()
     (tmp / "details").mkdir()
+    (tmp / "config").mkdir()
     shutil.copyfile(ROOT / "scripts" / "quality_gate.py", tmp / "scripts" / "quality_gate.py")
+    shutil.copyfile(ROOT / "scripts" / "coverage_audit.py", tmp / "scripts" / "coverage_audit.py")
+    shutil.copyfile(ROOT / "config" / "night_signal_coverage.json", tmp / "config" / "night_signal_coverage.json")
     shutil.copyfile(ROOT / f"night-brief-web-sample-{ISSUE_DATE}.html", tmp / f"night-brief-web-sample-{ISSUE_DATE}.html")
     shutil.copyfile(ROOT / "details" / f"extraction-log-{ISSUE_DATE}.html", tmp / "details" / f"extraction-log-{ISSUE_DATE}.html")
     shutil.copytree(ROOT / "site", tmp / "site")
@@ -164,8 +167,8 @@ def main() -> int:
     assert_fail(
         "detail headline quote shorthand leak",
         lambda tmp: write(
-            tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-16.html",
-            read(tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-16.html").replace("<h1>", "<h1>“投資枠”と“CPUの現場” ", 1),
+            tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-19.html",
+            read(tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-19.html").replace("<h1>", "<h1>“投資枠”と“CPUの現場” ", 1),
         ),
         "headings are not reader-facing",
     )
@@ -173,10 +176,10 @@ def main() -> int:
     assert_fail(
         "card detail title mismatch",
         lambda tmp: write(
-            tmp / "site" / ISSUE_DATE / "details" / "openai-2026-05-16.html",
-            read(tmp / "site" / ISSUE_DATE / "details" / "openai-2026-05-16.html").replace(
-                "ChatGPT家計管理プレビューと安全更新を確認",
-                "ChatGPTに家計管理プレビュー。米国Pro向けに口座連携を開始",
+            tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-19.html",
+            read(tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-19.html").replace(
+                "SoftBank: AIデータセンターの電源（国産バッテリー）と災害時の電源確保連携",
+                "災害時の電源確保連携を確認",
             ),
         ),
         "card/detail title mismatch",
@@ -185,8 +188,8 @@ def main() -> int:
     assert_fail(
         "detail checklist section heading leak",
         lambda tmp: write(
-            tmp / "site" / ISSUE_DATE / "details" / "brex-2026-05-16.html",
-            read(tmp / "site" / ISSUE_DATE / "details" / "brex-2026-05-16.html").replace("<h2>本文</h2>", "<h2>チェック観点</h2>", 1),
+            tmp / "site" / ISSUE_DATE / "details" / "brex-2026-05-19.html",
+            read(tmp / "site" / ISSUE_DATE / "details" / "brex-2026-05-19.html").replace("<h2>本文</h2>", "<h2>チェック観点</h2>", 1),
         ),
         "detail pages use checklist/next-step section headings",
     )
@@ -194,11 +197,11 @@ def main() -> int:
     assert_fail(
         "detail summary too thin",
         lambda tmp: write(
-            tmp / "site" / ISSUE_DATE / "details" / "brex-2026-05-16.html",
+            tmp / "site" / ISSUE_DATE / "details" / "brex-2026-05-19.html",
             re.sub(
                 r'<div class="summary-lead">.*?</div>',
                 '<div class="summary-lead">名古屋D戦とジェレット退団を確認する。</div>',
-                read(tmp / "site" / ISSUE_DATE / "details" / "brex-2026-05-16.html"),
+                read(tmp / "site" / ISSUE_DATE / "details" / "brex-2026-05-19.html"),
                 count=1,
                 flags=re.S,
             ),
@@ -220,14 +223,14 @@ def main() -> int:
 
     assert_fail(
         "stale visible card date",
-        lambda tmp: mutate_root_and_dated(tmp, lambda html: html.replace(">2026-05-16<", ">2026-05-10<", 1)),
+        lambda tmp: mutate_root_and_dated(tmp, lambda html: html.replace(">2026-05-19<", ">2026-05-10<", 1)),
         "stale cards found",
     )
 
     assert_fail(
         "broken local detail link",
-        lambda tmp: mutate_root_and_dated(tmp, lambda html: html.replace("details/softbank-2026-05-16.html", "details/missing.html", 1)),
-        "missing file: site/2026-05-16/details/missing.html",
+        lambda tmp: mutate_root_and_dated(tmp, lambda html: html.replace("details/softbank-2026-05-19.html", "details/missing.html", 1)),
+        "missing file: site/2026-05-19/details/missing.html",
     )
 
     assert_fail(
@@ -245,7 +248,7 @@ def main() -> int:
     assert_fail(
         "detail page too thin",
         lambda tmp: write(
-            tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-16.html",
+            tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-19.html",
             '<html><head><title>SoftBank</title></head><body><main><a class="back" href="../index.html#softbank">一覧へ戻る</a><article><h1>SoftBank</h1><p>薄い要約。</p><div class="source">原文確認:<a href="https://example.com">source</a></div></article></main></body></html>',
         ),
         "detail pages too thin",
@@ -254,10 +257,34 @@ def main() -> int:
     assert_fail(
         "detail heading policy wording leak",
         lambda tmp: write(
-            tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-16.html",
-            read(tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-16.html").replace("<h1>", "<h1>一次で固定 ", 1),
+            tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-19.html",
+            read(tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-19.html").replace("<h1>", "<h1>一次で固定 ", 1),
         ),
         "detail headings contain policy/checklist wording",
+    )
+
+    assert_fail(
+        "coverage card titles mismatch",
+        lambda tmp: mutate_manifest(tmp, "OpenAI", "published_card_titles", ["old copied title"]),
+        "OpenAI published_card_titles do not match page cards",
+    )
+
+    assert_fail(
+        "coverage search axes missing",
+        lambda tmp: mutate_manifest(tmp, "OpenAI", "search_axes", {}),
+        "OpenAI search_axis official_product_release",
+    )
+
+    assert_fail(
+        "coverage official URL missing",
+        lambda tmp: mutate_manifest(tmp, "OpenAI", "official", ["OpenAI blog checked without URL"]),
+        "OpenAI official must include URL evidence",
+    )
+
+    assert_fail(
+        "coverage collection status incomplete",
+        lambda tmp: mutate_manifest(tmp, "OpenAI", "collection_status", "partial"),
+        "OpenAI collection_status must be complete",
     )
 
     assert_fail(

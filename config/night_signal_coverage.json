@@ -1,0 +1,202 @@
+{
+  "contract_version": "2026-05-19.1",
+  "description": "NIGHT SIGNAL daily collection contract. A public issue must prove that every category was searched across stable axes before publication.",
+  "source_classes": {
+    "official": {
+      "min_items": 1,
+      "url_required": true
+    },
+    "major_media": {
+      "min_items": 1,
+      "url_required": true
+    },
+    "specialist_media": {
+      "min_items": 1,
+      "url_required": true
+    },
+    "sns_x": {
+      "min_items": 1,
+      "url_required": true
+    },
+    "youtube_video": {
+      "min_items": 1,
+      "url_required": true
+    },
+    "data_numeric": {
+      "min_items": 1,
+      "url_required": false,
+      "must_contain_digit": true
+    },
+    "schedule_calendar": {
+      "min_items": 1,
+      "url_required": false
+    },
+    "counter_search": {
+      "min_items": 1,
+      "url_required": false
+    }
+  },
+  "decision_classes": {
+    "adopted": {
+      "min_items": 2
+    },
+    "held": {
+      "min_items": 1
+    },
+    "excluded": {
+      "min_items": 1
+    },
+    "unresolved": {
+      "min_items": 1
+    }
+  },
+  "minimum_distinct_url_hosts_per_category": 5,
+  "minimum_url_evidence_per_category": 8,
+  "minimum_search_queries_per_axis": 2,
+  "categories": [
+    {
+      "label": "OpenAI",
+      "section_id": "openai",
+      "axes": [
+        {
+          "id": "official_product_release",
+          "terms": ["openai", "chatgpt", "api", "release", "model", "codex"]
+        },
+        {
+          "id": "enterprise_infrastructure",
+          "terms": ["enterprise", "deployment", "dell", "aws", "data", "infrastructure", "on-prem"]
+        },
+        {
+          "id": "safety_security_regulation",
+          "terms": ["security", "safety", "supply", "tanstack", "policy", "regulation"]
+        }
+      ]
+    },
+    {
+      "label": "SoftBank",
+      "section_id": "softbank",
+      "axes": [
+        {
+          "id": "corporate_ir_news",
+          "terms": ["softbank", "sbg", "ir", "earnings", "ソフトバンク"]
+        },
+        {
+          "id": "arm_ai_infrastructure",
+          "terms": ["arm", "ai", "openai", "stargate", "vision", "datacenter"]
+        },
+        {
+          "id": "power_financing_operations",
+          "terms": ["battery", "power", "funding", "debt", "data center", "電源", "バッテリー"]
+        }
+      ]
+    },
+    {
+      "label": "Honda",
+      "section_id": "honda",
+      "axes": [
+        {
+          "id": "ir_financials",
+          "terms": ["honda", "ir", "earnings", "guidance", "決算", "赤字"]
+        },
+        {
+          "id": "market_regions",
+          "terms": ["china", "india", "asean", "north america", "sales", "production", "中国", "販売"]
+        },
+        {
+          "id": "ev_battery_mobility",
+          "terms": ["ev", "hev", "battery", "adas", "robotics", "電池"]
+        }
+      ]
+    },
+    {
+      "label": "F1",
+      "section_id": "f1",
+      "axes": [
+        {
+          "id": "official_schedule_results",
+          "terms": ["formula 1", "f1", "grand prix", "schedule", "result", "timetable"]
+        },
+        {
+          "id": "honda_aston_pu",
+          "terms": ["honda", "aston", "hrc", "pu", "power unit", "ers", "回生"]
+        },
+        {
+          "id": "fia_regulations",
+          "terms": ["fia", "regulation", "aduo", "technical", "operational"]
+        }
+      ]
+    },
+    {
+      "label": "SpaceX",
+      "section_id": "spacex",
+      "axes": [
+        {
+          "id": "launch_status",
+          "terms": ["spacex", "launch", "starship", "falcon", "dragon", "flight"]
+        },
+        {
+          "id": "agency_regulatory",
+          "terms": ["nasa", "faa", "fcc", "nro", "regulatory", "iss"]
+        },
+        {
+          "id": "business_starlink_contracts",
+          "terms": ["starlink", "contract", "valuation", "government", "customer"]
+        }
+      ]
+    },
+    {
+      "label": "アジア経済",
+      "section_id": "asia",
+      "axes": [
+        {
+          "id": "india_macro",
+          "terms": ["india", "インド", "cpi", "rbi", "mospi", "pmi"]
+        },
+        {
+          "id": "vietnam_macro",
+          "terms": ["vietnam", "ベトナム", "iip", "cpi", "fdi", "gso", "nso"]
+        },
+        {
+          "id": "regional_markets_policy",
+          "terms": ["asean", "fx", "currency", "policy", "manufacturing", "supply chain"]
+        }
+      ]
+    },
+    {
+      "label": "宇都宮ブレックス",
+      "section_id": "brex",
+      "axes": [
+        {
+          "id": "club_official_roster_staff",
+          "terms": ["宇都宮", "brex", "ブレックス", "roster", "staff", "契約", "退団"]
+        },
+        {
+          "id": "bleague_games_schedule",
+          "terms": ["b.league", "bleague", "試合", "日程", "結果", "playoff"]
+        },
+        {
+          "id": "media_local_context",
+          "terms": ["basketball", "local", "media", "youtube", "press", "会見"]
+        }
+      ]
+    },
+    {
+      "label": "投資",
+      "section_id": "investment",
+      "axes": [
+        {
+          "id": "market_prices",
+          "terms": ["stock", "market", "s&p", "nasdaq", "dow", "株", "指数"]
+        },
+        {
+          "id": "fund_flows",
+          "terms": ["etf", "fund", "flows", "ici", "投信", "フロー"]
+        },
+        {
+          "id": "macro_calendar_rates",
+          "terms": ["fed", "rate", "yield", "oil", "cpi", "calendar", "金利"]
+        }
+      ]
+    }
+  ]
+}

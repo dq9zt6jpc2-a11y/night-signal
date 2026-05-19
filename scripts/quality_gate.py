@@ -11,6 +11,8 @@ from urllib.parse import unquote
 from datetime import datetime
 from pathlib import Path
 
+from coverage_audit import validate_coverage_contract
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE_ROOT = ROOT / "site"
@@ -645,6 +647,7 @@ def validate(issue_date: str) -> None:
     dated_html = read(dated_index)
     extraction_log_html = read(extraction_log)
     validate_extraction_log(issue_date, extraction_log_html)
+    validate_coverage_contract(issue_date, root_html, extraction_log_html)
     validate_daily_delta(issue_date, sample_html)
 
     expected_title = f"NIGHT SIGNAL | {issue_date}"
