@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TanStack供給網攻撃対応とChatGPT家計（口座）連携プレビュー | NIGHT SIGNAL</title>
+  <link rel="stylesheet" href="_style.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../night-brief-web-sample-2026-05-19.html#openai">一覧へ戻る</a>
+    <article class="article">
+      <div class="kicker">OpenAI / AI</div>
+      <h1>TanStack供給網攻撃への対応とChatGPT家計（口座）連携プレビューを確認</h1>
+
+      <h2>30秒概要</h2>
+      <div class="summary-lead">OpenAIはTanStack npm供給網攻撃（Mini Shai-Hulud）への対応を公開し、影響範囲、調査状況、macOSアプリの正規性確認プロセス強化、コード署名証明書の更新とアップデート期限（2026年6月12日まで）を示した。あわせて、ChatGPTの家計管理プレビューでは、米国のChatGPT Pro向けに口座連携（Plaid）を導入し、残高・取引の確認と質問応答を可能にした。供給網攻撃対応は“守り”、家計管理は“扱うデータの深さ”の話で、両方ともアカウント保護とデータの取り扱いを先に押さえるべき変更として読む。</div>
+
+      <h2>本文</h2>
+      <p>TanStackの供給網攻撃は、依存ライブラリ経由で開発者や企業の資格情報が狙われるタイプの事案です。OpenAIは、社内環境の一部（社員端末）でマルウェア挙動と一致する活動を観測したとし、限定された内部リポジトリへの不正アクセス/資格情報の持ち出しに対応したと説明しています。ユーザー側で重要なのは、「正規アプリか」を確認する仕組み（macOSのノータリゼーション等）に関わる対応が入っている点で、ChatGPT Desktop / Codex App / Codex CLI等のアップデート期限と、インストーラ詐欺への注意喚起を先に押さえます。</p>
+      <p>家計管理プレビューは、銀行・カード口座をPlaid経由で接続し、残高や取引の確認、支出の整理などをChatGPTで行う設計です。金融データを扱うため、対象地域（米国）、対象プラン（Proのプレビュー）、連携の切断・削除手順、学習設定（モデル学習に使われ得る範囲）を分けて理解し、日常運用に落とす必要があります。口座連携の導入は“便利さ”と“権限の広さ”が同時に増えるため、二要素認証や端末の保護も含めてリスクを再点検します。</p>
+
+      <div class="source">
+        原文確認:
+        <a href="https://openai.com/index/our-response-to-the-tanstack-npm-supply-chain-attack/">OpenAI: Our response to the TanStack npm supply chain attack</a>
+        <a href="https://openai.com/index/personal-finance-chatgpt/">A new personal finance experience in ChatGPT</a>
+        <a href="https://plaid.com/blog/chatgpt-personal-finance-plaid/">Plaid: What ChatGPT’s new experience signals for digital finance</a>
+        <a href="https://techcrunch.com/2026/05/15/openai-launches-chatgpt-for-personal-finance-will-let-you-connect-bank-accounts/">TechCrunch: ChatGPT personal finance (major report)</a>
+        <a href="https://www.theregister.com/security/2026/05/15/openai-caught-in-tanstack-npm-supply-chain-chaos-after-employee-devices-compromised/5241019">The Register: TanStack supply chain attack coverage</a>
+      </div>
+      <div class="return-row"><a class="back" href="../night-brief-web-sample-2026-05-19.html#openai">一覧へ戻る</a></div>
+    </article>
+  </main>
+</body>
+</html>
