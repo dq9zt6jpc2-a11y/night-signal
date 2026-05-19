@@ -11,16 +11,18 @@ from urllib.parse import unquote
 from datetime import datetime
 from pathlib import Path
 
-from coverage_audit import validate_coverage_contract
+from coverage_audit import load_contract, validate_coverage_contract
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE_ROOT = ROOT / "site"
+COVERAGE_CONTRACT = load_contract()
 MAX_CARD_AGE_DAYS = 2
 MIN_FRESH_CARDS = 12
 MIN_CHANGED_CARDS_VS_PREVIOUS = 6
 MAX_UNCHANGED_CARD_RATIO_VS_PREVIOUS = 0.70
 MAX_ISSUE_SIMILARITY_VS_PREVIOUS = 0.94
+MAX_DETAIL_SIMILARITY_VS_PREVIOUS = 0.95
 EXPECTED_HERO_TITLE = "NIGHT SIGNAL"
 EXPECTED_HERO_CONCEPT_TERMS = ["一次情報", "変化点", "判断"]
 HERO_DAILY_TOPIC_TERMS = [
@@ -37,26 +39,9 @@ HERO_DAILY_TOPIC_TERMS = [
     "ソフトバンク",
 ]
 
-REQUIRED_CATEGORIES = [
-    "OpenAI",
-    "SoftBank",
-    "Honda",
-    "F1",
-    "SpaceX",
-    "アジア経済",
-    "宇都宮ブレックス",
-    "投資",
-]
-
+REQUIRED_CATEGORIES = [category["label"] for category in COVERAGE_CONTRACT["categories"]]
 REQUIRED_SECTIONS = {
-    "softbank": "SoftBank",
-    "openai": "OpenAI",
-    "honda": "Honda",
-    "f1": "F1",
-    "spacex": "SpaceX",
-    "asia": "アジア経済",
-    "brex": "宇都宮ブレックス",
-    "investment": "投資",
+    category["section_id"]: category["label"] for category in COVERAGE_CONTRACT["categories"]
 }
 
 MIN_CARDS_PER_SECTION = 2
@@ -76,58 +61,8 @@ REQUIRED_COVERAGE_TERMS = [
     "未確認",
 ]
 
-REQUIRED_SOURCE_CLASSES = [
-    "official",
-    "major_media",
-    "specialist_media",
-    "sns_x",
-    "youtube_video",
-    "data_numeric",
-    "schedule_calendar",
-    "counter_search",
-]
-
-REQUIRED_DECISION_CLASSES = [
-    "adopted",
-    "held",
-    "excluded",
-    "unresolved",
-]
-
-REQUIRED_SEARCH_TERM_GROUPS = {
-    "OpenAI": [
-        ["openai"],
-        ["daybreak", "deployment", "codex", "realtime", "sam"],
-    ],
-    "SoftBank": [
-        ["softbank", "ソフトバンク"],
-        ["arm", "vision", "openai", "ai"],
-    ],
-    "Honda": [
-        ["honda", "ホンダ"],
-        ["ev", "china", "earnings", "loss", "販売", "決算", "赤字"],
-    ],
-    "F1": [
-        ["honda", "aston", "ホンダ"],
-        ["aduo", "pu", "power unit", "fia", "ers", "回生"],
-    ],
-    "SpaceX": [
-        ["spacex"],
-        ["crs", "starship", "nasa", "dragon"],
-    ],
-    "アジア経済": [
-        ["india", "インド"],
-        ["vietnam", "ベトナム", "asean"],
-    ],
-    "宇都宮ブレックス": [
-        ["宇都宮", "brex", "ブレックス"],
-        ["b.league", "試合", "日程", "名古屋", "結果"],
-    ],
-    "投資": [
-        ["etf", "株", "market", "fund", "指数"],
-        ["fed", "金利", "flows", "ai", "semiconductor", "半導体"],
-    ],
-}
+REQUIRED_SOURCE_CLASSES = list(COVERAGE_CONTRACT["source_classes"])
+REQUIRED_DECISION_CLASSES = list(COVERAGE_CONTRACT["decision_classes"])
 
 TITLE_POLICY_LEAK_TERMS = [
     "一次で固定",
@@ -342,6 +277,16 @@ def previous_issue_sample(issue_date: str) -> Path | None:
     return sorted(candidates)[-1][1]
 
 
+def previous_issue_date(issue_date: str) -> str | None:
+    previous_path = previous_issue_sample(issue_date)
+    if not previous_path:
+        return None
+    match = re.fullmatch(r"night-brief-web-sample-(\d{4}-\d{2}-\d{2})\.html", previous_path.name)
+    if not match:
+        return None
+    return match.group(1)
+
+
 def validate_reader_process_language(context: str, html: str) -> None:
     text = visible_text(html)
     leaks = [term for term in READER_PROCESS_LEAK_TERMS if term in text]
@@ -393,6 +338,33 @@ def validate_daily_delta(issue_date: str, sample_html: str) -> None:
     similarity = difflib.SequenceMatcher(None, current_body, previous_body).ratio()
     if similarity > MAX_ISSUE_SIMILARITY_VS_PREVIOUS:
         fail(f"issue body too similar to previous day ({similarity:.1%}) against {previous_path.name}")
+
+
+def validate_detail_daily_delta(issue_date: str, root_html: str, dated_html: str) -> None:
+    previous_date = previous_issue_date(issue_date)
+    if not previous_date:
+        return
+    linked = set(re.findall(rf'href="{issue_date}/details/([^"#?]+\.html)', root_html))
+    linked.update(re.findall(r'href="details/([^"#?]+\.html)', dated_html))
+    excluded = {"policy.html", f"extraction-log-{issue_date}.html"}
+    copied = []
+    for name in sorted(linked - excluded):
+        previous_name = name.replace(issue_date, previous_date)
+        if previous_name == name:
+            continue
+        current_path = SITE_ROOT / issue_date / "details" / name
+        previous_path = SITE_ROOT / previous_date / "details" / previous_name
+        if not previous_path.exists():
+            previous_path = ROOT / "details" / previous_name
+        if not previous_path.exists():
+            continue
+        current_text = normalize_for_similarity(read(current_path))
+        previous_text = normalize_for_similarity(read(previous_path))
+        similarity = difflib.SequenceMatcher(None, current_text, previous_text).ratio()
+        if similarity > MAX_DETAIL_SIMILARITY_VS_PREVIOUS:
+            copied.append(f"{name} vs {previous_name}: {similarity:.1%}")
+    if copied:
+        fail("detail page appears copied from previous day: " + "; ".join(copied[:8]))
 
 
 def validate_reader_facing_headlines(context: str, headings: list[str]) -> None:
@@ -625,10 +597,6 @@ def validate_extraction_log(issue_date: str, extraction_log_html: str) -> None:
         search_terms = entry.get("search_terms")
         if not isinstance(search_terms, list) or not search_terms:
             fail(f"{category} missing search_terms")
-        search_blob = " ".join(str(term).lower() for term in search_terms)
-        for group in REQUIRED_SEARCH_TERM_GROUPS[category]:
-            if not any(term.lower() in search_blob for term in group):
-                fail(f"{category} search_terms missing required axis: {'/'.join(group)}")
         if not entry.get("freshness_check"):
             fail(f"{category} missing freshness_check")
         if entry.get("critical_unresolved"):
@@ -713,6 +681,7 @@ def validate(issue_date: str) -> None:
     validate_coverage_contract(issue_date, root_html, extraction_log_html)
     validate_detail_quality(issue_date, root_html, dated_html)
     validate_card_detail_alignment(issue_date, root_html, dated_html)
+    validate_detail_daily_delta(issue_date, root_html, dated_html)
 
     required_links = [
         f"{issue_date}/details/extraction-log-{issue_date}.html",

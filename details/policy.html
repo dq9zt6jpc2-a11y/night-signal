@@ -103,7 +103,7 @@
         <li><code>python3 scripts/sync_site.py YYYY-MM-DD</code>: 当日版をsiteへ同期する。過去号へのフォールバックは禁止。</li>
         <li><code>python3 scripts/render_detail.py detail.json</code>: 詳細ページを許可された構造だけで生成する。作業見出しや薄い概要は作成時点で失敗させる。</li>
         <li><code>python3 scripts/coverage_audit.py YYYY-MM-DD</code>: 構造化収集契約に沿って、探索軸、情報源の多様性、掲載カードと抽出ログの一致を確認する。</li>
-        <li><code>python3 scripts/quality_gate.py YYYY-MM-DD</code>: 日付、鮮度、カテゴリ件数、読者向け見出し、カードと詳細ページの整合、詳細概要の厚み、リンク、詳細ページ、coverage-manifest、カテゴリ固有検索軸を検査する。</li>
+        <li><code>python3 scripts/quality_gate.py YYYY-MM-DD</code>: 日付、鮮度、カテゴリ件数、読者向け見出し、カードと詳細ページの整合、詳細概要の厚み、リンク、詳細ページ、coverage-manifest、カテゴリ固有検索軸、詳細ページの前日コピーを検査する。</li>
         <li><code>python3 scripts/pre22_audit.py YYYY-MM-DD</code>: 当日成果物と品質ゲートを公開前に確認する。</li>
         <li>commit/push後に <code>python3 scripts/publication_audit.py YYYY-MM-DD</code> を実行し、未コミット差分、未push、remote不一致、公開URLの日付不一致を失敗扱いにする。</li>
         <li>コマンドは必ず直列で実行する。順序は sync → coverage_audit → quality_gate → pre22_audit → commit → push → publication_audit。</li>
@@ -114,6 +114,7 @@
       <ul>
         <li>正常な現行版は通る。</li>
         <li>見出しへの作業語混入、抽象語・比喩・矢印・引用符による曖昧化、カード見出しと詳細ページ見出し/概要の不一致、薄い概要、チェックリスト見出し、カテゴリ欠落、カテゴリ1件化、古い日付、リンク切れ、未リンク詳細ページ混入、coverage-manifest不足は失敗する。</li>
+        <li>日付だけ変えて詳細ページ本文が前日とほぼ同じ場合は失敗する。</li>
         <li>8カテゴリすべてで、8種類の情報源クラス欠落を失敗させる。</li>
         <li>8カテゴリすべてで、search_terms欠落を失敗させる。</li>
         <li>8カテゴリすべてで、published_card_titles不一致、search_axes欠落、URL根拠不足、情報源ホスト不足を失敗させる。</li>

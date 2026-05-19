@@ -30,6 +30,7 @@ def copy_fixture() -> Path:
     shutil.copyfile(ROOT / "scripts" / "coverage_audit.py", tmp / "scripts" / "coverage_audit.py")
     shutil.copyfile(ROOT / "config" / "night_signal_coverage.json", tmp / "config" / "night_signal_coverage.json")
     shutil.copyfile(ROOT / f"night-brief-web-sample-{ISSUE_DATE}.html", tmp / f"night-brief-web-sample-{ISSUE_DATE}.html")
+    shutil.copyfile(ROOT / "night-brief-web-sample-2026-05-18.html", tmp / "night-brief-web-sample-2026-05-18.html")
     shutil.copyfile(ROOT / "details" / f"extraction-log-{ISSUE_DATE}.html", tmp / "details" / f"extraction-log-{ISSUE_DATE}.html")
     shutil.copytree(ROOT / "site", tmp / "site")
     return tmp
@@ -240,6 +241,15 @@ def main() -> int:
     )
 
     assert_fail(
+        "linked detail copied from previous day",
+        lambda tmp: shutil.copyfile(
+            tmp / "site" / "2026-05-18" / "details" / "softbank-2026-05-18.html",
+            tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-19.html",
+        ),
+        "detail page appears copied from previous day",
+    )
+
+    assert_fail(
         "coverage manifest source evidence missing",
         lambda tmp: mutate_manifest(tmp, "OpenAI", "official", []),
         "OpenAI missing source evidence: official",
@@ -289,8 +299,17 @@ def main() -> int:
 
     assert_fail(
         "category-specific search axis missing",
-        lambda tmp: mutate_manifest(tmp, "アジア経済", "search_terms", ["India CPI April 2026"]),
-        "アジア経済 search_terms missing required axis",
+        lambda tmp: mutate_manifest(
+            tmp,
+            "アジア経済",
+            "search_axes",
+            {
+                "india_macro": ["India CPI April 2026 MoSPI RBI", "インド CPI 2026年4月 RBI MOSPI"],
+                "vietnam_macro": ["India central bank policy May 2026", "South Asia reserves policy May 2026"],
+                "regional_markets_policy": ["ASEAN manufacturing PMI policy FX May 2026", "India Vietnam currency policy manufacturing supply chain May 2026"],
+            },
+        ),
+        "アジア経済 search_axis vietnam_macro missing expected terms",
     )
 
     assert_fail(
