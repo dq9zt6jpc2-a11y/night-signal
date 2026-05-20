@@ -17,8 +17,12 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ISSUE_DATE = "2026-05-19"
-SOFTBANK_CARD_TITLE = "<h3>SoftBank、堺AIデータセンター向け国産バッテリー事業を開始"
+ISSUE_DATE = "2026-05-21"
+SOFTBANK_CARD_TITLE = "<h3>SoftBank、SMBC・富士通と国産ヘルスケア基盤で提携"
+SOFTBANK_DETAIL = "softbank-healthcare-2026-05-21.html"
+BREX_DETAIL = "brex-newbill-2026-05-21.html"
+OPENAI_PRIMARY_DETAIL = "openai-dell-codex-2026-05-21.html"
+OPENAI_SECONDARY_DETAIL = "openai-codex-mobile-2026-05-21.html"
 
 
 def copy_fixture() -> Path:
@@ -175,8 +179,8 @@ def main() -> int:
     assert_fail(
         "detail headline quote shorthand leak",
         lambda tmp: write(
-            tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-19.html",
-            read(tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-19.html").replace("<h1>", "<h1>“投資枠”と“CPUの現場” ", 1),
+            tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
+            read(tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL).replace("<h1>", "<h1>“投資枠”と“CPUの現場” ", 1),
         ),
         "headings are not reader-facing",
     )
@@ -184,9 +188,9 @@ def main() -> int:
     assert_fail(
         "card detail title mismatch",
         lambda tmp: write(
-            tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-19.html",
-            read(tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-19.html").replace(
-                "SoftBank、堺AIデータセンター向け国産バッテリー事業を開始",
+            tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
+            read(tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL).replace(
+                "SoftBank、SMBC・富士通と国産ヘルスケア基盤で提携",
                 "宇都宮ブレックス、スタッフ体制を再編",
             ),
         ),
@@ -196,11 +200,11 @@ def main() -> int:
     assert_fail(
         "detail checklist section heading leak",
         lambda tmp: write(
-            tmp / "site" / ISSUE_DATE / "details" / "brex-2026-05-19.html",
+            tmp / "site" / ISSUE_DATE / "details" / BREX_DETAIL,
             re.sub(
                 r'(</div>)(\s*<div class="source">)',
                 '\\1<h2>チェック観点</h2><p>補足情報を概要の外に混ぜる。</p>\\2',
-                read(tmp / "site" / ISSUE_DATE / "details" / "brex-2026-05-19.html"),
+                read(tmp / "site" / ISSUE_DATE / "details" / BREX_DETAIL),
                 count=1,
                 flags=re.S,
             ),
@@ -211,11 +215,11 @@ def main() -> int:
     assert_fail(
         "detail body exists after summary",
         lambda tmp: write(
-            tmp / "site" / ISSUE_DATE / "details" / "brex-2026-05-19.html",
+            tmp / "site" / ISSUE_DATE / "details" / BREX_DETAIL,
             re.sub(
                 r'(</div>)(\s*<div class="source">)',
                 '\\1<p>概要とは別に本文を追加し、別論点まで説明する。</p>\\2',
-                read(tmp / "site" / ISSUE_DATE / "details" / "brex-2026-05-19.html"),
+                read(tmp / "site" / ISSUE_DATE / "details" / BREX_DETAIL),
                 count=1,
                 flags=re.S,
             ),
@@ -226,8 +230,8 @@ def main() -> int:
     assert_fail(
         "detail source list too broad",
         lambda tmp: write(
-            tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-19.html",
-            read(tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-19.html").replace(
+            tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
+            read(tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL).replace(
                 "</div>\n      <div class=\"return-row\">",
                 '<a href="https://example.com/extra-1">extra 1</a><a href="https://example.com/extra-2">extra 2</a></div>\\n      <div class="return-row">',
                 1,
@@ -240,7 +244,7 @@ def main() -> int:
         "duplicate card detail link",
         lambda tmp: mutate_root_and_dated(
             tmp,
-            lambda html: html.replace("details/openai-tanstack-2026-05-19.html", "details/openai-2026-05-19.html", 1),
+            lambda html: html.replace(f"details/{OPENAI_SECONDARY_DETAIL}", f"details/{OPENAI_PRIMARY_DETAIL}", 1),
         ),
         "duplicate detail links",
     )
@@ -248,11 +252,11 @@ def main() -> int:
     assert_fail(
         "detail summary too thin",
         lambda tmp: write(
-            tmp / "site" / ISSUE_DATE / "details" / "brex-2026-05-19.html",
+            tmp / "site" / ISSUE_DATE / "details" / BREX_DETAIL,
             re.sub(
                 r'<div class="summary-lead">.*?</div>',
                 '<div class="summary-lead">D.J.ニュービルは契約満了で宇都宮ブレックスを退団した。攻撃の中心だった主力の退団で、来季ロスターは大きく変わる。得点、アシスト、外国籍枠、後任ガードの補強がチーム力を左右する。クラブは指導体制の再編も抱え、主力の穴を埋める編成判断が急務になる。</div>',
-                read(tmp / "site" / ISSUE_DATE / "details" / "brex-2026-05-19.html"),
+                read(tmp / "site" / ISSUE_DATE / "details" / BREX_DETAIL),
                 count=1,
                 flags=re.S,
             ),
@@ -274,14 +278,14 @@ def main() -> int:
 
     assert_fail(
         "stale visible card date",
-        lambda tmp: mutate_root_and_dated(tmp, lambda html: html.replace(">2026-05-19<", ">2026-05-10<", 1)),
+        lambda tmp: mutate_root_and_dated(tmp, lambda html: html.replace(f">{ISSUE_DATE}<", ">2026-05-10<", 1)),
         "stale cards found",
     )
 
     assert_fail(
         "broken local detail link",
-        lambda tmp: mutate_root_and_dated(tmp, lambda html: html.replace("details/softbank-2026-05-19.html", "details/missing.html", 1)),
-        "missing file: site/2026-05-19/details/missing.html",
+        lambda tmp: mutate_root_and_dated(tmp, lambda html: html.replace(f"details/{SOFTBANK_DETAIL}", "details/missing.html", 1)),
+        f"missing file: site/{ISSUE_DATE}/details/missing.html",
     )
 
     assert_fail(
@@ -292,7 +296,7 @@ def main() -> int:
 
     assert_fail(
         "linked detail copied from previous day",
-        lambda tmp: mirror_current_detail_to_previous(tmp, "softbank-2026-05-19.html"),
+        lambda tmp: mirror_current_detail_to_previous(tmp, SOFTBANK_DETAIL),
         "detail page appears copied from previous day",
     )
 
@@ -305,8 +309,8 @@ def main() -> int:
     assert_fail(
         "detail page too thin",
         lambda tmp: write(
-            tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-19.html",
-            '<html><head><title>SoftBank</title></head><body><main><a class="back" href="../index.html#softbank">一覧へ戻る</a><article><h1>SoftBank</h1><h2>30秒概要</h2><div class="summary-lead">SoftBankはAIデータセンター向けの国産バッテリー事業を始める。堺拠点で蓄電と製造を組み合わせる構想で、AI投資の制約が電源にも広がった。公式発表では国内製造、蓄電容量、2030年度の売上目標が示され、データセンター運用の前提を変える材料になる。</div><div class="source">原文確認:<a href="https://www.softbank.jp/corp/news/press/sbkk/2026/20260511_01/">SoftBank</a></div></article></main></body></html>',
+            tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
+            '<html><head><title>SoftBank</title></head><body><main><a class="back" href="../index.html#softbank">一覧へ戻る</a><article><h1>SoftBank</h1><h2>30秒概要</h2><div class="summary-lead">SoftBankはSMBCと富士通と国内ヘルスケア基盤で提携した。通信、金融、デジタル基盤を組み合わせる構想で、国内データセンターとAI活用の領域が医療周辺にも広がる。個人情報、同意管理、医療機関連携がサービス品質を左右する。</div><div class="source">原文確認:<a href="https://www.softbank.jp/en/corp/news/press/sbkk/2026/20260519_01/">SoftBank</a></div></article></main></body></html>',
         ),
         "detail pages too thin",
     )
@@ -314,8 +318,8 @@ def main() -> int:
     assert_fail(
         "detail heading policy wording leak",
         lambda tmp: write(
-            tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-19.html",
-            read(tmp / "site" / ISSUE_DATE / "details" / "softbank-2026-05-19.html").replace("<h1>", "<h1>一次で固定 ", 1),
+            tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
+            read(tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL).replace("<h1>", "<h1>一次で固定 ", 1),
         ),
         "detail headings contain policy/checklist wording",
     )
@@ -340,14 +344,14 @@ def main() -> int:
             "new_or_changed_items",
             [
                 {
-                    "title": "OpenAIとDell、Codexを企業のハイブリッド/オンプレ環境へ展開",
+                    "title": "OpenAIとDell、Codexを企業のオンプレ環境へ展開",
                     "summary": "OpenAIとDellの提携は、Codexを企業の自社データ基盤に近い場所で使う選択肢を広げる新規材料。規制業種ではデータ境界、監査、既存IT接続が導入判断になる。",
                     "sources": ["https://example.com/not-the-detail-source"],
                 },
                 {
-                    "title": "OpenAI、TanStack供給網攻撃後のアプリ更新期限を6月12日に設定",
-                    "summary": "TanStack由来の供給網攻撃を受け、OpenAIはChatGPT Desktop、Codex App、Codex CLIの更新と証明書確認を案内。6月12日が利用継続上の重要期限になる。",
-                    "sources": ["https://openai.com/index/our-response-to-the-tanstack-npm-supply-chain-attack/"],
+                    "title": "Codex、ChatGPTモバイルから長時間タスクを操作可能に",
+                    "summary": "ChatGPTモバイルからCodexの長時間タスクを監督できる導線が加わり、外出中の確認や承認が扱いやすくなる。企業では権限管理が重要になる。",
+                    "sources": ["https://help.openai.com/en/articles/10128477-chatgpt-enterprise-edu-release-notes"],
                 },
             ],
         ),
@@ -362,14 +366,14 @@ def main() -> int:
             "new_or_changed_items",
             [
                 {
-                    "title": "OpenAIとDell、Codexを企業のハイブリッド/オンプレ環境へ展開",
+                    "title": "OpenAIとDell、Codexを企業のオンプレ環境へ展開",
                     "summary": "OpenAI and Dell announced an enterprise Codex deployment partnership for hybrid and on-premises environments.",
                     "sources": ["https://openai.com/index/dell-codex-enterprise-partnership/"],
                 },
                 {
-                    "title": "OpenAI、TanStack供給網攻撃後のアプリ更新期限を6月12日に設定",
-                    "summary": "TanStack由来の供給網攻撃を受け、OpenAIはChatGPT Desktop、Codex App、Codex CLIの更新と証明書確認を案内。6月12日が利用継続上の重要期限になる。",
-                    "sources": ["https://openai.com/index/our-response-to-the-tanstack-npm-supply-chain-attack/"],
+                    "title": "Codex、ChatGPTモバイルから長時間タスクを操作可能に",
+                    "summary": "ChatGPTモバイルからCodexの長時間タスクを監督できる導線が加わり、外出中の確認や承認が扱いやすくなる。企業では権限管理が重要になる。",
+                    "sources": ["https://help.openai.com/en/articles/10128477-chatgpt-enterprise-edu-release-notes"],
                 },
             ],
         ),
@@ -391,7 +395,7 @@ def main() -> int:
             [
                 {
                     "axis": "release notes / SNS",
-                    "result": "ChatGPT release notesとOpenAI公式SNSを確認し、5/19版では追加採用する新規公開材料はなかった。",
+                    "result": "ChatGPT release notesとOpenAI公式SNSを確認し、5月21日版ではYouTubeを欠いた証跡として扱う。",
                     "sources": ["https://help.openai.com/en/articles/6825453-chatgpt-release-notes", "https://x.com/OpenAI"],
                 }
             ],
