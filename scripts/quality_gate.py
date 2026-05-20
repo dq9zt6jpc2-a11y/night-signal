@@ -47,7 +47,7 @@ REQUIRED_SECTIONS = {
 
 MIN_CARDS_PER_SECTION = 2
 MIN_DETAIL_TEXT_CHARS = 300
-MAX_SOURCE_LINKS_PER_DETAIL = 4
+MAX_SOURCE_LINKS_PER_DETAIL = 3
 
 REQUIRED_COVERAGE_TERMS = [
     "公式",
@@ -211,6 +211,13 @@ READER_PROCESS_LEAK_TERMS = [
     "5/19版では",
     "版では",
     "作業",
+    "導線",
+    "点検",
+    "拾う",
+    "一次ソースで",
+    "確認して",
+    "公式/主要報道",
+    "位置づけ",
     "チェックリスト",
     "読むポイント",
     "次の確認",

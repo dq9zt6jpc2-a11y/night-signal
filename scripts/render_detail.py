@@ -23,7 +23,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DETAILS = ROOT / "details"
 MIN_SUMMARY_CHARS = 180
-MAX_SOURCE_LINKS = 4
+MAX_SOURCE_LINKS = 3
 FORBIDDEN_TEXT = [
     "チェック観点",
     "次の確認",
@@ -37,6 +37,21 @@ FORBIDDEN_TEXT = [
     "落とし込",
     "固定し",
     "混ぜない",
+    "今日の再抽出",
+    "今日の更新",
+    "本日の更新",
+    "本日の修正",
+    "日付だけ",
+    "差し替え",
+    "品質ゲート",
+    "監査メモ",
+    "カードを",
+    "版では",
+    "導線",
+    "点検",
+    "拾う",
+    "確認して",
+    "位置づけ",
     "作業",
 ]
 

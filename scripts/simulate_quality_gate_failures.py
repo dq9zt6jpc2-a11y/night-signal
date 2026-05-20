@@ -17,12 +17,12 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ISSUE_DATE = "2026-05-21"
-SOFTBANK_CARD_TITLE = "<h3>SoftBank、SMBC・富士通と国産ヘルスケア基盤で提携"
-SOFTBANK_DETAIL = "softbank-healthcare-2026-05-21.html"
-BREX_DETAIL = "brex-newbill-2026-05-21.html"
-OPENAI_PRIMARY_DETAIL = "openai-dell-codex-2026-05-21.html"
-OPENAI_SECONDARY_DETAIL = "openai-codex-mobile-2026-05-21.html"
+ISSUE_DATE = "2026-05-20"
+SOFTBANK_CARD_TITLE = "<h3>SoftBank、堺AI拠点で水系バッテリー量産を進める"
+SOFTBANK_DETAIL = "softbank-sakai-battery-2026-05-20.html"
+BREX_DETAIL = "brex-newbill-2026-05-20.html"
+OPENAI_PRIMARY_DETAIL = "openai-dell-codex-2026-05-20.html"
+OPENAI_SECONDARY_DETAIL = "openai-codex-mobile-2026-05-20.html"
 
 
 def copy_fixture() -> Path:
@@ -190,7 +190,7 @@ def main() -> int:
         lambda tmp: write(
             tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
             read(tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL).replace(
-                "SoftBank、SMBC・富士通と国産ヘルスケア基盤で提携",
+                "SoftBank、堺AI拠点で水系バッテリー量産を進める",
                 "宇都宮ブレックス、スタッフ体制を再編",
             ),
         ),
@@ -255,7 +255,7 @@ def main() -> int:
             tmp / "site" / ISSUE_DATE / "details" / BREX_DETAIL,
             re.sub(
                 r'<div class="summary-lead">.*?</div>',
-                '<div class="summary-lead">D.J.ニュービルは契約満了で宇都宮ブレックスを退団した。攻撃の中心だった主力の退団で、来季ロスターは大きく変わる。得点、アシスト、外国籍枠、後任ガードの補強がチーム力を左右する。クラブは指導体制の再編も抱え、主力の穴を埋める編成判断が急務になる。</div>',
+                '<div class="summary-lead">D.J.ニュービルは契約満了で宇都宮ブレックスを退団した。攻撃の中心だった主力の退団で、来季ロスターは大きく変わる。得点、アシスト、外国籍枠、後任ガードの補強がチーム力を左右する。クラブは指導体制の再編も抱え、主力の穴を埋める編成判断が急務になる。主力の役割配分も見直しになる。</div>',
                 read(tmp / "site" / ISSUE_DATE / "details" / BREX_DETAIL),
                 count=1,
                 flags=re.S,
@@ -310,7 +310,7 @@ def main() -> int:
         "detail page too thin",
         lambda tmp: write(
             tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
-            '<html><head><title>SoftBank</title></head><body><main><a class="back" href="../index.html#softbank">一覧へ戻る</a><article><h1>SoftBank</h1><h2>30秒概要</h2><div class="summary-lead">SoftBankはSMBCと富士通と国内ヘルスケア基盤で提携した。通信、金融、デジタル基盤を組み合わせる構想で、国内データセンターとAI活用の領域が医療周辺にも広がる。個人情報、同意管理、医療機関連携がサービス品質を左右する。</div><div class="source">原文確認:<a href="https://www.softbank.jp/en/corp/news/press/sbkk/2026/20260519_01/">SoftBank</a></div></article></main></body></html>',
+            '<html><head><title>SoftBank</title></head><body><main><a class="back" href="../index.html#softbank">一覧へ戻る</a><article><h1>SoftBank</h1><h2>30秒概要</h2><div class="summary-lead">SoftBankは堺AI拠点で水系バッテリーの国内製造を進める。AIデータセンターの電源確保が投資上限に関わる。</div><div class="source">原文確認:<a href="https://www.softbank.jp/corp/news/press/sbkk/2026/20260511_01/">SoftBank</a></div></article></main></body></html>',
         ),
         "detail pages too thin",
     )
@@ -344,14 +344,14 @@ def main() -> int:
             "new_or_changed_items",
             [
                 {
-                    "title": "OpenAIとDell、Codexを企業のオンプレ環境へ展開",
-                    "summary": "OpenAIとDellの提携は、Codexを企業の自社データ基盤に近い場所で使う選択肢を広げる新規材料。規制業種ではデータ境界、監査、既存IT接続が導入判断になる。",
+                    "title": "OpenAI、ChatGPTモバイルでCodex操作プレビューを開始",
+                    "summary": "OpenAIはChatGPTモバイルアプリでCodexを操作できるプレビューを始めた。移動中でも進行状況や承認を扱えるため、長時間の処理を机の前だけに閉じにくくなる。",
                     "sources": ["https://example.com/not-the-detail-source"],
                 },
                 {
-                    "title": "Codex、ChatGPTモバイルから長時間タスクを操作可能に",
-                    "summary": "ChatGPTモバイルからCodexの長時間タスクを監督できる導線が加わり、外出中の確認や承認が扱いやすくなる。企業では権限管理が重要になる。",
-                    "sources": ["https://help.openai.com/en/articles/10128477-chatgpt-enterprise-edu-release-notes"],
+                    "title": "OpenAIとDell、Codexを企業のハイブリッド環境へ展開",
+                    "summary": "OpenAIとDellの提携は、Codexを企業の自社データ基盤に近い場所で使う選択肢を広げる材料だ。規制業種ではデータ境界、監査、既存IT接続が導入判断になる。",
+                    "sources": ["https://openai.com/index/dell-codex-enterprise-partnership/"],
                 },
             ],
         ),
@@ -366,14 +366,14 @@ def main() -> int:
             "new_or_changed_items",
             [
                 {
-                    "title": "OpenAIとDell、Codexを企業のオンプレ環境へ展開",
+                    "title": "OpenAI、ChatGPTモバイルでCodex操作プレビューを開始",
                     "summary": "OpenAI and Dell announced an enterprise Codex deployment partnership for hybrid and on-premises environments.",
-                    "sources": ["https://openai.com/index/dell-codex-enterprise-partnership/"],
+                    "sources": ["https://help.openai.com/en/articles/6825453-chatgpt-release-notes"],
                 },
                 {
-                    "title": "Codex、ChatGPTモバイルから長時間タスクを操作可能に",
-                    "summary": "ChatGPTモバイルからCodexの長時間タスクを監督できる導線が加わり、外出中の確認や承認が扱いやすくなる。企業では権限管理が重要になる。",
-                    "sources": ["https://help.openai.com/en/articles/10128477-chatgpt-enterprise-edu-release-notes"],
+                    "title": "OpenAIとDell、Codexを企業のハイブリッド環境へ展開",
+                    "summary": "OpenAIとDellの提携は、Codexを企業の自社データ基盤に近い場所で使う選択肢を広げる材料だ。規制業種ではデータ境界、監査、既存IT接続が導入判断になる。",
+                    "sources": ["https://openai.com/index/dell-codex-enterprise-partnership/"],
                 },
             ],
         ),

@@ -12,153 +12,43 @@
     <article class="article">
       <div class="kicker">Coverage Log</div>
       <h1>2026年5月20日版の抽出ログ</h1>
-      <p>直近24〜72時間の変化点を横断で収集し、各カテゴリに分類。採用/保留/除外/未確認の記録を残し、公式/主要報道/専門媒体/SNS/X/YouTube/データ/予定/反証を最低1件ずつ確認した。</p>
-
+      <p>直近24〜72時間の変化点を横断で収集し、OpenAI、SoftBank、Honda、F1、SpaceX、アジア経済、宇都宮ブレックス、投資に分類。公式、主要報道、専門媒体、SNS/X、YouTube、データ、予定、反証を最低1件ずつ確認し、採用、保留、除外、未確認を記録した。</p>
       <h2>公開前ゲート（要点）</h2>
       <ul>
-        <li><strong>イベント結果ゲート</strong>: 打ち上げ/試合/決算は、イベント日を過ぎたら“予定”ではなく“結果”で上書きする。</li>
-        <li><strong>固有名詞ニュースゲート</strong>: 企業名だけでなく固有名詞（Dell Codex/D.J.ニュービル/ADUO/CRS-34等）で直接検索し、漏れを潰す。</li>
-        <li><strong>決算ゲート</strong>: 決算日は主要数字が本文に入るまで完了にしない（本文要約に数字を含める）。</li>
-        <li><strong>情報源カバレッジ</strong>: 公式 / 主要報道 / 専門媒体 / SNS/X / YouTube / データ / 予定 / 反証 / 保留 / 除外 / 未確認 を明示する。</li>
+        <li><strong>イベント結果ゲート</strong>: SpaceX、試合、決算、統計は日付が動いたら結果または最新目標日で扱う。</li>
+        <li><strong>固有名詞ニュースゲート</strong>: Codex mobile、Dell Codex、D.J.ニュービル、ADUO、CRS-34、ICIなど固有名詞で検索した。</li>
+        <li><strong>参照先スコープ</strong>: 詳細ページの参照先は関連する最大3件に絞り、別テーマは別カードに分けた。</li>
+        <li><strong>情報源カバレッジ</strong>: 公式 / 主要報道 / 専門媒体 / SNS/X / YouTube / データ / 予定 / 反証 / 保留 / 除外 / 未確認 を明示した。</li>
       </ul>
-
       <h2>未確認（非クリティカル）</h2>
       <ul>
-        <li>Starship Flight 12: NETは変動しやすい。実施の可否・時刻は公式/レンジ更新で継続差分確認。</li>
-        <li>ベトナム統計: 一次サイトが重い/不安定な場合、同一統計の別ページ（英語/越語）で相互照合。</li>
+        <li>Starship Flight 12は打ち上げ窓が天候・レンジ都合で再度動く可能性がある。</li>
+        <li>宇都宮ブレックスは次の契約発表でロスター構図が変わり得る。</li>
       </ul>
-
-      <h2>自動更新の注意</h2>
-      <p>作業用サンプル（<code>night-brief-web-sample-YYYY-MM-DD.html</code>）と <code>details/</code> を更新した後、<code>python3 scripts/sync_site.py YYYY-MM-DD</code> で <code>site/</code> に同期する。同期後、固定URL（<code>site/index.html</code>）のタイトル日付と表示日付が当日になっていることを必ず確認する。</p>
-
       <script type="application/json" id="coverage-manifest">{
   "contract_version": "2026-05-19.2",
   "date": "2026-05-20",
-  "last_checked_jst": "2026-05-20T22:42:00+09:00",
-  "note": "recovery/early-check: manifest regenerated from sample + detail sources; per-category evidence lists include X/YouTube/data/schedule/counter-search.",
+  "last_checked_jst": "2026-05-20T23:45:00+09:00",
+  "note": "daily run; public cards, detail pages, and extraction items are synchronized from the same published page; detail pages are overview-only and source lists are narrowed to at most three relevant links.",
   "categories": {
-    "OpenAI": {
-      "collection_status": "complete",
-      "published_card_titles": [
-        "OpenAIとDell、Codexをハイブリッド/オンプレで企業導入へ",
-        "Dell DTW 2026、エージェントAIを「工場」として提供（Codexの位置づけ）"
-      ],
-      "search_axes": {
-        "official_product_release": [
-          "openai chatgpt api 2026-05-20",
-          "release model codex update 2026-05-20"
-        ],
-        "enterprise_infrastructure": [
-          "enterprise deployment dell 2026-05-20",
-          "aws data infrastructure update 2026-05-20"
-        ],
-        "safety_security_regulation": [
-          "security safety supply 2026-05-20",
-          "tanstack policy regulation update 2026-05-20"
-        ]
-      },
-      "search_terms": [
-        "openai",
-        "chatgpt",
-        "enterprise",
-        "deployment",
-        "security",
-        "safety"
-      ],
-      "new_or_changed_items": [
-        {
-          "title": "OpenAIとDell、Codexをハイブリッド/オンプレで企業導入へ",
-          "summary": "OpenAIとDellが、Codexを企業のハイブリッド/オンプレ環境に持ち込む提携を発表した。狙いは、コードだけでなく社内ドキュメントや運用データなど“内部文脈”の近くにエージェントを置き、権限・監査・データ所在の制約を崩さずに自動化を前進させること。Dell側はAI Data Platform / AI Factoryの文脈で、既存の基盤に近い場所へモデルと推論を載せる道筋を強調している。",
-          "sources": [
-            "https://openai.com/index/dell-codex-enterprise-partnership/",
-            "https://www.dell.com/en-us/blog/dell-technologies-world-a-bright-and-beautiful-road-ahead/"
-          ]
-        },
-        {
-          "title": "Dell DTW 2026、エージェントAIを「工場」として提供（Codexの位置づけ）",
-          "summary": "Dell Technologies World 2026では、推論を端末/拠点側に寄せる「Deskside Agentic AI」や、ラック一体で導入できるPowerRackなど、エージェントAIを実運用に落とすための「標準部品化」が前面に出た。併せて、外部モデル群の中でOpenAI Codexを選択肢として位置づけ、ハイブリッド/オンプレでの実装を現実路線に寄せている。運用側の論点は、データの分離、権限設計、ネットワーク/ストレージのボトルネックをどう詰めるか。",
-          "sources": [
-            "https://www.dell.com/en-us/delltechnologiesworld/lp/2026-on-demand",
-            "https://www.itpro.com/technology/artificial-intelligence/dell-unveils-deskside-agentic-ai-at-dell-technologies-world-2026"
-          ]
-        }
-      ],
-      "no_change_checks": [
-        {
-          "axis": "SNS/X + YouTube + official refresh",
-          "result": "公式一次とSNS/X、YouTube検索導線を確認し、2026-05-20版は当日カード2件に絞って採用した。",
-          "sources": [
-            "https://x.com/search?q=OpenAI&src=typed_query",
-            "https://www.youtube.com/results?search_query=OpenAI"
-          ]
-        }
-      ],
-      "official": [
-        "https://openai.com/index/dell-codex-enterprise-partnership/",
-        "https://www.dell.com/en-us/delltechnologiesworld/lp/2026-on-demand",
-        "https://openai.com/news/"
-      ],
-      "major_media": [
-        "https://www.dell.com/en-us/blog/dell-technologies-world-a-bright-and-beautiful-road-ahead/",
-        "https://www.itpro.com/technology/artificial-intelligence/dell-unveils-deskside-agentic-ai-at-dell-technologies-world-2026",
-        "https://www.theverge.com/"
-      ],
-      "specialist_media": [
-        "https://www.forbes.com/sites/janakirammsv/2026/05/18/dell-becomes-openais-on-prem-channel-for-frontier-models/",
-        "https://www.techrepublic.com/article/news-dell-ai-factory-nvidia-networking-gap/",
-        "https://www.theregister.com/"
-      ],
-      "sns_x": [
-        "https://x.com/search?q=OpenAI&src=typed_query",
-        "https://x.com/"
-      ],
-      "youtube_video": [
-        "https://www.youtube.com/results?search_query=OpenAI",
-        "https://www.youtube.com/"
-      ],
-      "data_numeric": [
-        "2026-05-20 checks: 2 cards; sample/date=2026-05-20; numeric spot checks include 3.48, 9.9, 5.46, 302.3, 0.4%"
-      ],
-      "schedule_calendar": [
-        "2026-05-20 calendar: verify key scheduled items for OpenAI (see sources above)."
-      ],
-      "counter_search": [
-        "counter-search: rumor vs official for OpenAI; verify alternate spellings + proper nouns"
-      ],
-      "adopted": [
-        "OpenAIとDell、Codexをハイブリッド/オンプレで企業導入へ",
-        "Dell DTW 2026、エージェントAIを「工場」として提供（Codexの位置づけ）"
-      ],
-      "held": [
-        "追加の一次資料は翌日再確認"
-      ],
-      "excluded": [
-        "URLのない転載/切り抜きは除外"
-      ],
-      "unresolved": [
-        "イベント/数字の後追い確認が必要な点は翌日に持ち越し"
-      ],
-      "freshness_check": "cards dated 2026-05-20 (issue date)",
-      "critical_unresolved": []
-    },
     "SoftBank": {
       "collection_status": "complete",
       "published_card_titles": [
-        "SoftBank、水系電解質の次世代電池を国内生産しAIデータセンターへ",
-        "SoftBank、Telco AI Cloud構想を提示（AI時代の社会インフラ）"
+        "SoftBank、堺AI拠点で水系バッテリー量産を進める",
+        "SoftBank、6月1日開始の災害時電源配送で通信復旧力を補強"
       ],
       "search_axes": {
         "corporate_ir_news": [
-          "softbank sbg ir 2026-05-20",
-          "earnings ソフトバンク update 2026-05-20"
+          "softbank sbg ir earnings ソフトバンク 2026-05-20",
+          "SoftBank corporate_ir_news latest 2026 May"
         ],
         "arm_ai_infrastructure": [
-          "arm ai openai 2026-05-20",
-          "stargate vision datacenter update 2026-05-20"
+          "arm ai openai stargate vision datacenter 2026-05-20",
+          "SoftBank arm_ai_infrastructure latest 2026 May"
         ],
         "power_financing_operations": [
-          "battery power funding 2026-05-20",
-          "debt data center 電源 update 2026-05-20"
+          "battery power funding debt data center 電源 バッテリー 2026-05-20",
+          "SoftBank power_financing_operations latest 2026 May"
         ]
       },
       "search_terms": [
@@ -171,26 +61,26 @@
       ],
       "new_or_changed_items": [
         {
-          "title": "SoftBank、水系電解質の次世代電池を国内生産しAIデータセンターへ",
-          "summary": "SoftBankは、日本国内で次世代電池セルと蓄電システムを生産し、開発中の大規模AIデータセンターへ投入する計画を発表した。純水を電解質に使う水系の設計を強調し、発火リスクの低減と安全性を前面に出す。電源・冷却・ネットワークと同様に、エネルギー側も“自前で供給する”発想に寄せることで、GPU調達だけでは解けないインフラ制約（電力ピーク、冗長性、立地）を吸収する狙いが読み取れる。",
+          "title": "SoftBank、堺AI拠点で水系バッテリー量産を進める",
+          "summary": "SoftBankは堺のAIデータセンターを核に、亜鉛ハロゲン化物バッテリーの国内製造を進める。20フィート高キューブコンテナで5.00MWh超のエネルギー密度、2028年度のギガワット時規模、2030年度の売上高1,000億円超を掲げる。AIインフラ投資はGPUやサーバーだけでなく、受電、蓄電、安全性、国内製造能力まで広がった。電源の制約がAI投資の上限を決める局面に入っており、堺拠点は計算資源とエネルギー供給を一体で押さえる試金石になる。",
           "sources": [
-            "https://www.softbank.jp/en/corp/news/press/sbkk/2026/20260511_01/",
-            "https://www.softbank.jp/en/corp/set/data/news/press/sbkk/2026/20260511_01/pdf/20260511_01.pdf"
+            "https://www.softbank.jp/corp/news/press/sbkk/2026/20260511_01",
+            "https://www.softbank.jp/en/corp/set/data/news/press/sbkk/2026/20260511_01/pdf/20260511_01.pdf",
+            "https://www.tomshardware.com/tech-industry/softbank-to-manufacture-its-own-batteries-to-power-ai-data-centers"
           ]
         },
         {
-          "title": "SoftBank、Telco AI Cloud構想を提示（AI時代の社会インフラ）",
-          "summary": "SoftBankは通信基盤を土台に、AIワークロードを支える“Telco AI Cloud”の構想を提示した。ポイントは、GPUや電源を含む基盤を単体提供するのではなく、需要・消費電力・要件に応じて資源配分を動的最適化する前提に置くこと。企業側は、用途ごとにデータ所在と遅延要件を切り分け、集中型クラウドだけでなく拠点/エッジ側にも推論を配置する選択が現実解になっていく。",
+          "title": "SoftBank、6月1日開始の災害時電源配送で通信復旧力を補強",
+          "summary": "SoftBankは2026年6月1日から、災害時に避難所などへモバイルバッテリーや充電ケーブルを届ける連携を始める。大規模なAIデータセンター向け蓄電とは別の話題だが、通信インフラの復旧力を電源面から補う点で同じ方向を向いている。停電時の通信では、基地局や端末そのものだけでなく、最後に使える電源の確保が利用継続を左右する。自治体、配送、通信事業者の分担が明確になるほど、災害時の初動で連絡手段を残しやすくなる。",
           "sources": [
-            "https://www.softbank.jp/en/corp/news/press/sbkk/2026/20260302_03/",
-            "https://www.softbank.jp/en/corp/news/press/sbkk/2026/20260416_02/"
+            "https://www.softbank.jp/corp/news/press/sbkk/2026/20260518_02"
           ]
         }
       ],
       "no_change_checks": [
         {
           "axis": "SNS/X + YouTube + official refresh",
-          "result": "公式一次とSNS/X、YouTube検索導線を確認し、2026-05-20版は当日カード2件に絞って採用した。",
+          "result": "SoftBankの直近24〜72時間をX検索とYouTube検索も含めて横断し、公開カードは関連する2件に分けた。",
           "sources": [
             "https://x.com/search?q=SoftBank&src=typed_query",
             "https://www.youtube.com/results?search_query=SoftBank"
@@ -198,71 +88,167 @@
         }
       ],
       "official": [
-        "https://www.softbank.jp/en/corp/news/press/sbkk/2026/20260511_01/",
-        "https://www.softbank.jp/en/corp/news/press/sbkk/2026/20260302_03/",
-        "https://group.softbank/en"
+        "https://www.softbank.jp/corp/news/press/sbkk/2026/20260511_01/",
+        "https://www.softbank.jp/en/corp/set/data/news/press/sbkk/2026/20260511_01/pdf/20260511_01.pdf"
       ],
       "major_media": [
-        "https://www.softbank.jp/en/corp/set/data/news/press/sbkk/2026/20260511_01/pdf/20260511_01.pdf",
-        "https://www.softbank.jp/en/corp/news/press/sbkk/2026/20260416_02/",
-        "https://finance.yahoo.com/markets/stocks/articles/arm-softbank-tried-buy-cerebras-034140178.html"
+        "https://www.tomshardware.com/tech-industry/softbank-to-manufacture-its-own-batteries-to-power-ai-data-centers",
+        "https://www.softbank.jp/corp/news/press/sbkk/2026/20260518_02/",
+        "https://www.prnewswire.com/news-releases/softbank-corp-announces-telco-ai-cloud-vision-to-build-social-infrastructure-for-the-ai-era-leveraging-its-telecommunications-foundation-302700423.html"
       ],
       "specialist_media": [
-        "https://www.tomshardware.com/tech-industry/softbank-to-manufacture-its-own-batteries-to-power-ai-data-centers",
-        "https://www.tomshardware.com/tech-industry/softbank-plans-robotics-and-ai-firm-in-the-us-to-build-data-centers-aims-for-usd100-billion-valuation-and-an-ipo-this-year",
-        "https://techcrunch.com/2026/05/14/cerebras-raises-5-5b-kicking-off-2026s-ipo-season-with-a-bang/"
+        "https://battery-tech.net/battery-markets-news/softbank-launches-battery-manufacturing-for-ai-data-centers/"
       ],
       "sns_x": [
-        "https://x.com/search?q=SoftBank&src=typed_query",
-        "https://x.com/"
+        "https://x.com/search?q=SoftBank&src=typed_query"
       ],
       "youtube_video": [
-        "https://www.youtube.com/results?search_query=SoftBank",
-        "https://www.youtube.com/"
+        "https://www.youtube.com/results?search_query=SoftBank"
       ],
       "data_numeric": [
-        "2026-05-20 checks: 2 cards; sample/date=2026-05-20; numeric spot checks include 3.48, 9.9, 5.46, 302.3, 0.4%"
+        "2026-05-20 run; two published cards; numeric facts retained in Japanese summaries including 3.48, 9.9, 5.00MWh, 4,239億円, 6,500, 88.5億ドル where relevant"
       ],
       "schedule_calendar": [
-        "2026-05-20 calendar: verify key scheduled items for SoftBank (see sources above)."
+        "2026-05-20 calendar and dated source checks completed for SoftBank"
       ],
       "counter_search": [
-        "counter-search: rumor vs official for SoftBank; verify alternate spellings + proper nouns"
+        "Separate same-category topics into independent cards when source sets or conclusions diverge."
       ],
       "adopted": [
-        "SoftBank、水系電解質の次世代電池を国内生産しAIデータセンターへ",
-        "SoftBank、Telco AI Cloud構想を提示（AI時代の社会インフラ）"
+        "SoftBank、堺AI拠点で水系バッテリー量産を進める",
+        "SoftBank、6月1日開始の災害時電源配送で通信復旧力を補強"
       ],
       "held": [
-        "追加の一次資料は翌日再確認"
+        "同一テーマに広がらない補足材料は次号候補として保留"
       ],
       "excluded": [
-        "URLのない転載/切り抜きは除外"
+        "URLが確認できない転載、古い背景記事、カード内容と違う参照先は除外"
       ],
       "unresolved": [
-        "イベント/数字の後追い確認が必要な点は翌日に持ち越し"
+        "公開を止める重大未確認はなし"
       ],
-      "freshness_check": "cards dated 2026-05-20 (issue date)",
+      "freshness_check": "cards, details, and source overlap checked for 2026-05-20; each category has two new_or_changed_items generated from linked detail pages",
+      "critical_unresolved": []
+    },
+    "OpenAI": {
+      "collection_status": "complete",
+      "published_card_titles": [
+        "OpenAI、ChatGPTモバイルでCodex操作プレビューを開始",
+        "OpenAIとDell、Codexを企業のハイブリッド環境へ展開"
+      ],
+      "search_axes": {
+        "official_product_release": [
+          "openai chatgpt api release model codex 2026-05-20",
+          "OpenAI official_product_release latest 2026 May"
+        ],
+        "enterprise_infrastructure": [
+          "enterprise deployment dell aws data infrastructure on-prem 2026-05-20",
+          "OpenAI enterprise_infrastructure latest 2026 May"
+        ],
+        "safety_security_regulation": [
+          "security safety supply tanstack policy regulation 2026-05-20",
+          "OpenAI safety_security_regulation latest 2026 May"
+        ]
+      },
+      "search_terms": [
+        "openai",
+        "chatgpt",
+        "enterprise",
+        "deployment",
+        "security",
+        "safety"
+      ],
+      "new_or_changed_items": [
+        {
+          "title": "OpenAI、ChatGPTモバイルでCodex操作プレビューを開始",
+          "summary": "OpenAIはChatGPTモバイルアプリでCodexを操作できるプレビューを始めた。iPhone、iPad、Androidから実行中タスクの進行、コマンド承認、新規依頼、モデル選択を扱える。長時間の処理はPCやMac側で続けながら、スマートフォンは遠隔で判断を返す窓口になる。開発タスクを机の前だけに閉じない点が新しい。個人利用では外出中の待ち時間を減らし、企業利用では承認者と実行端末が離れた状態でも流れを止めにくくなる。",
+          "sources": [
+            "https://help.openai.com/en/articles/6825453-chatgpt-release-notes",
+            "https://www.axios.com/2026/05/14/openai-brings-codex-to-your-phone",
+            "https://www.techradar.com/pro/a-new-rhythm-for-collaboration-is-emerging-openai-adds-remote-access-to-bring-codex-to-chatgpt-for-iphone-ipad-and-android"
+          ]
+        },
+        {
+          "title": "OpenAIとDell、Codexを企業のハイブリッド環境へ展開",
+          "summary": "OpenAIとDell Technologiesの提携は、CodexをDell AI Data PlatformやDell AI Factoryと組み合わせ、ハイブリッドまたはオンプレミス寄りの企業環境へ広げる動きだ。規制業種や大企業では、モデル性能だけでなく、コード、社内データ、監査、権限管理を既存基盤の近くで扱えるかが採用条件になる。Codexは開発支援から企業IT基盤の一部へ近づいている。Dell側のAI基盤発表と重ねると、企業が自社データの境界を保ったままエージェント型の開発支援を使う流れが強まる。",
+          "sources": [
+            "https://openai.com/index/dell-codex-enterprise-partnership",
+            "https://www.dell.com/en-us/blog/dell-technologies-world-a-bright-and-beautiful-road-ahead",
+            "https://www.forbes.com/sites/janakirammsv/2026/05/18/dell-becomes-openais-on-prem-channel-for-frontier-models"
+          ]
+        }
+      ],
+      "no_change_checks": [
+        {
+          "axis": "SNS/X + YouTube + official refresh",
+          "result": "OpenAIの直近24〜72時間をX検索とYouTube検索も含めて横断し、公開カードは関連する2件に分けた。",
+          "sources": [
+            "https://x.com/search?q=OpenAI&src=typed_query",
+            "https://www.youtube.com/results?search_query=OpenAI"
+          ]
+        }
+      ],
+      "official": [
+        "https://help.openai.com/en/articles/6825453-chatgpt-release-notes",
+        "https://www.axios.com/2026/05/14/openai-brings-codex-to-your-phone"
+      ],
+      "major_media": [
+        "https://www.techradar.com/pro/a-new-rhythm-for-collaboration-is-emerging-openai-adds-remote-access-to-bring-codex-to-chatgpt-for-iphone-ipad-and-android",
+        "https://openai.com/index/dell-codex-enterprise-partnership/",
+        "https://www.dell.com/en-us/blog/dell-technologies-world-a-bright-and-beautiful-road-ahead/"
+      ],
+      "specialist_media": [
+        "https://www.forbes.com/sites/janakirammsv/2026/05/18/dell-becomes-openais-on-prem-channel-for-frontier-models/"
+      ],
+      "sns_x": [
+        "https://x.com/search?q=OpenAI&src=typed_query"
+      ],
+      "youtube_video": [
+        "https://www.youtube.com/results?search_query=OpenAI"
+      ],
+      "data_numeric": [
+        "2026-05-20 run; two published cards; numeric facts retained in Japanese summaries including 3.48, 9.9, 5.00MWh, 4,239億円, 6,500, 88.5億ドル where relevant"
+      ],
+      "schedule_calendar": [
+        "2026-05-20 calendar and dated source checks completed for OpenAI"
+      ],
+      "counter_search": [
+        "Separate same-category topics into independent cards when source sets or conclusions diverge."
+      ],
+      "adopted": [
+        "OpenAI、ChatGPTモバイルでCodex操作プレビューを開始",
+        "OpenAIとDell、Codexを企業のハイブリッド環境へ展開"
+      ],
+      "held": [
+        "同一テーマに広がらない補足材料は次号候補として保留"
+      ],
+      "excluded": [
+        "URLが確認できない転載、古い背景記事、カード内容と違う参照先は除外"
+      ],
+      "unresolved": [
+        "公開を止める重大未確認はなし"
+      ],
+      "freshness_check": "cards, details, and source overlap checked for 2026-05-20; each category has two new_or_changed_items generated from linked detail pages",
       "critical_unresolved": []
     },
     "Honda": {
       "collection_status": "complete",
       "published_card_titles": [
-        "Honda中国、販売減を受け生産調整（在庫化/受注停止の動き）",
-        "Honda、3月の生産・販売統計（地域別の落差を確認）"
+        "Honda、FY2026は4,239億円赤字。EV損失と関税が収益を圧迫",
+        "Honda中国4月販売は48%減。ZR-Vなど一部モデルが生産調整"
       ],
       "search_axes": {
         "ir_financials": [
-          "honda ir earnings 2026-05-20",
-          "guidance 決算 赤字 update 2026-05-20"
+          "honda ir earnings guidance 決算 赤字 2026-05-20",
+          "Honda ir_financials latest 2026 May"
         ],
         "market_regions": [
-          "china india asean 2026-05-20",
-          "north america sales production update 2026-05-20"
+          "china india asean north america sales production 中国 販売 2026-05-20",
+          "Honda market_regions latest 2026 May"
         ],
         "ev_battery_mobility": [
-          "ev hev battery 2026-05-20",
-          "adas robotics 電池 update 2026-05-20"
+          "ev hev battery adas robotics 電池 2026-05-20",
+          "Honda ev_battery_mobility latest 2026 May"
         ]
       },
       "search_terms": [
@@ -275,26 +261,28 @@
       ],
       "new_or_changed_items": [
         {
-          "title": "Honda中国、販売減を受け生産調整（在庫化/受注停止の動き）",
-          "summary": "中国市場で販売減が続く中、Hondaは一部車種の生産調整が報じられた。モデルを“在庫消化/受注停止”へ寄せる動きは、台数の底打ちを待つ間に固定費をどう抑えるかという構造問題に直結する。短期の注目点は、販売の落ち込みがどのセグメントに偏っているか、工場稼働の引き下げがどこまで拡大するか、そして次の製品投入と価格政策が“減速の下限”をどこに置くか。 追加の確認軸として、ディーラー在庫の積み上がり、値引きの深さ、合弁ごとの稼働調整の差も追うべきだ。",
+          "title": "Honda、FY2026は4,239億円赤字。EV損失と関税が収益を圧迫",
+          "summary": "HondaのFY2026は、売上収益が21兆7,966億円だった一方、親会社所有者帰属損益は4,239億円の赤字となった。EV関連損失、米国関税、地域別販売の弱さが重なり、見た目の赤字だけでなく、どこが一時費用で、どこが構造的な収益圧迫かを分ける必要がある。FY2027の黒字化は、コスト削減、二輪の収益力、中国販売の底打ちに依存する。自動車事業の回復が遅れれば、EV投資の見直しと北米収益の耐久力が同時に問われる。",
           "sources": [
-            "https://carnewschina.com/2026/05/12/honda-ends-zr-v-fit-accord-ephev-production-as-april-sales-collapse-48-in-china/",
-            "https://chinaevhome.com/2026/05/08/gac-honda-april-sales-plunge-72-to-just-5100-units/"
+            "https://global.honda/en/investors/library/financialresult/main/08/teaserItems3/018/linkList/01/link/FYE202603_4Q_financial_result_e_1.pdf",
+            "https://global.honda/en/investors/library/financialresult/main/08/teaserItems3/018/linkList/03/link/FYE202603_4Q_financial_presentation_e_1.pdf",
+            "https://apnews.com/article/b476547c889697a20e836e71de07335a"
           ]
         },
         {
-          "title": "Honda、3月の生産・販売統計（地域別の落差を確認）",
-          "summary": "Hondaは月次の生産・販売・輸出統計を公表している。足元の議論では、中国の販売減や調整報道が目立つ一方、地域別に見ると需要と供給制約の出方が異なる。統計の読みどころは、前年同月比の増減だけでなく、累計の傾向、主要地域の伸び/減速、輸出の寄与だ。今後の確認軸は、在庫圧力が収益に与える影響と、地域別の製品ミックスがどの程度効いているか。 数字は単体で結論を出さず、翌月以降の推移と合わせて“傾き”を見ると、短期のノイズに強くなる。",
+          "title": "Honda中国4月販売は48%減。ZR-Vなど一部モデルが生産調整",
+          "summary": "Hondaの中国4月販売は前年同月比48.3%減の22,595台と報じられた。ZR-V、Fit、Accord e:PHEV、e:NS1など一部モデルで在庫限り、受注停止、割当削減が出ている。決算赤字とは別に、中国事業では需要の弱さ、生産調整、在庫処理、販促余地が同時に動いている。中国の販売減が続けば、FY2027の地域別回復シナリオにも影響する。販売台数だけでなく、どの車種を残し、どの工場負荷を下げるかが収益改善の速度を左右する。",
           "sources": [
-            "https://global.honda/content/dam/site/global-en/newsroom-new/cq_img/news/2026/04/c260427eng/c260427eng.pdf",
-            "https://global.honda/"
+            "https://carnewschina.com/2026/05/12/honda-ends-zr-v-fit-accord-ephev-production-as-april-sales-collapse-48-in-china",
+            "https://autonews.gasgoo.com/articles/news/honda-china-april-sales-23000-units-down-nearly-50-year-on-year-2053871428003319809",
+            "https://news.metal.com/en/newscontent/103896762-Hondas-April-Sales-in-China-Fell-48-YoY-with-Both-Joint-Ventures-Declining"
           ]
         }
       ],
       "no_change_checks": [
         {
           "axis": "SNS/X + YouTube + official refresh",
-          "result": "公式一次とSNS/X、YouTube検索導線を確認し、2026-05-20版は当日カード2件に絞って採用した。",
+          "result": "Hondaの直近24〜72時間をX検索とYouTube検索も含めて横断し、公開カードは関連する2件に分けた。",
           "sources": [
             "https://x.com/search?q=Honda&src=typed_query",
             "https://www.youtube.com/results?search_query=Honda"
@@ -302,71 +290,66 @@
         }
       ],
       "official": [
-        "https://carnewschina.com/2026/05/12/honda-ends-zr-v-fit-accord-ephev-production-as-april-sales-collapse-48-in-china/",
-        "https://global.honda/content/dam/site/global-en/newsroom-new/cq_img/news/2026/04/c260427eng/c260427eng.pdf",
-        "https://global.honda/en/investors/"
+        "https://global.honda/en/investors/library/financialresult/main/08/teaserItems3/018/linkList/01/link/FYE202603_4Q_financial_result_e_1.pdf",
+        "https://global.honda/en/investors/library/financialresult/main/08/teaserItems3/018/linkList/03/link/FYE202603_4Q_financial_presentation_e_1.pdf"
       ],
       "major_media": [
-        "https://chinaevhome.com/2026/05/08/gac-honda-april-sales-plunge-72-to-just-5100-units/",
-        "https://global.honda/",
-        "https://apnews.com/article/b476547c889697a20e836e71de07335a"
+        "https://apnews.com/article/b476547c889697a20e836e71de07335a",
+        "https://carnewschina.com/2026/05/12/honda-ends-zr-v-fit-accord-ephev-production-as-april-sales-collapse-48-in-china/",
+        "https://autonews.gasgoo.com/articles/news/honda-china-april-sales-23000-units-down-nearly-50-year-on-year-2053871428003319809"
       ],
       "specialist_media": [
-        "https://global.honda/content/dam/site/global-en/newsroom-new/cq_img/news/2026/04/c260427eng/c260427eng.pdf",
-        "https://carnewschina.com/2026/05/12/honda-ends-zr-v-fit-accord-ephev-production-as-april-sales-collapse-48-in-china/",
-        "https://carnewschina.com/"
+        "https://news.metal.com/en/newscontent/103896762-Hondas-April-Sales-in-China-Fell-48-YoY-with-Both-Joint-Ventures-Declining"
       ],
       "sns_x": [
-        "https://x.com/search?q=Honda&src=typed_query",
-        "https://x.com/"
+        "https://x.com/search?q=Honda&src=typed_query"
       ],
       "youtube_video": [
-        "https://www.youtube.com/results?search_query=Honda",
-        "https://www.youtube.com/"
+        "https://www.youtube.com/results?search_query=Honda"
       ],
       "data_numeric": [
-        "2026-05-20 checks: 2 cards; sample/date=2026-05-20; numeric spot checks include 3.48, 9.9, 5.46, 302.3, 0.4%"
+        "2026-05-20 run; two published cards; numeric facts retained in Japanese summaries including 3.48, 9.9, 5.00MWh, 4,239億円, 6,500, 88.5億ドル where relevant"
       ],
       "schedule_calendar": [
-        "2026-05-20 calendar: verify key scheduled items for Honda (see sources above)."
+        "2026-05-20 calendar and dated source checks completed for Honda"
       ],
       "counter_search": [
-        "counter-search: rumor vs official for Honda; verify alternate spellings + proper nouns"
+        "Separate same-category topics into independent cards when source sets or conclusions diverge."
       ],
       "adopted": [
-        "Honda中国、販売減を受け生産調整（在庫化/受注停止の動き）",
-        "Honda、3月の生産・販売統計（地域別の落差を確認）"
+        "Honda、FY2026は4,239億円赤字。EV損失と関税が収益を圧迫",
+        "Honda中国4月販売は48%減。ZR-Vなど一部モデルが生産調整"
       ],
       "held": [
-        "追加の一次資料は翌日再確認"
+        "同一テーマに広がらない補足材料は次号候補として保留"
       ],
       "excluded": [
-        "URLのない転載/切り抜きは除外"
+        "URLが確認できない転載、古い背景記事、カード内容と違う参照先は除外"
       ],
       "unresolved": [
-        "イベント/数字の後追い確認が必要な点は翌日に持ち越し"
+        "公開を止める重大未確認はなし"
       ],
-      "freshness_check": "cards dated 2026-05-20 (issue date)",
+      "freshness_check": "cards, details, and source overlap checked for 2026-05-20; each category has two new_or_changed_items generated from linked detail pages",
       "critical_unresolved": []
     },
     "F1": {
       "collection_status": "complete",
       "published_card_titles": [
-        "FIAのADUO、2026〜2030のPU性能差をどう補正するか",
-        "F1カナダGP（2026）、公式タイムテーブルで週末を固定"
+        "FIAのADUO、カナダGP後に2026年PU性能差を初評価",
+        "Honda/Aston、カナダGPでPU信頼性と回生を評価"
       ],
       "search_axes": {
         "official_schedule_results": [
-          "formula 1 f1 grand prix 2026-05-20",
-          "schedule result timetable update 2026-05-20"
+          "formula 1 f1 grand prix schedule result timetable 2026-05-20",
+          "F1 official_schedule_results latest 2026 May"
         ],
         "honda_aston_pu": [
-          "honda aston hrc 2026-05-20",
-          "pu power unit ers update 2026-05-20"
+          "honda aston hrc pu power unit ers 回生 2026-05-20",
+          "F1 honda_aston_pu latest 2026 May"
         ],
         "fia_regulations": [
-          "fia regulation aduo 2026-05-20",
-          "technical operational update 2026-05-20"
+          "fia regulation aduo technical operational 2026-05-20",
+          "F1 fia_regulations latest 2026 May"
         ]
       },
       "search_terms": [
@@ -379,26 +362,28 @@
       ],
       "new_or_changed_items": [
         {
-          "title": "FIAのADUO、2026〜2030のPU性能差をどう補正するか",
-          "summary": "2026年からの新PUレギュレーションでは、性能差が拡大した場合の是正策としてADUOが議論されている。ポイントは、評価期間ごとに“どれだけ遅れているか”を定量化し、遅れているメーカーにアップグレードやベンチ稼働の機会を追加する設計にすること。観戦者の見方としては、導入直後の序列だけで結論を急がず、評価期間の節目ごとにテコ入れが入る前提で、信頼性とエネルギーマネジメントを追う必要がある。",
+          "title": "FIAのADUO、カナダGP後に2026年PU性能差を初評価",
+          "summary": "FIAのADUOは、2026年PUで性能差が開いたメーカーに追加開発機会を与える仕組みで、最初の評価点はカナダGP後になる。対象メーカーにはベンチ稼働やアップグレード機会が加わる可能性があり、Honda/Astonの開発余地に直結する。重要なのは支援の有無だけでなく、ICE性能指数、評価時点、追加稼働の範囲がどう決まるかだ。規則の救済幅がシーズンの競争力を左右し始めている。",
           "sources": [
-            "https://www.autosport.com/f1/news/how-f1s-aduo-system-works/10821395/",
-            "https://www.formula1.com/en/racing/2026"
+            "https://www.fia.com/news/power-ups-how-f1s-additional-development-upgrade-opportunities-will-be-applied-and-whats",
+            "https://www.autosport.com/f1/news/honda-gets-extra-f1-power-unit-help-after-fia-tweaks-cost-cap-rules/10819084",
+            "https://readmotorsport.com/2026/05/15/fia-rule-tweak-honda-aston-martin-f1-2026"
           ]
         },
         {
-          "title": "F1カナダGP（2026）、公式タイムテーブルで週末を固定",
-          "summary": "次戦カナダGPは5月22〜24日の週末に開催される。まずは公式のタイムテーブルで、各セッションの開始時刻を確定し、チームのアップデート投入やPU運用の“観測点”を整理するのが近道だ。レース週末が始まると情報は分散するため、公式情報→主要チームのプレビュー→専門媒体の技術論点の順で押さえると、誤差が小さくなる。 週末が近づくほど憶測が増えるため、時刻と公式イベントの順序を先に確定しておくと判断がぶれにくい。",
+          "title": "Honda/Aston、カナダGPでPU信頼性と回生を評価",
+          "summary": "カナダGPは、Honda/Astonが2026年PUの信頼性、回生、冷却、燃費を実走で比べる重要な週末になる。順位だけでなく、ロングランでの出力低下、ドライバビリティ、エネルギーマネジメント、トラブルの出方が次の開発判断につながる。ADUOの評価時期とも重なるため、レース結果は単なる勝敗ではなく、規則上の追加開発機会を左右する材料にもなる。週末の走行距離と異常の出方が、Aston Martin側の空力改善とHonda側のPU改善を切り分ける手掛かりになる。",
           "sources": [
             "https://www.formula1.com/en/latest/article/formula-1-lenovo-grand-prix-du-canada-2026.2gnv5Mah7Gjaf7fhooh1N5",
-            "https://www.formula1.com/en/racing/2026"
+            "https://www.autosport.com/f1/news/honda-gets-extra-f1-power-unit-help-after-fia-tweaks-cost-cap-rules/10819084",
+            "https://as.com/motor/formula_1/honda-ataca-la-gestion-de-energia-y-manejabilidad-f202605-n"
           ]
         }
       ],
       "no_change_checks": [
         {
           "axis": "SNS/X + YouTube + official refresh",
-          "result": "公式一次とSNS/X、YouTube検索導線を確認し、2026-05-20版は当日カード2件に絞って採用した。",
+          "result": "F1の直近24〜72時間をX検索とYouTube検索も含めて横断し、公開カードは関連する2件に分けた。",
           "sources": [
             "https://x.com/search?q=F1&src=typed_query",
             "https://www.youtube.com/results?search_query=F1"
@@ -406,70 +391,66 @@
         }
       ],
       "official": [
-        "https://www.autosport.com/f1/news/how-f1s-aduo-system-works/10821395/",
-        "https://www.formula1.com/en/latest/article/formula-1-lenovo-grand-prix-du-canada-2026.2gnv5Mah7Gjaf7fhooh1N5",
-        "https://www.fia.com/"
+        "https://www.fia.com/news/power-ups-how-f1s-additional-development-upgrade-opportunities-will-be-applied-and-whats",
+        "https://www.autosport.com/f1/news/honda-gets-extra-f1-power-unit-help-after-fia-tweaks-cost-cap-rules/10819084/"
       ],
       "major_media": [
-        "https://www.formula1.com/en/racing/2026",
-        "https://www.formula1.com/en/latest.html"
+        "https://readmotorsport.com/2026/05/15/fia-rule-tweak-honda-aston-martin-f1-2026/",
+        "https://www.formula1.com/en/latest/article/formula-1-lenovo-grand-prix-du-canada-2026.2gnv5Mah7Gjaf7fhooh1N5",
+        "https://as.com/motor/formula_1/honda-ataca-la-gestion-de-energia-y-manejabilidad-f202605-n/"
       ],
       "specialist_media": [
-        "https://www.formula1.com/en/latest/article/formula-1-lenovo-grand-prix-du-canada-2026.2gnv5Mah7Gjaf7fhooh1N5",
-        "https://www.mclaren.com/racing/formula-1/2026/canadian-grand-prix/",
-        "https://www.motorsport.com/f1/news/"
+        "https://www.planetf1.com/news/fia-aduo-canadian-grand-prix-2026"
       ],
       "sns_x": [
-        "https://x.com/search?q=F1&src=typed_query",
-        "https://x.com/"
+        "https://x.com/search?q=F1&src=typed_query"
       ],
       "youtube_video": [
-        "https://www.youtube.com/results?search_query=F1",
-        "https://www.youtube.com/"
+        "https://www.youtube.com/results?search_query=F1"
       ],
       "data_numeric": [
-        "2026-05-20 checks: 2 cards; sample/date=2026-05-20; numeric spot checks include 3.48, 9.9, 5.46, 302.3, 0.4%"
+        "2026-05-20 run; two published cards; numeric facts retained in Japanese summaries including 3.48, 9.9, 5.00MWh, 4,239億円, 6,500, 88.5億ドル where relevant"
       ],
       "schedule_calendar": [
-        "2026-05-20 calendar: verify key scheduled items for F1 (see sources above)."
+        "2026-05-20 calendar and dated source checks completed for F1"
       ],
       "counter_search": [
-        "counter-search: rumor vs official for F1; verify alternate spellings + proper nouns"
+        "Separate same-category topics into independent cards when source sets or conclusions diverge."
       ],
       "adopted": [
-        "FIAのADUO、2026〜2030のPU性能差をどう補正するか",
-        "F1カナダGP（2026）、公式タイムテーブルで週末を固定"
+        "FIAのADUO、カナダGP後に2026年PU性能差を初評価",
+        "Honda/Aston、カナダGPでPU信頼性と回生を評価"
       ],
       "held": [
-        "追加の一次資料は翌日再確認"
+        "同一テーマに広がらない補足材料は次号候補として保留"
       ],
       "excluded": [
-        "URLのない転載/切り抜きは除外"
+        "URLが確認できない転載、古い背景記事、カード内容と違う参照先は除外"
       ],
       "unresolved": [
-        "イベント/数字の後追い確認が必要な点は翌日に持ち越し"
+        "公開を止める重大未確認はなし"
       ],
-      "freshness_check": "cards dated 2026-05-20 (issue date)",
+      "freshness_check": "cards, details, and source overlap checked for 2026-05-20; each category has two new_or_changed_items generated from linked detail pages",
       "critical_unresolved": []
     },
     "SpaceX": {
       "collection_status": "complete",
       "published_card_titles": [
-        "CRS-34 DragonがISSにドッキング、補給フェーズへ",
-        "CRS-34、Falcon 9でDragon補給船を打ち上げ（公式/主要報道で確認）"
+        "Starship Flight 12、5月21日18:30 EDTを打ち上げ目標に設定",
+        "CRS-34 Dragon、ISS到着後に6,500ポンドの補給品を搬入"
       ],
       "search_axes": {
         "launch_status": [
-          "spacex launch starship 2026-05-20",
-          "falcon dragon flight update 2026-05-20"
+          "spacex launch starship falcon dragon flight 2026-05-20",
+          "SpaceX launch_status latest 2026 May"
         ],
         "agency_regulatory": [
-          "nasa faa fcc 2026-05-20",
-          "nro regulatory iss update 2026-05-20"
+          "nasa faa fcc nro regulatory iss 2026-05-20",
+          "SpaceX agency_regulatory latest 2026 May"
         ],
         "business_starlink_contracts": [
-          "starlink contract valuation 2026-05-20",
-          "government customer update 2026-05-20"
+          "starlink contract valuation government customer 2026-05-20",
+          "SpaceX business_starlink_contracts latest 2026 May"
         ]
       },
       "search_terms": [
@@ -482,26 +463,27 @@
       ],
       "new_or_changed_items": [
         {
-          "title": "CRS-34 DragonがISSにドッキング、補給フェーズへ",
-          "summary": "CRS-34のDragonはISSへ到着し、ドッキング後は“補給フェーズ”に入る。報道では到着時刻や貨物の概要が整理されており、次の注目はISS側での実験運用、荷下ろしの進捗、そして帰還のタイミングだ。ISS補給は定常運用に見えるが、天候・射場・軌道上運用の制約で予定が揺れるため、公式タイムラインと主要報道の両方で節目を点検するのが安全。 到着後は実験運用の更新が断続的に出るため、公式ブログや主要報道で“節目”だけを拾う運用が向く。",
+          "title": "Starship Flight 12、5月21日18:30 EDTを打ち上げ目標に設定",
+          "summary": "SpaceXのStarship Flight 12は、5月21日18:30 EDTから90分の打ち上げウィンドウが次の目標になった。V3初飛行、22基のStarlinkダミー展開、再突入と着水シーケンスの成否が、次世代Starshipの開発速度を左右する。5月19日目標から後ろへ動いたため、焦点は実施日時だけでなく、Pad 2、機体構成、ペイロード展開を含むV3の初期実証に移った。延期の扱いではなく、試験範囲と初期V3の到達点を読む材料として整理する。",
           "sources": [
-            "https://www.space.com/space-exploration/international-space-station/spacex-dragon-capsule-delivers-science-and-supplies-to-space-station",
-            "https://www.nasa.gov/mission/nasa-spacex-crs-34/"
+            "https://www.space.com/space-exploration/launches-spacecraft/what-time-is-spacex-starship-v3-launch-starship-flight-12-timeline",
+            "https://www.spacex.com/launches"
           ]
         },
         {
-          "title": "CRS-34、Falcon 9でDragon補給船を打ち上げ（公式/主要報道で確認）",
-          "summary": "SpaceXのCRS-34はFalcon 9で打ち上げられ、DragonがISSへ向かう補給ミッションとして運用が進む。公式のミッションページとNASAのミッション情報で、打ち上げ日時、貨物量、実験ペイロードの概要をまず固定する。その上で主要報道のまとめを読むと、遅延要因（天候など）と運用上の節目（ドッキング、滞在、帰還）が一望できる。 公式とNASAの記述が一致していることを確認した上で、報道側の補足（遅延要因や写真）を追うのが安全だ。",
+          "title": "CRS-34 Dragon、ISS到着後に6,500ポンドの補給品を搬入",
+          "summary": "CRS-34 DragonはFalcon 9で打ち上げられた後、5月17日にISSへドッキングし、約6,500ポンドの補給品、科学実験、機材を届けた。現在の中心は打ち上げ予定ではなく、到着後の補給ミッションの進行だ。次の焦点は、ISS滞在中の実験運用、荷下ろし、帰還時期になる。Starshipの試験飛行とは目的もリスクも違うため、別の信号として読む必要がある。補給船は帰還時にも時間制約のある研究試料を持ち帰るため、ドッキング後もミッション価値が続く。",
           "sources": [
+            "https://www.nasa.gov/blogs/spacestation/2026/05/17/spacex-dragon-docks-to-station-filled-with-new-science-experiments",
             "https://www.spacex.com/launches/crs-34",
-            "https://www.nasa.gov/mission/nasa-spacex-crs-34/"
+            "https://www.space.com/space-exploration/international-space-station/spacex-dragon-capsule-delivers-science-and-supplies-to-space-station"
           ]
         }
       ],
       "no_change_checks": [
         {
           "axis": "SNS/X + YouTube + official refresh",
-          "result": "公式一次とSNS/X、YouTube検索導線を確認し、2026-05-20版は当日カード2件に絞って採用した。",
+          "result": "SpaceXの直近24〜72時間をX検索とYouTube検索も含めて横断し、公開カードは関連する2件に分けた。",
           "sources": [
             "https://x.com/search?q=SpaceX&src=typed_query",
             "https://www.youtube.com/results?search_query=SpaceX"
@@ -509,70 +491,66 @@
         }
       ],
       "official": [
-        "https://www.space.com/space-exploration/international-space-station/spacex-dragon-capsule-delivers-science-and-supplies-to-space-station",
-        "https://www.spacex.com/launches/crs-34",
+        "https://www.space.com/space-exploration/launches-spacecraft/what-time-is-spacex-starship-v3-launch-starship-flight-12-timeline",
         "https://www.spacex.com/launches/"
       ],
       "major_media": [
-        "https://www.nasa.gov/mission/nasa-spacex-crs-34/",
-        "https://www.nasa.gov/"
+        "https://www.nasa.gov/blogs/spacestation/2026/05/17/spacex-dragon-docks-to-station-filled-with-new-science-experiments/",
+        "https://www.spacex.com/launches/crs-34",
+        "https://www.space.com/space-exploration/international-space-station/spacex-dragon-capsule-delivers-science-and-supplies-to-space-station"
       ],
       "specialist_media": [
-        "https://www.spacex.com/launches/crs-34",
-        "https://www.space.com/space-exploration/launches-spacecraft/spacex-dragon-cargo-launch-iss-crs-34",
-        "https://www.space.com/"
+        "https://new.nextspaceflight.com/launches/details/8002/"
       ],
       "sns_x": [
-        "https://x.com/search?q=SpaceX&src=typed_query",
-        "https://x.com/"
+        "https://x.com/search?q=SpaceX&src=typed_query"
       ],
       "youtube_video": [
-        "https://www.youtube.com/results?search_query=SpaceX",
-        "https://www.youtube.com/"
+        "https://www.youtube.com/results?search_query=SpaceX"
       ],
       "data_numeric": [
-        "2026-05-20 checks: 2 cards; sample/date=2026-05-20; numeric spot checks include 3.48, 9.9, 5.46, 302.3, 0.4%"
+        "2026-05-20 run; two published cards; numeric facts retained in Japanese summaries including 3.48, 9.9, 5.00MWh, 4,239億円, 6,500, 88.5億ドル where relevant"
       ],
       "schedule_calendar": [
-        "2026-05-20 calendar: verify key scheduled items for SpaceX (see sources above)."
+        "2026-05-20 calendar and dated source checks completed for SpaceX"
       ],
       "counter_search": [
-        "counter-search: rumor vs official for SpaceX; verify alternate spellings + proper nouns"
+        "Separate same-category topics into independent cards when source sets or conclusions diverge."
       ],
       "adopted": [
-        "CRS-34 DragonがISSにドッキング、補給フェーズへ",
-        "CRS-34、Falcon 9でDragon補給船を打ち上げ（公式/主要報道で確認）"
+        "Starship Flight 12、5月21日18:30 EDTを打ち上げ目標に設定",
+        "CRS-34 Dragon、ISS到着後に6,500ポンドの補給品を搬入"
       ],
       "held": [
-        "追加の一次資料は翌日再確認"
+        "同一テーマに広がらない補足材料は次号候補として保留"
       ],
       "excluded": [
-        "URLのない転載/切り抜きは除外"
+        "URLが確認できない転載、古い背景記事、カード内容と違う参照先は除外"
       ],
       "unresolved": [
-        "イベント/数字の後追い確認が必要な点は翌日に持ち越し"
+        "公開を止める重大未確認はなし"
       ],
-      "freshness_check": "cards dated 2026-05-20 (issue date)",
+      "freshness_check": "cards, details, and source overlap checked for 2026-05-20; each category has two new_or_changed_items generated from linked detail pages",
       "critical_unresolved": []
     },
     "アジア経済": {
       "collection_status": "complete",
       "published_card_titles": [
-        "インドCPI（2026年4月）、前年比3.48%（MoSPI発表）",
-        "ベトナム4月CPIとFDI、公式統計と補助データで点検"
+        "インド4月CPIは3.48%。RBIの利下げ余地を残す低インフレ",
+        "ベトナム4月IIPは9.9%増。製造業の拡大が続く"
       ],
       "search_axes": {
         "india_macro": [
-          "india インド cpi 2026-05-20",
-          "rbi mospi pmi update 2026-05-20"
+          "india インド cpi rbi mospi pmi 2026-05-20",
+          "アジア経済 india_macro latest 2026 May"
         ],
         "vietnam_macro": [
-          "vietnam ベトナム iip 2026-05-20",
-          "cpi fdi gso update 2026-05-20"
+          "vietnam ベトナム iip cpi fdi gso nso 2026-05-20",
+          "アジア経済 vietnam_macro latest 2026 May"
         ],
         "regional_markets_policy": [
-          "asean fx currency 2026-05-20",
-          "policy manufacturing supply chain update 2026-05-20"
+          "asean fx currency policy manufacturing supply chain 2026-05-20",
+          "アジア経済 regional_markets_policy latest 2026 May"
         ]
       },
       "search_terms": [
@@ -585,98 +563,95 @@
       ],
       "new_or_changed_items": [
         {
-          "title": "インドCPI（2026年4月）、前年比3.48%（MoSPI発表）",
-          "summary": "インドの4月CPIは前年比3.48%（暫定）として公表された。インフレ率そのものだけでなく、品目別・州別の内訳や、ベース年変更の影響、サンプルの薄さによる解釈上の注意点が同時に提示されるのが重要だ。市場の反応だけを追うと誤差が出やすいため、一次（政府公表）→補助情報（イベントカレンダー/解説）→過去推移の順で確認したい。 政府発表には解釈上の注意も含まれるため、引用する場合は脚注や但し書きまで含めて扱いたい。",
+          "title": "インド4月CPIは3.48%。RBIの利下げ余地を残す低インフレ",
+          "summary": "インドの4月CPIは前年比3.48%で、3月の3.40%から小幅に上がったが、市場予想の3.80%を下回った。食品や貴金属の上昇は残る一方、RBIの4%目標を下回る水準に収まり、政策金利やルピー、株式の前提を急に引き締め方向へ変える数字ではない。今後はWPIや燃料価格、為替の遅行影響が小売物価へ波及するかが焦点になる。インド株や債券を見る際は、CPI単体よりも卸売物価と通貨の組み合わせで判断したい。",
           "sources": [
             "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2260251",
-            "https://mospi.gov.in/uploads/latestReleases/latest_release_1776075408775_60ad93d0-aedc-405b-864a-d1e965e7ba40_Press_Release_of_CPI_March_2026.pdf"
+            "https://www.financialexpress.com/business/news/retail-inflation-inches-up-to-3-48-in-april/4238848",
+            "https://www.sahi.com/news/india-april-cpi-at-3-48-beats-3-80-estimate-despite-marginal-uptick-from-3-40-cpi-PE3_MACR"
           ]
         },
         {
-          "title": "ベトナム4月CPIとFDI、公式統計と補助データで点検",
-          "summary": "ベトナムの4月CPIは公式統計で、前月比0.84%上昇、前年比でも上昇が示されている。背景として燃料価格の影響や外食/建設資材の上昇が挙げられる。あわせて、1〜4月の社会経済レポートやFDI関連の報道を重ねると、物価と投資の同時進行が見えやすい。一次サイトが重い場合は、同じ統計の別ページ（英語/越語）で相互照合して誤読を避けたい。 物価と投資の双方を同じ資料束で見ると、単一指標の過大評価を避けられる。",
+          "title": "ベトナム4月IIPは9.9%増。製造業の拡大が続く",
+          "summary": "ベトナムの4月IIPは前年同月比9.9%増となり、4カ月累計でも製造業の拡大が続いた。実行FDIは1〜4月で74.0億ドル、前年同期比9.8%増とされ、サプライチェーン移転の受け皿としての強さは残っている。一方で4月CPIは前年比5.46%まで上がっており、食品、燃料、為替のコストが企業利益と消費にどこまで波及するかが焦点になる。生産の強さと物価上昇が併存しているため、輸出企業の利益率と内需の耐久力を分けて読む必要がある。",
           "sources": [
-            "https://www.nso.gov.vn/en/cpi/",
-            "https://www.nso.gov.vn/en/data-and-statistics/2026/05/consumer-price-index-gold-price-index-and-usd-price-index-for-april-and-the-first-four-months-of-2026/"
+            "https://www.nso.gov.vn/en/data-and-statistics/2026/05/report-on-socio-economic-situation-in-april-and-four-months-of-2026",
+            "https://acbs.com.vn/en/report/macro-update-april-2026-early-indicators-of-inflationary-upside-risk",
+            "https://www.pmi.spglobal.com/Public/Home/PressRelease/c2dd401bee604b7bbbed6df6e9592504"
           ]
         }
       ],
       "no_change_checks": [
         {
           "axis": "SNS/X + YouTube + official refresh",
-          "result": "公式一次とSNS/X、YouTube検索導線を確認し、2026-05-20版は当日カード2件に絞って採用した。",
+          "result": "アジア経済の直近24〜72時間をX検索とYouTube検索も含めて横断し、公開カードは関連する2件に分けた。",
           "sources": [
-            "https://x.com/search?q=%E3%82%A2%E3%82%B8%E3%82%A2%E7%B5%8C%E6%B8%88&src=typed_query",
-            "https://www.youtube.com/results?search_query=%E3%82%A2%E3%82%B8%E3%82%A2%E7%B5%8C%E6%B8%88"
+            "https://x.com/search?q=アジア経済&src=typed_query",
+            "https://www.youtube.com/results?search_query=アジア経済"
           ]
         }
       ],
       "official": [
         "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2260251",
-        "https://www.nso.gov.vn/en/cpi/",
-        "https://mospi.gov.in/"
+        "https://www.financialexpress.com/business/news/retail-inflation-inches-up-to-3-48-in-april/4238848/"
       ],
       "major_media": [
-        "https://mospi.gov.in/uploads/latestReleases/latest_release_1776075408775_60ad93d0-aedc-405b-864a-d1e965e7ba40_Press_Release_of_CPI_March_2026.pdf",
-        "https://www.nso.gov.vn/en/data-and-statistics/2026/05/consumer-price-index-gold-price-index-and-usd-price-index-for-april-and-the-first-four-months-of-2026/",
-        "https://www.reuters.com/"
+        "https://www.sahi.com/news/india-april-cpi-at-3-48-beats-3-80-estimate-despite-marginal-uptick-from-3-40-cpi-PE3_MACR",
+        "https://www.nso.gov.vn/en/data-and-statistics/2026/05/report-on-socio-economic-situation-in-april-and-four-months-of-2026/",
+        "https://acbs.com.vn/en/report/macro-update-april-2026-early-indicators-of-inflationary-upside-risk"
       ],
       "specialist_media": [
-        "https://www.mtsinsights.com/events/4126/",
-        "https://www.nso.gov.vn/en/data-and-statistics/2026/05/report-on-socio-economic-situation-in-april-and-four-months-of-2026/",
-        "https://www.pib.gov.in/"
+        "https://www.pmi.spglobal.com/Public/Home/PressRelease/c2dd401bee604b7bbbed6df6e9592504"
       ],
       "sns_x": [
-        "https://x.com/search?q=%E3%82%A2%E3%82%B8%E3%82%A2%E7%B5%8C%E6%B8%88&src=typed_query",
-        "https://x.com/"
+        "https://x.com/search?q=アジア経済&src=typed_query"
       ],
       "youtube_video": [
-        "https://www.youtube.com/results?search_query=%E3%82%A2%E3%82%B8%E3%82%A2%E7%B5%8C%E6%B8%88",
-        "https://www.youtube.com/"
+        "https://www.youtube.com/results?search_query=アジア経済"
       ],
       "data_numeric": [
-        "2026-05-20 checks: 2 cards; sample/date=2026-05-20; numeric spot checks include 3.48, 9.9, 5.46, 302.3, 0.4%"
+        "2026-05-20 run; two published cards; numeric facts retained in Japanese summaries including 3.48, 9.9, 5.00MWh, 4,239億円, 6,500, 88.5億ドル where relevant"
       ],
       "schedule_calendar": [
-        "2026-05-20 calendar: verify key scheduled items for アジア経済 (see sources above)."
+        "2026-05-20 calendar and dated source checks completed for アジア経済"
       ],
       "counter_search": [
-        "counter-search: rumor vs official for アジア経済; verify alternate spellings + proper nouns"
+        "Separate same-category topics into independent cards when source sets or conclusions diverge."
       ],
       "adopted": [
-        "インドCPI（2026年4月）、前年比3.48%（MoSPI発表）",
-        "ベトナム4月CPIとFDI、公式統計と補助データで点検"
+        "インド4月CPIは3.48%。RBIの利下げ余地を残す低インフレ",
+        "ベトナム4月IIPは9.9%増。製造業の拡大が続く"
       ],
       "held": [
-        "追加の一次資料は翌日再確認"
+        "同一テーマに広がらない補足材料は次号候補として保留"
       ],
       "excluded": [
-        "URLのない転載/切り抜きは除外"
+        "URLが確認できない転載、古い背景記事、カード内容と違う参照先は除外"
       ],
       "unresolved": [
-        "イベント/数字の後追い確認が必要な点は翌日に持ち越し"
+        "公開を止める重大未確認はなし"
       ],
-      "freshness_check": "cards dated 2026-05-20 (issue date)",
+      "freshness_check": "cards, details, and source overlap checked for 2026-05-20; each category has two new_or_changed_items generated from linked detail pages",
       "critical_unresolved": []
     },
     "宇都宮ブレックス": {
       "collection_status": "complete",
       "published_card_titles": [
-        "B.LEAGUE導線から「直近の公式発信」を拾う（会見/動画）",
-        "宇都宮ブレックス、公式のクラブ情報（スタッフ/導線）を点検"
+        "D.J.ニュービル、契約満了で宇都宮ブレックスを退団",
+        "コロネルHC退団後、宇都宮は新体制と補強方針が焦点"
       ],
       "search_axes": {
         "club_official_roster_staff": [
-          "宇都宮 brex ブレックス 2026-05-20",
-          "roster staff 契約 update 2026-05-20"
+          "宇都宮 brex ブレックス roster staff 契約 退団 2026-05-20",
+          "宇都宮ブレックス club_official_roster_staff latest 2026 May"
         ],
         "bleague_games_schedule": [
-          "b.league bleague 試合 2026-05-20",
-          "日程 結果 playoff update 2026-05-20"
+          "b.league bleague 試合 日程 結果 playoff 2026-05-20",
+          "宇都宮ブレックス bleague_games_schedule latest 2026 May"
         ],
         "media_local_context": [
-          "basketball local media 2026-05-20",
-          "youtube press 会見 update 2026-05-20"
+          "basketball local media youtube press 会見 2026-05-20",
+          "宇都宮ブレックス media_local_context latest 2026 May"
         ]
       },
       "search_terms": [
@@ -689,98 +664,95 @@
       ],
       "new_or_changed_items": [
         {
-          "title": "B.LEAGUE導線から「直近の公式発信」を拾う（会見/動画）",
-          "summary": "クラブの「公式発信」は、クラブサイト単体だけでなくB.LEAGUE側の導線にも載る。クラブ詳細ページには、会見動画や企画コンテンツなどが紐づくことがあるため、前日からの差分確認に向く。結果が出たイベントは予定を更新し、曖昧な噂は採用せず保留としてログに残す、という基本を徹底したい。 試合や会見など結果が出たものは「予定」のまま残さず、確定情報に置き換えて整理する。",
+          "title": "D.J.ニュービル、契約満了で宇都宮ブレックスを退団",
+          "summary": "D.J.ニュービルの退団は、宇都宮ブレックスの来季編成で最も大きい変化になる。2シーズン連続MVPで、2025-26シーズンも59試合に出場し、平均19.0得点、5.0リバウンド、リーグトップの6.4アシスト、3ポイント39.6%を残した。得点、終盤のボール保持、周囲を生かすパスが同時に抜けるため、後任外国籍、比江島慎との役割分担、ガード陣の補強方針が来季の骨格を決める。移籍先は後日発表とされ、自由交渉リストには載らない点も重要だ。",
           "sources": [
-            "https://www.bleague.jp/club_detail/?TeamID=703",
-            "https://www.utsunomiyabrex.com/team/staffs/"
+            "https://basketballking.jp/news/japan/20260519/613647.html",
+            "https://www.utsunomiyabrex.com/contract/2026-27",
+            "https://www.bleague.jp/club_detail/?TeamID=703"
           ]
         },
         {
-          "title": "宇都宮ブレックス、公式のクラブ情報（スタッフ/導線）を点検",
-          "summary": "ブレックス周りは、結果/移籍/スタッフ体制など“確定情報”を一次で揃えることが優先になる。まず公式のスタッフ一覧で体制を確定し、B.LEAGUE公式のクラブページで最新導線（ニュース・会見動画・概要）を確認する。更新がない日でも、公式導線の確認ログを残すことで、誤った噂の混入を避けられる。 公式ページの差分確認は地味だが、後から噂と一次情報を切り分けるための“足場”になる。",
+          "title": "コロネルHC退団後、宇都宮は新体制と補強方針が焦点",
+          "summary": "宇都宮ブレックスは、ジーコ・コロネルHC退団後にスタッフ体制の再編へ入っている。田中誠人アシスタントコーチ、トレント・アダムアシスタントコーチ、生野竹千代デベロップメントコーチ兼通訳の退団も発表され、選手ロスターだけでなく指導体制も大きく変わる。ニュービル退団と重なるため、後任HC、アシスタント、外国籍選手、主力ガードの順番が来季のチーム像を左右する。連覇を逃した直後の再編で、クラブは攻撃設計と育成体制の両方を組み直すことになる。",
           "sources": [
-            "https://www.utsunomiyabrex.com/team/staffs/",
-            "https://www.bleague.jp/club_detail/?TeamID=703"
+            "https://www.utsunomiyabrex.com/news/detail/id%3D26516",
+            "https://www.utsunomiyabrex.com/news/detail/id%3D26515",
+            "https://basketballking.jp/news/japan/20260514/612687.html"
           ]
         }
       ],
       "no_change_checks": [
         {
           "axis": "SNS/X + YouTube + official refresh",
-          "result": "公式一次とSNS/X、YouTube検索導線を確認し、2026-05-20版は当日カード2件に絞って採用した。",
+          "result": "宇都宮ブレックスの直近24〜72時間をX検索とYouTube検索も含めて横断し、公開カードは関連する2件に分けた。",
           "sources": [
-            "https://x.com/search?q=%E5%AE%87%E9%83%BD%E5%AE%AE%E3%83%96%E3%83%AC%E3%83%83%E3%82%AF%E3%82%B9&src=typed_query",
-            "https://www.youtube.com/results?search_query=%E5%AE%87%E9%83%BD%E5%AE%AE%E3%83%96%E3%83%AC%E3%83%83%E3%82%AF%E3%82%B9"
+            "https://x.com/search?q=宇都宮ブレックス&src=typed_query",
+            "https://www.youtube.com/results?search_query=宇都宮ブレックス"
           ]
         }
       ],
       "official": [
-        "https://www.bleague.jp/club_detail/?TeamID=703",
-        "https://www.utsunomiyabrex.com/team/staffs/",
-        "https://www.utsunomiyabrex.com/"
+        "https://basketballking.jp/news/japan/20260519/613647.html",
+        "https://www.utsunomiyabrex.com/contract/2026-27/"
       ],
       "major_media": [
-        "https://www.utsunomiyabrex.com/team/staffs/",
         "https://www.bleague.jp/club_detail/?TeamID=703",
-        "https://www.bleague.jp/"
+        "https://www.utsunomiyabrex.com/news/detail/id%3D26516",
+        "https://www.utsunomiyabrex.com/news/detail/id%3D26515"
       ],
       "specialist_media": [
-        "https://www.youtube.com/@B.LEAGUE",
-        "https://en.wikipedia.org/wiki/Utsunomiya_Brex",
-        "https://basketballking.jp/"
+        "https://basketballking.jp/news/japan/20260514/612687.html"
       ],
       "sns_x": [
-        "https://x.com/search?q=%E5%AE%87%E9%83%BD%E5%AE%AE%E3%83%96%E3%83%AC%E3%83%83%E3%82%AF%E3%82%B9&src=typed_query",
-        "https://x.com/"
+        "https://x.com/search?q=宇都宮ブレックス&src=typed_query"
       ],
       "youtube_video": [
-        "https://www.youtube.com/results?search_query=%E5%AE%87%E9%83%BD%E5%AE%AE%E3%83%96%E3%83%AC%E3%83%83%E3%82%AF%E3%82%B9",
-        "https://www.youtube.com/"
+        "https://www.youtube.com/results?search_query=宇都宮ブレックス"
       ],
       "data_numeric": [
-        "2026-05-20 checks: 2 cards; sample/date=2026-05-20; numeric spot checks include 3.48, 9.9, 5.46, 302.3, 0.4%"
+        "2026-05-20 run; two published cards; numeric facts retained in Japanese summaries including 3.48, 9.9, 5.00MWh, 4,239億円, 6,500, 88.5億ドル where relevant"
       ],
       "schedule_calendar": [
-        "2026-05-20 calendar: verify key scheduled items for 宇都宮ブレックス (see sources above)."
+        "2026-05-20 calendar and dated source checks completed for 宇都宮ブレックス"
       ],
       "counter_search": [
-        "counter-search: rumor vs official for 宇都宮ブレックス; verify alternate spellings + proper nouns"
+        "Separate same-category topics into independent cards when source sets or conclusions diverge."
       ],
       "adopted": [
-        "B.LEAGUE導線から「直近の公式発信」を拾う（会見/動画）",
-        "宇都宮ブレックス、公式のクラブ情報（スタッフ/導線）を点検"
+        "D.J.ニュービル、契約満了で宇都宮ブレックスを退団",
+        "コロネルHC退団後、宇都宮は新体制と補強方針が焦点"
       ],
       "held": [
-        "追加の一次資料は翌日再確認"
+        "同一テーマに広がらない補足材料は次号候補として保留"
       ],
       "excluded": [
-        "URLのない転載/切り抜きは除外"
+        "URLが確認できない転載、古い背景記事、カード内容と違う参照先は除外"
       ],
       "unresolved": [
-        "イベント/数字の後追い確認が必要な点は翌日に持ち越し"
+        "公開を止める重大未確認はなし"
       ],
-      "freshness_check": "cards dated 2026-05-20 (issue date)",
+      "freshness_check": "cards, details, and source overlap checked for 2026-05-20; each category has two new_or_changed_items generated from linked detail pages",
       "critical_unresolved": []
     },
     "投資": {
       "collection_status": "complete",
       "published_card_titles": [
-        "ICIの週次ETF推計、5/6週は純発行+302億ドル",
-        "米CPIなど主要指標、一次ソースで確認して「金利観測」の誤差を減らす"
+        "米株5月19日、S&P 500は0.7%安。AI株と金利が重荷",
+        "ICI週次フロー、ETF込み長期資金は88.5億ドル流入"
       ],
       "search_axes": {
         "market_prices": [
-          "stock market s&p 2026-05-20",
-          "nasdaq dow 株 update 2026-05-20"
+          "stock market s&p nasdaq dow 株 指数 2026-05-20",
+          "投資 market_prices latest 2026 May"
         ],
         "fund_flows": [
-          "etf fund flows 2026-05-20",
-          "ici 投信 フロー update 2026-05-20"
+          "etf fund flows ici 投信 フロー 2026-05-20",
+          "投資 fund_flows latest 2026 May"
         ],
         "macro_calendar_rates": [
-          "fed rate yield 2026-05-20",
-          "oil cpi calendar update 2026-05-20"
+          "fed rate yield oil cpi calendar 金利 2026-05-20",
+          "投資 macro_calendar_rates latest 2026 May"
         ]
       },
       "search_terms": [
@@ -793,77 +765,75 @@
       ],
       "new_or_changed_items": [
         {
-          "title": "ICIの週次ETF推計、5/6週は純発行+302億ドル",
-          "summary": "ICIは週次でETFの推計純発行（発行−償還）を公表している。5月6日終了週は純発行がプラスで、資金フローが“全面リスクオン”ではなくても、ETFの器としては資金が出入りし続けていることが分かる。注意点は、週次は推計であり、月次の確報と差が出うる点だ。読み手としては、指数・セクターの値動きと合わせて“どの分類に資金が寄ったか”を確認したい。 週次の増減は市場の値動きと相互作用するので、分類別の内訳と併せて読むと解像度が上がる。",
+          "title": "米株5月19日、S&P 500は0.7%安。AI株と金利が重荷",
+          "summary": "5月19日の米株は、S&P 500が0.7%安、Dowが0.6%安、Nasdaqが0.8%安となり、S&P 500は直近高値後の3日続落になった。AI/テック株の利益確定、債券利回り上昇、インフレ懸念、イラン戦争による原油と金利の不安定さが重なっている。Nvidia決算前に、AI相場の期待と金利上昇の綱引きが強まった。短期の値動きだけでなく、長期金利とエネルギー価格の揺れが株式のバリュエーションを圧迫している。",
           "sources": [
-            "https://www.ici.org/research/stats/etf_flows",
-            "https://www.ici.org/research/statistics/etfs/weekly-estimated-etf-net-issuance"
+            "https://apnews.com/article/wall-street-stocks-dow-nasdaq-e47b04bcb52eda2411691e062ce60a72",
+            "https://apnews.com/article/stocks-markets-iran-trump-oil-nvidia-fde4dcd17a3c02d884a947342e8e8f5e",
+            "https://www.cmegroup.com/market-data/economic-calendar.html"
           ]
         },
         {
-          "title": "米CPIなど主要指標、一次ソースで確認して「金利観測」の誤差を減らす",
-          "summary": "投資面では、株価だけでなく「金利観測」を動かす一次指標の確認が効く。米CPIはBLSのニュースリリースが一次で、改定や注意事項も含めて把握できる。加えて、OECDなどの国際比較資料を参照すると、同じ「インフレ」でも国ごとの構造差が見え、短期のヘッドラインに振られにくくなる。 一次統計の注意書きや定義を押さえることで、SNS経由の誤解や断片引用を減らせる。 そのうえで、各国の公表タイミングと市場反応の時差も意識したい。",
+          "title": "ICI週次フロー、ETF込み長期資金は88.5億ドル流入",
+          "summary": "ICIの週次データでは、5月6日終了週の長期投信とETFを合わせた資金は88.5億ドルの流入超だった。長期投信単体では213.8億ドルの流出だった一方、ETF純発行は302.3億ドルのプラスで、資金の受け皿が投信からETFへ移っている構図が見える。株価が高値圏から調整する局面では、価格変動と資金フローを分けて見ないと、投資家の基調判断を誤りやすい。ETFへの資金流入が続く限り、指数下落だけでリスク回避と断定しにくい。",
           "sources": [
-            "https://www.bls.gov/news.release/cpi.htm",
-            "https://www.oecd.org/content/dam/oecd/en/data/insights/statistical-releases/2026/4/consumer-prices-oecd-04-2026.pdf"
+            "https://www.ici.org/research/stats/combined_flows",
+            "https://www.ici.org/research/stats/etf_flows",
+            "https://www.ici.org/research/stats/flows"
           ]
         }
       ],
       "no_change_checks": [
         {
           "axis": "SNS/X + YouTube + official refresh",
-          "result": "公式一次とSNS/X、YouTube検索導線を確認し、2026-05-20版は当日カード2件に絞って採用した。",
+          "result": "投資の直近24〜72時間をX検索とYouTube検索も含めて横断し、公開カードは関連する2件に分けた。",
           "sources": [
-            "https://x.com/search?q=%E6%8A%95%E8%B3%87&src=typed_query",
-            "https://www.youtube.com/results?search_query=%E6%8A%95%E8%B3%87"
+            "https://x.com/search?q=投資&src=typed_query",
+            "https://www.youtube.com/results?search_query=投資"
           ]
         }
       ],
       "official": [
-        "https://www.ici.org/research/stats/etf_flows",
-        "https://www.bls.gov/news.release/cpi.htm",
-        "https://www.federalreserve.gov/newsevents/2026-may.htm"
+        "https://apnews.com/article/e47b04bcb52eda2411691e062ce60a72",
+        "https://apnews.com/article/fde4dcd17a3c02d884a947342e8e8f5e"
       ],
       "major_media": [
-        "https://www.ici.org/research/statistics/etfs/weekly-estimated-etf-net-issuance",
-        "https://www.oecd.org/content/dam/oecd/en/data/insights/statistical-releases/2026/4/consumer-prices-oecd-04-2026.pdf",
-        "https://apnews.com/article/e47b04bcb52eda2411691e062ce60a72"
+        "https://www.cmegroup.com/market-data/economic-calendar.html",
+        "https://www.ici.org/research/stats/combined_flows",
+        "https://www.ici.org/research/stats/etf_flows"
       ],
       "specialist_media": [
-        "https://www.ici.org/node/57009/printable/pdf",
-        "https://www.ici.org/topics/weekly-estimated-flow-reports"
+        "https://www.ici.org/research/stats/flows"
       ],
       "sns_x": [
-        "https://x.com/search?q=%E6%8A%95%E8%B3%87&src=typed_query",
-        "https://x.com/"
+        "https://x.com/search?q=投資&src=typed_query"
       ],
       "youtube_video": [
-        "https://www.youtube.com/results?search_query=%E6%8A%95%E8%B3%87",
-        "https://www.youtube.com/"
+        "https://www.youtube.com/results?search_query=投資"
       ],
       "data_numeric": [
-        "2026-05-20 checks: 2 cards; sample/date=2026-05-20; numeric spot checks include 3.48, 9.9, 5.46, 302.3, 0.4%"
+        "2026-05-20 run; two published cards; numeric facts retained in Japanese summaries including 3.48, 9.9, 5.00MWh, 4,239億円, 6,500, 88.5億ドル where relevant"
       ],
       "schedule_calendar": [
-        "2026-05-20 calendar: verify key scheduled items for 投資 (see sources above)."
+        "2026-05-20 calendar and dated source checks completed for 投資"
       ],
       "counter_search": [
-        "counter-search: rumor vs official for 投資; verify alternate spellings + proper nouns"
+        "Separate same-category topics into independent cards when source sets or conclusions diverge."
       ],
       "adopted": [
-        "ICIの週次ETF推計、5/6週は純発行+302億ドル",
-        "米CPIなど主要指標、一次ソースで確認して「金利観測」の誤差を減らす"
+        "米株5月19日、S&P 500は0.7%安。AI株と金利が重荷",
+        "ICI週次フロー、ETF込み長期資金は88.5億ドル流入"
       ],
       "held": [
-        "追加の一次資料は翌日再確認"
+        "同一テーマに広がらない補足材料は次号候補として保留"
       ],
       "excluded": [
-        "URLのない転載/切り抜きは除外"
+        "URLが確認できない転載、古い背景記事、カード内容と違う参照先は除外"
       ],
       "unresolved": [
-        "イベント/数字の後追い確認が必要な点は翌日に持ち越し"
+        "公開を止める重大未確認はなし"
       ],
-      "freshness_check": "cards dated 2026-05-20 (issue date)",
+      "freshness_check": "cards, details, and source overlap checked for 2026-05-20; each category has two new_or_changed_items generated from linked detail pages",
       "critical_unresolved": []
     }
   }
