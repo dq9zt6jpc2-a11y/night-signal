@@ -106,6 +106,17 @@ def mutate_manifest(tmp: Path, category: str, key: str, value) -> None:
     write(path, html[: match.start(2)] + json.dumps(manifest, ensure_ascii=False, indent=2) + html[match.end(2) :])
 
 
+def mutate_manifest_entry(tmp: Path, category: str, transform) -> None:
+    path = tmp / "details" / f"extraction-log-{ISSUE_DATE}.html"
+    html = read(path)
+    match = re.search(r'(<script type="application/json" id="coverage-manifest">)(.*?)(</script>)', html, flags=re.S)
+    if not match:
+        raise AssertionError("fixture missing coverage manifest")
+    manifest = json.loads(match.group(2))
+    transform(manifest["categories"][category])
+    write(path, html[: match.start(2)] + json.dumps(manifest, ensure_ascii=False, indent=2) + html[match.end(2) :])
+
+
 def mirror_current_detail_to_previous(tmp: Path, name: str) -> None:
     previous_name = name.replace(ISSUE_DATE, "2026-05-18")
     current = read(tmp / "site" / ISSUE_DATE / "details" / name)
@@ -419,6 +430,63 @@ def main() -> int:
         "coverage collection status incomplete",
         lambda tmp: mutate_manifest(tmp, "OpenAI", "collection_status", "partial"),
         "OpenAI collection_status must be complete",
+    )
+
+    assert_fail(
+        "coverage latest candidates missing",
+        lambda tmp: mutate_manifest(tmp, "OpenAI", "latest_candidates", []),
+        "OpenAI latest_candidates missing watch topics",
+    )
+
+    assert_fail(
+        "coverage latest watch topic missing",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "OpenAI",
+            lambda entry: entry.update(
+                {
+                    "latest_candidates": [
+                        candidate
+                        for candidate in entry["latest_candidates"]
+                        if candidate.get("topic_id") != "ipo_financing"
+                    ]
+                }
+            ),
+        ),
+        "OpenAI latest_candidates missing watch topics: ipo_financing",
+    )
+
+    assert_fail(
+        "coverage adopted latest candidate not published",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "OpenAI",
+            lambda entry: entry["latest_candidates"].append(
+                {
+                    "topic_id": "product_release",
+                    "title": "OpenAI、未掲載の新モデル候補を採用扱いにする",
+                    "source_url": "https://help.openai.com/en/articles/6825453-chatgpt-release-notes",
+                    "source_published_date": ISSUE_DATE,
+                    "decision": "adopted",
+                    "rationale": "採用扱いにした候補が公開カードへ出ていない状態を失敗させるための検証項目です。",
+                }
+            ),
+        ),
+        "adopted latest candidate is not published as a card",
+    )
+
+    assert_fail(
+        "coverage stale adopted latest candidate without override",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "Honda",
+            lambda entry: [
+                candidate.pop("freshness_override", None)
+                for candidate in entry["latest_candidates"]
+                if candidate.get("title") == "Honda、初の通期赤字はEV費用と関税が主因"
+            ],
+        ),
+        "Honda adopted latest candidate is stale",
     )
 
     assert_fail(

@@ -284,6 +284,81 @@ def validate_new_or_changed_items(contract: dict, issue_date: str, root_html: st
         fail(f"{category} new_or_changed_items must mirror published cards: items={item_titles}, page={expected_titles}")
 
 
+def validate_latest_candidates(contract: dict, issue_date: str, root_html: str, category_config: dict, entry: dict) -> None:
+    category = category_config["label"]
+    watch_topics = category_config.get("watch_topics")
+    if not isinstance(watch_topics, list) or not watch_topics:
+        fail(f"{category} coverage contract missing watch_topics")
+
+    candidates = entry.get("latest_candidates")
+    if not isinstance(candidates, list):
+        fail(f"{category} missing latest_candidates")
+
+    expected_titles = card_titles_by_section(root_html, category_config["section_id"])
+    detail_by_title = card_detail_by_title(root_html, category_config)
+    watch_ids = {topic["id"] for topic in watch_topics if isinstance(topic, dict) and isinstance(topic.get("id"), str)}
+    if len(watch_ids) != len(watch_topics):
+        fail(f"{category} watch_topics are invalid")
+
+    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
+    max_age = int(contract.get("maximum_adopted_candidate_source_age_days", 3))
+    min_per_topic = int(contract.get("minimum_latest_candidates_per_watch_topic", 1))
+    by_topic = {topic_id: 0 for topic_id in watch_ids}
+    adopted_titles: list[str] = []
+
+    for index, candidate in enumerate(candidates, start=1):
+        if not isinstance(candidate, dict):
+            fail(f"{category} latest_candidates[{index}] must be an object")
+        topic_id = candidate.get("topic_id")
+        title = candidate.get("title")
+        source_url = candidate.get("source_url")
+        source_date = candidate.get("source_published_date")
+        decision = candidate.get("decision")
+        rationale = candidate.get("rationale")
+        if topic_id not in watch_ids:
+            fail(f"{category} latest_candidates[{index}] topic_id is not configured: {topic_id}")
+        by_topic[topic_id] += 1
+        if not isinstance(title, str) or len(title.strip()) < 8:
+            fail(f"{category} latest_candidates[{index}] title is too weak")
+        if not isinstance(source_url, str) or not normalize_url_host(source_url):
+            fail(f"{category} latest_candidates[{index}] source_url must be absolute")
+        if decision not in {"adopted", "held", "excluded", "no_fresh_item"}:
+            fail(f"{category} latest_candidates[{index}] decision is invalid: {decision}")
+        if not isinstance(rationale, str) or len(re.sub(r"\s+", "", rationale)) < 30 or not has_japanese(rationale):
+            fail(f"{category} latest_candidates[{index}] rationale must be a concrete Japanese decision")
+        if not isinstance(source_date, str):
+            fail(f"{category} latest_candidates[{index}] missing source_published_date")
+        try:
+            candidate_dt = datetime.strptime(source_date, "%Y-%m-%d").date()
+        except ValueError:
+            fail(f"{category} latest_candidates[{index}] source_published_date must be YYYY-MM-DD")
+        if candidate_dt > issue_dt:
+            fail(f"{category} latest_candidates[{index}] source_published_date is in the future: {source_date}")
+        if decision == "adopted":
+            if title not in expected_titles:
+                fail(f"{category} adopted latest candidate is not published as a card: {title}")
+            age = (issue_dt - candidate_dt).days
+            freshness_override = candidate.get("freshness_override")
+            if age > max_age and (
+                not isinstance(freshness_override, str)
+                or len(re.sub(r"\s+", "", freshness_override)) < 30
+                or not has_japanese(freshness_override)
+            ):
+                fail(f"{category} adopted latest candidate is stale: {title} ({source_date}, {age} days old)")
+            detail_urls = source_urls_from_detail(issue_date, detail_by_title[title])
+            if normalize_url(source_url) not in detail_urls:
+                fail(f"{category} adopted latest candidate source must overlap linked detail page: {title}")
+            adopted_titles.append(title)
+
+    missing_topics = [topic_id for topic_id, count in sorted(by_topic.items()) if count < min_per_topic]
+    if missing_topics:
+        fail(f"{category} latest_candidates missing watch topics: " + ", ".join(missing_topics))
+
+    missing_adopted = [title for title in expected_titles if title not in adopted_titles]
+    if missing_adopted:
+        fail(f"{category} published cards must come from adopted latest_candidates: " + "; ".join(missing_adopted))
+
+
 def validate_no_change_checks(contract: dict, category: str, entry: dict) -> None:
     minimum = int(contract.get("minimum_no_change_checks_per_category", 1))
     checks = entry.get("no_change_checks")
@@ -337,6 +412,7 @@ def validate_coverage_contract(issue_date: str, root_html: str, extraction_log_h
             fail(f"{category} collection_status must be complete")
         validate_card_manifest_alignment(root_html, category_config, entry)
         validate_new_or_changed_items(contract, issue_date, root_html, category_config, entry)
+        validate_latest_candidates(contract, issue_date, root_html, category_config, entry)
         validate_no_change_checks(contract, category, entry)
         validate_search_axes(contract, category_config, entry)
         total_urls, hosts = validate_sources(contract, category, entry)

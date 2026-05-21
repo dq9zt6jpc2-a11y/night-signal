@@ -1,5 +1,5 @@
 {
-  "contract_version": "2026-05-19.2",
+  "contract_version": "2026-05-21.1",
   "description": "NIGHT SIGNAL daily collection contract. A public issue must prove that every category was searched across stable axes before publication.",
   "source_classes": {
     "official": {
@@ -54,6 +54,8 @@
   "minimum_url_evidence_per_category": 8,
   "minimum_search_queries_per_axis": 2,
   "minimum_new_or_changed_items_per_category": 2,
+  "minimum_latest_candidates_per_watch_topic": 1,
+  "maximum_adopted_candidate_source_age_days": 3,
   "minimum_no_change_checks_per_category": 1,
   "categories": [
     {
@@ -71,6 +73,28 @@
         {
           "id": "safety_security_regulation",
           "terms": ["security", "safety", "supply", "tanstack", "policy", "regulation"]
+        }
+      ],
+      "watch_topics": [
+        {
+          "id": "ipo_financing",
+          "terms": ["ipo", "public markets", "listing", "funding", "valuation", "上場"]
+        },
+        {
+          "id": "math_research",
+          "terms": ["math", "mathematics", "geometry", "proof", "conjecture", "数学"]
+        },
+        {
+          "id": "product_release",
+          "terms": ["chatgpt", "api", "model", "codex", "release", "mobile"]
+        },
+        {
+          "id": "enterprise_infrastructure",
+          "terms": ["dell", "enterprise", "deployment", "infrastructure", "on-prem", "data"]
+        },
+        {
+          "id": "safety_security_regulation",
+          "terms": ["security", "safety", "policy", "regulation", "certificate", "supply"]
         }
       ]
     },
@@ -90,6 +114,24 @@
           "id": "power_financing_operations",
           "terms": ["battery", "power", "funding", "debt", "data center", "電源", "バッテリー"]
         }
+      ],
+      "watch_topics": [
+        {
+          "id": "ai_infrastructure",
+          "terms": ["ai", "data center", "datacenter", "stargate", "arm", "openai"]
+        },
+        {
+          "id": "power_battery",
+          "terms": ["battery", "power", "electricity", "energy", "電源", "バッテリー"]
+        },
+        {
+          "id": "corporate_ir_financing",
+          "terms": ["ir", "earnings", "funding", "debt", "nav", "決算"]
+        },
+        {
+          "id": "domestic_services",
+          "terms": ["softbank corp", "healthcare", "telecom", "smbc", "fujitsu", "国内"]
+        }
       ]
     },
     {
@@ -107,6 +149,24 @@
         {
           "id": "ev_battery_mobility",
           "terms": ["ev", "hev", "battery", "adas", "robotics", "電池"]
+        }
+      ],
+      "watch_topics": [
+        {
+          "id": "earnings_guidance",
+          "terms": ["earnings", "loss", "guidance", "tariff", "決算", "赤字"]
+        },
+        {
+          "id": "china_sales",
+          "terms": ["china", "sales", "cpca", "gasgoo", "中国", "販売"]
+        },
+        {
+          "id": "hybrid_ev_strategy",
+          "terms": ["hybrid", "ev", "hev", "battery", "acura", "電動化"]
+        },
+        {
+          "id": "regional_production",
+          "terms": ["production", "inventory", "north america", "india", "asean", "生産"]
         }
       ]
     },
@@ -126,6 +186,20 @@
           "id": "fia_regulations",
           "terms": ["fia", "regulation", "aduo", "technical", "operational"]
         }
+      ],
+      "watch_topics": [
+        {
+          "id": "race_schedule_results",
+          "terms": ["grand prix", "schedule", "result", "practice", "qualifying", "race"]
+        },
+        {
+          "id": "honda_aston_pu",
+          "terms": ["honda", "aston", "pu", "power unit", "ers", "energy", "回生"]
+        },
+        {
+          "id": "fia_regulation_development",
+          "terms": ["fia", "aduo", "regulation", "upgrade", "development"]
+        }
       ]
     },
     {
@@ -143,6 +217,20 @@
         {
           "id": "business_starlink_contracts",
           "terms": ["starlink", "contract", "valuation", "government", "customer"]
+        }
+      ],
+      "watch_topics": [
+        {
+          "id": "starship_status",
+          "terms": ["starship", "flight", "launch", "faa", "test"]
+        },
+        {
+          "id": "dragon_iss",
+          "terms": ["dragon", "crs", "iss", "nasa", "dock", "return"]
+        },
+        {
+          "id": "business_contracts",
+          "terms": ["starlink", "contract", "ipo", "valuation", "customer"]
         }
       ]
     },
@@ -162,6 +250,20 @@
           "id": "regional_markets_policy",
           "terms": ["asean", "fx", "currency", "policy", "manufacturing", "supply chain"]
         }
+      ],
+      "watch_topics": [
+        {
+          "id": "india_macro",
+          "terms": ["india", "cpi", "rbi", "pmi", "mospi", "インド"]
+        },
+        {
+          "id": "vietnam_macro",
+          "terms": ["vietnam", "iip", "cpi", "fdi", "nso", "ベトナム"]
+        },
+        {
+          "id": "regional_policy_markets",
+          "terms": ["asean", "fx", "currency", "policy", "manufacturing", "supply"]
+        }
       ]
     },
     {
@@ -180,6 +282,20 @@
           "id": "media_local_context",
           "terms": ["basketball", "local", "media", "youtube", "press", "会見"]
         }
+      ],
+      "watch_topics": [
+        {
+          "id": "club_roster_staff",
+          "terms": ["brex", "宇都宮", "契約", "退団", "staff", "roster"]
+        },
+        {
+          "id": "bleague_games_schedule",
+          "terms": ["b.league", "bleague", "game", "schedule", "result", "試合"]
+        },
+        {
+          "id": "media_press_video",
+          "terms": ["press", "youtube", "interview", "会見", "動画", "local"]
+        }
       ]
     },
     {
@@ -196,6 +312,20 @@
         },
         {
           "id": "macro_calendar_rates",
+          "terms": ["fed", "rate", "yield", "oil", "cpi", "calendar", "金利"]
+        }
+      ],
+      "watch_topics": [
+        {
+          "id": "market_prices",
+          "terms": ["stock", "market", "s&p", "nasdaq", "dow", "株"]
+        },
+        {
+          "id": "fund_flows",
+          "terms": ["etf", "fund", "flows", "ici", "投信", "フロー"]
+        },
+        {
+          "id": "macro_rates_calendar",
           "terms": ["fed", "rate", "yield", "oil", "cpi", "calendar", "金利"]
         }
       ]
