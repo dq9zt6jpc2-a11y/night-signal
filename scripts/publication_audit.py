@@ -25,6 +25,16 @@ def issue_date_from_args() -> str:
     return datetime.now().strftime("%Y-%m-%d")
 
 
+def latest_available_issue_date() -> str | None:
+    dates = []
+    for path in ROOT.glob("night-brief-web-sample-*.html"):
+        match = re.fullmatch(r"night-brief-web-sample-(\d{4}-\d{2}-\d{2})\.html", path.name)
+        if not match:
+            continue
+        dates.append(match.group(1))
+    return max(dates) if dates else None
+
+
 def fail(message: str) -> None:
     print(f"PUBLICATION AUDIT FAILED: {message}", file=sys.stderr)
     raise SystemExit(1)
@@ -56,6 +66,16 @@ def ensure_clean_worktree() -> None:
 
 def ensure_pushed_to_origin() -> None:
     branch = run(["git", "rev-parse", "--abbrev-ref", "HEAD"], check=True).stdout.strip()
+    if branch == "HEAD":
+        local_head = run(["git", "rev-parse", "HEAD"], check=True).stdout.strip()
+        remote = run(["git", "ls-remote", "origin", "refs/heads/main"], check=True).stdout.strip().split()
+        if not remote:
+            fail("cannot find remote branch origin/main")
+        remote_head = remote[0]
+        if remote_head != local_head:
+            fail(f"remote origin/main is {remote_head[:12]}, local HEAD is {local_head[:12]}")
+        return
+
     upstream = run(["git", "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"], check=True).stdout.strip()
     ahead_behind = run(["git", "rev-list", "--left-right", "--count", f"{upstream}...HEAD"], check=True).stdout.split()
     behind = int(ahead_behind[0])
@@ -125,6 +145,9 @@ def ensure_public_url(issue_date: str) -> None:
 
 def main() -> int:
     issue_date = issue_date_from_args()
+    latest_issue = latest_available_issue_date()
+    if latest_issue and issue_date != latest_issue:
+        fail(f"{issue_date} is not the latest local issue; latest is {latest_issue}")
     run_quality_gate(issue_date)
     ensure_clean_worktree()
     ensure_pushed_to_origin()
