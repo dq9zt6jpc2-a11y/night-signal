@@ -24,6 +24,7 @@ URL_RE = re.compile(r"https?://[^\s\"'<>)]+")
 JAPANESE_RE = re.compile(r"[\u3040-\u30ff\u3400-\u9fff]")
 SNS_HOSTS = {"x.com", "twitter.com"}
 YOUTUBE_HOSTS = {"youtube.com", "youtu.be"}
+DEFERRED_PUBLISHING_RE = re.compile(r"(未反映|次回|次の再抽出|次の採用候補|次回の採用候補)")
 
 
 def fail(message: str) -> None:
@@ -334,10 +335,12 @@ def validate_latest_candidates(contract: dict, issue_date: str, root_html: str, 
             fail(f"{category} latest_candidates[{index}] source_published_date must be YYYY-MM-DD")
         if candidate_dt > issue_dt:
             fail(f"{category} latest_candidates[{index}] source_published_date is in the future: {source_date}")
+        age = (issue_dt - candidate_dt).days
+        if decision == "held" and age <= max_age and DEFERRED_PUBLISHING_RE.search(rationale):
+            fail(f"{category} fresh latest candidate was deferred instead of resolved: {title}")
         if decision == "adopted":
             if title not in expected_titles:
                 fail(f"{category} adopted latest candidate is not published as a card: {title}")
-            age = (issue_dt - candidate_dt).days
             freshness_override = candidate.get("freshness_override")
             if age > max_age and (
                 not isinstance(freshness_override, str)

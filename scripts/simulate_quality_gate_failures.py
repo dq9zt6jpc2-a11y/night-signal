@@ -548,6 +548,25 @@ def main() -> int:
     )
 
     assert_fail(
+        "coverage fresh candidate deferred without resolution",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "OpenAI",
+            lambda entry: entry["latest_candidates"].append(
+                {
+                    "topic_id": "product_release",
+                    "title": "OpenAI、鮮度の高い重要候補を後回しにする",
+                    "source_url": "https://help.openai.com/en/articles/6825453-chatgpt-release-notes",
+                    "source_published_date": ISSUE_DATE,
+                    "decision": "held",
+                    "rationale": "現行公開カードには未反映のため、次回の採用候補として残すという失敗例です。",
+                }
+            ),
+        ),
+        "fresh latest candidate was deferred instead of resolved",
+    )
+
+    assert_fail(
         "coverage stale adopted latest candidate without override",
         lambda tmp: mutate_manifest_entry(
             tmp,
