@@ -24,12 +24,27 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Prepare site
         run: |
           ISSUE_DATE="$(TZ=Asia/Tokyo date +%F)"
+          if [[ "${GITHUB_EVENT_NAME}" == "push" && -n "${GITHUB_EVENT_BEFORE:-}" && "${GITHUB_EVENT_BEFORE}" != "0000000000000000000000000000000000000000" ]]; then
+            CHANGED_DATES="$(
+              git diff --name-only "${GITHUB_EVENT_BEFORE}" "${GITHUB_SHA}" \
+                | sed -nE \
+                  -e 's#(^|.*/)night-brief-web-sample-([0-9]{4}-[0-9]{2}-[0-9]{2})\.html$#\2#p' \
+                  -e 's#(^|.*/)extraction-log-([0-9]{4}-[0-9]{2}-[0-9]{2})\.html$#\2#p' \
+                  -e 's#(^|.*/)site/([0-9]{4}-[0-9]{2}-[0-9]{2})/.*#\2#p' \
+                | sort -u
+            )"
+            if [[ -n "${CHANGED_DATES}" ]]; then
+              ISSUE_DATE="$(echo "${CHANGED_DATES}" | tail -n 1)"
+            fi
+          fi
           if [[ ! -f "night-brief-web-sample-${ISSUE_DATE}.html" ]]; then
-            echo "Today's NIGHT SIGNAL issue is missing: night-brief-web-sample-${ISSUE_DATE}.html" >&2
+            echo "Selected NIGHT SIGNAL issue is missing: night-brief-web-sample-${ISSUE_DATE}.html" >&2
             exit 1
           fi
           python3 scripts/sync_site.py "$ISSUE_DATE"
@@ -37,6 +52,8 @@ jobs:
           python3 scripts/quality_gate.py "$ISSUE_DATE"
           cp .nojekyll site/.nojekyll
           echo "ISSUE_DATE=$ISSUE_DATE" >> "$GITHUB_ENV"
+        env:
+          GITHUB_EVENT_BEFORE: ${{ github.event.before }}
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
