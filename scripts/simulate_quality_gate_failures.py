@@ -18,8 +18,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ISSUE_DATE = "2026-05-21"
-SOFTBANK_CARD_TITLE = "<h3>SoftBank、SMBC・富士通と国産ヘルスケア基盤で提携"
-SOFTBANK_DETAIL = "softbank-healthcare-2026-05-21.html"
+SOFTBANK_CARD_TITLE = "<h3>SoftBank、堺AIデータセンター電池計画を決算資料で再提示"
+SOFTBANK_DETAIL = "softbank-battery-2026-05-21.html"
 BREX_DETAIL = "brex-newbill-2026-05-21.html"
 OPENAI_PRIMARY_DETAIL = "openai-dell-codex-2026-05-21.html"
 OPENAI_SECONDARY_DETAIL = "openai-codex-mobile-2026-05-21.html"
@@ -190,7 +190,7 @@ def main() -> int:
         lambda tmp: write(
             tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
             read(tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL).replace(
-                "SoftBank、SMBC・富士通と国産ヘルスケア基盤で提携",
+                "SoftBank、堺AIデータセンター電池計画を決算資料で再提示",
                 "宇都宮ブレックス、スタッフ体制を再編",
             ),
         ),
@@ -310,7 +310,7 @@ def main() -> int:
         "detail page too thin",
         lambda tmp: write(
             tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
-            '<html><head><title>SoftBank</title></head><body><main><a class="back" href="../index.html#softbank">一覧へ戻る</a><article><h1>SoftBank</h1><h2>30秒概要</h2><div class="summary-lead">SoftBankは堺AI拠点で水系バッテリーの国内製造を進める。AIデータセンターの電源確保が投資上限に関わる。</div><div class="source">原文確認:<a href="https://www.softbank.jp/corp/news/press/sbkk/2026/20260511_01/">SoftBank</a></div></article></main></body></html>',
+            '<html><head><title>SoftBank</title></head><body><main><a class="back" href="../index.html#softbank">一覧へ戻る</a><article><h1>SoftBank、堺AIデータセンター電池計画を決算資料で再提示</h1><h2>30秒概要</h2><div class="summary-lead">SoftBankは堺AIデータセンター向けに電池計画を進める。</div><div class="source">原文確認:<a href="https://www.softbank.jp/corp/news/press/sbkk/2026/20260511_01/">SoftBank</a></div></article></main></body></html>',
         ),
         "detail pages too thin",
     )
@@ -344,14 +344,14 @@ def main() -> int:
             "new_or_changed_items",
             [
                 {
-                    "title": "OpenAI、ChatGPTモバイルでCodex操作プレビューを開始",
-                    "summary": "OpenAIはChatGPTモバイルアプリでCodexを操作できるプレビューを始めた。移動中でも進行状況や承認を扱えるため、長時間の処理を机の前だけに閉じにくくなる。",
+                    "title": "OpenAIとDell、Codexを企業のオンプレ環境へ展開",
+                    "summary": "OpenAIとDell Technologiesの提携は、Codexを企業のデータ基盤に近い場所へ置く選択肢を広げる。オンプレミスやハイブリッド環境では、既存の統制、監査、データ境界が導入判断になる。",
                     "sources": ["https://example.com/not-the-detail-source"],
                 },
                 {
-                    "title": "OpenAIとDell、Codexを企業のハイブリッド環境へ展開",
-                    "summary": "OpenAIとDellの提携は、Codexを企業の自社データ基盤に近い場所で使う選択肢を広げる材料だ。規制業種ではデータ境界、監査、既存IT接続が導入判断になる。",
-                    "sources": ["https://openai.com/index/dell-codex-enterprise-partnership/"],
+                    "title": "Codex、ChatGPTモバイルから長時間タスクを操作可能に",
+                    "summary": "OpenAIのリリースノートでは、CodexがChatGPTモバイルアプリから利用できるようになった。長時間タスクの出力確認、承認、接続先ホストの切り替えを外出先から扱える。",
+                    "sources": ["https://help.openai.com/en/articles/10128477-chatgpt-enterprise-edu-release-notes"],
                 },
             ],
         ),
@@ -366,14 +366,14 @@ def main() -> int:
             "new_or_changed_items",
             [
                 {
-                    "title": "OpenAI、ChatGPTモバイルでCodex操作プレビューを開始",
+                    "title": "OpenAIとDell、Codexを企業のオンプレ環境へ展開",
                     "summary": "OpenAI and Dell announced an enterprise Codex deployment partnership for hybrid and on-premises environments.",
-                    "sources": ["https://help.openai.com/en/articles/6825453-chatgpt-release-notes"],
+                    "sources": ["https://openai.com/index/dell-codex-enterprise-partnership/"],
                 },
                 {
-                    "title": "OpenAIとDell、Codexを企業のハイブリッド環境へ展開",
-                    "summary": "OpenAIとDellの提携は、Codexを企業の自社データ基盤に近い場所で使う選択肢を広げる材料だ。規制業種ではデータ境界、監査、既存IT接続が導入判断になる。",
-                    "sources": ["https://openai.com/index/dell-codex-enterprise-partnership/"],
+                    "title": "Codex、ChatGPTモバイルから長時間タスクを操作可能に",
+                    "summary": "OpenAIのリリースノートでは、CodexがChatGPTモバイルアプリから利用できるようになった。長時間タスクの出力確認、承認、接続先ホストの切り替えを外出先から扱える。",
+                    "sources": ["https://help.openai.com/en/articles/10128477-chatgpt-enterprise-edu-release-notes"],
                 },
             ],
         ),
