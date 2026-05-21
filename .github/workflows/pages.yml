@@ -59,6 +59,7 @@ jobs:
             echo "Selected NIGHT SIGNAL issue is missing: night-brief-web-sample-${ISSUE_DATE}.html" >&2
             exit 1
           fi
+          python3 scripts/guardrail_inventory.py
           python3 scripts/sync_site.py "$ISSUE_DATE"
           python3 scripts/coverage_audit.py "$ISSUE_DATE"
           python3 scripts/quality_gate.py "$ISSUE_DATE"

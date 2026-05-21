@@ -1,0 +1,116 @@
+{
+  "version": "2026-05-22.1",
+  "description": "Persistent recurrence-prevention inventory for NIGHT SIGNAL. A user-reported failure is not considered fixed unless it is represented here and enforced by scripts/guardrail_inventory.py.",
+  "guards": [
+    {
+      "id": "cross_channel_watch_topic_evidence",
+      "description": "Every configured watch topic must prove Web, SNS/X, and YouTube collection before publication.",
+      "contract": {
+        "required_watch_topic_channels": ["web", "sns_x", "youtube"],
+        "minimum_watch_topic_checks_per_topic": 1
+      },
+      "required_audit_terms": [
+        "validate_watch_topic_checks",
+        "candidate_titles must match latest_candidates for same topic",
+        "checked_at_jst must use JST offset"
+      ],
+      "required_policy_terms": [
+        "watch_topic_checks",
+        "Web、SNS/X、YouTube"
+      ],
+      "required_simulation_terms": [
+        "coverage watch topic YouTube evidence missing",
+        "coverage watch topic candidate not linked"
+      ]
+    },
+    {
+      "id": "fresh_candidates_must_be_resolved",
+      "description": "Fresh important candidates cannot be deferred with 'next time' wording instead of being adopted or explicitly excluded.",
+      "required_audit_terms": [
+        "DEFERRED_PUBLISHING_RE",
+        "fresh latest candidate was deferred instead of resolved"
+      ],
+      "required_simulation_terms": [
+        "coverage fresh candidate deferred without resolution"
+      ]
+    },
+    {
+      "id": "softbank_market_price_nav",
+      "description": "SoftBank Group must be monitored as a listed market asset, not only as business/IR news.",
+      "category": "SoftBank",
+      "required_axes": ["market_price_nav"],
+      "required_watch_topics": ["market_price_nav"],
+      "required_terms": [
+        "9984",
+        "stock",
+        "stop high",
+        "limit up",
+        "株価",
+        "ストップ高",
+        "NAV"
+      ],
+      "required_policy_terms": [
+        "9984の株価急変",
+        "ストップ高/ストップ安",
+        "NAVや保有株評価"
+      ],
+      "required_simulation_terms": [
+        "coverage SoftBank market price watch topic missing",
+        "SoftBank market price search axis missing"
+      ]
+    },
+    {
+      "id": "openai_capital_and_research",
+      "description": "OpenAI monitoring must include capital-market and research breakthroughs, not only product/enterprise updates.",
+      "category": "OpenAI",
+      "required_watch_topics": ["ipo_financing", "math_research", "product_release", "enterprise_infrastructure"],
+      "required_terms": [
+        "ipo",
+        "listing",
+        "valuation",
+        "math",
+        "geometry",
+        "数学"
+      ],
+      "required_policy_terms": [
+        "IPO/資金調達",
+        "数学・研究成果"
+      ],
+      "required_simulation_terms": [
+        "coverage latest watch topic missing"
+      ]
+    },
+    {
+      "id": "overview_only_details",
+      "description": "Detail pages must remain overview-only and must not contain authoring/checklist sections or broad source bundles.",
+      "required_audit_terms": [
+        "detail pages must be overview-only",
+        "detail pages have too many source links"
+      ],
+      "required_policy_terms": [
+        "詳細ページは日本語で読める概要",
+        "原文確認は論点に直接関係する参照先だけ"
+      ],
+      "required_simulation_terms": [
+        "detail body exists after summary",
+        "detail source list too broad"
+      ]
+    },
+    {
+      "id": "latest_issue_publish_only",
+      "description": "Publishing must not silently fall back to an old issue or a stale root page.",
+      "required_audit_terms": [
+        "Refusing to publish",
+        "PUBLICATION AUDIT PASSED"
+      ],
+      "required_policy_terms": [
+        "過去号へのフォールバックは禁止",
+        "publication_audit"
+      ],
+      "required_workflow_terms": [
+        "Verify public page date",
+        "Selected NIGHT SIGNAL issue is missing"
+      ]
+    }
+  ]
+}

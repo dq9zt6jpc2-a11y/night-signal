@@ -32,10 +32,17 @@ def copy_fixture() -> Path:
     (tmp / "config").mkdir()
     shutil.copyfile(ROOT / "scripts" / "quality_gate.py", tmp / "scripts" / "quality_gate.py")
     shutil.copyfile(ROOT / "scripts" / "coverage_audit.py", tmp / "scripts" / "coverage_audit.py")
+    shutil.copyfile(ROOT / "scripts" / "guardrail_inventory.py", tmp / "scripts" / "guardrail_inventory.py")
+    shutil.copyfile(ROOT / "scripts" / "publication_audit.py", tmp / "scripts" / "publication_audit.py")
+    shutil.copyfile(ROOT / "scripts" / "sync_site.py", tmp / "scripts" / "sync_site.py")
+    shutil.copyfile(ROOT / "scripts" / "simulate_quality_gate_failures.py", tmp / "scripts" / "simulate_quality_gate_failures.py")
     shutil.copyfile(ROOT / "config" / "night_signal_coverage.json", tmp / "config" / "night_signal_coverage.json")
+    shutil.copyfile(ROOT / "config" / "night_signal_guardrails.json", tmp / "config" / "night_signal_guardrails.json")
     shutil.copyfile(ROOT / f"night-brief-web-sample-{ISSUE_DATE}.html", tmp / f"night-brief-web-sample-{ISSUE_DATE}.html")
     shutil.copyfile(ROOT / "night-brief-web-sample-2026-05-18.html", tmp / "night-brief-web-sample-2026-05-18.html")
     shutil.copyfile(ROOT / "details" / f"extraction-log-{ISSUE_DATE}.html", tmp / "details" / f"extraction-log-{ISSUE_DATE}.html")
+    shutil.copyfile(ROOT / "details" / "policy.html", tmp / "details" / "policy.html")
+    shutil.copytree(ROOT / ".github", tmp / ".github")
     shutil.copytree(ROOT / "site", tmp / "site")
     return tmp
 
@@ -57,8 +64,23 @@ def run_gate(tmp: Path) -> subprocess.CompletedProcess[str]:
     )
 
 
+def run_guardrail(tmp: Path) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [sys.executable, str(tmp / "scripts" / "guardrail_inventory.py")],
+        cwd=tmp,
+        text=True,
+        capture_output=True,
+    )
+
+
 def assert_pass(name: str, tmp: Path) -> None:
     result = run_gate(tmp)
+    if result.returncode != 0:
+        raise AssertionError(f"{name}: expected pass, got fail\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}")
+
+
+def assert_guardrail_pass(name: str, tmp: Path) -> None:
+    result = run_guardrail(tmp)
     if result.returncode != 0:
         raise AssertionError(f"{name}: expected pass, got fail\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}")
 
@@ -73,6 +95,18 @@ def assert_fail(name: str, mutate, expected: str) -> None:
     if expected not in output:
         raise AssertionError(f"{name}: expected '{expected}' in output\n{output}")
     print(f"PASS expected failure: {name}")
+
+
+def assert_guardrail_fail(name: str, mutate, expected: str) -> None:
+    tmp = copy_fixture()
+    mutate(tmp)
+    result = run_guardrail(tmp)
+    output = result.stdout + result.stderr
+    if result.returncode == 0:
+        raise AssertionError(f"{name}: expected guardrail failure but passed")
+    if expected not in output:
+        raise AssertionError(f"{name}: expected '{expected}' in output\n{output}")
+    print(f"PASS expected guardrail failure: {name}")
 
 
 def mutate_root_and_dated(tmp: Path, transform) -> None:
@@ -115,6 +149,13 @@ def mutate_manifest_entry(tmp: Path, category: str, transform) -> None:
     manifest = json.loads(match.group(2))
     transform(manifest["categories"][category])
     write(path, html[: match.start(2)] + json.dumps(manifest, ensure_ascii=False, indent=2) + html[match.end(2) :])
+
+
+def mutate_contract(tmp: Path, transform) -> None:
+    path = tmp / "config" / "night_signal_coverage.json"
+    contract = json.loads(read(path))
+    transform(contract)
+    write(path, json.dumps(contract, ensure_ascii=False, indent=2) + "\n")
 
 
 def mirror_current_detail_to_previous(tmp: Path, name: str) -> None:
@@ -169,6 +210,29 @@ def main() -> int:
     baseline = copy_fixture()
     assert_pass("baseline current issue", baseline)
     print("PASS baseline current issue")
+    assert_guardrail_pass("baseline guardrail inventory", baseline)
+    print("PASS baseline guardrail inventory")
+
+    assert_guardrail_fail(
+        "guardrail catches removed SoftBank market price axis",
+        lambda tmp: mutate_contract(
+            tmp,
+            lambda contract: [
+                category.update(
+                    {
+                        "axes": [
+                            axis
+                            for axis in category["axes"]
+                            if axis.get("id") != "market_price_nav"
+                        ]
+                    }
+                )
+                for category in contract["categories"]
+                if category.get("label") == "SoftBank"
+            ],
+        ),
+        "softbank_market_price_nav missing category axes: market_price_nav",
+    )
 
     assert_fail(
         "title policy wording leak",
