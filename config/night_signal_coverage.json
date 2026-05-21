@@ -1,5 +1,5 @@
 {
-  "contract_version": "2026-05-21.2",
+  "contract_version": "2026-05-21.3",
   "description": "NIGHT SIGNAL daily collection contract. A public issue must prove that every category and configured watch topic was searched across Web, SNS/X, and YouTube before publication.",
   "source_classes": {
     "official": {
@@ -56,7 +56,11 @@
   "minimum_new_or_changed_items_per_category": 2,
   "minimum_latest_candidates_per_watch_topic": 1,
   "minimum_watch_topic_checks_per_topic": 1,
-  "required_watch_topic_channels": ["web", "sns_x", "youtube"],
+  "required_watch_topic_channels": [
+    "web",
+    "sns_x",
+    "youtube"
+  ],
   "maximum_adopted_candidate_source_age_days": 3,
   "minimum_no_change_checks_per_category": 1,
   "categories": [
@@ -66,37 +70,94 @@
       "axes": [
         {
           "id": "official_product_release",
-          "terms": ["openai", "chatgpt", "api", "release", "model", "codex"]
+          "terms": [
+            "openai",
+            "chatgpt",
+            "api",
+            "release",
+            "model",
+            "codex"
+          ]
         },
         {
           "id": "enterprise_infrastructure",
-          "terms": ["enterprise", "deployment", "dell", "aws", "data", "infrastructure", "on-prem"]
+          "terms": [
+            "enterprise",
+            "deployment",
+            "dell",
+            "aws",
+            "data",
+            "infrastructure",
+            "on-prem"
+          ]
         },
         {
           "id": "safety_security_regulation",
-          "terms": ["security", "safety", "supply", "tanstack", "policy", "regulation"]
+          "terms": [
+            "security",
+            "safety",
+            "supply",
+            "tanstack",
+            "policy",
+            "regulation"
+          ]
         }
       ],
       "watch_topics": [
         {
           "id": "ipo_financing",
-          "terms": ["ipo", "public markets", "listing", "funding", "valuation", "上場"]
+          "terms": [
+            "ipo",
+            "public markets",
+            "listing",
+            "funding",
+            "valuation",
+            "上場"
+          ]
         },
         {
           "id": "math_research",
-          "terms": ["math", "mathematics", "geometry", "proof", "conjecture", "数学"]
+          "terms": [
+            "math",
+            "mathematics",
+            "geometry",
+            "proof",
+            "conjecture",
+            "数学"
+          ]
         },
         {
           "id": "product_release",
-          "terms": ["chatgpt", "api", "model", "codex", "release", "mobile"]
+          "terms": [
+            "chatgpt",
+            "api",
+            "model",
+            "codex",
+            "release",
+            "mobile"
+          ]
         },
         {
           "id": "enterprise_infrastructure",
-          "terms": ["dell", "enterprise", "deployment", "infrastructure", "on-prem", "data"]
+          "terms": [
+            "dell",
+            "enterprise",
+            "deployment",
+            "infrastructure",
+            "on-prem",
+            "data"
+          ]
         },
         {
           "id": "safety_security_regulation",
-          "terms": ["security", "safety", "policy", "regulation", "certificate", "supply"]
+          "terms": [
+            "security",
+            "safety",
+            "policy",
+            "regulation",
+            "certificate",
+            "supply"
+          ]
         }
       ]
     },
@@ -106,33 +167,109 @@
       "axes": [
         {
           "id": "corporate_ir_news",
-          "terms": ["softbank", "sbg", "ir", "earnings", "ソフトバンク"]
+          "terms": [
+            "softbank",
+            "sbg",
+            "ir",
+            "earnings",
+            "ソフトバンク"
+          ]
         },
         {
           "id": "arm_ai_infrastructure",
-          "terms": ["arm", "ai", "openai", "stargate", "vision", "datacenter"]
+          "terms": [
+            "arm",
+            "ai",
+            "openai",
+            "stargate",
+            "vision",
+            "datacenter"
+          ]
         },
         {
           "id": "power_financing_operations",
-          "terms": ["battery", "power", "funding", "debt", "data center", "電源", "バッテリー"]
+          "terms": [
+            "battery",
+            "power",
+            "funding",
+            "debt",
+            "data center",
+            "電源",
+            "バッテリー"
+          ]
+        },
+        {
+          "id": "market_price_nav",
+          "terms": [
+            "9984",
+            "sbg",
+            "stock",
+            "stop high",
+            "limit up",
+            "株価",
+            "ストップ高",
+            "NAV"
+          ]
         }
       ],
       "watch_topics": [
         {
+          "id": "market_price_nav",
+          "terms": [
+            "9984",
+            "softbank group",
+            "sbg",
+            "stock",
+            "stop high",
+            "limit up",
+            "株価",
+            "ストップ高",
+            "NAV"
+          ]
+        },
+        {
           "id": "ai_infrastructure",
-          "terms": ["ai", "data center", "datacenter", "stargate", "arm", "openai"]
+          "terms": [
+            "ai",
+            "data center",
+            "datacenter",
+            "stargate",
+            "arm",
+            "openai"
+          ]
         },
         {
           "id": "power_battery",
-          "terms": ["battery", "power", "electricity", "energy", "電源", "バッテリー"]
+          "terms": [
+            "battery",
+            "power",
+            "electricity",
+            "energy",
+            "電源",
+            "バッテリー"
+          ]
         },
         {
           "id": "corporate_ir_financing",
-          "terms": ["ir", "earnings", "funding", "debt", "nav", "決算"]
+          "terms": [
+            "ir",
+            "earnings",
+            "funding",
+            "debt",
+            "nav",
+            "決算"
+          ]
         },
         {
           "id": "domestic_services",
-          "terms": ["softbank corp", "healthcare", "telecom", "smbc", "fujitsu", "国内"]
+          "terms": [
+            "softbank corp",
+            "healthcare",
+            "telecom",
+            "smbc",
+            "fujitsu",
+            "国内"
+          ]
         }
       ]
     },
@@ -142,33 +279,84 @@
       "axes": [
         {
           "id": "ir_financials",
-          "terms": ["honda", "ir", "earnings", "guidance", "決算", "赤字"]
+          "terms": [
+            "honda",
+            "ir",
+            "earnings",
+            "guidance",
+            "決算",
+            "赤字"
+          ]
         },
         {
           "id": "market_regions",
-          "terms": ["china", "india", "asean", "north america", "sales", "production", "中国", "販売"]
+          "terms": [
+            "china",
+            "india",
+            "asean",
+            "north america",
+            "sales",
+            "production",
+            "中国",
+            "販売"
+          ]
         },
         {
           "id": "ev_battery_mobility",
-          "terms": ["ev", "hev", "battery", "adas", "robotics", "電池"]
+          "terms": [
+            "ev",
+            "hev",
+            "battery",
+            "adas",
+            "robotics",
+            "電池"
+          ]
         }
       ],
       "watch_topics": [
         {
           "id": "earnings_guidance",
-          "terms": ["earnings", "loss", "guidance", "tariff", "決算", "赤字"]
+          "terms": [
+            "earnings",
+            "loss",
+            "guidance",
+            "tariff",
+            "決算",
+            "赤字"
+          ]
         },
         {
           "id": "china_sales",
-          "terms": ["china", "sales", "cpca", "gasgoo", "中国", "販売"]
+          "terms": [
+            "china",
+            "sales",
+            "cpca",
+            "gasgoo",
+            "中国",
+            "販売"
+          ]
         },
         {
           "id": "hybrid_ev_strategy",
-          "terms": ["hybrid", "ev", "hev", "battery", "acura", "電動化"]
+          "terms": [
+            "hybrid",
+            "ev",
+            "hev",
+            "battery",
+            "acura",
+            "電動化"
+          ]
         },
         {
           "id": "regional_production",
-          "terms": ["production", "inventory", "north america", "india", "asean", "生産"]
+          "terms": [
+            "production",
+            "inventory",
+            "north america",
+            "india",
+            "asean",
+            "生産"
+          ]
         }
       ]
     },
@@ -178,29 +366,71 @@
       "axes": [
         {
           "id": "official_schedule_results",
-          "terms": ["formula 1", "f1", "grand prix", "schedule", "result", "timetable"]
+          "terms": [
+            "formula 1",
+            "f1",
+            "grand prix",
+            "schedule",
+            "result",
+            "timetable"
+          ]
         },
         {
           "id": "honda_aston_pu",
-          "terms": ["honda", "aston", "hrc", "pu", "power unit", "ers", "回生"]
+          "terms": [
+            "honda",
+            "aston",
+            "hrc",
+            "pu",
+            "power unit",
+            "ers",
+            "回生"
+          ]
         },
         {
           "id": "fia_regulations",
-          "terms": ["fia", "regulation", "aduo", "technical", "operational"]
+          "terms": [
+            "fia",
+            "regulation",
+            "aduo",
+            "technical",
+            "operational"
+          ]
         }
       ],
       "watch_topics": [
         {
           "id": "race_schedule_results",
-          "terms": ["grand prix", "schedule", "result", "practice", "qualifying", "race"]
+          "terms": [
+            "grand prix",
+            "schedule",
+            "result",
+            "practice",
+            "qualifying",
+            "race"
+          ]
         },
         {
           "id": "honda_aston_pu",
-          "terms": ["honda", "aston", "pu", "power unit", "ers", "energy", "回生"]
+          "terms": [
+            "honda",
+            "aston",
+            "pu",
+            "power unit",
+            "ers",
+            "energy",
+            "回生"
+          ]
         },
         {
           "id": "fia_regulation_development",
-          "terms": ["fia", "aduo", "regulation", "upgrade", "development"]
+          "terms": [
+            "fia",
+            "aduo",
+            "regulation",
+            "upgrade",
+            "development"
+          ]
         }
       ]
     },
@@ -210,29 +440,68 @@
       "axes": [
         {
           "id": "launch_status",
-          "terms": ["spacex", "launch", "starship", "falcon", "dragon", "flight"]
+          "terms": [
+            "spacex",
+            "launch",
+            "starship",
+            "falcon",
+            "dragon",
+            "flight"
+          ]
         },
         {
           "id": "agency_regulatory",
-          "terms": ["nasa", "faa", "fcc", "nro", "regulatory", "iss"]
+          "terms": [
+            "nasa",
+            "faa",
+            "fcc",
+            "nro",
+            "regulatory",
+            "iss"
+          ]
         },
         {
           "id": "business_starlink_contracts",
-          "terms": ["starlink", "contract", "valuation", "government", "customer"]
+          "terms": [
+            "starlink",
+            "contract",
+            "valuation",
+            "government",
+            "customer"
+          ]
         }
       ],
       "watch_topics": [
         {
           "id": "starship_status",
-          "terms": ["starship", "flight", "launch", "faa", "test"]
+          "terms": [
+            "starship",
+            "flight",
+            "launch",
+            "faa",
+            "test"
+          ]
         },
         {
           "id": "dragon_iss",
-          "terms": ["dragon", "crs", "iss", "nasa", "dock", "return"]
+          "terms": [
+            "dragon",
+            "crs",
+            "iss",
+            "nasa",
+            "dock",
+            "return"
+          ]
         },
         {
           "id": "business_contracts",
-          "terms": ["starlink", "contract", "ipo", "valuation", "customer"]
+          "terms": [
+            "starlink",
+            "contract",
+            "ipo",
+            "valuation",
+            "customer"
+          ]
         }
       ]
     },
@@ -242,29 +511,72 @@
       "axes": [
         {
           "id": "india_macro",
-          "terms": ["india", "インド", "cpi", "rbi", "mospi", "pmi"]
+          "terms": [
+            "india",
+            "インド",
+            "cpi",
+            "rbi",
+            "mospi",
+            "pmi"
+          ]
         },
         {
           "id": "vietnam_macro",
-          "terms": ["vietnam", "ベトナム", "iip", "cpi", "fdi", "gso", "nso"]
+          "terms": [
+            "vietnam",
+            "ベトナム",
+            "iip",
+            "cpi",
+            "fdi",
+            "gso",
+            "nso"
+          ]
         },
         {
           "id": "regional_markets_policy",
-          "terms": ["asean", "fx", "currency", "policy", "manufacturing", "supply chain"]
+          "terms": [
+            "asean",
+            "fx",
+            "currency",
+            "policy",
+            "manufacturing",
+            "supply chain"
+          ]
         }
       ],
       "watch_topics": [
         {
           "id": "india_macro",
-          "terms": ["india", "cpi", "rbi", "pmi", "mospi", "インド"]
+          "terms": [
+            "india",
+            "cpi",
+            "rbi",
+            "pmi",
+            "mospi",
+            "インド"
+          ]
         },
         {
           "id": "vietnam_macro",
-          "terms": ["vietnam", "iip", "cpi", "fdi", "nso", "ベトナム"]
+          "terms": [
+            "vietnam",
+            "iip",
+            "cpi",
+            "fdi",
+            "nso",
+            "ベトナム"
+          ]
         },
         {
           "id": "regional_policy_markets",
-          "terms": ["asean", "fx", "currency", "policy", "manufacturing", "supply"]
+          "terms": [
+            "asean",
+            "fx",
+            "currency",
+            "policy",
+            "manufacturing",
+            "supply"
+          ]
         }
       ]
     },
@@ -274,29 +586,72 @@
       "axes": [
         {
           "id": "club_official_roster_staff",
-          "terms": ["宇都宮", "brex", "ブレックス", "roster", "staff", "契約", "退団"]
+          "terms": [
+            "宇都宮",
+            "brex",
+            "ブレックス",
+            "roster",
+            "staff",
+            "契約",
+            "退団"
+          ]
         },
         {
           "id": "bleague_games_schedule",
-          "terms": ["b.league", "bleague", "試合", "日程", "結果", "playoff"]
+          "terms": [
+            "b.league",
+            "bleague",
+            "試合",
+            "日程",
+            "結果",
+            "playoff"
+          ]
         },
         {
           "id": "media_local_context",
-          "terms": ["basketball", "local", "media", "youtube", "press", "会見"]
+          "terms": [
+            "basketball",
+            "local",
+            "media",
+            "youtube",
+            "press",
+            "会見"
+          ]
         }
       ],
       "watch_topics": [
         {
           "id": "club_roster_staff",
-          "terms": ["brex", "宇都宮", "契約", "退団", "staff", "roster"]
+          "terms": [
+            "brex",
+            "宇都宮",
+            "契約",
+            "退団",
+            "staff",
+            "roster"
+          ]
         },
         {
           "id": "bleague_games_schedule",
-          "terms": ["b.league", "bleague", "game", "schedule", "result", "試合"]
+          "terms": [
+            "b.league",
+            "bleague",
+            "game",
+            "schedule",
+            "result",
+            "試合"
+          ]
         },
         {
           "id": "media_press_video",
-          "terms": ["press", "youtube", "interview", "会見", "動画", "local"]
+          "terms": [
+            "press",
+            "youtube",
+            "interview",
+            "会見",
+            "動画",
+            "local"
+          ]
         }
       ]
     },
@@ -306,29 +661,74 @@
       "axes": [
         {
           "id": "market_prices",
-          "terms": ["stock", "market", "s&p", "nasdaq", "dow", "株", "指数"]
+          "terms": [
+            "stock",
+            "market",
+            "s&p",
+            "nasdaq",
+            "dow",
+            "株",
+            "指数"
+          ]
         },
         {
           "id": "fund_flows",
-          "terms": ["etf", "fund", "flows", "ici", "投信", "フロー"]
+          "terms": [
+            "etf",
+            "fund",
+            "flows",
+            "ici",
+            "投信",
+            "フロー"
+          ]
         },
         {
           "id": "macro_calendar_rates",
-          "terms": ["fed", "rate", "yield", "oil", "cpi", "calendar", "金利"]
+          "terms": [
+            "fed",
+            "rate",
+            "yield",
+            "oil",
+            "cpi",
+            "calendar",
+            "金利"
+          ]
         }
       ],
       "watch_topics": [
         {
           "id": "market_prices",
-          "terms": ["stock", "market", "s&p", "nasdaq", "dow", "株"]
+          "terms": [
+            "stock",
+            "market",
+            "s&p",
+            "nasdaq",
+            "dow",
+            "株"
+          ]
         },
         {
           "id": "fund_flows",
-          "terms": ["etf", "fund", "flows", "ici", "投信", "フロー"]
+          "terms": [
+            "etf",
+            "fund",
+            "flows",
+            "ici",
+            "投信",
+            "フロー"
+          ]
         },
         {
           "id": "macro_rates_calendar",
-          "terms": ["fed", "rate", "yield", "oil", "cpi", "calendar", "金利"]
+          "terms": [
+            "fed",
+            "rate",
+            "yield",
+            "oil",
+            "cpi",
+            "calendar",
+            "金利"
+          ]
         }
       ]
     }

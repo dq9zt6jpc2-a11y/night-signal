@@ -20,7 +20,7 @@
         <li>new_or_changed_items と no_change_checks はカテゴリごとに記録し、new_or_changed_itemsのURLは詳細ページの原文確認と重ねた。</li>
       </ul>
       <script type="application/json" id="coverage-manifest">{
-  "contract_version": "2026-05-21.2",
+  "contract_version": "2026-05-21.3",
   "date": "2026-05-21",
   "last_checked_jst": "2026-05-21T20:45:00+09:00",
   "note": "daily autonomous collection; every configured watch topic must record Web, SNS/X, and YouTube evidence, candidate titles, and a Japanese decision result before publication. Adopted cards must still come from latest_candidates and stale adopted items require freshness_override.",
@@ -287,6 +287,7 @@
     "SoftBank": {
       "collection_status": "complete",
       "published_card_titles": [
+        "SoftBank Group、OpenAI IPO観測でストップ高",
         "SoftBank、SMBC・富士通と国産ヘルスケア基盤で提携",
         "SoftBank、堺AIデータセンター電池計画を決算資料で再提示"
       ],
@@ -302,6 +303,10 @@
         "power_financing_operations": [
           "SoftBank battery power AI data center 2026",
           "ソフトバンク バッテリー 電源 データセンター 2026"
+        ],
+        "market_price_nav": [
+          "SoftBank Group 9984 stop high OpenAI IPO Arm May 21 2026",
+          "ソフトバンクグループ 9984 ストップ高 OpenAI IPO Arm 2026年5月21日"
         ]
       },
       "search_terms": [
@@ -310,9 +315,23 @@
         "AIデータセンター",
         "堺 バッテリー",
         "Arm",
-        "OpenAI"
+        "OpenAI",
+        "9984",
+        "SoftBank Group stock",
+        "ストップ高",
+        "株価",
+        "NAV",
+        "OpenAI IPO",
+        "Arm株"
       ],
       "new_or_changed_items": [
+        {
+          "title": "SoftBank Group、OpenAI IPO観測でストップ高",
+          "summary": "ソフトバンクグループ<9984>は5月21日、終値6,039円、前日比1,000円高、19.9%高のストップ高となった。OpenAIのIPO観測とArm株高が、保有資産価値、NAV、AI投資回収期待を同時に押し上げた市場シグナルとして重要だった。",
+          "sources": [
+            "https://s.kabutan.jp/news/n202605211038/"
+          ]
+        },
         {
           "title": "SoftBank、SMBC・富士通と国産ヘルスケア基盤で提携",
           "summary": "SoftBank Corp.、SMBC Group、Fujitsuは、日本発の持続可能なヘルスケアプラットフォーム構築に向けた提携を発表した。SMBC側のOlive Healthcareを起点に、通信、金融、デジタル基盤、医療関連サービスを組み合わせる構想で、SoftBankのAI・データ活用はAIデータセンターやArmだけでなく、国内サ",
@@ -331,11 +350,12 @@
       "no_change_checks": [
         {
           "axis": "Arm / AI infrastructure / SNS / YouTube",
-          "result": "SoftBank公式、IR資料、主要報道、X、YouTube検索を確認し、ArmやStargate単独の新規決定よりもヘルスケア提携と電源計画の継続材料を採用した。",
+          "result": "SoftBank公式、IR資料、主要報道、株価ニュース、X、YouTube検索を確認し、9984のストップ高、ヘルスケア提携、電源計画を主要な変化項目として採用した。",
           "sources": [
             "https://x.com/SoftBank",
             "https://www.youtube.com/results?search_query=SoftBank%20AI%20data%20center%20battery",
-            "https://www.softbank.jp/en/corp/news/press/sbkk/2026/"
+            "https://www.softbank.jp/en/corp/news/press/sbkk/2026/",
+            "https://s.kabutan.jp/news/n202605211038/"
           ]
         }
       ],
@@ -345,12 +365,14 @@
         "https://www.softbank.jp/en/corp/set/data/ir/documents/financial_reports/fy2025/pdf/sbkk_financial_report_20260511_en.pdf"
       ],
       "major_media": [
+        "https://s.kabutan.jp/news/n202605211038/",
         "https://apnews.com/article/9cd118bf3407dfafce40027252b0dd0b",
         "https://www.watch.impress.co.jp/docs/news/2109601.html"
       ],
       "specialist_media": [
         "https://www.tomshardware.com/tech-industry/softbank-to-manufacture-its-own-batteries-to-power-ai-data-centers",
-        "https://battery-tech.net/battery-markets-news/softbank-launches-battery-manufacturing-for-ai-data-centers/"
+        "https://battery-tech.net/battery-markets-news/softbank-launches-battery-manufacturing-for-ai-data-centers/",
+        "https://www.nsjournal.jp/%E2%98%86%E6%A6%82%E6%B3%81-%E5%BE%8C%E5%A0%B4%E5%AF%84%E3%82%8A%E3%80%802121%E5%86%86%E9%AB%98%E3%81%AE%E3%81%86%E3%81%A1%E3%82%BD%E3%83%95%E3%83%88%E3%83%90%E3%83%B3%E3%82%AF%E3%82%B0%E3%83%AB/"
       ],
       "sns_x": [
         "https://x.com/SoftBank",
@@ -361,15 +383,16 @@
         "https://www.youtube.com/results?search_query=%E3%82%BD%E3%83%95%E3%83%88%E3%83%90%E3%83%B3%E3%82%AF%20AI%E3%83%87%E3%83%BC%E3%82%BF%E3%82%BB%E3%83%B3%E3%82%BF%E3%83%BC%20%E9%9B%BB%E6%B1%A0"
       ],
       "data_numeric": [
-        "healthcare alliance announced 2026-05-19; battery plan targets gigawatt-hour scale by FY2028 and 100B yen sales in FY2030 context"
+        "SoftBank Group 9984 close 6,039 yen, +1,000 yen, +19.9%, stop high on 2026-05-21; Codex mobile release noted May 14, 2026; Dell partnership published May 18, 2026"
       ],
       "schedule_calendar": [
         "healthcare alliance May 19; battery milestones FY2028/FY2030; disaster battery cooperation starts June 1"
       ],
       "counter_search": [
-        "counter-search: SoftBank healthcare alliance; Arm OpenAI Stargate; Sakai battery PDF"
+        "counter-search: SoftBank Group 9984 stop high; OpenAI IPO impact; Arm stock; SoftBank healthcare alliance; Sakai battery PDF"
       ],
       "adopted": [
+        "SoftBank Group stop high on OpenAI IPO report",
         "SMBC/Fujitsu healthcare platform alliance",
         "Sakai AI data center battery plan context"
       ],
@@ -385,6 +408,14 @@
       "freshness_check": "cards dated 2026-05-21 (issue date); collected before 22:00 JST release window",
       "critical_unresolved": [],
       "latest_candidates": [
+        {
+          "topic_id": "market_price_nav",
+          "title": "SoftBank Group、OpenAI IPO観測でストップ高",
+          "source_url": "https://s.kabutan.jp/news/n202605211038/",
+          "source_published_date": "2026-05-21",
+          "decision": "adopted",
+          "rationale": "9984のストップ高はOpenAI IPO観測とArm株高を通じたNAV変化であり、SoftBank固有の重要市場シグナルとして公開カードへ採用する。"
+        },
         {
           "topic_id": "domestic_services",
           "title": "SoftBank、SMBC・富士通と国産ヘルスケア基盤で提携",
@@ -420,6 +451,25 @@
         }
       ],
       "watch_topic_checks": [
+        {
+          "topic_id": "market_price_nav",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://s.kabutan.jp/news/n202605211038/"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=SoftBank%209984%20softbank%20group%20sbg%20stock%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/SoftBank"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=SoftBank%209984%20softbank%20group%20sbg%20stock%202026",
+            "https://www.youtube.com/results?search_query=SoftBank%20SMBC%20Fujitsu%20healthcare"
+          ],
+          "candidate_titles": [
+            "SoftBank Group、OpenAI IPO観測でストップ高"
+          ],
+          "result": "SoftBankのmarket/price/navについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「SoftBank Group、OpenAI IPO観測でストップ高」をlatest_candidatesへ接続した。判断区分はadoptedで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
         {
           "topic_id": "ai_infrastructure",
           "checked_at_jst": "2026-05-21T20:45:00+09:00",

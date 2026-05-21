@@ -467,6 +467,24 @@ def main() -> int:
     )
 
     assert_fail(
+        "coverage SoftBank market price watch topic missing",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "SoftBank",
+            lambda entry: entry.update(
+                {
+                    "latest_candidates": [
+                        candidate
+                        for candidate in entry["latest_candidates"]
+                        if candidate.get("topic_id") != "market_price_nav"
+                    ]
+                }
+            ),
+        ),
+        "SoftBank latest_candidates missing watch topics: market_price_nav",
+    )
+
+    assert_fail(
         "coverage watch topic checks missing",
         lambda tmp: mutate_manifest_entry(tmp, "OpenAI", lambda entry: entry.pop("watch_topic_checks", None)),
         "OpenAI missing watch_topic_checks",
@@ -593,6 +611,16 @@ def main() -> int:
             },
         ),
         "アジア経済 search_axis vietnam_macro missing expected terms",
+    )
+
+    assert_fail(
+        "SoftBank market price search axis missing",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "SoftBank",
+            lambda entry: entry["search_axes"].pop("market_price_nav", None),
+        ),
+        "SoftBank search_axis market_price_nav",
     )
 
     assert_fail(
