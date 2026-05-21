@@ -17,12 +17,12 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ISSUE_DATE = "2026-05-20"
-SOFTBANK_CARD_TITLE = "<h3>SoftBank、堺AI拠点で水系バッテリー量産を進める"
-SOFTBANK_DETAIL = "softbank-sakai-battery-2026-05-20.html"
-BREX_DETAIL = "brex-newbill-2026-05-20.html"
-OPENAI_PRIMARY_DETAIL = "openai-dell-codex-2026-05-20.html"
-OPENAI_SECONDARY_DETAIL = "openai-codex-mobile-2026-05-20.html"
+ISSUE_DATE = "2026-05-21"
+SOFTBANK_CARD_TITLE = "<h3>SoftBank、SMBC・富士通と国産ヘルスケア基盤で提携"
+SOFTBANK_DETAIL = "softbank-healthcare-2026-05-21.html"
+BREX_DETAIL = "brex-newbill-2026-05-21.html"
+OPENAI_PRIMARY_DETAIL = "openai-dell-codex-2026-05-21.html"
+OPENAI_SECONDARY_DETAIL = "openai-codex-mobile-2026-05-21.html"
 
 
 def copy_fixture() -> Path:
@@ -190,7 +190,7 @@ def main() -> int:
         lambda tmp: write(
             tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
             read(tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL).replace(
-                "SoftBank、堺AI拠点で水系バッテリー量産を進める",
+                "SoftBank、SMBC・富士通と国産ヘルスケア基盤で提携",
                 "宇都宮ブレックス、スタッフ体制を再編",
             ),
         ),
