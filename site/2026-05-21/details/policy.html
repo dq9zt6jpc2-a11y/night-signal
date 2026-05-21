@@ -45,6 +45,7 @@
         <li><code>published_card_titles</code> はトップページのカード見出しと完全一致させる。カードだけ更新して抽出ログが古い状態を失敗にする。</li>
         <li><code>search_axes</code> はカテゴリごとに3軸以上を必須にする。例: OpenAIなら公式/製品、企業導入/インフラ、安全/規制。投資なら市場価格、資金フロー、金利/マクロ予定。</li>
         <li><code>latest_candidates</code> はカテゴリごとのウォッチ項目をすべて埋める。OpenAIならIPO/資金調達、数学・研究成果、製品更新、企業導入、安全/規制を必ず候補として記録し、採用/保留/除外/新規なしの判断を残す。</li>
+        <li><code>watch_topic_checks</code> は各ウォッチ項目ごとにWeb、SNS/X、YouTubeの確認URLを必須にする。「候補はあるが、どの経路を見たか分からない」状態を公開前に失敗させる。</li>
         <li>公開カードは <code>latest_candidates</code> の <code>decision: adopted</code> からしか作らない。古い材料を採用する場合は、なぜ当日版に残すのかを日本語で <code>freshness_override</code> に明記する。</li>
         <li>URL根拠はカテゴリごとに8件以上、異なるホスト5件以上を最低ラインにする。公式だけ、SNSだけ、単一メディアだけでは通さない。</li>
         <li><code>last_checked_jst</code> は当日の日付で記録する。日付だけ差し替えた過去ログを失敗にする。</li>
@@ -95,9 +96,10 @@
         <li>必須トップレベル項目: contract_version、date、last_checked_jst、categories。</li>
         <li>必須情報源クラス: official、major_media、specialist_media、sns_x、youtube_video、data_numeric、schedule_calendar、counter_search。</li>
         <li>必須判断リスト: adopted、held、excluded、unresolved。</li>
-        <li>必須項目: collection_status、published_card_titles、new_or_changed_items、latest_candidates、no_change_checks、search_axes、search_terms、freshness_check、critical_unresolved。</li>
+        <li>必須項目: collection_status、published_card_titles、new_or_changed_items、latest_candidates、watch_topic_checks、no_change_checks、search_axes、search_terms、freshness_check、critical_unresolved。</li>
         <li><code>new_or_changed_items</code> は公開カードと同じ順番・同じ見出しにし、各項目に日本語概要と参照URLを入れる。参照URLはリンク先詳細ページの原文確認にも含める。</li>
         <li><code>latest_candidates</code> は topic_id、title、source_url、source_published_date、decision、rationale を必須にする。採用候補のURLはリンク先詳細ページの原文確認にも含める。</li>
+        <li><code>watch_topic_checks</code> は topic_id、checked_at_jst、web、sns_x、youtube、candidate_titles、result を必須にする。candidate_titles は同じカテゴリの <code>latest_candidates</code> に存在する見出しだけを許可し、探索証跡と候補判断を切り離さない。</li>
         <li><code>no_change_checks</code> には、Web/SNS/X/YouTubeを見たうえで採用しなかった軸、変化なしと判断した軸、保留した軸をURL付きで残す。</li>
         <li>カテゴリ固有の探索軸を必ず含める。例: アジア経済ならIndiaとVietnam/ASEAN、F1ならHonda/AstonとPU/FIA、ブレックスなら宇都宮/BREXとB.LEAGUE/試合。</li>
         <li>重大未確認リスクが残る場合は公開しない。決算資料、イベント結果、公式発表、固有名詞ニュース、SNSで大きく話題化した件は重大リスクとして扱う。</li>
@@ -108,7 +110,7 @@
       <ul>
         <li><code>python3 scripts/sync_site.py YYYY-MM-DD</code>: 当日版をsiteへ同期する。過去号へのフォールバックは禁止。</li>
         <li><code>python3 scripts/render_detail.py detail.json</code>: 詳細ページを許可された構造だけで生成する。作業見出しや薄い概要は作成時点で失敗させる。</li>
-        <li><code>python3 scripts/coverage_audit.py YYYY-MM-DD</code>: 構造化収集契約に沿って、探索軸、最新候補、情報源の多様性、掲載カードと抽出ログの一致、新規/変化項目の概要と参照先、変化なし確認の証跡を確認する。</li>
+        <li><code>python3 scripts/coverage_audit.py YYYY-MM-DD</code>: 構造化収集契約に沿って、探索軸、ウォッチ項目別のWeb/SNS/X/YouTube証跡、最新候補、情報源の多様性、掲載カードと抽出ログの一致、新規/変化項目の概要と参照先、変化なし確認の証跡を確認する。</li>
         <li><code>python3 scripts/quality_gate.py YYYY-MM-DD</code>: 日付、鮮度、カテゴリ件数、読者向け見出し、カードと詳細ページの整合、通常カードの詳細リンク重複、概要だけの詳細構造、参照リンク数、リンク、coverage-manifest、カテゴリ固有検索軸、詳細ページの前日コピーを検査する。</li>
         <li><code>python3 scripts/pre22_audit.py YYYY-MM-DD</code>: 当日成果物と品質ゲートを公開前に確認する。</li>
         <li>commit/push後に <code>python3 scripts/publication_audit.py YYYY-MM-DD</code> を実行し、未コミット差分、未push、remote不一致、公開URLの日付不一致を失敗扱いにする。</li>

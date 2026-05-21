@@ -1,6 +1,6 @@
 {
-  "contract_version": "2026-05-21.1",
-  "description": "NIGHT SIGNAL daily collection contract. A public issue must prove that every category was searched across stable axes before publication.",
+  "contract_version": "2026-05-21.2",
+  "description": "NIGHT SIGNAL daily collection contract. A public issue must prove that every category and configured watch topic was searched across Web, SNS/X, and YouTube before publication.",
   "source_classes": {
     "official": {
       "min_items": 1,
@@ -55,6 +55,8 @@
   "minimum_search_queries_per_axis": 2,
   "minimum_new_or_changed_items_per_category": 2,
   "minimum_latest_candidates_per_watch_topic": 1,
+  "minimum_watch_topic_checks_per_topic": 1,
+  "required_watch_topic_channels": ["web", "sns_x", "youtube"],
   "maximum_adopted_candidate_source_age_days": 3,
   "minimum_no_change_checks_per_category": 1,
   "categories": [

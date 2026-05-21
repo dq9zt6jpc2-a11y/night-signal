@@ -359,6 +359,100 @@ def validate_latest_candidates(contract: dict, issue_date: str, root_html: str, 
         fail(f"{category} published cards must come from adopted latest_candidates: " + "; ".join(missing_adopted))
 
 
+def validate_watch_topic_checks(contract: dict, issue_date: str, category_config: dict, entry: dict) -> None:
+    category = category_config["label"]
+    watch_topics = category_config.get("watch_topics")
+    if not isinstance(watch_topics, list) or not watch_topics:
+        fail(f"{category} coverage contract missing watch_topics")
+    watch_ids = {topic["id"] for topic in watch_topics if isinstance(topic, dict) and isinstance(topic.get("id"), str)}
+    if len(watch_ids) != len(watch_topics):
+        fail(f"{category} watch_topics are invalid")
+
+    candidates = entry.get("latest_candidates")
+    if not isinstance(candidates, list):
+        fail(f"{category} missing latest_candidates")
+    candidate_titles_by_topic: dict[str, set[str]] = {}
+    for candidate in candidates:
+        if not isinstance(candidate, dict):
+            continue
+        topic_id = candidate.get("topic_id")
+        title = candidate.get("title")
+        if isinstance(topic_id, str) and isinstance(title, str):
+            candidate_titles_by_topic.setdefault(topic_id, set()).add(title)
+
+    required_channels = contract.get("required_watch_topic_channels", ["web", "sns_x", "youtube"])
+    if (
+        not isinstance(required_channels, list)
+        or not required_channels
+        or any(channel not in {"web", "sns_x", "youtube"} for channel in required_channels)
+    ):
+        fail("coverage contract has invalid required_watch_topic_channels")
+
+    checks = entry.get("watch_topic_checks")
+    if not isinstance(checks, list):
+        fail(f"{category} missing watch_topic_checks")
+
+    min_per_topic = int(contract.get("minimum_watch_topic_checks_per_topic", 1))
+    by_topic = {topic_id: 0 for topic_id in watch_ids}
+    for index, check in enumerate(checks, start=1):
+        if not isinstance(check, dict):
+            fail(f"{category} watch_topic_checks[{index}] must be an object")
+        topic_id = check.get("topic_id")
+        if not isinstance(topic_id, str) or topic_id not in watch_ids:
+            fail(f"{category} watch_topic_checks[{index}] topic_id is not configured: {topic_id}")
+        by_topic[topic_id] += 1
+
+        checked_at = check.get("checked_at_jst")
+        if not isinstance(checked_at, str):
+            fail(f"{category} watch_topic_checks[{index}] missing checked_at_jst")
+        try:
+            checked_dt = datetime.fromisoformat(checked_at)
+        except ValueError:
+            fail(f"{category} watch_topic_checks[{index}] checked_at_jst is not ISO-8601: {checked_at}")
+        offset = checked_dt.utcoffset()
+        if offset is None or offset.total_seconds() != 9 * 60 * 60:
+            fail(f"{category} watch_topic_checks[{index}] checked_at_jst must use JST offset: {checked_at}")
+        if checked_dt.strftime("%Y-%m-%d") != issue_date:
+            fail(f"{category} watch_topic_checks[{index}] checked_at_jst date mismatch: {checked_at} != {issue_date}")
+
+        result = check.get("result")
+        if not isinstance(result, str) or len(re.sub(r"\s+", "", result)) < 30:
+            fail(f"{category} watch_topic_checks[{index}] result is too thin")
+        if not has_japanese(result):
+            fail(f"{category} watch_topic_checks[{index}] result must be Japanese")
+
+        titles = check.get("candidate_titles")
+        if not isinstance(titles, list) or not titles or any(not isinstance(title, str) for title in titles):
+            fail(f"{category} watch_topic_checks[{index}] candidate_titles must be a non-empty string list")
+        known_titles_for_topic = candidate_titles_by_topic.get(topic_id, set())
+        unknown_titles = [title for title in titles if title not in known_titles_for_topic]
+        if unknown_titles:
+            fail(
+                f"{category} watch_topic_checks[{index}] candidate_titles must match latest_candidates for same topic: "
+                + "; ".join(unknown_titles)
+            )
+
+        for channel in required_channels:
+            values = check.get(channel)
+            if not isinstance(values, list) or not values or any(not isinstance(value, str) for value in values):
+                fail(f"{category} watch_topic_checks[{index}].{channel} must be a non-empty string list")
+            evidence_urls = urls_in(values)
+            if not evidence_urls:
+                fail(f"{category} watch_topic_checks[{index}].{channel} must include URL evidence")
+            if channel == "web" and not any(
+                not host_matches(url, SNS_HOSTS) and not host_matches(url, YOUTUBE_HOSTS) for url in evidence_urls
+            ):
+                fail(f"{category} watch_topic_checks[{index}].web must include Web URL evidence")
+            if channel == "sns_x":
+                require_channel_url(category, f"watch_topic_checks[{index}].sns_x", values, SNS_HOSTS, "SNS/X")
+            if channel == "youtube":
+                require_channel_url(category, f"watch_topic_checks[{index}].youtube", values, YOUTUBE_HOSTS, "YouTube")
+
+    missing_topics = [topic_id for topic_id, count in sorted(by_topic.items()) if count < min_per_topic]
+    if missing_topics:
+        fail(f"{category} watch_topic_checks missing topics: " + ", ".join(missing_topics))
+
+
 def validate_no_change_checks(contract: dict, category: str, entry: dict) -> None:
     minimum = int(contract.get("minimum_no_change_checks_per_category", 1))
     checks = entry.get("no_change_checks")
@@ -413,6 +507,7 @@ def validate_coverage_contract(issue_date: str, root_html: str, extraction_log_h
         validate_card_manifest_alignment(root_html, category_config, entry)
         validate_new_or_changed_items(contract, issue_date, root_html, category_config, entry)
         validate_latest_candidates(contract, issue_date, root_html, category_config, entry)
+        validate_watch_topic_checks(contract, issue_date, category_config, entry)
         validate_no_change_checks(contract, category, entry)
         validate_search_axes(contract, category_config, entry)
         total_urls, hosts = validate_sources(contract, category, entry)

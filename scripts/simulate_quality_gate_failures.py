@@ -155,6 +155,16 @@ def clear_search_terms_simulations() -> None:
         )
 
 
+def clear_watch_topic_checks_simulations() -> None:
+    categories = ["OpenAI", "SoftBank", "Honda", "F1", "SpaceX", "アジア経済", "宇都宮ブレックス", "投資"]
+    for category in categories:
+        assert_fail(
+            f"{category} missing watch_topic_checks",
+            lambda tmp, c=category: mutate_manifest_entry(tmp, c, lambda entry: entry.pop("watch_topic_checks", None)),
+            f"{category} missing watch_topic_checks",
+        )
+
+
 def main() -> int:
     baseline = copy_fixture()
     assert_pass("baseline current issue", baseline)
@@ -457,6 +467,68 @@ def main() -> int:
     )
 
     assert_fail(
+        "coverage watch topic checks missing",
+        lambda tmp: mutate_manifest_entry(tmp, "OpenAI", lambda entry: entry.pop("watch_topic_checks", None)),
+        "OpenAI missing watch_topic_checks",
+    )
+
+    assert_fail(
+        "coverage watch topic check missing topic",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "OpenAI",
+            lambda entry: entry.update(
+                {
+                    "watch_topic_checks": [
+                        check for check in entry["watch_topic_checks"] if check.get("topic_id") != "ipo_financing"
+                    ]
+                }
+            ),
+        ),
+        "OpenAI watch_topic_checks missing topics: ipo_financing",
+    )
+
+    assert_fail(
+        "coverage watch topic YouTube evidence missing",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "OpenAI",
+            lambda entry: entry["watch_topic_checks"][0].update({"youtube": ["https://example.com/no-youtube"]}),
+        ),
+        "OpenAI watch_topic_checks[1].youtube must include YouTube URL evidence",
+    )
+
+    assert_fail(
+        "coverage watch topic candidate not linked",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "OpenAI",
+            lambda entry: entry["watch_topic_checks"][0].update({"candidate_titles": ["OpenAI 未接続の候補"]}),
+        ),
+        "OpenAI watch_topic_checks[1] candidate_titles must match latest_candidates",
+    )
+
+    assert_fail(
+        "coverage watch topic checked date mismatch",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "OpenAI",
+            lambda entry: entry["watch_topic_checks"][0].update({"checked_at_jst": "2026-05-20T20:45:00+09:00"}),
+        ),
+        "OpenAI watch_topic_checks[1] checked_at_jst date mismatch",
+    )
+
+    assert_fail(
+        "coverage watch topic checked timezone missing",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "OpenAI",
+            lambda entry: entry["watch_topic_checks"][0].update({"checked_at_jst": "2026-05-21T20:45:00"}),
+        ),
+        "OpenAI watch_topic_checks[1] checked_at_jst must use JST offset",
+    )
+
+    assert_fail(
         "coverage adopted latest candidate not published",
         lambda tmp: mutate_manifest_entry(
             tmp,
@@ -512,6 +584,7 @@ def main() -> int:
 
     clear_each_source_class_simulations()
     clear_search_terms_simulations()
+    clear_watch_topic_checks_simulations()
 
     print("ALL QUALITY GATE SIMULATIONS PASSED")
     return 0

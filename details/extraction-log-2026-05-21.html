@@ -20,10 +20,10 @@
         <li>new_or_changed_items と no_change_checks はカテゴリごとに記録し、new_or_changed_itemsのURLは詳細ページの原文確認と重ねた。</li>
       </ul>
       <script type="application/json" id="coverage-manifest">{
-  "contract_version": "2026-05-21.1",
+  "contract_version": "2026-05-21.2",
   "date": "2026-05-21",
   "last_checked_jst": "2026-05-21T20:45:00+09:00",
-  "note": "daily autonomous collection; every category must now record latest_candidates for configured watch_topics, including adopted, held, excluded, and no-fresh-item decisions. Stale adopted items require an explicit Japanese freshness_override.",
+  "note": "daily autonomous collection; every configured watch topic must record Web, SNS/X, and YouTube evidence, candidate titles, and a Japanese decision result before publication. Adopted cards must still come from latest_candidates and stale adopted items require freshness_override.",
   "categories": {
     "OpenAI": {
       "collection_status": "complete",
@@ -167,6 +167,103 @@
           "decision": "no_fresh_item",
           "rationale": "公式SNSと検索結果を確認する対象として残す。IPOと数学成果の方が5月21日の主要変化として優先される。"
         }
+      ],
+      "watch_topic_checks": [
+        {
+          "topic_id": "ipo_financing",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://www.axios.com/2026/05/20/openai-ipo-spacex-musk"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=OpenAI%20ipo%20public%20markets%20listing%20funding%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/OpenAI"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=OpenAI%20ipo%20public%20markets%20listing%20funding%202026",
+            "https://www.youtube.com/@OpenAI"
+          ],
+          "candidate_titles": [
+            "OpenAI、早ければ今週にもIPO書類を非公開提出へ"
+          ],
+          "result": "OpenAIのipo/financingについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「OpenAI、早ければ今週にもIPO書類を非公開提出へ」をlatest_candidatesへ接続した。判断区分はheldで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
+        {
+          "topic_id": "math_research",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://openai.com/index/model-disproves-discrete-geometry-conjecture/"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=OpenAI%20math%20mathematics%20geometry%20proof%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/OpenAI"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=OpenAI%20math%20mathematics%20geometry%20proof%202026",
+            "https://www.youtube.com/@OpenAI"
+          ],
+          "candidate_titles": [
+            "OpenAIモデル、80年未解決の離散幾何予想を反証"
+          ],
+          "result": "OpenAIのmath/researchについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「OpenAIモデル、80年未解決の離散幾何予想を反証」をlatest_candidatesへ接続した。判断区分はheldで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
+        {
+          "topic_id": "product_release",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://help.openai.com/en/articles/10128477-chatgpt-enterprise-edu-release-notes"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=OpenAI%20chatgpt%20api%20model%20codex%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/OpenAI"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=OpenAI%20chatgpt%20api%20model%20codex%202026",
+            "https://www.youtube.com/@OpenAI"
+          ],
+          "candidate_titles": [
+            "Codex、ChatGPTモバイルから長時間タスクを操作可能に"
+          ],
+          "result": "OpenAIのproduct/releaseについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「Codex、ChatGPTモバイルから長時間タスクを操作可能に」をlatest_candidatesへ接続した。判断区分はadoptedで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
+        {
+          "topic_id": "enterprise_infrastructure",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://openai.com/index/dell-codex-enterprise-partnership/"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=OpenAI%20dell%20enterprise%20deployment%20infrastructure%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/OpenAI"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=OpenAI%20dell%20enterprise%20deployment%20infrastructure%202026",
+            "https://www.youtube.com/@OpenAI"
+          ],
+          "candidate_titles": [
+            "OpenAIとDell、Codexを企業のオンプレ環境へ展開"
+          ],
+          "result": "OpenAIのenterprise/infrastructureについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「OpenAIとDell、Codexを企業のオンプレ環境へ展開」をlatest_candidatesへ接続した。判断区分はadoptedで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
+        {
+          "topic_id": "safety_security_regulation",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://openai.com/index/dell-codex-enterprise-partnership/"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=OpenAI%20security%20safety%20policy%20regulation%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/OpenAI"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=OpenAI%20security%20safety%20policy%20regulation%202026",
+            "https://www.youtube.com/@OpenAI"
+          ],
+          "candidate_titles": [
+            "OpenAI安全・規制・供給網の新規重大更新は公開カード化せず"
+          ],
+          "result": "OpenAIのsafety/security/regulationについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「OpenAI安全・規制・供給網の新規重大更新は公開カード化せず」をlatest_candidatesへ接続した。判断区分はno_fresh_itemで、公開採用・保留・新規なしの理由を候補側に残している。"
+        }
       ]
     },
     "SoftBank": {
@@ -302,6 +399,84 @@
           "source_published_date": "2026-05-21",
           "decision": "no_fresh_item",
           "rationale": "IRと資金調達軸を確認したことを残す。採用済み2件より強い当日新規材料は見つからなかった扱い。"
+        }
+      ],
+      "watch_topic_checks": [
+        {
+          "topic_id": "ai_infrastructure",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://www.softbank.jp/en/corp/news/press/sbkk/2026/20260519_01/"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=SoftBank%20ai%20data%20center%20datacenter%20stargate%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/SoftBank"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=SoftBank%20ai%20data%20center%20datacenter%20stargate%202026",
+            "https://www.youtube.com/results?search_query=SoftBank%20SMBC%20Fujitsu%20healthcare"
+          ],
+          "candidate_titles": [
+            "Arm、Stargate、AIデータセンターの新規決定は公開カード化せず"
+          ],
+          "result": "SoftBankのai/infrastructureについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「Arm、Stargate、AIデータセンターの新規決定は公開カード化せず」をlatest_candidatesへ接続した。判断区分はno_fresh_itemで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
+        {
+          "topic_id": "power_battery",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://www.softbank.jp/corp/news/press/sbkk/2026/20260511_01/"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=SoftBank%20battery%20power%20electricity%20energy%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/SoftBank"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=SoftBank%20battery%20power%20electricity%20energy%202026",
+            "https://www.youtube.com/results?search_query=SoftBank%20SMBC%20Fujitsu%20healthcare"
+          ],
+          "candidate_titles": [
+            "SoftBank、堺AIデータセンター電池計画を決算資料で再提示"
+          ],
+          "result": "SoftBankのpower/batteryについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「SoftBank、堺AIデータセンター電池計画を決算資料で再提示」をlatest_candidatesへ接続した。判断区分はadoptedで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
+        {
+          "topic_id": "corporate_ir_financing",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://www.softbank.jp/en/corp/ir/"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=SoftBank%20ir%20earnings%20funding%20debt%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/SoftBank"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=SoftBank%20ir%20earnings%20funding%20debt%202026",
+            "https://www.youtube.com/results?search_query=SoftBank%20SMBC%20Fujitsu%20healthcare"
+          ],
+          "candidate_titles": [
+            "SoftBank IR・資金調達の新規重大更新は公開カード化せず"
+          ],
+          "result": "SoftBankのcorporate/ir/financingについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「SoftBank IR・資金調達の新規重大更新は公開カード化せず」をlatest_candidatesへ接続した。判断区分はno_fresh_itemで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
+        {
+          "topic_id": "domestic_services",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://www.softbank.jp/en/corp/news/press/sbkk/2026/20260519_01/"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=SoftBank%20softbank%20corp%20healthcare%20telecom%20smbc%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/SoftBank"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=SoftBank%20softbank%20corp%20healthcare%20telecom%20smbc%202026",
+            "https://www.youtube.com/results?search_query=SoftBank%20SMBC%20Fujitsu%20healthcare"
+          ],
+          "candidate_titles": [
+            "SoftBank、SMBC・富士通と国産ヘルスケア基盤で提携"
+          ],
+          "result": "SoftBankのdomestic/servicesについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「SoftBank、SMBC・富士通と国産ヘルスケア基盤で提携」をlatest_candidatesへ接続した。判断区分はadoptedで、公開採用・保留・新規なしの理由を候補側に残している。"
         }
       ]
     },
@@ -440,6 +615,84 @@
           "decision": "no_fresh_item",
           "rationale": "地域別生産や在庫の探索軸を確認するための候補。中国販売ほど強い当日材料はない扱い。"
         }
+      ],
+      "watch_topic_checks": [
+        {
+          "topic_id": "earnings_guidance",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://global.honda/en/investors/library/filings/auto_20260514532752/pdfFile.pdf"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=Honda%20earnings%20loss%20guidance%20tariff%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/HondaJP"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=Honda%20earnings%20loss%20guidance%20tariff%202026",
+            "https://www.youtube.com/results?search_query=Honda%202026%20annual%20loss%20EV%20charge"
+          ],
+          "candidate_titles": [
+            "Honda、初の通期赤字はEV費用と関税が主因"
+          ],
+          "result": "Hondaのearnings/guidanceについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「Honda、初の通期赤字はEV費用と関税が主因」をlatest_candidatesへ接続した。判断区分はadoptedで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
+        {
+          "topic_id": "china_sales",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://carnewschina.com/2026/05/12/honda-ends-zr-v-fit-accord-ephev-production-as-april-sales-collapse-48-in-china/"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=Honda%20china%20sales%20cpca%20gasgoo%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/HondaJP"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=Honda%20china%20sales%20cpca%20gasgoo%202026",
+            "https://www.youtube.com/results?search_query=Honda%202026%20annual%20loss%20EV%20charge"
+          ],
+          "candidate_titles": [
+            "Honda中国4月販売48%減、モデル整理報道が重なる"
+          ],
+          "result": "Hondaのchina/salesについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「Honda中国4月販売48%減、モデル整理報道が重なる」をlatest_candidatesへ接続した。判断区分はadoptedで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
+        {
+          "topic_id": "hybrid_ev_strategy",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://www.carscoops.com/2026/05/honda-acura-hybrid-strategy/"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=Honda%20hybrid%20ev%20hev%20battery%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/HondaJP"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=Honda%20hybrid%20ev%20hev%20battery%202026",
+            "https://www.youtube.com/results?search_query=Honda%202026%20annual%20loss%20EV%20charge"
+          ],
+          "candidate_titles": [
+            "Honda、EV縮小後にハイブリッド戦略を前面化"
+          ],
+          "result": "Hondaのhybrid/ev/strategyについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「Honda、EV縮小後にハイブリッド戦略を前面化」をlatest_candidatesへ接続した。判断区分はheldで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
+        {
+          "topic_id": "regional_production",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://global.honda/en/investors/"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=Honda%20production%20inventory%20north%20america%20india%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/HondaJP"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=Honda%20production%20inventory%20north%20america%20india%202026",
+            "https://www.youtube.com/results?search_query=Honda%202026%20annual%20loss%20EV%20charge"
+          ],
+          "candidate_titles": [
+            "Honda地域別生産・在庫の当日重大更新は公開カード化せず"
+          ],
+          "result": "Hondaのregional/productionについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「Honda地域別生産・在庫の当日重大更新は公開カード化せず」をlatest_candidatesへ接続した。判断区分はno_fresh_itemで、公開採用・保留・新規なしの理由を候補側に残している。"
+        }
       ]
     },
     "F1": {
@@ -566,6 +819,65 @@
           "source_published_date": "2026-05-19",
           "decision": "held",
           "rationale": "規則そのものは採用済みカードに含めたが、別カード化するほどの追加材料はないため保留にした。"
+        }
+      ],
+      "watch_topic_checks": [
+        {
+          "topic_id": "race_schedule_results",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://www.formula1.com/en/latest/article/what-is-the-weather-forecast-for-the-2026-canadian-grand-prix.3NijByrfcXjIiWF2O6Y21T"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=F1%20grand%20prix%20schedule%20result%20practice%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/F1"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=F1%20grand%20prix%20schedule%20result%20practice%202026",
+            "https://www.youtube.com/@Formula1"
+          ],
+          "candidate_titles": [
+            "カナダGPはスプリント週末、金曜は雨なし予報で開幕"
+          ],
+          "result": "F1のrace/schedule/resultsについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「カナダGPはスプリント週末、金曜は雨なし予報で開幕」をlatest_candidatesへ接続した。判断区分はadoptedで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
+        {
+          "topic_id": "honda_aston_pu",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://www.motorsport.com/f1/news/fia-tweaks-aduo-regulations-aston-martin-honda/10819071/"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=F1%20honda%20aston%20pu%20power%20unit%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/F1"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=F1%20honda%20aston%20pu%20power%20unit%202026",
+            "https://www.youtube.com/@Formula1"
+          ],
+          "candidate_titles": [
+            "FIAのADUO、Honda/AstonのPU開発余地を左右"
+          ],
+          "result": "F1のhonda/aston/puについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「FIAのADUO、Honda/AstonのPU開発余地を左右」をlatest_candidatesへ接続した。判断区分はadoptedで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
+        {
+          "topic_id": "fia_regulation_development",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://www.fia.com/news/power-ups-how-f1s-additional-development-upgrade-opportunities-will-be-applied-and-whats"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=F1%20fia%20aduo%20regulation%20upgrade%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/F1"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=F1%20fia%20aduo%20regulation%20upgrade%202026",
+            "https://www.youtube.com/@Formula1"
+          ],
+          "candidate_titles": [
+            "FIA ADUO規則の追加更新は公開カード内で扱う"
+          ],
+          "result": "F1のfia/regulation/developmentについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「FIA ADUO規則の追加更新は公開カード内で扱う」をlatest_candidatesへ接続した。判断区分はheldで、公開採用・保留・新規なしの理由を候補側に残している。"
         }
       ]
     },
@@ -696,6 +1008,65 @@
           "decision": "no_fresh_item",
           "rationale": "SpaceXの事業・契約軸も探索対象として残すが、当日の公開カードはStarshipとCRS-34を優先した。"
         }
+      ],
+      "watch_topic_checks": [
+        {
+          "topic_id": "starship_status",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://www.space.com/space-exploration/launches-spacecraft/what-time-is-spacex-starship-v3-launch-starship-flight-12-timeline"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=SpaceX%20starship%20flight%20launch%20faa%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/SpaceX"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=SpaceX%20starship%20flight%20launch%20faa%202026",
+            "https://www.youtube.com/@SpaceX"
+          ],
+          "candidate_titles": [
+            "Starship Flight 12、5月21日にV3初飛行へ"
+          ],
+          "result": "SpaceXのstarship/statusについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「Starship Flight 12、5月21日にV3初飛行へ」をlatest_candidatesへ接続した。判断区分はadoptedで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
+        {
+          "topic_id": "dragon_iss",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://www.nasa.gov/mission/nasa-spacex-crs-34/"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=SpaceX%20dragon%20crs%20iss%20nasa%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/SpaceX"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=SpaceX%20dragon%20crs%20iss%20nasa%202026",
+            "https://www.youtube.com/@SpaceX"
+          ],
+          "candidate_titles": [
+            "CRS-34 Dragon、ISS到着後は実験運用フェーズへ"
+          ],
+          "result": "SpaceXのdragon/issについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「CRS-34 Dragon、ISS到着後は実験運用フェーズへ」をlatest_candidatesへ接続した。判断区分はadoptedで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
+        {
+          "topic_id": "business_contracts",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://www.spacex.com/launches/"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=SpaceX%20starlink%20contract%20ipo%20valuation%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/SpaceX"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=SpaceX%20starlink%20contract%20ipo%20valuation%202026",
+            "https://www.youtube.com/@SpaceX"
+          ],
+          "candidate_titles": [
+            "Starlink・IPO・契約の新規重大更新は公開カード化せず"
+          ],
+          "result": "SpaceXのbusiness/contractsについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「Starlink・IPO・契約の新規重大更新は公開カード化せず」をlatest_candidatesへ接続した。判断区分はno_fresh_itemで、公開採用・保留・新規なしの理由を候補側に残している。"
+        }
       ]
     },
     "アジア経済": {
@@ -823,6 +1194,65 @@
           "source_published_date": "2026-05-21",
           "decision": "no_fresh_item",
           "rationale": "地域横断の政策・為替軸を確認したが、公開カードはインドとベトナムの数値更新を優先した。"
+        }
+      ],
+      "watch_topic_checks": [
+        {
+          "topic_id": "india_macro",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2260251"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=%E3%82%A2%E3%82%B8%E3%82%A2%E7%B5%8C%E6%B8%88%20india%20cpi%20rbi%20pmi%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/RBI"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=%E3%82%A2%E3%82%B8%E3%82%A2%E7%B5%8C%E6%B8%88%20india%20cpi%20rbi%20pmi%202026",
+            "https://www.youtube.com/results?search_query=Vietnam%20IIP%20April%202026"
+          ],
+          "candidate_titles": [
+            "インド4月CPIは3.48%、食品4.20%でも目標圏内"
+          ],
+          "result": "アジア経済のindia/macroについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「インド4月CPIは3.48%、食品4.20%でも目標圏内」をlatest_candidatesへ接続した。判断区分はadoptedで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
+        {
+          "topic_id": "vietnam_macro",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://www.nso.gov.vn/en/data-and-statistics/2026/05/report-on-socio-economic-situation-in-april-and-four-months-of-2026/"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=%E3%82%A2%E3%82%B8%E3%82%A2%E7%B5%8C%E6%B8%88%20vietnam%20iip%20cpi%20fdi%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/RBI"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=%E3%82%A2%E3%82%B8%E3%82%A2%E7%B5%8C%E6%B8%88%20vietnam%20iip%20cpi%20fdi%202026",
+            "https://www.youtube.com/results?search_query=Vietnam%20IIP%20April%202026"
+          ],
+          "candidate_titles": [
+            "ベトナム4月IIPは9.9%増、FDI実行も9.8%増"
+          ],
+          "result": "アジア経済のvietnam/macroについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「ベトナム4月IIPは9.9%増、FDI実行も9.8%増」をlatest_candidatesへ接続した。判断区分はadoptedで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
+        {
+          "topic_id": "regional_policy_markets",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://www.nso.gov.vn/en/data-and-statistics/2026/05/report-on-socio-economic-situation-in-april-and-four-months-of-2026/"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=%E3%82%A2%E3%82%B8%E3%82%A2%E7%B5%8C%E6%B8%88%20asean%20fx%20currency%20policy%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/RBI"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=%E3%82%A2%E3%82%B8%E3%82%A2%E7%B5%8C%E6%B8%88%20asean%20fx%20currency%20policy%202026",
+            "https://www.youtube.com/results?search_query=Vietnam%20IIP%20April%202026"
+          ],
+          "candidate_titles": [
+            "ASEAN為替・政策の新規重大更新は公開カード化せず"
+          ],
+          "result": "アジア経済のregional/policy/marketsについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「ASEAN為替・政策の新規重大更新は公開カード化せず」をlatest_candidatesへ接続した。判断区分はno_fresh_itemで、公開採用・保留・新規なしの理由を候補側に残している。"
         }
       ]
     },
@@ -959,6 +1389,67 @@
           "decision": "no_fresh_item",
           "rationale": "動画と会見の探索軸を確認したことを残す。公開カードは公式契約情報を優先した。"
         }
+      ],
+      "watch_topic_checks": [
+        {
+          "topic_id": "club_roster_staff",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://basketballking.jp/news/japan/20260519/613647.html",
+            "https://www.utsunomiyabrex.com/news/detail/id%3D26516"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=%E5%AE%87%E9%83%BD%E5%AE%AE%E3%83%96%E3%83%AC%E3%83%83%E3%82%AF%E3%82%B9%20brex%20%E5%AE%87%E9%83%BD%E5%AE%AE%20%E5%A5%91%E7%B4%84%20%E9%80%80%E5%9B%A3%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/utsunomiyabrex"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=%E5%AE%87%E9%83%BD%E5%AE%AE%E3%83%96%E3%83%AC%E3%83%83%E3%82%AF%E3%82%B9%20brex%20%E5%AE%87%E9%83%BD%E5%AE%AE%20%E5%A5%91%E7%B4%84%20%E9%80%80%E5%9B%A3%202026",
+            "https://www.youtube.com/@UtsunomiyaBrex"
+          ],
+          "candidate_titles": [
+            "D.J.ニュービル退団、宇都宮ブレックスは得点源を失う",
+            "コロネルHCとジェレット退団でブレックスの骨格が変化"
+          ],
+          "result": "宇都宮ブレックスのclub/roster/staffについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「D.J.ニュービル退団、宇都宮ブレックスは得点源を失う」、「コロネルHCとジェレット退団でブレックスの骨格が変化」をlatest_candidatesへ接続した。判断区分はadoptedで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
+        {
+          "topic_id": "bleague_games_schedule",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://www.bleague.jp/"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=%E5%AE%87%E9%83%BD%E5%AE%AE%E3%83%96%E3%83%AC%E3%83%83%E3%82%AF%E3%82%B9%20b.league%20bleague%20game%20schedule%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/utsunomiyabrex"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=%E5%AE%87%E9%83%BD%E5%AE%AE%E3%83%96%E3%83%AC%E3%83%83%E3%82%AF%E3%82%B9%20b.league%20bleague%20game%20schedule%202026",
+            "https://www.youtube.com/@UtsunomiyaBrex"
+          ],
+          "candidate_titles": [
+            "B.LEAGUE試合日程・結果の追加重大更新は公開カード化せず"
+          ],
+          "result": "宇都宮ブレックスのbleague/games/scheduleについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「B.LEAGUE試合日程・結果の追加重大更新は公開カード化せず」をlatest_candidatesへ接続した。判断区分はno_fresh_itemで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
+        {
+          "topic_id": "media_press_video",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://sports.yahoo.co.jp/contents/19524"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=%E5%AE%87%E9%83%BD%E5%AE%AE%E3%83%96%E3%83%AC%E3%83%83%E3%82%AF%E3%82%B9%20press%20youtube%20interview%20%E4%BC%9A%E8%A6%8B%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/utsunomiyabrex"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=%E5%AE%87%E9%83%BD%E5%AE%AE%E3%83%96%E3%83%AC%E3%83%83%E3%82%AF%E3%82%B9%20press%20youtube%20interview%20%E4%BC%9A%E8%A6%8B%202026",
+            "https://www.youtube.com/@UtsunomiyaBrex"
+          ],
+          "candidate_titles": [
+            "会見・動画の追加重大更新は公開カード化せず"
+          ],
+          "result": "宇都宮ブレックスのmedia/press/videoについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「会見・動画の追加重大更新は公開カード化せず」をlatest_candidatesへ接続した。判断区分はno_fresh_itemで、公開採用・保留・新規なしの理由を候補側に残している。"
+        }
       ]
     },
     "投資": {
@@ -1086,6 +1577,65 @@
           "source_published_date": "2026-05-21",
           "decision": "no_fresh_item",
           "rationale": "マクロ予定と金利軸は確認対象として維持したが、公開カードは米株下落とICIフローを優先した。"
+        }
+      ],
+      "watch_topic_checks": [
+        {
+          "topic_id": "market_prices",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://apnews.com/article/e47b04bcb52eda2411691e062ce60a72"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=%E6%8A%95%E8%B3%87%20stock%20market%20s%26p%20nasdaq%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/NYSE"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=%E6%8A%95%E8%B3%87%20stock%20market%20s%26p%20nasdaq%202026",
+            "https://www.youtube.com/results?search_query=AP%20markets%20May%2019%202026%20S%26P%20500"
+          ],
+          "candidate_titles": [
+            "米株5月19日、S&P 500は0.7%安で3日続落"
+          ],
+          "result": "投資のmarket/pricesについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「米株5月19日、S&P 500は0.7%安で3日続落」をlatest_candidatesへ接続した。判断区分はadoptedで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
+        {
+          "topic_id": "fund_flows",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://www.ici.org/research/stats/combined_flows"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=%E6%8A%95%E8%B3%87%20etf%20fund%20flows%20ici%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/NYSE"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=%E6%8A%95%E8%B3%87%20etf%20fund%20flows%20ici%202026",
+            "https://www.youtube.com/results?search_query=AP%20markets%20May%2019%202026%20S%26P%20500"
+          ],
+          "candidate_titles": [
+            "ICI週次、ETF発行超が投信流出を吸収し88.5億ドル流入"
+          ],
+          "result": "投資のfund/flowsについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「ICI週次、ETF発行超が投信流出を吸収し88.5億ドル流入」をlatest_candidatesへ接続した。判断区分はadoptedで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
+        {
+          "topic_id": "macro_rates_calendar",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://www.cmegroup.com/market-data/economic-calendar.html"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=%E6%8A%95%E8%B3%87%20fed%20rate%20yield%20oil%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/NYSE"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=%E6%8A%95%E8%B3%87%20fed%20rate%20yield%20oil%202026",
+            "https://www.youtube.com/results?search_query=AP%20markets%20May%2019%202026%20S%26P%20500"
+          ],
+          "candidate_titles": [
+            "金利・原油・CPI予定の追加重大更新は公開カード化せず"
+          ],
+          "result": "投資のmacro/rates/calendarについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「金利・原油・CPI予定の追加重大更新は公開カード化せず」をlatest_candidatesへ接続した。判断区分はno_fresh_itemで、公開採用・保留・新規なしの理由を候補側に残している。"
         }
       ]
     }
