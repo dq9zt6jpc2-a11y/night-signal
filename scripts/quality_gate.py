@@ -12,7 +12,7 @@ from urllib.parse import unquote
 from datetime import datetime
 from pathlib import Path
 
-from coverage_audit import load_contract, validate_coverage_contract
+from coverage_audit import effective_on_or_after, load_contract, validate_coverage_contract
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -189,7 +189,7 @@ DETAIL_FORBIDDEN_SECTION_HEADINGS = [
     "今回の要点",
     "一次で押さえる点",
 ]
-MIN_SUMMARY_LEAD_CHARS = 180
+LEGACY_MIN_SUMMARY_LEAD_CHARS = 180
 
 READER_PROCESS_LEAK_TERMS = [
     "今日の再抽出",
@@ -546,6 +546,10 @@ def validate_detail_scope(issue_date: str, root_html: str, dated_html: str) -> N
 
 
 def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) -> None:
+    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
+    min_summary_chars = LEGACY_MIN_SUMMARY_LEAD_CHARS
+    if effective_on_or_after(COVERAGE_CONTRACT, "summary_quality_effective_date", issue_dt):
+        min_summary_chars = int(COVERAGE_CONTRACT.get("minimum_detail_summary_chars", 240))
     linked = linked_detail_names(issue_date, root_html, dated_html)
     excluded = {"policy.html", f"extraction-log-{issue_date}.html"}
     weak = []
@@ -578,7 +582,7 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
         else:
             summary_text = visible_text(summary_match.group(1))
             summary_text = re.sub(r"\s+", "", summary_text)
-            if len(summary_text) < MIN_SUMMARY_LEAD_CHARS:
+            if len(summary_text) < min_summary_chars:
                 weak_summaries.append(f"{name}: {len(summary_text)} chars")
         source_match = re.search(r'<div class="source">(.*?)</div>', html, flags=re.S)
         if summary_match and source_match:

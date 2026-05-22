@@ -16,13 +16,15 @@ from __future__ import annotations
 import html
 import json
 import sys
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
 DETAILS = ROOT / "details"
-MIN_SUMMARY_CHARS = 180
+CONFIG_PATH = ROOT / "config" / "night_signal_coverage.json"
+LEGACY_MIN_SUMMARY_CHARS = 180
 MAX_SOURCE_LINKS = 3
 FORBIDDEN_TEXT = [
     "チェック観点",
@@ -59,6 +61,25 @@ FORBIDDEN_TEXT = [
 def fail(message: str) -> None:
     print(f"DETAIL RENDER FAILED: {message}", file=sys.stderr)
     raise SystemExit(1)
+
+
+def minimum_summary_chars(issue_date: str) -> int:
+    try:
+        contract = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return LEGACY_MIN_SUMMARY_CHARS
+
+    effective_value = contract.get("summary_quality_effective_date")
+    if not isinstance(effective_value, str):
+        return LEGACY_MIN_SUMMARY_CHARS
+    try:
+        issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
+        effective_dt = datetime.strptime(effective_value, "%Y-%m-%d").date()
+    except ValueError:
+        return LEGACY_MIN_SUMMARY_CHARS
+    if issue_dt < effective_dt:
+        return LEGACY_MIN_SUMMARY_CHARS
+    return int(contract.get("minimum_detail_summary_chars", LEGACY_MIN_SUMMARY_CHARS))
 
 
 def required_str(data: dict[str, Any], key: str) -> str:
@@ -114,7 +135,8 @@ def render(data: dict[str, Any]) -> str:
     ]:
         reject_forbidden(label, text)
 
-    if len(summary.replace(" ", "").replace("\n", "")) < MIN_SUMMARY_CHARS:
+    min_summary_chars = minimum_summary_chars(issue_date)
+    if len(summary.replace(" ", "").replace("\n", "")) < min_summary_chars:
         fail(f"summary is too thin: {len(summary)} chars")
 
     source_links = render_sources(sources)

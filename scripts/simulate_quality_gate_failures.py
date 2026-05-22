@@ -394,6 +394,20 @@ def main() -> int:
     )
 
     assert_fail(
+        "strict detail summary too thin",
+        lambda tmp: mutate_contract(
+            tmp,
+            lambda contract: contract.update(
+                {
+                    "summary_quality_effective_date": ISSUE_DATE,
+                    "minimum_new_or_changed_summary_chars": 60,
+                }
+            ),
+        ),
+        "detail summaries are too thin",
+    )
+
+    assert_fail(
         "missing category section",
         lambda tmp: mutate_root_and_dated(tmp, remove_investment_section_once),
         "missing category sections",
@@ -506,6 +520,41 @@ def main() -> int:
             ],
         ),
         "summary must be Japanese",
+    )
+
+    assert_fail(
+        "coverage strict new item summary too thin",
+        lambda tmp: [
+            mutate_contract(tmp, lambda contract: contract.update({"summary_quality_effective_date": ISSUE_DATE})),
+            mutate_manifest(
+                tmp,
+                "OpenAI",
+                "new_or_changed_items",
+                [
+                    {
+                        "title": "OpenAIモデル、80年未解決の離散幾何予想を反証",
+                        "summary": "OpenAIモデルが離散幾何の長年の予想を反証した。研究力の評価材料になる。",
+                        "sources": ["https://openai.com/index/model-disproves-discrete-geometry-conjecture/"],
+                    },
+                    {
+                        "title": "OpenAI、早ければ今週にもIPO書類を非公開提出へ",
+                        "summary": "OpenAIのIPO観測が報じられ、資本市場イベントとして注目される。",
+                        "sources": ["https://www.axios.com/2026/05/20/openai-ipo-spacex-musk"],
+                    },
+                    {
+                        "title": "OpenAIとDell、Codexを企業のオンプレ環境へ展開",
+                        "summary": "OpenAIとDellはCodexを企業のオンプレ環境へ広げる提携を発表した。",
+                        "sources": ["https://openai.com/index/dell-codex-enterprise-partnership/"],
+                    },
+                    {
+                        "title": "Codex、ChatGPTモバイルから長時間タスクを操作可能に",
+                        "summary": "CodexがChatGPTモバイルから操作できるようになった。",
+                        "sources": ["https://help.openai.com/en/articles/10128477-chatgpt-enterprise-edu-release-notes"],
+                    },
+                ],
+            ),
+        ],
+        "OpenAI new_or_changed_items[1] summary is too thin",
     )
 
     assert_fail(
@@ -789,6 +838,17 @@ def main() -> int:
             ),
         ),
         "fresh latest candidate was deferred instead of resolved",
+    )
+
+    assert_fail(
+        "coverage fresh non-adopted candidate missing reason class",
+        lambda tmp: mutate_contract(
+            tmp,
+            lambda contract: contract.update(
+                {"fresh_non_adopted_reason_required_effective_date": ISSUE_DATE}
+            ),
+        ),
+        "fresh non-adopted latest candidate missing non_adoption_reason_class",
     )
 
     assert_fail(

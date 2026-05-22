@@ -63,6 +63,19 @@ def load_contract() -> dict:
         fail(f"coverage contract JSON is invalid: {exc}")
 
 
+def effective_on_or_after(contract: dict, key: str, issue_dt) -> bool:
+    value = contract.get(key)
+    if value is None:
+        return False
+    if not isinstance(value, str):
+        fail(f"coverage contract {key} must be YYYY-MM-DD")
+    try:
+        effective_dt = datetime.strptime(value, "%Y-%m-%d").date()
+    except ValueError:
+        fail(f"coverage contract {key} must be YYYY-MM-DD")
+    return issue_dt >= effective_dt
+
+
 def extract_manifest(extraction_log_html: str) -> dict:
     match = re.search(
         r'<script type="application/json" id="coverage-manifest">(.*?)</script>',
@@ -271,6 +284,10 @@ def validate_new_or_changed_items(contract: dict, issue_date: str, root_html: st
     detail_by_title = card_detail_by_title(root_html, category_config)
     items = entry.get("new_or_changed_items")
     minimum = int(contract.get("minimum_new_or_changed_items_per_category", 1))
+    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
+    min_summary_chars = 60
+    if effective_on_or_after(contract, "summary_quality_effective_date", issue_dt):
+        min_summary_chars = int(contract.get("minimum_new_or_changed_summary_chars", 120))
     if not isinstance(items, list) or len(items) < minimum:
         fail(f"{category} needs at least {minimum} new_or_changed_items")
 
@@ -283,7 +300,7 @@ def validate_new_or_changed_items(contract: dict, issue_date: str, root_html: st
         sources = item.get("sources")
         if not isinstance(title, str) or title not in expected_titles:
             fail(f"{category} new_or_changed_items[{index}] title must match a published card")
-        if not isinstance(summary, str) or len(re.sub(r"\s+", "", summary)) < 60:
+        if not isinstance(summary, str) or len(re.sub(r"\s+", "", summary)) < min_summary_chars:
             fail(f"{category} new_or_changed_items[{index}] summary is too thin")
         if not isinstance(summary, str) or not has_japanese(summary):
             fail(f"{category} new_or_changed_items[{index}] summary must be Japanese")
@@ -319,16 +336,17 @@ def validate_latest_candidates(contract: dict, issue_date: str, root_html: str, 
 
     issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
     max_age = int(contract.get("maximum_adopted_candidate_source_age_days", 3))
-    strict_effective_value = contract.get("strict_adopted_candidate_source_age_effective_date")
-    strict_effective_dt = None
-    if strict_effective_value is not None:
-        if not isinstance(strict_effective_value, str):
-            fail("coverage contract strict_adopted_candidate_source_age_effective_date must be YYYY-MM-DD")
-        try:
-            strict_effective_dt = datetime.strptime(strict_effective_value, "%Y-%m-%d").date()
-        except ValueError:
-            fail("coverage contract strict_adopted_candidate_source_age_effective_date must be YYYY-MM-DD")
-    strict_source_age_applies = strict_effective_dt is not None and issue_dt >= strict_effective_dt
+    strict_source_age_applies = effective_on_or_after(
+        contract, "strict_adopted_candidate_source_age_effective_date", issue_dt
+    )
+    fresh_reason_applies = effective_on_or_after(
+        contract, "fresh_non_adopted_reason_required_effective_date", issue_dt
+    )
+    allowed_non_adoption_reasons = contract.get("allowed_non_adoption_reason_classes", [])
+    if not isinstance(allowed_non_adoption_reasons, list) or any(
+        not isinstance(item, str) for item in allowed_non_adoption_reasons
+    ):
+        fail("coverage contract allowed_non_adoption_reason_classes must be a string list")
     min_per_topic = int(contract.get("minimum_latest_candidates_per_watch_topic", 1))
     by_topic = {topic_id: 0 for topic_id in watch_ids}
     adopted_titles: list[str] = []
@@ -366,6 +384,13 @@ def validate_latest_candidates(contract: dict, issue_date: str, root_html: str, 
         age = (issue_dt - candidate_dt).days
         if decision == "held" and age <= max_age and DEFERRED_PUBLISHING_RE.search(rationale):
             fail(f"{category} fresh latest candidate was deferred instead of resolved: {title}")
+        if decision in {"held", "excluded", "no_fresh_item"} and age <= max_age and fresh_reason_applies:
+            reason_class = candidate.get("non_adoption_reason_class")
+            if reason_class not in allowed_non_adoption_reasons:
+                fail(
+                    f"{category} fresh non-adopted latest candidate missing non_adoption_reason_class: "
+                    f"{title}"
+                )
         if decision == "adopted":
             if title not in expected_titles:
                 fail(f"{category} adopted latest candidate is not published as a card: {title}")
