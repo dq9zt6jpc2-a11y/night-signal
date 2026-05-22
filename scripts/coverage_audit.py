@@ -502,6 +502,37 @@ def validate_collected_items(contract: dict, issue_date: str, category_config: d
         fail(f"{category} collected_items missing latest candidate sources: " + "; ".join(title for _, title, _ in missing))
 
 
+def validate_search_sweep(contract: dict, category: str, index: int, check: dict) -> None:
+    sweep = check.get("search_sweep")
+    if not isinstance(sweep, dict):
+        fail(f"{category} watch_topic_checks[{index}] missing search_sweep")
+
+    min_queries = int(contract.get("minimum_search_sweep_queries_per_watch_topic", 1))
+    queries = sweep.get("queries")
+    if not isinstance(queries, list) or len(queries) < min_queries:
+        fail(f"{category} watch_topic_checks[{index}].search_sweep needs at least {min_queries} queries")
+    for query_index, query in enumerate(queries, start=1):
+        if not isinstance(query, str) or len(query.strip()) < 8:
+            fail(f"{category} watch_topic_checks[{index}].search_sweep.queries[{query_index}] is too weak")
+        if urls_in([query]):
+            fail(f"{category} watch_topic_checks[{index}].search_sweep.queries[{query_index}] must be query text, not a URL")
+
+    allowed_results = contract.get("allowed_search_sweep_results", [])
+    if not isinstance(allowed_results, list) or any(not isinstance(item, str) for item in allowed_results):
+        fail("coverage contract allowed_search_sweep_results must be a string list")
+    result = sweep.get("result")
+    if result not in allowed_results:
+        fail(f"{category} watch_topic_checks[{index}].search_sweep result is invalid: {result}")
+
+    selection_reason = sweep.get("selection_reason")
+    if (
+        not isinstance(selection_reason, str)
+        or len(re.sub(r"\s+", "", selection_reason)) < 35
+        or not has_japanese(selection_reason)
+    ):
+        fail(f"{category} watch_topic_checks[{index}].search_sweep selection_reason must be concrete Japanese text")
+
+
 def validate_watch_topic_checks(contract: dict, issue_date: str, category_config: dict, entry: dict) -> None:
     category = category_config["label"]
     watch_topics = category_config.get("watch_topics")
@@ -546,6 +577,8 @@ def validate_watch_topic_checks(contract: dict, issue_date: str, category_config
     min_paths = int(contract.get("minimum_investigation_paths_per_watch_topic", 0))
     min_hypotheses = int(contract.get("minimum_investigation_hypotheses_per_watch_topic", 0))
     min_window_hours = int(contract.get("minimum_investigation_time_window_hours", 0))
+    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
+    search_sweep_required = effective_on_or_after(contract, "search_sweep_required_effective_date", issue_dt)
     by_topic = {topic_id: 0 for topic_id in watch_ids}
     for index, check in enumerate(checks, start=1):
         if not isinstance(check, dict):
@@ -661,6 +694,9 @@ def validate_watch_topic_checks(contract: dict, issue_date: str, category_config
         delta_basis = check.get("delta_basis")
         if not isinstance(delta_basis, str) or len(re.sub(r"\s+", "", delta_basis)) < 30 or not has_japanese(delta_basis):
             fail(f"{category} watch_topic_checks[{index}] delta_basis must be concrete Japanese text")
+
+        if search_sweep_required:
+            validate_search_sweep(contract, category, index, check)
 
         titles = check.get("candidate_titles")
         if not isinstance(titles, list) or not titles or any(not isinstance(title, str) for title in titles):

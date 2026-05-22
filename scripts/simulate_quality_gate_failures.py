@@ -731,6 +731,39 @@ def main() -> int:
     )
 
     assert_fail(
+        "coverage search sweep missing",
+        lambda tmp: mutate_contract(
+            tmp,
+            lambda contract: contract.update({"search_sweep_required_effective_date": ISSUE_DATE}),
+        ),
+        "OpenAI watch_topic_checks[1] missing search_sweep",
+    )
+
+    assert_fail(
+        "coverage search sweep query URL rejected",
+        lambda tmp: [
+            mutate_contract(tmp, lambda contract: contract.update({"search_sweep_required_effective_date": ISSUE_DATE})),
+            mutate_manifest_entry(
+                tmp,
+                "OpenAI",
+                lambda entry: entry["watch_topic_checks"][0].update(
+                    {
+                        "search_sweep": {
+                            "queries": [
+                                "https://www.google.com/search?q=OpenAI+latest",
+                                "OpenAI IPO mathematics Codex latest 2026",
+                            ],
+                            "result": "covered_by_existing_candidate",
+                            "selection_reason": "検索結果ページそのものを根拠にしてしまう失敗例を検出するための日本語理由です。",
+                        }
+                    }
+                ),
+            ),
+        ],
+        "search_sweep.queries[1] must be query text, not a URL",
+    )
+
+    assert_fail(
         "coverage investigation paths missing",
         lambda tmp: mutate_manifest_entry(
             tmp,

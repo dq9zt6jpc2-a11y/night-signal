@@ -1,5 +1,5 @@
 {
-  "version": "2026-05-22.8",
+  "version": "2026-05-22.9",
   "description": "Persistent recurrence-prevention inventory for NIGHT SIGNAL. A user-reported failure is not considered fixed unless it is represented here and enforced by scripts/guardrail_inventory.py.",
   "guards": [
     {
@@ -134,6 +134,34 @@
         "coverage strict new item summary too thin",
         "strict detail summary too thin",
         "coverage fresh non-adopted candidate missing reason class"
+      ]
+    },
+    {
+      "id": "search_sweep_selection_required",
+      "description": "Every watch topic must record search queries and a selection judgment without publishing raw search-result URLs.",
+      "contract": {
+        "search_sweep_required_effective_date": "2026-05-22",
+        "minimum_search_sweep_queries_per_watch_topic": 2,
+        "allowed_search_sweep_results": [
+          "new_update_found",
+          "covered_by_existing_candidate",
+          "no_new_update"
+        ]
+      },
+      "required_audit_terms": [
+        "validate_search_sweep",
+        "search_sweep",
+        "selection_reason",
+        "must be query text, not a URL"
+      ],
+      "required_policy_terms": [
+        "search_sweep",
+        "検索結果URLは公開情報として載せず",
+        "重要情報を拾ったか"
+      ],
+      "required_simulation_terms": [
+        "coverage search sweep missing",
+        "coverage search sweep query URL rejected"
       ]
     },
     {
