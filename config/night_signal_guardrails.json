@@ -1,12 +1,16 @@
 {
-  "version": "2026-05-22.1",
+  "version": "2026-05-22.2",
   "description": "Persistent recurrence-prevention inventory for NIGHT SIGNAL. A user-reported failure is not considered fixed unless it is represented here and enforced by scripts/guardrail_inventory.py.",
   "guards": [
     {
       "id": "cross_channel_watch_topic_evidence",
       "description": "Every configured watch topic must prove Web, SNS/X, and YouTube collection before publication.",
       "contract": {
-        "required_watch_topic_channels": ["web", "sns_x", "youtube"],
+        "required_watch_topic_channels": [
+          "web",
+          "sns_x",
+          "youtube"
+        ],
         "minimum_watch_topic_checks_per_topic": 1
       },
       "required_audit_terms": [
@@ -38,8 +42,12 @@
       "id": "softbank_market_price_nav",
       "description": "SoftBank Group must be monitored as a listed market asset, not only as business/IR news.",
       "category": "SoftBank",
-      "required_axes": ["market_price_nav"],
-      "required_watch_topics": ["market_price_nav"],
+      "required_axes": [
+        "market_price_nav"
+      ],
+      "required_watch_topics": [
+        "market_price_nav"
+      ],
       "required_terms": [
         "9984",
         "stock",
@@ -60,10 +68,46 @@
       ]
     },
     {
+      "id": "listed_company_market_signals",
+      "description": "Every listed-company category must monitor stock-price dislocations and market reaction, not only business headlines.",
+      "category_class": "listed_company_market_sensitive",
+      "required_any_axes": [
+        "market_price_nav",
+        "market_price_reaction"
+      ],
+      "required_any_watch_topics": [
+        "market_price_nav",
+        "market_price_reaction"
+      ],
+      "required_terms": [
+        "stock",
+        "shares",
+        "株価",
+        "ストップ高",
+        "ストップ安",
+        "急騰",
+        "急落"
+      ],
+      "required_policy_terms": [
+        "上場企業カテゴリ",
+        "株価急変",
+        "ストップ高/ストップ安"
+      ],
+      "required_simulation_terms": [
+        "guardrail catches removed listed-company market class",
+        "coverage Honda market reaction watch topic missing"
+      ]
+    },
+    {
       "id": "openai_capital_and_research",
       "description": "OpenAI monitoring must include capital-market and research breakthroughs, not only product/enterprise updates.",
       "category": "OpenAI",
-      "required_watch_topics": ["ipo_financing", "math_research", "product_release", "enterprise_infrastructure"],
+      "required_watch_topics": [
+        "ipo_financing",
+        "math_research",
+        "product_release",
+        "enterprise_infrastructure"
+      ],
       "required_terms": [
         "ipo",
         "listing",

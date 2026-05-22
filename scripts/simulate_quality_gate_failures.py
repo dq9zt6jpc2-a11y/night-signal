@@ -231,7 +231,20 @@ def main() -> int:
                 if category.get("label") == "SoftBank"
             ],
         ),
-        "softbank_market_price_nav missing category axes: market_price_nav",
+        "softbank_market_price_nav SoftBank missing category axes: market_price_nav",
+    )
+
+    assert_guardrail_fail(
+        "guardrail catches removed listed-company market class",
+        lambda tmp: mutate_contract(
+            tmp,
+            lambda contract: [
+                category.update({"risk_classes": []})
+                for category in contract["categories"]
+                if category.get("label") in {"SoftBank", "Honda"}
+            ],
+        ),
+        "guardrail category_class has no categories: listed_company_market_sensitive",
     )
 
     assert_fail(
@@ -549,6 +562,24 @@ def main() -> int:
     )
 
     assert_fail(
+        "coverage Honda market reaction watch topic missing",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "Honda",
+            lambda entry: entry.update(
+                {
+                    "latest_candidates": [
+                        candidate
+                        for candidate in entry["latest_candidates"]
+                        if candidate.get("topic_id") != "market_price_reaction"
+                    ]
+                }
+            ),
+        ),
+        "Honda latest_candidates missing watch topics: market_price_reaction",
+    )
+
+    assert_fail(
         "coverage watch topic checks missing",
         lambda tmp: mutate_manifest_entry(tmp, "OpenAI", lambda entry: entry.pop("watch_topic_checks", None)),
         "OpenAI missing watch_topic_checks",
@@ -685,6 +716,16 @@ def main() -> int:
             lambda entry: entry["search_axes"].pop("market_price_nav", None),
         ),
         "SoftBank search_axis market_price_nav",
+    )
+
+    assert_fail(
+        "Honda market reaction search axis missing",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "Honda",
+            lambda entry: entry["search_axes"].pop("market_price_reaction", None),
+        ),
+        "Honda search_axis market_price_reaction",
     )
 
     assert_fail(

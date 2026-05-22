@@ -94,6 +94,53 @@ def category_terms(category: dict[str, Any]) -> str:
     return "\n".join(terms)
 
 
+def categories_by_class(contract: dict[str, Any], class_name: str) -> list[dict[str, Any]]:
+    categories = contract.get("categories")
+    if not isinstance(categories, list):
+        fail("coverage contract missing categories")
+    matched = []
+    for category in categories:
+        if not isinstance(category, dict):
+            continue
+        classes = category.get("risk_classes", [])
+        if isinstance(classes, list) and class_name in classes:
+            matched.append(category)
+    if not matched:
+        fail(f"guardrail category_class has no categories: {class_name}")
+    return matched
+
+
+def validate_category_requirements(category: dict[str, Any], guard_id: str, guard: dict[str, Any]) -> None:
+    label = category.get("label", "<unknown>")
+    required_axes = guard.get("required_axes", [])
+    required_topics = guard.get("required_watch_topics", [])
+    required_any_axes = guard.get("required_any_axes", [])
+    required_any_topics = guard.get("required_any_watch_topics", [])
+    required_terms = guard.get("required_terms", [])
+    for key, value in [
+        ("required_axes", required_axes),
+        ("required_watch_topics", required_topics),
+        ("required_any_axes", required_any_axes),
+        ("required_any_watch_topics", required_any_topics),
+    ]:
+        if not isinstance(value, list) or any(not isinstance(item, str) for item in value):
+            fail(f"{guard_id} {key} must be a string list")
+
+    axis_ids = ids_in(category, "axes", guard_id)
+    topic_ids = ids_in(category, "watch_topics", guard_id)
+    missing_axes = sorted(set(required_axes) - axis_ids)
+    if missing_axes:
+        fail(f"{guard_id} {label} missing category axes: " + ", ".join(missing_axes))
+    missing_topics = sorted(set(required_topics) - topic_ids)
+    if missing_topics:
+        fail(f"{guard_id} {label} missing watch topics: " + ", ".join(missing_topics))
+    if required_any_axes and not set(required_any_axes).intersection(axis_ids):
+        fail(f"{guard_id} {label} missing any category axis: " + ", ".join(required_any_axes))
+    if required_any_topics and not set(required_any_topics).intersection(topic_ids):
+        fail(f"{guard_id} {label} missing any watch topic: " + ", ".join(required_any_topics))
+    require_terms(f"{label} category terms", guard_id, category_terms(category), required_terms)
+
+
 def validate_contract_values(contract: dict[str, Any], guard_id: str, expected: dict[str, Any]) -> None:
     if not isinstance(expected, dict):
         fail(f"{guard_id} contract must be an object")
@@ -116,21 +163,14 @@ def validate_guard(contract: dict[str, Any], guard: dict[str, Any], texts: dict[
     if category_label is not None:
         if not isinstance(category_label, str):
             fail(f"{guard_id} category must be a string")
-        category = category_by_label(contract, category_label)
-        required_axes = guard.get("required_axes", [])
-        required_topics = guard.get("required_watch_topics", [])
-        required_terms = guard.get("required_terms", [])
-        if not isinstance(required_axes, list) or any(not isinstance(item, str) for item in required_axes):
-            fail(f"{guard_id} required_axes must be a string list")
-        if not isinstance(required_topics, list) or any(not isinstance(item, str) for item in required_topics):
-            fail(f"{guard_id} required_watch_topics must be a string list")
-        missing_axes = sorted(set(required_axes) - ids_in(category, "axes", guard_id))
-        if missing_axes:
-            fail(f"{guard_id} missing category axes: " + ", ".join(missing_axes))
-        missing_topics = sorted(set(required_topics) - ids_in(category, "watch_topics", guard_id))
-        if missing_topics:
-            fail(f"{guard_id} missing watch topics: " + ", ".join(missing_topics))
-        require_terms("category terms", guard_id, category_terms(category), required_terms)
+        validate_category_requirements(category_by_label(contract, category_label), guard_id, guard)
+
+    category_class = guard.get("category_class")
+    if category_class is not None:
+        if not isinstance(category_class, str):
+            fail(f"{guard_id} category_class must be a string")
+        for category in categories_by_class(contract, category_class):
+            validate_category_requirements(category, guard_id, guard)
 
     require_terms("policy terms", guard_id, texts["policy"], guard.get("required_policy_terms", []))
     require_terms("audit terms", guard_id, texts["audit"], guard.get("required_audit_terms", []))

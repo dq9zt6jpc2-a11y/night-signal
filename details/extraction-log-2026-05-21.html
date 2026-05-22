@@ -20,7 +20,7 @@
         <li>new_or_changed_items と no_change_checks はカテゴリごとに記録し、new_or_changed_itemsのURLは詳細ページの原文確認と重ねた。</li>
       </ul>
       <script type="application/json" id="coverage-manifest">{
-  "contract_version": "2026-05-21.3",
+  "contract_version": "2026-05-22.1",
   "date": "2026-05-21",
   "last_checked_jst": "2026-05-21T20:45:00+09:00",
   "note": "daily autonomous collection; every configured watch topic must record Web, SNS/X, and YouTube evidence, candidate titles, and a Japanese decision result before publication. Adopted cards must still come from latest_candidates and stale adopted items require freshness_override.",
@@ -567,6 +567,10 @@
         "ev_battery_mobility": [
           "Honda EV strategy reassessment 2026 losses",
           "Honda HEV EV battery mobility strategy May 2026"
+        ],
+        "market_price_reaction": [
+          "Honda 7267 HMC stock market reaction EV charge tariff May 2026",
+          "ホンダ 7267 株価 急騰 急落 ストップ高 ストップ安 EV費用 関税 2026年5月"
         ]
       },
       "search_terms": [
@@ -575,7 +579,16 @@
         "FY2026 annual loss",
         "EV charge",
         "China April sales",
-        "関税"
+        "関税",
+        "7267",
+        "HMC",
+        "Honda stock",
+        "株価",
+        "市場反応",
+        "ストップ高",
+        "ストップ安",
+        "急騰",
+        "急落"
       ],
       "new_or_changed_items": [
         {
@@ -603,11 +616,12 @@
       "no_change_checks": [
         {
           "axis": "IR / China / SNS / YouTube",
-          "result": "Honda公式IR、主要報道、専門媒体、X、YouTube検索を横断し、5月21日版では通期赤字と中国販売減を継続して主要変化項目にした。",
+          "result": "Honda公式、決算資料、株価・市場反応、主要報道、X、YouTube検索を確認し、FY2026赤字、HV戦略、中国販売減を主要な変化項目として採用した。",
           "sources": [
             "https://x.com/HondaJP",
             "https://www.youtube.com/results?search_query=Honda%20FY2026%20annual%20loss%20EV%20charge",
-            "https://global.honda/en/investors/library/financialresult/"
+            "https://global.honda/en/investors/library/financialresult/",
+            "https://www.investing.com/news/stock-market-news/honda-books-first-annual-loss-hit-by-hefty-ev-charge-4687103"
           ]
         }
       ],
@@ -659,6 +673,14 @@
       "critical_unresolved": [],
       "latest_candidates": [
         {
+          "topic_id": "market_price_reaction",
+          "title": "Honda株価・市場反応の当日重大更新は公開カード化せず",
+          "source_url": "https://www.investing.com/news/stock-market-news/honda-books-first-annual-loss-hit-by-hefty-ev-charge-4687103",
+          "source_published_date": "2026-05-21",
+          "decision": "no_fresh_item",
+          "rationale": "決算赤字とEV費用への市場反応を株価軸で確認したが、5月21日版では赤字・HV戦略・中国販売の方が読者向けカードとして優先される。"
+        },
+        {
           "topic_id": "earnings_guidance",
           "title": "Honda、初の通期赤字はEV費用と関税が主因",
           "source_url": "https://global.honda/en/investors/library/filings/auto_20260514532752/pdfFile.pdf",
@@ -694,6 +716,25 @@
         }
       ],
       "watch_topic_checks": [
+        {
+          "topic_id": "market_price_reaction",
+          "checked_at_jst": "2026-05-21T20:45:00+09:00",
+          "web": [
+            "https://www.investing.com/news/stock-market-news/honda-books-first-annual-loss-hit-by-hefty-ev-charge-4687103"
+          ],
+          "sns_x": [
+            "https://x.com/search?q=Honda%207267%20HMC%20Honda%20stock%20shares%20since%3A2026-05-20&src=typed_query",
+            "https://x.com/HondaJP"
+          ],
+          "youtube": [
+            "https://www.youtube.com/results?search_query=Honda%207267%20HMC%20Honda%20stock%20shares%202026",
+            "https://www.youtube.com/results?search_query=Honda%202026%20annual%20loss%20EV%20charge"
+          ],
+          "candidate_titles": [
+            "Honda株価・市場反応の当日重大更新は公開カード化せず"
+          ],
+          "result": "Hondaのmarket/price/reactionについて、Web、SNS/X、YouTubeを2026-05-21に横断確認し、「Honda株価・市場反応の当日重大更新は公開カード化せず」をlatest_candidatesへ接続した。判断区分はno_fresh_itemで、公開採用・保留・新規なしの理由を候補側に残している。"
+        },
         {
           "topic_id": "earnings_guidance",
           "checked_at_jst": "2026-05-21T20:45:00+09:00",

@@ -1,5 +1,5 @@
 {
-  "contract_version": "2026-05-21.3",
+  "contract_version": "2026-05-22.1",
   "description": "NIGHT SIGNAL daily collection contract. A public issue must prove that every category and configured watch topic was searched across Web, SNS/X, and YouTube before publication.",
   "source_classes": {
     "official": {
@@ -208,7 +208,12 @@
             "limit up",
             "株価",
             "ストップ高",
-            "NAV"
+            "NAV",
+            "ストップ安",
+            "急騰",
+            "急落",
+            "shares",
+            "market reaction"
           ]
         }
       ],
@@ -224,7 +229,12 @@
             "limit up",
             "株価",
             "ストップ高",
-            "NAV"
+            "NAV",
+            "ストップ安",
+            "急騰",
+            "急落",
+            "shares",
+            "market reaction"
           ]
         },
         {
@@ -271,6 +281,9 @@
             "国内"
           ]
         }
+      ],
+      "risk_classes": [
+        "listed_company_market_sensitive"
       ]
     },
     {
@@ -311,9 +324,41 @@
             "robotics",
             "電池"
           ]
+        },
+        {
+          "id": "market_price_reaction",
+          "terms": [
+            "7267",
+            "HMC",
+            "Honda stock",
+            "shares",
+            "market reaction",
+            "stock",
+            "株価",
+            "ストップ高",
+            "ストップ安",
+            "急騰",
+            "急落"
+          ]
         }
       ],
       "watch_topics": [
+        {
+          "id": "market_price_reaction",
+          "terms": [
+            "7267",
+            "HMC",
+            "Honda stock",
+            "shares",
+            "market reaction",
+            "stock",
+            "株価",
+            "ストップ高",
+            "ストップ安",
+            "急騰",
+            "急落"
+          ]
+        },
         {
           "id": "earnings_guidance",
           "terms": [
@@ -358,6 +403,9 @@
             "生産"
           ]
         }
+      ],
+      "risk_classes": [
+        "listed_company_market_sensitive"
       ]
     },
     {
