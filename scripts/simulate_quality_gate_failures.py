@@ -165,6 +165,11 @@ def mutate_contract(tmp: Path, transform) -> None:
     write(path, json.dumps(contract, ensure_ascii=False, indent=2) + "\n")
 
 
+def append_workflow_text(tmp: Path, text: str) -> None:
+    path = tmp / ".github" / "workflows" / "pages.yml"
+    write(path, read(path) + "\n" + text + "\n")
+
+
 def keep_only_one_investment_update(tmp: Path) -> None:
     mutate_root_and_dated(tmp, remove_ici_investment_card)
     detail = tmp / "site" / ISSUE_DATE / "details" / INVESTMENT_SECOND_DETAIL
@@ -276,6 +281,16 @@ def main() -> int:
             ],
         ),
         "guardrail category_class has no categories: listed_company_market_sensitive",
+    )
+
+    assert_guardrail_fail(
+        "guardrail catches workflow fallback to latest issue",
+        lambda tmp: append_workflow_text(
+            tmp,
+            'LATEST_ISSUE_DATE="$(ls night-brief-web-sample-*.html | tail -n 1)"\n'
+            'echo "No pushed issue file; using latest committed issue ${LATEST_ISSUE_DATE}" >&2',
+        ),
+        "latest_issue_publish_only forbidden workflow terms",
     )
 
     assert_fail(

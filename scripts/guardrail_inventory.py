@@ -62,6 +62,17 @@ def require_terms(label: str, guard_id: str, text: str, terms: list[Any]) -> Non
         fail(f"{guard_id} missing {label}: " + ", ".join(str(term) for term in missing))
 
 
+def forbid_terms(label: str, guard_id: str, text: str, terms: list[Any]) -> None:
+    if not isinstance(terms, list):
+        fail(f"{guard_id} {label} must be a list")
+    present = [term for term in terms if isinstance(term, str) and term in text]
+    invalid = [term for term in terms if not isinstance(term, str)]
+    if invalid:
+        fail(f"{guard_id} {label} contains invalid terms: " + ", ".join(str(term) for term in invalid))
+    if present:
+        fail(f"{guard_id} forbidden {label}: " + ", ".join(present))
+
+
 def category_by_label(contract: dict[str, Any], label: str) -> dict[str, Any]:
     categories = contract.get("categories")
     if not isinstance(categories, list):
@@ -176,6 +187,7 @@ def validate_guard(contract: dict[str, Any], guard: dict[str, Any], texts: dict[
     require_terms("audit terms", guard_id, texts["audit"], guard.get("required_audit_terms", []))
     require_terms("simulation terms", guard_id, texts["simulation"], guard.get("required_simulation_terms", []))
     require_terms("workflow terms", guard_id, texts["workflow"], guard.get("required_workflow_terms", []))
+    forbid_terms("workflow terms", guard_id, texts["workflow"], guard.get("forbidden_workflow_terms", []))
 
 
 def main() -> int:

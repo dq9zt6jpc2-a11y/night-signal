@@ -1,5 +1,5 @@
 {
-  "version": "2026-05-22.9",
+  "version": "2026-05-22.10",
   "description": "Persistent recurrence-prevention inventory for NIGHT SIGNAL. A user-reported failure is not considered fixed unless it is represented here and enforced by scripts/guardrail_inventory.py.",
   "guards": [
     {
@@ -280,6 +280,14 @@
       "required_workflow_terms": [
         "Verify public page date",
         "Selected NIGHT SIGNAL issue is missing"
+      ],
+      "forbidden_workflow_terms": [
+        "LATEST_ISSUE_DATE",
+        "using latest committed issue",
+        "No pushed issue file"
+      ],
+      "required_simulation_terms": [
+        "guardrail catches workflow fallback to latest issue"
       ]
     }
   ]

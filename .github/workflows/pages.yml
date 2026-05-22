@@ -43,18 +43,6 @@ jobs:
               ISSUE_DATE="$(echo "${CHANGED_DATES}" | tail -n 1)"
             fi
           fi
-          if [[ ! -f "night-brief-web-sample-${ISSUE_DATE}.html" && "${GITHUB_EVENT_NAME}" == "push" ]]; then
-            LATEST_ISSUE_DATE="$(
-              ls night-brief-web-sample-*.html \
-                | sed -nE 's#night-brief-web-sample-([0-9]{4}-[0-9]{2}-[0-9]{2})\.html#\1#p' \
-                | sort \
-                | tail -n 1
-            )"
-            if [[ -n "${LATEST_ISSUE_DATE}" ]]; then
-              echo "No pushed issue file for ${ISSUE_DATE}; using latest committed issue ${LATEST_ISSUE_DATE}" >&2
-              ISSUE_DATE="${LATEST_ISSUE_DATE}"
-            fi
-          fi
           if [[ ! -f "night-brief-web-sample-${ISSUE_DATE}.html" ]]; then
             echo "Selected NIGHT SIGNAL issue is missing: night-brief-web-sample-${ISSUE_DATE}.html" >&2
             exit 1
