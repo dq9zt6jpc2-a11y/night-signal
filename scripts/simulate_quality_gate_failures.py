@@ -17,14 +17,14 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ISSUE_DATE = "2026-05-21"
-SOFTBANK_CARD_TITLE = "<h3>SoftBank、堺AIデータセンター電池計画を決算資料で再提示"
-SOFTBANK_DETAIL = "softbank-battery-2026-05-21.html"
-BREX_DETAIL = "brex-newbill-2026-05-21.html"
-OPENAI_PRIMARY_DETAIL = "openai-dell-codex-2026-05-21.html"
-OPENAI_SECONDARY_DETAIL = "openai-codex-mobile-2026-05-21.html"
-INVESTMENT_SECOND_TITLE = "ICI週次、ETF発行超が投信流出を吸収し88.5億ドル流入"
-INVESTMENT_SECOND_DETAIL = "investment-ici-flows-2026-05-21.html"
+ISSUE_DATE = "2026-05-22"
+SOFTBANK_CARD_TITLE = "<h3>SoftBank Group、OpenAIとSB EnergyのIPO観測で急騰続く"
+SOFTBANK_DETAIL = "softbank-ipo-surge-2026-05-22.html"
+BREX_DETAIL = "brex-newbill-roster-2026-05-22.html"
+OPENAI_PRIMARY_DETAIL = "openai-geometry-follow-2026-05-22.html"
+OPENAI_SECONDARY_DETAIL = "openai-ipo-capital-2026-05-22.html"
+INVESTMENT_SECOND_TITLE = "ICI週次、ETF流入が長期投信流出を吸収"
+INVESTMENT_SECOND_DETAIL = "investment-ici-flows-2026-05-22.html"
 
 
 def copy_fixture() -> Path:
@@ -189,6 +189,7 @@ def keep_only_one_investment_update(tmp: Path) -> None:
         for candidate in entry["latest_candidates"]:
             if candidate.get("title") == INVESTMENT_SECOND_TITLE:
                 candidate["decision"] = "no_fresh_item"
+                candidate["non_adoption_reason_class"] = "lower_importance"
                 candidate["rationale"] = "投資カテゴリで当日採用できる変化が1件だけの場合、固定枠を埋めるためには公開カード化しない。調査証跡は候補として残す。"
 
     mutate_manifest_entry(tmp, "投資", transform)
@@ -344,7 +345,7 @@ def main() -> int:
         lambda tmp: write(
             tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
             read(tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL).replace(
-                "SoftBank、堺AIデータセンター電池計画を決算資料で再提示",
+                "SoftBank Group、OpenAIとSB EnergyのIPO観測で急騰続く",
                 "宇都宮ブレックス、スタッフ体制を再編",
             ),
         ),
@@ -415,7 +416,7 @@ def main() -> int:
                 flags=re.S,
             ),
         ),
-        "detail summaries are too thin",
+        "detail pages too thin",
     )
 
     assert_fail(
@@ -426,6 +427,7 @@ def main() -> int:
                 {
                     "summary_quality_effective_date": ISSUE_DATE,
                     "minimum_new_or_changed_summary_chars": 60,
+                    "minimum_detail_summary_chars": 420,
                 }
             ),
         ),
@@ -477,7 +479,7 @@ def main() -> int:
         "detail page too thin",
         lambda tmp: write(
             tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
-            '<html><head><title>SoftBank</title></head><body><main><a class="back" href="../index.html#softbank">一覧へ戻る</a><article><h1>SoftBank、堺AIデータセンター電池計画を決算資料で再提示</h1><h2>30秒概要</h2><div class="summary-lead">SoftBankは堺AIデータセンター向けに電池計画を進める。</div><div class="source">原文確認:<a href="https://www.softbank.jp/corp/news/press/sbkk/2026/20260511_01/">SoftBank</a></div></article></main></body></html>',
+            '<html><head><title>SoftBank</title></head><body><main><a class="back" href="../index.html#softbank">一覧へ戻る</a><article><h1>SoftBank Group、OpenAIとSB EnergyのIPO観測で急騰続く</h1><h2>30秒概要</h2><div class="summary-lead">SoftBank Group株はIPO観測で動いた。</div><div class="source">原文確認:<a href="https://www.bloomberg.com/news/articles/2026-05-21/softbank-group-shares-surge-almost-20-on-openai-sb-energy-ipos">Bloomberg</a></div></article></main></body></html>',
         ),
         "detail pages too thin",
     )
@@ -511,14 +513,14 @@ def main() -> int:
             "new_or_changed_items",
             [
                 {
-                    "title": "OpenAIとDell、Codexを企業のオンプレ環境へ展開",
-                    "summary": "OpenAIとDell Technologiesの提携は、Codexを企業のデータ基盤に近い場所へ置く選択肢を広げる。オンプレミスやハイブリッド環境では、既存の統制、監査、データ境界が導入判断になる。",
+                    "title": "OpenAIモデルの幾何予想反証、AI研究力の評価軸に浮上",
+                    "summary": "OpenAIの内部モデルが離散幾何の長年の予想を反証した件は、製品機能ではなく研究成果そのものが材料になった。外部数学者の検証を伴うため、AI企業の研究力を測る基準にも影響し、未解決問題への到達力を資本市場と企業導入の両方から評価する材料になる。",
                     "sources": ["https://example.com/not-the-detail-source"],
                 },
                 {
-                    "title": "Codex、ChatGPTモバイルから長時間タスクを操作可能に",
-                    "summary": "OpenAIのリリースノートでは、CodexがChatGPTモバイルアプリから利用できるようになった。長時間タスクの出力確認、承認、接続先ホストの切り替えを外出先から扱える。",
-                    "sources": ["https://help.openai.com/en/articles/10128477-chatgpt-enterprise-edu-release-notes"],
+                    "title": "OpenAIの非公開IPO準備報道、AI資本市場イベントへ発展",
+                    "summary": "Axiosの報道では、OpenAIが非公開のIPO書類提出を準備している。AI企業の資金調達力、公開市場評価、Microsoftとの関係を同時に見る材料になり、SpaceXの公開準備報道とも重なって資本市場イベントとして重要度が高い。",
+                    "sources": ["https://www.axios.com/2026/05/20/openai-ipo-spacex-musk"],
                 },
             ],
         ),
@@ -533,14 +535,14 @@ def main() -> int:
             "new_or_changed_items",
             [
                 {
-                    "title": "OpenAIとDell、Codexを企業のオンプレ環境へ展開",
-                    "summary": "OpenAI and Dell announced an enterprise Codex deployment partnership for hybrid and on-premises environments.",
-                    "sources": ["https://openai.com/index/dell-codex-enterprise-partnership/"],
+                    "title": "OpenAIモデルの幾何予想反証、AI研究力の評価軸に浮上",
+                    "summary": "OpenAI disclosed that an internal model disproved a long-standing discrete geometry conjecture, making research capability itself a market and enterprise adoption signal beyond product release notes.",
+                    "sources": ["https://openai.com/index/model-disproves-discrete-geometry-conjecture/"],
                 },
                 {
-                    "title": "Codex、ChatGPTモバイルから長時間タスクを操作可能に",
-                    "summary": "OpenAIのリリースノートでは、CodexがChatGPTモバイルアプリから利用できるようになった。長時間タスクの出力確認、承認、接続先ホストの切り替えを外出先から扱える。",
-                    "sources": ["https://help.openai.com/en/articles/10128477-chatgpt-enterprise-edu-release-notes"],
+                    "title": "OpenAIの非公開IPO準備報道、AI資本市場イベントへ発展",
+                    "summary": "Axiosの報道では、OpenAIが非公開のIPO書類提出を準備している。AI企業の資金調達力、公開市場評価、Microsoftとの関係を同時に見る材料になり、資本市場イベントとして重要度が高い。",
+                    "sources": ["https://www.axios.com/2026/05/20/openai-ipo-spacex-musk"],
                 },
             ],
         ),
@@ -557,24 +559,14 @@ def main() -> int:
                 "new_or_changed_items",
                 [
                     {
-                        "title": "OpenAIモデル、80年未解決の離散幾何予想を反証",
+                        "title": "OpenAIモデルの幾何予想反証、AI研究力の評価軸に浮上",
                         "summary": "OpenAIモデルが離散幾何の長年の予想を反証した。研究力の評価材料になる。",
                         "sources": ["https://openai.com/index/model-disproves-discrete-geometry-conjecture/"],
                     },
                     {
-                        "title": "OpenAI、早ければ今週にもIPO書類を非公開提出へ",
-                        "summary": "OpenAIのIPO観測が報じられ、資本市場イベントとして注目される。",
+                        "title": "OpenAIの非公開IPO準備報道、AI資本市場イベントへ発展",
+                        "summary": "Axiosの報道では、OpenAIが非公開のIPO書類提出を準備している。AI企業の資金調達力、公開市場評価、Microsoftとの関係を同時に見る材料になり、SpaceXの公開準備報道とも重なって資本市場イベントとして重要度が高い。",
                         "sources": ["https://www.axios.com/2026/05/20/openai-ipo-spacex-musk"],
-                    },
-                    {
-                        "title": "OpenAIとDell、Codexを企業のオンプレ環境へ展開",
-                        "summary": "OpenAIとDellはCodexを企業のオンプレ環境へ広げる提携を発表した。",
-                        "sources": ["https://openai.com/index/dell-codex-enterprise-partnership/"],
-                    },
-                    {
-                        "title": "Codex、ChatGPTモバイルから長時間タスクを操作可能に",
-                        "summary": "CodexがChatGPTモバイルから操作できるようになった。",
-                        "sources": ["https://help.openai.com/en/articles/10128477-chatgpt-enterprise-edu-release-notes"],
                     },
                 ],
             ),
@@ -757,10 +749,17 @@ def main() -> int:
 
     assert_fail(
         "coverage search sweep missing",
-        lambda tmp: mutate_contract(
-            tmp,
-            lambda contract: contract.update({"search_sweep_required_effective_date": ISSUE_DATE}),
-        ),
+        lambda tmp: [
+            mutate_contract(
+                tmp,
+                lambda contract: contract.update({"search_sweep_required_effective_date": ISSUE_DATE}),
+            ),
+            mutate_manifest_entry(
+                tmp,
+                "OpenAI",
+                lambda entry: entry["watch_topic_checks"][0].pop("search_sweep", None),
+            ),
+        ],
         "OpenAI watch_topic_checks[1] missing search_sweep",
     )
 
@@ -900,37 +899,63 @@ def main() -> int:
 
     assert_fail(
         "coverage fresh non-adopted candidate missing reason class",
-        lambda tmp: mutate_contract(
-            tmp,
-            lambda contract: contract.update(
-                {"fresh_non_adopted_reason_required_effective_date": ISSUE_DATE}
+        lambda tmp: [
+            mutate_contract(
+                tmp,
+                lambda contract: contract.update(
+                    {"fresh_non_adopted_reason_required_effective_date": ISSUE_DATE}
+                ),
             ),
-        ),
+            mutate_manifest_entry(
+                tmp,
+                "OpenAI",
+                lambda entry: entry["latest_candidates"][-1].pop("non_adoption_reason_class", None),
+            ),
+        ],
         "fresh non-adopted latest candidate missing non_adoption_reason_class",
     )
 
     assert_fail(
         "coverage stale adopted latest candidate without override",
-        lambda tmp: mutate_manifest_entry(
-            tmp,
-            "Honda",
-            lambda entry: [
-                candidate.pop("freshness_override", None)
-                for candidate in entry["latest_candidates"]
-                if candidate.get("title") == "Honda、初の通期赤字はEV費用と関税が主因"
-            ],
-        ),
-        "Honda adopted latest candidate is stale",
+        lambda tmp: [
+            mutate_contract(
+                tmp,
+                lambda contract: contract.update(
+                    {"strict_adopted_candidate_source_age_effective_date": "2099-01-01"}
+                ),
+            ),
+            mutate_manifest_entry(
+                tmp,
+                "OpenAI",
+                lambda entry: [
+                    candidate.update({"source_published_date": "2026-05-18"})
+                    for candidate in entry["latest_candidates"]
+                    if candidate.get("title") == "OpenAIモデルの幾何予想反証、AI研究力の評価軸に浮上"
+                ],
+            ),
+        ],
+        "OpenAI adopted latest candidate is stale",
     )
 
     assert_fail(
         "coverage strict stale adopted candidate blocked after effective date",
-        lambda tmp: mutate_contract(
-            tmp,
-            lambda contract: contract.update(
-                {"strict_adopted_candidate_source_age_effective_date": ISSUE_DATE}
+        lambda tmp: [
+            mutate_contract(
+                tmp,
+                lambda contract: contract.update(
+                    {"strict_adopted_candidate_source_age_effective_date": ISSUE_DATE}
+                ),
             ),
-        ),
+            mutate_manifest_entry(
+                tmp,
+                "OpenAI",
+                lambda entry: [
+                    candidate.update({"source_published_date": "2026-05-18"})
+                    for candidate in entry["latest_candidates"]
+                    if candidate.get("title") == "OpenAIモデルの幾何予想反証、AI研究力の評価軸に浮上"
+                ],
+            ),
+        ],
         "adopted latest candidate exceeds strict source age and must stay background-only",
     )
 
