@@ -45,7 +45,7 @@ REQUIRED_SECTIONS = {
     category["section_id"]: category["label"] for category in COVERAGE_CONTRACT["categories"]
 }
 
-MIN_CARDS_PER_SECTION = 2
+MIN_CARDS_PER_SECTION = int(COVERAGE_CONTRACT.get("minimum_published_cards_per_category", 0))
 MIN_DETAIL_TEXT_CHARS = 300
 MAX_SOURCE_LINKS_PER_DETAIL = 3
 

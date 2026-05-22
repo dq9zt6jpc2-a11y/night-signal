@@ -218,10 +218,11 @@ def validate_search_axes(contract: dict, category_config: dict, entry: dict) -> 
             fail(f"{category_config['label']} search_axis {axis_id} missing expected terms")
 
 
-def validate_card_manifest_alignment(root_html: str, category_config: dict, entry: dict) -> None:
+def validate_card_manifest_alignment(contract: dict, root_html: str, category_config: dict, entry: dict) -> None:
     category = category_config["label"]
     expected_titles = card_titles_by_section(root_html, category_config["section_id"])
-    if len(expected_titles) < 2:
+    minimum = int(contract.get("minimum_published_cards_per_category", 0))
+    if len(expected_titles) < minimum:
         fail(f"{category} section has too few published cards for coverage alignment")
     manifest_titles = entry.get("published_card_titles")
     if not isinstance(manifest_titles, list) or any(not isinstance(item, str) for item in manifest_titles):
@@ -318,6 +319,16 @@ def validate_latest_candidates(contract: dict, issue_date: str, root_html: str, 
 
     issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
     max_age = int(contract.get("maximum_adopted_candidate_source_age_days", 3))
+    strict_effective_value = contract.get("strict_adopted_candidate_source_age_effective_date")
+    strict_effective_dt = None
+    if strict_effective_value is not None:
+        if not isinstance(strict_effective_value, str):
+            fail("coverage contract strict_adopted_candidate_source_age_effective_date must be YYYY-MM-DD")
+        try:
+            strict_effective_dt = datetime.strptime(strict_effective_value, "%Y-%m-%d").date()
+        except ValueError:
+            fail("coverage contract strict_adopted_candidate_source_age_effective_date must be YYYY-MM-DD")
+    strict_source_age_applies = strict_effective_dt is not None and issue_dt >= strict_effective_dt
     min_per_topic = int(contract.get("minimum_latest_candidates_per_watch_topic", 1))
     by_topic = {topic_id: 0 for topic_id in watch_ids}
     adopted_titles: list[str] = []
@@ -358,6 +369,11 @@ def validate_latest_candidates(contract: dict, issue_date: str, root_html: str, 
         if decision == "adopted":
             if title not in expected_titles:
                 fail(f"{category} adopted latest candidate is not published as a card: {title}")
+            if age > max_age and strict_source_age_applies:
+                fail(
+                    f"{category} adopted latest candidate exceeds strict source age and must stay background-only: "
+                    f"{title} ({source_date}, {age} days old)"
+                )
             freshness_override = candidate.get("freshness_override")
             if age > max_age and (
                 not isinstance(freshness_override, str)
@@ -704,7 +720,7 @@ def validate_coverage_contract(issue_date: str, root_html: str, extraction_log_h
             fail(f"{category} manifest entry must be an object")
         if entry.get("collection_status") != "complete":
             fail(f"{category} collection_status must be complete")
-        validate_card_manifest_alignment(root_html, category_config, entry)
+        validate_card_manifest_alignment(contract, root_html, category_config, entry)
         validate_new_or_changed_items(contract, issue_date, root_html, category_config, entry)
         validate_latest_candidates(contract, issue_date, root_html, category_config, entry)
         validate_collected_items(contract, issue_date, category_config, entry)

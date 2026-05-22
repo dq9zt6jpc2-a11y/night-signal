@@ -23,6 +23,8 @@ SOFTBANK_DETAIL = "softbank-battery-2026-05-21.html"
 BREX_DETAIL = "brex-newbill-2026-05-21.html"
 OPENAI_PRIMARY_DETAIL = "openai-dell-codex-2026-05-21.html"
 OPENAI_SECONDARY_DETAIL = "openai-codex-mobile-2026-05-21.html"
+INVESTMENT_SECOND_TITLE = "ICI週次、ETF発行超が投信流出を吸収し88.5億ドル流入"
+INVESTMENT_SECOND_DETAIL = "investment-ici-flows-2026-05-21.html"
 
 
 def copy_fixture() -> Path:
@@ -124,9 +126,14 @@ def remove_investment_section_once(html: str) -> str:
     )
 
 
-def remove_one_investment_card(html: str) -> str:
-    pattern = r'(<section class="section" id="investment">.*?<article class="card[^"]*">.*?</article>)(.*?</section>)'
-    return re.sub(pattern, r"\1</div>\n    </section>", html, count=1, flags=re.S)
+def remove_ici_investment_card(html: str) -> str:
+    return re.sub(
+        rf'\s*<article class="card[^"]*">(?:(?!</article>).)*<h3>{re.escape(INVESTMENT_SECOND_TITLE)}</h3>.*?</article>',
+        "",
+        html,
+        count=1,
+        flags=re.S,
+    )
 
 
 def mutate_manifest(tmp: Path, category: str, key: str, value) -> None:
@@ -156,6 +163,30 @@ def mutate_contract(tmp: Path, transform) -> None:
     contract = json.loads(read(path))
     transform(contract)
     write(path, json.dumps(contract, ensure_ascii=False, indent=2) + "\n")
+
+
+def keep_only_one_investment_update(tmp: Path) -> None:
+    mutate_root_and_dated(tmp, remove_ici_investment_card)
+    detail = tmp / "site" / ISSUE_DATE / "details" / INVESTMENT_SECOND_DETAIL
+    if detail.exists():
+        detail.unlink()
+
+    def transform(entry: dict) -> None:
+        entry["published_card_titles"] = [
+            title for title in entry["published_card_titles"] if title != INVESTMENT_SECOND_TITLE
+        ]
+        entry["new_or_changed_items"] = [
+            item for item in entry["new_or_changed_items"] if item.get("title") != INVESTMENT_SECOND_TITLE
+        ]
+        entry["adopted"] = [
+            item for item in entry["adopted"] if item != "ICI combined fund and ETF flows"
+        ]
+        for candidate in entry["latest_candidates"]:
+            if candidate.get("title") == INVESTMENT_SECOND_TITLE:
+                candidate["decision"] = "no_fresh_item"
+                candidate["rationale"] = "投資カテゴリで当日採用できる変化が1件だけの場合、固定枠を埋めるためには公開カード化しない。調査証跡は候補として残す。"
+
+    mutate_manifest_entry(tmp, "投資", transform)
 
 
 def mirror_current_detail_to_previous(tmp: Path, name: str) -> None:
@@ -368,11 +399,10 @@ def main() -> int:
         "missing category sections",
     )
 
-    assert_fail(
-        "category has only one card",
-        lambda tmp: mutate_root_and_dated(tmp, remove_one_investment_card),
-        "category sections below minimum cards",
-    )
+    one_card_fixture = copy_fixture()
+    keep_only_one_investment_update(one_card_fixture)
+    assert_pass("variable card count keeps one fresh investment update", one_card_fixture)
+    print("PASS variable card count keeps one fresh investment update")
 
     assert_fail(
         "stale visible card date",
@@ -431,7 +461,7 @@ def main() -> int:
     assert_fail(
         "coverage new or changed items missing",
         lambda tmp: mutate_manifest(tmp, "OpenAI", "new_or_changed_items", []),
-        "OpenAI needs at least",
+        "OpenAI new_or_changed_items must mirror published cards",
     )
 
     assert_fail(
@@ -773,6 +803,17 @@ def main() -> int:
             ],
         ),
         "Honda adopted latest candidate is stale",
+    )
+
+    assert_fail(
+        "coverage strict stale adopted candidate blocked after effective date",
+        lambda tmp: mutate_contract(
+            tmp,
+            lambda contract: contract.update(
+                {"strict_adopted_candidate_source_age_effective_date": ISSUE_DATE}
+            ),
+        ),
+        "adopted latest candidate exceeds strict source age and must stay background-only",
     )
 
     assert_fail(

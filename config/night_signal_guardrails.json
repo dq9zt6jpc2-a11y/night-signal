@@ -1,5 +1,5 @@
 {
-  "version": "2026-05-22.6",
+  "version": "2026-05-22.7",
   "description": "Persistent recurrence-prevention inventory for NIGHT SIGNAL. A user-reported failure is not considered fixed unless it is represented here and enforced by scripts/guardrail_inventory.py.",
   "guards": [
     {
@@ -76,6 +76,31 @@
       ],
       "required_simulation_terms": [
         "coverage fresh candidate deferred without resolution"
+      ]
+    },
+    {
+      "id": "variable_publication_fresh_updates_only",
+      "description": "Publication volume must follow actual new or changed information; stale source material cannot be used to fill fixed category slots.",
+      "contract": {
+        "minimum_published_cards_per_category": 0,
+        "minimum_new_or_changed_items_per_category": 0,
+        "maximum_adopted_candidate_source_age_days": 3,
+        "strict_adopted_candidate_source_age_effective_date": "2026-05-22",
+        "stale_sources_allowed_only_as_background": true
+      },
+      "required_audit_terms": [
+        "minimum_published_cards_per_category",
+        "strict_adopted_candidate_source_age_effective_date",
+        "must stay background-only"
+      ],
+      "required_policy_terms": [
+        "掲載数は固定しない",
+        "更新がなければカテゴリ内のカードは0件",
+        "3日より古い元情報は公開カードにしない"
+      ],
+      "required_simulation_terms": [
+        "variable card count keeps one fresh investment update",
+        "coverage strict stale adopted candidate blocked after effective date"
       ]
     },
     {

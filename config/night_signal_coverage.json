@@ -1,5 +1,5 @@
 {
-  "contract_version": "2026-05-22.5",
+  "contract_version": "2026-05-22.7",
   "description": "NIGHT SIGNAL daily collection contract. A public issue must prove that every category and configured watch topic was searched across Web, SNS/X, and YouTube before publication.",
   "source_classes": {
     "official": {
@@ -38,7 +38,7 @@
   },
   "decision_classes": {
     "adopted": {
-      "min_items": 2
+      "min_items": 0
     },
     "held": {
       "min_items": 1
@@ -53,7 +53,8 @@
   "minimum_distinct_url_hosts_per_category": 5,
   "minimum_url_evidence_per_category": 8,
   "minimum_search_queries_per_axis": 2,
-  "minimum_new_or_changed_items_per_category": 2,
+  "minimum_published_cards_per_category": 0,
+  "minimum_new_or_changed_items_per_category": 0,
   "minimum_latest_candidates_per_watch_topic": 1,
   "minimum_watch_topic_checks_per_topic": 1,
   "minimum_investigation_paths_per_watch_topic": 3,
@@ -79,6 +80,8 @@
     "youtube"
   ],
   "maximum_adopted_candidate_source_age_days": 3,
+  "strict_adopted_candidate_source_age_effective_date": "2026-05-22",
+  "stale_sources_allowed_only_as_background": true,
   "minimum_no_change_checks_per_category": 1,
   "categories": [
     {
