@@ -1,5 +1,5 @@
 {
-  "version": "2026-05-22.10",
+  "version": "2026-05-22.11",
   "description": "Persistent recurrence-prevention inventory for NIGHT SIGNAL. A user-reported failure is not considered fixed unless it is represented here and enforced by scripts/guardrail_inventory.py.",
   "guards": [
     {
@@ -282,12 +282,16 @@
         "Selected NIGHT SIGNAL issue is missing"
       ],
       "forbidden_workflow_terms": [
+        "CHANGED_DATES",
+        "GITHUB_EVENT_BEFORE",
         "LATEST_ISSUE_DATE",
+        "git diff --name-only",
         "using latest committed issue",
         "No pushed issue file"
       ],
       "required_simulation_terms": [
-        "guardrail catches workflow fallback to latest issue"
+        "guardrail catches workflow fallback to latest issue",
+        "guardrail catches workflow changed-date override"
       ]
     }
   ]

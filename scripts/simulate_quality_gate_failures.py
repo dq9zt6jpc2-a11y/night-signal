@@ -293,6 +293,16 @@ def main() -> int:
         "latest_issue_publish_only forbidden workflow terms",
     )
 
+    assert_guardrail_fail(
+        "guardrail catches workflow changed-date override",
+        lambda tmp: append_workflow_text(
+            tmp,
+            'CHANGED_DATES="$(git diff --name-only ${GITHUB_EVENT_BEFORE} ${GITHUB_SHA})"\n'
+            'ISSUE_DATE="$(echo "${CHANGED_DATES}" | tail -n 1)"',
+        ),
+        "latest_issue_publish_only forbidden workflow terms",
+    )
+
     assert_fail(
         "title policy wording leak",
         lambda tmp: mutate_root_and_dated(
