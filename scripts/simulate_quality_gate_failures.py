@@ -526,6 +526,36 @@ def main() -> int:
     )
 
     assert_fail(
+        "coverage collected items missing",
+        lambda tmp: mutate_manifest_entry(tmp, "OpenAI", lambda entry: entry.pop("collected_items", None)),
+        "OpenAI missing collected_items",
+    )
+
+    assert_fail(
+        "coverage latest candidate search URL rejected",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "OpenAI",
+            lambda entry: entry["latest_candidates"][0].update(
+                {"source_url": "https://www.youtube.com/results?search_query=OpenAI%20latest"}
+            ),
+        ),
+        "OpenAI latest_candidates[1] source_url cannot be a search result URL",
+    )
+
+    assert_fail(
+        "coverage collected item search URL rejected",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "OpenAI",
+            lambda entry: entry["collected_items"][0].update(
+                {"source_url": "https://x.com/search?q=OpenAI%20latest&src=typed_query"}
+            ),
+        ),
+        "OpenAI collected_items[1] source_url cannot be a search result URL",
+    )
+
+    assert_fail(
         "coverage latest watch topic missing",
         lambda tmp: mutate_manifest_entry(
             tmp,
@@ -609,6 +639,58 @@ def main() -> int:
             lambda entry: entry["watch_topic_checks"][0].update({"youtube": ["https://example.com/no-youtube"]}),
         ),
         "OpenAI watch_topic_checks[1].youtube must include YouTube URL evidence",
+    )
+
+    assert_fail(
+        "coverage investigation hypotheses missing",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "OpenAI",
+            lambda entry: entry["watch_topic_checks"][0].pop("investigation_hypotheses", None),
+        ),
+        "OpenAI watch_topic_checks[1] needs at least",
+    )
+
+    assert_fail(
+        "coverage investigation paths missing",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "OpenAI",
+            lambda entry: entry["watch_topic_checks"][0].pop("investigation_paths", None),
+        ),
+        "OpenAI watch_topic_checks[1] needs at least",
+    )
+
+    assert_fail(
+        "coverage investigation path search URL rejected",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "OpenAI",
+            lambda entry: entry["watch_topic_checks"][0]["investigation_paths"][0].update(
+                {"evidence_url": "https://www.youtube.com/results?search_query=OpenAI%20latest", "channel": "youtube"}
+            ),
+        ),
+        "OpenAI watch_topic_checks[1].investigation_paths[1] evidence_url cannot be a search result URL",
+    )
+
+    assert_fail(
+        "coverage source roles missing",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "OpenAI",
+            lambda entry: entry["watch_topic_checks"][0].update({"source_roles_checked": ["primary_or_official"]}),
+        ),
+        "OpenAI watch_topic_checks[1] missing source_roles_checked",
+    )
+
+    assert_fail(
+        "coverage event class missing",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "OpenAI",
+            lambda entry: entry["watch_topic_checks"][0].update({"event_classes": []}),
+        ),
+        "OpenAI watch_topic_checks[1] missing event_classes",
     )
 
     assert_fail(

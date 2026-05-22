@@ -25,6 +25,7 @@ JAPANESE_RE = re.compile(r"[\u3040-\u30ff\u3400-\u9fff]")
 SNS_HOSTS = {"x.com", "twitter.com"}
 YOUTUBE_HOSTS = {"youtube.com", "youtu.be"}
 DEFERRED_PUBLISHING_RE = re.compile(r"(未反映|次回|次の再抽出|次の採用候補|次回の採用候補)")
+SEARCH_RESULT_HOSTS = {"google.com", "bing.com", "duckduckgo.com"}
 
 
 def fail(message: str) -> None:
@@ -121,6 +122,20 @@ def has_japanese(text: str) -> bool:
 def host_matches(url: str, expected_hosts: set[str]) -> bool:
     host = normalize_url_host(url)
     return bool(host and any(host == expected or host.endswith("." + expected) for expected in expected_hosts))
+
+
+def is_search_result_url(url: str) -> bool:
+    host = normalize_url_host(url)
+    path = urlparse(url).path.lower()
+    if not host:
+        return False
+    if host in SEARCH_RESULT_HOSTS or any(host.endswith("." + expected) for expected in SEARCH_RESULT_HOSTS):
+        return True
+    if host_matches(url, YOUTUBE_HOSTS) and path == "/results":
+        return True
+    if host_matches(url, SNS_HOSTS) and path == "/search":
+        return True
+    return False
 
 
 def require_channel_url(category: str, key: str, values: list[str], expected_hosts: set[str], label: str) -> None:
@@ -323,6 +338,8 @@ def validate_latest_candidates(contract: dict, issue_date: str, root_html: str, 
             fail(f"{category} latest_candidates[{index}] title is too weak")
         if not isinstance(source_url, str) or not normalize_url_host(source_url):
             fail(f"{category} latest_candidates[{index}] source_url must be absolute")
+        if is_search_result_url(source_url):
+            fail(f"{category} latest_candidates[{index}] source_url cannot be a search result URL")
         if decision not in {"adopted", "held", "excluded", "no_fresh_item"}:
             fail(f"{category} latest_candidates[{index}] decision is invalid: {decision}")
         if not isinstance(rationale, str) or len(re.sub(r"\s+", "", rationale)) < 30 or not has_japanese(rationale):
@@ -362,6 +379,88 @@ def validate_latest_candidates(contract: dict, issue_date: str, root_html: str, 
         fail(f"{category} published cards must come from adopted latest_candidates: " + "; ".join(missing_adopted))
 
 
+def validate_collected_items(contract: dict, issue_date: str, category_config: dict, entry: dict) -> None:
+    category = category_config["label"]
+    watch_topics = category_config.get("watch_topics")
+    if not isinstance(watch_topics, list) or not watch_topics:
+        fail(f"{category} coverage contract missing watch_topics")
+    watch_ids = {topic["id"] for topic in watch_topics if isinstance(topic, dict) and isinstance(topic.get("id"), str)}
+
+    candidates = entry.get("latest_candidates")
+    if not isinstance(candidates, list):
+        fail(f"{category} missing latest_candidates")
+    expected_keys = set()
+    candidate_titles_by_topic: dict[str, set[str]] = {}
+    for candidate in candidates:
+        if not isinstance(candidate, dict):
+            continue
+        topic_id = candidate.get("topic_id")
+        title = candidate.get("title")
+        source_url = candidate.get("source_url")
+        if isinstance(topic_id, str) and isinstance(title, str) and isinstance(source_url, str):
+            key = (topic_id, title, normalize_url(source_url))
+            expected_keys.add(key)
+            candidate_titles_by_topic.setdefault(topic_id, set()).add(title)
+
+    collected = entry.get("collected_items")
+    if not isinstance(collected, list):
+        fail(f"{category} missing collected_items")
+    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
+    collected_keys = set()
+    for index, item in enumerate(collected, start=1):
+        if not isinstance(item, dict):
+            fail(f"{category} collected_items[{index}] must be an object")
+        topic_id = item.get("topic_id")
+        title = item.get("title")
+        source_url = item.get("source_url")
+        source_date = item.get("source_published_date")
+        observed_at = item.get("observed_at_jst")
+        channel = item.get("channel")
+        note = item.get("collection_note")
+        if topic_id not in watch_ids:
+            fail(f"{category} collected_items[{index}] topic_id is not configured: {topic_id}")
+        if not isinstance(title, str) or title not in candidate_titles_by_topic.get(topic_id, set()):
+            fail(f"{category} collected_items[{index}] title must match latest_candidates for same topic")
+        if not isinstance(source_url, str) or not normalize_url_host(source_url):
+            fail(f"{category} collected_items[{index}] source_url must be absolute")
+        if is_search_result_url(source_url):
+            fail(f"{category} collected_items[{index}] source_url cannot be a search result URL")
+        if channel not in {"web", "sns_x", "youtube"}:
+            fail(f"{category} collected_items[{index}] channel is invalid: {channel}")
+        if channel == "sns_x" and not host_matches(source_url, SNS_HOSTS):
+            fail(f"{category} collected_items[{index}] channel/source mismatch for SNS/X")
+        if channel == "youtube" and not host_matches(source_url, YOUTUBE_HOSTS):
+            fail(f"{category} collected_items[{index}] channel/source mismatch for YouTube")
+        if channel == "web" and (host_matches(source_url, SNS_HOSTS) or host_matches(source_url, YOUTUBE_HOSTS)):
+            fail(f"{category} collected_items[{index}] channel/source mismatch for Web")
+        if not isinstance(source_date, str):
+            fail(f"{category} collected_items[{index}] missing source_published_date")
+        try:
+            source_dt = datetime.strptime(source_date, "%Y-%m-%d").date()
+        except ValueError:
+            fail(f"{category} collected_items[{index}] source_published_date must be YYYY-MM-DD")
+        if source_dt > issue_dt:
+            fail(f"{category} collected_items[{index}] source_published_date is in the future: {source_date}")
+        if not isinstance(observed_at, str):
+            fail(f"{category} collected_items[{index}] missing observed_at_jst")
+        try:
+            observed_dt = datetime.fromisoformat(observed_at)
+        except ValueError:
+            fail(f"{category} collected_items[{index}] observed_at_jst is not ISO-8601: {observed_at}")
+        offset = observed_dt.utcoffset()
+        if offset is None or offset.total_seconds() != 9 * 60 * 60:
+            fail(f"{category} collected_items[{index}] observed_at_jst must use JST offset: {observed_at}")
+        if observed_dt.strftime("%Y-%m-%d") != issue_date:
+            fail(f"{category} collected_items[{index}] observed_at_jst date mismatch: {observed_at} != {issue_date}")
+        if not isinstance(note, str) or len(re.sub(r"\s+", "", note)) < 30 or not has_japanese(note):
+            fail(f"{category} collected_items[{index}] collection_note must be concrete Japanese text")
+        collected_keys.add((topic_id, title, normalize_url(source_url)))
+
+    missing = sorted(expected_keys - collected_keys)
+    if missing:
+        fail(f"{category} collected_items missing latest candidate sources: " + "; ".join(title for _, title, _ in missing))
+
+
 def validate_watch_topic_checks(contract: dict, issue_date: str, category_config: dict, entry: dict) -> None:
     category = category_config["label"]
     watch_topics = category_config.get("watch_topics")
@@ -396,6 +495,16 @@ def validate_watch_topic_checks(contract: dict, issue_date: str, category_config
         fail(f"{category} missing watch_topic_checks")
 
     min_per_topic = int(contract.get("minimum_watch_topic_checks_per_topic", 1))
+    allowed_event_classes = contract.get("allowed_discovery_event_classes", [])
+    if not isinstance(allowed_event_classes, list) or any(not isinstance(item, str) for item in allowed_event_classes):
+        fail("coverage contract has invalid allowed_discovery_event_classes")
+    allowed_event_class_set = set(allowed_event_classes)
+    required_source_roles = contract.get("required_investigation_source_roles", [])
+    if not isinstance(required_source_roles, list) or any(not isinstance(item, str) for item in required_source_roles):
+        fail("coverage contract has invalid required_investigation_source_roles")
+    min_paths = int(contract.get("minimum_investigation_paths_per_watch_topic", 0))
+    min_hypotheses = int(contract.get("minimum_investigation_hypotheses_per_watch_topic", 0))
+    min_window_hours = int(contract.get("minimum_investigation_time_window_hours", 0))
     by_topic = {topic_id: 0 for topic_id in watch_ids}
     for index, check in enumerate(checks, start=1):
         if not isinstance(check, dict):
@@ -423,6 +532,94 @@ def validate_watch_topic_checks(contract: dict, issue_date: str, category_config
             fail(f"{category} watch_topic_checks[{index}] result is too thin")
         if not has_japanese(result):
             fail(f"{category} watch_topic_checks[{index}] result must be Japanese")
+
+        configured_event_classes = []
+        for topic in watch_topics:
+            if isinstance(topic, dict) and topic.get("id") == topic_id and isinstance(topic.get("event_classes"), list):
+                configured_event_classes = [item for item in topic["event_classes"] if isinstance(item, str)]
+                break
+        if not configured_event_classes:
+            fail(f"{category} watch_topic {topic_id} missing event_classes")
+        if any(item not in allowed_event_class_set for item in configured_event_classes):
+            fail(f"{category} watch_topic {topic_id} has invalid event_classes")
+
+        check_event_classes = check.get("event_classes")
+        if not isinstance(check_event_classes, list) or any(not isinstance(item, str) for item in check_event_classes):
+            fail(f"{category} watch_topic_checks[{index}] event_classes must be a string list")
+        missing_event_classes = sorted(set(configured_event_classes) - set(check_event_classes))
+        if missing_event_classes:
+            fail(f"{category} watch_topic_checks[{index}] missing event_classes: " + ", ".join(missing_event_classes))
+
+        source_roles = check.get("source_roles_checked")
+        if not isinstance(source_roles, list) or any(not isinstance(item, str) for item in source_roles):
+            fail(f"{category} watch_topic_checks[{index}] source_roles_checked must be a string list")
+        missing_roles = sorted(set(required_source_roles) - set(source_roles))
+        if missing_roles:
+            fail(f"{category} watch_topic_checks[{index}] missing source_roles_checked: " + ", ".join(missing_roles))
+
+        paths = check.get("investigation_paths")
+        if not isinstance(paths, list) or len(paths) < min_paths:
+            fail(f"{category} watch_topic_checks[{index}] needs at least {min_paths} investigation_paths")
+        path_roles: set[str] = set()
+        for path_index, path in enumerate(paths, start=1):
+            if not isinstance(path, dict):
+                fail(f"{category} watch_topic_checks[{index}].investigation_paths[{path_index}] must be an object")
+            role = path.get("source_role")
+            channel = path.get("channel")
+            evidence_url = path.get("evidence_url")
+            finding = path.get("finding")
+            if role not in required_source_roles:
+                fail(f"{category} watch_topic_checks[{index}].investigation_paths[{path_index}] source_role is invalid: {role}")
+            path_roles.add(role)
+            if channel not in {"web", "sns_x", "youtube"}:
+                fail(f"{category} watch_topic_checks[{index}].investigation_paths[{path_index}] channel is invalid: {channel}")
+            if not isinstance(evidence_url, str) or not normalize_url_host(evidence_url):
+                fail(f"{category} watch_topic_checks[{index}].investigation_paths[{path_index}] evidence_url must be absolute")
+            if is_search_result_url(evidence_url):
+                fail(f"{category} watch_topic_checks[{index}].investigation_paths[{path_index}] evidence_url cannot be a search result URL")
+            if channel == "sns_x" and not host_matches(evidence_url, SNS_HOSTS):
+                fail(f"{category} watch_topic_checks[{index}].investigation_paths[{path_index}] channel/source mismatch for SNS/X")
+            if channel == "youtube" and not host_matches(evidence_url, YOUTUBE_HOSTS):
+                fail(f"{category} watch_topic_checks[{index}].investigation_paths[{path_index}] channel/source mismatch for YouTube")
+            if channel == "web" and (host_matches(evidence_url, SNS_HOSTS) or host_matches(evidence_url, YOUTUBE_HOSTS)):
+                fail(f"{category} watch_topic_checks[{index}].investigation_paths[{path_index}] channel/source mismatch for Web")
+            if not isinstance(finding, str) or len(re.sub(r"\s+", "", finding)) < 25 or not has_japanese(finding):
+                fail(f"{category} watch_topic_checks[{index}].investigation_paths[{path_index}] finding must be concrete Japanese text")
+        missing_path_roles = sorted(set(required_source_roles) - path_roles)
+        if missing_path_roles:
+            fail(f"{category} watch_topic_checks[{index}] missing investigation_paths roles: " + ", ".join(missing_path_roles))
+
+        hypotheses = check.get("investigation_hypotheses")
+        if (
+            min_hypotheses > 0
+            and (
+                not isinstance(hypotheses, list)
+                or len(hypotheses) < min_hypotheses
+                or any(not isinstance(item, str) or len(re.sub(r"\s+", "", item)) < 25 or not has_japanese(item) for item in hypotheses)
+            )
+        ):
+            fail(f"{category} watch_topic_checks[{index}] needs at least {min_hypotheses} concrete Japanese investigation_hypotheses")
+
+        window = check.get("time_window_jst")
+        if not isinstance(window, dict):
+            fail(f"{category} watch_topic_checks[{index}] missing time_window_jst")
+        try:
+            start_dt = datetime.fromisoformat(window.get("start", ""))
+            end_dt = datetime.fromisoformat(window.get("end", ""))
+        except (TypeError, ValueError):
+            fail(f"{category} watch_topic_checks[{index}] time_window_jst must contain ISO start/end")
+        if start_dt.utcoffset() is None or end_dt.utcoffset() is None:
+            fail(f"{category} watch_topic_checks[{index}] time_window_jst must use timezone offsets")
+        if end_dt <= start_dt:
+            fail(f"{category} watch_topic_checks[{index}] time_window_jst end must be after start")
+        if min_window_hours > 0 and (end_dt - start_dt).total_seconds() < min_window_hours * 3600:
+            fail(f"{category} watch_topic_checks[{index}] time_window_jst is too short")
+        if end_dt.strftime("%Y-%m-%d") != issue_date:
+            fail(f"{category} watch_topic_checks[{index}] time_window_jst end date mismatch: {end_dt.date()} != {issue_date}")
+
+        delta_basis = check.get("delta_basis")
+        if not isinstance(delta_basis, str) or len(re.sub(r"\s+", "", delta_basis)) < 30 or not has_japanese(delta_basis):
+            fail(f"{category} watch_topic_checks[{index}] delta_basis must be concrete Japanese text")
 
         titles = check.get("candidate_titles")
         if not isinstance(titles, list) or not titles or any(not isinstance(title, str) for title in titles):
@@ -510,6 +707,7 @@ def validate_coverage_contract(issue_date: str, root_html: str, extraction_log_h
         validate_card_manifest_alignment(root_html, category_config, entry)
         validate_new_or_changed_items(contract, issue_date, root_html, category_config, entry)
         validate_latest_candidates(contract, issue_date, root_html, category_config, entry)
+        validate_collected_items(contract, issue_date, category_config, entry)
         validate_watch_topic_checks(contract, issue_date, category_config, entry)
         validate_no_change_checks(contract, category, entry)
         validate_search_axes(contract, category_config, entry)

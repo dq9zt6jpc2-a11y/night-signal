@@ -1,5 +1,5 @@
 {
-  "version": "2026-05-22.2",
+  "version": "2026-05-22.6",
   "description": "Persistent recurrence-prevention inventory for NIGHT SIGNAL. A user-reported failure is not considered fixed unless it is represented here and enforced by scripts/guardrail_inventory.py.",
   "guards": [
     {
@@ -11,20 +11,60 @@
           "sns_x",
           "youtube"
         ],
-        "minimum_watch_topic_checks_per_topic": 1
+        "minimum_watch_topic_checks_per_topic": 1,
+        "minimum_investigation_hypotheses_per_watch_topic": 2,
+        "minimum_investigation_time_window_hours": 24,
+        "minimum_investigation_paths_per_watch_topic": 3
       },
       "required_audit_terms": [
         "validate_watch_topic_checks",
         "candidate_titles must match latest_candidates for same topic",
-        "checked_at_jst must use JST offset"
+        "checked_at_jst must use JST offset",
+        "event_classes",
+        "source_roles_checked",
+        "investigation_hypotheses",
+        "time_window_jst",
+        "delta_basis",
+        "investigation_paths",
+        "evidence_url cannot be a search result URL",
+        "minimum_investigation_paths_per_watch_topic"
       ],
       "required_policy_terms": [
         "watch_topic_checks",
-        "Web、SNS/X、YouTube"
+        "Web、SNS/X、YouTube",
+        "仮説",
+        "情報源ロール",
+        "時間窓",
+        "差分",
+        "調査経路",
+        "実際に見た"
       ],
       "required_simulation_terms": [
         "coverage watch topic YouTube evidence missing",
-        "coverage watch topic candidate not linked"
+        "coverage watch topic candidate not linked",
+        "coverage investigation hypotheses missing",
+        "coverage source roles missing",
+        "coverage event class missing",
+        "coverage investigation paths missing",
+        "coverage investigation path search URL rejected"
+      ]
+    },
+    {
+      "id": "collected_items_direct_sources",
+      "description": "Latest candidates must be backed by collected direct source URLs, not by search-result pages or query placeholders.",
+      "required_audit_terms": [
+        "validate_collected_items",
+        "source_url cannot be a search result URL",
+        "collected_items missing latest candidate sources"
+      ],
+      "required_policy_terms": [
+        "collected_items",
+        "検索結果ページではなく"
+      ],
+      "required_simulation_terms": [
+        "coverage collected items missing",
+        "coverage latest candidate search URL rejected",
+        "coverage collected item search URL rejected"
       ]
     },
     {

@@ -1,5 +1,5 @@
 {
-  "contract_version": "2026-05-22.1",
+  "contract_version": "2026-05-22.5",
   "description": "NIGHT SIGNAL daily collection contract. A public issue must prove that every category and configured watch topic was searched across Web, SNS/X, and YouTube before publication.",
   "source_classes": {
     "official": {
@@ -56,6 +56,23 @@
   "minimum_new_or_changed_items_per_category": 2,
   "minimum_latest_candidates_per_watch_topic": 1,
   "minimum_watch_topic_checks_per_topic": 1,
+  "minimum_investigation_paths_per_watch_topic": 3,
+  "allowed_discovery_event_classes": [
+    "official_update",
+    "product_update",
+    "research_breakthrough",
+    "capital_markets",
+    "market_reaction",
+    "financials",
+    "partnership",
+    "infrastructure",
+    "regulation_safety",
+    "operations_market",
+    "schedule_result",
+    "people_contracts",
+    "macro_data",
+    "fund_flows"
+  ],
   "required_watch_topic_channels": [
     "web",
     "sns_x",
@@ -113,6 +130,10 @@
             "funding",
             "valuation",
             "上場"
+          ],
+          "event_classes": [
+            "capital_markets",
+            "financials"
           ]
         },
         {
@@ -124,6 +145,10 @@
             "proof",
             "conjecture",
             "数学"
+          ],
+          "event_classes": [
+            "research_breakthrough",
+            "official_update"
           ]
         },
         {
@@ -135,6 +160,10 @@
             "codex",
             "release",
             "mobile"
+          ],
+          "event_classes": [
+            "product_update",
+            "official_update"
           ]
         },
         {
@@ -146,6 +175,10 @@
             "infrastructure",
             "on-prem",
             "data"
+          ],
+          "event_classes": [
+            "partnership",
+            "infrastructure"
           ]
         },
         {
@@ -157,6 +190,10 @@
             "regulation",
             "certificate",
             "supply"
+          ],
+          "event_classes": [
+            "regulation_safety",
+            "official_update"
           ]
         }
       ]
@@ -235,6 +272,10 @@
             "急落",
             "shares",
             "market reaction"
+          ],
+          "event_classes": [
+            "market_reaction",
+            "capital_markets"
           ]
         },
         {
@@ -246,6 +287,10 @@
             "stargate",
             "arm",
             "openai"
+          ],
+          "event_classes": [
+            "infrastructure",
+            "partnership"
           ]
         },
         {
@@ -257,6 +302,10 @@
             "energy",
             "電源",
             "バッテリー"
+          ],
+          "event_classes": [
+            "infrastructure",
+            "operations_market"
           ]
         },
         {
@@ -268,6 +317,10 @@
             "debt",
             "nav",
             "決算"
+          ],
+          "event_classes": [
+            "financials",
+            "capital_markets"
           ]
         },
         {
@@ -279,6 +332,10 @@
             "smbc",
             "fujitsu",
             "国内"
+          ],
+          "event_classes": [
+            "partnership",
+            "operations_market"
           ]
         }
       ],
@@ -357,6 +414,10 @@
             "ストップ安",
             "急騰",
             "急落"
+          ],
+          "event_classes": [
+            "market_reaction",
+            "financials"
           ]
         },
         {
@@ -368,6 +429,10 @@
             "tariff",
             "決算",
             "赤字"
+          ],
+          "event_classes": [
+            "financials",
+            "official_update"
           ]
         },
         {
@@ -379,6 +444,10 @@
             "gasgoo",
             "中国",
             "販売"
+          ],
+          "event_classes": [
+            "operations_market",
+            "macro_data"
           ]
         },
         {
@@ -390,6 +459,10 @@
             "battery",
             "acura",
             "電動化"
+          ],
+          "event_classes": [
+            "product_update",
+            "operations_market"
           ]
         },
         {
@@ -401,6 +474,10 @@
             "india",
             "asean",
             "生産"
+          ],
+          "event_classes": [
+            "operations_market",
+            "macro_data"
           ]
         }
       ],
@@ -456,6 +533,10 @@
             "practice",
             "qualifying",
             "race"
+          ],
+          "event_classes": [
+            "schedule_result",
+            "operations_market"
           ]
         },
         {
@@ -468,6 +549,10 @@
             "ers",
             "energy",
             "回生"
+          ],
+          "event_classes": [
+            "infrastructure",
+            "regulation_safety"
           ]
         },
         {
@@ -478,6 +563,10 @@
             "regulation",
             "upgrade",
             "development"
+          ],
+          "event_classes": [
+            "regulation_safety",
+            "official_update"
           ]
         }
       ]
@@ -528,6 +617,10 @@
             "launch",
             "faa",
             "test"
+          ],
+          "event_classes": [
+            "schedule_result",
+            "operations_market"
           ]
         },
         {
@@ -539,6 +632,10 @@
             "nasa",
             "dock",
             "return"
+          ],
+          "event_classes": [
+            "schedule_result",
+            "official_update"
           ]
         },
         {
@@ -549,6 +646,10 @@
             "ipo",
             "valuation",
             "customer"
+          ],
+          "event_classes": [
+            "capital_markets",
+            "partnership"
           ]
         }
       ]
@@ -602,6 +703,10 @@
             "pmi",
             "mospi",
             "インド"
+          ],
+          "event_classes": [
+            "macro_data",
+            "financials"
           ]
         },
         {
@@ -613,6 +718,10 @@
             "fdi",
             "nso",
             "ベトナム"
+          ],
+          "event_classes": [
+            "macro_data",
+            "operations_market"
           ]
         },
         {
@@ -624,6 +733,10 @@
             "policy",
             "manufacturing",
             "supply"
+          ],
+          "event_classes": [
+            "macro_data",
+            "capital_markets"
           ]
         }
       ]
@@ -677,6 +790,10 @@
             "退団",
             "staff",
             "roster"
+          ],
+          "event_classes": [
+            "people_contracts",
+            "official_update"
           ]
         },
         {
@@ -688,6 +805,10 @@
             "schedule",
             "result",
             "試合"
+          ],
+          "event_classes": [
+            "schedule_result",
+            "official_update"
           ]
         },
         {
@@ -699,6 +820,10 @@
             "会見",
             "動画",
             "local"
+          ],
+          "event_classes": [
+            "official_update",
+            "schedule_result"
           ]
         }
       ]
@@ -753,6 +878,10 @@
             "nasdaq",
             "dow",
             "株"
+          ],
+          "event_classes": [
+            "market_reaction",
+            "financials"
           ]
         },
         {
@@ -764,6 +893,10 @@
             "ici",
             "投信",
             "フロー"
+          ],
+          "event_classes": [
+            "fund_flows",
+            "capital_markets"
           ]
         },
         {
@@ -776,9 +909,20 @@
             "cpi",
             "calendar",
             "金利"
+          ],
+          "event_classes": [
+            "macro_data",
+            "schedule_result"
           ]
         }
       ]
     }
-  ]
+  ],
+  "minimum_investigation_hypotheses_per_watch_topic": 2,
+  "required_investigation_source_roles": [
+    "primary_or_official",
+    "independent_media_or_data",
+    "social_or_video_signal"
+  ],
+  "minimum_investigation_time_window_hours": 24
 }
