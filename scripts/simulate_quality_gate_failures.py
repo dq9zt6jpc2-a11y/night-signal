@@ -18,13 +18,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ISSUE_DATE = "2026-05-22"
-SOFTBANK_CARD_TITLE = "<h3>SoftBank Group、OpenAIとSB EnergyのIPO観測で急騰続く"
-SOFTBANK_DETAIL = "softbank-ipo-surge-2026-05-22.html"
-BREX_DETAIL = "brex-newbill-roster-2026-05-22.html"
-OPENAI_PRIMARY_DETAIL = "openai-geometry-follow-2026-05-22.html"
-OPENAI_SECONDARY_DETAIL = "openai-ipo-capital-2026-05-22.html"
-INVESTMENT_SECOND_TITLE = "ICI週次、ETF流入が長期投信流出を吸収"
-INVESTMENT_SECOND_DETAIL = "investment-ici-flows-2026-05-22.html"
+SOFTBANK_CARD_TITLE = "<h3>SoftBank株が続伸、OpenAIのIPO観測とSB Energy上場計画が材料に"
+SOFTBANK_DETAIL = "softbank-shares-rally-openai-ipo-2026-05-22.html"
+BREX_DETAIL = "brex-newbill-exit-2026-05-22.html"
+OPENAI_PRIMARY_DETAIL = "openai-content-provenance-2026-05-22.html"
+OPENAI_SECONDARY_DETAIL = "openai-release-notes-codex-mobile-2026-05-22.html"
+INVESTMENT_SECOND_TITLE = "米株ファンドは利回り上昇警戒で資金流出：利益確定の動きが強まる"
+INVESTMENT_SECOND_DETAIL = "investment-us-equity-funds-outflows-2026-05-22.html"
 
 
 def copy_fixture() -> Path:
@@ -42,10 +42,25 @@ def copy_fixture() -> Path:
     shutil.copyfile(ROOT / "config" / "night_signal_guardrails.json", tmp / "config" / "night_signal_guardrails.json")
     shutil.copyfile(ROOT / f"night-brief-web-sample-{ISSUE_DATE}.html", tmp / f"night-brief-web-sample-{ISSUE_DATE}.html")
     shutil.copyfile(ROOT / "night-brief-web-sample-2026-05-18.html", tmp / "night-brief-web-sample-2026-05-18.html")
-    shutil.copyfile(ROOT / "details" / f"extraction-log-{ISSUE_DATE}.html", tmp / "details" / f"extraction-log-{ISSUE_DATE}.html")
+    sample_html = (ROOT / f"night-brief-web-sample-{ISSUE_DATE}.html").read_text(encoding="utf-8")
+    detail_names = {
+        match.group(1)
+        for match in re.finditer(r'href="details/([^"#?]+\.html)', sample_html)
+    }
+    detail_names.add(f"extraction-log-{ISSUE_DATE}.html")
+    for name in sorted(detail_names):
+        shutil.copyfile(ROOT / "details" / name, tmp / "details" / name)
+    shutil.copyfile(ROOT / "details" / "_style.css", tmp / "details" / "_style.css")
     shutil.copyfile(ROOT / "details" / "policy.html", tmp / "details" / "policy.html")
     shutil.copytree(ROOT / ".github", tmp / ".github")
     shutil.copytree(ROOT / "site", tmp / "site")
+    subprocess.run(
+        [sys.executable, str(tmp / "scripts" / "sync_site.py"), ISSUE_DATE],
+        cwd=tmp,
+        check=True,
+        text=True,
+        capture_output=True,
+    )
     return tmp
 
 
@@ -345,7 +360,7 @@ def main() -> int:
         lambda tmp: write(
             tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
             read(tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL).replace(
-                "SoftBank Group、OpenAIとSB EnergyのIPO観測で急騰続く",
+                "SoftBank株が続伸、OpenAIのIPO観測とSB Energy上場計画が材料に",
                 "宇都宮ブレックス、スタッフ体制を再編",
             ),
         ),
@@ -479,7 +494,7 @@ def main() -> int:
         "detail page too thin",
         lambda tmp: write(
             tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
-            '<html><head><title>SoftBank</title></head><body><main><a class="back" href="../index.html#softbank">一覧へ戻る</a><article><h1>SoftBank Group、OpenAIとSB EnergyのIPO観測で急騰続く</h1><h2>30秒概要</h2><div class="summary-lead">SoftBank Group株はIPO観測で動いた。</div><div class="source">原文確認:<a href="https://www.bloomberg.com/news/articles/2026-05-21/softbank-group-shares-surge-almost-20-on-openai-sb-energy-ipos">Bloomberg</a></div></article></main></body></html>',
+            '<html><head><title>SoftBank</title></head><body><main><a class="back" href="../index.html#softbank">一覧へ戻る</a><article><h1>SoftBank株が続伸、OpenAIのIPO観測とSB Energy上場計画が材料に</h1><h2>30秒概要</h2><div class="summary-lead">SoftBank株はIPO観測で動いた。</div><div class="source">原文確認:<a href="https://group.softbank/en/news/press/20260401_0">SBG</a></div></article></main></body></html>',
         ),
         "detail pages too thin",
     )
@@ -513,14 +528,14 @@ def main() -> int:
             "new_or_changed_items",
             [
                 {
-                    "title": "OpenAIモデルの幾何予想反証、AI研究力の評価軸に浮上",
-                    "summary": "OpenAIの内部モデルが離散幾何の長年の予想を反証した件は、製品機能ではなく研究成果そのものが材料になった。外部数学者の検証を伴うため、AI企業の研究力を測る基準にも影響し、未解決問題への到達力を資本市場と企業導入の両方から評価する材料になる。",
+                    "title": "OpenAI、画像の来歴検証ツールを予告：C2PAとSynthIDで「出所」を残す",
+                    "summary": "OpenAIは画像の出所情報を残す仕組みを強化し、C2PA準拠とSynthIDのウォーターマークを組み合わせる方針を示した。生成物の拡散前検知、ラベル付け、監査可能性を同時に上げるための基盤更新として重要度が高く、プラットフォーム側の運用コストにも直結する。",
                     "sources": ["https://example.com/not-the-detail-source"],
                 },
                 {
-                    "title": "OpenAIの非公開IPO準備報道、AI資本市場イベントへ発展",
-                    "summary": "Axiosの報道では、OpenAIが非公開のIPO書類提出を準備している。AI企業の資金調達力、公開市場評価、Microsoftとの関係を同時に見る材料になり、SpaceXの公開準備報道とも重なって資本市場イベントとして重要度が高い。",
-                    "sources": ["https://www.axios.com/2026/05/20/openai-ipo-spacex-musk"],
+                    "title": "ChatGPTリリースノート更新：Codexのモバイル接続とAppshotsで「長時間タスク」を前提化",
+                    "summary": "ChatGPTのリリースノートでは、Codexをモバイルから扱う導線やAppshotsのような画面文脈の共有が強まり、長時間タスクの進捗確認と承認が前提になってきた。企業利用では端末管理と承認フローの設計が焦点になり、便利さより統制設計が導入可否を左右する。",
+                    "sources": ["https://help.openai.com/en/articles/6825453-chatgpt-release-notes"],
                 },
             ],
         ),
@@ -535,14 +550,14 @@ def main() -> int:
             "new_or_changed_items",
             [
                 {
-                    "title": "OpenAIモデルの幾何予想反証、AI研究力の評価軸に浮上",
+                    "title": "OpenAI、画像の来歴検証ツールを予告：C2PAとSynthIDで「出所」を残す",
                     "summary": "OpenAI disclosed that an internal model disproved a long-standing discrete geometry conjecture, making research capability itself a market and enterprise adoption signal beyond product release notes.",
-                    "sources": ["https://openai.com/index/model-disproves-discrete-geometry-conjecture/"],
+                    "sources": ["https://openai.com/index/advancing-content-provenance/"],
                 },
                 {
-                    "title": "OpenAIの非公開IPO準備報道、AI資本市場イベントへ発展",
-                    "summary": "Axiosの報道では、OpenAIが非公開のIPO書類提出を準備している。AI企業の資金調達力、公開市場評価、Microsoftとの関係を同時に見る材料になり、資本市場イベントとして重要度が高い。",
-                    "sources": ["https://www.axios.com/2026/05/20/openai-ipo-spacex-musk"],
+                    "title": "ChatGPTリリースノート更新：Codexのモバイル接続とAppshotsで「長時間タスク」を前提化",
+                    "summary": "ChatGPTのリリースノートでは、Codexをモバイルから扱う導線やAppshotsのような画面文脈の共有が強まり、長時間タスクの進捗確認と承認が前提になってきた。企業利用では端末管理と承認フローの設計が焦点になる。",
+                    "sources": ["https://help.openai.com/en/articles/6825453-chatgpt-release-notes"],
                 },
             ],
         ),
@@ -559,19 +574,19 @@ def main() -> int:
                 "new_or_changed_items",
                 [
                     {
-                        "title": "OpenAIモデルの幾何予想反証、AI研究力の評価軸に浮上",
-                        "summary": "OpenAIモデルが離散幾何の長年の予想を反証した。研究力の評価材料になる。",
-                        "sources": ["https://openai.com/index/model-disproves-discrete-geometry-conjecture/"],
+                        "title": "OpenAI、画像の来歴検証ツールを予告：C2PAとSynthIDで「出所」を残す",
+                        "summary": "OpenAIは画像の出所情報を残す仕組みを強化し、C2PA準拠とSynthIDのウォーターマークを組み合わせる方針を示した。生成物の拡散前検知、ラベル付け、監査可能性を同時に上げるための基盤更新として重要度が高く、プラットフォーム側の運用コストにも直結する。",
+                        "sources": ["https://openai.com/index/advancing-content-provenance/"],
                     },
                     {
-                        "title": "OpenAIの非公開IPO準備報道、AI資本市場イベントへ発展",
-                        "summary": "Axiosの報道では、OpenAIが非公開のIPO書類提出を準備している。AI企業の資金調達力、公開市場評価、Microsoftとの関係を同時に見る材料になり、SpaceXの公開準備報道とも重なって資本市場イベントとして重要度が高い。",
-                        "sources": ["https://www.axios.com/2026/05/20/openai-ipo-spacex-musk"],
+                        "title": "ChatGPTリリースノート更新：Codexのモバイル接続とAppshotsで「長時間タスク」を前提化",
+                        "summary": "Codexのモバイル接続が広がった。",
+                        "sources": ["https://help.openai.com/en/articles/6825453-chatgpt-release-notes"],
                     },
                 ],
             ),
         ],
-        "OpenAI new_or_changed_items[1] summary is too thin",
+        "OpenAI new_or_changed_items[2] summary is too thin",
     )
 
     assert_fail(
@@ -909,7 +924,7 @@ def main() -> int:
             mutate_manifest_entry(
                 tmp,
                 "OpenAI",
-                lambda entry: entry["latest_candidates"][-1].pop("non_adoption_reason_class", None),
+                lambda entry: entry["latest_candidates"][0].pop("non_adoption_reason_class", None),
             ),
         ],
         "fresh non-adopted latest candidate missing non_adoption_reason_class",
@@ -930,7 +945,7 @@ def main() -> int:
                 lambda entry: [
                     candidate.update({"source_published_date": "2026-05-18"})
                     for candidate in entry["latest_candidates"]
-                    if candidate.get("title") == "OpenAIモデルの幾何予想反証、AI研究力の評価軸に浮上"
+                    if candidate.get("title") == "OpenAI、画像の来歴検証ツールを予告：C2PAとSynthIDで「出所」を残す"
                 ],
             ),
         ],
@@ -952,7 +967,7 @@ def main() -> int:
                 lambda entry: [
                     candidate.update({"source_published_date": "2026-05-18"})
                     for candidate in entry["latest_candidates"]
-                    if candidate.get("title") == "OpenAIモデルの幾何予想反証、AI研究力の評価軸に浮上"
+                    if candidate.get("title") == "OpenAI、画像の来歴検証ツールを予告：C2PAとSynthIDで「出所」を残す"
                 ],
             ),
         ],
