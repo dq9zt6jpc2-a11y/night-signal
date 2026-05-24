@@ -1,5 +1,5 @@
 {
-  "version": "2026-05-22.11",
+  "version": "2026-05-24.13",
   "description": "Persistent recurrence-prevention inventory for NIGHT SIGNAL. A user-reported failure is not considered fixed unless it is represented here and enforced by scripts/guardrail_inventory.py.",
   "guards": [
     {
@@ -311,10 +311,12 @@
         "PUBLICATION AUDIT PASSED"
       ],
       "required_policy_terms": [
+        ".night-signal-issue-date",
         "過去号へのフォールバックは禁止",
         "publication_audit"
       ],
       "required_workflow_terms": [
+        ".night-signal-issue-date",
         "Verify public page date",
         "Selected NIGHT SIGNAL issue is missing"
       ],

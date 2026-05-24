@@ -13,9 +13,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check today's generated issue
+      - name: Check selected generated issue
         run: |
-          ISSUE_DATE="$(TZ=Asia/Tokyo date +%F)"
+          if [[ ! -f ".night-signal-issue-date" ]]; then
+            echo "Selected NIGHT SIGNAL issue date marker is missing: .night-signal-issue-date" >&2
+            exit 1
+          fi
+          ISSUE_DATE="$(tr -d '[:space:]' < .night-signal-issue-date)"
+          if [[ ! "$ISSUE_DATE" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+            echo "Selected NIGHT SIGNAL issue date marker is invalid: ${ISSUE_DATE}" >&2
+            exit 1
+          fi
           python3 scripts/guardrail_inventory.py
           python3 scripts/coverage_audit.py "$ISSUE_DATE"
           python3 scripts/pre22_audit.py "$ISSUE_DATE"
