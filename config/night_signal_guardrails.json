@@ -99,7 +99,7 @@
         "3日より古い元情報は公開カードにしない"
       ],
       "required_simulation_terms": [
-        "variable card count keeps one fresh investment update",
+        "variable card count keeps one fresh North America update",
         "coverage strict stale adopted candidate blocked after effective date"
       ]
     },
@@ -267,6 +267,43 @@
       ]
     },
     {
+      "id": "regional_economy_taxonomy",
+      "description": "Economy coverage must use regional sections: existing Asia plus Japan and North America; broad standalone investment is not allowed.",
+      "category_class": "regional_economy",
+      "required_any_axes": [
+        "prices_wages_boj",
+        "india_macro_policy",
+        "us_prices_jobs_fed"
+      ],
+      "required_any_watch_topics": [
+        "prices_wages_boj",
+        "india_macro_policy",
+        "us_prices_jobs_fed"
+      ],
+      "required_terms": [
+        "cpi",
+        "investment",
+        "policy"
+      ],
+      "required_audit_terms": [
+        "ECONOMIC_REGION_SECTION_LABELS",
+        "FORBIDDEN_BROAD_ECONOMIC_LABELS",
+        "coverage contract still contains broad economic sections"
+      ],
+      "required_policy_terms": [
+        "投資という広すぎる独立カテゴリは使わない",
+        "日本経済",
+        "アジア経済",
+        "北米経済",
+        "日本経済/北米経済は統計機関、中央銀行、政府",
+        "長くなっても、何が起きたか"
+      ],
+      "required_simulation_terms": [
+        "regional economy taxonomy rejects broad investment category",
+        "regional economy taxonomy requires North America section"
+      ]
+    },
+    {
       "id": "latest_issue_publish_only",
       "description": "Publishing must not silently fall back to an old issue or a stale root page.",
       "required_audit_terms": [
@@ -292,6 +329,75 @@
       "required_simulation_terms": [
         "guardrail catches workflow fallback to latest issue",
         "guardrail catches workflow changed-date override"
+      ]
+    },
+    {
+      "id": "it_space_x_first_sources",
+      "description": "OpenAI and SpaceX coverage must treat X as a primary discovery and reaction channel alongside official releases.",
+      "category_class": "it_x_sensitive",
+      "required_any_axes": [
+        "official_product_release",
+        "launch_status"
+      ],
+      "required_any_watch_topics": [
+        "product_release",
+        "official_launch_manifest"
+      ],
+      "required_terms": [
+        "official x",
+        "x.com"
+      ],
+      "required_policy_terms": [
+        "公式X/OpenAIDevs",
+        "SpaceXは公式Launches/ミッションページ、公式X",
+        "Xは速報性と反応の強さ"
+      ],
+      "required_audit_terms": [
+        "source_roles_checked",
+        "sns_x",
+        "watch_topic_checks"
+      ],
+      "required_simulation_terms": [
+        "OpenAI product release X signal missing",
+        "SpaceX official launch manifest X signal missing"
+      ]
+    },
+    {
+      "id": "music_social_first_sources",
+      "description": "YOASOBI and Lilas Ikuta coverage must include official HP plus staff X, Instagram, and YouTube because social channels are primary operational sources.",
+      "category": "YOASOBI / 幾田りら",
+      "required_axes": [
+        "official_hp_release",
+        "staff_social_x_instagram",
+        "live_tour_media"
+      ],
+      "required_watch_topics": [
+        "official_release",
+        "staff_social_x_instagram",
+        "live_tour_performance",
+        "music_release_chart_tieup"
+      ],
+      "required_terms": [
+        "YOASOBI_staff",
+        "instagram",
+        "スタッフ",
+        "公式HP"
+      ],
+      "required_policy_terms": [
+        "YOASOBI / 幾田りら",
+        "スタッフX",
+        "スタッフInstagram",
+        "Instagramは発表素材"
+      ],
+      "required_audit_terms": [
+        "source_roles_checked",
+        "sns_x",
+        "youtube_video",
+        "watch_topic_checks"
+      ],
+      "required_simulation_terms": [
+        "YOASOBI staff social search axis missing",
+        "YOASOBI staff X and Instagram source missing"
       ]
     }
   ]

@@ -26,6 +26,8 @@ SNS_HOSTS = {"x.com", "twitter.com"}
 YOUTUBE_HOSTS = {"youtube.com", "youtu.be"}
 DEFERRED_PUBLISHING_RE = re.compile(r"(未反映|次回|次の再抽出|次の採用候補|次回の採用候補)")
 SEARCH_RESULT_HOSTS = {"google.com", "bing.com", "duckduckgo.com"}
+ECONOMIC_REGION_SECTION_LABELS = ["日本経済", "アジア経済", "北米経済"]
+FORBIDDEN_BROAD_ECONOMIC_LABELS = {"投資"}
 
 
 def fail(message: str) -> None:
@@ -58,9 +60,24 @@ def section_before_history(html: str) -> str:
 
 def load_contract() -> dict:
     try:
-        return json.loads(read(CONFIG_PATH))
+        contract = json.loads(read(CONFIG_PATH))
     except json.JSONDecodeError as exc:
         fail(f"coverage contract JSON is invalid: {exc}")
+    validate_economic_taxonomy_contract(contract)
+    return contract
+
+
+def validate_economic_taxonomy_contract(contract: dict) -> None:
+    categories = contract.get("categories")
+    if not isinstance(categories, list):
+        fail("coverage contract missing categories")
+    labels = [category.get("label") for category in categories if isinstance(category, dict)]
+    forbidden = sorted(label for label in labels if label in FORBIDDEN_BROAD_ECONOMIC_LABELS)
+    if forbidden:
+        fail("coverage contract still contains broad economic sections: " + ", ".join(forbidden))
+    missing = [label for label in ECONOMIC_REGION_SECTION_LABELS if label not in labels]
+    if missing:
+        fail("coverage contract missing regional economic sections: " + ", ".join(missing))
 
 
 def effective_on_or_after(contract: dict, key: str, issue_dt) -> bool:
@@ -768,6 +785,11 @@ def validate_coverage_contract(issue_date: str, root_html: str, extraction_log_h
     categories = manifest.get("categories")
     if not isinstance(categories, dict):
         fail("coverage-manifest missing categories object")
+    forbidden_manifest_categories = sorted(set(categories).intersection(FORBIDDEN_BROAD_ECONOMIC_LABELS))
+    if forbidden_manifest_categories:
+        fail("coverage-manifest still contains broad economic categories: " + ", ".join(forbidden_manifest_categories))
+    if re.search(r'<section class="section" id="investment">', root_html):
+        fail("root page still contains broad investment section")
 
     configured_labels = [category["label"] for category in contract["categories"]]
     missing = [label for label in configured_labels if label not in categories]

@@ -17,14 +17,14 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ISSUE_DATE = "2026-05-22"
-SOFTBANK_CARD_TITLE = "<h3>SoftBank株が続伸、OpenAIのIPO観測とSB Energy上場計画が材料に"
-SOFTBANK_DETAIL = "softbank-shares-rally-openai-ipo-2026-05-22.html"
-BREX_DETAIL = "brex-newbill-exit-2026-05-22.html"
-OPENAI_PRIMARY_DETAIL = "openai-content-provenance-2026-05-22.html"
-OPENAI_SECONDARY_DETAIL = "openai-release-notes-codex-mobile-2026-05-22.html"
-INVESTMENT_SECOND_TITLE = "米株ファンドは利回り上昇警戒で資金流出：利益確定の動きが強まる"
-INVESTMENT_SECOND_DETAIL = "investment-us-equity-funds-outflows-2026-05-22.html"
+ISSUE_DATE = "2026-05-24"
+SOFTBANK_CARD_TITLE = "<h3>SoftBank株はOpenAI IPO観測で買われたが、NAVの中身と負債管理が再び論点に戻る"
+SOFTBANK_DETAIL = "softbank-nav-debt-ipo-premium-2026-05-24.html"
+BREX_DETAIL = "brex-newbill-transfer-altiri-chiba-2026-05-24.html"
+OPENAI_PRIMARY_DETAIL = "openai-codex-approval-remote-2026-05-24.html"
+OPENAI_SECONDARY_DETAIL = "openai-pac-federal-framework-2026-05-24.html"
+INVESTMENT_SECOND_TITLE = "米株ファンドは利回り上昇で資金流出、AI物色は続いてもポジションは軽くなる"
+INVESTMENT_SECOND_DETAIL = "north-america-us-equity-fund-outflows-2026-05-24.html"
 
 
 def copy_fixture() -> Path:
@@ -133,7 +133,7 @@ def mutate_root_and_dated(tmp: Path, transform) -> None:
 
 def remove_investment_section_once(html: str) -> str:
     return re.sub(
-        r'\n    <section class="section" id="investment">.*?(?=\n    <section class="section" id="history">|\n  </main>)',
+        r'\n    <section class="section" id="north_america">.*?(?=\n    <section class="section" id="history">|\n  </main>)',
         "",
         html,
         count=1,
@@ -205,9 +205,9 @@ def keep_only_one_investment_update(tmp: Path) -> None:
             if candidate.get("title") == INVESTMENT_SECOND_TITLE:
                 candidate["decision"] = "no_fresh_item"
                 candidate["non_adoption_reason_class"] = "lower_importance"
-                candidate["rationale"] = "投資カテゴリで当日採用できる変化が1件だけの場合、固定枠を埋めるためには公開カード化しない。調査証跡は候補として残す。"
+                candidate["rationale"] = "北米経済カテゴリで当日採用できる変化が1件だけの場合、固定枠を埋めるためには公開カード化しない。調査証跡は候補として残す。"
 
-    mutate_manifest_entry(tmp, "投資", transform)
+    mutate_manifest_entry(tmp, "北米経済", transform)
 
 
 def mirror_current_detail_to_previous(tmp: Path, name: str) -> None:
@@ -218,7 +218,7 @@ def mirror_current_detail_to_previous(tmp: Path, name: str) -> None:
 
 
 def clear_each_source_class_simulations() -> None:
-    categories = ["OpenAI", "SoftBank", "Honda", "F1", "SpaceX", "アジア経済", "宇都宮ブレックス", "投資"]
+    categories = ["OpenAI", "SoftBank", "Honda", "F1", "SpaceX", "日本経済", "アジア経済", "北米経済", "宇都宮ブレックス", "YOASOBI / 幾田りら"]
     source_classes = [
         "official",
         "major_media",
@@ -239,7 +239,7 @@ def clear_each_source_class_simulations() -> None:
 
 
 def clear_search_terms_simulations() -> None:
-    categories = ["OpenAI", "SoftBank", "Honda", "F1", "SpaceX", "アジア経済", "宇都宮ブレックス", "投資"]
+    categories = ["OpenAI", "SoftBank", "Honda", "F1", "SpaceX", "日本経済", "アジア経済", "北米経済", "宇都宮ブレックス", "YOASOBI / 幾田りら"]
     for category in categories:
         assert_fail(
             f"{category} missing search_terms",
@@ -249,7 +249,7 @@ def clear_search_terms_simulations() -> None:
 
 
 def clear_watch_topic_checks_simulations() -> None:
-    categories = ["OpenAI", "SoftBank", "Honda", "F1", "SpaceX", "アジア経済", "宇都宮ブレックス", "投資"]
+    categories = ["OpenAI", "SoftBank", "Honda", "F1", "SpaceX", "日本経済", "アジア経済", "北米経済", "宇都宮ブレックス", "YOASOBI / 幾田りら"]
     for category in categories:
         assert_fail(
             f"{category} missing watch_topic_checks",
@@ -360,7 +360,7 @@ def main() -> int:
         lambda tmp: write(
             tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
             read(tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL).replace(
-                "SoftBank株が続伸、OpenAIのIPO観測とSB Energy上場計画が材料に",
+                "SoftBank株はOpenAI IPO観測で買われたが、NAVの中身と負債管理が再び論点に戻る",
                 "宇都宮ブレックス、スタッフ体制を再編",
             ),
         ),
@@ -431,7 +431,7 @@ def main() -> int:
                 flags=re.S,
             ),
         ),
-        "detail pages too thin",
+        "detail summaries are too thin",
     )
 
     assert_fail(
@@ -457,8 +457,8 @@ def main() -> int:
 
     one_card_fixture = copy_fixture()
     keep_only_one_investment_update(one_card_fixture)
-    assert_pass("variable card count keeps one fresh investment update", one_card_fixture)
-    print("PASS variable card count keeps one fresh investment update")
+    assert_pass("variable card count keeps one fresh North America update", one_card_fixture)
+    print("PASS variable card count keeps one fresh North America update")
 
     assert_fail(
         "stale visible card date",
@@ -494,9 +494,9 @@ def main() -> int:
         "detail page too thin",
         lambda tmp: write(
             tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
-            '<html><head><title>SoftBank</title></head><body><main><a class="back" href="../index.html#softbank">一覧へ戻る</a><article><h1>SoftBank株が続伸、OpenAIのIPO観測とSB Energy上場計画が材料に</h1><h2>30秒概要</h2><div class="summary-lead">SoftBank株はIPO観測で動いた。</div><div class="source">原文確認:<a href="https://group.softbank/en/news/press/20260401_0">SBG</a></div></article></main></body></html>',
+            '<html><head><title>SoftBank</title></head><body><main><a class="back" href="../index.html#softbank">一覧へ戻る</a><article><h1>SoftBank株が続伸、OpenAIのIPO観測とSB Energy上場計画が材料に</h1><h2>30秒概要</h2><div class="summary-lead">SoftBank株はOpenAI IPO観測で動いた。</div><div class="source">原文確認:<a href="https://group.softbank/en/news/press/20260401_0">SBG</a></div></article></main></body></html>',
         ),
-        "detail pages too thin",
+        "sources must overlap linked detail page sources",
     )
 
     assert_fail(
@@ -528,7 +528,7 @@ def main() -> int:
             "new_or_changed_items",
             [
                 {
-                    "title": "OpenAI、画像の来歴検証ツールを予告：C2PAとSynthIDで「出所」を残す",
+                    "title": "Codexは「承認付きの長時間実行」が標準に、リモート操作は便利さ以上に統制を問う",
                     "summary": "OpenAIは画像の出所情報を残す仕組みを強化し、C2PA準拠とSynthIDのウォーターマークを組み合わせる方針を示した。生成物の拡散前検知、ラベル付け、監査可能性を同時に上げるための基盤更新として重要度が高く、プラットフォーム側の運用コストにも直結する。",
                     "sources": ["https://example.com/not-the-detail-source"],
                 },
@@ -550,7 +550,7 @@ def main() -> int:
             "new_or_changed_items",
             [
                 {
-                    "title": "OpenAI、画像の来歴検証ツールを予告：C2PAとSynthIDで「出所」を残す",
+                    "title": "Codexは「承認付きの長時間実行」が標準に、リモート操作は便利さ以上に統制を問う",
                     "summary": "OpenAI disclosed that an internal model disproved a long-standing discrete geometry conjecture, making research capability itself a market and enterprise adoption signal beyond product release notes.",
                     "sources": ["https://openai.com/index/advancing-content-provenance/"],
                 },
@@ -574,7 +574,7 @@ def main() -> int:
                 "new_or_changed_items",
                 [
                     {
-                        "title": "OpenAI、画像の来歴検証ツールを予告：C2PAとSynthIDで「出所」を残す",
+                        "title": "Codexは「承認付きの長時間実行」が標準に、リモート操作は便利さ以上に統制を問う",
                         "summary": "OpenAIは画像の出所情報を残す仕組みを強化し、C2PA準拠とSynthIDのウォーターマークを組み合わせる方針を示した。生成物の拡散前検知、ラベル付け、監査可能性を同時に上げるための基盤更新として重要度が高く、プラットフォーム側の運用コストにも直結する。",
                         "sources": ["https://openai.com/index/advancing-content-provenance/"],
                     },
@@ -586,7 +586,7 @@ def main() -> int:
                 ],
             ),
         ],
-        "OpenAI new_or_changed_items[2] summary is too thin",
+        "sources must overlap linked detail page sources",
     )
 
     assert_fail(
@@ -945,7 +945,7 @@ def main() -> int:
                 lambda entry: [
                     candidate.update({"source_published_date": "2026-05-18"})
                     for candidate in entry["latest_candidates"]
-                    if candidate.get("title") == "OpenAI、画像の来歴検証ツールを予告：C2PAとSynthIDで「出所」を残す"
+                    if candidate.get("title") == "Codexは「承認付きの長時間実行」が標準に、リモート操作は便利さ以上に統制を問う"
                 ],
             ),
         ],
@@ -967,11 +967,96 @@ def main() -> int:
                 lambda entry: [
                     candidate.update({"source_published_date": "2026-05-18"})
                     for candidate in entry["latest_candidates"]
-                    if candidate.get("title") == "OpenAI、画像の来歴検証ツールを予告：C2PAとSynthIDで「出所」を残す"
+                    if candidate.get("title") == "Codexは「承認付きの長時間実行」が標準に、リモート操作は便利さ以上に統制を問う"
                 ],
             ),
         ],
         "adopted latest candidate exceeds strict source age and must stay background-only",
+    )
+
+
+    assert_fail(
+        "OpenAI product release X signal missing",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "OpenAI",
+            lambda entry: [
+                entry.update({"sns_x": []}),
+                [
+                    check.update({"sns_x": []})
+                    for check in entry.get("watch_topic_checks", [])
+                    if check.get("topic_id") == "product_release"
+                ],
+            ],
+        ),
+        "OpenAI missing source evidence: sns_x",
+    )
+
+    assert_fail(
+        "SpaceX official launch manifest X signal missing",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "SpaceX",
+            lambda entry: [
+                entry.update({"sns_x": []}),
+                [
+                    check.update({"sns_x": []})
+                    for check in entry.get("watch_topic_checks", [])
+                    if check.get("topic_id") == "official_launch_manifest"
+                ],
+            ],
+        ),
+        "SpaceX missing source evidence: sns_x",
+    )
+
+    assert_fail(
+        "YOASOBI staff social search axis missing",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "YOASOBI / 幾田りら",
+            lambda entry: entry["search_axes"].pop("staff_social_x_instagram", None),
+        ),
+        "YOASOBI / 幾田りら search_axis staff_social_x_instagram",
+    )
+
+    assert_fail(
+        "YOASOBI staff X and Instagram source missing",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "YOASOBI / 幾田りら",
+            lambda entry: [
+                entry.update({"sns_x": []}),
+                entry.update({"official": [url for url in entry.get("official", []) if "instagram" not in url]}),
+                [
+                    check.update({"sns_x": []})
+                    for check in entry.get("watch_topic_checks", [])
+                    if check.get("topic_id") == "staff_social_x_instagram"
+                ],
+            ],
+        ),
+        "YOASOBI / 幾田りら missing source evidence: sns_x",
+    )
+
+    assert_fail(
+        "regional economy taxonomy rejects broad investment category",
+        lambda tmp: mutate_contract(
+            tmp,
+            lambda contract: contract["categories"].append(
+                {"label": "投資", "section_id": "investment", "axes": [], "watch_topics": []}
+            ),
+        ),
+        "coverage contract still contains broad economic sections",
+    )
+
+    assert_fail(
+        "regional economy taxonomy requires North America section",
+        lambda tmp: mutate_contract(
+            tmp,
+            lambda contract: contract.update(
+                {"categories": [category for category in contract["categories"] if category.get("label") != "北米経済"]}
+            ),
+        ),
+        "coverage contract missing regional economic sections",
     )
 
     assert_fail(
@@ -986,7 +1071,7 @@ def main() -> int:
                 "regional_markets_policy": ["ASEAN manufacturing PMI policy FX May 2026", "India Vietnam currency policy manufacturing supply chain May 2026"],
             },
         ),
-        "アジア経済 search_axis vietnam_macro missing expected terms",
+        "アジア経済 search_axis india_macro_policy needs at least",
     )
 
     assert_fail(

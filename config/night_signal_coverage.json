@@ -1,6 +1,6 @@
 {
-  "contract_version": "2026-05-22.9",
-  "description": "NIGHT SIGNAL daily collection contract. A public issue must prove that every category and configured watch topic was searched across Web, SNS/X, and YouTube before publication.",
+  "contract_version": "2026-05-24.12",
+  "description": "NIGHT SIGNAL daily collection contract. A public issue must prove that every category and configured watch topic was searched across Web, SNS/X, and YouTube before publication. Economy coverage is regional: Japan, Asia ex-Japan focus, and North America; broad standalone investment sections are not allowed. IT/space topics must include official release plus X signals; YOASOBI/Ikuta coverage must include official HP plus staff/person social channels including X and Instagram.",
   "source_classes": {
     "official": {
       "min_items": 1,
@@ -114,7 +114,15 @@
             "api",
             "release",
             "model",
-            "codex"
+            "codex",
+            "official release",
+            "official x",
+            "OpenAIDevs",
+            "developers",
+            "x.com",
+            "instagram",
+            "youtube",
+            "official social"
           ]
         },
         {
@@ -180,7 +188,15 @@
             "model",
             "codex",
             "release",
-            "mobile"
+            "mobile",
+            "official release",
+            "official x",
+            "OpenAIDevs",
+            "developers",
+            "x.com",
+            "instagram",
+            "youtube",
+            "official social"
           ],
           "event_classes": [
             "product_update",
@@ -217,6 +233,10 @@
             "official_update"
           ]
         }
+      ],
+      "risk_classes": [
+        "it_x_sensitive",
+        "it_social_multichannel"
       ]
     },
     {
@@ -418,6 +438,23 @@
             "急騰",
             "急落"
           ]
+        },
+        {
+          "id": "official_product_demand",
+          "terms": [
+            "honda",
+            "official",
+            "release",
+            "Super-ONE",
+            "pre-orders",
+            "orders",
+            "7000",
+            "予約",
+            "受注",
+            "契約台数",
+            "補助金",
+            "product"
+          ]
         }
       ],
       "watch_topics": [
@@ -500,6 +537,25 @@
             "operations_market",
             "macro_data"
           ]
+        },
+        {
+          "id": "official_product_demand",
+          "terms": [
+            "Super-ONE",
+            "pre-orders",
+            "orders",
+            "7000",
+            "予約",
+            "受注",
+            "補助金",
+            "product site",
+            "official release"
+          ],
+          "event_classes": [
+            "product_update",
+            "operations_market",
+            "macro_data"
+          ]
         }
       ],
       "risk_classes": [
@@ -513,12 +569,18 @@
         {
           "id": "official_schedule_results",
           "terms": [
-            "formula 1",
+            "classification",
             "f1",
+            "fia timing",
+            "formula 1",
             "grand prix",
-            "schedule",
+            "official results",
             "result",
-            "timetable"
+            "schedule",
+            "sprint",
+            "timetable",
+            "スプリント",
+            "リザルト"
           ]
         },
         {
@@ -548,12 +610,18 @@
         {
           "id": "race_schedule_results",
           "terms": [
+            "classification",
+            "fia timing",
             "grand prix",
-            "schedule",
-            "result",
+            "official results",
             "practice",
             "qualifying",
-            "race"
+            "race",
+            "result",
+            "schedule",
+            "sprint",
+            "スプリント",
+            "リザルト"
           ],
           "event_classes": [
             "schedule_result",
@@ -599,12 +667,25 @@
         {
           "id": "launch_status",
           "terms": [
-            "spacex",
-            "launch",
-            "starship",
-            "falcon",
             "dragon",
-            "flight"
+            "falcon",
+            "flight",
+            "launch",
+            "launch window",
+            "launches",
+            "mission page",
+            "official release",
+            "spacex",
+            "starship",
+            "webcast",
+            "公式リリース",
+            "official x",
+            "x.com",
+            "SpaceX",
+            "Starlink",
+            "instagram",
+            "youtube",
+            "official social"
           ]
         },
         {
@@ -672,6 +753,252 @@
             "capital_markets",
             "partnership"
           ]
+        },
+        {
+          "id": "official_launch_manifest",
+          "terms": [
+            "spacex",
+            "launches",
+            "mission page",
+            "launch window",
+            "webcast",
+            "official release",
+            "公式リリース",
+            "打ち上げ予定",
+            "official x",
+            "x.com",
+            "SpaceX",
+            "Starlink",
+            "instagram",
+            "youtube",
+            "official social"
+          ],
+          "event_classes": [
+            "schedule_result",
+            "official_update"
+          ]
+        }
+      ],
+      "risk_classes": [
+        "it_x_sensitive",
+        "it_social_multichannel"
+      ]
+    },
+    {
+      "label": "日本経済",
+      "section_id": "japan_economy",
+      "axes": [
+        {
+          "id": "prices_wages_boj",
+          "terms": [
+            "japan",
+            "日本",
+            "cpi",
+            "wages",
+            "boj",
+            "日銀",
+            "賃金",
+            "物価"
+          ]
+        },
+        {
+          "id": "employment_consumption",
+          "terms": [
+            "employment",
+            "jobs",
+            "unemployment",
+            "consumer",
+            "spending",
+            "家計",
+            "雇用",
+            "消費"
+          ]
+        },
+        {
+          "id": "investment_policy_markets",
+          "terms": [
+            "capex",
+            "investment",
+            "policy",
+            "budget",
+            "jgb",
+            "yen",
+            "stock",
+            "設備投資",
+            "政府方針",
+            "円",
+            "金利",
+            "株"
+          ]
+        }
+      ],
+      "watch_topics": [
+        {
+          "id": "prices_wages_boj",
+          "terms": [
+            "japan",
+            "cpi",
+            "wages",
+            "boj",
+            "inflation",
+            "日本",
+            "物価",
+            "賃金",
+            "日銀"
+          ],
+          "event_classes": [
+            "macro_data",
+            "financials"
+          ]
+        },
+        {
+          "id": "employment_consumption",
+          "terms": [
+            "employment",
+            "jobs",
+            "unemployment",
+            "consumer",
+            "spending",
+            "household",
+            "雇用",
+            "消費",
+            "家計"
+          ],
+          "event_classes": [
+            "macro_data",
+            "operations_market"
+          ]
+        },
+        {
+          "id": "investment_policy_markets",
+          "terms": [
+            "capex",
+            "investment",
+            "policy",
+            "budget",
+            "jgb",
+            "yen",
+            "stock",
+            "設備投資",
+            "投資案件",
+            "政府方針",
+            "金利",
+            "円",
+            "株"
+          ],
+          "event_classes": [
+            "capital_markets",
+            "macro_data"
+          ]
+        }
+      ],
+      "risk_classes": [
+        "regional_economy"
+      ]
+    },
+    {
+      "label": "YOASOBI / 幾田りら",
+      "section_id": "yoasobi_ikuta",
+      "risk_classes": [
+        "music_social_first"
+      ],
+      "axes": [
+        {
+          "id": "official_hp_release",
+          "terms": [
+            "yoasobi",
+            "幾田りら",
+            "official",
+            "news",
+            "release",
+            "公式HP"
+          ]
+        },
+        {
+          "id": "staff_social_x_instagram",
+          "terms": [
+            "YOASOBI_staff",
+            "幾田りら staff",
+            "x.com",
+            "instagram",
+            "スタッフ",
+            "インスタ"
+          ]
+        },
+        {
+          "id": "live_tour_media",
+          "terms": [
+            "tour",
+            "live",
+            "Laugh",
+            "ソウル",
+            "YENA",
+            "ライブ",
+            "海外公演"
+          ]
+        }
+      ],
+      "watch_topics": [
+        {
+          "id": "official_release",
+          "terms": [
+            "official",
+            "news",
+            "release",
+            "yoasobi",
+            "幾田りら",
+            "公式HP"
+          ],
+          "event_classes": [
+            "official_update",
+            "product_update"
+          ]
+        },
+        {
+          "id": "staff_social_x_instagram",
+          "terms": [
+            "YOASOBI_staff",
+            "staff",
+            "x.com",
+            "instagram",
+            "インスタ",
+            "スタッフ"
+          ],
+          "event_classes": [
+            "official_update",
+            "operations_market"
+          ]
+        },
+        {
+          "id": "live_tour_performance",
+          "terms": [
+            "tour",
+            "live",
+            "Laugh",
+            "Seoul",
+            "YENA",
+            "ソウル",
+            "ライブ"
+          ],
+          "event_classes": [
+            "schedule_result",
+            "operations_market"
+          ]
+        },
+        {
+          "id": "music_release_chart_tieup",
+          "terms": [
+            "release",
+            "chart",
+            "Billboard",
+            "タイアップ",
+            "streaming",
+            "新曲"
+          ],
+          "event_classes": [
+            "product_update",
+            "operations_market"
+          ]
         }
       ]
     },
@@ -680,18 +1007,21 @@
       "section_id": "asia",
       "axes": [
         {
-          "id": "india_macro",
+          "id": "india_macro_policy",
           "terms": [
             "india",
             "インド",
             "cpi",
             "rbi",
             "mospi",
-            "pmi"
+            "pmi",
+            "forex",
+            "reserves",
+            "policy"
           ]
         },
         {
-          "id": "vietnam_macro",
+          "id": "vietnam_macro_investment",
           "terms": [
             "vietnam",
             "ベトナム",
@@ -699,30 +1029,40 @@
             "cpi",
             "fdi",
             "gso",
-            "nso"
+            "nso",
+            "manufacturing",
+            "investment"
           ]
         },
         {
-          "id": "regional_markets_policy",
+          "id": "india_vietnam_markets_supply_chain",
           "terms": [
-            "asean",
+            "india",
+            "vietnam",
             "fx",
             "currency",
-            "policy",
+            "supply chain",
             "manufacturing",
-            "supply chain"
+            "trade",
+            "インド",
+            "ベトナム",
+            "為替",
+            "供給網"
           ]
         }
       ],
       "watch_topics": [
         {
-          "id": "india_macro",
+          "id": "india_macro_policy",
           "terms": [
             "india",
             "cpi",
             "rbi",
             "pmi",
             "mospi",
+            "forex",
+            "reserves",
+            "policy",
             "インド"
           ],
           "event_classes": [
@@ -731,13 +1071,15 @@
           ]
         },
         {
-          "id": "vietnam_macro",
+          "id": "vietnam_macro_investment",
           "terms": [
             "vietnam",
             "iip",
             "cpi",
             "fdi",
             "nso",
+            "manufacturing",
+            "investment",
             "ベトナム"
           ],
           "event_classes": [
@@ -746,20 +1088,142 @@
           ]
         },
         {
-          "id": "regional_policy_markets",
+          "id": "india_vietnam_markets_supply_chain",
           "terms": [
-            "asean",
+            "india",
+            "vietnam",
             "fx",
             "currency",
-            "policy",
+            "trade",
+            "supply",
             "manufacturing",
-            "supply"
+            "インド",
+            "ベトナム"
           ],
           "event_classes": [
             "macro_data",
             "capital_markets"
           ]
         }
+      ],
+      "risk_classes": [
+        "regional_economy"
+      ]
+    },
+    {
+      "label": "北米経済",
+      "section_id": "north_america",
+      "axes": [
+        {
+          "id": "us_prices_jobs_fed",
+          "terms": [
+            "united states",
+            "us",
+            "america",
+            "cpi",
+            "pce",
+            "employment",
+            "jobs",
+            "fed",
+            "inflation",
+            "雇用",
+            "物価"
+          ]
+        },
+        {
+          "id": "us_markets_fund_flows_rates",
+          "terms": [
+            "s&p",
+            "nasdaq",
+            "dow",
+            "treasury",
+            "yield",
+            "fund flows",
+            "etf",
+            "ici",
+            "米株",
+            "金利",
+            "資金流向"
+          ]
+        },
+        {
+          "id": "north_america_investment_policy",
+          "terms": [
+            "north america",
+            "canada",
+            "mexico",
+            "capex",
+            "investment",
+            "industrial policy",
+            "tariff",
+            "energy",
+            "大型投資",
+            "政府方針"
+          ]
+        }
+      ],
+      "watch_topics": [
+        {
+          "id": "us_prices_jobs_fed",
+          "terms": [
+            "us",
+            "cpi",
+            "pce",
+            "jobs",
+            "employment",
+            "fed",
+            "inflation",
+            "雇用",
+            "物価"
+          ],
+          "event_classes": [
+            "macro_data",
+            "financials"
+          ]
+        },
+        {
+          "id": "us_markets_fund_flows_rates",
+          "terms": [
+            "s&p",
+            "nasdaq",
+            "dow",
+            "treasury",
+            "yield",
+            "fund",
+            "flows",
+            "ici",
+            "etf",
+            "米株",
+            "金利",
+            "フロー"
+          ],
+          "event_classes": [
+            "market_reaction",
+            "fund_flows"
+          ]
+        },
+        {
+          "id": "north_america_investment_policy",
+          "terms": [
+            "north america",
+            "canada",
+            "mexico",
+            "capex",
+            "investment",
+            "tariff",
+            "policy",
+            "energy",
+            "大型投資",
+            "政府方針"
+          ],
+          "event_classes": [
+            "capital_markets",
+            "macro_data"
+          ]
+        }
+      ],
+      "risk_classes": [
+        "regional_economy"
       ]
     },
     {
@@ -844,95 +1308,6 @@
           ],
           "event_classes": [
             "official_update",
-            "schedule_result"
-          ]
-        }
-      ]
-    },
-    {
-      "label": "投資",
-      "section_id": "investment",
-      "axes": [
-        {
-          "id": "market_prices",
-          "terms": [
-            "stock",
-            "market",
-            "s&p",
-            "nasdaq",
-            "dow",
-            "株",
-            "指数"
-          ]
-        },
-        {
-          "id": "fund_flows",
-          "terms": [
-            "etf",
-            "fund",
-            "flows",
-            "ici",
-            "投信",
-            "フロー"
-          ]
-        },
-        {
-          "id": "macro_calendar_rates",
-          "terms": [
-            "fed",
-            "rate",
-            "yield",
-            "oil",
-            "cpi",
-            "calendar",
-            "金利"
-          ]
-        }
-      ],
-      "watch_topics": [
-        {
-          "id": "market_prices",
-          "terms": [
-            "stock",
-            "market",
-            "s&p",
-            "nasdaq",
-            "dow",
-            "株"
-          ],
-          "event_classes": [
-            "market_reaction",
-            "financials"
-          ]
-        },
-        {
-          "id": "fund_flows",
-          "terms": [
-            "etf",
-            "fund",
-            "flows",
-            "ici",
-            "投信",
-            "フロー"
-          ],
-          "event_classes": [
-            "fund_flows",
-            "capital_markets"
-          ]
-        },
-        {
-          "id": "macro_rates_calendar",
-          "terms": [
-            "fed",
-            "rate",
-            "yield",
-            "oil",
-            "cpi",
-            "calendar",
-            "金利"
-          ],
-          "event_classes": [
-            "macro_data",
             "schedule_result"
           ]
         }
