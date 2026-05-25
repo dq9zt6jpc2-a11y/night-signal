@@ -121,6 +121,27 @@ def extract_manifest(extraction_log_html: str) -> dict:
         fail(f"coverage-manifest JSON is invalid: {exc}")
 
 
+def expected_contract_version(contract: dict, issue_date: str) -> str | None:
+    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
+    legacy_versions = contract.get("legacy_contract_versions", [])
+    if not isinstance(legacy_versions, list):
+        fail("coverage contract legacy_contract_versions must be a list")
+    for index, legacy in enumerate(legacy_versions, start=1):
+        if not isinstance(legacy, dict):
+            fail(f"coverage contract legacy_contract_versions[{index}] must be an object")
+        through_date = legacy.get("through_date")
+        version = legacy.get("version")
+        try:
+            through_dt = datetime.strptime(through_date, "%Y-%m-%d").date()
+        except (TypeError, ValueError):
+            fail(f"coverage contract legacy_contract_versions[{index}] through_date must be YYYY-MM-DD")
+        if not isinstance(version, str) or not version:
+            fail(f"coverage contract legacy_contract_versions[{index}] version is invalid")
+        if issue_dt <= through_dt:
+            return version
+    return contract.get("contract_version")
+
+
 def card_titles_by_section(root_html: str, section_id: str) -> list[str]:
     body = section_before_history(root_html)
     match = re.search(
@@ -325,6 +346,9 @@ def validate_new_or_changed_items(contract: dict, issue_date: str, root_html: st
     min_summary_chars = 60
     if effective_on_or_after(contract, "summary_quality_effective_date", issue_dt):
         min_summary_chars = int(contract.get("minimum_new_or_changed_summary_chars", 120))
+    synthesis_required = effective_on_or_after(contract, "synthesis_manifest_effective_date", issue_dt)
+    allowed_summary_modes = contract.get("allowed_summary_modes", [])
+    minimum_material_facts = int(contract.get("minimum_material_facts_per_published_item", 0))
     if not isinstance(items, list) or len(items) < minimum:
         fail(f"{category} needs at least {minimum} new_or_changed_items")
 
@@ -347,7 +371,27 @@ def validate_new_or_changed_items(contract: dict, issue_date: str, root_html: st
         if not source_urls:
             fail(f"{category} new_or_changed_items[{index}] must include URL sources")
         detail_urls = source_urls_from_detail(issue_date, detail_by_title[title])
-        if not any(url in detail_urls for url in source_urls):
+        if synthesis_required:
+            summary_mode = item.get("summary_mode")
+            material_facts = item.get("material_facts")
+            if summary_mode not in allowed_summary_modes:
+                fail(f"{category} new_or_changed_items[{index}] summary_mode is required for article synthesis")
+            if (
+                not isinstance(material_facts, list)
+                or len(material_facts) < minimum_material_facts
+                or any(not isinstance(fact, str) or len(re.sub(r"\s+", "", fact)) < 12 or not has_japanese(fact) for fact in material_facts)
+            ):
+                fail(f"{category} new_or_changed_items[{index}] needs concrete material_facts")
+            if len(set(source_urls)) > 1 and summary_mode != "multi_source_synthesis":
+                fail(f"{category} new_or_changed_items[{index}] multiple sources require multi_source_synthesis")
+            if summary_mode == "multi_source_synthesis":
+                basis = item.get("synthesis_basis")
+                if not isinstance(basis, str) or len(re.sub(r"\s+", "", basis)) < 30 or not has_japanese(basis):
+                    fail(f"{category} new_or_changed_items[{index}] multi_source_synthesis needs synthesis_basis")
+            missing_detail_sources = [url for url in source_urls if url not in detail_urls]
+            if missing_detail_sources:
+                fail(f"{category} new_or_changed_items[{index}] all synthesis sources must appear on detail page")
+        elif not any(url in detail_urls for url in source_urls):
             fail(f"{category} new_or_changed_items[{index}] sources must overlap linked detail page sources")
         item_titles.append(title)
 
@@ -379,6 +423,10 @@ def validate_latest_candidates(contract: dict, issue_date: str, root_html: str, 
     fresh_reason_applies = effective_on_or_after(
         contract, "fresh_non_adopted_reason_required_effective_date", issue_dt
     )
+    screening_applies = effective_on_or_after(
+        contract, "publication_screening_effective_date", issue_dt
+    )
+    allowed_change_classes = contract.get("allowed_change_classes", [])
     allowed_non_adoption_reasons = contract.get("allowed_non_adoption_reason_classes", [])
     if not isinstance(allowed_non_adoption_reasons, list) or any(
         not isinstance(item, str) for item in allowed_non_adoption_reasons
@@ -419,6 +467,25 @@ def validate_latest_candidates(contract: dict, issue_date: str, root_html: str, 
         if candidate_dt > issue_dt:
             fail(f"{category} latest_candidates[{index}] source_published_date is in the future: {source_date}")
         age = (issue_dt - candidate_dt).days
+        change_class = candidate.get("change_class")
+        if screening_applies:
+            assessment = candidate.get("publication_assessment")
+            if change_class not in allowed_change_classes:
+                fail(f"{category} latest_candidates[{index}] change_class is required for publication screening")
+            if not isinstance(assessment, str) or len(re.sub(r"\s+", "", assessment)) < 30 or not has_japanese(assessment):
+                fail(f"{category} latest_candidates[{index}] publication_assessment must explain the human judgment")
+            if decision == "adopted" and change_class in {"routine_recurring", "duplicate_followup"}:
+                materiality = candidate.get("materiality_basis")
+                if not isinstance(materiality, str) or len(re.sub(r"\s+", "", materiality)) < 30 or not has_japanese(materiality):
+                    fail(f"{category} adopted routine or duplicate candidate needs materiality_basis")
+            if decision in {"held", "no_fresh_item"} and change_class in {"new_event", "material_update"}:
+                fail(f"{category} fresh material candidate must be published or explicitly excluded: {title}")
+            if decision == "excluded" and change_class in {"new_event", "material_update"}:
+                if candidate.get("non_adoption_reason_class") not in {"duplicate_covered", "insufficient_evidence", "insufficient_relevance"}:
+                    fail(f"{category} excluded material candidate needs a defensible exclusion reason: {title}")
+            if decision != "adopted" and change_class == "routine_recurring":
+                if candidate.get("non_adoption_reason_class") not in {"duplicate_covered", "no_material_change"}:
+                    fail(f"{category} routine candidate must be screened as duplicate or no material change: {title}")
         if decision == "held" and age <= max_age and DEFERRED_PUBLISHING_RE.search(rationale):
             fail(f"{category} fresh latest candidate was deferred instead of resolved: {title}")
         if decision in {"held", "excluded", "no_fresh_item"} and age <= max_age and fresh_reason_applies:
@@ -808,7 +875,7 @@ def validate_no_change_checks(contract: dict, category_config: dict, entry: dict
 def validate_coverage_contract(issue_date: str, root_html: str, extraction_log_html: str) -> None:
     contract = load_contract()
     manifest = extract_manifest(extraction_log_html)
-    expected_version = contract.get("contract_version")
+    expected_version = expected_contract_version(contract, issue_date)
     if manifest.get("contract_version") != expected_version:
         fail(f"coverage contract version mismatch: {manifest.get('contract_version')} != {expected_version}")
     if manifest.get("date") != issue_date:

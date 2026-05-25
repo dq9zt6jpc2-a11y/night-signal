@@ -8,6 +8,7 @@ operational mistakes fail before publication.
 from __future__ import annotations
 
 import json
+import html as html_lib
 import re
 import shutil
 import subprocess
@@ -25,6 +26,7 @@ OPENAI_PRIMARY_DETAIL = "openai-codex-approval-remote-2026-05-24.html"
 OPENAI_SECONDARY_DETAIL = "openai-pac-federal-framework-2026-05-24.html"
 INVESTMENT_SECOND_TITLE = "米株ファンドは利回り上昇で資金流出、AI物色は続いてもポジションは軽くなる"
 INVESTMENT_SECOND_DETAIL = "north-america-us-equity-fund-outflows-2026-05-24.html"
+NEXT_ISSUE_DATE = "2026-05-26"
 
 
 def copy_fixture() -> Path:
@@ -37,6 +39,7 @@ def copy_fixture() -> Path:
     shutil.copyfile(ROOT / "scripts" / "guardrail_inventory.py", tmp / "scripts" / "guardrail_inventory.py")
     shutil.copyfile(ROOT / "scripts" / "publication_audit.py", tmp / "scripts" / "publication_audit.py")
     shutil.copyfile(ROOT / "scripts" / "sync_site.py", tmp / "scripts" / "sync_site.py")
+    shutil.copyfile(ROOT / "scripts" / "render_detail.py", tmp / "scripts" / "render_detail.py")
     shutil.copyfile(ROOT / "scripts" / "simulate_quality_gate_failures.py", tmp / "scripts" / "simulate_quality_gate_failures.py")
     shutil.copyfile(ROOT / "config" / "night_signal_coverage.json", tmp / "config" / "night_signal_coverage.json")
     shutil.copyfile(ROOT / "config" / "night_signal_guardrails.json", tmp / "config" / "night_signal_guardrails.json")
@@ -188,6 +191,81 @@ def mutate_contract(tmp: Path, transform) -> None:
     contract = json.loads(read(path))
     transform(contract)
     write(path, json.dumps(contract, ensure_ascii=False, indent=2) + "\n")
+
+
+def mutate_manifest_all(tmp: Path, transform) -> None:
+    path = tmp / "details" / f"extraction-log-{ISSUE_DATE}.html"
+    html = read(path)
+    match = re.search(r'(<script type="application/json" id="coverage-manifest">)(.*?)(</script>)', html, flags=re.S)
+    if not match:
+        raise AssertionError("fixture missing coverage manifest")
+    manifest = json.loads(match.group(2))
+    transform(manifest)
+    write(path, html[: match.start(2)] + json.dumps(manifest, ensure_ascii=False, indent=2) + html[match.end(2) :])
+
+
+def enable_future_manifest_rules(tmp: Path) -> None:
+    mutate_contract(
+        tmp,
+        lambda contract: contract.update(
+            {
+                "synthesis_manifest_effective_date": ISSUE_DATE,
+                "publication_screening_effective_date": ISSUE_DATE,
+            }
+        ),
+    )
+
+    detail_by_title: dict[str, str] = {}
+    for detail_path in (tmp / "details").glob("*.html"):
+        detail_html = read(detail_path)
+        h1 = re.search(r"<h1>(.*?)</h1>", detail_html, flags=re.S)
+        if h1:
+            title = html_lib.unescape(re.sub(r"<[^>]+>", "", h1.group(1))).strip()
+            detail_by_title[title] = detail_html
+
+    def augment(manifest: dict) -> None:
+        for entry in manifest["categories"].values():
+            for item in entry.get("new_or_changed_items", []):
+                detail_html = detail_by_title.get(item["title"], "")
+                matching_sources = [source for source in item.get("sources", []) if source in detail_html]
+                if matching_sources:
+                    item["sources"] = [matching_sources[0]]
+                item["summary_mode"] = "single_source_summary"
+                item["material_facts"] = [
+                    "公表主体と公表日時を本文へ残し、出来事の起点を特定している。",
+                    "掲載対象となった数値または結果を本文へ残し、変化の中身を説明している。",
+                ]
+            for candidate in entry.get("latest_candidates", []):
+                candidate["change_class"] = (
+                    "material_update" if candidate.get("decision") == "adopted" else "background_only"
+                )
+                candidate["publication_assessment"] = (
+                    "掲載済み候補は読者が知るべき確定した変化として扱い、非掲載候補は当日差分を伴わない背景情報として判定した。"
+                )
+
+    mutate_manifest_all(tmp, augment)
+
+
+def run_detail_renderer(tmp: Path, data: dict) -> subprocess.CompletedProcess[str]:
+    input_path = tmp / "future-detail-input.json"
+    write(input_path, json.dumps(data, ensure_ascii=False, indent=2))
+    return subprocess.run(
+        [sys.executable, str(tmp / "scripts" / "render_detail.py"), str(input_path)],
+        cwd=tmp,
+        text=True,
+        capture_output=True,
+    )
+
+
+def enable_future_article_layout_on_fixture(tmp: Path) -> None:
+    mutate_contract(tmp, lambda contract: contract.update({"article_summary_effective_date": ISSUE_DATE}))
+    for path in (tmp / "site" / ISSUE_DATE / "details").glob("*.html"):
+        if path.name in {"policy.html", f"extraction-log-{ISSUE_DATE}.html"}:
+            continue
+        html = read(path)
+        html = html.replace("<h2>30秒概要</h2>", "<h2>記事まとめ</h2>")
+        html = html.replace('<div class="summary-lead">', '<div class="article-summary">')
+        write(path, html)
 
 
 def append_workflow_text(tmp: Path, text: str) -> None:
@@ -427,7 +505,7 @@ def main() -> int:
                 flags=re.S,
             ),
         ),
-        "detail pages must be overview-only",
+        "detail pages must use article-summary-only structure",
     )
 
     assert_fail(
@@ -440,7 +518,7 @@ def main() -> int:
                 1,
             ),
         ),
-        "detail pages have too many source links",
+        "legacy detail pages have too many source links",
     )
 
     assert_fail(
@@ -567,6 +645,119 @@ def main() -> int:
     )
     assert_pass("regional economy does not require unrelated social source class", economic_web_fixture)
     print("PASS regional economy does not require unrelated social source class")
+
+    future_detail_fixture = copy_fixture()
+    future_detail_result = run_detail_renderer(
+        future_detail_fixture,
+        {
+            "issue_date": NEXT_ISSUE_DATE,
+            "section_id": "openai",
+            "kicker": "OpenAI / 公式・主要報道",
+            "title": "OpenAIの新発表を複数原文から整理",
+            "h1": "OpenAIの新発表を複数原文から整理",
+            "slug": "future-article-summary.html",
+            "summary_paragraphs": [
+                "公式発表は、公開日、対象機能、利用可能な範囲を明示した。記事まとめでは、発表された変更内容と利用者に直接影響する条件を、日本語で省略せず整理する。",
+                "主要報道は、導入背景と既存運用との差分を補った。公式に確認できる事実と報道による補足を分けて示し、未公表の条件は確定事項として扱わない。",
+            ],
+            "sources": [
+                {"label": "公式発表", "url": "https://example.com/official"},
+                {"label": "主要報道", "url": "https://example.com/report"},
+                {"label": "関連資料", "url": "https://example.com/data"},
+                {"label": "補足発信", "url": "https://example.com/social"},
+            ],
+        },
+    )
+    if future_detail_result.returncode != 0:
+        raise AssertionError(f"future article summary renderer permits multi-source synthesis: {future_detail_result.stderr}")
+    rendered_future_detail = read(future_detail_fixture / "details" / "future-article-summary.html")
+    if "記事まとめ" not in rendered_future_detail or "article-summary" not in rendered_future_detail:
+        raise AssertionError("future article summary renderer did not write article summary structure")
+    if rendered_future_detail.count("<a href=") < 4:
+        raise AssertionError("future article summary renderer discarded source links")
+    print("PASS future article summary renderer permits multi-source synthesis")
+
+    future_layout_fixture = copy_fixture()
+    enable_future_article_layout_on_fixture(future_layout_fixture)
+    assert_pass("future article detail structure baseline", future_layout_fixture)
+    print("PASS future article detail structure baseline")
+
+    assert_fail(
+        "future issue rejects legacy 30-second detail heading",
+        lambda tmp: [
+            enable_future_article_layout_on_fixture(tmp),
+            write(
+                tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
+                read(tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL)
+                .replace("<h2>記事まとめ</h2>", "<h2>30秒概要</h2>", 1)
+                .replace('<div class="article-summary">', '<div class="summary-lead">', 1),
+            ),
+        ],
+        "detail pages must use article-summary-only structure",
+    )
+
+    future_manifest_fixture = copy_fixture()
+    enable_future_manifest_rules(future_manifest_fixture)
+    assert_pass("future manifest synthesis baseline", future_manifest_fixture)
+    print("PASS future manifest synthesis baseline")
+
+    assert_fail(
+        "future published item missing summary mode",
+        lambda tmp: [
+            enable_future_manifest_rules(tmp),
+            mutate_manifest_entry(tmp, "OpenAI", lambda entry: entry["new_or_changed_items"][0].pop("summary_mode", None)),
+        ],
+        "summary_mode is required for article synthesis",
+    )
+
+    assert_fail(
+        "future multi-source synthesis omits a source link",
+        lambda tmp: [
+            enable_future_manifest_rules(tmp),
+            mutate_manifest_entry(
+                tmp,
+                "OpenAI",
+                lambda entry: entry["new_or_changed_items"][0].update(
+                    {
+                        "summary_mode": "multi_source_synthesis",
+                        "synthesis_basis": "公式発表で確定した更新内容に主要報道の説明を重ね、同一の出来事として差分と影響を整理した。",
+                        "sources": entry["new_or_changed_items"][0]["sources"] + ["https://example.com/omitted-source"],
+                    }
+                ),
+            ),
+        ],
+        "all synthesis sources must appear on detail page",
+    )
+
+    assert_fail(
+        "future material candidate cannot remain no-fresh",
+        lambda tmp: [
+            enable_future_manifest_rules(tmp),
+            mutate_manifest_entry(
+                tmp,
+                "OpenAI",
+                lambda entry: next(
+                    candidate for candidate in entry["latest_candidates"] if candidate["decision"] != "adopted"
+                ).update({"change_class": "material_update"}),
+            ),
+        ],
+        "fresh material candidate must be published or explicitly excluded",
+    )
+
+    assert_fail(
+        "future routine adoption needs materiality basis",
+        lambda tmp: [
+            enable_future_manifest_rules(tmp),
+            mutate_manifest_entry(
+                tmp,
+                "OpenAI",
+                lambda entry: next(
+                    candidate for candidate in entry["latest_candidates"] if candidate["decision"] == "adopted"
+                ).update({"change_class": "routine_recurring"}),
+            ),
+        ],
+        "adopted routine or duplicate candidate needs materiality_basis",
+    )
 
     assert_fail(
         "stale visible card date",

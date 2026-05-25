@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Render a NIGHT SIGNAL detail page from structured content.
 
-This is the preferred creation path for detail pages. It intentionally exposes
-only the reader-facing sections we want to publish:
+This is the preferred creation path for detail pages. New issues expose only
+the reader-facing sections we want to publish:
 
-- 30秒概要
+- 記事まとめ
 - 原文確認
 
-Authoring checklist sections, extra body sections, and broad source bundles are
-not supported here, so they are not created in the first place.
+The summary can be multiple paragraphs and can synthesize multiple directly
+relevant articles. Authoring checklist sections are never published.
 """
 
 from __future__ import annotations
@@ -82,6 +82,16 @@ def minimum_summary_chars(issue_date: str) -> int:
     return int(contract.get("minimum_detail_summary_chars", LEGACY_MIN_SUMMARY_CHARS))
 
 
+def article_summary_applies(issue_date: str) -> bool:
+    try:
+        contract = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+        issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
+        effective_dt = datetime.strptime(contract["article_summary_effective_date"], "%Y-%m-%d").date()
+    except (OSError, json.JSONDecodeError, KeyError, TypeError, ValueError):
+        return False
+    return issue_dt >= effective_dt
+
+
 def required_str(data: dict[str, Any], key: str) -> str:
     value = data.get(key)
     if not isinstance(value, str) or not value.strip():
@@ -102,8 +112,8 @@ def reject_forbidden(label: str, text: str) -> None:
         fail(f"{label} contains authoring/checklist wording: {', '.join(found)}")
 
 
-def render_sources(sources: list[Any]) -> str:
-    if len(sources) > MAX_SOURCE_LINKS:
+def render_sources(sources: list[Any], allow_multiple: bool) -> str:
+    if not allow_multiple and len(sources) > MAX_SOURCE_LINKS:
         fail(f"sources must be narrowed to {MAX_SOURCE_LINKS} links or fewer")
     links = []
     for item in sources:
@@ -123,10 +133,20 @@ def render(data: dict[str, Any]) -> str:
     kicker = required_str(data, "kicker")
     title = required_str(data, "title")
     h1 = required_str(data, "h1")
-    summary = required_str(data, "summary")
     sources = required_list(data, "sources")
+    article_mode = article_summary_applies(issue_date)
     if data.get("body_paragraphs"):
-        fail("body_paragraphs are no longer supported; integrate reader-facing facts into summary")
+        fail("body_paragraphs are not supported; integrate reader-facing facts into the article summary")
+
+    if article_mode:
+        paragraphs = required_list(data, "summary_paragraphs")
+        if any(not isinstance(paragraph, str) or not paragraph.strip() for paragraph in paragraphs):
+            fail("summary_paragraphs must contain non-empty strings")
+        summary_parts = [paragraph.strip() for paragraph in paragraphs]
+        summary = "\n".join(summary_parts)
+    else:
+        summary = required_str(data, "summary")
+        summary_parts = [summary]
 
     for label, text in [
         ("title", title),
@@ -139,11 +159,19 @@ def render(data: dict[str, Any]) -> str:
     if len(summary.replace(" ", "").replace("\n", "")) < min_summary_chars:
         fail(f"summary is too thin: {len(summary)} chars")
 
-    source_links = render_sources(sources)
+    source_links = render_sources(sources, allow_multiple=article_mode)
     escaped_title = html.escape(title)
     escaped_kicker = html.escape(kicker)
     escaped_h1 = html.escape(h1)
-    escaped_summary = html.escape(summary)
+    if article_mode:
+        summary_html = "\n".join(f"        <p>{html.escape(paragraph)}</p>" for paragraph in summary_parts)
+        summary_block = f"""      <h2>記事まとめ</h2>
+      <div class="article-summary">
+{summary_html}
+      </div>"""
+    else:
+        summary_block = f"""      <h2>30秒概要</h2>
+      <div class="summary-lead">{html.escape(summary)}</div>"""
     escaped_issue = html.escape(issue_date, quote=True)
     escaped_section = html.escape(section_id, quote=True)
 
@@ -162,8 +190,7 @@ def render(data: dict[str, Any]) -> str:
       <div class="kicker">{escaped_kicker}</div>
       <h1>{escaped_h1}</h1>
 
-      <h2>30秒概要</h2>
-      <div class="summary-lead">{escaped_summary}</div>
+{summary_block}
 
       <div class="source">
         原文確認:

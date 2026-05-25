@@ -1,5 +1,5 @@
 {
-  "version": "2026-05-25.14",
+  "version": "2026-05-26.15",
   "description": "Persistent recurrence-prevention inventory for NIGHT SIGNAL. A user-reported failure is not considered fixed unless it is represented here and enforced by scripts/guardrail_inventory.py.",
   "guards": [
     {
@@ -131,7 +131,7 @@
       ],
       "required_policy_terms": [
         "最低120字",
-        "全カテゴリ共通で、カード本文と30秒概要",
+        "全カテゴリ共通で、カード本文と記事まとめ",
         "調査方法、採用判断、今後の監視方針は抽出ログへ分け",
         "non_adoption_reason_class",
         "新しい候補を「なんとなく保留」にしない"
@@ -142,6 +142,77 @@
         "public summary research procedure leak",
         "public card research procedure leak",
         "coverage fresh non-adopted candidate missing reason class"
+      ]
+    },
+    {
+      "id": "article_summary_without_information_loss",
+      "description": "New detail pages must be readable article summaries that retain material facts and can synthesize multiple directly relevant sources without an arbitrary link cap.",
+      "contract": {
+        "article_summary_effective_date": "2026-05-26",
+        "synthesis_manifest_effective_date": "2026-05-26",
+        "allowed_summary_modes": [
+          "single_source_summary",
+          "multi_source_synthesis"
+        ],
+        "minimum_material_facts_per_published_item": 2
+      },
+      "required_audit_terms": [
+        "expected_contract_version",
+        "legacy_contract_versions",
+        "article_summary_effective_date",
+        "summary_paragraphs",
+        "article-summary",
+        "synthesis_manifest_effective_date",
+        "summary_mode",
+        "material_facts",
+        "synthesis_basis",
+        "all synthesis sources must appear on detail page"
+      ],
+      "required_policy_terms": [
+        "記事まとめ",
+        "「30秒概要」という短さを目標にせず",
+        "短文化のために判断材料を切り落とさない",
+        "複数の記事や公式発信",
+        "リンク数を一律に制限しない"
+      ],
+      "required_simulation_terms": [
+        "future article summary renderer permits multi-source synthesis",
+        "future issue rejects legacy 30-second detail heading",
+        "future published item missing summary mode",
+        "future multi-source synthesis omits a source link"
+      ]
+    },
+    {
+      "id": "broad_capture_with_routine_suppression",
+      "description": "Collection should err toward publishing confirmed material change while suppressing recurring or duplicate noise unless it has a concrete new consequence.",
+      "contract": {
+        "publication_screening_effective_date": "2026-05-26",
+        "allowed_change_classes": [
+          "new_event",
+          "material_update",
+          "routine_recurring",
+          "duplicate_followup",
+          "background_only"
+        ]
+      },
+      "required_audit_terms": [
+        "publication_screening_effective_date",
+        "change_class",
+        "publication_assessment",
+        "materiality_basis",
+        "fresh material candidate must be published or explicitly excluded",
+        "adopted routine or duplicate candidate needs materiality_basis"
+      ],
+      "required_policy_terms": [
+        "不足より過剰を許容し、根拠を確認できる限り掲載寄り",
+        "定例イベントや高頻度の反復",
+        "実質差分",
+        "change_class",
+        "materiality_basis"
+      ],
+      "required_simulation_terms": [
+        "future material candidate cannot remain no-fresh",
+        "future routine adoption needs materiality basis"
       ]
     },
     {
@@ -259,20 +330,18 @@
       ]
     },
     {
-      "id": "overview_only_details",
-      "description": "Detail pages must remain overview-only and must not contain authoring/checklist sections or broad source bundles.",
+      "id": "reader_article_structure",
+      "description": "Reader pages keep one coherent article-summary section and source list, without publishing authoring or monitoring instructions.",
       "required_audit_terms": [
-        "detail pages must be overview-only",
-        "detail pages have too many source links",
+        "detail pages must use article-summary-only structure",
         "validate_public_summary_language"
       ],
       "required_policy_terms": [
-        "詳細ページは日本語で読める概要",
-        "原文確認は論点に直接関係する参照先だけ"
+        "詳細ページは「記事まとめ」と「原文確認」",
+        "原文確認は論点に直接関係し"
       ],
       "required_simulation_terms": [
         "detail body exists after summary",
-        "detail source list too broad",
         "public summary research procedure leak",
         "public summary source-handling commentary leak"
       ]

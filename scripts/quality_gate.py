@@ -509,7 +509,7 @@ def validate_card_detail_alignment(issue_date: str, root_html: str, dated_html: 
         html = read(path)
         primary = " ".join(heading_texts(html, ("title", "h1")))
         body = " ".join(heading_texts(html, ("title", "h1", "h2")))
-        summary_match = re.search(r'<div class="summary-lead">(.*?)</div>', html, flags=re.S)
+        summary_match = re.search(r'<div class="(?:summary-lead|article-summary)">(.*?)</div>', html, flags=re.S)
         if summary_match:
             body += " " + re.sub(r"<.*?>", "", summary_match.group(1))
         for title in sorted(titles):
@@ -593,6 +593,7 @@ def validate_detail_scope(issue_date: str, root_html: str, dated_html: str) -> N
 
 def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) -> None:
     issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
+    article_summary_required = effective_on_or_after(COVERAGE_CONTRACT, "article_summary_effective_date", issue_dt)
     min_summary_chars = LEGACY_MIN_SUMMARY_LEAD_CHARS
     if effective_on_or_after(COVERAGE_CONTRACT, "summary_quality_effective_date", issue_dt):
         min_summary_chars = int(COVERAGE_CONTRACT.get("minimum_detail_summary_chars", 240))
@@ -601,7 +602,7 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
     weak = []
     leaked = []
     checklist_headings = []
-    overview_only_failures = []
+    article_structure_failures = []
     weak_summaries = []
     missing_source = []
     too_many_sources = []
@@ -620,9 +621,11 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
         h2_texts = heading_texts(html, ("h2",))
         if any(any(term in heading for term in DETAIL_FORBIDDEN_SECTION_HEADINGS) for heading in h2_texts):
             checklist_headings.append(name)
-        if h2_texts != ["30秒概要"]:
-            overview_only_failures.append(f"{name}: h2={h2_texts or '-'}")
-        summary_match = re.search(r'<div class="summary-lead">(.*?)</div>', html, flags=re.S)
+        required_h2 = ["記事まとめ"] if article_summary_required else ["30秒概要"]
+        if h2_texts != required_h2:
+            article_structure_failures.append(f"{name}: h2={h2_texts or '-'}")
+        summary_class = "article-summary" if article_summary_required else "summary-lead"
+        summary_match = re.search(rf'<div class="{summary_class}">(.*?)</div>', html, flags=re.S)
         if not summary_match:
             weak_summaries.append(f"{name}: missing summary")
         else:
@@ -635,9 +638,9 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
         if summary_match and source_match:
             between = html[summary_match.end() : source_match.start()]
             if visible_text(between):
-                overview_only_failures.append(f"{name}: body exists between summary and sources")
+                article_structure_failures.append(f"{name}: body exists outside article summary")
             source_links = re.findall(r"<a\b", source_match.group(1), flags=re.I)
-            if len(source_links) > MAX_SOURCE_LINKS_PER_DETAIL:
+            if not article_summary_required and len(source_links) > MAX_SOURCE_LINKS_PER_DETAIL:
                 too_many_sources.append(f"{name}: {len(source_links)} links")
         validate_reader_facing_headlines(
             f"detail page {name}",
@@ -654,14 +657,14 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
         fail("detail headings contain policy/checklist wording: " + ", ".join(leaked[:8]))
     if checklist_headings:
         fail("detail pages use checklist/next-step section headings: " + ", ".join(checklist_headings[:8]))
-    if overview_only_failures:
-        fail("detail pages must be overview-only: " + "; ".join(overview_only_failures[:8]))
+    if article_structure_failures:
+        fail("detail pages must use article-summary-only structure: " + "; ".join(article_structure_failures[:8]))
     if weak_summaries:
         fail("detail summaries are too thin: " + "; ".join(weak_summaries[:8]))
     if missing_source:
         fail("detail pages missing source block: " + ", ".join(missing_source[:8]))
     if too_many_sources:
-        fail("detail pages have too many source links; split or narrow references: " + "; ".join(too_many_sources[:8]))
+        fail("legacy detail pages have too many source links: " + "; ".join(too_many_sources[:8]))
     if missing_back:
         fail("detail pages missing back link: " + ", ".join(missing_back[:8]))
 
