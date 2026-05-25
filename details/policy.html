@@ -129,6 +129,7 @@
       <ul>
         <li><code>python3 scripts/guardrail_inventory.py</code>: 過去の不具合対策が設定、方針、監査コード、失敗シミュレーションに残っているか確認する。個別HTMLだけを直した状態を失敗させる。</li>
         <li><code>python3 scripts/sync_site.py YYYY-MM-DD</code>: 当日版をsiteへ同期する。過去号へのフォールバックは禁止。</li>
+        <li><code>site/index.html</code> の固定URLには、日付別ページ用の <code>最新号</code> 相対リンクを残さない。日付別ページから固定URLへ戻る導線を編集元が含んでいても、同期時に固定URL側から除去する。</li>
         <li><code>python3 scripts/render_detail.py detail.json</code>: 詳細ページを許可された構造だけで生成する。作業見出しや薄い概要は作成時点で失敗させる。</li>
         <li><code>python3 scripts/coverage_audit.py YYYY-MM-DD</code>: 構造化収集契約に沿って、探索軸、ウォッチ項目別のWeb/SNS/X/YouTube証跡、最新候補、情報源の多様性、掲載カードと抽出ログの一致、新規/変化項目の概要と参照先、変化なし確認の証跡を確認する。</li>
         <li><code>python3 scripts/quality_gate.py YYYY-MM-DD</code>: 日付、鮮度、可変掲載、読者向け見出し、カードと詳細ページの整合、通常カードの詳細リンク重複、概要だけの詳細構造、参照リンク数、リンク、coverage-manifest、カテゴリ固有検索軸、詳細ページの前日コピーを検査する。</li>

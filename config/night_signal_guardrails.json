@@ -357,6 +357,22 @@
       ]
     },
     {
+      "id": "root_latest_link_sanitized",
+      "description": "The stable site root must never retain the dated issue link back to ../index.html.",
+      "required_audit_terms": [
+        "rewrite_root_links",
+        "href=\"\\.\\./index\\.html\">最新号"
+      ],
+      "required_policy_terms": [
+        "固定URLには",
+        "最新号",
+        "相対リンク"
+      ],
+      "required_simulation_terms": [
+        "root strips dated latest link during sync"
+      ]
+    },
+    {
       "id": "it_space_x_first_sources",
       "description": "OpenAI and SpaceX coverage must treat X as a primary discovery and reaction channel alongside official releases.",
       "category_class": "it_x_sensitive",

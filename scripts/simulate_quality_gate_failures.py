@@ -90,6 +90,16 @@ def run_guardrail(tmp: Path) -> subprocess.CompletedProcess[str]:
     )
 
 
+def run_sync(tmp: Path) -> None:
+    subprocess.run(
+        [sys.executable, str(tmp / "scripts" / "sync_site.py"), ISSUE_DATE],
+        cwd=tmp,
+        text=True,
+        capture_output=True,
+        check=True,
+    )
+
+
 def assert_pass(name: str, tmp: Path) -> None:
     result = run_gate(tmp)
     if result.returncode != 0:
@@ -264,6 +274,22 @@ def main() -> int:
     print("PASS baseline current issue")
     assert_guardrail_pass("baseline guardrail inventory", baseline)
     print("PASS baseline guardrail inventory")
+
+    latest_link_fixture = copy_fixture()
+    sample_path = latest_link_fixture / f"night-brief-web-sample-{ISSUE_DATE}.html"
+    write(
+        sample_path,
+        read(sample_path).replace(
+            '<a href="details/extraction-log-',
+            '<a href="../index.html">最新号</a>\n        <a href="details/extraction-log-',
+            1,
+        ),
+    )
+    run_sync(latest_link_fixture)
+    if '<a href="../index.html">最新号</a>' in read(latest_link_fixture / "site" / "index.html"):
+        raise AssertionError("root strips dated latest link during sync: fixed URL retained ../index.html")
+    assert_pass("root strips dated latest link during sync", latest_link_fixture)
+    print("PASS root strips dated latest link during sync")
 
     assert_guardrail_fail(
         "guardrail catches removed SoftBank market price axis",
