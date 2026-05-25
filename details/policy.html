@@ -48,8 +48,8 @@
         <li><code>search_axes</code> はカテゴリごとに3軸以上を必須にする。例: OpenAIなら公式/製品、企業導入/インフラ、安全/規制。経済カテゴリなら雇用、物価、金融政策、政府方針、投資案件、市場反応、資金フローを地域ごとに見る。</li>
         <li><code>latest_candidates</code> はカテゴリごとのウォッチ項目をすべて埋める。OpenAIならIPO/資金調達、数学・研究成果、製品更新、企業導入、安全/規制を必ず候補として記録し、採用/保留/除外/新規なしの判断を残す。</li>
         <li><code>collected_items</code> は <code>latest_candidates</code> の各候補に対応する直接URLを必須にする。検索結果ページではなく、実際に開いた記事、公式ページ、SNS投稿/プロフィール、YouTubeチャンネル/動画などを記録する。</li>
-        <li><code>watch_topic_checks</code> は各ウォッチ項目ごとにWeb、SNS/X、YouTubeの確認URLに加え、仮説、情報源ロール、調査経路、時間窓、差分を必須にする。単語の有無ではなく、人が調査するときの「何が起き得るか、どこに出るか、何を実際に見たか、昨日から何が変わったか」を公開前に証明する。</li>
-        <li>カテゴリによって主情報源は変わる。日本経済/北米経済は統計機関、中央銀行、政府、主要経済媒体、資金フロー/市場データを主にし、OpenAI/SpaceXは公式リリースとXを主にし、YOASOBI / 幾田りらは公式HP、スタッフX、Instagram、YouTubeを主にする。全カテゴリでWeb/SNS/X/YouTubeの確認証跡は残すが、何を最重要視したかを候補ごとに書く。</li>
+        <li><code>watch_topic_checks</code> は各ウォッチ項目ごとに主情報源の確認URLに加え、仮説、情報源ロール、調査経路、時間窓、差分を必須にする。SNS/XやYouTubeが主要な発信経路であるカテゴリではそのURLも必須にする。単語の有無ではなく、人が調査するときの「何が起き得るか、どこに出るか、何を実際に見たか、昨日から何が変わったか」を公開前に証明する。</li>
+        <li>カテゴリによって主情報源は変わる。日本経済/アジア経済/北米経済は統計機関、中央銀行、政府、主要経済媒体、資金フロー/市場データを主根拠にし、国別の公式根拠を別の国のSNSや動画で代替しない。OpenAI/SpaceXは公式リリースとXを主にし、YOASOBI / 幾田りらは公式HP、スタッフX、Instagram、YouTubeを主にする。SNSや動画は情報が発信されるカテゴリで必須確認し、経済統計では関連する発信元が確認できた場合に補助根拠として残す。</li>
         <li>2026-05-22以降、各ウォッチ項目は <code>search_sweep</code> に検索クエリと選別判断を残す。検索結果URLは公開情報として載せず、検索で見つけた直接URLだけを <code>collected_items</code> や原文確認に回す。</li>
         <li>公開カードは <code>latest_candidates</code> の <code>decision: adopted</code> からしか作らない。2026-05-22以降、元情報が3日より古い候補は公開カードにせず、背景資料としてだけ扱う。</li>
         <li>2026-05-22以降、3日以内の新しい候補を採用しない場合は、重複、重要度不足、実質変化なし、根拠不足、関連不足のどれかを <code>non_adoption_reason_class</code> に残す。新しい候補を「なんとなく保留」にしない。</li>
@@ -83,7 +83,7 @@
         <li>決算・IRは主要数字、セグメント、投資損益、ガイダンス、説明会資料/Q&Aを確認する。数字が概要にない決算カードは未完成。</li>
         <li>上場企業カテゴリでは、事業ニュースだけでなく株価急変も確認する。ストップ高/ストップ安、10%以上の急騰急落、NAVや保有株評価に直結する材料は、企業カテゴリまたは該当地域の経済カテゴリの候補に必ず残す。</li>
         <li>採用に迷う重要候補は、不足より過剰を許容し、掲載または抽出ログの保留に残す。</li>
-        <li>見出しは短い暗号にしない。長くなっても、何が起きたか、どの数字/結果が重要か、読者が何を理解すべきかが分かる題目にする。概要は短すぎるより、理解に必要な前提、数字、確認先、なぜ重要かを日本語で説明する。</li>
+        <li>見出しは短い暗号にしない。長くなっても、何が起きたか、どの数字/結果が重要か、読者が何を理解すべきかが分かる題目にする。概要は短すぎるより、理解に必要な前提、数字、出来事の意味を日本語で説明する。出典の整理や採否判断は原文確認欄と抽出ログへ分ける。</li>
         <li>煽り、根拠不明、一次情報へ戻れない投稿、関連が薄い穴埋め記事は採用しない。</li>
       </ul>
 
@@ -96,7 +96,7 @@
         <li>「一次で固定」「完了扱い」「補助線」「採用前確認」「直検索」「品質ゲート」などの作業語を見出しに入れない。</li>
         <li>通常カードは1件1詳細ページにする。違う内容のカードを同じ詳細ページへリンクしない。参照先が広がる場合は、無理に1つへまとめずカードと詳細ページを分ける。</li>
         <li>カテゴリごとのカード数は固定しない。重要なのは枠を埋めることではなく、Web、SNS/X、YouTube、公式、データを確認したうえで、当日の新規追加・変化点だけを出すこと。</li>
-        <li>「今日の最重要」を掲載する場合は、掲載総数から何件を選び、影響範囲、判断期限、根拠の強さなど何を基準に優先したかを読者向けに明記する。</li>
+        <li>「今日の最重要」を掲載する場合、選定理由と優先順位の作業説明は抽出ログへ残す。トップページには重要テーマの事実要約だけを表示する。</li>
         <li>詳細ページは日本語で読める概要にする。構造は「30秒概要」と「原文確認」だけにし、別見出しの本文や作業メモを置かない。</li>
         <li>新規の詳細ページは原則として <code>python3 scripts/render_detail.py detail.json</code> で作成する。自由HTMLの手書きで「チェック観点」「次の確認」などの作業見出しを作らない。</li>
         <li>30秒概要の後に追加本文を置かない。重要な数字、日時、関係者、背景、前回からの変化、今後の日程は30秒概要へ統合する。</li>
@@ -116,9 +116,9 @@
         <li><code>new_or_changed_items</code> は公開カードと同じ順番・同じ見出しにし、各項目に日本語概要と参照URLを入れる。参照URLはリンク先詳細ページの原文確認にも含める。</li>
         <li><code>latest_candidates</code> は topic_id、title、source_url、source_published_date、decision、rationale を必須にする。2026-05-22以降、3日以内の候補を採用しない場合は non_adoption_reason_class も必須にする。採用候補のURLはリンク先詳細ページの原文確認にも含める。</li>
         <li><code>collected_items</code> は topic_id、title、source_url、source_published_date、observed_at_jst、channel、collection_note を必須にする。source_url は検索結果URLではなく、<code>latest_candidates</code> と同じ直接URLにする。</li>
-        <li><code>watch_topic_checks</code> は topic_id、checked_at_jst、web、sns_x、youtube、event_classes、source_roles_checked、investigation_paths、investigation_hypotheses、time_window_jst、delta_basis、search_sweep、candidate_titles、result を必須にする。investigation_pathsには一次/公式、独立媒体またはデータ、SNSまたは動画の3ロールについて直接URLと発見内容を残す。candidate_titles は同じカテゴリの <code>latest_candidates</code> に存在する見出しだけを許可し、探索証跡と候補判断を切り離さない。</li>
+        <li><code>watch_topic_checks</code> は topic_id、checked_at_jst、カテゴリで必須化された確認チャネル、event_classes、source_roles_checked、investigation_paths、investigation_hypotheses、time_window_jst、delta_basis、search_sweep、candidate_titles、result を必須にする。investigation_pathsには一次/公式、独立媒体またはデータ、補助シグナルの各ロールについて直接URLと発見内容を残す。国や組織を限定した探索軸では一次/公式URLをその対象に一致させ、別対象の発信元で代用しない。candidate_titles は同じカテゴリの <code>latest_candidates</code> に存在する見出しだけを許可し、探索証跡と候補判断を切り離さない。</li>
         <li><code>search_sweep</code> は検索クエリ2件以上、結果区分（new_update_found / covered_by_existing_candidate / no_new_update）、日本語の選別理由を必須にする。検索結果そのものではなく、重要情報を拾ったか、既存候補でカバーしたか、新規なしと判断したかを残す。</li>
-        <li><code>no_change_checks</code> には、Web/SNS/X/YouTubeを見たうえで採用しなかった軸、変化なしと判断した軸、保留した軸をURL付きで残す。</li>
+        <li><code>no_change_checks</code> には、カテゴリの主情報源を確認したうえで採用しなかった軸、変化なしと判断した軸、保留した軸をURL付きで残す。SNS/X/YouTubeが主情報源のカテゴリでは、その確認証跡も必須にする。</li>
         <li>カテゴリ固有の探索軸を必ず含める。例: アジア経済ならIndiaとVietnam/ASEAN、F1ならHonda/AstonとPU/FIA、ブレックスなら宇都宮/BREXとB.LEAGUE/試合。</li>
         <li>公式発表があるカテゴリでは、公式リリース、公式X、主要報道、専門媒体を同じ候補に接続し、XやInstagramで見つけた面白い論点も一次情報または信頼できる媒体で裏取りしてから採用する。</li>
         <li>重大未確認リスクが残る場合は公開しない。決算資料、イベント結果、公式発表、固有名詞ニュース、SNSで大きく話題化した件は重大リスクとして扱う。</li>

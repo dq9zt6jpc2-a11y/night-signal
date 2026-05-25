@@ -80,6 +80,20 @@ def validate_economic_taxonomy_contract(contract: dict) -> None:
         fail("coverage contract missing regional economic sections: " + ", ".join(missing))
 
 
+def required_channels_for_category(contract: dict, category_config: dict) -> list[str]:
+    required_channels = category_config.get(
+        "required_watch_topic_channels",
+        contract.get("required_watch_topic_channels", ["web", "sns_x", "youtube"]),
+    )
+    if (
+        not isinstance(required_channels, list)
+        or not required_channels
+        or any(channel not in {"web", "sns_x", "youtube"} for channel in required_channels)
+    ):
+        fail(f"{category_config['label']} has invalid required_watch_topic_channels")
+    return required_channels
+
+
 def effective_on_or_after(contract: dict, key: str, issue_dt) -> bool:
     value = contract.get(key)
     if value is None:
@@ -194,10 +208,16 @@ def validate_last_checked(issue_date: str, manifest: dict) -> None:
         fail(f"last_checked_jst date mismatch: {value} != {issue_date}")
 
 
-def validate_sources(contract: dict, category: str, entry: dict) -> tuple[int, set[str]]:
+def validate_sources(contract: dict, category_config: dict, entry: dict) -> tuple[int, set[str]]:
+    category = category_config["label"]
+    optional_classes = category_config.get("optional_source_classes", [])
+    if not isinstance(optional_classes, list) or any(not isinstance(item, str) for item in optional_classes):
+        fail(f"{category} has invalid optional_source_classes")
     total_urls = 0
     hosts: set[str] = set()
     for source_class, rule in contract["source_classes"].items():
+        if source_class in optional_classes and not entry.get(source_class):
+            continue
         values = string_list(entry, source_class, category)
         if len(values) < int(rule.get("min_items", 1)):
             fail(f"{category} has too little source evidence: {source_class}")
@@ -571,13 +591,7 @@ def validate_watch_topic_checks(contract: dict, issue_date: str, category_config
         if isinstance(topic_id, str) and isinstance(title, str):
             candidate_titles_by_topic.setdefault(topic_id, set()).add(title)
 
-    required_channels = contract.get("required_watch_topic_channels", ["web", "sns_x", "youtube"])
-    if (
-        not isinstance(required_channels, list)
-        or not required_channels
-        or any(channel not in {"web", "sns_x", "youtube"} for channel in required_channels)
-    ):
-        fail("coverage contract has invalid required_watch_topic_channels")
+    required_channels = required_channels_for_category(contract, category_config)
 
     checks = entry.get("watch_topic_checks")
     if not isinstance(checks, list):
@@ -596,6 +610,9 @@ def validate_watch_topic_checks(contract: dict, issue_date: str, category_config
     min_window_hours = int(contract.get("minimum_investigation_time_window_hours", 0))
     issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
     search_sweep_required = effective_on_or_after(contract, "search_sweep_required_effective_date", issue_dt)
+    scoped_primary_evidence_required = effective_on_or_after(
+        contract, "scoped_primary_evidence_effective_date", issue_dt
+    )
     by_topic = {topic_id: 0 for topic_id in watch_ids}
     for index, check in enumerate(checks, start=1):
         if not isinstance(check, dict):
@@ -625,9 +642,14 @@ def validate_watch_topic_checks(contract: dict, issue_date: str, category_config
             fail(f"{category} watch_topic_checks[{index}] result must be Japanese")
 
         configured_event_classes = []
+        primary_evidence_hosts: list[str] = []
         for topic in watch_topics:
             if isinstance(topic, dict) and topic.get("id") == topic_id and isinstance(topic.get("event_classes"), list):
                 configured_event_classes = [item for item in topic["event_classes"] if isinstance(item, str)]
+                configured_hosts = topic.get("primary_evidence_hosts", [])
+                if not isinstance(configured_hosts, list) or any(not isinstance(host, str) for host in configured_hosts):
+                    fail(f"{category} watch_topic {topic_id} has invalid primary_evidence_hosts")
+                primary_evidence_hosts = configured_hosts
                 break
         if not configured_event_classes:
             fail(f"{category} watch_topic {topic_id} missing event_classes")
@@ -674,6 +696,13 @@ def validate_watch_topic_checks(contract: dict, issue_date: str, category_config
                 fail(f"{category} watch_topic_checks[{index}].investigation_paths[{path_index}] channel/source mismatch for YouTube")
             if channel == "web" and (host_matches(evidence_url, SNS_HOSTS) or host_matches(evidence_url, YOUTUBE_HOSTS)):
                 fail(f"{category} watch_topic_checks[{index}].investigation_paths[{path_index}] channel/source mismatch for Web")
+            if scoped_primary_evidence_required and role == "primary_or_official" and primary_evidence_hosts and not host_matches(
+                evidence_url, set(primary_evidence_hosts)
+            ):
+                fail(
+                    f"{category} watch_topic_checks[{index}].investigation_paths[{path_index}] "
+                    "primary evidence host outside configured topic scope"
+                )
             if not isinstance(finding, str) or len(re.sub(r"\s+", "", finding)) < 25 or not has_japanese(finding):
                 fail(f"{category} watch_topic_checks[{index}].investigation_paths[{path_index}] finding must be concrete Japanese text")
         missing_path_roles = sorted(set(required_source_roles) - path_roles)
@@ -747,7 +776,9 @@ def validate_watch_topic_checks(contract: dict, issue_date: str, category_config
         fail(f"{category} watch_topic_checks missing topics: " + ", ".join(missing_topics))
 
 
-def validate_no_change_checks(contract: dict, category: str, entry: dict) -> None:
+def validate_no_change_checks(contract: dict, category_config: dict, entry: dict) -> None:
+    category = category_config["label"]
+    required_channels = required_channels_for_category(contract, category_config)
     minimum = int(contract.get("minimum_no_change_checks_per_category", 1))
     checks = entry.get("no_change_checks")
     if not isinstance(checks, list) or len(checks) < minimum:
@@ -768,8 +799,10 @@ def validate_no_change_checks(contract: dict, category: str, entry: dict) -> Non
             fail(f"{category} no_change_checks[{index}] sources must be a non-empty string list")
         if not urls_in(sources):
             fail(f"{category} no_change_checks[{index}] must include URL evidence")
-        require_channel_url(category, f"no_change_checks[{index}]", sources, SNS_HOSTS, "SNS/X")
-        require_channel_url(category, f"no_change_checks[{index}]", sources, YOUTUBE_HOSTS, "YouTube")
+        if "sns_x" in required_channels:
+            require_channel_url(category, f"no_change_checks[{index}]", sources, SNS_HOSTS, "SNS/X")
+        if "youtube" in required_channels:
+            require_channel_url(category, f"no_change_checks[{index}]", sources, YOUTUBE_HOSTS, "YouTube")
 
 
 def validate_coverage_contract(issue_date: str, root_html: str, extraction_log_html: str) -> None:
@@ -808,12 +841,18 @@ def validate_coverage_contract(issue_date: str, root_html: str, extraction_log_h
         validate_latest_candidates(contract, issue_date, root_html, category_config, entry)
         validate_collected_items(contract, issue_date, category_config, entry)
         validate_watch_topic_checks(contract, issue_date, category_config, entry)
-        validate_no_change_checks(contract, category, entry)
+        validate_no_change_checks(contract, category_config, entry)
         validate_search_axes(contract, category_config, entry)
-        total_urls, hosts = validate_sources(contract, category, entry)
-        if total_urls < int(contract["minimum_url_evidence_per_category"]):
+        total_urls, hosts = validate_sources(contract, category_config, entry)
+        minimum_url_evidence = int(
+            category_config.get("minimum_url_evidence", contract["minimum_url_evidence_per_category"])
+        )
+        minimum_distinct_hosts = int(
+            category_config.get("minimum_distinct_url_hosts", contract["minimum_distinct_url_hosts_per_category"])
+        )
+        if total_urls < minimum_url_evidence:
             fail(f"{category} has too little URL evidence: {total_urls}")
-        if len(hosts) < int(contract["minimum_distinct_url_hosts_per_category"]):
+        if len(hosts) < minimum_distinct_hosts:
             fail(f"{category} has too little source diversity: {len(hosts)} hosts")
         validate_decisions(contract, category, entry)
         freshness = entry.get("freshness_check")

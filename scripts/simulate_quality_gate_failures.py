@@ -229,6 +229,11 @@ def mirror_current_detail_to_previous(tmp: Path, name: str) -> None:
 
 def clear_each_source_class_simulations() -> None:
     categories = ["OpenAI", "SoftBank", "Honda", "F1", "SpaceX", "日本経済", "アジア経済", "北米経済", "宇都宮ブレックス", "YOASOBI / 幾田りら"]
+    optional_source_classes = {
+        "日本経済": {"sns_x", "youtube_video"},
+        "アジア経済": {"sns_x", "youtube_video"},
+        "北米経済": {"sns_x", "youtube_video"},
+    }
     source_classes = [
         "official",
         "major_media",
@@ -241,6 +246,8 @@ def clear_each_source_class_simulations() -> None:
     ]
     for category in categories:
         for source_class in source_classes:
+            if source_class in optional_source_classes.get(category, set()):
+                continue
             assert_fail(
                 f"{category} missing {source_class}",
                 lambda tmp, c=category, s=source_class: mutate_manifest(tmp, c, s, []),
@@ -493,6 +500,19 @@ def main() -> int:
     )
 
     assert_fail(
+        "public summary source-handling commentary leak",
+        lambda tmp: write(
+            tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
+            read(tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL).replace(
+                '<div class="summary-lead">',
+                '<div class="summary-lead">原文確認先として公式Xも併記し、参照経路を揃えた。 ',
+                1,
+            ),
+        ),
+        "source-handling commentary",
+    )
+
+    assert_fail(
         "public card research procedure leak",
         lambda tmp: mutate_root_and_dated(
             tmp,
@@ -506,12 +526,26 @@ def main() -> int:
     )
 
     assert_fail(
-        "priority selection rationale missing",
-        lambda tmp: mutate_root_and_dated(
-            tmp,
-            lambda html: re.sub(r'\s*<p class="priority-rationale">.*?</p>', "", html, count=1, flags=re.S),
-        ),
-        "priority selection rationale is missing",
+        "priority selection rationale leak",
+        lambda tmp: [
+            write(
+                tmp / "scripts" / "quality_gate.py",
+                read(tmp / "scripts" / "quality_gate.py").replace(
+                    'PUBLIC_SELECTION_RATIONALE_BAN_EFFECTIVE_DATE = "2026-05-25"',
+                    'PUBLIC_SELECTION_RATIONALE_BAN_EFFECTIVE_DATE = "2026-05-24"',
+                    1,
+                ),
+            ),
+            mutate_root_and_dated(
+                tmp,
+                lambda html: html.replace(
+                    '<div class="priority">',
+                    '<p class="priority-rationale"><strong>選定理由:</strong> 全件から優先した作業上の説明を公開する。</p><div class="priority">',
+                    1,
+                ),
+            ),
+        ],
+        "priority section exposes selection rationale",
     )
 
     assert_fail(
@@ -524,6 +558,15 @@ def main() -> int:
     keep_only_one_investment_update(one_card_fixture)
     assert_pass("variable card count keeps one fresh North America update", one_card_fixture)
     print("PASS variable card count keeps one fresh North America update")
+
+    economic_web_fixture = copy_fixture()
+    mutate_manifest_entry(
+        economic_web_fixture,
+        "アジア経済",
+        lambda entry: entry.update({"sns_x": [], "youtube_video": []}),
+    )
+    assert_pass("regional economy does not require unrelated social source class", economic_web_fixture)
+    print("PASS regional economy does not require unrelated social source class")
 
     assert_fail(
         "stale visible card date",
@@ -1122,6 +1165,24 @@ def main() -> int:
             ),
         ),
         "coverage contract missing regional economic sections",
+    )
+
+    assert_fail(
+        "regional economy rejects wrong-country official evidence",
+        lambda tmp: [
+            mutate_contract(
+                tmp,
+                lambda contract: contract.update({"scoped_primary_evidence_effective_date": ISSUE_DATE}),
+            ),
+            mutate_manifest_entry(
+                tmp,
+                "アジア経済",
+                lambda entry: entry["watch_topic_checks"][1]["investigation_paths"][0].update(
+                    {"evidence_url": "https://rbi.org.in/Scripts/BS_ViewWSS.aspx"}
+                ),
+            ),
+        ],
+        "primary evidence host outside configured topic scope",
     )
 
     assert_fail(

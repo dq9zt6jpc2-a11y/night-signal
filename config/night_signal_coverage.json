@@ -1,6 +1,6 @@
 {
   "contract_version": "2026-05-24.12",
-  "description": "NIGHT SIGNAL daily collection contract. A public issue must prove that every category and configured watch topic was searched across Web, SNS/X, and YouTube before publication. Economy coverage is regional: Japan, Asia ex-Japan focus, and North America; broad standalone investment sections are not allowed. IT/space topics must include official release plus X signals; YOASOBI/Ikuta coverage must include official HP plus staff/person social channels including X and Instagram.",
+  "description": "NIGHT SIGNAL daily collection contract. A public issue must prove that every category and configured watch topic was searched through the channels appropriate to that subject before publication. Economy coverage is regional: Japan, Asia ex-Japan focus, and North America; broad standalone investment sections are not allowed and country-specific official evidence must not be substituted from another country. IT/space topics must include official release plus X signals; YOASOBI/Ikuta coverage must include official HP plus staff/person social channels including X and Instagram.",
   "source_classes": {
     "official": {
       "min_items": 1,
@@ -62,6 +62,7 @@
   "minimum_watch_topic_checks_per_topic": 1,
   "minimum_investigation_paths_per_watch_topic": 3,
   "search_sweep_required_effective_date": "2026-05-22",
+  "scoped_primary_evidence_effective_date": "2026-05-25",
   "minimum_search_sweep_queries_per_watch_topic": 2,
   "allowed_search_sweep_results": [
     "new_update_found",
@@ -787,6 +788,15 @@
     {
       "label": "日本経済",
       "section_id": "japan_economy",
+      "required_watch_topic_channels": [
+        "web"
+      ],
+      "optional_source_classes": [
+        "sns_x",
+        "youtube_video"
+      ],
+      "minimum_url_evidence": 6,
+      "minimum_distinct_url_hosts": 3,
       "axes": [
         {
           "id": "prices_wages_boj",
@@ -1005,6 +1015,15 @@
     {
       "label": "アジア経済",
       "section_id": "asia",
+      "required_watch_topic_channels": [
+        "web"
+      ],
+      "optional_source_classes": [
+        "sns_x",
+        "youtube_video"
+      ],
+      "minimum_url_evidence": 6,
+      "minimum_distinct_url_hosts": 3,
       "axes": [
         {
           "id": "india_macro_policy",
@@ -1054,6 +1073,10 @@
       "watch_topics": [
         {
           "id": "india_macro_policy",
+          "primary_evidence_hosts": [
+            "rbi.org.in",
+            "mospi.gov.in"
+          ],
           "terms": [
             "india",
             "cpi",
@@ -1072,6 +1095,9 @@
         },
         {
           "id": "vietnam_macro_investment",
+          "primary_evidence_hosts": [
+            "nso.gov.vn"
+          ],
           "terms": [
             "vietnam",
             "iip",
@@ -1089,6 +1115,10 @@
         },
         {
           "id": "india_vietnam_markets_supply_chain",
+          "primary_evidence_hosts": [
+            "rbi.org.in",
+            "nso.gov.vn"
+          ],
           "terms": [
             "india",
             "vietnam",
@@ -1113,6 +1143,15 @@
     {
       "label": "北米経済",
       "section_id": "north_america",
+      "required_watch_topic_channels": [
+        "web"
+      ],
+      "optional_source_classes": [
+        "sns_x",
+        "youtube_video"
+      ],
+      "minimum_url_evidence": 6,
+      "minimum_distinct_url_hosts": 3,
       "axes": [
         {
           "id": "us_prices_jobs_fed",

@@ -4,7 +4,7 @@
   "guards": [
     {
       "id": "cross_channel_watch_topic_evidence",
-      "description": "Every configured watch topic must prove Web, SNS/X, and YouTube collection before publication.",
+      "description": "Every configured watch topic must prove collection through channels appropriate to its subject; social-first categories retain mandatory SNS/X and YouTube evidence.",
       "contract": {
         "required_watch_topic_channels": [
           "web",
@@ -18,6 +18,7 @@
       },
       "required_audit_terms": [
         "validate_watch_topic_checks",
+        "required_channels_for_category",
         "candidate_titles must match latest_candidates for same topic",
         "checked_at_jst must use JST offset",
         "event_classes",
@@ -31,7 +32,8 @@
       ],
       "required_policy_terms": [
         "watch_topic_checks",
-        "Web、SNS/X、YouTube",
+        "主情報源の確認URL",
+        "SNS/XやYouTubeが主要な発信経路",
         "仮説",
         "情報源ロール",
         "時間窓",
@@ -271,22 +273,23 @@
       "required_simulation_terms": [
         "detail body exists after summary",
         "detail source list too broad",
-        "public summary research procedure leak"
+        "public summary research procedure leak",
+        "public summary source-handling commentary leak"
       ]
     },
     {
-      "id": "priority_selection_explained",
-      "description": "A shortened top-priority list must state its visible selection basis so readers know why only those items lead the issue.",
+      "id": "priority_selection_kept_in_log",
+      "description": "A shortened top-priority list may be justified in the extraction log, but public pages must contain event summaries rather than selection-process commentary.",
       "required_audit_terms": [
-        "validate_priority_rationale",
-        "priority selection rationale is missing"
+        "validate_priority_has_no_selection_process",
+        "priority section exposes selection rationale"
       ],
       "required_policy_terms": [
         "今日の最重要",
-        "何を基準に優先したかを読者向けに明記する"
+        "選定理由と優先順位の作業説明は抽出ログへ残す"
       ],
       "required_simulation_terms": [
-        "priority selection rationale missing"
+        "priority selection rationale leak"
       ]
     },
     {
@@ -311,19 +314,23 @@
       "required_audit_terms": [
         "ECONOMIC_REGION_SECTION_LABELS",
         "FORBIDDEN_BROAD_ECONOMIC_LABELS",
-        "coverage contract still contains broad economic sections"
+        "coverage contract still contains broad economic sections",
+        "primary evidence host outside configured topic scope",
+        "required_channels_for_category"
       ],
       "required_policy_terms": [
         "投資という広すぎる独立カテゴリは使わない",
         "日本経済",
         "アジア経済",
         "北米経済",
-        "日本経済/北米経済は統計機関、中央銀行、政府",
+        "国別の公式根拠を別の国のSNSや動画で代替しない",
         "長くなっても、何が起きたか"
       ],
       "required_simulation_terms": [
         "regional economy taxonomy rejects broad investment category",
-        "regional economy taxonomy requires North America section"
+        "regional economy taxonomy requires North America section",
+        "regional economy rejects wrong-country official evidence",
+        "regional economy does not require unrelated social source class"
       ]
     },
     {

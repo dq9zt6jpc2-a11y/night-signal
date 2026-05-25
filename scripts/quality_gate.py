@@ -25,7 +25,10 @@ MAX_UNCHANGED_CARD_RATIO_VS_PREVIOUS = 0.70
 MAX_ISSUE_SIMILARITY_VS_PREVIOUS = 0.94
 MAX_DETAIL_SIMILARITY_VS_PREVIOUS = 0.95
 EXPECTED_HERO_TITLE = "NIGHT SIGNAL"
-EXPECTED_HERO_CONCEPT_TERMS = ["一次情報", "変化点", "判断"]
+EXPECTED_HERO_CONCEPT_TERMS = ["眠りにつく前に", "世界の輪郭", "次の朝"]
+LEGACY_HERO_CONCEPT_TERMS = ["一次情報", "変化点", "判断"]
+HERO_COPY_EFFECTIVE_DATE = "2026-05-25"
+PUBLIC_SELECTION_RATIONALE_BAN_EFFECTIVE_DATE = "2026-05-25"
 HERO_DAILY_TOPIC_TERMS = [
     "OpenAI",
     "SoftBank",
@@ -41,6 +44,9 @@ HERO_DAILY_TOPIC_TERMS = [
 ]
 
 REQUIRED_CATEGORIES = [category["label"] for category in COVERAGE_CONTRACT["categories"]]
+CATEGORY_CONFIG_BY_LABEL = {
+    category["label"]: category for category in COVERAGE_CONTRACT["categories"]
+}
 REQUIRED_SECTIONS = {
     category["section_id"]: category["label"] for category in COVERAGE_CONTRACT["categories"]
 }
@@ -234,6 +240,9 @@ PUBLIC_SUMMARY_PROCESS_PATTERNS = [
     (r"(?:調査|探索|監視|収集)(?:方法|経路|方針|対象|チャネル|チャンネル)", "research procedure"),
     (r"(?:見る|追う|確認する|収集する)必要がある", "research instruction"),
     (r"(?:本人|スタッフ|公式|SNS|X|Instagram|YouTube).{0,24}(?:毎回|必ず|継続して)(?:見る|確認|追う)", "monitoring instruction"),
+    (r"(?:原文確認先|参照経路|参照先).{0,24}(?:併記|揃え|区別)", "source-handling commentary"),
+    (r"(?:本項目|本記事).{0,24}(?:区別して掲載|掲載する)", "publication commentary"),
+    (r"(?:水準|差分|構成比).{0,24}(?:確認したい|見たい|読むべき)", "reader instruction"),
 ]
 
 
@@ -371,7 +380,7 @@ def validate_public_summary_language(context: str, text: str) -> None:
         fail(f"{context} contains editorial/research procedure wording: " + ", ".join(violations))
 
 
-def validate_stable_hero(context: str, html: str) -> None:
+def validate_stable_hero(context: str, html: str, issue_date: str) -> None:
     hero_match = re.search(r'<section class="hero">(.*?)</section>', html, flags=re.S)
     if not hero_match:
         fail(f"{context} missing hero section")
@@ -383,7 +392,12 @@ def validate_stable_hero(context: str, html: str) -> None:
     if hero_title != EXPECTED_HERO_TITLE:
         fail(f"{context} hero h1 must be stable concept title '{EXPECTED_HERO_TITLE}', not daily news: {hero_title}")
     hero_text = visible_text(hero)
-    missing = [term for term in EXPECTED_HERO_CONCEPT_TERMS if term not in hero_text]
+    concept_terms = (
+        EXPECTED_HERO_CONCEPT_TERMS
+        if issue_date >= HERO_COPY_EFFECTIVE_DATE
+        else LEGACY_HERO_CONCEPT_TERMS
+    )
+    missing = [term for term in concept_terms if term not in hero_text]
     if missing:
         fail(f"{context} hero concept copy missing terms: " + ", ".join(missing))
     daily_terms = [term for term in HERO_DAILY_TOPIC_TERMS if term in hero_text]
@@ -391,7 +405,9 @@ def validate_stable_hero(context: str, html: str) -> None:
         fail(f"{context} hero must describe the product concept, not daily topics: " + ", ".join(daily_terms[:8]))
 
 
-def validate_priority_rationale(context: str, html: str) -> None:
+def validate_priority_has_no_selection_process(context: str, html: str, issue_date: str) -> None:
+    if issue_date < PUBLIC_SELECTION_RATIONALE_BAN_EFFECTIVE_DATE:
+        return
     match = re.search(
         r'<section class="section" id="priority">(.*?)(?=<section class="section" id=|\Z)',
         section_before_history(html),
@@ -399,16 +415,9 @@ def validate_priority_rationale(context: str, html: str) -> None:
     )
     if not match:
         fail(f"{context} missing priority section")
-    rationale_match = re.search(r'<p class="priority-rationale">(.*?)</p>', match.group(1), flags=re.S)
-    if not rationale_match:
-        fail(f"{context} priority selection rationale is missing")
-    rationale = visible_text(rationale_match.group(1))
-    required_terms = ["選定理由", "全", "影響範囲", "一次情報", "優先"]
-    missing = [term for term in required_terms if term not in rationale]
-    if missing:
-        fail(f"{context} priority selection rationale missing terms: " + ", ".join(missing))
-    if len(rationale) < 80:
-        fail(f"{context} priority selection rationale is too thin")
+    priority_text = visible_text(match.group(1))
+    if "選定理由" in priority_text or "priority-rationale" in match.group(1):
+        fail(f"{context} priority section exposes selection rationale")
 
 
 def validate_daily_delta(issue_date: str, sample_html: str) -> None:
@@ -722,8 +731,11 @@ def validate_extraction_log(issue_date: str, extraction_log_html: str) -> None:
         entry = categories.get(category)
         if not isinstance(entry, dict):
             fail(f"coverage-manifest missing category entry: {category}")
+        optional_source_classes = set(CATEGORY_CONFIG_BY_LABEL[category].get("optional_source_classes", []))
         for source_class in REQUIRED_SOURCE_CLASSES:
             value = entry.get(source_class)
+            if source_class in optional_source_classes and (not isinstance(value, list) or not value):
+                continue
             if not isinstance(value, list) or not value:
                 fail(f"{category} missing source evidence: {source_class}")
             if any(not isinstance(item, str) or len(item.strip()) < 4 for item in value):
@@ -763,15 +775,15 @@ def validate(issue_date: str) -> None:
     if display_date not in root_html:
         fail(f"root page does not display {display_date}")
 
-    validate_stable_hero("sample page", sample_html)
-    validate_stable_hero("root page", root_html)
-    validate_stable_hero("dated issue page", dated_html)
-    validate_priority_rationale("root page", root_html)
-    validate_priority_rationale("dated issue page", dated_html)
+    validate_stable_hero("sample page", sample_html, issue_date)
+    validate_stable_hero("root page", root_html, issue_date)
+    validate_stable_hero("dated issue page", dated_html, issue_date)
+    validate_priority_has_no_selection_process("root page", root_html, issue_date)
+    validate_priority_has_no_selection_process("dated issue page", dated_html, issue_date)
     validate_reader_process_language("root page", section_before_history(root_html))
     validate_reader_process_language("dated issue page", section_before_history(dated_html))
     for context, html in [("root page", root_html), ("dated issue page", dated_html)]:
-        for card in normal_card_blocks(html):
+        for card in card_blocks(html):
             for paragraph in re.findall(r"<p[^>]*>(.*?)</p>", card, flags=re.S):
                 validate_public_summary_language(f"{context} card summary", visible_text(paragraph))
 
