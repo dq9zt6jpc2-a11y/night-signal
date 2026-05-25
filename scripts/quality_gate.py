@@ -229,6 +229,13 @@ READER_PROCESS_LEAK_TERMS = [
     "最新採用",
 ]
 
+PUBLIC_SUMMARY_PROCESS_PATTERNS = [
+    (r"(?:採用|掲載|公開)(?:判断|基準|可否|候補)", "selection/publication decision"),
+    (r"(?:調査|探索|監視|収集)(?:方法|経路|方針|対象|チャネル|チャンネル)", "research procedure"),
+    (r"(?:見る|追う|確認する|収集する)必要がある", "research instruction"),
+    (r"(?:本人|スタッフ|公式|SNS|X|Instagram|YouTube).{0,24}(?:毎回|必ず|継続して)(?:見る|確認|追う)", "monitoring instruction"),
+]
+
 
 def issue_date_from_args() -> str:
     if len(sys.argv) > 1:
@@ -354,6 +361,16 @@ def validate_reader_process_language(context: str, html: str) -> None:
         fail(f"{context} contains production/process wording: " + ", ".join(leaks[:8]))
 
 
+def validate_public_summary_language(context: str, text: str) -> None:
+    violations = [
+        label
+        for pattern, label in PUBLIC_SUMMARY_PROCESS_PATTERNS
+        if re.search(pattern, text)
+    ]
+    if violations:
+        fail(f"{context} contains editorial/research procedure wording: " + ", ".join(violations))
+
+
 def validate_stable_hero(context: str, html: str) -> None:
     hero_match = re.search(r'<section class="hero">(.*?)</section>', html, flags=re.S)
     if not hero_match:
@@ -372,6 +389,26 @@ def validate_stable_hero(context: str, html: str) -> None:
     daily_terms = [term for term in HERO_DAILY_TOPIC_TERMS if term in hero_text]
     if daily_terms:
         fail(f"{context} hero must describe the product concept, not daily topics: " + ", ".join(daily_terms[:8]))
+
+
+def validate_priority_rationale(context: str, html: str) -> None:
+    match = re.search(
+        r'<section class="section" id="priority">(.*?)(?=<section class="section" id=|\Z)',
+        section_before_history(html),
+        flags=re.S,
+    )
+    if not match:
+        fail(f"{context} missing priority section")
+    rationale_match = re.search(r'<p class="priority-rationale">(.*?)</p>', match.group(1), flags=re.S)
+    if not rationale_match:
+        fail(f"{context} priority selection rationale is missing")
+    rationale = visible_text(rationale_match.group(1))
+    required_terms = ["選定理由", "全", "影響範囲", "一次情報", "優先"]
+    missing = [term for term in required_terms if term not in rationale]
+    if missing:
+        fail(f"{context} priority selection rationale missing terms: " + ", ".join(missing))
+    if len(rationale) < 80:
+        fail(f"{context} priority selection rationale is too thin")
 
 
 def validate_daily_delta(issue_date: str, sample_html: str) -> None:
@@ -581,6 +618,7 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
             weak_summaries.append(f"{name}: missing summary")
         else:
             summary_text = visible_text(summary_match.group(1))
+            validate_public_summary_language(f"detail page {name} summary", summary_text)
             summary_text = re.sub(r"\s+", "", summary_text)
             if len(summary_text) < min_summary_chars:
                 weak_summaries.append(f"{name}: {len(summary_text)} chars")
@@ -728,8 +766,14 @@ def validate(issue_date: str) -> None:
     validate_stable_hero("sample page", sample_html)
     validate_stable_hero("root page", root_html)
     validate_stable_hero("dated issue page", dated_html)
+    validate_priority_rationale("root page", root_html)
+    validate_priority_rationale("dated issue page", dated_html)
     validate_reader_process_language("root page", section_before_history(root_html))
     validate_reader_process_language("dated issue page", section_before_history(dated_html))
+    for context, html in [("root page", root_html), ("dated issue page", dated_html)]:
+        for card in normal_card_blocks(html):
+            for paragraph in re.findall(r"<p[^>]*>(.*?)</p>", card, flags=re.S):
+                validate_public_summary_language(f"{context} card summary", visible_text(paragraph))
 
     cards = card_blocks(root_html)
     if not cards:

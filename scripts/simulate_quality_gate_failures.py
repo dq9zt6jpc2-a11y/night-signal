@@ -425,10 +425,14 @@ def main() -> int:
             tmp / "site" / ISSUE_DATE / "details" / BREX_DETAIL,
             re.sub(
                 r'<div class="summary-lead">.*?</div>',
-                '<div class="summary-lead">D.J.ニュービルは契約満了で宇都宮ブレックスを退団した。攻撃の中心だった主力の退団で、来季ロスターは大きく変わる。得点、アシスト、外国籍枠、後任ガードの補強がチーム力を左右する。クラブは指導体制の再編も抱え、主力の穴を埋める編成判断が急務になる。主力の役割配分も見直しになる。</div>',
+                '<div class="summary-lead">D.J.ニュービルの移籍先が発表された。ブレックスは来季の後任編成を進める。</div>',
                 read(tmp / "site" / ISSUE_DATE / "details" / BREX_DETAIL),
                 count=1,
                 flags=re.S,
+            ).replace(
+                "原文確認:",
+                "原文確認: 契約満了と移籍先の発表日、所属クラブ名、掲載主体を確認できる公式および主要報道の参照先を明示し、情報の由来を保持する資料:",
+                1,
             ),
         ),
         "detail summaries are too thin",
@@ -447,6 +451,41 @@ def main() -> int:
             ),
         ),
         "detail summaries are too thin",
+    )
+
+    assert_fail(
+        "public summary research procedure leak",
+        lambda tmp: write(
+            tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
+            read(tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL).replace(
+                '<div class="summary-lead">',
+                '<div class="summary-lead">このカテゴリでは公式発表とSNSを毎回確認する必要がある。採用判断は次の反応まで含めて行う。 ',
+                1,
+            ),
+        ),
+        "contains editorial/research procedure wording",
+    )
+
+    assert_fail(
+        "public card research procedure leak",
+        lambda tmp: mutate_root_and_dated(
+            tmp,
+            lambda html: html.replace(
+                "<p>公式ページには、神戸・横浜での4公演に続き、ソウルのオリンピック公園 オリンピックホールで2公演を行う日程が掲載されている…</p>",
+                "<p>このカテゴリでは公式HPとSNSを必ず確認する必要がある。採用基準は当日反応を含める。</p>",
+                1,
+            ),
+        ),
+        "contains editorial/research procedure wording",
+    )
+
+    assert_fail(
+        "priority selection rationale missing",
+        lambda tmp: mutate_root_and_dated(
+            tmp,
+            lambda html: re.sub(r'\s*<p class="priority-rationale">.*?</p>', "", html, count=1, flags=re.S),
+        ),
+        "priority selection rationale is missing",
     )
 
     assert_fail(

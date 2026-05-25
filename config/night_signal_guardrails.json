@@ -1,5 +1,5 @@
 {
-  "version": "2026-05-24.13",
+  "version": "2026-05-25.14",
   "description": "Persistent recurrence-prevention inventory for NIGHT SIGNAL. A user-reported failure is not considered fixed unless it is represented here and enforced by scripts/guardrail_inventory.py.",
   "guards": [
     {
@@ -108,7 +108,7 @@
       "description": "Published items must have information-rich Japanese summaries, and fresh non-adopted candidates must carry a clear reason class.",
       "contract": {
         "minimum_new_or_changed_summary_chars": 120,
-        "minimum_detail_summary_chars": 240,
+        "minimum_detail_summary_chars": 120,
         "summary_quality_effective_date": "2026-05-22",
         "fresh_non_adopted_reason_required_effective_date": "2026-05-22",
         "allowed_non_adoption_reason_classes": [
@@ -123,16 +123,22 @@
         "minimum_new_or_changed_summary_chars",
         "minimum_detail_summary_chars",
         "fresh_non_adopted_reason_required_effective_date",
-        "non_adoption_reason_class"
+        "non_adoption_reason_class",
+        "validate_public_summary_language",
+        "PUBLIC_SUMMARY_PROCESS_PATTERNS"
       ],
       "required_policy_terms": [
-        "最低240字",
+        "最低120字",
+        "全カテゴリ共通で、カード本文と30秒概要",
+        "調査方法、採用判断、今後の監視方針は抽出ログへ分け",
         "non_adoption_reason_class",
         "新しい候補を「なんとなく保留」にしない"
       ],
       "required_simulation_terms": [
         "coverage strict new item summary too thin",
         "strict detail summary too thin",
+        "public summary research procedure leak",
+        "public card research procedure leak",
         "coverage fresh non-adopted candidate missing reason class"
       ]
     },
@@ -255,7 +261,8 @@
       "description": "Detail pages must remain overview-only and must not contain authoring/checklist sections or broad source bundles.",
       "required_audit_terms": [
         "detail pages must be overview-only",
-        "detail pages have too many source links"
+        "detail pages have too many source links",
+        "validate_public_summary_language"
       ],
       "required_policy_terms": [
         "詳細ページは日本語で読める概要",
@@ -263,7 +270,23 @@
       ],
       "required_simulation_terms": [
         "detail body exists after summary",
-        "detail source list too broad"
+        "detail source list too broad",
+        "public summary research procedure leak"
+      ]
+    },
+    {
+      "id": "priority_selection_explained",
+      "description": "A shortened top-priority list must state its visible selection basis so readers know why only those items lead the issue.",
+      "required_audit_terms": [
+        "validate_priority_rationale",
+        "priority selection rationale is missing"
+      ],
+      "required_policy_terms": [
+        "今日の最重要",
+        "何を基準に優先したかを読者向けに明記する"
+      ],
+      "required_simulation_terms": [
+        "priority selection rationale missing"
       ]
     },
     {

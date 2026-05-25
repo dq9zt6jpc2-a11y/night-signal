@@ -56,7 +56,7 @@
   "minimum_published_cards_per_category": 0,
   "minimum_new_or_changed_items_per_category": 0,
   "minimum_new_or_changed_summary_chars": 120,
-  "minimum_detail_summary_chars": 240,
+  "minimum_detail_summary_chars": 120,
   "summary_quality_effective_date": "2026-05-22",
   "minimum_latest_candidates_per_watch_topic": 1,
   "minimum_watch_topic_checks_per_topic": 1,
