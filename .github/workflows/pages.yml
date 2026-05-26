@@ -79,3 +79,6 @@ jobs:
           done
           echo "Public page did not show ${ISSUE_DATE}" >&2
           exit 1
+
+      - name: Audit published issue content
+        run: python3 scripts/publication_audit.py "$ISSUE_DATE"

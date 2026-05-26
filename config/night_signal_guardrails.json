@@ -411,17 +411,23 @@
       "description": "Publishing must not silently fall back to an old issue or a stale root page.",
       "required_audit_terms": [
         "Refusing to publish",
-        "PUBLICATION AUDIT PASSED"
+        "PUBLICATION AUDIT PASSED",
+        "local site/index.html has no card titles",
+        "missing_titles = [title for title in local_card_titles(issue_date) if title not in root_html]"
       ],
       "required_policy_terms": [
         ".night-signal-issue-date",
         "過去号へのフォールバックは禁止",
-        "publication_audit"
+        "publication_audit",
+        "掲載した全カード見出し",
+        "定例ニュースで件数を埋めない"
       ],
       "required_workflow_terms": [
         ".night-signal-issue-date",
         "Verify public page date",
-        "Selected NIGHT SIGNAL issue is missing"
+        "Selected NIGHT SIGNAL issue is missing",
+        "Audit published issue content",
+        "python3 scripts/publication_audit.py"
       ],
       "forbidden_workflow_terms": [
         "CHANGED_DATES",
@@ -433,7 +439,8 @@
       ],
       "required_simulation_terms": [
         "guardrail catches workflow fallback to latest issue",
-        "guardrail catches workflow changed-date override"
+        "guardrail catches workflow changed-date override",
+        "guardrail catches missing published content audit"
       ]
     },
     {

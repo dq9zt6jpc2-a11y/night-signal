@@ -123,8 +123,8 @@ def local_card_titles(issue_date: str) -> list[str]:
         title = visible_text(match.group(1))
         if title and title not in titles:
             titles.append(title)
-    if len(titles) < 8:
-        fail(f"local site/index.html has too few card titles for {issue_date}: {len(titles)}")
+    if not titles:
+        fail(f"local site/index.html has no card titles for {issue_date}")
     return titles
 
 
@@ -138,7 +138,7 @@ def ensure_public_url(issue_date: str) -> None:
     if expected not in dated_html:
         fail(f"public dated issue does not show {issue_date}")
 
-    missing_titles = [title for title in local_card_titles(issue_date)[:8] if title not in root_html]
+    missing_titles = [title for title in local_card_titles(issue_date) if title not in root_html]
     if missing_titles:
         fail("public root date is current but content is stale; missing local titles: " + "; ".join(missing_titles))
 

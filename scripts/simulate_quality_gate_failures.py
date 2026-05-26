@@ -273,6 +273,11 @@ def append_workflow_text(tmp: Path, text: str) -> None:
     write(path, read(path) + "\n" + text + "\n")
 
 
+def remove_workflow_text(tmp: Path, text: str) -> None:
+    path = tmp / ".github" / "workflows" / "pages.yml"
+    write(path, read(path).replace(text, "", 1))
+
+
 def keep_only_one_investment_update(tmp: Path) -> None:
     mutate_root_and_dated(tmp, remove_ici_investment_card)
     detail = tmp / "site" / ISSUE_DATE / "details" / INVESTMENT_SECOND_DETAIL
@@ -430,6 +435,12 @@ def main() -> int:
             'ISSUE_DATE="$(echo "${CHANGED_DATES}" | tail -n 1)"',
         ),
         "latest_issue_publish_only forbidden workflow terms",
+    )
+
+    assert_guardrail_fail(
+        "guardrail catches missing published content audit",
+        lambda tmp: remove_workflow_text(tmp, "Audit published issue content"),
+        "latest_issue_publish_only missing workflow terms",
     )
 
     assert_fail(
