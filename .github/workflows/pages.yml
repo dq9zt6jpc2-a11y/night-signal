@@ -81,4 +81,4 @@ jobs:
           exit 1
 
       - name: Audit published issue content
-        run: python3 scripts/publication_audit.py "$ISSUE_DATE"
+        run: python3 scripts/publication_audit.py "$ISSUE_DATE" --public-content-only

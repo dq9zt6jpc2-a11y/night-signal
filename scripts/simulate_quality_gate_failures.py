@@ -443,6 +443,12 @@ def main() -> int:
         "latest_issue_publish_only missing workflow terms",
     )
 
+    assert_guardrail_fail(
+        "guardrail catches published content audit mode removal",
+        lambda tmp: remove_workflow_text(tmp, " --public-content-only"),
+        "latest_issue_publish_only missing workflow terms",
+    )
+
     assert_fail(
         "title policy wording leak",
         lambda tmp: mutate_root_and_dated(

@@ -17,12 +17,18 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC_ROOT = "https://dq9zt6jpc2-a11y.github.io/night-signal/"
+PUBLIC_CONTENT_ONLY_FLAG = "--public-content-only"
 
 
 def issue_date_from_args() -> str:
-    if len(sys.argv) > 1:
-        return sys.argv[1]
+    args = [arg for arg in sys.argv[1:] if arg != PUBLIC_CONTENT_ONLY_FLAG]
+    if args:
+        return args[0]
     return datetime.now().strftime("%Y-%m-%d")
+
+
+def public_content_only() -> bool:
+    return PUBLIC_CONTENT_ONLY_FLAG in sys.argv[1:]
 
 
 def latest_available_issue_date() -> str | None:
@@ -149,8 +155,9 @@ def main() -> int:
     if latest_issue and issue_date != latest_issue:
         fail(f"{issue_date} is not the latest local issue; latest is {latest_issue}")
     run_quality_gate(issue_date)
-    ensure_clean_worktree()
-    ensure_pushed_to_origin()
+    if not public_content_only():
+        ensure_clean_worktree()
+        ensure_pushed_to_origin()
     ensure_public_url(issue_date)
     print(f"PUBLICATION AUDIT PASSED: {issue_date}")
     return 0

@@ -137,7 +137,7 @@
         <li><code>python3 scripts/quality_gate.py YYYY-MM-DD</code>: 日付、鮮度、可変掲載、読者向け見出し、カードと詳細ページの整合、通常カードの詳細リンク重複、記事まとめ構造、リンク、coverage-manifest、カテゴリ固有検索軸、詳細ページの前日コピーを検査する。</li>
         <li><code>python3 scripts/pre22_audit.py YYYY-MM-DD</code>: 当日成果物と品質ゲートを公開前に確認する。</li>
         <li>commit/push後に <code>python3 scripts/publication_audit.py YYYY-MM-DD</code> を実行し、未コミット差分、未push、remote不一致、公開URLの日付不一致に加え、掲載した全カード見出しの公開ページ不一致を失敗扱いにする。掲載件数は変化の有無に応じて可変とし、定例ニュースで件数を埋めない。</li>
-        <li>GitHub Pagesの公開処理でも <code>publication_audit.py</code> を実行し、日付だけが新しく本文が不整合な状態を公開成功扱いにしない。</li>
+        <li>GitHub Pagesの公開処理でも <code>publication_audit.py --public-content-only</code> を実行し、日付だけが新しく本文が不整合な状態を公開成功扱いにしない。CIでは生成後の作業ツリー状態ではなく、配信HTMLと採用見出しの一致を検証する。</li>
         <li>コマンドは必ず直列で実行する。順序は sync → coverage_audit → quality_gate → pre22_audit → commit → push → publication_audit。</li>
       </ul>
 
