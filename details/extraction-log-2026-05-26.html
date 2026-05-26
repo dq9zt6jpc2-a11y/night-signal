@@ -22,7 +22,7 @@
       <script type="application/json" id="coverage-manifest">{
   "contract_version": "2026-05-26.13",
   "date": "2026-05-26",
-  "last_checked_jst": "2026-05-26T22:46+09:00",
+  "last_checked_jst": "2026-05-26T23:07+09:00",
   "note": "daily collection; each category records official/major/specialist/SNS/X/YouTube/data/schedule/counter-search plus decisions.",
   "categories": {
     "OpenAI": {
@@ -2143,7 +2143,6 @@
     "SpaceX": {
       "collection_status": "complete",
       "published_card_titles": [
-        "SpaceXのStarlink 17-37、5月26日14:00 UTC以降に打ち上げ予定",
         "SpaceXと米国防総省、Starlink軍事利用の料金を巡り協議が難航とReuters報道"
       ],
       "search_axes": {
@@ -2194,20 +2193,6 @@
       ],
       "new_or_changed_items": [
         {
-          "title": "SpaceXのStarlink 17-37、5月26日14:00 UTC以降に打ち上げ予定",
-          "summary": "Spaceflight Nowの打ち上げ予定表は、SpaceXのFalcon 9によるStarlink 17-37を5月26日の便として掲載し、29機のStarlink V2 Mini Optimized衛星を低軌道へ運ぶ計画だと示した。RocketLaunchのミッションページは、VandenbergのSLC-4Eから24機を運ぶ便として14:00 UTC以降の打ち上げ枠を掲載しており、衛星数の記載は一致していない。予定時刻は共通して示される一方、搭載数は確定情報として扱えない段階にある。",
-          "sources": [
-            "https://spaceflightnow.com/launch-schedule/",
-            "https://rocketlaunch.org/mission-falcon-9-block-5-starlink-group-17-37"
-          ],
-          "summary_mode": "multi_source_synthesis",
-          "material_facts": [
-            "Spaceflight Nowは5月26日のFalcon 9便としてStarlink 17-37を予定表に掲載した。",
-            "RocketLaunchも同便の14:00 UTC以降の打ち上げ枠を掲示したが、両ページの搭載衛星数表記は一致しない。"
-          ],
-          "synthesis_basis": "二つの直接ページが同一便の日付と時刻枠を示す一方、搭載数は異なるため、合致する予定情報と未確定の差異を分けてまとめた。"
-        },
-        {
           "title": "SpaceXと米国防総省、Starlink軍事利用の料金を巡り協議が難航とReuters報道",
           "summary": "Reutersは5月26日、米軍が利用するStarlink接続を巡り、SpaceXと米国防総省の間で料金協議が難航していると報じた。記事によると、軍側が端末当たり約5000ドルで利用していた接続に対し、SpaceX側は約2万5000ドル相当の高位プランに近い運用だと主張した。報道はdirect-to-cell接続案で最大5億ドルと月額1億ドルの提示にも触れたが、合意成立の有無は確認できないとしている。",
           "sources": [
@@ -2223,7 +2208,7 @@
       "no_change_checks": [
         {
           "axis": "direct-source and channel sweep",
-          "result": "SpaceXは2026-05-26に情報源と関連チャネルを照合し、掲載項目以外に本文へ加えるべき実質差分がないことを判定した。",
+          "result": "SpaceXは2026-05-26に情報源と関連チャネルを照合し、Starlink定例便を除外したうえで、料金協議報道以外に本文へ加えるべき実質差分がないことを判定した。",
           "sources": [
             "https://www.spacex.com/launches/sl-10-1",
             "https://apnews.com/article/eee2fd12d03e7c3c2e24753eb80c0d17",
@@ -2266,14 +2251,13 @@
         "反証検索: SpaceX の再掲、日付違い、公式未確定情報を除外対象として確認"
       ],
       "adopted": [
-        "SpaceXのStarlink 17-37、5月26日14:00 UTC以降に打ち上げ予定",
         "SpaceXと米国防総省、Starlink軍事利用の料金を巡り協議が難航とReuters報道"
       ],
       "held": [
         "保留: SpaceXの根拠不足の周辺情報は本文に加えない"
       ],
       "excluded": [
-        "除外: SpaceXの重複または実質差分のない情報は本文に加えない"
+        "除外: Starlink 17-37の打ち上げ予定は、高頻度の定例便で実質差分を伴わないため本文に掲載しない。"
       ],
       "unresolved": [
         "未確認: SpaceXに公開を妨げる重大な未解決事項はない"
@@ -2308,10 +2292,11 @@
           "title": "SpaceXのStarlink 17-37、5月26日14:00 UTC以降に打ち上げ予定",
           "source_url": "https://spaceflightnow.com/launch-schedule/",
           "source_published_date": "2026-05-25",
-          "decision": "adopted",
-          "rationale": "SpaceXのStarlink 17-37、5月26日14:00 UTC以降に打ち上げ予定は直近の直接資料で日時と内容を説明でき、2026-05-26号に反映すべき実質差分として扱う。",
-          "change_class": "new_event",
-          "publication_assessment": "前号で示していない事実または日程の確定情報を含み、読者が当日の状況を理解するために本文で示す価値がある。"
+          "decision": "excluded",
+          "rationale": "5月26日のStarlink打ち上げ枠は直接ページで確認したが、前号にも同種のStarlink運用を掲載しており、事故、節目、契約変更など読者判断を変える実質差分を伴わない定例便のため本文には掲載しない。",
+          "change_class": "routine_recurring",
+          "publication_assessment": "打ち上げ日時の更新自体は確認できるが、高頻度に繰り返される衛星投入予定であり、通常運用を毎号カード化しないという掲載基準に該当する。",
+          "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "business_contracts",
@@ -2571,7 +2556,7 @@
           "candidate_titles": [
             "SpaceXのStarlink 17-37、5月26日14:00 UTC以降に打ち上げ予定"
           ],
-          "result": "SpaceXのofficial_launch_manifestは直接ページと関連チャネルを照合し、当日版への反映可否を事実の差分に基づいて判定した。",
+          "result": "SpaceXのofficial_launch_manifestは日時を確認したが、Starlink定例便で実質差分を伴わないため本文から除外した。",
           "event_classes": [
             "schedule_result",
             "official_update"
@@ -2595,7 +2580,7 @@
               "SpaceX official_launch_manifest 2026-05-25",
               "SpaceX official_launch_manifest official SNS YouTube latest 2026-05-25"
             ],
-            "result": "new_update_found",
+            "result": "covered_by_existing_candidate",
             "selection_reason": "SpaceXの対象語で新着を探索し、直接資料を読んだうえで、当日号に残す事実か背景のみかを区分した。"
           },
           "investigation_paths": [
@@ -2609,7 +2594,7 @@
               "source_role": "independent_media_or_data",
               "channel": "web",
               "evidence_url": "https://spaceflightnow.com/launch-schedule/",
-              "finding": "SpaceXのStarlink 17-37、5月26日14:00 UTC以降に打ち上げ予定について日時と主要事実を示す直接ページを読み、当日号へ反映する差分を得た。"
+              "finding": "SpaceXのStarlink 17-37は打ち上げ予定を確認したが、前号でも扱った高頻度の定例輸送と同種で、本文へ加える実質差分はないと判定した。"
             },
             {
               "source_role": "social_or_video_signal",
@@ -2624,6 +2609,7 @@
     "日本経済": {
       "collection_status": "complete",
       "published_card_titles": [
+        "日銀の4月コア指標、特殊要因を除く生鮮食品除外CPIは前年比2.8%",
         "日銀IMES会議は5月27日開幕、植田総裁が冒頭挨拶の予定"
       ],
       "search_axes": {
@@ -2672,6 +2658,21 @@
       ],
       "new_or_changed_items": [
         {
+          "title": "日銀の4月コア指標、特殊要因を除く生鮮食品除外CPIは前年比2.8%",
+          "summary": "日本銀行が5月26日に公表した2026年4月の消費者物価のコア指標では、生鮮食品と特殊要因を除いた指数が前年比2.8%上昇となり、3月の2.5%から伸びが拡大した。同じ資料では、生鮮食品とエネルギーを除き特殊要因も除いた指数は2.2%、食料とエネルギーを除き特殊要因も除いた指数は1.4%だった。全国CPIの鈍化と並べることで、政策措置を取り除いた基調的な物価圧力の粘りが確認できる。",
+          "sources": [
+            "https://www.boj.or.jp/research/research_data/cpi/index.htm",
+            "https://www.boj.or.jp/research/research_data/cpi/cpirev.xlsx",
+            "https://www.newsweekjapan.jp/articles/-/323594"
+          ],
+          "summary_mode": "multi_source_synthesis",
+          "material_facts": [
+            "日銀の4月指標では、特殊要因を除く生鮮食品除外指数が前年比2.8%となり、3月の2.5%から伸びが拡大した。",
+            "同資料では、特殊要因を除く生鮮食品・エネルギー除外指数が2.2%、食料・エネルギー除外指数が1.4%となった。"
+          ],
+          "synthesis_basis": "日銀の公表ページと数値データを一次情報として読み、当日配信の報道で前月比の変化と解釈を照合してまとめた。"
+        },
+        {
           "title": "日銀IMES会議は5月27日開幕、植田総裁が冒頭挨拶の予定",
           "summary": "日本銀行金融研究所の公式プログラムによると、2026 BOJ-IMES Conferenceは5月27日と28日に「Monetary Policy from New Perspectives」をテーマとして開催される。初日9時の冒頭挨拶は植田和男総裁が担当し、同日には世界的な価格ショックと国際的な金融政策協調、金融政策と不均衡を扱う討議が並ぶ。翌日には氷見野副総裁が司会を務め、FedとECBの関係者を迎える対話も予定されている。",
           "sources": [
@@ -2687,7 +2688,7 @@
       "no_change_checks": [
         {
           "axis": "direct-source and channel sweep",
-          "result": "日本経済は2026-05-26に情報源と関連チャネルを照合し、掲載項目以外に本文へ加えるべき実質差分がないことを判定した。",
+          "result": "日本経済は2026-05-26に公式統計と関連チャネルを照合し、日銀コア物価とIMES会議予定以外に本文へ加えるべき実質差分がないことを判定した。",
           "sources": [
             "https://www.stat.go.jp/data/cpi/1.htm?guid=ON",
             "https://www.japantimes.co.jp/business/2026/05/22/economy/cpi-april-rise/"
@@ -2699,12 +2700,15 @@
         "https://www.boj.or.jp/",
         "https://www.mhlw.go.jp/",
         "https://www.boj.or.jp/en/",
-        "https://www.imes.boj.or.jp/en/conference/2026confsppa.html"
+        "https://www.imes.boj.or.jp/en/conference/2026confsppa.html",
+        "https://www.boj.or.jp/research/research_data/cpi/index.htm",
+        "https://www.boj.or.jp/research/research_data/cpi/cpirev.xlsx"
       ],
       "major_media": [
         "https://www.japantimes.co.jp/business/2026/05/22/economy/cpi-april-rise/",
         "https://www.newsweekjapan.jp/articles/-/323276",
-        "https://www.japantimes.co.jp/business/2026/05/21/economy/boj-bond-market-forex/"
+        "https://www.japantimes.co.jp/business/2026/05/21/economy/boj-bond-market-forex/",
+        "https://www.newsweekjapan.jp/articles/-/323594"
       ],
       "specialist_media": [
         "https://www.dir.co.jp/report/research/economics/japan/20260522_025772.html",
@@ -2720,7 +2724,7 @@
         "https://www.youtube.com/@bankofjapanchannel"
       ],
       "data_numeric": [
-        "2026-05-25: 直近72時間と当日20:53 JST時点の確認記録 1"
+        "2026-05-26: 日銀コア指標、特殊要因を除く生鮮食品除外指数は前年比2.8%、同生鮮食品・エネルギー除外は2.2%。"
       ],
       "schedule_calendar": [
         "2026-05-25: 次の72時間に公表・試合・打ち上げ・指標予定があるかを確認"
@@ -2729,6 +2733,7 @@
         "反証検索: 日本経済 の再掲、日付違い、公式未確定情報を除外対象として確認"
       ],
       "adopted": [
+        "日銀の4月コア指標、特殊要因を除く生鮮食品除外CPIは前年比2.8%",
         "日銀IMES会議は5月27日開幕、植田総裁が冒頭挨拶の予定"
       ],
       "held": [
@@ -2745,14 +2750,14 @@
       "latest_candidates": [
         {
           "topic_id": "prices_wages_boj",
-          "title": "日本経済 prices_wages_boj：直近72時間で追加掲載を要する確定差分なし",
-          "source_url": "https://www.boj.or.jp/en/",
-          "source_published_date": "2026-05-25",
-          "decision": "no_fresh_item",
-          "rationale": "日本経済のprices_wages_bojは関連資料を照合したが、2026-05-26号で新たに本文化する実質差分は得られなかった。",
+          "title": "日銀の4月コア指標、特殊要因を除く生鮮食品除外CPIは前年比2.8%",
+          "source_url": "https://www.boj.or.jp/research/research_data/cpi/index.htm",
+          "source_published_date": "2026-05-26",
+          "decision": "adopted",
+          "rationale": "日本銀行が5月26日に公表した4月のコア物価指標は、特殊要因を除く生鮮食品除外指数の前年比2.8%と前月からの加速を具体的に示し、日本経済の物価判断を更新するため採用した。",
           "non_adoption_reason_class": "no_material_change",
-          "change_class": "background_only",
-          "publication_assessment": "直接資料を照合したが、前号から読者向け本文へ加えるべき新規事実または重要な数値変化は得られなかった。"
+          "change_class": "material_update",
+          "publication_assessment": "当日公表の公式数値であり、全国CPIの見かけの鈍化だけでは捉えにくい基調物価の粘りを示すため、読者の金融政策・景気判断に直接関係する。"
         },
         {
           "topic_id": "employment_consumption",
@@ -2779,12 +2784,12 @@
       "collected_items": [
         {
           "topic_id": "prices_wages_boj",
-          "title": "日本経済 prices_wages_boj：直近72時間で追加掲載を要する確定差分なし",
-          "source_url": "https://www.boj.or.jp/en/",
-          "source_published_date": "2026-05-25",
-          "observed_at_jst": "2026-05-26T22:20:00+09:00",
+          "title": "日銀の4月コア指標、特殊要因を除く生鮮食品除外CPIは前年比2.8%",
+          "source_url": "https://www.boj.or.jp/research/research_data/cpi/index.htm",
+          "source_published_date": "2026-05-26",
+          "observed_at_jst": "2026-05-26T23:07+09:00",
           "channel": "web",
-          "collection_note": "日本経済のprices_wages_bojについて直接ページを読み、関連チャネルも照合した上で当日差分の有無を判定した。"
+          "collection_note": "日本経済のprices_wages_bojについて日銀の当日公表ページと数値ファイルを読み、当日報道で変化の説明を照合して採用した。"
         },
         {
           "topic_id": "employment_consumption",
@@ -2808,10 +2813,11 @@
       "watch_topic_checks": [
         {
           "topic_id": "prices_wages_boj",
-          "checked_at_jst": "2026-05-26T22:20:00+09:00",
+          "checked_at_jst": "2026-05-26T23:07+09:00",
           "web": [
-            "https://www.boj.or.jp/en/",
-            "https://www.japantimes.co.jp/business/2026/05/21/economy/boj-bond-market-forex/"
+            "https://www.boj.or.jp/research/research_data/cpi/index.htm",
+            "https://www.boj.or.jp/research/research_data/cpi/cpirev.xlsx",
+            "https://www.newsweekjapan.jp/articles/-/323594"
           ],
           "sns_x": [
             "https://x.com/Bank_of_Japan_e"
@@ -2820,9 +2826,9 @@
             "https://www.youtube.com/@bankofjapanchannel"
           ],
           "candidate_titles": [
-            "日本経済 prices_wages_boj：直近72時間で追加掲載を要する確定差分なし"
+            "日銀の4月コア指標、特殊要因を除く生鮮食品除外CPIは前年比2.8%"
           ],
-          "result": "日本経済のprices_wages_bojは直接ページと関連チャネルを照合し、当日版への反映可否を事実の差分に基づいて判定した。",
+          "result": "日本経済のprices_wages_bojは日銀の当日公表データで物価指標の具体的変化を確認し、本文へ採用した。",
           "event_classes": [
             "macro_data",
             "financials"
@@ -2840,27 +2846,27 @@
             "日本経済のprices_wages_bojでは、公式または一次情報に更新があれば掲載判断を変える具体的事実が含まれるという仮説で調査した。",
             "日本経済のprices_wages_bojでは、SNSや動画の反応だけが先行し一次情報と一致しない場合は掲載しないという仮説で反証した。"
           ],
-          "delta_basis": "前号以降に表示された直接資料と2026-05-26当日の内容を照合し、タイトルで示す実質差分の有無を判定根拠にした。",
+          "delta_basis": "日銀公表の4月コア指標を前月値と比較し、特殊要因を除いた指数の前年比上昇率が2.8%へ拡大した変化を採用根拠とした。",
           "search_sweep": {
             "queries": [
               "日本経済 prices_wages_boj 2026-05-25",
               "日本経済 prices_wages_boj official SNS YouTube latest 2026-05-25"
             ],
-            "result": "no_new_update",
+            "result": "new_update_found",
             "selection_reason": "日本経済の対象語で新着を探索し、直接資料を読んだうえで、当日号に残す事実か背景のみかを区分した。"
           },
           "investigation_paths": [
             {
               "source_role": "primary_or_official",
               "channel": "web",
-              "evidence_url": "https://www.boj.or.jp/en/",
-              "finding": "日本経済のprices_wages_bojについて公式または一次ページの掲載内容と日程を参照し、起点となる事実を確認した。"
+              "evidence_url": "https://www.boj.or.jp/research/research_data/cpi/index.htm",
+              "finding": "日銀が5月26日に公表した消費者物価のコア指標ページとデータを参照し、4月の数値を確認した。"
             },
             {
               "source_role": "independent_media_or_data",
               "channel": "web",
-              "evidence_url": "https://www.japantimes.co.jp/business/2026/05/21/economy/boj-bond-market-forex/",
-              "finding": "日本経済のprices_wages_bojについて主要報道または独立データで一次情報の補足と差分の重要性を検討した。"
+              "evidence_url": "https://www.newsweekjapan.jp/articles/-/323594",
+              "finding": "Reuters配信の当日報道で、日銀指標の前年比2.8%と3月からの伸び拡大を照合した。"
             },
             {
               "source_role": "social_or_video_signal",

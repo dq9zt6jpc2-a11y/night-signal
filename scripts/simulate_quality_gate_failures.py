@@ -263,6 +263,7 @@ def enable_future_article_layout_on_fixture(tmp: Path) -> None:
         if path.name in {"policy.html", f"extraction-log-{ISSUE_DATE}.html"}:
             continue
         html = read(path)
+        html = html.replace("<h2>30秒概要</h2>", "<h2>記事まとめ</h2>")
         html = html.replace('<div class="summary-lead">', '<div class="article-summary">')
         write(path, html)
 
@@ -672,7 +673,7 @@ def main() -> int:
     if future_detail_result.returncode != 0:
         raise AssertionError(f"future article summary renderer permits multi-source synthesis: {future_detail_result.stderr}")
     rendered_future_detail = read(future_detail_fixture / "details" / "future-article-summary.html")
-    if "30秒概要" not in rendered_future_detail or "article-summary" not in rendered_future_detail:
+    if "記事まとめ" not in rendered_future_detail or "article-summary" not in rendered_future_detail:
         raise AssertionError("future article summary renderer did not write article summary structure")
     if rendered_future_detail.count("<a href=") < 4:
         raise AssertionError("future article summary renderer discarded source links")
@@ -684,13 +685,13 @@ def main() -> int:
     print("PASS future article detail structure baseline")
 
     assert_fail(
-        "future issue rejects renamed detail heading",
+        "future issue rejects legacy 30-second detail heading",
         lambda tmp: [
             enable_future_article_layout_on_fixture(tmp),
             write(
                 tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
                 read(tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL)
-                .replace("<h2>30秒概要</h2>", "<h2>記事まとめ</h2>", 1)
+                .replace("<h2>記事まとめ</h2>", "<h2>30秒概要</h2>", 1)
                 .replace('<div class="article-summary">', '<div class="summary-lead">', 1),
             ),
         ],

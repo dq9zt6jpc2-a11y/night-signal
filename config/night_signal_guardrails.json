@@ -173,14 +173,15 @@
         "all synthesis sources must appear on detail page"
       ],
       "required_policy_terms": [
-        "「30秒概要」は表示上の見出し",
+        "記事まとめ",
+        "「30秒概要」という短さを目標にせず",
         "短文化のために判断材料を切り落とさない",
         "複数の記事や公式発信",
         "リンク数を一律に制限しない"
       ],
       "required_simulation_terms": [
         "future article summary renderer permits multi-source synthesis",
-        "future issue rejects renamed detail heading",
+        "future issue rejects legacy 30-second detail heading",
         "future published item missing summary mode",
         "future multi-source synthesis omits a source link"
       ]
@@ -340,7 +341,7 @@
         "validate_public_summary_language"
       ],
       "required_policy_terms": [
-        "詳細ページは「30秒概要」と「原文確認」",
+        "詳細ページは「記事まとめ」と「原文確認」",
         "原文確認は論点に直接関係し"
       ],
       "required_simulation_terms": [

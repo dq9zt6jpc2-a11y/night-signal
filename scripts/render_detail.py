@@ -4,7 +4,7 @@
 This is the preferred creation path for detail pages. New issues expose only
 the reader-facing sections we want to publish:
 
-- 30秒概要
+- 記事まとめ
 - 原文確認
 
 The summary can be multiple paragraphs and can synthesize multiple directly
@@ -165,7 +165,7 @@ def render(data: dict[str, Any]) -> str:
     escaped_h1 = html.escape(h1)
     if article_mode:
         summary_html = "\n".join(f"        <p>{html.escape(paragraph)}</p>" for paragraph in summary_parts)
-        summary_block = f"""      <h2>30秒概要</h2>
+        summary_block = f"""      <h2>記事まとめ</h2>
       <div class="article-summary">
 {summary_html}
       </div>"""
