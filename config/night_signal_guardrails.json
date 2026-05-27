@@ -1,5 +1,5 @@
 {
-  "version": "2026-05-26.15",
+  "version": "2026-05-27.16",
   "description": "Persistent recurrence-prevention inventory for NIGHT SIGNAL. A user-reported failure is not considered fixed unless it is represented here and enforced by scripts/guardrail_inventory.py.",
   "guards": [
     {
@@ -530,6 +530,20 @@
       "required_simulation_terms": [
         "YOASOBI staff social search axis missing",
         "YOASOBI staff X and Instagram source missing"
+      ]
+    },
+    {
+      "id": "current_issue_detail_date_binding",
+      "description": "Published cards in article-summary issues must link to detail files created for that same issue date, preventing prior-day replay under a new card date.",
+      "required_audit_terms": [
+        "current issue detail filenames must include issue date"
+      ],
+      "required_policy_terms": [
+        "詳細ページ名は当日の日付を含める",
+        "前号詳細へのリンクをカードの日付だけ変更して再掲"
+      ],
+      "required_simulation_terms": [
+        "future issue rejects prior-date linked detail"
       ]
     }
   ]

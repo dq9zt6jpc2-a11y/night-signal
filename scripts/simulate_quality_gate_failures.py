@@ -312,6 +312,15 @@ def mirror_current_detail_to_previous(tmp: Path, name: str) -> None:
     write(previous_path, previous)
 
 
+def link_detail_as_prior_date(tmp: Path, name: str) -> None:
+    prior_name = name.replace(ISSUE_DATE, "2026-05-23")
+    current_path = tmp / "site" / ISSUE_DATE / "details" / name
+    prior_path = tmp / "site" / ISSUE_DATE / "details" / prior_name
+    shutil.copyfile(current_path, prior_path)
+    current_path.unlink()
+    mutate_root_and_dated(tmp, lambda html: html.replace(name, prior_name))
+
+
 def clear_each_source_class_simulations() -> None:
     categories = ["OpenAI", "SoftBank", "Honda", "F1", "SpaceX", "日本経済", "アジア経済", "北米経済", "宇都宮ブレックス", "YOASOBI / 幾田りら"]
     optional_source_classes = {
@@ -713,6 +722,15 @@ def main() -> int:
             ),
         ],
         "detail pages must use article-summary-only structure",
+    )
+
+    assert_fail(
+        "future issue rejects prior-date linked detail",
+        lambda tmp: [
+            enable_future_article_layout_on_fixture(tmp),
+            link_detail_as_prior_date(tmp, SOFTBANK_DETAIL),
+        ],
+        "current issue detail filenames must include issue date",
     )
 
     future_manifest_fixture = copy_fixture()

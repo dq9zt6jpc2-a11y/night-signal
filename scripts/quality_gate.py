@@ -599,6 +599,15 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
         min_summary_chars = int(COVERAGE_CONTRACT.get("minimum_detail_summary_chars", 240))
     linked = linked_detail_names(issue_date, root_html, dated_html)
     excluded = {"policy.html", f"extraction-log-{issue_date}.html"}
+    if article_summary_required:
+        wrong_issue_details = [
+            name for name in sorted(linked - excluded) if not name.endswith(f"-{issue_date}.html")
+        ]
+        if wrong_issue_details:
+            fail(
+                "current issue detail filenames must include issue date: "
+                + ", ".join(wrong_issue_details[:8])
+            )
     weak = []
     leaked = []
     checklist_headings = []
