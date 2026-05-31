@@ -1,5 +1,5 @@
 {
-  "contract_version": "2026-05-26.13",
+  "contract_version": "2026-05-31.14",
   "legacy_contract_versions": [
     {
       "through_date": "2026-05-25",
@@ -125,6 +125,16 @@
     "insufficient_relevance"
   ],
   "minimum_no_change_checks_per_category": 1,
+  "zero_category_challenge_effective_date": "2026-05-31",
+  "minimum_zero_category_representative_candidates": 3,
+  "allowed_zero_category_rejection_classes": [
+    "routine_recurring",
+    "duplicate_covered",
+    "stale_background",
+    "insufficient_evidence",
+    "insufficient_relevance",
+    "source_unavailable"
+  ],
   "categories": [
     {
       "label": "OpenAI",
@@ -1077,6 +1087,19 @@
           ]
         },
         {
+          "id": "china_macro_policy",
+          "terms": [
+            "china",
+            "中国",
+            "pmi",
+            "nbs",
+            "manufacturing",
+            "new orders",
+            "policy",
+            "stimulus"
+          ]
+        },
+        {
           "id": "india_vietnam_markets_supply_chain",
           "terms": [
             "india",
@@ -1130,6 +1153,25 @@
             "manufacturing",
             "investment",
             "ベトナム"
+          ],
+          "event_classes": [
+            "macro_data",
+            "operations_market"
+          ]
+        },
+        {
+          "id": "china_macro_policy",
+          "primary_evidence_hosts": [
+            "stats.gov.cn"
+          ],
+          "terms": [
+            "china",
+            "pmi",
+            "nbs",
+            "manufacturing",
+            "new orders",
+            "policy",
+            "中国"
           ],
           "event_classes": [
             "macro_data",

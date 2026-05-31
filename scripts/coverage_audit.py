@@ -524,6 +524,89 @@ def validate_latest_candidates(contract: dict, issue_date: str, root_html: str, 
         fail(f"{category} published cards must come from adopted latest_candidates: " + "; ".join(missing_adopted))
 
 
+def validate_zero_category_challenge(contract: dict, issue_date: str, root_html: str, category_config: dict, entry: dict) -> None:
+    category = category_config["label"]
+    expected_titles = card_titles_by_section(root_html, category_config["section_id"])
+    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
+    if expected_titles or not effective_on_or_after(contract, "zero_category_challenge_effective_date", issue_dt):
+        return
+
+    challenge = entry.get("zero_category_challenge")
+    if not isinstance(challenge, dict):
+        fail(f"{category} has zero published cards and needs zero_category_challenge")
+
+    checked_at = challenge.get("checked_at_jst")
+    if not isinstance(checked_at, str):
+        fail(f"{category} zero_category_challenge missing checked_at_jst")
+    try:
+        checked_dt = datetime.fromisoformat(checked_at)
+    except ValueError:
+        fail(f"{category} zero_category_challenge checked_at_jst is not ISO-8601: {checked_at}")
+    offset = checked_dt.utcoffset()
+    if offset is None or offset.total_seconds() != 9 * 60 * 60:
+        fail(f"{category} zero_category_challenge checked_at_jst must use JST offset: {checked_at}")
+    if checked_dt.strftime("%Y-%m-%d") != issue_date:
+        fail(f"{category} zero_category_challenge checked_at_jst date mismatch: {checked_at} != {issue_date}")
+
+    candidates = challenge.get("representative_candidates")
+    minimum = int(contract.get("minimum_zero_category_representative_candidates", 3))
+    if not isinstance(candidates, list) or len(candidates) < minimum:
+        fail(f"{category} zero_category_challenge needs at least {minimum} representative candidates")
+
+    allowed_rejections = contract.get("allowed_zero_category_rejection_classes", [])
+    if not isinstance(allowed_rejections, list) or any(not isinstance(item, str) for item in allowed_rejections):
+        fail("coverage contract allowed_zero_category_rejection_classes must be a string list")
+    allowed_change_classes = contract.get("allowed_change_classes", [])
+    max_age = int(contract.get("maximum_adopted_candidate_source_age_days", 3))
+    generic_patterns = [
+        r"直近72時間で追加掲載を要する確定差分なし",
+        r"no fresh",
+        r"no_new_update",
+        r"掲載条件を満たす実質差分なし",
+    ]
+
+    recent_count = 0
+    for index, candidate in enumerate(candidates, start=1):
+        if not isinstance(candidate, dict):
+            fail(f"{category} zero_category_challenge representative_candidates[{index}] must be an object")
+        title = candidate.get("title")
+        source_url = candidate.get("source_url")
+        source_date = candidate.get("source_published_date")
+        change_class = candidate.get("change_class")
+        rejection_class = candidate.get("rejection_class")
+        rejection_rationale = candidate.get("rejection_rationale")
+        if not isinstance(title, str) or len(title.strip()) < 12 or any(re.search(pattern, title, re.I) for pattern in generic_patterns):
+            fail(f"{category} zero_category_challenge representative_candidates[{index}] title must be a concrete near-miss candidate")
+        if not isinstance(source_url, str) or not normalize_url_host(source_url):
+            fail(f"{category} zero_category_challenge representative_candidates[{index}] source_url must be absolute")
+        if is_search_result_url(source_url):
+            fail(f"{category} zero_category_challenge representative_candidates[{index}] source_url cannot be a search result URL")
+        if change_class not in allowed_change_classes:
+            fail(f"{category} zero_category_challenge representative_candidates[{index}] change_class is invalid")
+        if change_class in {"new_event", "material_update"}:
+            fail(f"{category} zero category contains material candidate that must be adopted or explicitly published: {title}")
+        if rejection_class not in allowed_rejections:
+            fail(f"{category} zero_category_challenge representative_candidates[{index}] rejection_class is invalid")
+        if (
+            not isinstance(rejection_rationale, str)
+            or len(re.sub(r"\s+", "", rejection_rationale)) < 35
+            or not has_japanese(rejection_rationale)
+            or any(re.search(pattern, rejection_rationale, re.I) for pattern in generic_patterns)
+        ):
+            fail(f"{category} zero_category_challenge representative_candidates[{index}] needs a specific Japanese rejection rationale")
+        try:
+            candidate_dt = datetime.strptime(source_date, "%Y-%m-%d").date()
+        except (TypeError, ValueError):
+            fail(f"{category} zero_category_challenge representative_candidates[{index}] source_published_date must be YYYY-MM-DD")
+        if candidate_dt > issue_dt:
+            fail(f"{category} zero_category_challenge representative_candidates[{index}] source_published_date is in the future: {source_date}")
+        if (issue_dt - candidate_dt).days <= max_age:
+            recent_count += 1
+
+    if recent_count < minimum:
+        fail(f"{category} zero_category_challenge needs {minimum} recent representative candidates")
+
+
 def validate_collected_items(contract: dict, issue_date: str, category_config: dict, entry: dict) -> None:
     category = category_config["label"]
     watch_topics = category_config.get("watch_topics")
@@ -906,6 +989,7 @@ def validate_coverage_contract(issue_date: str, root_html: str, extraction_log_h
         validate_card_manifest_alignment(contract, root_html, category_config, entry)
         validate_new_or_changed_items(contract, issue_date, root_html, category_config, entry)
         validate_latest_candidates(contract, issue_date, root_html, category_config, entry)
+        validate_zero_category_challenge(contract, issue_date, root_html, category_config, entry)
         validate_collected_items(contract, issue_date, category_config, entry)
         validate_watch_topic_checks(contract, issue_date, category_config, entry)
         validate_no_change_checks(contract, category_config, entry)

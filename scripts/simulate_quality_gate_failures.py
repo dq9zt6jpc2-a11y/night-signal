@@ -164,6 +164,11 @@ def remove_ici_investment_card(html: str) -> str:
     )
 
 
+def remove_section_cards(html: str, section_id: str) -> str:
+    pattern = rf'(<section class="section" id="{re.escape(section_id)}">.*?<div class="cards">).*?(</div>\s*</section>)'
+    return re.sub(pattern, r"\1\n\n      \2", html, count=1, flags=re.S)
+
+
 def mutate_manifest(tmp: Path, category: str, key: str, value) -> None:
     path = tmp / "details" / f"extraction-log-{ISSUE_DATE}.html"
     html = read(path)
@@ -658,6 +663,44 @@ def main() -> int:
         "missing category section",
         lambda tmp: mutate_root_and_dated(tmp, remove_investment_section_once),
         "missing category sections",
+    )
+
+    assert_fail(
+        "zero category challenge missing",
+        lambda tmp: [
+            mutate_contract(
+                tmp,
+                lambda contract: contract.update({"zero_category_challenge_effective_date": ISSUE_DATE}),
+            ),
+            mutate_root_and_dated(tmp, lambda html: remove_section_cards(html, "f1")),
+            mutate_manifest_entry(
+                tmp,
+                "F1",
+                lambda entry: [
+                    entry.update(
+                        {
+                            "published_card_titles": [],
+                            "new_or_changed_items": [],
+                            "adopted": [],
+                        }
+                    ),
+                    entry.pop("zero_category_challenge", None),
+                    [
+                        candidate.update(
+                            {
+                                "decision": "no_fresh_item",
+                                "change_class": "background_only",
+                                "non_adoption_reason_class": "no_material_change",
+                                "rationale": "F1の候補は近接情報を確認したが、当日号で新規カード化する具体的な実質差分は確認できなかった。",
+                                "publication_assessment": "確認した資料は既報または周辺情報にとどまり、読者向け本文へ追加する新しい決定や結果ではない。",
+                            }
+                        )
+                        for candidate in entry.get("latest_candidates", [])
+                    ],
+                ],
+            ),
+        ],
+        "zero published cards and needs zero_category_challenge",
     )
 
     one_card_fixture = copy_fixture()
