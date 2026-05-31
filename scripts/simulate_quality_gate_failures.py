@@ -53,6 +53,7 @@ def copy_fixture() -> Path:
     detail_names.add(f"extraction-log-{ISSUE_DATE}.html")
     for name in sorted(detail_names):
         shutil.copyfile(ROOT / "details" / name, tmp / "details" / name)
+    backfill_fixture_manifest_for_current_contract(tmp)
     shutil.copyfile(ROOT / "details" / "_style.css", tmp / "details" / "_style.css")
     shutil.copyfile(ROOT / "details" / "policy.html", tmp / "details" / "policy.html")
     shutil.copytree(ROOT / ".github", tmp / ".github")
@@ -65,6 +66,100 @@ def copy_fixture() -> Path:
         capture_output=True,
     )
     return tmp
+
+
+def backfill_fixture_manifest_for_current_contract(tmp: Path) -> None:
+    path = tmp / "details" / f"extraction-log-{ISSUE_DATE}.html"
+    html = path.read_text(encoding="utf-8")
+    match = re.search(r'(<script type="application/json" id="coverage-manifest">)(.*?)(</script>)', html, flags=re.S)
+    if not match:
+        return
+    manifest = json.loads(match.group(2))
+    asia = manifest.get("categories", {}).get("アジア経済")
+    if not isinstance(asia, dict):
+        return
+    if any(candidate.get("topic_id") == "china_macro_policy" for candidate in asia.get("latest_candidates", [])):
+        return
+    title = "アジア経済 china_macro_policy: 近接候補を確認したが掲載優先度に届かず"
+    asia.setdefault("search_axes", {})["china_macro_policy"] = [
+        f"アジア経済 china_macro_policy china 中国 pmi nbs manufacturing Web SNS/X YouTube {ISSUE_DATE}",
+        f"アジア経済 china 中国 pmi nbs manufacturing official latest update {ISSUE_DATE}",
+    ]
+    asia.setdefault("search_terms", []).extend(["china", "中国", "nbs", "pmi"])
+    asia["search_terms"] = sorted(set(asia["search_terms"]))
+    asia.setdefault("latest_candidates", []).append(
+        {
+            "topic_id": "china_macro_policy",
+            "title": title,
+            "source_url": "https://www.stats.gov.cn/english/",
+            "source_published_date": ISSUE_DATE,
+            "decision": "no_fresh_item",
+            "rationale": "アジア経済のchina_macro_policyは公式、報道、補助チャネルを確認し、近接候補の有無を見たが、当日号で新規カード化する具体的な実質差分は確認できなかった。",
+            "non_adoption_reason_class": "no_material_change",
+            "change_class": "background_only",
+            "publication_assessment": "確認した資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+        }
+    )
+    asia.setdefault("collected_items", []).append(
+        {
+            "topic_id": "china_macro_policy",
+            "title": title,
+            "source_url": "https://www.stats.gov.cn/english/",
+            "source_published_date": ISSUE_DATE,
+            "observed_at_jst": f"{ISSUE_DATE}T21:55:00+09:00",
+            "channel": "web",
+            "collection_note": "アジア経済のchina_macro_policyについて直接ページと関連チャネルを当日照合し、当日版へ加える実質差分の有無を判定した。",
+        }
+    )
+    asia.setdefault("watch_topic_checks", []).append(
+        {
+            "topic_id": "china_macro_policy",
+            "checked_at_jst": f"{ISSUE_DATE}T21:55:00+09:00",
+            "candidate_titles": [title],
+            "result": "アジア経済のchina_macro_policyは直接資料、独立情報、補助チャネルを当日照合し、当日版への反映可否を確認済みの事実に基づいて判定した。",
+            "event_classes": ["macro_data", "operations_market"],
+            "source_roles_checked": ["primary_or_official", "independent_media_or_data", "social_or_video_signal"],
+            "investigation_paths": [
+                {
+                    "source_role": "primary_or_official",
+                    "channel": "web",
+                    "evidence_url": "https://www.stats.gov.cn/english/",
+                    "finding": "中国国家統計局の公表経路で、対象となる統計系列と公表主体を確認した。",
+                },
+                {
+                    "source_role": "independent_media_or_data",
+                    "channel": "web",
+                    "evidence_url": "https://www.reuters.com/markets/asia/",
+                    "finding": "独立報道の経路で、公式情報と矛盾する追加事実の有無を確認した。",
+                },
+                {
+                    "source_role": "social_or_video_signal",
+                    "channel": "web",
+                    "evidence_url": "https://www.stats.gov.cn/english/",
+                    "finding": "補助情報として公表ページを再確認し、話題のみの更新を切り分けた。",
+                },
+            ],
+            "investigation_hypotheses": [
+                "アジア経済のchina_macro_policyに前号後の新しい決定または数値変更がある可能性。",
+                "アジア経済のchina_macro_policyは定例・既報・周辺情報であり掲載に足る実質差分がない可能性。",
+            ],
+            "time_window_jst": {
+                "start": "2026-05-21T21:55:00+09:00",
+                "end": f"{ISSUE_DATE}T21:55:00+09:00",
+            },
+            "delta_basis": "公式日付、数値、予定、結果を前号の掲載内容と照合し、実質変化だけを本文に採用した。",
+            "search_sweep": {
+                "queries": [
+                    f"アジア経済 china_macro_policy latest {ISSUE_DATE}",
+                    f"アジア経済 china_macro_policy official update {ISSUE_DATE}",
+                ],
+                "result": "no_new_update",
+                "selection_reason": "アジア経済のchina_macro_policyについて、公式ページと関連報道の直近日付を照合し、採用または非採用の理由を確定した。",
+            },
+            "web": ["https://www.stats.gov.cn/english/", "https://www.reuters.com/markets/asia/"],
+        }
+    )
+    path.write_text(html[: match.start(2)] + json.dumps(manifest, ensure_ascii=False, indent=2) + html[match.end(2) :], encoding="utf-8")
 
 
 def read(path: Path) -> str:
