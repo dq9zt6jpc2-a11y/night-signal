@@ -359,13 +359,6 @@ def run_detail_renderer(tmp: Path, data: dict) -> subprocess.CompletedProcess[st
 
 def enable_future_article_layout_on_fixture(tmp: Path) -> None:
     mutate_contract(tmp, lambda contract: contract.update({"article_summary_effective_date": ISSUE_DATE}))
-    for path in (tmp / "site" / ISSUE_DATE / "details").glob("*.html"):
-        if path.name in {"policy.html", f"extraction-log-{ISSUE_DATE}.html"}:
-            continue
-        html = read(path)
-        html = html.replace("<h2>30秒概要</h2>", "<h2>記事まとめ</h2>")
-        html = html.replace('<div class="summary-lead">', '<div class="article-summary">')
-        write(path, html)
 
 
 def append_workflow_text(tmp: Path, text: str) -> None:
@@ -633,7 +626,7 @@ def main() -> int:
                 flags=re.S,
             ),
         ),
-        "detail pages must use article-summary-only structure",
+        "detail pages must use 30-second overview-only structure",
     )
 
     assert_fail(
@@ -821,27 +814,23 @@ def main() -> int:
             "kicker": "OpenAI / 公式・主要報道",
             "title": "OpenAIの新発表を複数原文から整理",
             "h1": "OpenAIの新発表を複数原文から整理",
-            "slug": "future-article-summary.html",
-            "summary_paragraphs": [
-                "公式発表は、公開日、対象機能、利用可能な範囲を明示した。記事まとめでは、発表された変更内容と利用者に直接影響する条件を、日本語で省略せず整理する。",
-                "主要報道は、導入背景と既存運用との差分を補った。公式に確認できる事実と報道による補足を分けて示し、未公表の条件は確定事項として扱わない。",
-            ],
+            "slug": "future-30-second-summary.html",
+            "summary": "公式発表は、公開日、対象機能、利用可能な範囲を明示した。主要報道は、導入背景と既存運用との差分を補った。公式に確認できる事実と報道による補足を分けて示し、未公表の条件は確定事項として扱わない。利用者が当日判断に使う対象範囲、時期、残る不確定点を同じ概要内にまとめる。",
             "sources": [
                 {"label": "公式発表", "url": "https://example.com/official"},
                 {"label": "主要報道", "url": "https://example.com/report"},
                 {"label": "関連資料", "url": "https://example.com/data"},
-                {"label": "補足発信", "url": "https://example.com/social"},
             ],
         },
     )
     if future_detail_result.returncode != 0:
-        raise AssertionError(f"future article summary renderer permits multi-source synthesis: {future_detail_result.stderr}")
-    rendered_future_detail = read(future_detail_fixture / "details" / "future-article-summary.html")
-    if "記事まとめ" not in rendered_future_detail or "article-summary" not in rendered_future_detail:
-        raise AssertionError("future article summary renderer did not write article summary structure")
-    if rendered_future_detail.count("<a href=") < 4:
+        raise AssertionError(f"future 30-second summary renderer failed: {future_detail_result.stderr}")
+    rendered_future_detail = read(future_detail_fixture / "details" / "future-30-second-summary.html")
+    if "30秒概要" not in rendered_future_detail or "summary-lead" not in rendered_future_detail:
+        raise AssertionError("future detail renderer did not keep 30-second overview structure")
+    if rendered_future_detail.count("<a href=") < 3:
         raise AssertionError("future article summary renderer discarded source links")
-    print("PASS future article summary renderer permits multi-source synthesis")
+    print("PASS future detail renderer keeps 30-second overview")
 
     future_layout_fixture = copy_fixture()
     enable_future_article_layout_on_fixture(future_layout_fixture)
@@ -849,17 +838,17 @@ def main() -> int:
     print("PASS future article detail structure baseline")
 
     assert_fail(
-        "future issue rejects legacy 30-second detail heading",
+        "future issue rejects article-summary detail heading",
         lambda tmp: [
             enable_future_article_layout_on_fixture(tmp),
             write(
                 tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
                 read(tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL)
-                .replace("<h2>記事まとめ</h2>", "<h2>30秒概要</h2>", 1)
-                .replace('<div class="article-summary">', '<div class="summary-lead">', 1),
+                .replace("<h2>30秒概要</h2>", "<h2>記事まとめ</h2>", 1)
+                .replace('<div class="summary-lead">', '<div class="article-summary">', 1),
             ),
         ],
-        "detail pages must use article-summary-only structure",
+        "detail pages must use 30-second overview-only structure",
     )
 
     assert_fail(

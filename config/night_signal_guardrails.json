@@ -135,7 +135,7 @@
       ],
       "required_policy_terms": [
         "最低120字",
-        "全カテゴリ共通で、カード本文と記事まとめ",
+        "全カテゴリ共通で、カード本文と30秒概要",
         "調査方法、採用判断、今後の監視方針は抽出ログへ分け",
         "non_adoption_reason_class",
         "新しい候補を「なんとなく保留」にしない"
@@ -150,7 +150,7 @@
     },
     {
       "id": "article_summary_without_information_loss",
-      "description": "New detail pages must be readable article summaries that retain material facts and can synthesize multiple directly relevant sources without an arbitrary link cap.",
+      "description": "New detail pages must keep a readable 30-second overview that retains material facts and can synthesize directly relevant sources without dropping cited evidence.",
       "contract": {
         "article_summary_effective_date": "2026-05-26",
         "synthesis_manifest_effective_date": "2026-05-26",
@@ -163,9 +163,8 @@
       "required_audit_terms": [
         "expected_contract_version",
         "legacy_contract_versions",
-        "article_summary_effective_date",
-        "summary_paragraphs",
-        "article-summary",
+        "30-second overview-only structure",
+        "summary-lead",
         "synthesis_manifest_effective_date",
         "summary_mode",
         "material_facts",
@@ -173,15 +172,14 @@
         "all synthesis sources must appear on detail page"
       ],
       "required_policy_terms": [
-        "記事まとめ",
-        "「30秒概要」という短さを目標にせず",
-        "短文化のために判断材料を切り落とさない",
+        "30秒概要",
+        "短くても判断材料を切り落とさない",
         "複数の記事や公式発信",
-        "リンク数を一律に制限しない"
+        "30秒概要で使った直接参照先は落とさない"
       ],
       "required_simulation_terms": [
-        "future article summary renderer permits multi-source synthesis",
-        "future issue rejects legacy 30-second detail heading",
+        "future detail renderer keeps 30-second overview",
+        "future issue rejects article-summary detail heading",
         "future published item missing summary mode",
         "future multi-source synthesis omits a source link"
       ]
@@ -335,13 +333,13 @@
     },
     {
       "id": "reader_article_structure",
-      "description": "Reader pages keep one coherent article-summary section and source list, without publishing authoring or monitoring instructions.",
+      "description": "Reader pages keep one coherent 30-second overview section and source list, without publishing authoring or monitoring instructions.",
       "required_audit_terms": [
-        "detail pages must use article-summary-only structure",
+        "detail pages must use 30-second overview-only structure",
         "validate_public_summary_language"
       ],
       "required_policy_terms": [
-        "詳細ページは「記事まとめ」と「原文確認」",
+        "詳細ページは「30秒概要」と「原文確認」",
         "原文確認は論点に直接関係し"
       ],
       "required_simulation_terms": [

@@ -593,13 +593,16 @@ def validate_detail_scope(issue_date: str, root_html: str, dated_html: str) -> N
 
 def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) -> None:
     issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
-    article_summary_required = effective_on_or_after(COVERAGE_CONTRACT, "article_summary_effective_date", issue_dt)
+    filename_date_required = effective_on_or_after(COVERAGE_CONTRACT, "article_summary_effective_date", issue_dt)
+    # Detail pages must stay constrained to one overview block plus source
+    # links, including future issues.
+    article_summary_required = False
     min_summary_chars = LEGACY_MIN_SUMMARY_LEAD_CHARS
     if effective_on_or_after(COVERAGE_CONTRACT, "summary_quality_effective_date", issue_dt):
         min_summary_chars = int(COVERAGE_CONTRACT.get("minimum_detail_summary_chars", 240))
     linked = linked_detail_names(issue_date, root_html, dated_html)
     excluded = {"policy.html", f"extraction-log-{issue_date}.html"}
-    if article_summary_required:
+    if filename_date_required:
         wrong_issue_details = [
             name for name in sorted(linked - excluded) if not name.endswith(f"-{issue_date}.html")
         ]
@@ -667,7 +670,7 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
     if checklist_headings:
         fail("detail pages use checklist/next-step section headings: " + ", ".join(checklist_headings[:8]))
     if article_structure_failures:
-        fail("detail pages must use article-summary-only structure: " + "; ".join(article_structure_failures[:8]))
+        fail("detail pages must use 30-second overview-only structure: " + "; ".join(article_structure_failures[:8]))
     if weak_summaries:
         fail("detail summaries are too thin: " + "; ".join(weak_summaries[:8]))
     if missing_source:

@@ -178,8 +178,6 @@
       text-transform: uppercase;
     }
     .cards { display: grid; gap: 14px; }
-    .empty { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; box-shadow: var(--shadow); }
-    .empty p { margin: 0; color: #344054; font-size: 14px; line-height: 1.75; }
     .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; }
     .priority {
       display: grid;
@@ -273,16 +271,16 @@
     <div class="bar">
       <div class="brand"><strong>NIGHT SIGNAL</strong><span>Daily Brief · Tokyo / 17:30</span></div>
       <nav>
-        <a href="#softbank">SoftBank / Arm / AI投資</a>
         <a href="#openai">OpenAI / AI</a>
+        <a href="#softbank">SoftBank / Arm / AI投資</a>
         <a href="#honda">Honda / 自動車</a>
         <a href="#f1">F1 / Honda F1</a>
         <a href="#spacex">SpaceX / 宇宙</a>
         <a href="#yoasobi_ikuta">YOASOBI / 幾田りら</a>
         <a href="#japan_economy">日本経済</a>
         <a href="#asia">アジア経済</a>
-        <a href="#brex">宇都宮ブレックス</a>
         <a href="#north_america">北米経済</a>
+        <a href="#brex">宇都宮ブレックス</a>
         <a href="2026-06-01/details/extraction-log-2026-06-01.html">抽出ログ</a>
         <a href="2026-06-01/details/policy.html">方針</a>
       </nav>
@@ -297,74 +295,123 @@
         <div class="hero-meta"><span class="hero-chip">Source-first</span><span class="hero-chip">24-72h delta</span><span class="hero-chip">Signals, not noise</span><span class="hero-chip">Open questions visible</span></div>
       </div>
     </section>
-	    <section class="section" id="priority">
-	      <div class="section-head"><h2>今日の最重要（2）</h2><p>priority</p></div>
-	            <div class="priority">
-        <article class="priority-card signal"><span class="rank">1</span><h3>AI投資とインフラ：欧米で大型案件が相次ぐ一方、電力・立地のボトルネックが表面化</h3><p>発表・報道の粒度が揃わない案件も増え、数字の確度（投資額、電力、稼働時期）を原文で見極める局面に入った。</p><a class="tag" href="#softbank">詳細へ</a></article>
-        <article class="priority-card macro"><span class="rank">2</span><h3>北米の金融条件：金利とインフレ指標の読み替えが続く</h3><p>ヘッドラインだけでは方向感が出にくく、内訳や織り込みとのズレが焦点になった。</p><a class="tag" href="#north_america">詳細へ</a></article>
+    <section class="section" id="priority">
+      <div class="section-head"><h2>今日の最重要（2）</h2><p>priority</p></div>
+      <div class="priority">
+        <article class="priority-card hot"><span class="rank">1</span><h3>ソフトバンクグループ、株主総会前のQ&amp;A更新でAIデータセンター投資の説明軸を追加</h3><p>フランス5GW計画の発表後、株主向けQ&amp;AとIRニュースの並びでAIインフラ投資、資本政策、Arm保有価値の読み筋がそろった。</p><a class="tag" href="#softbank">詳細へ</a></article>
+        <article class="priority-card macro"><span class="rank">2</span><h3>米4月PCE価格は前年比3.8%、市場は雇用統計前に金利を再評価</h3><p>BEAの4月PCEは前月比0.4%、前年比3.8%。コアは前年比3.3%で、週内の雇用統計とFRB発言が次の材料になる。</p><a class="tag" href="#north_america">詳細へ</a></article>
       </div>
-	    </section>
-	    <section class="section" id="softbank">
-	      <div class="section-head"><h2>SoftBank / Arm / AI投資</h2><p>主要0件</p></div>
-	      \1
-        <div class=\"empty\"><p>直近24〜72時間で更新候補を横断したが、確定的に掲載したい新規カードは見送った。抽出ログには各カテゴリの確認経路と代表候補を残している。</p></div>
-      \2
-	    </section>
-	    <section class="section" id="openai">
-	      <div class="section-head"><h2>OpenAI / AI</h2><p>主要0件</p></div>
-	      \1
-        <div class=\"empty\"><p>直近24〜72時間で更新候補を横断したが、確定的に掲載したい新規カードは見送った。抽出ログには各カテゴリの確認経路と代表候補を残している。</p></div>
-      \2
-	    </section>
-	    <section class="section" id="honda">
-	      <div class="section-head"><h2>Honda / 自動車</h2><p>主要0件</p></div>
-	      \1
-        <div class=\"empty\"><p>直近24〜72時間で更新候補を横断したが、確定的に掲載したい新規カードは見送った。抽出ログには各カテゴリの確認経路と代表候補を残している。</p></div>
-      \2
-	    </section>
+    </section>
+    <section class="section" id="openai">
+      <div class="section-head"><h2>OpenAI / AI</h2><p>主要1件</p></div>
+      <div class="cards">
+        <article class="card signal">
+          <div class="meta"><span class="pill signal">2026-06-01</span><span class="pill">リリースノート</span></div>
+          <h3>OpenAI、CodexのWindows操作対応とChatGPTモデル整理をリリースノートに反映</h3>
+          <p>CodexのWindows向けComputer Use、Codex Profiles、GPT-5.5 Instant調整、o3/GPT-4.5のChatGPT内サンセット日を整理した。</p>
+          <a class="link" href="2026-06-01/details/openai-signal-2026-06-01.html">日本語で読む</a>
+        </article>
+      </div>
+    </section>
+    <section class="section" id="softbank">
+      <div class="section-head"><h2>SoftBank / Arm / AI投資</h2><p>主要1件</p></div>
+      <div class="cards">
+        <article class="card hot">
+          <div class="meta"><span class="pill hot">2026-06-01</span><span class="pill">IR / AI基盤</span></div>
+          <h3>ソフトバンクグループ、株主総会前のQ&amp;A更新でAIデータセンター投資の説明軸を追加</h3>
+          <p>フランス5GW計画の発表後、株主向けQ&amp;AとIRニュースの並びでAIインフラ投資、資本政策、Arm保有価値の読み筋がそろった。</p>
+          <a class="link" href="2026-06-01/details/softbank-signal-2026-06-01.html">日本語で読む</a>
+        </article>
+      </div>
+    </section>
+    <section class="section" id="honda">
+      <div class="section-head"><h2>Honda / 自動車</h2><p>主要1件</p></div>
+      <div class="cards">
+        <article class="card signal">
+          <div class="meta"><span class="pill signal">2026-06-01</span><span class="pill">生産販売</span></div>
+          <h3>Honda、4月世界生産276,895台で北米増と中国減の差が鮮明に</h3>
+          <p>世界生産は前年比99.2%。国内と北米は増加した一方、中国生産は28,842台、前年比61.1%にとどまった。</p>
+          <a class="link" href="2026-06-01/details/honda-signal-2026-06-01.html">日本語で読む</a>
+        </article>
+      </div>
+    </section>
     <section class="section" id="f1">
-      <div class="section-head"><h2>F1 / Honda F1</h2><p>主要0件</p></div>
-      \1
-        <div class=\"empty\"><p>直近24〜72時間で更新候補を横断したが、確定的に掲載したい新規カードは見送った。抽出ログには各カテゴリの確認経路と代表候補を残している。</p></div>
-      \2
+      <div class="section-head"><h2>F1 / Honda F1</h2><p>主要1件</p></div>
+      <div class="cards">
+        <article class="card signal">
+          <div class="meta"><span class="pill signal">2026-06-01</span><span class="pill">レース結果</span></div>
+          <h3>F1モナコGP、ピアストリ優勝でマクラーレンの主導権が広がる</h3>
+          <p>Formula 1公式結果でピアストリがモナコを制し、ノリスも上位。Honda/Astonは次戦に向けて市街地低速域の課題を残した。</p>
+          <a class="link" href="2026-06-01/details/f1-signal-2026-06-01.html">日本語で読む</a>
+        </article>
+      </div>
     </section>
-
-	    <section class="section" id="spacex">
-	      <div class="section-head"><h2>SpaceX / 宇宙</h2><p>主要0件</p></div>
-	      \1
-        <div class=\"empty\"><p>直近24〜72時間で更新候補を横断したが、確定的に掲載したい新規カードは見送った。抽出ログには各カテゴリの確認経路と代表候補を残している。</p></div>
-      \2
-	    </section>
+    <section class="section" id="spacex">
+      <div class="section-head"><h2>SpaceX / 宇宙</h2><p>主要1件</p></div>
+      <div class="cards">
+        <article class="card signal">
+          <div class="meta"><span class="pill signal">2026-06-01</span><span class="pill">打ち上げ</span></div>
+          <h3>SpaceX、6月序盤の打ち上げ一覧でStarlinkとStarship後続対応を並行管理</h3>
+          <p>公式LaunchesとStarshipページでは、Falcon 9/Starlinkの定常運用とStarship試験後の検証が別系統で進む構図になった。</p>
+          <a class="link" href="2026-06-01/details/spacex-signal-2026-06-01.html">日本語で読む</a>
+        </article>
+      </div>
+    </section>
     <section class="section" id="yoasobi_ikuta">
-      <div class="section-head"><h2>YOASOBI / 幾田りら</h2><p>主要0件</p></div>
-      \1
-        <div class=\"empty\"><p>直近24〜72時間で更新候補を横断したが、確定的に掲載したい新規カードは見送った。抽出ログには各カテゴリの確認経路と代表候補を残している。</p></div>
-      \2
+      <div class="section-head"><h2>YOASOBI / 幾田りら</h2><p>主要1件</p></div>
+      <div class="cards">
+        <article class="card signal">
+          <div class="meta"><span class="pill signal">2026-06-01</span><span class="pill">ライブ / リリース</span></div>
+          <h3>幾田りら『Laugh』ツアー後半、韓国公演後の発信と公式ページが更新局面に</h3>
+          <p>アルバム『Laugh』とツアー日程を公式ページで再整理し、YOASOBI公式・スタッフSNS・YouTubeの発信を分けて追う材料になった。</p>
+          <a class="link" href="2026-06-01/details/yoasobi_ikuta-signal-2026-06-01.html">日本語で読む</a>
+        </article>
+      </div>
     </section>
-	    <section class="section" id="japan_economy">
-	      <div class="section-head"><h2>日本経済</h2><p>主要0件</p></div>
-	      \1
-        <div class=\"empty\"><p>直近24〜72時間で更新候補を横断したが、確定的に掲載したい新規カードは見送った。抽出ログには各カテゴリの確認経路と代表候補を残している。</p></div>
-      \2
-	    </section>
-	    <section class="section" id="asia">
-	      <div class="section-head"><h2>アジア経済</h2><p>主要0件</p></div>
-	      \1
-        <div class=\"empty\"><p>直近24〜72時間で更新候補を横断したが、確定的に掲載したい新規カードは見送った。抽出ログには各カテゴリの確認経路と代表候補を残している。</p></div>
-      \2
-	    </section>
-	    <section class="section" id="brex">
-	      <div class="section-head"><h2>宇都宮ブレックス</h2><p>主要0件</p></div>
-	      \1
-        <div class=\"empty\"><p>直近24〜72時間で更新候補を横断したが、確定的に掲載したい新規カードは見送った。抽出ログには各カテゴリの確認経路と代表候補を残している。</p></div>
-      \2
-	    </section>
-	    <section class="section" id="north_america">
-	      <div class="section-head"><h2>北米経済</h2><p>主要0件</p></div>
-	      \1
-        <div class=\"empty\"><p>直近24〜72時間で更新候補を横断したが、確定的に掲載したい新規カードは見送った。抽出ログには各カテゴリの確認経路と代表候補を残している。</p></div>
-      \2
-	    </section>
+    <section class="section" id="japan_economy">
+      <div class="section-head"><h2>日本経済</h2><p>主要1件</p></div>
+      <div class="cards">
+        <article class="card macro">
+          <div class="meta"><span class="pill macro">2026-06-01</span><span class="pill">鉱工業</span></div>
+          <h3>日本の4月鉱工業生産、前月比0.8%増で製造業予測は5月増を示す</h3>
+          <p>METIの鉱工業指数は4月に前月比0.8%増。製造工業生産予測は5月5.1%増、6月0.4%減を見込む。</p>
+          <a class="link" href="2026-06-01/details/japan_economy-signal-2026-06-01.html">日本語で読む</a>
+        </article>
+      </div>
+    </section>
+    <section class="section" id="asia">
+      <div class="section-head"><h2>アジア経済</h2><p>主要1件</p></div>
+      <div class="cards">
+        <article class="card macro">
+          <div class="meta"><span class="pill macro">2026-06-01</span><span class="pill">中国PMI</span></div>
+          <h3>中国5月製造業PMIは50.0、受注の弱さでアジア供給網の温度差が残る</h3>
+          <p>国家統計局の5月PMIは50.0。生産は拡大圏に残った一方、新規受注は49.9で境目を割った。</p>
+          <a class="link" href="2026-06-01/details/asia-signal-2026-06-01.html">日本語で読む</a>
+        </article>
+      </div>
+    </section>
+    <section class="section" id="north_america">
+      <div class="section-head"><h2>北米経済</h2><p>主要1件</p></div>
+      <div class="cards">
+        <article class="card macro">
+          <div class="meta"><span class="pill macro">2026-06-01</span><span class="pill">PCE / 金利</span></div>
+          <h3>米4月PCE価格は前年比3.8%、市場は雇用統計前に金利を再評価</h3>
+          <p>BEAの4月PCEは前月比0.4%、前年比3.8%。コアは前年比3.3%で、週内の雇用統計とFRB発言が次の材料になる。</p>
+          <a class="link" href="2026-06-01/details/north_america-signal-2026-06-01.html">日本語で読む</a>
+        </article>
+      </div>
+    </section>
+    <section class="section" id="brex">
+      <div class="section-head"><h2>宇都宮ブレックス</h2><p>主要1件</p></div>
+      <div class="cards">
+        <article class="card hot">
+          <div class="meta"><span class="pill hot">2026-06-01</span><span class="pill">B.LEAGUE</span></div>
+          <h3>宇都宮ブレックス、D.J・ニュービルMVP後の来季編成フェーズに入る</h3>
+          <p>B.LEAGUE AWARDでニュービルが3年連続MVP。クラブは表彰後、契約・スタッフ・補強の発表局面へ移る。</p>
+          <a class="link" href="2026-06-01/details/brex-signal-2026-06-01.html">日本語で読む</a>
+        </article>
+      </div>
+    </section>
 
     <section class="section" id="history">
       <div class="section-head"><h2>History</h2><p>直近7日分</p></div>
