@@ -311,6 +311,7 @@ def enable_future_manifest_rules(tmp: Path) -> None:
             {
                 "synthesis_manifest_effective_date": ISSUE_DATE,
                 "publication_screening_effective_date": ISSUE_DATE,
+                "claim_verification_effective_date": ISSUE_DATE,
             }
         ),
     )
@@ -334,6 +335,50 @@ def enable_future_manifest_rules(tmp: Path) -> None:
                 item["material_facts"] = [
                     "公表主体と公表日時を本文へ残し、出来事の起点を特定している。",
                     "掲載対象となった数値または結果を本文へ残し、変化の中身を説明している。",
+                ]
+                item["claim_verification"] = [
+                    {
+                        "claim_type": "announcement",
+                        "source_state": "confirmed_update",
+                        "evidence_kind": "direct_source",
+                        "claim": "本文で発表または更新として扱った主張を、詳細ページに掲載した直接URLで確認した。",
+                        "source_url": item["sources"][0],
+                    },
+                    {
+                        "claim_type": "schedule",
+                        "source_state": "scheduled",
+                        "evidence_kind": "direct_source",
+                        "claim": "本文で予定として扱った主張を、詳細ページに掲載した直接URLで確認した。",
+                        "source_url": item["sources"][0],
+                    },
+                    {
+                        "claim_type": "numeric",
+                        "source_state": "published_value",
+                        "evidence_kind": "direct_source",
+                        "claim": "本文で数値として扱った主張を、詳細ページに掲載した直接URLで確認した。",
+                        "source_url": item["sources"][0],
+                    },
+                    {
+                        "claim_type": "result",
+                        "source_state": "final_result",
+                        "evidence_kind": "direct_source",
+                        "claim": "本文で結果として扱った主張を、詳細ページに掲載した直接URLで確認した。",
+                        "source_url": item["sources"][0],
+                    },
+                    {
+                        "claim_type": "award",
+                        "source_state": "confirmed_award",
+                        "evidence_kind": "direct_source",
+                        "claim": "本文で受賞として扱った主張を、詳細ページに掲載した直接URLで確認した。",
+                        "source_url": item["sources"][0],
+                    },
+                    {
+                        "claim_type": "status",
+                        "source_state": "confirmed_status",
+                        "evidence_kind": "direct_source",
+                        "claim": "本文で状態として扱った主張を、詳細ページに掲載した直接URLで確認した。",
+                        "source_url": item["sources"][0],
+                    },
                 ]
             for candidate in entry.get("latest_candidates", []):
                 candidate["change_class"] = (
@@ -930,6 +975,30 @@ def main() -> int:
             ),
         ],
         "all synthesis sources must appear on detail page",
+    )
+
+    assert_fail(
+        "future published item missing claim verification",
+        lambda tmp: [
+            enable_future_manifest_rules(tmp),
+            mutate_manifest_entry(tmp, "OpenAI", lambda entry: entry["new_or_changed_items"][0].pop("claim_verification", None)),
+        ],
+        "missing claim_verification",
+    )
+
+    assert_fail(
+        "future result claim cannot use schedule evidence",
+        lambda tmp: [
+            enable_future_manifest_rules(tmp),
+            mutate_manifest_entry(
+                tmp,
+                "OpenAI",
+                lambda entry: entry["new_or_changed_items"][0]["claim_verification"][0].update(
+                    {"claim_type": "result", "source_state": "scheduled", "claim": "本文で優勝した結果として扱った主張を予定情報で代用した。"}
+                ),
+            ),
+        ],
+        "claim/source state mismatch",
     )
 
     assert_fail(

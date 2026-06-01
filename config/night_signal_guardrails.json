@@ -218,6 +218,47 @@
       ]
     },
     {
+      "id": "claim_verification_by_type",
+      "description": "Published claims are verified by claim type, so results, schedules, numbers, awards, announcements, and status statements cannot borrow the wrong evidence type.",
+      "contract": {
+        "claim_verification_effective_date": "2026-06-01",
+        "allowed_claim_types": [
+          "announcement",
+          "schedule",
+          "numeric",
+          "result",
+          "award",
+          "status"
+        ],
+        "allowed_claim_evidence_kinds": [
+          "official_release",
+          "official_calendar",
+          "official_result",
+          "official_dataset",
+          "official_award",
+          "direct_source",
+          "major_media_confirmation"
+        ]
+      },
+      "required_audit_terms": [
+        "claim_verification_effective_date",
+        "CLAIM_TYPE_PATTERNS",
+        "claim_verification",
+        "claim/source state mismatch",
+        "missing claim verification for"
+      ],
+      "required_policy_terms": [
+        "主張型",
+        "根拠型",
+        "結果を予定で代用しない",
+        "本文の事実主張"
+      ],
+      "required_simulation_terms": [
+        "future published item missing claim verification",
+        "future result claim cannot use schedule evidence"
+      ]
+    },
+    {
       "id": "search_sweep_selection_required",
       "description": "Every watch topic must record search queries and a selection judgment without publishing raw search-result URLs.",
       "contract": {

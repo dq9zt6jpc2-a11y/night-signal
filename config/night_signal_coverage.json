@@ -69,11 +69,49 @@
   "article_summary_effective_date": "2026-05-26",
   "synthesis_manifest_effective_date": "2026-05-26",
   "publication_screening_effective_date": "2026-05-26",
+  "claim_verification_effective_date": "2026-06-01",
   "allowed_summary_modes": [
     "single_source_summary",
     "multi_source_synthesis"
   ],
   "minimum_material_facts_per_published_item": 2,
+  "allowed_claim_types": [
+    "announcement",
+    "schedule",
+    "numeric",
+    "result",
+    "award",
+    "status"
+  ],
+  "allowed_claim_evidence_kinds": [
+    "official_release",
+    "official_calendar",
+    "official_result",
+    "official_dataset",
+    "official_award",
+    "direct_source",
+    "major_media_confirmation"
+  ],
+  "claim_type_required_source_states": {
+    "announcement": [
+      "confirmed_update"
+    ],
+    "schedule": [
+      "scheduled"
+    ],
+    "numeric": [
+      "published_value"
+    ],
+    "result": [
+      "final_result"
+    ],
+    "award": [
+      "confirmed_award"
+    ],
+    "status": [
+      "confirmed_status"
+    ]
+  },
   "allowed_change_classes": [
     "new_event",
     "material_update",

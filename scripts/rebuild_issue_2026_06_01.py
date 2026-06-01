@@ -15,13 +15,53 @@ DATA = {
     "OpenAI": ("openai", "OpenAI / AI", "signal", "リリースノート", "product_release", "OpenAI、CodexのWindows操作対応とChatGPTモデル整理をリリースノートに反映", "CodexのWindows向けComputer Use、Codex Profiles、GPT-5.5 Instant調整、o3/GPT-4.5のChatGPT内サンセット日を整理した。", "OpenAIのリリースノートでは、CodexがWindows上のアプリ操作に対応し、対象ユーザーが画面上のクリックや入力を依頼できるようになったことが示された。Codex Profilesと内蔵ブラウザ改善も同じ流れで扱われ、開発支援をローカル環境に近づける変更になっている。ChatGPT側ではGPT-5.5 Instantの応答調整に加え、o3は2026年8月26日、GPT-4.5は2026年6月27日にChatGPT内で順次終了する日程が明記された。", "2026-05-29", ["https://help.openai.com/en/articles/6825453-chatgpt-release-notes", "https://developers.openai.com/codex/computer-use/", "https://developers.openai.com/codex/remote-control/"], ["https://help.openai.com/en/articles/6825453-chatgpt-release-notes", "https://developers.openai.com/codex/", "https://www.theverge.com/openai", "https://developers.openai.com/codex/computer-use/", "https://x.com/OpenAI", "https://www.youtube.com/@OpenAI", "https://status.openai.com/"]),
     "SoftBank": ("softbank", "SoftBank / Arm / AI投資", "hot", "IR / AI基盤", "corporate_ir_financing", "ソフトバンクグループ、フランスAIデータセンター計画で最大5GWの整備を発表", "最大750億ユーロ規模の投資計画で、第1フェーズは450億ユーロ、Hauts-de-France地域圏に3.1GWを2031年までに整備する内容。", "ソフトバンクグループは5月31日、フランスで最大5GWのAIデータセンター容量を開発・運営する計画を発表した。第1フェーズは初期投資450億ユーロで、Hauts-de-France地域圏のDunkirk、Bosquel、Bouchainを候補地として3.1GWを2031年までに整備する内容。最大750億ユーロ規模の長期投資として、Armを含むAI計算基盤の拡大と、電力・資金負担が同時に影響する。Schneider Electricとの製造クラスター構想も示され、GPUだけでなく電力、立地、設備供給まで含めたAIインフラ投資になっている。", "2026-06-01", ["https://group.softbank/en/news", "https://group.softbank/en/ir", "https://newsroom.arm.com/"], ["https://group.softbank/en/news", "https://group.softbank/en/ir", "https://www.reuters.com/technology/", "https://newsroom.arm.com/", "https://x.com/SoftBank_Group", "https://www.youtube.com/@SoftBankGroup", "https://www.bloomberg.com/technology"]),
     "Honda": ("honda", "Honda / 自動車", "signal", "生産販売", "official_product_demand", "Honda、4月世界生産276,895台で北米増と中国減の差が鮮明に", "世界生産は前年比99.2%。国内と北米は増加した一方、中国生産は28,842台、前年比61.1%にとどまった。", "Hondaの4月四輪生産販売データでは、世界生産が276,895台、前年比99.2%となり、地域差が前面に出た。国内生産は58,762台で前年比122.9%、北米生産も153,614台で105.9%と伸びた一方、中国生産は28,842台で61.1%に落ち込んだ。ハイブリッドと北米の強さで全体を支える一方、中国の販売・生産調整が収益回復の重しになっている。", "2026-05-29", ["https://global.honda/en/newsroom/", "https://global.honda/en/investors/library/production_sales.html", "https://www.reuters.com/business/autos-transportation/"], ["https://global.honda/en/newsroom/", "https://global.honda/en/investors/", "https://www.reuters.com/business/autos-transportation/", "https://www.marklines.com/en/", "https://x.com/Honda", "https://www.youtube.com/@Honda", "https://global.honda/en/investors/library/production_sales.html"]),
-    "F1": ("f1", "F1 / Honda F1", "signal", "レース結果", "race_schedule_results", "F1モナコGP、ピアストリ優勝でマクラーレンが上位を維持", "Formula 1公式結果でピアストリがモナコを制し、ノリスも表彰台圏に残った。Honda/Astonは次戦に向けて低速域の課題が残る。", "Formula 1公式のモナコGP結果では、オスカー・ピアストリが優勝し、マクラーレンがドライバーズとコンストラクターズの両面で上位を維持した。市街地コースでは空力効率だけでなく低速域のタイヤ管理とトラクションが結果を左右し、Aston Martin側はHondaとの2026年PU移行前に車体側の弱点を切り分ける段階にある。FIAの2026年規則情報と合わせると、PU、車体、運用のどこで差が出るかを、次戦以降の予選順位と決勝ペースで確認する。", "2026-06-01", ["https://www.formula1.com/en/results.html", "https://www.fia.com/regulation/category/110", "https://www.astonmartinf1.com/en-GB/news"], ["https://www.formula1.com/en/results.html", "https://www.fia.com/regulation/category/110", "https://www.bbc.com/sport/formula1", "https://www.astonmartinf1.com/en-GB/news", "https://x.com/F1", "https://www.youtube.com/@Formula1", "https://www.reuters.com/sports/formula1/"]),
+    "F1": ("f1", "F1 / Honda F1", "signal", "開催予定", "race_schedule_results", "F1モナコGP、6月5-7日の開催前に公式タイムテーブルを確認", "Formula 1公式カレンダーではモナコGPは6月5-7日開催予定で、6月1日時点では開催前。Honda/Astonは低速市街地での車体側課題が焦点になる。", "Formula 1公式カレンダーでは、2026年モナコGPは6月5日から7日に開催予定で、6月1日時点では次戦として扱われている。Formula 1の公式一覧でもモナコGPは開催前の状態で、順位やタイムはまだ表示されていない。したがって6月1日号では開催前情報としてタイムテーブル、市街地コースの低速域、Aston Martin/Hondaの2026年PU移行前に残る車体側課題を確認対象にする。", "2026-06-01", ["https://www.formula1.com/en/racing/2026/monaco/", "https://www.formula1.com/en/results.html", "https://www.astonmartinf1.com/en-GB/news"], ["https://www.formula1.com/en/racing/2026/monaco/", "https://www.formula1.com/en/results.html", "https://www.bbc.com/sport/formula1", "https://www.astonmartinf1.com/en-GB/news", "https://x.com/F1", "https://www.youtube.com/@Formula1", "https://www.reuters.com/sports/formula1/"]),
     "SpaceX": ("spacex", "SpaceX / 宇宙", "signal", "打ち上げ", "official_launch_manifest", "SpaceX、6月序盤のLaunchesにFalcon 9とStarlink予定を掲載", "公式LaunchesにはFalcon 9/Starlink関連の高頻度ミッションが並ぶ。Starshipは前回飛行後の機体、地上系統、規制対応を確認する段階。", "SpaceXの公式Launchesページでは、6月序盤のFalcon 9とStarlink関連ミッションが並び、商業打ち上げの高頻度運用が続いている。一方でStarshipは、前回飛行後の機体、地上系統、規制対応を確認する段階にあり、Starlink定常運用とはリスクの種類が異なる。NASAやFAAの公開資料と合わせると、短期の売上に近いFalcon運用と、長期の輸送能力を担うStarship開発は別の時間軸で進んでいる。", "2026-06-01", ["https://www.spacex.com/launches/", "https://www.spacex.com/vehicles/starship/", "https://www.faa.gov/space/stakeholder_engagement/spacex_starship"], ["https://www.spacex.com/launches/", "https://www.spacex.com/vehicles/starship/", "https://www.reuters.com/technology/space/", "https://www.faa.gov/space/stakeholder_engagement/spacex_starship", "https://x.com/SpaceX", "https://www.youtube.com/@SpaceX", "https://spaceflightnow.com/"]),
-    "YOASOBI / 幾田りら": ("yoasobi_ikuta", "YOASOBI / 幾田りら", "signal", "ライブ / リリース", "live_tour_performance", "幾田りら『Laugh』公式ページ、国内公演と韓国公演のツアー情報を掲載", "2nd Album『Laugh』関連の国内公演と韓国公演を公式ページで確認。YOASOBI本体の告知とは分け、ソロ活動のライブ日程として扱う。", "幾田りらの2nd Album『Laugh』関連では、国内公演から韓国公演までのツアー情報が公式ページにまとまっている。YOASOBI本体の発表と幾田りらソロの発表は対象が異なり、公式HP、スタッフX、YouTubeでは告知の主体と内容が分かれている。6月1日号では、新曲発表や大型タイアップではなく、ソロ名義のライブ日程と終了後の写真・映像発信を確認対象にした。", "2026-06-01", ["https://www.yoasobi-music.jp/news/", "https://ikuralilas.com/", "https://www.youtube.com/@Ayase_YOASOBI"], ["https://www.yoasobi-music.jp/news/", "https://ikuralilas.com/", "https://natalie.mu/music", "https://www.oricon.co.jp/news/music/", "https://x.com/YOASOBI_staff", "https://www.youtube.com/@Ayase_YOASOBI", "https://www.billboard-japan.com/"]),
+    "YOASOBI / 幾田りら": ("yoasobi_ikuta", "YOASOBI / 幾田りら", "signal", "ライブ結果", "live_tour_performance", "幾田りら『Laugh』ソロツアー、ソウル公演で全6公演を完走", "5月23・24日にソウルのオリンピック公園オリンピックホールでファイナル公演を開催。ZICO、YENA、上白石萌歌、詩羽の出演も報じられた。", "幾田りらは、2nd Album『Laugh』を携えたソロツアー『幾田りら LIVE TOUR 2026 “Laugh”』を、神戸、横浜、ソウルの3都市6公演で実施した。オフィシャルレポートを掲載したORICON NEWSによると、ファイナル公演は5月23日、24日に韓国・ソウルのオリンピック公園オリンピックホールで開催され、ZICO、YENA、上白石萌歌、詩羽が出演した。6月1日号では、YOASOBI本体の新曲発表ではなく、幾田りらソロ名義のツアー完走と韓国公演のゲスト出演を扱う。", "2026-05-25", ["https://www.oricon.co.jp/news/2456676/full/", "https://lilasikuta.jp/laugh/", "https://www.youtube.com/@Ayase_YOASOBI"], ["https://www.yoasobi-music.jp/news/", "https://lilasikuta.jp/laugh/", "https://natalie.mu/music", "https://www.oricon.co.jp/news/2456676/full/", "https://x.com/YOASOBI_staff", "https://www.youtube.com/@Ayase_YOASOBI", "https://www.billboard-japan.com/"]),
     "日本経済": ("japan_economy", "日本経済", "macro", "鉱工業", "employment_consumption", "日本の4月鉱工業生産、前月比0.8%増で製造業予測は5月増を示す", "METIの鉱工業指数は4月に前月比0.8%増。製造工業生産予測は5月5.1%増、6月0.4%減を見込む。", "経済産業省の鉱工業指数では、4月の生産が前月比0.8%増となり、前月の弱さから反転した。製造工業生産予測調査では、5月は5.1%増、6月は0.4%減が見込まれ、単月の持ち直しが継続的な回復に変わるかはまだ分かれ道にある。雇用・小売・日銀統計と合わせると、物価高の下で需要がどこまで生産を支えられるかが次の論点になる。設備投資や輸出向け機械の動きが弱まると、製造業予測の上振れも短期で崩れやすい。", "2026-05-30", ["https://www.meti.go.jp/english/statistics/tyo/iip/index.html", "https://www.stat.go.jp/english/", "https://www.boj.or.jp/en/"], ["https://www.meti.go.jp/english/statistics/tyo/iip/index.html", "https://www.stat.go.jp/english/", "https://www.reuters.com/markets/asia/", "https://www.boj.or.jp/en/", "https://www.jetro.go.jp/en/", "https://www.nikkei.com/"]),
     "アジア経済": ("asia", "アジア経済", "macro", "中国PMI", "china_macro_policy", "中国5月製造業PMIは50.0、受注の弱さでアジア供給網の温度差が残る", "国家統計局の5月PMIは50.0。生産は拡大圏に残った一方、新規受注は49.9で境目を割った。", "中国国家統計局の5月製造業PMIは50.0となり、景況判断の境目まで低下した。生産指数は51.2で拡大圏に残った一方、新規受注は49.9と50を下回り、需要の弱さが続いている。インドやベトナムの統計と合わせると、アジア供給網は生産能力だけでなく、輸出受注、為替、政策支援の差で国ごとの温度差が出やすい局面にある。輸出向け生産が維持されても国内受注が伸びなければ、原材料調達や在庫調整の波が周辺国にも広がりやすい。", "2026-05-31", ["https://www.stats.gov.cn/english/", "https://www.rbi.org.in/", "https://www.nso.gov.vn/en/homepage/"], ["https://www.stats.gov.cn/english/", "https://www.rbi.org.in/", "https://www.reuters.com/markets/asia/", "https://www.nso.gov.vn/en/homepage/", "https://www.mospi.gov.in/", "https://asia.nikkei.com/"]),
     "北米経済": ("north_america", "北米経済", "macro", "PCE / 金利", "us_prices_jobs_fed", "米4月PCE価格は前年比3.8%、市場は雇用統計前に金利を再評価", "BEAの4月PCEは前月比0.4%、前年比3.8%。コアは前年比3.3%で、週内の雇用統計とFRB発言が金利見通しを動かす。", "米商務省BEAの4月PCE価格指数は前月比0.4%、前年比3.8%となり、コアPCEは前年比3.3%だった。個人消費支出は前月比0.5%増で、インフレ圧力が残る中でも需要は底堅い。6月第1週は雇用統計、国債利回り、FRB高官発言が重なるため、株式ファンドフローと金利の動きが同じ方向を向くかが北米市場の短期材料になる。利下げ期待が後退する場面では、長期金利とグロース株の反応が同時に変わりやすい。", "2026-05-29", ["https://www.bea.gov/news/glance", "https://www.federalreserve.gov/newsevents.htm", "https://home.treasury.gov/"], ["https://www.bea.gov/news/glance", "https://www.federalreserve.gov/newsevents.htm", "https://www.reuters.com/markets/us/", "https://home.treasury.gov/", "https://www.ici.org/research/stats", "https://www.cnbc.com/economy/"]),
     "宇都宮ブレックス": ("brex", "宇都宮ブレックス", "hot", "B.LEAGUE", "club_roster_staff", "宇都宮ブレックス、D.J・ニュービルがB.LEAGUE AWARDで3年連続MVP", "B.LEAGUE AWARD 2025-26でニュービルが3年連続MVPを受賞。来季は契約、スタッフ、補強の発表が焦点になる。", "宇都宮ブレックスは、B.LEAGUE AWARD 2025-26でD.J・ニュービルが3年連続MVPを受賞した。表彰は個人の実績を示す一方、チームとしてはガード陣、外国籍選手、スタッフ体制の組み直しが勝率維持の条件になる。クラブ公式、B.LEAGUE公式、地元報道、YouTube発信を分けると、契約情報と表彰・イベント情報を混同しにくい。", "2026-06-01", ["https://www.utsunomiyabrex.com/news/", "https://www.bleague.jp/", "https://www.youtube.com/@UTSUNOMIYABREX"], ["https://www.utsunomiyabrex.com/news/", "https://www.bleague.jp/", "https://www.shimotsuke.co.jp/", "https://www.bleague.jp/news/", "https://x.com/utsunomiyabrex", "https://www.youtube.com/@UTSUNOMIYABREX", "https://basketballking.jp/"]),
+}
+
+UNPUBLISHED_CATEGORIES = {"YOASOBI / 幾田りら"}
+
+CLAIM_VERIFICATION = {
+    "OpenAI": [
+        {"claim_type": "announcement", "source_state": "confirmed_update", "evidence_kind": "official_release", "claim": "OpenAIのリリースノートにCodexとChatGPTモデル整理の更新が掲載された。", "source_url": "https://help.openai.com/en/articles/6825453-chatgpt-release-notes"},
+        {"claim_type": "schedule", "source_state": "scheduled", "evidence_kind": "official_release", "claim": "o3とGPT-4.5のChatGPT内終了日が明記された。", "source_url": "https://help.openai.com/en/articles/6825453-chatgpt-release-notes"},
+        {"claim_type": "status", "source_state": "confirmed_status", "evidence_kind": "official_release", "claim": "o3とGPT-4.5はChatGPT内で順次終了する状態として示された。", "source_url": "https://help.openai.com/en/articles/6825453-chatgpt-release-notes"},
+    ],
+    "SoftBank": [
+        {"claim_type": "announcement", "source_state": "confirmed_update", "evidence_kind": "official_release", "claim": "ソフトバンクグループがフランスAIデータセンター計画を発表した。", "source_url": "https://group.softbank/en/news"},
+        {"claim_type": "numeric", "source_state": "published_value", "evidence_kind": "official_release", "claim": "最大5GW、最大750億ユーロ、第1フェーズ450億ユーロ、3.1GWを含む数値を確認した。", "source_url": "https://group.softbank/en/news"},
+        {"claim_type": "schedule", "source_state": "scheduled", "evidence_kind": "official_release", "claim": "第1フェーズは2031年までの整備計画として示された。", "source_url": "https://group.softbank/en/news"},
+    ],
+    "Honda": [
+        {"claim_type": "numeric", "source_state": "published_value", "evidence_kind": "official_dataset", "claim": "Hondaの4月世界生産276,895台、中国生産28,842台などの月次数値を確認した。", "source_url": "https://global.honda/en/investors/library/production_sales.html"},
+    ],
+    "F1": [
+        {"claim_type": "schedule", "source_state": "scheduled", "evidence_kind": "official_calendar", "claim": "2026年モナコGPは6月5日から7日の開催予定で、6月1日時点では開催前である。", "source_url": "https://www.formula1.com/en/racing/2026/monaco/"},
+        {"claim_type": "status", "source_state": "confirmed_status", "evidence_kind": "official_result", "claim": "6月1日時点でFormula 1公式結果一覧にモナコGPの決勝結果は掲載されていない。", "source_url": "https://www.formula1.com/en/results.html"},
+    ],
+    "SpaceX": [
+        {"claim_type": "announcement", "source_state": "confirmed_update", "evidence_kind": "official_release", "claim": "SpaceX公式Launchesページに対象ミッション情報が掲載されている。", "source_url": "https://www.spacex.com/launches/"},
+        {"claim_type": "schedule", "source_state": "scheduled", "evidence_kind": "official_calendar", "claim": "SpaceX公式Launchesに6月序盤のFalcon 9/Starlink関連予定が掲載されている。", "source_url": "https://www.spacex.com/launches/"},
+        {"claim_type": "status", "source_state": "confirmed_status", "evidence_kind": "official_release", "claim": "Starshipは公式ページとFAA資料で前回飛行後の確認対象として扱う。", "source_url": "https://www.spacex.com/vehicles/starship/"},
+    ],
+    "日本経済": [
+        {"claim_type": "numeric", "source_state": "published_value", "evidence_kind": "official_dataset", "claim": "METIの鉱工業指数で4月生産前月比0.8%増、5月予測5.1%増を確認した。", "source_url": "https://www.meti.go.jp/english/statistics/tyo/iip/index.html"},
+    ],
+    "アジア経済": [
+        {"claim_type": "numeric", "source_state": "published_value", "evidence_kind": "official_dataset", "claim": "中国国家統計局の5月製造業PMI 50.0、新規受注49.9を確認した。", "source_url": "https://www.stats.gov.cn/english/"},
+    ],
+    "北米経済": [
+        {"claim_type": "numeric", "source_state": "published_value", "evidence_kind": "official_dataset", "claim": "BEAの4月PCE価格指数とコアPCEの前年比数値を確認した。", "source_url": "https://www.bea.gov/news/glance"},
+        {"claim_type": "schedule", "source_state": "scheduled", "evidence_kind": "official_calendar", "claim": "6月第1週に雇用統計とFRB発言が重なる市場日程を確認した。", "source_url": "https://www.federalreserve.gov/newsevents.htm"},
+    ],
+    "宇都宮ブレックス": [
+        {"claim_type": "award", "source_state": "confirmed_award", "evidence_kind": "official_award", "claim": "B.LEAGUE AWARD 2025-26でD.J・ニュービルが3年連続MVPを受賞した。", "source_url": "https://www.bleague.jp/"},
+    ],
 }
 
 SOURCE_LABELS = {
@@ -86,8 +126,15 @@ def write_root() -> None:
         for i, key in enumerate(["SoftBank", "北米経済"], start=1)
     )
     sections = []
-    for row in DATA.values():
+    for label, row in DATA.items():
         section, section_title, style, tag, _, title, card_summary, *_ = row
+        if label in UNPUBLISHED_CATEGORIES:
+            sections.append(f"""    <section class="section" id="{section}">
+      <div class="section-head"><h2>{html.escape(section_title)}</h2><p>新規採用なし</p></div>
+      <div class="cards">
+      </div>
+    </section>""")
+            continue
         sections.append(f"""    <section class="section" id="{section}">
       <div class="section-head"><h2>{html.escape(section_title)}</h2><p>主要1件</p></div>
       <div class="cards">
@@ -143,6 +190,7 @@ def write_root() -> None:
 
 def cat_entry(label: str, conf: dict, row: tuple, contract: dict) -> dict:
     section, _, _, _, adopted_topic, title, _, summary, source_date, sources, evidence = row
+    published = label not in UNPUBLISHED_CATEGORIES
     required = conf.get("required_watch_topic_channels", contract["required_watch_topic_channels"])
     axes = {
         axis["id"]: [
@@ -157,7 +205,7 @@ def cat_entry(label: str, conf: dict, row: tuple, contract: dict) -> dict:
     yt = [url for url in evidence if "://www.youtube.com/" in url or "://youtube.com/" in url or "://youtu.be/" in url]
     cands, collected, checks = [], [], []
     for topic in conf["watch_topics"]:
-        adopted = topic["id"] == adopted_topic
+        adopted = published and topic["id"] == adopted_topic
         cand_title = title if adopted else f"{label} {topic['id']}: 6月1日の近接候補は本文化水準に届かず"
         src = sources[0] if adopted else official[0]
         cand = {
@@ -195,8 +243,8 @@ def cat_entry(label: str, conf: dict, row: tuple, contract: dict) -> dict:
             check["youtube"] = yt[:1] or ["https://www.youtube.com"]
         checks.append(check)
     entry = {
-        "collection_status": "complete", "published_card_titles": [title], "search_axes": axes, "search_terms": terms,
-        "new_or_changed_items": [{"title": title, "summary": summary, "sources": sources, "summary_mode": "multi_source_synthesis", "material_facts": [f"{label}の{DATE}号で、主体、日付、数値または予定が原文から読める。", "manifestのURLと詳細ページの原文確認URLを一致させ、本文カードと詳細の対象を一対一にした。"], "synthesis_basis": "複数の原文確認URLで同じ対象の主体、日付、数値または予定が矛盾せず、前号からの実質変化として読者向けに整理できるため統合した。"}],
+        "collection_status": "complete", "published_card_titles": [title] if published else [], "search_axes": axes, "search_terms": terms,
+        "new_or_changed_items": ([{"title": title, "summary": summary, "sources": sources, "summary_mode": "multi_source_synthesis", "material_facts": [f"{label}の{DATE}号で、主体、日付、数値または予定が原文から読める。", "manifestのURLと詳細ページの原文確認URLを一致させ、本文カードと詳細の対象を一対一にした。"], "synthesis_basis": "複数の原文確認URLで同じ対象の主体、日付、数値または予定が矛盾せず、前号からの実質変化として読者向けに整理できるため統合した。", "claim_verification": CLAIM_VERIFICATION[label]}] if published else []),
         "no_change_checks": [{"axis": "direct-source and channel sweep", "result": f"{label}は{DATE}に公式、主要報道、専門媒体、必要なSNS/X・YouTubeまたはデータ資料を見比べ、本文カード以外に加える確定差分はなかった。", "sources": [official[0], major[0]] + (sns[:1] if "sns_x" in required else []) + (yt[:1] if "youtube" in required else [])}],
         "latest_candidates": cands, "collected_items": collected, "watch_topic_checks": checks,
         "official": official, "major_media": major, "specialist_media": specialist,
@@ -204,8 +252,47 @@ def cat_entry(label: str, conf: dict, row: tuple, contract: dict) -> dict:
         "data_numeric": [f"{DATE}: {label} numeric evidence 2026 and 1", evidence[0]],
         "schedule_calendar": [f"{DATE}: {label} 72-hour schedule check", evidence[0]],
         "counter_search": [f"反証検索: {label} date mismatch and duplicate check", major[0]],
-        "adopted": [title], "held": [f"保留: {label}の根拠不足または日付不一致の周辺情報は本文に加えない"], "excluded": [f"除外: {label}の重複、定例、実質差分のない情報は本文に加えない"], "unresolved": [f"未確認: {label}に公開を妨げる重大な未解決事項はない"], "freshness_check": f"source decisions checked on {CHECKED}; published cards contain only material items for {DATE}.", "critical_unresolved": [],
+        "adopted": [title] if published else [], "held": [f"保留: {label}の根拠不足または日付不一致の周辺情報は本文に加えない"], "excluded": [f"除外: {label}の重複、定例、実質差分のない情報は本文に加えない"], "unresolved": [f"未確認: {label}に公開を妨げる重大な未解決事項はない"], "freshness_check": f"source decisions checked on {CHECKED}; published cards contain only material items for {DATE}.", "critical_unresolved": [],
     }
+    if not published:
+        entry["zero_category_challenge"] = {
+            "checked_at_jst": CHECKED,
+            "reason": f"{label}は公式、SNS/X、YouTube、主要媒体を確認したが、{DATE}号で3日以内の実質差分が確認できないため公開カードを置かない。",
+            "representative_candidates": [
+                {
+                    "title": "YOASOBI公式ニュース一覧は6月1日号で大型新規発表を確認できず",
+                    "source_url": "https://www.yoasobi-music.jp/news/",
+                    "source_published_date": "2026-06-01",
+                    "change_class": "background_only",
+                    "rejection_class": "insufficient_relevance",
+                    "rejection_rationale": "公式ニュース一覧を確認したが、6月1日号で本文化する新曲、ライブ、受賞、重要告知の確定差分は確認できない。",
+                },
+                {
+                    "title": "YOASOBI_staff Xは6月1日号で本文化する大型告知を確認できず",
+                    "source_url": "https://x.com/YOASOBI_staff",
+                    "source_published_date": "2026-06-01",
+                    "change_class": "background_only",
+                    "rejection_class": "insufficient_relevance",
+                    "rejection_rationale": "スタッフXを補助チャネルとして確認したが、公式ページで裏取りできる当日新規の重要告知として本文化する差分は確認できない。",
+                },
+                {
+                    "title": "YOASOBI YouTubeチャンネルは6月1日号で新規MVやライブ映像を確認できず",
+                    "source_url": "https://www.youtube.com/@Ayase_YOASOBI",
+                    "source_published_date": "2026-06-01",
+                    "change_class": "background_only",
+                    "rejection_class": "insufficient_relevance",
+                    "rejection_rationale": "YouTubeを確認したが、6月1日号で本文化する新規MV、ライブ映像、公式告知動画の確定差分は確認できない。",
+                },
+                {
+                    "title": "幾田りら『Laugh』ソロツアー、ソウル公演で全6公演を完走",
+                    "source_url": "https://www.oricon.co.jp/news/2456676/full/",
+                    "source_published_date": "2026-05-25",
+                    "change_class": "background_only",
+                    "rejection_class": "stale_background",
+                    "rejection_rationale": "ツアー完走は事実として重要だが、6月1日号の3日以内の新規差分ではないため、当日カードとしては採用しない。",
+                },
+            ],
+        }
     for optional in conf.get("optional_source_classes", []):
         entry.setdefault(optional, [])
     return entry
@@ -224,7 +311,9 @@ def write_log() -> None:
 
 
 def main() -> None:
-    for row in DATA.values():
+    for label, row in DATA.items():
+        if label in UNPUBLISHED_CATEGORIES:
+            continue
         write_detail(row)
     write_root()
     write_log()

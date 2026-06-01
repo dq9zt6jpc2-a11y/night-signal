@@ -28,6 +28,14 @@ DEFERRED_PUBLISHING_RE = re.compile(r"(未反映|次回|次の再抽出|次の�
 SEARCH_RESULT_HOSTS = {"google.com", "bing.com", "duckduckgo.com"}
 ECONOMIC_REGION_SECTION_LABELS = ["日本経済", "アジア経済", "北米経済"]
 FORBIDDEN_BROAD_ECONOMIC_LABELS = {"投資"}
+CLAIM_TYPE_PATTERNS = {
+    "result": [r"優勝", r"制し", r"勝利", r"表彰台", r"決勝結果", r"レース結果"],
+    "schedule": [r"予定", r"日程", r"開催", r"公演", r"タイムテーブル"],
+    "numeric": [r"\d+(?:\.\d+)?\s?(?:%|％|台|GW|MWh|円|ユーロ|ドル|億|兆)"],
+    "award": [r"受賞", r"MVP", r"AWARD", r"表彰"],
+    "announcement": [r"発表", r"公表", r"公開", r"リリース", r"掲載", r"更新", r"対応"],
+    "status": [r"完走", r"終了", r"未掲載", r"確認", r"開幕"],
+}
 
 
 def fail(message: str) -> None:
@@ -182,6 +190,14 @@ def urls_in(values: list[str]) -> list[str]:
 
 def has_japanese(text: str) -> bool:
     return bool(JAPANESE_RE.search(text))
+
+
+def inferred_claim_types(text: str) -> set[str]:
+    return {
+        claim_type
+        for claim_type, patterns in CLAIM_TYPE_PATTERNS.items()
+        if any(re.search(pattern, text, flags=re.I) for pattern in patterns)
+    }
 
 
 def host_matches(url: str, expected_hosts: set[str]) -> bool:
@@ -347,8 +363,12 @@ def validate_new_or_changed_items(contract: dict, issue_date: str, root_html: st
     if effective_on_or_after(contract, "summary_quality_effective_date", issue_dt):
         min_summary_chars = int(contract.get("minimum_new_or_changed_summary_chars", 120))
     synthesis_required = effective_on_or_after(contract, "synthesis_manifest_effective_date", issue_dt)
+    claim_verification_required = effective_on_or_after(contract, "claim_verification_effective_date", issue_dt)
     allowed_summary_modes = contract.get("allowed_summary_modes", [])
     minimum_material_facts = int(contract.get("minimum_material_facts_per_published_item", 0))
+    allowed_claim_types = set(contract.get("allowed_claim_types", []))
+    allowed_evidence_kinds = set(contract.get("allowed_claim_evidence_kinds", []))
+    required_source_states = contract.get("claim_type_required_source_states", {})
     if not isinstance(items, list) or len(items) < minimum:
         fail(f"{category} needs at least {minimum} new_or_changed_items")
 
@@ -393,6 +413,38 @@ def validate_new_or_changed_items(contract: dict, issue_date: str, root_html: st
                 fail(f"{category} new_or_changed_items[{index}] all synthesis sources must appear on detail page")
         elif not any(url in detail_urls for url in source_urls):
             fail(f"{category} new_or_changed_items[{index}] sources must overlap linked detail page sources")
+        if claim_verification_required:
+            claims = item.get("claim_verification")
+            if not isinstance(claims, list) or not claims:
+                fail(f"{category} new_or_changed_items[{index}] missing claim_verification")
+            verified_types: set[str] = set()
+            for claim_index, claim in enumerate(claims, start=1):
+                if not isinstance(claim, dict):
+                    fail(f"{category} new_or_changed_items[{index}] claim_verification[{claim_index}] must be an object")
+                claim_type = claim.get("claim_type")
+                evidence_kind = claim.get("evidence_kind")
+                source_state = claim.get("source_state")
+                claim_text = claim.get("claim")
+                source_url = normalize_url(str(claim.get("source_url", "")))
+                if claim_type not in allowed_claim_types:
+                    fail(f"{category} new_or_changed_items[{index}] claim_type is invalid: {claim_type}")
+                if evidence_kind not in allowed_evidence_kinds:
+                    fail(f"{category} new_or_changed_items[{index}] evidence_kind is invalid: {evidence_kind}")
+                expected_states = required_source_states.get(claim_type, [])
+                if source_state not in expected_states:
+                    fail(
+                        f"{category} new_or_changed_items[{index}] claim/source state mismatch: "
+                        f"{claim_type} cannot use {source_state}"
+                    )
+                if not isinstance(claim_text, str) or len(re.sub(r"\s+", "", claim_text)) < 12 or not has_japanese(claim_text):
+                    fail(f"{category} new_or_changed_items[{index}] claim text is too weak")
+                if source_url not in set(source_urls) | detail_urls:
+                    fail(f"{category} new_or_changed_items[{index}] claim source must be cited on the item/detail page")
+                verified_types.add(claim_type)
+            inferred = inferred_claim_types(f"{title} {summary}")
+            missing_claims = sorted(inferred - verified_types)
+            if missing_claims:
+                fail(f"{category} new_or_changed_items[{index}] missing claim verification for: " + ", ".join(missing_claims))
         item_titles.append(title)
 
     if item_titles != expected_titles:
