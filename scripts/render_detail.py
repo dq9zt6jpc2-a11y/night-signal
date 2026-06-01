@@ -4,7 +4,7 @@
 This is the preferred creation path for detail pages. New issues expose only
 the reader-facing sections we want to publish:
 
-- 30秒概要
+- 記事まとめ
 - 原文確認
 
 The summary is a single overview block. Authoring checklist sections are never
@@ -55,6 +55,15 @@ FORBIDDEN_TEXT = [
     "確認して",
     "位置づけ",
     "作業",
+    "説明軸",
+    "IR文脈",
+    "読み筋",
+    "読める状態",
+    "材料になっている",
+    "更新局面",
+    "並行管理",
+    "競争軸",
+    "発表局面",
 ]
 
 
@@ -80,6 +89,23 @@ def minimum_summary_chars(issue_date: str) -> int:
     if issue_dt < effective_dt:
         return LEGACY_MIN_SUMMARY_CHARS
     return int(contract.get("minimum_detail_summary_chars", LEGACY_MIN_SUMMARY_CHARS))
+
+
+def article_summary_required(issue_date: str) -> bool:
+    try:
+        contract = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+
+    effective_value = contract.get("article_summary_effective_date")
+    if not isinstance(effective_value, str):
+        return False
+    try:
+        issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
+        effective_dt = datetime.strptime(effective_value, "%Y-%m-%d").date()
+    except ValueError:
+        return False
+    return issue_dt >= effective_dt
 
 
 def required_str(data: dict[str, Any], key: str) -> str:
@@ -139,11 +165,16 @@ def render(data: dict[str, Any]) -> str:
     if len(summary.replace(" ", "").replace("\n", "")) < min_summary_chars:
         fail(f"summary is too thin: {len(summary)} chars")
 
-    source_links = render_sources(sources, allow_multiple=False)
+    use_article_summary = article_summary_required(issue_date)
+    source_links = render_sources(sources, allow_multiple=use_article_summary)
     escaped_title = html.escape(title)
     escaped_kicker = html.escape(kicker)
     escaped_h1 = html.escape(h1)
-    summary_block = f"""      <h2>30秒概要</h2>
+    if use_article_summary:
+        summary_block = f"""      <h2>記事まとめ</h2>
+      <div class="article-summary">{html.escape(summary)}</div>"""
+    else:
+        summary_block = f"""      <h2>30秒概要</h2>
       <div class="summary-lead">{html.escape(summary)}</div>"""
     escaped_issue = html.escape(issue_date, quote=True)
     escaped_section = html.escape(section_id, quote=True)

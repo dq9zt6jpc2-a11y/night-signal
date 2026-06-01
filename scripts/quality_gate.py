@@ -28,6 +28,7 @@ EXPECTED_HERO_CONCEPT_TERMS = ["眠りにつく前に", "世界の輪郭", "次�
 LEGACY_HERO_CONCEPT_TERMS = ["一次情報", "変化点", "判断"]
 HERO_COPY_EFFECTIVE_DATE = "2026-05-25"
 PUBLIC_SELECTION_RATIONALE_BAN_EFFECTIVE_DATE = "2026-05-25"
+PUBLIC_ABSTRACT_FRAMING_BAN_EFFECTIVE_DATE = "2026-06-01"
 HERO_DAILY_TOPIC_TERMS = [
     "OpenAI",
     "SoftBank",
@@ -124,6 +125,19 @@ HEADLINE_ABSTRACT_LEAK_TERMS = [
     "確認する",
     "読む",
     "見る",
+]
+
+PUBLIC_ABSTRACT_FRAMING_TERMS = [
+    "説明軸",
+    "IR文脈",
+    "読み筋",
+    "読める状態",
+    "見せる材料",
+    "更新局面",
+    "並行管理",
+    "競争軸",
+    "発表局面",
+    "材料になっている",
 ]
 
 HEADLINE_FORBIDDEN_CHARS = ["→", "“", "”"]
@@ -369,7 +383,7 @@ def validate_reader_process_language(context: str, html: str) -> None:
         fail(f"{context} contains production/process wording: " + ", ".join(leaks[:8]))
 
 
-def validate_public_summary_language(context: str, text: str) -> None:
+def validate_public_summary_language(context: str, text: str, issue_date: str) -> None:
     violations = [
         label
         for pattern, label in PUBLIC_SUMMARY_PROCESS_PATTERNS
@@ -377,6 +391,10 @@ def validate_public_summary_language(context: str, text: str) -> None:
     ]
     if violations:
         fail(f"{context} contains editorial/research procedure wording: " + ", ".join(violations))
+    if issue_date >= PUBLIC_ABSTRACT_FRAMING_BAN_EFFECTIVE_DATE:
+        abstract_terms = [term for term in PUBLIC_ABSTRACT_FRAMING_TERMS if term in text]
+        if abstract_terms:
+            fail(f"{context} contains abstract/editorial framing wording: " + ", ".join(abstract_terms[:8]))
 
 
 def validate_stable_hero(context: str, html: str, issue_date: str) -> None:
@@ -476,7 +494,7 @@ def validate_detail_daily_delta(issue_date: str, root_html: str, dated_html: str
 def validate_reader_facing_headlines(context: str, headings: list[str]) -> None:
     failures = []
     for heading in headings:
-        if any(term in heading for term in HEADLINE_ABSTRACT_LEAK_TERMS):
+        if any(term in heading for term in HEADLINE_ABSTRACT_LEAK_TERMS + PUBLIC_ABSTRACT_FRAMING_TERMS):
             failures.append(f"{heading} [abstract phrase]")
             continue
         if any(char in heading for char in HEADLINE_FORBIDDEN_CHARS):
@@ -596,7 +614,7 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
     filename_date_required = effective_on_or_after(COVERAGE_CONTRACT, "article_summary_effective_date", issue_dt)
     # Detail pages must stay constrained to one overview block plus source
     # links, including future issues.
-    article_summary_required = False
+    article_summary_required = filename_date_required
     min_summary_chars = LEGACY_MIN_SUMMARY_LEAD_CHARS
     if effective_on_or_after(COVERAGE_CONTRACT, "summary_quality_effective_date", issue_dt):
         min_summary_chars = int(COVERAGE_CONTRACT.get("minimum_detail_summary_chars", 240))
@@ -642,7 +660,7 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
             weak_summaries.append(f"{name}: missing summary")
         else:
             summary_text = visible_text(summary_match.group(1))
-            validate_public_summary_language(f"detail page {name} summary", summary_text)
+            validate_public_summary_language(f"detail page {name} summary", summary_text, issue_date)
             summary_text = re.sub(r"\s+", "", summary_text)
             if len(summary_text) < min_summary_chars:
                 weak_summaries.append(f"{name}: {len(summary_text)} chars")
@@ -670,7 +688,8 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
     if checklist_headings:
         fail("detail pages use checklist/next-step section headings: " + ", ".join(checklist_headings[:8]))
     if article_structure_failures:
-        fail("detail pages must use 30-second overview-only structure: " + "; ".join(article_structure_failures[:8]))
+        expected_structure = "article-summary-only" if article_summary_required else "30-second overview-only"
+        fail(f"detail pages must use {expected_structure} structure: " + "; ".join(article_structure_failures[:8]))
     if weak_summaries:
         fail("detail summaries are too thin: " + "; ".join(weak_summaries[:8]))
     if missing_source:
@@ -800,7 +819,7 @@ def validate(issue_date: str) -> None:
     for context, html in [("root page", root_html), ("dated issue page", dated_html)]:
         for card in card_blocks(html):
             for paragraph in re.findall(r"<p[^>]*>(.*?)</p>", card, flags=re.S):
-                validate_public_summary_language(f"{context} card summary", visible_text(paragraph))
+                validate_public_summary_language(f"{context} card summary", visible_text(paragraph), issue_date)
 
     cards = card_blocks(root_html)
     leaked_titles = [
