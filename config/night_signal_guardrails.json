@@ -1,5 +1,5 @@
 {
-  "version": "2026-05-27.16",
+  "version": "2026-06-01.17",
   "description": "Persistent recurrence-prevention inventory for NIGHT SIGNAL. A user-reported failure is not considered fixed unless it is represented here and enforced by scripts/guardrail_inventory.py.",
   "guards": [
     {
@@ -90,18 +90,23 @@
         "minimum_changed_cards_vs_previous_issue": 1,
         "maximum_adopted_candidate_source_age_days": 3,
         "strict_adopted_candidate_source_age_effective_date": "2026-05-22",
+        "latest_three_calendar_days_effective_date": "2026-06-01",
         "stale_sources_allowed_only_as_background": true
       },
       "required_audit_terms": [
         "minimum_published_cards_per_category",
         "minimum_changed_cards_vs_previous_issue",
-        "MAX_CARD_AGE_DAYS = int(COVERAGE_CONTRACT.get(\"maximum_adopted_candidate_source_age_days\"",
+        "max_adopted_source_age_days",
+        "latest_three_calendar_days_effective_date",
+        "LATEST_THREE_DAY_LABELS",
+        "cards missing 今日/昨日/一昨日 freshness labels",
         "strict_adopted_candidate_source_age_effective_date",
         "must stay background-only"
       ],
       "required_policy_terms": [
         "掲載数は固定しない",
         "更新がなければカテゴリ内のカードは0件",
+        "2026-06-01以降は今日・昨日・一昨日",
         "3日より古い元情報は公開カードにしない"
       ],
       "required_simulation_terms": [

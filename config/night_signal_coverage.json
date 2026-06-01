@@ -1,5 +1,5 @@
 {
-  "contract_version": "2026-05-31.14",
+  "contract_version": "2026-06-01.15",
   "legacy_contract_versions": [
     {
       "through_date": "2026-05-25",
@@ -153,6 +153,7 @@
   ],
   "maximum_adopted_candidate_source_age_days": 3,
   "strict_adopted_candidate_source_age_effective_date": "2026-05-22",
+  "latest_three_calendar_days_effective_date": "2026-06-01",
   "stale_sources_allowed_only_as_background": true,
   "fresh_non_adopted_reason_required_effective_date": "2026-05-22",
   "allowed_non_adoption_reason_classes": [

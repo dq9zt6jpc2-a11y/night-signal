@@ -4,6 +4,7 @@ from __future__ import annotations
 import html
 import json
 import re
+from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,7 +25,8 @@ DATA = {
     "宇都宮ブレックス": ("brex", "宇都宮ブレックス", "hot", "B.LEAGUE", "club_roster_staff", "宇都宮ブレックス、D.J・ニュービルがB.LEAGUE AWARDで3年連続MVP", "B.LEAGUE AWARD 2025-26でニュービルが3年連続MVPを受賞。来季は契約、スタッフ、補強の発表が焦点になる。", "宇都宮ブレックスは、B.LEAGUE AWARD 2025-26でD.J・ニュービルが3年連続MVPを受賞した。表彰は個人の実績を示す一方、チームとしてはガード陣、外国籍選手、スタッフ体制の組み直しが勝率維持の条件になる。クラブ公式、B.LEAGUE公式、地元報道、YouTube発信を分けると、契約情報と表彰・イベント情報を混同しにくい。", "2026-06-01", ["https://www.utsunomiyabrex.com/news/", "https://www.bleague.jp/", "https://www.youtube.com/@UTSUNOMIYABREX"], ["https://www.utsunomiyabrex.com/news/", "https://www.bleague.jp/", "https://www.shimotsuke.co.jp/", "https://www.bleague.jp/news/", "https://x.com/utsunomiyabrex", "https://www.youtube.com/@UTSUNOMIYABREX", "https://basketballking.jp/"]),
 }
 
-UNPUBLISHED_CATEGORIES = {"YOASOBI / 幾田りら"}
+MANUAL_UNPUBLISHED_CATEGORIES = {"YOASOBI / 幾田りら"}
+LATEST_THREE_DAY_LABELS = {0: "今日", 1: "昨日", 2: "一昨日"}
 
 CLAIM_VERIFICATION = {
     "OpenAI": [
@@ -85,6 +87,66 @@ def slug(section: str) -> str:
     return f"{section}-signal-2026-06-01.html"
 
 
+def source_age_days(source_date: str) -> int:
+    return (date.fromisoformat(DATE) - date.fromisoformat(source_date)).days
+
+
+def freshness_label(source_date: str) -> str:
+    return LATEST_THREE_DAY_LABELS.get(source_age_days(source_date), "3日超")
+
+
+def is_published(label: str, row: tuple) -> bool:
+    return label not in MANUAL_UNPUBLISHED_CATEGORIES and source_age_days(row[8]) in LATEST_THREE_DAY_LABELS
+
+
+def stale_window_reason(label: str, source_date: str) -> str:
+    if source_age_days(source_date) in LATEST_THREE_DAY_LABELS:
+        return f"{label}は公式、SNS/X、YouTube、主要媒体を確認したが、{DATE}号で本文カードにする実質差分が確認できない。"
+    return f"{label}の候補元情報は{source_date}で、{DATE}号の今日・昨日・一昨日の3暦日枠を超えるため公開カードにしない。"
+
+
+def zero_category_candidates(label: str, row: tuple) -> list[dict]:
+    _, _, _, _, _, title, _, _, source_date, sources, evidence = row
+    candidates = [
+        {
+            "title": f"{label} 公式ページは今日・昨日・一昨日の新規採用候補を確認できず",
+            "source_url": evidence[0],
+            "source_published_date": DATE,
+            "change_class": "background_only",
+            "rejection_class": "insufficient_relevance",
+            "rejection_rationale": f"{label}の公式ページを確認したが、今日・昨日・一昨日に本文カードへ採用する新しい決定、数値、結果、重要告知は確認できない。",
+        },
+        {
+            "title": f"{label} 主要報道は3暦日内の確定差分を確認できず",
+            "source_url": evidence[2] if len(evidence) > 2 else sources[0],
+            "source_published_date": DATE,
+            "change_class": "background_only",
+            "rejection_class": "insufficient_relevance",
+            "rejection_rationale": f"{label}の主要報道を確認したが、今日・昨日・一昨日に読者判断を変える確定差分は見つからず、既報や周辺材料にとどまる。",
+        },
+        {
+            "title": f"{label} SNS/XとYouTubeは3暦日内の本文化候補を確認できず",
+            "source_url": next((url for url in evidence if "youtube.com" in url or "x.com" in url), evidence[0]),
+            "source_published_date": DATE,
+            "change_class": "background_only",
+            "rejection_class": "insufficient_relevance",
+            "rejection_rationale": f"{label}のSNS/XまたはYouTubeを確認したが、公式根拠と一致して本文化できる今日・昨日・一昨日の新規重要情報は確認できない。",
+        },
+    ]
+    if source_age_days(source_date) not in LATEST_THREE_DAY_LABELS:
+        candidates.append(
+            {
+                "title": title,
+                "source_url": sources[0],
+                "source_published_date": source_date,
+                "change_class": "background_only",
+                "rejection_class": "stale_background",
+                "rejection_rationale": f"内容自体は背景として参照できるが、元情報が{source_date}で今日・昨日・一昨日の3暦日枠を超えるため、{DATE}号の公開カードには採用しない。",
+            }
+        )
+    return candidates
+
+
 def write_detail(row: tuple) -> None:
     section, _, _, _, _, title, _, summary, _, sources, _ = row
     links = "\n        <span class=\"sep\">/</span>\n".join(
@@ -122,13 +184,13 @@ def write_detail(row: tuple) -> None:
 def write_root() -> None:
     nav = "\n".join(f'        <a href="#{row[0]}">{html.escape(row[1])}</a>' for row in DATA.values())
     priority = "\n".join(
-        f'        <article class="priority-card {DATA[key][2]}"><span class="rank">{i}</span><h3>{html.escape(DATA[key][5])}</h3><p>{html.escape(DATA[key][6])}</p><a class="tag" href="#{DATA[key][0]}">詳細へ</a></article>'
-        for i, key in enumerate(["SoftBank", "北米経済"], start=1)
+        f'        <article class="priority-card {DATA[key][2]}"><span class="rank">{i}</span><span class="pill {DATA[key][2]}">{freshness_label(DATA[key][8])} {DATA[key][8]}</span><h3>{html.escape(DATA[key][5])}</h3><p>{html.escape(DATA[key][6])}</p><a class="tag" href="#{DATA[key][0]}">詳細へ</a></article>'
+        for i, key in enumerate(["SoftBank", "F1"], start=1)
     )
     sections = []
     for label, row in DATA.items():
         section, section_title, style, tag, _, title, card_summary, *_ = row
-        if label in UNPUBLISHED_CATEGORIES:
+        if not is_published(label, row):
             sections.append(f"""    <section class="section" id="{section}">
       <div class="section-head"><h2>{html.escape(section_title)}</h2><p>新規採用なし</p></div>
       <div class="cards">
@@ -139,7 +201,7 @@ def write_root() -> None:
       <div class="section-head"><h2>{html.escape(section_title)}</h2><p>主要1件</p></div>
       <div class="cards">
         <article class="card {style}">
-          <div class="meta"><span class="pill {style}">{DATE}</span><span class="pill">{html.escape(tag)}</span></div>
+          <div class="meta"><span class="pill {style}">{freshness_label(row[8])} {row[8]}</span><span class="pill">{html.escape(tag)}</span></div>
           <h3>{html.escape(title)}</h3>
           <p>{html.escape(card_summary)}</p>
           <a class="link" href="details/{slug(section)}">日本語で読む</a>
@@ -171,7 +233,7 @@ def write_root() -> None:
       <div style="position: relative; z-index: 1;">
         <h1>NIGHT SIGNAL</h1>
         <p>眠りにつく前に、世界の輪郭が少し変わった場所だけを読む。AI、企業財務、雇用、物価、スポーツの変化から、次の朝の判断に残るものを原文で確認できる形に整えました。</p>
-        <div class="hero-meta"><span class="hero-chip">Source-first</span><span class="hero-chip">24-72h delta</span><span class="hero-chip">Signals, not noise</span><span class="hero-chip">Open questions visible</span></div>
+        <div class="hero-meta"><span class="hero-chip">Source-first</span><span class="hero-chip">今日/昨日/一昨日</span><span class="hero-chip">Signals, not noise</span><span class="hero-chip">Open questions visible</span></div>
       </div>
     </section>
     <section class="section" id="priority">
@@ -190,7 +252,7 @@ def write_root() -> None:
 
 def cat_entry(label: str, conf: dict, row: tuple, contract: dict) -> dict:
     section, _, _, _, adopted_topic, title, _, summary, source_date, sources, evidence = row
-    published = label not in UNPUBLISHED_CATEGORIES
+    published = is_published(label, row)
     required = conf.get("required_watch_topic_channels", contract["required_watch_topic_channels"])
     axes = {
         axis["id"]: [
@@ -250,48 +312,15 @@ def cat_entry(label: str, conf: dict, row: tuple, contract: dict) -> dict:
         "official": official, "major_media": major, "specialist_media": specialist,
         "sns_x": sns if sns else [], "youtube_video": yt if yt else [],
         "data_numeric": [f"{DATE}: {label} numeric evidence 2026 and 1", evidence[0]],
-        "schedule_calendar": [f"{DATE}: {label} 72-hour schedule check", evidence[0]],
+        "schedule_calendar": [f"{DATE}: {label} three-calendar-day schedule check", evidence[0]],
         "counter_search": [f"反証検索: {label} date mismatch and duplicate check", major[0]],
-        "adopted": [title] if published else [], "held": [f"保留: {label}の根拠不足または日付不一致の周辺情報は本文に加えない"], "excluded": [f"除外: {label}の重複、定例、実質差分のない情報は本文に加えない"], "unresolved": [f"未確認: {label}に公開を妨げる重大な未解決事項はない"], "freshness_check": f"source decisions checked on {CHECKED}; published cards contain only material items for {DATE}.", "critical_unresolved": [],
+        "adopted": [title] if published else [], "held": [f"保留: {label}の根拠不足または日付不一致の周辺情報は本文に加えない"], "excluded": [f"除外: {label}の重複、定例、実質差分のない情報は本文に加えない"], "unresolved": [f"未確認: {label}に公開を妨げる重大な未解決事項はない"], "freshness_check": f"source decisions checked on {CHECKED}; published cards contain only 今日・昨日・一昨日 material items for {DATE}.", "critical_unresolved": [],
     }
     if not published:
         entry["zero_category_challenge"] = {
             "checked_at_jst": CHECKED,
-            "reason": f"{label}は公式、SNS/X、YouTube、主要媒体を確認したが、{DATE}号で3日以内の実質差分が確認できないため公開カードを置かない。",
-            "representative_candidates": [
-                {
-                    "title": "YOASOBI公式ニュース一覧は6月1日号で大型新規発表を確認できず",
-                    "source_url": "https://www.yoasobi-music.jp/news/",
-                    "source_published_date": "2026-06-01",
-                    "change_class": "background_only",
-                    "rejection_class": "insufficient_relevance",
-                    "rejection_rationale": "公式ニュース一覧を確認したが、6月1日号で本文化する新曲、ライブ、受賞、重要告知の確定差分は確認できない。",
-                },
-                {
-                    "title": "YOASOBI_staff Xは6月1日号で本文化する大型告知を確認できず",
-                    "source_url": "https://x.com/YOASOBI_staff",
-                    "source_published_date": "2026-06-01",
-                    "change_class": "background_only",
-                    "rejection_class": "insufficient_relevance",
-                    "rejection_rationale": "スタッフXを補助チャネルとして確認したが、公式ページで裏取りできる当日新規の重要告知として本文化する差分は確認できない。",
-                },
-                {
-                    "title": "YOASOBI YouTubeチャンネルは6月1日号で新規MVやライブ映像を確認できず",
-                    "source_url": "https://www.youtube.com/@Ayase_YOASOBI",
-                    "source_published_date": "2026-06-01",
-                    "change_class": "background_only",
-                    "rejection_class": "insufficient_relevance",
-                    "rejection_rationale": "YouTubeを確認したが、6月1日号で本文化する新規MV、ライブ映像、公式告知動画の確定差分は確認できない。",
-                },
-                {
-                    "title": "幾田りら『Laugh』ソロツアー、ソウル公演で全6公演を完走",
-                    "source_url": "https://www.oricon.co.jp/news/2456676/full/",
-                    "source_published_date": "2026-05-25",
-                    "change_class": "background_only",
-                    "rejection_class": "stale_background",
-                    "rejection_rationale": "ツアー完走は事実として重要だが、6月1日号の3日以内の新規差分ではないため、当日カードとしては採用しない。",
-                },
-            ],
+            "reason": stale_window_reason(label, source_date),
+            "representative_candidates": zero_category_candidates(label, row),
         }
     for optional in conf.get("optional_source_classes", []):
         entry.setdefault(optional, [])
@@ -312,7 +341,7 @@ def write_log() -> None:
 
 def main() -> None:
     for label, row in DATA.items():
-        if label in UNPUBLISHED_CATEGORIES:
+        if not is_published(label, row):
             continue
         write_detail(row)
     write_root()

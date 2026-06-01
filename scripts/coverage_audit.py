@@ -115,6 +115,12 @@ def effective_on_or_after(contract: dict, key: str, issue_dt) -> bool:
     return issue_dt >= effective_dt
 
 
+def max_adopted_source_age_days(contract: dict, issue_dt) -> int:
+    if effective_on_or_after(contract, "latest_three_calendar_days_effective_date", issue_dt):
+        return 2
+    return int(contract.get("maximum_adopted_candidate_source_age_days", 3))
+
+
 def extract_manifest(extraction_log_html: str) -> dict:
     match = re.search(
         r'<script type="application/json" id="coverage-manifest">(.*?)</script>',
@@ -468,7 +474,7 @@ def validate_latest_candidates(contract: dict, issue_date: str, root_html: str, 
         fail(f"{category} watch_topics are invalid")
 
     issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
-    max_age = int(contract.get("maximum_adopted_candidate_source_age_days", 3))
+    max_age = max_adopted_source_age_days(contract, issue_dt)
     strict_source_age_applies = effective_on_or_after(
         contract, "strict_adopted_candidate_source_age_effective_date", issue_dt
     )
@@ -609,7 +615,7 @@ def validate_zero_category_challenge(contract: dict, issue_date: str, root_html:
     if not isinstance(allowed_rejections, list) or any(not isinstance(item, str) for item in allowed_rejections):
         fail("coverage contract allowed_zero_category_rejection_classes must be a string list")
     allowed_change_classes = contract.get("allowed_change_classes", [])
-    max_age = int(contract.get("maximum_adopted_candidate_source_age_days", 3))
+    max_age = max_adopted_source_age_days(contract, issue_dt)
     generic_patterns = [
         r"直近72時間で追加掲載を要する確定差分なし",
         r"no fresh",

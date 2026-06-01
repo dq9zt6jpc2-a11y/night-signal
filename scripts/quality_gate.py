@@ -12,13 +12,12 @@ from urllib.parse import unquote
 from datetime import datetime
 from pathlib import Path
 
-from coverage_audit import effective_on_or_after, load_contract, validate_coverage_contract
+from coverage_audit import effective_on_or_after, load_contract, max_adopted_source_age_days, validate_coverage_contract
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE_ROOT = ROOT / "site"
 COVERAGE_CONTRACT = load_contract()
-MAX_CARD_AGE_DAYS = int(COVERAGE_CONTRACT.get("maximum_adopted_candidate_source_age_days", 3))
 MIN_CHANGED_CARDS_VS_PREVIOUS = int(COVERAGE_CONTRACT.get("minimum_changed_cards_vs_previous_issue", 1))
 MAX_UNCHANGED_CARD_RATIO_VS_PREVIOUS = 0.70
 MAX_ISSUE_SIMILARITY_VS_PREVIOUS = 0.94
@@ -29,6 +28,7 @@ LEGACY_HERO_CONCEPT_TERMS = ["一次情報", "変化点", "判断"]
 HERO_COPY_EFFECTIVE_DATE = "2026-05-25"
 PUBLIC_SELECTION_RATIONALE_BAN_EFFECTIVE_DATE = "2026-05-25"
 PUBLIC_ABSTRACT_FRAMING_BAN_EFFECTIVE_DATE = "2026-06-01"
+LATEST_THREE_DAY_LABELS = {0: "今日", 1: "昨日", 2: "一昨日"}
 HERO_DAILY_TOPIC_TERMS = [
     "OpenAI",
     "SoftBank",
@@ -292,7 +292,7 @@ def normal_card_blocks(html: str) -> list[str]:
 def card_dates(card: str) -> list[str]:
     # Only visible metadata dates count. Links such as
     # href="2026-05-13/details/..." are publication paths, not item dates.
-    return re.findall(r"<span class=\"pill[^\"]*\">(20\d{2}-\d{2}-\d{2})</span>", card)
+    return re.findall(r"<span class=\"pill[^\"]*\">(?:今日|昨日|一昨日)?\s*(20\d{2}-\d{2}-\d{2})</span>", card)
 
 
 def card_title(card: str) -> str:
@@ -836,8 +836,13 @@ def validate(issue_date: str) -> None:
     )
 
     stale: list[str] = []
+    label_failures: list[str] = []
     fresh_count = 0
     undated: list[str] = []
+    max_card_age_days = max_adopted_source_age_days(COVERAGE_CONTRACT, issue_dt)
+    freshness_label_required = effective_on_or_after(
+        COVERAGE_CONTRACT, "latest_three_calendar_days_effective_date", issue_dt
+    )
     for card in cards:
         dates = card_dates(card)
         if not dates:
@@ -852,8 +857,10 @@ def validate(issue_date: str) -> None:
             if "予定" not in card and "次回" not in card and "発表" not in card:
                 stale.append(f"future date without schedule context: {card_title(card)} ({newest})")
             continue
-        if age > MAX_CARD_AGE_DAYS:
+        if age > max_card_age_days:
             stale.append(f"{card_title(card)} ({newest}, {age} days old)")
+        if freshness_label_required and 0 <= age <= 2 and LATEST_THREE_DAY_LABELS[age] not in visible_text(card):
+            label_failures.append(f"{card_title(card)} needs {LATEST_THREE_DAY_LABELS[age]} label")
         if age <= 1:
             fresh_count += 1
 
@@ -861,6 +868,8 @@ def validate(issue_date: str) -> None:
         fail("undated cards found: " + "; ".join(undated[:5]))
     if stale:
         fail("stale cards found: " + "; ".join(stale[:8]))
+    if label_failures:
+        fail("cards missing 今日/昨日/一昨日 freshness labels: " + "; ".join(label_failures[:8]))
     # Publication volume is determined by adopted material changes in the
     # coverage manifest; requiring filler cards would conflict with that rule.
 
