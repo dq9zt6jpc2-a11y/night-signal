@@ -185,6 +185,7 @@
       "required_simulation_terms": [
         "future detail renderer uses article summary",
         "future issue rejects legacy 30-second detail heading",
+        "future issue rejects legacy summary-lead detail body",
         "future published item missing summary mode",
         "future multi-source synthesis omits a source link"
       ]

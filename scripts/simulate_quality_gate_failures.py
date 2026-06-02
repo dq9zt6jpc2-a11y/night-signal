@@ -408,8 +408,8 @@ def enable_future_article_layout_on_fixture(tmp: Path) -> None:
         if detail_path.name.startswith("extraction-log-") or detail_path.name == "policy.html":
             continue
         text = read(detail_path)
-        text = text.replace("<h2>30秒概要</h2>", "<h2>記事まとめ</h2>")
         text = text.replace('class="summary-lead"', 'class="article-summary"')
+        text = text.replace("<h2>30秒概要</h2>", "<h2>記事まとめ</h2>")
         write(detail_path, text)
 
 
@@ -928,11 +928,23 @@ def main() -> int:
             write(
                 tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
                 read(tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL)
-                .replace("<h2>記事まとめ</h2>", "<h2>30秒概要</h2>", 1)
-                .replace('<div class="article-summary">', '<div class="summary-lead">', 1),
+                .replace("<h2>記事まとめ</h2>", "<h2>30秒概要</h2>", 1),
             ),
         ],
         "detail pages must use article-summary-only structure",
+    )
+
+    assert_fail(
+        "future issue rejects legacy summary-lead detail body",
+        lambda tmp: [
+            enable_future_article_layout_on_fixture(tmp),
+            write(
+                tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
+                read(tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL)
+                .replace('<div class="article-summary">', '<div class="summary-lead">', 1),
+            ),
+        ],
+        "detail summaries are too thin",
     )
 
     assert_fail(
