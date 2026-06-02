@@ -140,7 +140,7 @@
       ],
       "required_policy_terms": [
         "最低120字",
-        "全カテゴリ共通で、カード本文と30秒概要",
+        "全カテゴリ共通で、カード本文と記事まとめ",
         "調査方法、採用判断、今後の監視方針は抽出ログへ分け",
         "non_adoption_reason_class",
         "新しい候補を「なんとなく保留」にしない"
@@ -183,8 +183,8 @@
         "記事まとめで使った直接参照先は落とさない"
       ],
       "required_simulation_terms": [
-        "future detail renderer uses 30-second article summary",
-        "future issue rejects changed detail heading",
+        "future detail renderer uses article summary",
+        "future issue rejects legacy 30-second detail heading",
         "future issue rejects legacy summary-lead detail body",
         "future published item missing summary mode",
         "future multi-source synthesis omits a source link"

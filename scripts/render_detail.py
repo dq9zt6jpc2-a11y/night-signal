@@ -4,7 +4,7 @@
 This is the preferred creation path for detail pages. New issues expose only
 the reader-facing sections we want to publish:
 
-- 30秒概要
+- 記事まとめ
 - 原文確認
 
 The summary is a single overview block. Authoring checklist sections are never
@@ -171,7 +171,7 @@ def render(data: dict[str, Any]) -> str:
     escaped_kicker = html.escape(kicker)
     escaped_h1 = html.escape(h1)
     if use_article_summary:
-        summary_block = f"""      <h2>30秒概要</h2>
+        summary_block = f"""      <h2>記事まとめ</h2>
       <div class="article-summary">{html.escape(summary)}</div>"""
     else:
         summary_block = f"""      <h2>30秒概要</h2>

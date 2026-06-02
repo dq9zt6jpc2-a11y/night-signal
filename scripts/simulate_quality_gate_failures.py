@@ -409,6 +409,7 @@ def enable_future_article_layout_on_fixture(tmp: Path) -> None:
         if detail_path.name.startswith("extraction-log-") or detail_path.name == "policy.html":
             continue
         text = read(detail_path)
+        text = text.replace("<h2>30秒概要</h2>", "<h2>記事まとめ</h2>")
         text = text.replace('class="summary-lead"', 'class="article-summary"')
         write(detail_path, text)
 
@@ -910,11 +911,11 @@ def main() -> int:
     if future_detail_result.returncode != 0:
         raise AssertionError(f"future article summary renderer failed: {future_detail_result.stderr}")
     rendered_future_detail = read(future_detail_fixture / "details" / "future-30-second-summary.html")
-    if "30秒概要" not in rendered_future_detail or "article-summary" not in rendered_future_detail:
+    if "記事まとめ" not in rendered_future_detail or "article-summary" not in rendered_future_detail:
         raise AssertionError("future detail renderer did not use article summary structure")
     if rendered_future_detail.count("<a href=") < 3:
         raise AssertionError("future article summary renderer discarded source links")
-    print("PASS future detail renderer uses 30-second article summary")
+    print("PASS future detail renderer uses article summary")
 
     future_layout_fixture = copy_fixture()
     enable_future_article_layout_on_fixture(future_layout_fixture)
@@ -922,16 +923,16 @@ def main() -> int:
     print("PASS future article detail structure baseline")
 
     assert_fail(
-        "future issue rejects changed detail heading",
+        "future issue rejects legacy 30-second detail heading",
         lambda tmp: [
             enable_future_article_layout_on_fixture(tmp),
             write(
                 tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
                 read(tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL)
-                .replace("<h2>30秒概要</h2>", "<h2>記事まとめ</h2>", 1),
+                .replace("<h2>記事まとめ</h2>", "<h2>30秒概要</h2>", 1),
             ),
         ],
-        "detail pages must use 30-second overview-only structure",
+        "detail pages must use article-summary-only structure",
     )
 
     assert_fail(
