@@ -22,6 +22,7 @@ AUDIT_PATHS = [
     ROOT / "scripts" / "coverage_audit.py",
     ROOT / "scripts" / "quality_gate.py",
     ROOT / "scripts" / "publication_audit.py",
+    ROOT / "scripts" / "current_issue_audit.py",
     ROOT / "scripts" / "sync_site.py",
     ROOT / "scripts" / "render_detail.py",
 ]

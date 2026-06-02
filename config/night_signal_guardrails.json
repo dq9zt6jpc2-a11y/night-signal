@@ -1,5 +1,5 @@
 {
-  "version": "2026-06-01.17",
+  "version": "2026-06-02.18",
   "description": "Persistent recurrence-prevention inventory for NIGHT SIGNAL. A user-reported failure is not considered fixed unless it is represented here and enforced by scripts/guardrail_inventory.py.",
   "guards": [
     {
@@ -140,7 +140,7 @@
       ],
       "required_policy_terms": [
         "最低120字",
-        "全カテゴリ共通で、カード本文と記事まとめ",
+        "全カテゴリ共通で、カード本文と30秒概要",
         "調査方法、採用判断、今後の監視方針は抽出ログへ分け",
         "non_adoption_reason_class",
         "新しい候補を「なんとなく保留」にしない"
@@ -168,7 +168,7 @@
       "required_audit_terms": [
         "expected_contract_version",
         "legacy_contract_versions",
-        "article-summary-only",
+        "30-second overview-only",
         "summary-lead",
         "synthesis_manifest_effective_date",
         "summary_mode",
@@ -183,8 +183,8 @@
         "記事まとめで使った直接参照先は落とさない"
       ],
       "required_simulation_terms": [
-        "future detail renderer uses article summary",
-        "future issue rejects legacy 30-second detail heading",
+        "future detail renderer uses 30-second article summary",
+        "future issue rejects changed detail heading",
         "future issue rejects legacy summary-lead detail body",
         "future published item missing summary mode",
         "future multi-source synthesis omits a source link"
@@ -589,6 +589,25 @@
       ],
       "required_simulation_terms": [
         "future issue rejects prior-date linked detail"
+      ]
+    },
+    {
+      "id": "jst_current_issue_publication",
+      "description": "Daily publication must fail when the selected issue marker and generated artifacts are not today's JST issue.",
+      "required_audit_terms": [
+        "CURRENT ISSUE AUDIT FAILED",
+        ".night-signal-issue-date",
+        "Asia/Tokyo",
+        "missing current issue artifact"
+      ],
+      "required_policy_terms": [
+        ".night-signal-issue-date",
+        "JSTの今日号",
+        "当日版がそろわない場合は公開前監査で止める"
+      ],
+      "required_workflow_terms": [
+        "scripts/current_issue_audit.py",
+        "cron: \"15 13 * * *\""
       ]
     }
   ]

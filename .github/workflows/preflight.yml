@@ -2,6 +2,8 @@ name: NIGHT SIGNAL Preflight
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "15 13 * * *"
 
 permissions:
   contents: read
@@ -25,5 +27,6 @@ jobs:
             exit 1
           fi
           python3 scripts/guardrail_inventory.py
+          python3 scripts/current_issue_audit.py
           python3 scripts/coverage_audit.py "$ISSUE_DATE"
           python3 scripts/pre22_audit.py "$ISSUE_DATE"
