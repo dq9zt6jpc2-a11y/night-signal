@@ -7,6 +7,8 @@ import re
 from datetime import date
 from pathlib import Path
 
+from topic_value_engine import evaluate_topic_value
+
 ROOT = Path(__file__).resolve().parents[1]
 DATE = "2026-06-03"
 CHECKED = "2026-06-03T20:55:00+09:00"
@@ -67,34 +69,6 @@ CLAIM_VERIFICATION = {
 }
 
 MANUAL_UNPUBLISHED_CATEGORIES = {"OpenAI", "SoftBank", "Honda", "YOASOBI / 幾田りら", "宇都宮ブレックス"}
-
-TOPIC_VALUE = {
-    "F1": (
-        "cultural_or_audience_signal",
-        "モナコGP開幕前にAston Martinのスポンサー露出と車体イメージが変わり、競技結果以外の週末注目点が増えた。",
-        "6月3日の公式発信で特別リバリーが新たに示され、Honda/Aston Martinの露出、スポンサー文脈、開催前の市場・ファン反応を読む材料になる。",
-    ),
-    "SpaceX": (
-        "operational_status_change",
-        "公式Launches上で6月3日のSLC-40発Starlink予定を確認でき、Starship開発とは別の運用収益軸を切り分けられる。",
-        "当日ミッション予定は低軌道通信網の継続運用を示し、開発リスクの大きいStarshipと成熟したFalcon/Starlink運用の時間軸を分ける材料になる。",
-    ),
-    "日本経済": (
-        "decision_or_policy",
-        "植田総裁の6月3日講演により、物価、賃金、原油、金融政策判断を市場が読むための言葉の変化を確認できる。",
-        "日銀総裁講演は単なる予定ではなく、利上げ経路、物価リスク、賃金確認を結びつける政策判断材料として当日の読者判断に影響する。",
-    ),
-    "アジア経済": (
-        "market_or_financial_impact",
-        "ADB週次表で香港輸出、輸入、シンガポールGDP、Vietnam PMI予定を横断し、アジア供給網の強弱を国別に見直せる。",
-        "輸出42.9%、輸入44.4%、GDP6.0%などの数値が並び、中国PMIだけでは見落とす地域差を市場・供給網の観点で補える。",
-    ),
-    "北米経済": (
-        "market_or_financial_impact",
-        "米ISM製造業PMIの改善と価格・供給不安を同時に確認でき、雇用統計や金利見通しを一方向に読まない材料になる。",
-        "PMI 54.0という改善だけでなく、燃料コスト、供給網、イラン情勢への企業コメントが残り、景況感と価格圧力を分けて見る必要がある。",
-    ),
-}
 
 DATA.update(
     {
@@ -308,8 +282,24 @@ def freshness_label(source_date: str) -> str:
     return LATEST_THREE_DAY_LABELS.get(source_age_days(source_date), "3日超")
 
 
+def topic_value_decision(label: str, row: tuple) -> dict:
+    _, _, _, _, _, title, _, summary, _, sources, _ = row
+    return evaluate_topic_value(
+        {
+            "title": title,
+            "summary": summary,
+            "claim_verification": CLAIM_VERIFICATION[label],
+            "sources": sources,
+        }
+    )
+
+
 def is_published(label: str, row: tuple) -> bool:
-    return label not in MANUAL_UNPUBLISHED_CATEGORIES and source_age_days(row[8]) in LATEST_THREE_DAY_LABELS
+    return (
+        label not in MANUAL_UNPUBLISHED_CATEGORIES
+        and source_age_days(row[8]) in LATEST_THREE_DAY_LABELS
+        and topic_value_decision(label, row)["adoption_decision"] == "adopt"
+    )
 
 
 def stale_window_reason(label: str, source_date: str) -> str:
@@ -465,7 +455,9 @@ def write_root() -> None:
 
 def cat_entry(label: str, conf: dict, row: tuple, contract: dict) -> dict:
     section, _, _, _, adopted_topic, title, _, summary, source_date, sources, evidence = row
-    published = is_published(label, row)
+    fresh_eligible = label not in MANUAL_UNPUBLISHED_CATEGORIES and source_age_days(source_date) in LATEST_THREE_DAY_LABELS
+    topic_value = topic_value_decision(label, row) if fresh_eligible else None
+    published = bool(topic_value and topic_value["adoption_decision"] == "adopt")
     required = conf.get("required_watch_topic_channels", contract["required_watch_topic_channels"])
     axes = {
         axis["id"]: [
@@ -480,24 +472,28 @@ def cat_entry(label: str, conf: dict, row: tuple, contract: dict) -> dict:
     yt = [url for url in evidence if "://www.youtube.com/" in url or "://youtube.com/" in url or "://youtu.be/" in url]
     cands, collected, checks = [], [], []
     for topic in conf["watch_topics"]:
-        adopted = published and topic["id"] == adopted_topic
-        cand_title = title if adopted else f"{label} {topic['id']}: 6月3日の近接候補は本文化水準に届かず"
-        src = sources[0] if adopted else official[0]
+        candidate_topic = topic["id"] == adopted_topic and topic_value is not None
+        adopted = published and candidate_topic
+        cand_title = title if candidate_topic else f"{label} {topic['id']}: 6月3日の近接候補は本文化水準に届かず"
+        src = sources[0] if candidate_topic else official[0]
         cand = {
             "topic_id": topic["id"], "title": cand_title, "source_url": src,
-            "source_published_date": source_date if adopted else DATE,
+            "source_published_date": source_date if candidate_topic else DATE,
             "decision": "adopted" if adopted else "no_fresh_item",
             "rationale": (f"{cand_title}は{DATE}号で読者の判断材料になる主体、日付、数値、予定または結果を含むため本文カードにした。" if adopted else f"{label}の{topic['id']}は公式資料、独立情報、補助チャネルを横断したが、{DATE}号で本文カードにする確定した実質差分はなかった。"),
             "change_class": "material_update" if adopted else "background_only",
             "publication_assessment": ("公式資料と補助資料で日付、主体、数値または予定がそろい、前号からの実質的な変化として本文で扱える。" if adopted else "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"),
         }
         if adopted:
-            value_class, reader_delta, materiality_basis = TOPIC_VALUE[label]
-            cand["topic_value_class"] = value_class
-            cand["reader_delta"] = reader_delta
-            cand["materiality_basis"] = materiality_basis
+            cand["topic_value_class"] = topic_value["topic_value_class"]
+            cand["reader_delta"] = topic_value["reader_delta"]
+            cand["materiality_basis"] = topic_value["materiality_basis"]
+        elif candidate_topic and topic_value["adoption_decision"] == "reject":
+            cand["non_adoption_reason_class"] = topic_value["reject_reason_class"] or "no_material_change"
+            cand["rationale"] = topic_value["reject_reason"] or "題材価値が不足するため公開カードにしない。"
+            cand["publication_assessment"] = topic_value["materiality_basis"]
         if not adopted:
-            cand["non_adoption_reason_class"] = "no_material_change"
+            cand.setdefault("non_adoption_reason_class", "no_material_change")
         cands.append(cand)
         collected.append({"topic_id": topic["id"], "title": cand_title, "source_url": src, "source_published_date": cand["source_published_date"], "observed_at_jst": CHECKED, "channel": "web", "collection_note": f"{label}の{topic['id']}について直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"})
         primary_hosts = topic.get("primary_evidence_hosts") or []
