@@ -402,7 +402,7 @@ def write_root() -> None:
 <body>
   <header>
     <div class="bar">
-      <div class="brand"><strong>NIGHT SIGNAL</strong><span>Daily Brief · Tokyo / 17:30</span></div>
+      <div class="brand"><strong>NIGHT SIGNAL</strong><span>Daily Brief · Tokyo / 20:00</span></div>
       <nav>
 {nav}
         <a href="details/extraction-log-{DATE}.html">抽出ログ</a>

@@ -651,7 +651,7 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
         h2_texts = heading_texts(html, ("h2",))
         if any(any(term in heading for term in DETAIL_FORBIDDEN_SECTION_HEADINGS) for heading in h2_texts):
             checklist_headings.append(name)
-        required_h2 = ["記事まとめ"] if article_summary_required else ["30秒概要"]
+        required_h2 = ["30秒概要"]
         if h2_texts != required_h2:
             article_structure_failures.append(f"{name}: h2={h2_texts or '-'}")
         summary_class = "article-summary" if article_summary_required else "summary-lead"
@@ -688,7 +688,7 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
     if checklist_headings:
         fail("detail pages use checklist/next-step section headings: " + ", ".join(checklist_headings[:8]))
     if article_structure_failures:
-        expected_structure = "article-summary-only" if article_summary_required else "30-second overview-only"
+        expected_structure = "30-second overview-only"
         fail(f"detail pages must use {expected_structure} structure: " + "; ".join(article_structure_failures[:8]))
     if weak_summaries:
         fail("detail summaries are too thin: " + "; ".join(weak_summaries[:8]))

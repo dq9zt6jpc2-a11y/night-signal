@@ -140,7 +140,7 @@
       ],
       "required_policy_terms": [
         "最低120字",
-        "全カテゴリ共通で、カード本文と記事まとめ",
+        "全カテゴリ共通で、カード本文と30秒概要",
         "調査方法、採用判断、今後の監視方針は抽出ログへ分け",
         "non_adoption_reason_class",
         "新しい候補を「なんとなく保留」にしない"
@@ -155,7 +155,7 @@
     },
     {
       "id": "article_summary_without_information_loss",
-      "description": "New detail pages must keep a readable article summary that retains material facts and can synthesize directly relevant sources without dropping cited evidence.",
+      "description": "New detail pages must keep a readable 30-second overview that retains material facts and can synthesize directly relevant sources without dropping cited evidence.",
       "contract": {
         "article_summary_effective_date": "2026-05-26",
         "synthesis_manifest_effective_date": "2026-05-26",
@@ -177,14 +177,14 @@
         "all synthesis sources must appear on detail page"
       ],
       "required_policy_terms": [
-        "記事まとめ",
+        "30秒概要",
         "短くても判断材料を切り落とさない",
         "複数の記事や公式発信",
-        "記事まとめで使った直接参照先は落とさない"
+        "30秒概要で使った直接参照先は落とさない"
       ],
       "required_simulation_terms": [
-        "future detail renderer uses article summary",
-        "future issue rejects legacy 30-second detail heading",
+        "future detail renderer uses 30-second article summary",
+        "future issue rejects non-overview detail heading",
         "future issue rejects legacy summary-lead detail body",
         "future published item missing summary mode",
         "future multi-source synthesis omits a source link"
@@ -386,7 +386,7 @@
         "validate_public_summary_language"
       ],
       "required_policy_terms": [
-        "詳細ページは「記事まとめ」と「原文確認」",
+        "詳細ページは「30秒概要」と「原文確認」",
         "原文確認は論点に直接関係し"
       ],
       "required_simulation_terms": [
@@ -603,11 +603,12 @@
       "required_policy_terms": [
         ".night-signal-issue-date",
         "JSTの今日号",
+        "20:00 JSTまで",
         "当日版がそろわない場合は公開前監査で止める"
       ],
       "required_workflow_terms": [
         "scripts/current_issue_audit.py",
-        "cron: \"15 13 * * *\""
+        "cron: \"00 11 * * *\""
       ]
     }
   ]
