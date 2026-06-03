@@ -205,22 +205,32 @@
       },
       "required_audit_terms": [
         "publication_screening_effective_date",
+        "topic_value_gate_effective_date",
         "change_class",
         "publication_assessment",
+        "topic_value_class",
+        "reader_delta",
         "materiality_basis",
+        "schedule-only candidate is too weak",
         "fresh material candidate must be published or explicitly excluded",
         "adopted routine or duplicate candidate needs materiality_basis"
       ],
       "required_policy_terms": [
         "不足より過剰を許容し、根拠を確認できる限り掲載寄り",
         "定例イベントや高頻度の反復",
+        "鮮度は入口条件",
+        "予定表、開催前情報、結果未掲載の確認だけでは採用しない",
         "実質差分",
         "change_class",
+        "topic_value_class",
+        "reader_delta",
         "materiality_basis"
       ],
       "required_simulation_terms": [
         "future material candidate cannot remain no-fresh",
-        "future routine adoption needs materiality basis"
+        "future routine adoption needs materiality basis",
+        "future adopted item missing topic value",
+        "future schedule-only topic value is rejected"
       ]
     },
     {

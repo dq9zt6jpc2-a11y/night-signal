@@ -313,6 +313,7 @@ def enable_future_manifest_rules(tmp: Path) -> None:
                 "synthesis_manifest_effective_date": ISSUE_DATE,
                 "publication_screening_effective_date": ISSUE_DATE,
                 "claim_verification_effective_date": ISSUE_DATE,
+                "topic_value_gate_effective_date": ISSUE_DATE,
             }
         ),
     )
@@ -388,6 +389,10 @@ def enable_future_manifest_rules(tmp: Path) -> None:
                 candidate["publication_assessment"] = (
                     "掲載済み候補は読者が知るべき確定した変化として扱い、非掲載候補は当日差分を伴わない背景情報として判定した。"
                 )
+                if candidate.get("decision") == "adopted":
+                    candidate["topic_value_class"] = "technical_or_product_shift"
+                    candidate["reader_delta"] = "公開済み候補は新しい製品、技術、運用、数値、結果のいずれかを含み、読者の見方を更新する。"
+                    candidate["materiality_basis"] = "公式資料と補助資料で確認できる新しい変化があり、予定表だけではなく本文に残す価値がある。"
 
     mutate_manifest_all(tmp, augment)
 
@@ -1035,12 +1040,54 @@ def main() -> int:
             mutate_manifest_entry(
                 tmp,
                 "OpenAI",
-                lambda entry: next(
-                    candidate for candidate in entry["latest_candidates"] if candidate["decision"] == "adopted"
-                ).update({"change_class": "routine_recurring"}),
+                lambda entry: [
+                    next(
+                        candidate for candidate in entry["latest_candidates"] if candidate["decision"] == "adopted"
+                    ).update({"change_class": "routine_recurring"}),
+                    next(
+                        candidate for candidate in entry["latest_candidates"] if candidate["decision"] == "adopted"
+                    ).pop("materiality_basis", None),
+                ],
             ),
         ],
         "adopted routine or duplicate candidate needs materiality_basis",
+    )
+
+    assert_fail(
+        "future adopted item missing topic value",
+        lambda tmp: [
+            enable_future_manifest_rules(tmp),
+            mutate_manifest_entry(
+                tmp,
+                "OpenAI",
+                lambda entry: next(
+                    candidate for candidate in entry["latest_candidates"] if candidate["decision"] == "adopted"
+                ).pop("topic_value_class", None),
+            ),
+        ],
+        "adopted candidate missing topic_value_class",
+    )
+
+    assert_fail(
+        "future schedule-only topic value is rejected",
+        lambda tmp: [
+            enable_future_manifest_rules(tmp),
+            mutate_manifest_entry(
+                tmp,
+                "OpenAI",
+                lambda entry: next(
+                    candidate for candidate in entry["latest_candidates"] if candidate["decision"] == "adopted"
+                ).update(
+                    {
+                        "change_class": "routine_recurring",
+                        "topic_value_class": "material_schedule_change",
+                        "materiality_basis": "公式カレンダー上の日付と開催予定だけを確認した。結果や仕様変更はなく、予定表としての確認にとどまる。",
+                        "reader_delta": "読者は開催日と周回数だけを知る。新しい決定、資金、技術、結果、安全リスクはまだ出ていない。",
+                    }
+                ),
+            ),
+        ],
+        "schedule-only candidate is too weak",
     )
 
     assert_fail(

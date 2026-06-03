@@ -69,6 +69,20 @@
   "article_summary_effective_date": "2026-05-26",
   "synthesis_manifest_effective_date": "2026-05-26",
   "publication_screening_effective_date": "2026-05-26",
+  "topic_value_gate_effective_date": "2026-06-03",
+  "allowed_topic_value_classes": [
+    "decision_or_policy",
+    "market_or_financial_impact",
+    "technical_or_product_shift",
+    "operational_status_change",
+    "event_result_or_outcome",
+    "material_schedule_change",
+    "risk_or_safety_signal",
+    "cultural_or_audience_signal"
+  ],
+  "weak_standalone_topic_value_classes": [
+    "material_schedule_change"
+  ],
   "claim_verification_effective_date": "2026-06-01",
   "allowed_summary_modes": [
     "single_source_summary",

@@ -484,7 +484,12 @@ def validate_latest_candidates(contract: dict, issue_date: str, root_html: str, 
     screening_applies = effective_on_or_after(
         contract, "publication_screening_effective_date", issue_dt
     )
+    topic_value_applies = effective_on_or_after(
+        contract, "topic_value_gate_effective_date", issue_dt
+    )
     allowed_change_classes = contract.get("allowed_change_classes", [])
+    allowed_topic_value_classes = contract.get("allowed_topic_value_classes", [])
+    weak_standalone_topic_value_classes = set(contract.get("weak_standalone_topic_value_classes", []))
     allowed_non_adoption_reasons = contract.get("allowed_non_adoption_reason_classes", [])
     if not isinstance(allowed_non_adoption_reasons, list) or any(
         not isinstance(item, str) for item in allowed_non_adoption_reasons
@@ -536,6 +541,23 @@ def validate_latest_candidates(contract: dict, issue_date: str, root_html: str, 
                 materiality = candidate.get("materiality_basis")
                 if not isinstance(materiality, str) or len(re.sub(r"\s+", "", materiality)) < 30 or not has_japanese(materiality):
                     fail(f"{category} adopted routine or duplicate candidate needs materiality_basis")
+            if topic_value_applies and decision == "adopted":
+                value_class = candidate.get("topic_value_class")
+                reader_delta = candidate.get("reader_delta")
+                materiality = candidate.get("materiality_basis")
+                if value_class not in allowed_topic_value_classes:
+                    fail(f"{category} adopted candidate missing topic_value_class: {title}")
+                if not isinstance(reader_delta, str) or len(re.sub(r"\s+", "", reader_delta)) < 35 or not has_japanese(reader_delta):
+                    fail(f"{category} adopted candidate must explain reader_delta: {title}")
+                if not isinstance(materiality, str) or len(re.sub(r"\s+", "", materiality)) < 35 or not has_japanese(materiality):
+                    fail(f"{category} adopted candidate needs materiality_basis: {title}")
+                if value_class in weak_standalone_topic_value_classes and change_class not in {"new_event", "material_update"}:
+                    fail(f"{category} schedule-only candidate is too weak without material change: {title}")
+                if value_class in weak_standalone_topic_value_classes and not re.search(
+                    r"(変更|延期|前倒し|中止|新設|追加|規制|契約|資金|結果|事故|安全|供給|収益|市場|スポンサー|技術|性能|リスク)",
+                    f"{reader_delta} {materiality}",
+                ):
+                    fail(f"{category} schedule-only candidate lacks concrete topic value: {title}")
             if decision in {"held", "no_fresh_item"} and change_class in {"new_event", "material_update"}:
                 fail(f"{category} fresh material candidate must be published or explicitly excluded: {title}")
             if decision == "excluded" and change_class in {"new_event", "material_update"}:
