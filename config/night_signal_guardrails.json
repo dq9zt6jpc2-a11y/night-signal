@@ -620,6 +620,53 @@
         "scripts/current_issue_audit.py",
         "cron: \"00 11 * * *\""
       ]
+    },
+    {
+      "id": "schema_first_ai_state_machine",
+      "description": "NIGHT SIGNAL must model collection and publication as structured states, not free-form generation followed by more gates.",
+      "required_audit_terms": [
+        "SOURCE_OBSERVATION_SCHEMA",
+        "CANDIDATE_SCHEMA",
+        "ISSUE_STATE_SCHEMA",
+        "frontier_built",
+        "--readiness",
+        "required_observation_slots",
+        "missing_slots",
+        "collection_complete"
+      ],
+      "required_policy_terms": [
+        "scripts/night_signal_state.py",
+        "AI状態機械",
+        "typed blocker",
+        "Responses API",
+        "Structured Outputs",
+        "observation slot",
+        "未収集slot"
+      ],
+      "required_workflow_terms": [
+        "scripts/night_signal_state.py --self-test",
+        "scripts/night_signal_state.py --readiness"
+      ]
+    },
+    {
+      "id": "publish_trigger_issue_artifacts_only",
+      "description": "Code, docs, and policy changes must not republish a stale selected issue through the Pages workflow.",
+      "required_policy_terms": [
+        "コード、ドキュメント、設定、方針の改善だけで過去号を再配信しない"
+      ],
+      "required_workflow_terms": [
+        "paths:",
+        ".night-signal-issue-date",
+        "night-brief-web-sample-*.html",
+        "site/**"
+      ],
+      "forbidden_workflow_terms": [
+        "details/**",
+        "scripts/**",
+        "docs/**",
+        "config/**",
+        ".github/workflows/pages.yml"
+      ]
     }
   ]
 }

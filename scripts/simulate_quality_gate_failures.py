@@ -41,6 +41,7 @@ def copy_fixture() -> Path:
     shutil.copyfile(ROOT / "scripts" / "current_issue_audit.py", tmp / "scripts" / "current_issue_audit.py")
     shutil.copyfile(ROOT / "scripts" / "sync_site.py", tmp / "scripts" / "sync_site.py")
     shutil.copyfile(ROOT / "scripts" / "render_detail.py", tmp / "scripts" / "render_detail.py")
+    shutil.copyfile(ROOT / "scripts" / "night_signal_state.py", tmp / "scripts" / "night_signal_state.py")
     shutil.copyfile(ROOT / "scripts" / "simulate_quality_gate_failures.py", tmp / "scripts" / "simulate_quality_gate_failures.py")
     shutil.copyfile(ROOT / "config" / "night_signal_coverage.json", tmp / "config" / "night_signal_coverage.json")
     shutil.copyfile(ROOT / "config" / "night_signal_guardrails.json", tmp / "config" / "night_signal_guardrails.json")

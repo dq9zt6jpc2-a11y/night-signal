@@ -42,7 +42,9 @@
 
       <h2>構造化収集契約</h2>
       <p>網羅性は長い説明量ではなく、抽出ログの <code>coverage-manifest</code> で証明する。各カテゴリは「調べた検索軸」「見た情報源」「採用/保留/除外/未確認」「掲載カード」を同じJSONに残す。</p>
+      <p>2026-06-04以降の設計中心は、後段チェックの足し算ではなく、<code>scripts/night_signal_state.py</code> が表すAI状態機械に置く。状態は discovery frontier、source observations、candidates、topic decisions、publication plan の順に進め、欠けた状態があれば typed blocker として止める。OpenAIを使う場合も自由作文ではなく、Responses APIとStructured OutputsでこのJSON schemaを埋める。</p>
       <ul>
+        <li>網羅性は「カテゴリごとに何かを見た」では足りない。各ウォッチ項目について、一次/公式、独立媒体またはデータ、カテゴリで必要なSNS/XやYouTubeの observation slot を埋める。未収集slotが残る状態は本文生成へ進めない。</li>
         <li>各カテゴリは <code>collection_status: complete</code> になるまで公開しない。</li>
         <li><code>published_card_titles</code> はトップページのカード見出しと完全一致させる。カードだけ更新して抽出ログが古い状態を失敗にする。</li>
         <li><code>search_axes</code> はカテゴリごとに3軸以上を必須にする。例: OpenAIなら公式/製品、企業導入/インフラ、安全/規制。経済カテゴリなら雇用、物価、金融政策、政府方針、投資案件、市場反応、資金フローを地域ごとに見る。</li>
@@ -55,6 +57,7 @@
         <li>2026-05-22以降、3日以内の新しい候補を採用しない場合は、重複、重要度不足、実質変化なし、根拠不足、関連不足のどれかを <code>non_adoption_reason_class</code> に残す。新しい候補を「なんとなく保留」にしない。</li>
         <li>掲載数は固定しない。調査は全ウォッチ項目で必ず行い、公開カードは新規追加または明確な変化がある候補だけにする。更新がなければカテゴリ内のカードは0件でもよく、更新が多ければ増やす。</li>
         <li>公開対象は <code>.night-signal-issue-date</code> で選ぶ。日次運用ではJSTの今日号、サンプル、抽出ログ、site配下の当日版がそろわない場合は公開前監査で止める。</li>
+        <li>公開workflowは当日issue成果物と <code>.night-signal-issue-date</code> の変更だけで動かす。コード、ドキュメント、設定、方針の改善だけで過去号を再配信しない。</li>
         <li>URL根拠はカテゴリごとに8件以上、異なるホスト5件以上を最低ラインにする。公式だけ、SNSだけ、単一メディアだけでは通さない。</li>
         <li><code>last_checked_jst</code> は当日の日付で記録する。日付だけ差し替えた過去ログを失敗にする。</li>
       </ul>

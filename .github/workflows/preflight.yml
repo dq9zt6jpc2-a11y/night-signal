@@ -3,6 +3,7 @@ name: NIGHT SIGNAL Preflight
 on:
   workflow_dispatch:
   schedule:
+    - cron: "30 08 * * *"
     - cron: "00 11 * * *"
 
 permissions:
@@ -26,6 +27,8 @@ jobs:
             echo "Selected NIGHT SIGNAL issue date marker is invalid: ${ISSUE_DATE}" >&2
             exit 1
           fi
+          python3 scripts/night_signal_state.py --self-test
+          python3 scripts/night_signal_state.py --readiness
           python3 scripts/guardrail_inventory.py
           python3 scripts/current_issue_audit.py
           python3 scripts/coverage_audit.py "$ISSUE_DATE"

@@ -5,6 +5,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - ".night-signal-issue-date"
+      - "night-brief-web-sample-*.html"
+      - "site/**"
 
 permissions:
   contents: read
