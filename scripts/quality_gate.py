@@ -209,6 +209,8 @@ DETAIL_FORBIDDEN_SECTION_HEADINGS = [
     "一次で押さえる点",
 ]
 LEGACY_MIN_SUMMARY_LEAD_CHARS = 180
+LEGACY_DETAIL_SUMMARY_HEADING = "30秒概要"
+DEFAULT_DETAIL_SUMMARY_HEADING = "要点と背景"
 
 READER_PROCESS_LEAK_TERMS = [
     "今日の再抽出",
@@ -229,7 +231,6 @@ READER_PROCESS_LEAK_TERMS = [
     "カードを",
     "5/19版では",
     "版では",
-    "作業",
     "導線",
     "点検",
     "拾う",
@@ -246,6 +247,9 @@ READER_PROCESS_LEAK_TERMS = [
     "固定し",
     "確認として",
     "最新採用",
+]
+READER_PROCESS_LEAK_PATTERNS = [
+    (r"作業(?:指示|説明|メモ|語|上|として|を書)", "authoring work wording"),
 ]
 
 PUBLIC_SUMMARY_PROCESS_PATTERNS = [
@@ -379,8 +383,9 @@ def previous_issue_date(issue_date: str) -> str | None:
 def validate_reader_process_language(context: str, html: str) -> None:
     text = visible_text(html)
     leaks = [term for term in READER_PROCESS_LEAK_TERMS if term in text]
-    if leaks:
-        fail(f"{context} contains production/process wording: " + ", ".join(leaks[:8]))
+    pattern_leaks = [label for pattern, label in READER_PROCESS_LEAK_PATTERNS if re.search(pattern, text)]
+    if leaks or pattern_leaks:
+        fail(f"{context} contains production/process wording: " + ", ".join((leaks + pattern_leaks)[:8]))
 
 
 def validate_public_summary_language(context: str, text: str, issue_date: str) -> None:
@@ -395,6 +400,25 @@ def validate_public_summary_language(context: str, text: str, issue_date: str) -
         abstract_terms = [term for term in PUBLIC_ABSTRACT_FRAMING_TERMS if term in text]
         if abstract_terms:
             fail(f"{context} contains abstract/editorial framing wording: " + ", ".join(abstract_terms[:8]))
+
+
+def detail_summary_heading(issue_dt) -> str:
+    if effective_on_or_after(COVERAGE_CONTRACT, "detail_summary_heading_effective_date", issue_dt):
+        heading = COVERAGE_CONTRACT.get("detail_summary_heading", DEFAULT_DETAIL_SUMMARY_HEADING)
+        if isinstance(heading, str) and heading.strip():
+            return heading.strip()
+        return DEFAULT_DETAIL_SUMMARY_HEADING
+    return LEGACY_DETAIL_SUMMARY_HEADING
+
+
+def detail_min_summary_chars(issue_dt) -> int:
+    if effective_on_or_after(COVERAGE_CONTRACT, "summary_quality_effective_date", issue_dt):
+        return int(COVERAGE_CONTRACT.get("minimum_detail_summary_chars", 240))
+    return LEGACY_MIN_SUMMARY_LEAD_CHARS
+
+
+def detail_information_required(issue_dt) -> bool:
+    return effective_on_or_after(COVERAGE_CONTRACT, "detail_information_contract_effective_date", issue_dt)
 
 
 def validate_stable_hero(context: str, html: str, issue_date: str) -> None:
@@ -612,12 +636,11 @@ def validate_detail_scope(issue_date: str, root_html: str, dated_html: str) -> N
 def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) -> None:
     issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
     filename_date_required = effective_on_or_after(COVERAGE_CONTRACT, "article_summary_effective_date", issue_dt)
-    # Detail pages must stay constrained to one overview block plus source
-    # links, including future issues.
+    # Legacy details use one overview block. Current details use a compact,
+    # reader-facing structure: summary, confirmed facts, limits, and sources.
     article_summary_required = filename_date_required
-    min_summary_chars = LEGACY_MIN_SUMMARY_LEAD_CHARS
-    if effective_on_or_after(COVERAGE_CONTRACT, "summary_quality_effective_date", issue_dt):
-        min_summary_chars = int(COVERAGE_CONTRACT.get("minimum_detail_summary_chars", 240))
+    information_required = detail_information_required(issue_dt)
+    min_summary_chars = detail_min_summary_chars(issue_dt)
     linked = linked_detail_names(issue_date, root_html, dated_html)
     excluded = {"policy.html", f"extraction-log-{issue_date}.html"}
     if filename_date_required:
@@ -642,7 +665,7 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
         html = read(path)
         plain = re.sub(r"<[^>]+>", "", html)
         plain = re.sub(r"\s+", "", plain)
-        if len(plain) < MIN_DETAIL_TEXT_CHARS:
+        if not information_required and len(plain) < MIN_DETAIL_TEXT_CHARS:
             weak.append(f"{name}: {len(plain)} chars")
         headings = " ".join(re.findall(r"<(?:title|h1|h2)[^>]*>(.*?)</(?:title|h1|h2)>", html, flags=re.S))
         heading_text = re.sub(r"<[^>]+>", "", headings)
@@ -651,7 +674,10 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
         h2_texts = heading_texts(html, ("h2",))
         if any(any(term in heading for term in DETAIL_FORBIDDEN_SECTION_HEADINGS) for heading in h2_texts):
             checklist_headings.append(name)
-        required_h2 = ["30秒概要"]
+        if information_required:
+            required_h2 = [detail_summary_heading(issue_dt), "確認した事実", "未確定点"]
+        else:
+            required_h2 = [detail_summary_heading(issue_dt)]
         if h2_texts != required_h2:
             article_structure_failures.append(f"{name}: h2={h2_texts or '-'}")
         summary_class = "article-summary" if article_summary_required else "summary-lead"
@@ -662,12 +688,28 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
             summary_text = visible_text(summary_match.group(1))
             validate_public_summary_language(f"detail page {name} summary", summary_text, issue_date)
             summary_text = re.sub(r"\s+", "", summary_text)
-            if len(summary_text) < min_summary_chars:
+            if not information_required and len(summary_text) < min_summary_chars:
                 weak_summaries.append(f"{name}: {len(summary_text)} chars")
+        if information_required:
+            fact_match = re.search(r'<ul class="fact-list">(.*?)</ul>', html, flags=re.S)
+            if not fact_match:
+                article_structure_failures.append(f"{name}: missing confirmed facts")
+            else:
+                facts = [visible_text(item) for item in re.findall(r"<li[^>]*>(.*?)</li>", fact_match.group(1), flags=re.S)]
+                min_facts = int(COVERAGE_CONTRACT.get("minimum_material_facts_per_published_item", 2))
+                if len([fact for fact in facts if fact]) < min_facts:
+                    article_structure_failures.append(f"{name}: not enough confirmed facts")
+                for fact in facts:
+                    validate_public_summary_language(f"detail page {name} fact", fact, issue_date)
+            limits_match = re.search(r'<p class="limits">(.*?)</p>', html, flags=re.S)
+            if not limits_match or not visible_text(limits_match.group(1)):
+                article_structure_failures.append(f"{name}: missing limits/unknowns")
+            elif "確認して" in visible_text(limits_match.group(1)):
+                article_structure_failures.append(f"{name}: limits read like an instruction")
         source_match = re.search(r'<div class="source">(.*?)</div>', html, flags=re.S)
         if summary_match and source_match:
             between = html[summary_match.end() : source_match.start()]
-            if visible_text(between):
+            if not information_required and visible_text(between):
                 article_structure_failures.append(f"{name}: body exists outside article summary")
             source_links = re.findall(r"<a\b", source_match.group(1), flags=re.I)
             if not article_summary_required and len(source_links) > MAX_SOURCE_LINKS_PER_DETAIL:
@@ -688,9 +730,11 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
     if checklist_headings:
         fail("detail pages use checklist/next-step section headings: " + ", ".join(checklist_headings[:8]))
     if article_structure_failures:
-        expected_structure = "30-second overview-only"
+        expected_structure = "information-complete detail"
         fail(f"detail pages must use {expected_structure} structure: " + "; ".join(article_structure_failures[:8]))
     if weak_summaries:
+        if information_required:
+            fail("detail summaries are incomplete: " + "; ".join(weak_summaries[:8]))
         fail("detail summaries are too thin: " + "; ".join(weak_summaries[:8]))
     if missing_source:
         fail("detail pages missing source block: " + ", ".join(missing_source[:8]))

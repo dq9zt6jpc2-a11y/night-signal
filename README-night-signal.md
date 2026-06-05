@@ -1,76 +1,130 @@
-# NIGHT SIGNAL 運用メモ
+# NIGHT SIGNAL
 
-## できたもの
+NIGHT SIGNAL is a daily public web issue. The stable page is:
 
 - `site/index.html`
-  - PCで毎日開く固定URL
-  - 最新号そのものを表示する
-  - Safariのお気に入りに入れる対象
-- `site/2026-05-10/index.html`
-  - 日付別の履歴ページ
-- `site/2026-05-10/details/`
-  - 日本語詳細ページ
-- `scripts/send_line.py`
-  - LINE Messaging APIでURLを送るスクリプト
-- `scripts/build_latest.py`
-  - 最新号への入口ページを作るスクリプト
-- `scripts/sync_site.py`
-  - 作業用HTMLを `site/2026-05-10/` へ同期し、Safariで戻るリンクが壊れないように調整するスクリプト
 
-## PCで毎日見る方法
+The dated archive is:
 
-1. Safariで `site/index.html` を開く
-2. そのページをお気に入りに追加する
-3. 毎日夜はそのお気に入りを開く
+- `site/YYYY-MM-DD/index.html`
+- `site/YYYY-MM-DD/details/`
 
-日付ごとのページが増えても、見るURLは `site/index.html` のまま固定します。  
-`site/index.html` は常に最新号を表示し、ページ下部に直近7日分の履歴リンクを残します。
+## Canonical Path
 
-## 履歴の扱い
+The operating path is intentionally small.
 
-- `site/YYYY-MM-DD/` は日付別の保存版です。
-- `site/index.html` は最新号です。
-- `scripts/sync_site.py` 実行時に、7日を超えた日付別フォルダは削除します。
-- 1週間内の情報は、後から追えるように履歴リンクとして残します。
+1. Collect current information using `config/night_signal_coverage.json`.
+2. Generate the daily collection plan:
+   - `state/YYYY-MM-DD/collection_plan.json`
+3. Write structured collection state:
+   - `state/YYYY-MM-DD/observations.jsonl`
+   - `state/YYYY-MM-DD/candidates.json`
+   - `state/YYYY-MM-DD/decisions.json`
+   - `state/YYYY-MM-DD/cards.json`
+   - `state/YYYY-MM-DD/coverage_manifest.json`
+4. Assemble the canonical issue state:
+   - `state/YYYY-MM-DD/issue.json`
+5. Generate the working issue files:
+   - `night-brief-web-sample-YYYY-MM-DD.html`
+   - `details/extraction-log-YYYY-MM-DD.html`
+   - linked detail pages in `details/`
+6. Sync the issue to `site/`.
+7. Keep only the latest seven dated site issues as readable history.
+8. Audit coverage, quality, current date, and public publication.
+9. Commit and push only when the current issue is ready.
 
-## 次に必要な設定
-
-1. Web公開先を決める
-   - GitHub Pages
-   - Netlify
-   - Vercel
-
-2. `site/` を公開する
-
-3. LINE公式アカウントを作る
-
-4. Messaging APIを有効化して以下を取得する
-   - `LINE_CHANNEL_ACCESS_TOKEN`
-   - `LINE_USER_ID`
-
-5. LINE送信テスト
+## Commands
 
 ```bash
-python3 scripts/send_line.py "https://公開URL/2026-05-10/"
+python3 scripts/night_signal_state.py --write-collection-plan YYYY-MM-DD
+python3 scripts/night_signal_collect.py YYYY-MM-DD
+python3 scripts/night_signal_state.py --validate-observations state/YYYY-MM-DD/observations.jsonl
+python3 scripts/night_signal_synthesize.py YYYY-MM-DD --replace
+python3 scripts/night_signal_state.py --assemble-issue-state YYYY-MM-DD
+python3 scripts/night_signal_state.py --validate-issue state/YYYY-MM-DD/issue.json
+python3 scripts/night_signal_state.py --generate-issue state/YYYY-MM-DD/issue.json
+python3 scripts/sync_site.py YYYY-MM-DD
+python3 scripts/coverage_audit.py YYYY-MM-DD
+python3 scripts/quality_gate.py YYYY-MM-DD
+python3 scripts/pre22_audit.py YYYY-MM-DD
+python3 scripts/publication_audit.py YYYY-MM-DD
 ```
 
-## 本番の毎晩処理
+Useful structural checks:
 
-1. `config/night_signal_coverage.json` のカテゴリと探索軸に沿って最新情報を収集する
-2. 既存・新規を含めて、直近24〜72時間を中心に網羅的に調査する
-3. 各カテゴリで公式、主要報道、専門媒体、SNS/X、YouTube、データ、予定、反証を確認する
-4. 迷う材料は落とさず、抽出ログの `held` / `unresolved` に残す
-5. 日本語記事を優先して確認し、日本語記事がない場合は英語記事を本文まで読み、日本語要約を作成する
-6. トップページ、詳細ページ、抽出ログの `coverage-manifest` を更新する
-7. `published_card_titles` とトップページのカード見出しを一致させる
-8. `python3 scripts/sync_site.py YYYY-MM-DD` で `site/index.html` と日付別履歴へ同期する
-9. `python3 scripts/coverage_audit.py YYYY-MM-DD` と `python3 scripts/quality_gate.py YYYY-MM-DD` を通す
-10. `python3 scripts/pre22_audit.py YYYY-MM-DD` を通してからcommit/pushする
-11. `python3 scripts/publication_audit.py YYYY-MM-DD` で公開URLまで確認する
+```bash
+python3 scripts/night_signal_state.py --self-test
+python3 scripts/night_signal_state.py --readiness --date YYYY-MM-DD
+python3 scripts/pre22_audit.py YYYY-MM-DD
+python3 scripts/simulate_quality_gate_failures.py
+```
 
-## 再発防止の中核
+## Files That Matter
 
-- 収集範囲の正は `config/night_signal_coverage.json`。
-- 抽出ログは作業メモではなく、網羅収集の証跡。
-- `scripts/coverage_audit.py` は、検索軸、情報源の多様性、URL根拠数、掲載カードと抽出ログの一致を検査する。
-- `scripts/quality_gate.py` は `coverage_audit.py` を内包しているため、構造化収集契約を満たさない当日版は公開できない。
+- `config/night_signal_coverage.json`: collection contract.
+- `config/night_signal_sources.json`: canonical seed sources.
+- `config/night_signal_guardrails.json`: recurrence-prevention inventory.
+- `scripts/night_signal_state.py`: state model, generation owner, and readiness surface.
+- `scripts/night_signal_collect.py`: source-observation collector using Responses
+  API web search and structured output.
+- `scripts/night_signal_synthesize.py`: source-observation synthesizer for
+  candidates, decisions, cards, and coverage_manifest.
+- `scripts/sync_site.py`: the only site sync path.
+- `scripts/coverage_audit.py`: coverage contract audit.
+- `scripts/quality_gate.py`: public issue quality audit.
+- `scripts/current_issue_audit.py`: current JST issue audit.
+- `scripts/pre22_audit.py`: pre-publication local audit.
+- `scripts/publication_audit.py`: pushed/public URL audit.
+- `.github/workflows/pages.yml`: GitHub Pages publication.
+- `.github/workflows/preflight.yml`: scheduled readiness check.
+- `docs/night-signal-basic-design.md`: design source of truth.
+
+## Private Data
+
+- Keep Safari exports, password CSVs, payment-card JSON, history JSON, and local
+  `.env` files out of the repo history and out of commits.
+- `.gitignore` excludes those artifacts, but they should not be treated as
+  NIGHT SIGNAL inputs after `config/night_signal_sources.json` exists.
+
+## Rules
+
+- Do not restore date-specific rebuild scripts.
+- Do not hand-edit daily HTML as the source of truth.
+- If `state/YYYY-MM-DD/issue.json` exists, preflight and publication regenerate
+  working artifacts from it before auditing.
+- `collection_plan.json` is generated from the coverage contract. It maps each
+  semantic slot to a source role, channel, query set, reuse policy, and model
+  route, plus batch group, prompt cache key, and seed source targets. Search
+  queries can add sources, but they do not replace the seed source checks.
+  Collection may be manual or AI-backed, but it must write the same observation
+  schema.
+- Live AI-backed collection requires `OPENAI_API_KEY`. Without it, the system can
+  generate collection requests and readiness blockers, but it cannot honestly
+  claim external Web/SNS/YouTube collection is complete.
+- The collector keeps stable model routes in the plan. Current default concrete
+  models are `gpt-5-mini` for structured source extraction and `gpt-5.2` for
+  frontier reasoning; use the `NIGHT_SIGNAL_MODEL_*` environment variables when
+  official OpenAI model guidance changes.
+- Each observation must include `source_target_results` for every seed target in
+  its task, including X, Instagram, Facebook, YouTube, official, media, and data
+  sources when configured.
+- `observations` alone are never publication-ready. The synthesis step must
+  produce `candidates`, `decisions`, `cards`, and `coverage_manifest` before
+  assembly and rendering.
+- `issue.json` must include frontier, observations, candidates, decisions,
+  cards, and coverage_manifest. Cards without adopted decisions, or decisions
+  without closed observation slots, are invalid.
+- Cards must keep `candidate_title` for traceability to the adopted decision and
+  `title` for the reader-facing headline.
+- Detail pages are not time-boxed summaries. Current details must carry
+  `summary_basis` with what changed, why it matters, confirmed facts, limits or
+  unknowns, and source dates, then render those as reader-facing context.
+- Do not add a new gate when a state transition should own the failure.
+- Do not publish by falling back to an older issue.
+- Do not treat schedule-only or routine items as topic value.
+- Root publication shows the current issue only; dated history keeps the latest
+  seven published issues.
+- Do not use model names as architecture. Use model routes and resolve concrete
+  models from official docs at implementation time.
+- Keep temporary experiments out of the repo unless they become the canonical
+  path.

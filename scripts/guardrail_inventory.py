@@ -26,6 +26,8 @@ AUDIT_PATHS = [
     ROOT / "scripts" / "sync_site.py",
     ROOT / "scripts" / "render_detail.py",
     ROOT / "scripts" / "night_signal_state.py",
+    ROOT / "scripts" / "night_signal_collect.py",
+    ROOT / "scripts" / "night_signal_synthesize.py",
 ]
 SIMULATION_PATH = ROOT / "scripts" / "simulate_quality_gate_failures.py"
 WORKFLOW_PATHS = list((ROOT / ".github" / "workflows").glob("*.yml"))

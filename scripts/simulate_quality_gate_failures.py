@@ -26,7 +26,7 @@ OPENAI_PRIMARY_DETAIL = "openai-codex-approval-remote-2026-05-24.html"
 OPENAI_SECONDARY_DETAIL = "openai-pac-federal-framework-2026-05-24.html"
 INVESTMENT_SECOND_TITLE = "米株ファンドは利回り上昇で資金流出、AI物色は続いてもポジションは軽くなる"
 INVESTMENT_SECOND_DETAIL = "north-america-us-equity-fund-outflows-2026-05-24.html"
-NEXT_ISSUE_DATE = "2026-05-26"
+NEXT_ISSUE_DATE = "2026-06-05"
 
 
 def copy_fixture() -> Path:
@@ -42,6 +42,8 @@ def copy_fixture() -> Path:
     shutil.copyfile(ROOT / "scripts" / "sync_site.py", tmp / "scripts" / "sync_site.py")
     shutil.copyfile(ROOT / "scripts" / "render_detail.py", tmp / "scripts" / "render_detail.py")
     shutil.copyfile(ROOT / "scripts" / "night_signal_state.py", tmp / "scripts" / "night_signal_state.py")
+    shutil.copyfile(ROOT / "scripts" / "night_signal_collect.py", tmp / "scripts" / "night_signal_collect.py")
+    shutil.copyfile(ROOT / "scripts" / "night_signal_synthesize.py", tmp / "scripts" / "night_signal_synthesize.py")
     shutil.copyfile(ROOT / "scripts" / "simulate_quality_gate_failures.py", tmp / "scripts" / "simulate_quality_gate_failures.py")
     shutil.copyfile(ROOT / "config" / "night_signal_coverage.json", tmp / "config" / "night_signal_coverage.json")
     shutil.copyfile(ROOT / "config" / "night_signal_guardrails.json", tmp / "config" / "night_signal_guardrails.json")
@@ -190,6 +192,24 @@ def run_guardrail(tmp: Path) -> subprocess.CompletedProcess[str]:
     )
 
 
+def run_collector_self_test(tmp: Path) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [sys.executable, str(tmp / "scripts" / "night_signal_collect.py"), "--self-test"],
+        cwd=tmp,
+        text=True,
+        capture_output=True,
+    )
+
+
+def run_synthesis_self_test(tmp: Path) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [sys.executable, str(tmp / "scripts" / "night_signal_synthesize.py"), "--self-test"],
+        cwd=tmp,
+        text=True,
+        capture_output=True,
+    )
+
+
 def run_sync(tmp: Path) -> None:
     subprocess.run(
         [sys.executable, str(tmp / "scripts" / "sync_site.py"), ISSUE_DATE],
@@ -200,6 +220,16 @@ def run_sync(tmp: Path) -> None:
     )
 
 
+def dated_site_dirs(tmp: Path) -> list[str]:
+    names = []
+    for path in (tmp / "site").iterdir():
+        if not path.is_dir():
+            continue
+        if re.fullmatch(r"\d{4}-\d{2}-\d{2}", path.name):
+            names.append(path.name)
+    return sorted(names, reverse=True)
+
+
 def assert_pass(name: str, tmp: Path) -> None:
     result = run_gate(tmp)
     if result.returncode != 0:
@@ -208,6 +238,18 @@ def assert_pass(name: str, tmp: Path) -> None:
 
 def assert_guardrail_pass(name: str, tmp: Path) -> None:
     result = run_guardrail(tmp)
+    if result.returncode != 0:
+        raise AssertionError(f"{name}: expected pass, got fail\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}")
+
+
+def assert_collector_self_test_pass(name: str, tmp: Path) -> None:
+    result = run_collector_self_test(tmp)
+    if result.returncode != 0:
+        raise AssertionError(f"{name}: expected pass, got fail\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}")
+
+
+def assert_synthesis_self_test_pass(name: str, tmp: Path) -> None:
+    result = run_synthesis_self_test(tmp)
     if result.returncode != 0:
         raise AssertionError(f"{name}: expected pass, got fail\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}")
 
@@ -410,12 +452,37 @@ def run_detail_renderer(tmp: Path, data: dict) -> subprocess.CompletedProcess[st
 
 
 def enable_future_article_layout_on_fixture(tmp: Path) -> None:
-    mutate_contract(tmp, lambda contract: contract.update({"article_summary_effective_date": ISSUE_DATE}))
+    mutate_contract(
+        tmp,
+        lambda contract: contract.update(
+            {
+                "article_summary_effective_date": ISSUE_DATE,
+                "detail_summary_heading_effective_date": ISSUE_DATE,
+                "detail_information_contract_effective_date": ISSUE_DATE,
+            }
+        ),
+    )
     for detail_path in (tmp / "site" / ISSUE_DATE / "details").glob("*.html"):
         if detail_path.name.startswith("extraction-log-") or detail_path.name == "policy.html":
             continue
         text = read(detail_path)
+        text = text.replace("<h2>30秒概要</h2>", "<h2>要点と背景</h2>", 1)
         text = text.replace('class="summary-lead"', 'class="article-summary"')
+        text = re.sub(
+            r'(</div>)(\s*<div class="source">)',
+            (
+                '\\1\n\n      <h2>確認した事実</h2>\n'
+                '      <ul class="fact-list">\n'
+                '        <li>公表主体と公表日を直接資料で確認済み。</li>\n'
+                '        <li>掲載対象となった数値、結果、または更新内容を本文に残している。</li>\n'
+                '      </ul>\n\n'
+                '      <h2>未確定点</h2>\n'
+                '      <p class="limits">未公表の条件は確定事項として扱わず、原文で確認できる範囲に限定する。</p>\\2'
+            ),
+            text,
+            count=1,
+            flags=re.S,
+        )
         write(detail_path, text)
 
 
@@ -526,6 +593,10 @@ def main() -> int:
     print("PASS baseline current issue")
     assert_guardrail_pass("baseline guardrail inventory", baseline)
     print("PASS baseline guardrail inventory")
+    assert_collector_self_test_pass("collector self-test covers Responses source observation path", baseline)
+    print("PASS collector self-test covers Responses source observation path")
+    assert_synthesis_self_test_pass("synthesis self-test covers observation to issue state path", baseline)
+    print("PASS synthesis self-test covers observation to issue state path")
 
     latest_link_fixture = copy_fixture()
     sample_path = latest_link_fixture / f"night-brief-web-sample-{ISSUE_DATE}.html"
@@ -542,6 +613,17 @@ def main() -> int:
         raise AssertionError("root strips dated latest link during sync: fixed URL retained ../index.html")
     assert_pass("root strips dated latest link during sync", latest_link_fixture)
     print("PASS root strips dated latest link during sync")
+
+    retention_fixture = copy_fixture()
+    for day in range(15, 24):
+        old_dir = retention_fixture / "site" / f"2026-05-{day:02d}"
+        old_dir.mkdir(parents=True, exist_ok=True)
+        (old_dir / "index.html").write_text(f"<html>{old_dir.name}</html>", encoding="utf-8")
+    run_sync(retention_fixture)
+    retained = dated_site_dirs(retention_fixture)
+    if len(retained) != 7 or "2026-05-17" in retained:
+        raise AssertionError(f"sync_site retains latest seven issues only: retained={retained}")
+    print("PASS sync_site retains latest seven issues only")
 
     assert_guardrail_fail(
         "guardrail catches removed SoftBank market price axis",
@@ -583,6 +665,16 @@ def main() -> int:
             tmp,
             'LATEST_ISSUE_DATE="$(ls night-brief-web-sample-*.html | tail -n 1)"\n'
             'echo "No pushed issue file; using latest committed issue ${LATEST_ISSUE_DATE}" >&2',
+        ),
+        "latest_issue_publish_only forbidden workflow terms",
+    )
+
+    assert_guardrail_fail(
+        "guardrail catches marker fallback to old issue",
+        lambda tmp: append_workflow_text(
+            tmp,
+            'elif [[ -f ".night-signal-issue-date" ]]; then\n'
+            '  echo "No current state issue or selected issue marker found" >&2',
         ),
         "latest_issue_publish_only forbidden workflow terms",
     )
@@ -693,7 +785,7 @@ def main() -> int:
                 flags=re.S,
             ),
         ),
-        "detail pages must use 30-second overview-only structure",
+        "detail pages must use information-complete detail",
     )
 
     assert_fail(
@@ -904,8 +996,18 @@ def main() -> int:
             "kicker": "OpenAI / 公式・主要報道",
             "title": "OpenAIの新発表を複数原文から整理",
             "h1": "OpenAIの新発表を複数原文から整理",
-            "slug": "future-30-second-summary.html",
-            "summary": "公式発表は、公開日、対象機能、利用可能な範囲を明示した。主要報道は、導入背景と既存運用との差分を補った。公式に確認できる事実と報道による補足を分けて示し、未公表の条件は確定事項として扱わない。利用者が当日判断に使う対象範囲、時期、残る不確定点を同じ概要内にまとめる。",
+            "slug": "future-information-summary.html",
+            "summary": "公式発表は公開日、対象機能、利用可能な範囲を明示し、主要報道は導入背景と既存運用との差分を補った。",
+            "summary_basis": {
+                "what_changed": "OpenAIが対象機能と利用範囲を公式に発表した。",
+                "why_it_matters": "読者は公式発表と主要報道を分けて、導入時期、対象範囲、残る不確定点を把握できる。",
+                "confirmed_facts": [
+                    "公式発表は公開日、対象機能、利用可能な範囲を示している。",
+                    "主要報道は導入背景と既存運用との差分を補足している。",
+                ],
+                "limits_or_unknowns": "未公表の条件は確定事項として扱わず、原文で確認できる範囲に限定する。",
+                "source_dates": [NEXT_ISSUE_DATE],
+            },
             "sources": [
                 {"label": "公式発表", "url": "https://example.com/official"},
                 {"label": "主要報道", "url": "https://example.com/report"},
@@ -915,12 +1017,19 @@ def main() -> int:
     )
     if future_detail_result.returncode != 0:
         raise AssertionError(f"future article summary renderer failed: {future_detail_result.stderr}")
-    rendered_future_detail = read(future_detail_fixture / "details" / "future-30-second-summary.html")
-    if "30秒概要" not in rendered_future_detail or "article-summary" not in rendered_future_detail:
-        raise AssertionError("future detail renderer did not use 30-second article summary structure")
+    rendered_future_detail = read(future_detail_fixture / "details" / "future-information-summary.html")
+    if (
+        "30秒概要" in rendered_future_detail
+        or "要点と背景" not in rendered_future_detail
+        or "確認した事実" not in rendered_future_detail
+        or "未確定点" not in rendered_future_detail
+        or "article-summary" not in rendered_future_detail
+        or "fact-list" not in rendered_future_detail
+    ):
+        raise AssertionError("future detail renderer did not use information-complete detail structure")
     if rendered_future_detail.count("<a href=") < 3:
         raise AssertionError("future article summary renderer discarded source links")
-    print("PASS future detail renderer uses 30-second article summary")
+    print("PASS future detail renderer uses information-complete detail structure")
 
     future_layout_fixture = copy_fixture()
     enable_future_article_layout_on_fixture(future_layout_fixture)
@@ -928,16 +1037,16 @@ def main() -> int:
     print("PASS future article detail structure baseline")
 
     assert_fail(
-        "future issue rejects non-overview detail heading",
+        "future issue rejects missing information heading",
         lambda tmp: [
             enable_future_article_layout_on_fixture(tmp),
             write(
                 tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL,
                 read(tmp / "site" / ISSUE_DATE / "details" / SOFTBANK_DETAIL)
-                .replace("<h2>30秒概要</h2>", "<h2>記事まとめ</h2>", 1),
+                .replace("<h2>要点と背景</h2>", "<h2>記事まとめ</h2>", 1),
             ),
         ],
-        "detail pages must use 30-second overview-only structure",
+        "detail pages must use information-complete detail",
     )
 
     assert_fail(
@@ -950,7 +1059,7 @@ def main() -> int:
                 .replace('<div class="article-summary">', '<div class="summary-lead">', 1),
             ),
         ],
-        "detail summaries are too thin",
+        "detail summaries are incomplete",
     )
 
     assert_fail(

@@ -9,6 +9,7 @@ or cards that no longer match the extraction log.
 from __future__ import annotations
 
 import json
+import subprocess
 import re
 import sys
 import html as html_lib
@@ -20,9 +21,13 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[1]
 SITE_ROOT = ROOT / "site"
 CONFIG_PATH = ROOT / "config" / "night_signal_coverage.json"
+STATE_ROOT = ROOT / "state"
 URL_RE = re.compile(r"https?://[^\s\"'<>)]+")
 JAPANESE_RE = re.compile(r"[\u3040-\u30ff\u3400-\u9fff]")
 SNS_HOSTS = {"x.com", "twitter.com"}
+INSTAGRAM_HOSTS = {"instagram.com"}
+FACEBOOK_HOSTS = {"facebook.com", "fb.com"}
+SOCIAL_HOSTS = SNS_HOSTS | INSTAGRAM_HOSTS | FACEBOOK_HOSTS
 YOUTUBE_HOSTS = {"youtube.com", "youtu.be"}
 DEFERRED_PUBLISHING_RE = re.compile(r"(未反映|次回|次の再抽出|次の採用候補|次回の採用候補)")
 SEARCH_RESULT_HOSTS = {"google.com", "bing.com", "duckduckgo.com"}
@@ -96,7 +101,7 @@ def required_channels_for_category(contract: dict, category_config: dict) -> lis
     if (
         not isinstance(required_channels, list)
         or not required_channels
-        or any(channel not in {"web", "sns_x", "youtube"} for channel in required_channels)
+        or any(channel not in {"web", "sns_x", "instagram", "facebook", "youtube"} for channel in required_channels)
     ):
         fail(f"{category_config['label']} has invalid required_watch_topic_channels")
     return required_channels
@@ -220,7 +225,7 @@ def is_search_result_url(url: str) -> bool:
         return True
     if host_matches(url, YOUTUBE_HOSTS) and path == "/results":
         return True
-    if host_matches(url, SNS_HOSTS) and path == "/search":
+    if host_matches(url, SOCIAL_HOSTS) and path == "/search":
         return True
     return False
 
@@ -228,6 +233,90 @@ def is_search_result_url(url: str) -> bool:
 def require_channel_url(category: str, key: str, values: list[str], expected_hosts: set[str], label: str) -> None:
     if not any(host_matches(url, expected_hosts) for url in urls_in(values)):
         fail(f"{category} {key} must include {label} URL evidence")
+
+
+def require_required_channel_url(category: str, key: str, channel: str, values: list[str]) -> None:
+    if channel == "sns_x":
+        require_channel_url(category, key, values, SNS_HOSTS, "SNS/X")
+    if channel == "instagram":
+        require_channel_url(category, key, values, INSTAGRAM_HOSTS, "Instagram")
+    if channel == "facebook":
+        require_channel_url(category, key, values, FACEBOOK_HOSTS, "Facebook")
+    if channel == "youtube":
+        require_channel_url(category, key, values, YOUTUBE_HOSTS, "YouTube")
+
+
+def validate_channel_source(category: str, key: str, channel: str, url: str) -> None:
+    if channel == "sns_x" and not host_matches(url, SNS_HOSTS):
+        fail(f"{category} {key} channel/source mismatch for SNS/X")
+    if channel == "instagram" and not host_matches(url, INSTAGRAM_HOSTS):
+        fail(f"{category} {key} channel/source mismatch for Instagram")
+    if channel == "facebook" and not host_matches(url, FACEBOOK_HOSTS):
+        fail(f"{category} {key} channel/source mismatch for Facebook")
+    if channel == "youtube" and not host_matches(url, YOUTUBE_HOSTS):
+        fail(f"{category} {key} channel/source mismatch for YouTube")
+    if channel == "web" and (host_matches(url, SOCIAL_HOSTS) or host_matches(url, YOUTUBE_HOSTS)):
+        fail(f"{category} {key} channel/source mismatch for Web")
+
+
+def state_issue_path(issue_date: str) -> Path:
+    return STATE_ROOT / issue_date / "issue.json"
+
+
+def validate_state_issue(issue_date: str) -> dict | None:
+    path = state_issue_path(issue_date)
+    if not path.exists():
+        return None
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "night_signal_state.py"), "--validate-issue", str(path)],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+    )
+    if result.returncode != 0:
+        detail = (result.stderr or result.stdout).strip()
+        fail(f"state-backed coverage validation failed: {detail}")
+    try:
+        issue = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        fail(f"state issue JSON is invalid: {exc}")
+    if not isinstance(issue, dict):
+        fail("state issue must be a JSON object")
+    return issue
+
+
+def validate_state_backed_coverage(issue_date: str, root_html: str, manifest: dict, contract: dict, issue: dict) -> None:
+    expected_version = expected_contract_version(contract, issue_date)
+    if manifest.get("contract_version") != expected_version:
+        fail(f"coverage contract version mismatch: {manifest.get('contract_version')} != {expected_version}")
+    if manifest.get("date") != issue_date:
+        fail(f"coverage-manifest date mismatch: {manifest.get('date')} != {issue_date}")
+    validate_last_checked(issue_date, manifest)
+    categories = manifest.get("categories")
+    if not isinstance(categories, dict):
+        fail("coverage-manifest missing categories object")
+    configured_labels = [category["label"] for category in contract["categories"]]
+    missing = [label for label in configured_labels if label not in categories]
+    if missing:
+        fail("coverage-manifest missing configured categories: " + ", ".join(missing))
+    state_cards = issue.get("cards", [])
+    if not isinstance(state_cards, list):
+        fail("state issue cards must be a list")
+    state_titles_by_section: dict[str, list[str]] = {}
+    for card in state_cards:
+        if isinstance(card, dict):
+            state_titles_by_section.setdefault(str(card.get("section_id")), []).append(str(card.get("title")))
+    for category_config in contract["categories"]:
+        label = category_config["label"]
+        section_id = category_config["section_id"]
+        entry = categories[label]
+        if not isinstance(entry, dict):
+            fail(f"{label} manifest entry must be an object")
+        expected_titles = card_titles_by_section(root_html, section_id)
+        if entry.get("published_card_titles") != expected_titles:
+            fail(f"{label} published_card_titles do not match page cards")
+        if state_titles_by_section.get(section_id, []) != expected_titles:
+            fail(f"{label} state cards do not match page cards")
 
 
 def string_list(entry: dict, key: str, category: str) -> list[str]:
@@ -387,10 +476,12 @@ def validate_new_or_changed_items(contract: dict, issue_date: str, root_html: st
         sources = item.get("sources")
         if not isinstance(title, str) or title not in expected_titles:
             fail(f"{category} new_or_changed_items[{index}] title must match a published card")
-        if not isinstance(summary, str) or len(re.sub(r"\s+", "", summary)) < min_summary_chars:
-            fail(f"{category} new_or_changed_items[{index}] summary is too thin")
-        if not isinstance(summary, str) or not has_japanese(summary):
+        if not isinstance(summary, str) or not summary.strip():
+            fail(f"{category} new_or_changed_items[{index}] summary is required")
+        if not has_japanese(summary):
             fail(f"{category} new_or_changed_items[{index}] summary must be Japanese")
+        if not synthesis_required and len(re.sub(r"\s+", "", summary)) < min_summary_chars:
+            fail(f"{category} new_or_changed_items[{index}] summary is too thin")
         if not isinstance(sources, list) or not sources or any(not isinstance(source, str) for source in sources):
             fail(f"{category} new_or_changed_items[{index}] sources must be a non-empty string list")
         source_urls = [normalize_url(url) for url in urls_in(sources)]
@@ -733,14 +824,9 @@ def validate_collected_items(contract: dict, issue_date: str, category_config: d
             fail(f"{category} collected_items[{index}] source_url must be absolute")
         if is_search_result_url(source_url):
             fail(f"{category} collected_items[{index}] source_url cannot be a search result URL")
-        if channel not in {"web", "sns_x", "youtube"}:
+        if channel not in {"web", "sns_x", "instagram", "facebook", "youtube"}:
             fail(f"{category} collected_items[{index}] channel is invalid: {channel}")
-        if channel == "sns_x" and not host_matches(source_url, SNS_HOSTS):
-            fail(f"{category} collected_items[{index}] channel/source mismatch for SNS/X")
-        if channel == "youtube" and not host_matches(source_url, YOUTUBE_HOSTS):
-            fail(f"{category} collected_items[{index}] channel/source mismatch for YouTube")
-        if channel == "web" and (host_matches(source_url, SNS_HOSTS) or host_matches(source_url, YOUTUBE_HOSTS)):
-            fail(f"{category} collected_items[{index}] channel/source mismatch for Web")
+        validate_channel_source(category, f"collected_items[{index}]", channel, source_url)
         if not isinstance(source_date, str):
             fail(f"{category} collected_items[{index}] missing source_published_date")
         try:
@@ -914,18 +1000,18 @@ def validate_watch_topic_checks(contract: dict, issue_date: str, category_config
             if role not in required_source_roles:
                 fail(f"{category} watch_topic_checks[{index}].investigation_paths[{path_index}] source_role is invalid: {role}")
             path_roles.add(role)
-            if channel not in {"web", "sns_x", "youtube"}:
+            if channel not in {"web", "sns_x", "instagram", "facebook", "youtube"}:
                 fail(f"{category} watch_topic_checks[{index}].investigation_paths[{path_index}] channel is invalid: {channel}")
             if not isinstance(evidence_url, str) or not normalize_url_host(evidence_url):
                 fail(f"{category} watch_topic_checks[{index}].investigation_paths[{path_index}] evidence_url must be absolute")
             if is_search_result_url(evidence_url):
                 fail(f"{category} watch_topic_checks[{index}].investigation_paths[{path_index}] evidence_url cannot be a search result URL")
-            if channel == "sns_x" and not host_matches(evidence_url, SNS_HOSTS):
-                fail(f"{category} watch_topic_checks[{index}].investigation_paths[{path_index}] channel/source mismatch for SNS/X")
-            if channel == "youtube" and not host_matches(evidence_url, YOUTUBE_HOSTS):
-                fail(f"{category} watch_topic_checks[{index}].investigation_paths[{path_index}] channel/source mismatch for YouTube")
-            if channel == "web" and (host_matches(evidence_url, SNS_HOSTS) or host_matches(evidence_url, YOUTUBE_HOSTS)):
-                fail(f"{category} watch_topic_checks[{index}].investigation_paths[{path_index}] channel/source mismatch for Web")
+            validate_channel_source(
+                category,
+                f"watch_topic_checks[{index}].investigation_paths[{path_index}]",
+                channel,
+                evidence_url,
+            )
             if scoped_primary_evidence_required and role == "primary_or_official" and primary_evidence_hosts and not host_matches(
                 evidence_url, set(primary_evidence_hosts)
             ):
@@ -993,13 +1079,10 @@ def validate_watch_topic_checks(contract: dict, issue_date: str, category_config
             if not evidence_urls:
                 fail(f"{category} watch_topic_checks[{index}].{channel} must include URL evidence")
             if channel == "web" and not any(
-                not host_matches(url, SNS_HOSTS) and not host_matches(url, YOUTUBE_HOSTS) for url in evidence_urls
+                not host_matches(url, SOCIAL_HOSTS) and not host_matches(url, YOUTUBE_HOSTS) for url in evidence_urls
             ):
                 fail(f"{category} watch_topic_checks[{index}].web must include Web URL evidence")
-            if channel == "sns_x":
-                require_channel_url(category, f"watch_topic_checks[{index}].sns_x", values, SNS_HOSTS, "SNS/X")
-            if channel == "youtube":
-                require_channel_url(category, f"watch_topic_checks[{index}].youtube", values, YOUTUBE_HOSTS, "YouTube")
+            require_required_channel_url(category, f"watch_topic_checks[{index}].{channel}", channel, values)
 
     missing_topics = [topic_id for topic_id, count in sorted(by_topic.items()) if count < min_per_topic]
     if missing_topics:
@@ -1029,15 +1112,18 @@ def validate_no_change_checks(contract: dict, category_config: dict, entry: dict
             fail(f"{category} no_change_checks[{index}] sources must be a non-empty string list")
         if not urls_in(sources):
             fail(f"{category} no_change_checks[{index}] must include URL evidence")
-        if "sns_x" in required_channels:
-            require_channel_url(category, f"no_change_checks[{index}]", sources, SNS_HOSTS, "SNS/X")
-        if "youtube" in required_channels:
-            require_channel_url(category, f"no_change_checks[{index}]", sources, YOUTUBE_HOSTS, "YouTube")
+        for channel in required_channels:
+            require_required_channel_url(category, f"no_change_checks[{index}]", channel, sources)
 
 
 def validate_coverage_contract(issue_date: str, root_html: str, extraction_log_html: str) -> None:
     contract = load_contract()
     manifest = extract_manifest(extraction_log_html)
+    state_issue = validate_state_issue(issue_date)
+    if state_issue is not None:
+        validate_state_backed_coverage(issue_date, root_html, manifest, contract, state_issue)
+        return
+
     expected_version = expected_contract_version(contract, issue_date)
     if manifest.get("contract_version") != expected_version:
         fail(f"coverage contract version mismatch: {manifest.get('contract_version')} != {expected_version}")

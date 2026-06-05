@@ -1,0 +1,447 @@
+#!/usr/bin/env python3
+"""Synthesize NIGHT SIGNAL observations into publication state artifacts.
+
+This script owns the transition from completed source observations to
+candidates, decisions, cards, and coverage_manifest. It refuses to run on
+incomplete observations, so daily publication cannot skip collection closure.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+import time
+import urllib.error
+import urllib.request
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+from zoneinfo import ZoneInfo
+
+import night_signal_state as state
+
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_STATE_ROOT = ROOT / "state"
+RESPONSES_URL = os.getenv("OPENAI_RESPONSES_URL", "https://api.openai.com/v1/responses")
+DEFAULT_SYNTHESIS_MODEL = os.getenv("NIGHT_SIGNAL_SYNTHESIS_MODEL", "gpt-5.2")
+
+NO_CHANGE_CHECK_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "additionalProperties": False,
+    "required": ["topic_id", "result", "evidence_urls"],
+    "properties": {
+        "topic_id": {"type": "string"},
+        "result": {"type": "string"},
+        "evidence_urls": {"type": "array", "items": {"type": "string"}},
+    },
+}
+
+CATEGORY_SYNTHESIS_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "additionalProperties": False,
+    "required": ["category", "candidates", "decisions", "cards", "no_change_checks"],
+    "properties": {
+        "category": {"type": "string"},
+        "candidates": {"type": "array", "items": state.CANDIDATE_SCHEMA},
+        "decisions": {"type": "array", "items": state.TOPIC_DECISION_SCHEMA},
+        "cards": {"type": "array", "items": state.CARD_SCHEMA},
+        "no_change_checks": {"type": "array", "items": NO_CHANGE_CHECK_SCHEMA},
+    },
+}
+
+SYSTEM_PROMPT = """You synthesize NIGHT SIGNAL source observations.
+
+Return exactly one JSON object matching category_synthesis.
+
+Mission:
+- Convert closed source observations into reader-facing candidates, decisions,
+  cards, and no-change evidence for one category.
+- Do not publish routine schedules, old background, search-result pages, or
+  extreme personal opinions unless a confirmed material change exists.
+- Prefer including a confirmed material item over missing it, but reject weak
+  items with a concrete reason.
+- Every watch_topic_id in frontier_topics must have at least one candidate.
+- Every candidate must have one decision.
+- Cards must correspond exactly to adopted decisions.
+- Public titles must be concise Japanese news headlines. Do not include
+  checklist, monitoring, collection, or authoring wording.
+- Summaries may be long when needed. Do not compress away names, dates, numbers,
+  source dates, status/result, limits, or relevant uncertainty.
+- Detail summary_basis must explain what changed, why it matters, confirmed
+  facts, limits/unknowns, and source dates.
+- Use only absolute direct source URLs observed in the input observations.
+"""
+
+
+def fail(message: str) -> None:
+    print(f"NIGHT SIGNAL SYNTHESIS FAILED: {message}", file=sys.stderr)
+    raise SystemExit(1)
+
+
+def jst_now() -> str:
+    return datetime.now(ZoneInfo("Asia/Tokyo")).isoformat(timespec="seconds")
+
+
+def api_key() -> str:
+    key = os.getenv("OPENAI_API_KEY")
+    if not key:
+        fail("OPENAI_API_KEY is required for live synthesis; use --dry-run to write request payloads")
+    return key
+
+
+def load_observations(issue_date: str, state_root: Path) -> list[dict[str, Any]]:
+    state_dir = state_root / issue_date
+    path = state.records_path(state_dir, "observations")
+    observations = state.read_json_records(path)
+    frontier = state.build_frontier(state.read_json(state.CONFIG_PATH))
+    state.validate_observation_records(observations, frontier)
+    return observations
+
+
+def by_category(records: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for record in records:
+        grouped.setdefault(str(record.get("category")), []).append(record)
+    return grouped
+
+
+def frontier_by_category() -> dict[str, list[dict[str, Any]]]:
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for item in state.build_frontier(state.read_json(state.CONFIG_PATH)):
+        grouped.setdefault(str(item["category"]), []).append(item)
+    return grouped
+
+
+def task_payload(issue_date: str, category: str, frontier_topics: list[dict[str, Any]], observations: list[dict[str, Any]]) -> dict[str, Any]:
+    return {
+        "model": DEFAULT_SYNTHESIS_MODEL,
+        "reasoning": {"effort": os.getenv("NIGHT_SIGNAL_SYNTHESIS_REASONING_EFFORT", "medium")},
+        "input": [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {
+                "role": "user",
+                "content": json.dumps(
+                    {
+                        "issue_date": issue_date,
+                        "category": category,
+                        "latest_allowed_source_dates": latest_three_dates(issue_date),
+                        "frontier_topics": frontier_topics,
+                        "observations": observations,
+                        "required_output": "one category_synthesis JSON object",
+                        "generated_at_jst": jst_now(),
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                ),
+            },
+        ],
+        "text": {
+            "format": {
+                "type": "json_schema",
+                "name": "category_synthesis",
+                "strict": True,
+                "schema": CATEGORY_SYNTHESIS_SCHEMA,
+            }
+        },
+    }
+
+
+def latest_three_dates(issue_date: str) -> list[str]:
+    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
+    return [
+        issue_dt.isoformat(),
+        (issue_dt.fromordinal(issue_dt.toordinal() - 1)).isoformat(),
+        (issue_dt.fromordinal(issue_dt.toordinal() - 2)).isoformat(),
+    ]
+
+
+def call_responses(payload: dict[str, Any], *, retries: int) -> dict[str, Any]:
+    body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+    headers = {
+        "Authorization": f"Bearer {api_key()}",
+        "Content-Type": "application/json",
+        "User-Agent": "night-signal-synthesizer",
+    }
+    last_error = ""
+    for attempt in range(1, retries + 1):
+        request = urllib.request.Request(RESPONSES_URL, data=body, headers=headers, method="POST")
+        try:
+            with urllib.request.urlopen(request, timeout=240) as response:
+                return json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as exc:
+            detail = exc.read().decode("utf-8", errors="replace")
+            last_error = f"HTTP {exc.code}: {detail[:1000]}"
+            if exc.code not in {408, 409, 429, 500, 502, 503, 504}:
+                break
+        except (urllib.error.URLError, TimeoutError) as exc:
+            last_error = str(exc)
+        time.sleep(min(60, 2**attempt))
+    fail(f"Responses API request failed after {retries} attempt(s): {last_error}")
+
+
+def output_text(response: dict[str, Any]) -> str:
+    if isinstance(response.get("output_text"), str):
+        return response["output_text"]
+    chunks: list[str] = []
+    for item in response.get("output", []):
+        if not isinstance(item, dict):
+            continue
+        for content in item.get("content", []):
+            if isinstance(content, dict) and content.get("type") == "output_text":
+                chunks.append(str(content.get("text", "")))
+    text = "\n".join(chunk for chunk in chunks if chunk).strip()
+    if not text:
+        fail("Responses API returned no output_text")
+    return text
+
+
+def parse_category_result(response: dict[str, Any]) -> dict[str, Any]:
+    text = output_text(response)
+    try:
+        value = json.loads(text)
+    except json.JSONDecodeError as exc:
+        fail(f"synthesis output was not JSON: {exc}: {text[:500]}")
+    if not isinstance(value, dict):
+        fail("synthesis output must be a JSON object")
+    return value
+
+
+def direct_urls(observations: list[dict[str, Any]]) -> set[str]:
+    urls: set[str] = set()
+    for observation in observations:
+        url = observation.get("url")
+        if isinstance(url, str) and url.startswith(("http://", "https://")):
+            urls.add(url)
+        for result in observation.get("source_target_results", []):
+            if isinstance(result, dict):
+                result_url = result.get("url")
+                if isinstance(result_url, str) and result_url.startswith(("http://", "https://")):
+                    urls.add(result_url)
+    return urls
+
+
+def validate_category_result(issue_date: str, category: str, frontier_topics: list[dict[str, Any]], observations: list[dict[str, Any]], result: dict[str, Any]) -> None:
+    if result.get("category") != category:
+        fail(f"synthesis category mismatch: {result.get('category')} != {category}")
+    candidates = result.get("candidates")
+    decisions = result.get("decisions")
+    cards = result.get("cards")
+    no_change_checks = result.get("no_change_checks")
+    if not isinstance(candidates, list) or not isinstance(decisions, list) or not isinstance(cards, list) or not isinstance(no_change_checks, list):
+        fail(f"{category} synthesis result must contain candidates, decisions, cards, and no_change_checks lists")
+
+    required_topics = {str(item["watch_topic_id"]) for item in frontier_topics}
+    candidate_topics = {str(candidate.get("watch_topic_id")) for candidate in candidates if isinstance(candidate, dict)}
+    missing = sorted(required_topics - candidate_topics)
+    if missing:
+        fail(f"{category} synthesis missing candidates for watch topics: " + ", ".join(missing[:8]))
+
+    allowed_source_dates = set(latest_three_dates(issue_date))
+    allowed_urls = direct_urls(observations)
+    for candidate in candidates:
+        if not isinstance(candidate, dict):
+            fail(f"{category} candidate must be an object")
+        if candidate.get("source_published_date") not in allowed_source_dates and candidate.get("change_class") not in {"background_only", "routine_recurring", "duplicate_followup"}:
+            fail(f"{category} candidate has stale material source date: {candidate.get('title')}")
+        for url in candidate.get("source_urls", []):
+            if url not in allowed_urls:
+                fail(f"{category} candidate uses URL not present in observations: {url}")
+
+    decision_titles = [str(decision.get("candidate_title")) for decision in decisions if isinstance(decision, dict)]
+    candidate_titles = [str(candidate.get("title")) for candidate in candidates if isinstance(candidate, dict)]
+    if sorted(decision_titles) != sorted(candidate_titles):
+        fail(f"{category} decisions must cover exactly all candidates")
+
+    adopted = {str(decision.get("candidate_title")) for decision in decisions if isinstance(decision, dict) and decision.get("adoption_decision") == "adopt"}
+    card_candidates = {str(card.get("candidate_title")) for card in cards if isinstance(card, dict)}
+    if adopted != card_candidates:
+        fail(f"{category} cards must cover exactly adopted decisions")
+
+    issue = {
+        "issue_date": issue_date,
+        "state": "publication_ready",
+        "frontier": state.build_frontier(state.read_json(state.CONFIG_PATH)),
+        "observations": observations_for_issue_cache[issue_date],
+        "candidates": candidates_for_validation_cache[issue_date] + candidates,
+        "decisions": decisions_for_validation_cache[issue_date] + decisions,
+        "cards": cards_for_validation_cache[issue_date] + cards,
+        "coverage_manifest": minimal_manifest(issue_date, {category: result}),
+        "blockers": [],
+    }
+    for card in cards:
+        if isinstance(card, dict):
+            state.validate_public_card_copy(card, card.get("detail", {}), issue_date=issue_date, card_index=1)
+
+
+observations_for_issue_cache: dict[str, list[dict[str, Any]]] = {}
+candidates_for_validation_cache: dict[str, list[dict[str, Any]]] = {}
+decisions_for_validation_cache: dict[str, list[dict[str, Any]]] = {}
+cards_for_validation_cache: dict[str, list[dict[str, Any]]] = {}
+
+
+def minimal_manifest(issue_date: str, results_by_category: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    contract = state.read_json(state.CONFIG_PATH)
+    categories: dict[str, dict[str, Any]] = {}
+    for category in contract.get("categories", []):
+        if not isinstance(category, dict):
+            continue
+        label = str(category.get("label"))
+        result = results_by_category.get(label, {"candidates": [], "cards": [], "no_change_checks": []})
+        cards = [card for card in result.get("cards", []) if isinstance(card, dict)]
+        candidates = [candidate for candidate in result.get("candidates", []) if isinstance(candidate, dict)]
+        decisions = [decision for decision in result.get("decisions", []) if isinstance(decision, dict)]
+        adopted_titles = {str(decision.get("candidate_title")) for decision in decisions if decision.get("adoption_decision") == "adopt"}
+        categories[label] = {
+            "published_card_titles": [str(card.get("title")) for card in cards],
+            "new_or_changed_items": [
+                {
+                    "title": str(card.get("title")),
+                    "summary": str(card.get("summary")),
+                    "sources": [str(source.get("url")) for source in card.get("detail", {}).get("sources", []) if isinstance(source, dict)],
+                    "summary_mode": "multi_source_synthesis" if len(card.get("detail", {}).get("sources", [])) > 1 else "single_source_summary",
+                    "material_facts": card.get("detail", {}).get("summary_basis", {}).get("confirmed_facts", []),
+                }
+                for card in cards
+            ],
+            "latest_candidates": [
+                {
+                    "topic_id": str(candidate.get("watch_topic_id")),
+                    "title": str(candidate.get("title")),
+                    "source_url": str(candidate.get("source_urls", [""])[0]),
+                    "source_published_date": str(candidate.get("source_published_date")),
+                    "decision": "adopted" if str(candidate.get("title")) in adopted_titles else "no_fresh_item",
+                    "change_class": str(candidate.get("change_class")),
+                    "rationale": str(candidate.get("summary")),
+                }
+                for candidate in candidates
+            ],
+            "no_change_checks": result.get("no_change_checks", []),
+        }
+    return {
+        "contract_version": contract.get("contract_version"),
+        "date": issue_date,
+        "last_checked_jst": jst_now(),
+        "categories": categories,
+    }
+
+
+def write_jsonl(path: Path, records: list[dict[str, Any]], *, replace: bool) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    mode = "w" if replace else "a"
+    with path.open(mode, encoding="utf-8") as handle:
+        for record in records:
+            handle.write(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n")
+
+
+def write_requests(path: Path, payloads: list[dict[str, Any]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        "".join(json.dumps(payload, ensure_ascii=False, sort_keys=True) + "\n" for payload in payloads),
+        encoding="utf-8",
+    )
+
+
+def synthesize(issue_date: str, state_root: Path, *, dry_run: bool, replace: bool, retries: int) -> dict[str, Any]:
+    observations = load_observations(issue_date, state_root)
+    observations_for_issue_cache[issue_date] = observations
+    candidates_for_validation_cache[issue_date] = []
+    decisions_for_validation_cache[issue_date] = []
+    cards_for_validation_cache[issue_date] = []
+
+    observations_by_category = by_category(observations)
+    frontier_categories = frontier_by_category()
+    payloads = [
+        task_payload(issue_date, category, topics, observations_by_category.get(category, []))
+        for category, topics in frontier_categories.items()
+    ]
+    state_dir = state_root / issue_date
+    if dry_run:
+        write_requests(state_dir / "synthesis_requests.jsonl", payloads)
+        return {"issue_date": issue_date, "requests": len(payloads), "path": str(state_dir / "synthesis_requests.jsonl")}
+
+    results_by_category: dict[str, dict[str, Any]] = {}
+    for index, (category, topics) in enumerate(frontier_categories.items(), start=1):
+        print(f"synthesizing {index}/{len(frontier_categories)} {category}", file=sys.stderr)
+        result = parse_category_result(call_responses(task_payload(issue_date, category, topics, observations_by_category.get(category, [])), retries=retries))
+        validate_category_result(issue_date, category, topics, observations_by_category.get(category, []), result)
+        results_by_category[category] = result
+        candidates_for_validation_cache[issue_date].extend(result["candidates"])
+        decisions_for_validation_cache[issue_date].extend(result["decisions"])
+        cards_for_validation_cache[issue_date].extend(result["cards"])
+
+    candidates = [candidate for result in results_by_category.values() for candidate in result["candidates"]]
+    decisions = [decision for result in results_by_category.values() for decision in result["decisions"]]
+    cards = [card for result in results_by_category.values() for card in result["cards"]]
+    manifest = minimal_manifest(issue_date, results_by_category)
+
+    write_jsonl(state_dir / "candidates.jsonl", candidates, replace=replace)
+    write_jsonl(state_dir / "decisions.jsonl", decisions, replace=replace)
+    write_jsonl(state_dir / "cards.jsonl", cards, replace=replace)
+    (state_dir / "coverage_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    state.assemble_issue_state(issue_date, state_root)
+    return {"issue_date": issue_date, "categories": len(results_by_category), "candidates": len(candidates), "decisions": len(decisions), "cards": len(cards)}
+
+
+def self_test() -> None:
+    payload = task_payload(
+        "2099-01-01",
+        "OpenAI",
+        [{"category": "OpenAI", "section_id": "openai", "watch_topic_id": "product_release", "required_channels": ["web", "sns_x", "youtube"]}],
+        [
+            {
+                "category": "OpenAI",
+                "watch_topic_id": "product_release",
+                "source_role": "primary_or_official",
+                "channel": "web",
+                "slot_state": "observed_live",
+                "url": "https://openai.com/",
+                "observed_at_jst": "2099-01-01T20:00:00+09:00",
+                "published_date": "2099-01-01",
+                "evidence_summary": "OpenAI公式で新しい発表を確認した。",
+                "source_target_results": [
+                    {
+                        "label": "OpenAI News",
+                        "url": "https://openai.com/",
+                        "channel": "web",
+                        "slot_state": "observed_live",
+                        "published_date": "2099-01-01",
+                        "evidence_summary": "OpenAI公式で発表を確認した。",
+                    }
+                ],
+                "claim_atoms": [{"claim_type": "announcement", "claim": "OpenAIが発表した。", "source_state": "confirmed_update"}],
+            }
+        ],
+    )
+    fmt = payload["text"]["format"]
+    if fmt["type"] != "json_schema" or fmt["schema"] != CATEGORY_SYNTHESIS_SCHEMA:
+        fail("synthesizer must use category synthesis structured output schema")
+    content = payload["input"][1]["content"]
+    for term in ("frontier_topics", "observations", "latest_allowed_source_dates"):
+        if term not in content:
+            fail(f"synthesis prompt missing {term}")
+    print("NIGHT SIGNAL SYNTHESIS PASSED")
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("issue_date", nargs="?", default=state.jst_today())
+    parser.add_argument("--state-root", type=Path, default=DEFAULT_STATE_ROOT)
+    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--replace", action="store_true")
+    parser.add_argument("--retries", type=int, default=3)
+    parser.add_argument("--self-test", action="store_true")
+    args = parser.parse_args()
+
+    if args.self_test:
+        self_test()
+        return 0
+    print(json.dumps(synthesize(args.issue_date, args.state_root, dry_run=args.dry_run, replace=args.replace, retries=args.retries), ensure_ascii=False, indent=2))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
