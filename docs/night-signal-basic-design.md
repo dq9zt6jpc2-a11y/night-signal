@@ -68,12 +68,11 @@ A required slot is closed only when it is:
 When uncertain, keep the item as a candidate. Publication can be selective, but
 collection should bias toward not missing material changes.
 
-The reader experience follows the same split. The top issue shows broad
-`Signals` built from fresh candidates from today, yesterday, and the day before,
-including items that were not promoted to full detail. Adopted category cards
-remain selective and link to detail pages. This avoids hiding collected signals
-while still preventing routine, duplicate, or weak items from becoming full
-articles.
+The reader experience follows the same split. The top issue shows
+`カテゴリ別新着` built from fresh candidates from today, yesterday, and the day
+before, in the configured category order. Adopted category cards remain
+selective and link to detail pages. This avoids hiding collected updates while
+still preventing routine, duplicate, or weak items from becoming full articles.
 
 The canonical daily state is assembled from structured files:
 

@@ -802,6 +802,12 @@ def render_priority_card(index: int, card: dict[str, Any]) -> str:
 
 def signal_board_items(issue: dict[str, Any], cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
     issue_date = require_str(issue, "issue_date")
+    contract = read_json(CONFIG_PATH)
+    category_rank = {
+        str(category.get("label")): index
+        for index, category in enumerate(contract.get("categories", []))
+        if isinstance(category, dict)
+    }
     candidates = [candidate for candidate in issue.get("candidates", []) if isinstance(candidate, dict)]
     decisions = {
         str(decision.get("candidate_title")): decision
@@ -835,6 +841,7 @@ def signal_board_items(issue: dict[str, Any], cards: list[dict[str, Any]]) -> li
                 "title": title,
                 "summary": str(candidate.get("summary", "")).strip(),
                 "category": str(candidate.get("category", "")).strip(),
+                "category_rank": category_rank.get(str(candidate.get("category", "")).strip(), 999),
                 "source_published_date": source_date,
                 "source_date_rank": date_rank.get(source_date, 99),
                 "freshness_label": relative_day_label(issue_date, source_date),
@@ -844,9 +851,9 @@ def signal_board_items(issue: dict[str, Any], cards: list[dict[str, Any]]) -> li
         )
     items.sort(
         key=lambda item: (
+            item["category_rank"],
             item["adoption_decision"] != "adopt",
             item["source_date_rank"],
-            item["category"],
             item["title"],
         )
     )
@@ -864,12 +871,15 @@ def render_signal_item(item: dict[str, Any], *, issue_date: str, root: bool) -> 
     href_prefix = f"{html.escape(issue_date, quote=True)}/" if root else ""
     detail = ""
     if item.get("detail_slug"):
-        detail = f'<a class="signal-link" href="{href_prefix}details/{html.escape(str(item["detail_slug"]), quote=True)}">詳細へ</a>'
-    return f"""        <article class="signal-item">
-          <div class="signal-meta"><span>{label_text}{source_date}</span><span>{category}</span><span>{html.escape(status)}</span></div>
+        detail = (
+            "\n"
+            f'          <a class="category-update-link" href="{href_prefix}details/'
+            f'{html.escape(str(item["detail_slug"]), quote=True)}">詳細へ</a>'
+        )
+    return f"""        <article class="category-update-item">
+          <div class="category-update-meta"><span>{category}</span><span>{label_text}{source_date}</span><span>{html.escape(status)}</span></div>
           <strong>{title}</strong>
-          <p>{summary}</p>
-          {detail}
+          <p>{summary}</p>{detail}
         </article>"""
 
 
@@ -885,7 +895,7 @@ def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, roo
             )
         )
     )
-    nav_links = ['<a href="#priority">Priority</a>', '<a href="#signals">Signals</a>']
+    nav_links = ['<a href="#priority">Priority</a>', '<a href="#category_updates">カテゴリ別新着</a>']
     contract = read_json(CONFIG_PATH)
     section_labels = {
         category["section_id"]: category["label"]
@@ -932,13 +942,13 @@ def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, roo
     .hero p {{ max-width:760px; color:#dce5ef; font-size:15px; }} .hero-meta {{ display:flex; flex-wrap:wrap; gap:9px; margin-top:26px; }}
     .hero-chip, .pill {{ border:1px solid var(--line); border-radius:5px; padding:7px 10px; font-size:11px; font-weight:900; }}
     .hero-chip {{ border-color:rgba(255,255,255,.18); color:#dce5ef; }} .section {{ margin-top:32px; }} .section-head {{ margin-bottom:12px; padding-top:14px; border-top:1px solid #9aa7b8; }}
-    h2 {{ margin:0; font-size:23px; }} .priority, .cards, .signal-list {{ display:grid; gap:14px; }} .priority {{ grid-template-columns:repeat(2,minmax(0,1fr)); }} .cards {{ grid-template-columns:repeat(3,minmax(0,1fr)); }} .signal-list {{ grid-template-columns:repeat(2,minmax(0,1fr)); }}
+    h2 {{ margin:0; font-size:23px; }} .priority, .cards, .category-update-list {{ display:grid; gap:14px; }} .priority {{ grid-template-columns:repeat(2,minmax(0,1fr)); }} .cards {{ grid-template-columns:repeat(3,minmax(0,1fr)); }} .category-update-list {{ grid-template-columns:repeat(2,minmax(0,1fr)); }}
     .priority-card, .card {{ background:var(--panel); border:1px solid var(--line); border-top:4px solid var(--blue); border-radius:10px; padding:18px; }}
-    .signal-item {{ background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:14px; }} .signal-item strong {{ display:block; font-size:15px; line-height:1.35; margin-bottom:6px; }} .signal-item p {{ font-size:13px; color:#334155; }} .signal-meta {{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; color:var(--muted); font-size:11px; font-weight:800; }} .signal-link {{ font-size:12px; }}
+    .category-update-item {{ background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:14px; }} .category-update-item strong {{ display:block; font-size:15px; line-height:1.35; margin-bottom:6px; }} .category-update-item p {{ font-size:13px; color:#334155; }} .category-update-meta {{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; color:var(--muted); font-size:11px; font-weight:800; }} .category-update-link {{ font-size:12px; }}
     .priority-card.hot, .card.hot {{ border-top-color:var(--red); }} .priority-card.signal, .card.signal {{ border-top-color:var(--teal); }} .priority-card.macro, .card.macro {{ border-top-color:var(--amber); }}
     .rank {{ display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; margin-bottom:10px; border-radius:6px; background:var(--night); color:white; font-size:12px; font-weight:900; }}
     h3 {{ margin:0 0 8px; font-size:18px; line-height:1.32; }} p {{ margin:0 0 12px; }} .meta {{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; color:var(--muted); }}
-    @media (max-width:860px) {{ .priority, .cards, .signal-list {{ grid-template-columns:1fr; }} .bar {{ align-items:flex-start; flex-direction:column; }} }}
+    @media (max-width:860px) {{ .priority, .cards, .category-update-list {{ grid-template-columns:1fr; }} .bar {{ align-items:flex-start; flex-direction:column; }} }}
   </style>
 </head>
 <body>
@@ -954,9 +964,9 @@ def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, roo
 {priority}
       </div>
     </section>
-    <section class="section" id="signals">
-      <div class="section-head"><h2>Signals</h2><p>新着{len(signals)}件</p></div>
-      <div class="signal-list">
+    <section class="section" id="category_updates">
+      <div class="section-head"><h2>カテゴリ別新着</h2><p>新着{len(signals)}件</p></div>
+      <div class="category-update-list">
 {rendered_signals}
       </div>
     </section>
@@ -1745,10 +1755,10 @@ def self_test() -> None:
     signal_items = signal_board_items(signal_issue, signal_cards)
     signal_titles = [item["title"] for item in signal_items]
     if signal_titles != ["OpenAI、Codexに共有機能を追加", "Honda、中国販売の月次減少を確認"]:
-        fail("signal board must show latest-three-day candidates with adopted items first")
+        fail("category updates must show latest-three-day candidates in configured category order")
     signal_html = render_issue_html(signal_issue, signal_cards, root=False)
-    if "Signals" not in signal_html or "一覧のみ" not in signal_html or "古い発射実績" in signal_html:
-        fail("issue renderer must expose broad fresh candidates without stale background items")
+    if "カテゴリ別新着" not in signal_html or "一覧のみ" not in signal_html or "古い発射実績" in signal_html:
+        fail("issue renderer must expose broad fresh candidates by configured category without stale background items")
     print("NIGHT SIGNAL STATE PASSED")
 
 

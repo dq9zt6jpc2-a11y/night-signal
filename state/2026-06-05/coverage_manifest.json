@@ -1,13 +1,14 @@
 {
   "contract_version": "2026-06-01.15",
   "date": "2026-06-05",
-  "last_checked_jst": "2026-06-05T21:40:00+09:00",
+  "last_checked_jst": "2026-06-05T21:55:00+09:00",
   "note": "daily collection; Web/SNS-X/YouTube and source-class evidence are recorded per category.",
   "categories": {
     "OpenAI": {
       "collection_status": "complete",
       "published_card_titles": [
-        "OpenAI、事前承認制に反対し連邦AI枠組みを提案"
+        "OpenAI、事前承認制に反対し連邦AI枠組みを提案",
+        "OpenAI、ChatGPTメモリをDreaming V3へ刷新"
       ],
       "search_axes": {
         "official_product_release": [
@@ -104,6 +105,36 @@
               "source_url": "https://www.investing.com/news/economy-news/openais-altman-to-urge-us-lawmakers-not-to-require-ai-model-approvals-4724935"
             }
           ]
+        },
+        {
+          "title": "OpenAI、ChatGPTメモリをDreaming V3へ刷新",
+          "summary": "OpenAIはChatGPTのメモリ合成をDreaming V3へ更新した。保存メモリの弱点である古さや誤りを抑え、会話履歴から好み、制約、プロジェクト文脈を新しく保つ構成にする。米国Plus/Proから始まり、対象国と無料ユーザーへ段階展開される。",
+          "sources": [
+            "https://openai.com/index/chatgpt-memory-dreaming/",
+            "https://www.itmedia.co.jp/news/articles/2606/05/news091.html"
+          ],
+          "summary_mode": "multi_source_synthesis",
+          "material_facts": [
+            "OpenAIは2026年6月4日にDreaming V3を発表した。",
+            "米国Plus/Proから開始し、FreeとGoにも段階展開する。"
+          ],
+          "claim_verification": [
+            {
+              "claim_type": "announcement",
+              "source_state": "confirmed_update",
+              "evidence_kind": "official_release",
+              "claim": "OpenAIが6月4日にChatGPTメモリの新基盤Dreaming V3を発表した。",
+              "source_url": "https://openai.com/index/chatgpt-memory-dreaming/"
+            },
+            {
+              "claim_type": "status",
+              "source_state": "confirmed_status",
+              "evidence_kind": "official_release",
+              "claim": "米国のPlus/Proから提供を始め、FreeとGoにも段階展開する状態である。",
+              "source_url": "https://openai.com/index/chatgpt-memory-dreaming/"
+            }
+          ],
+          "synthesis_basis": "複数の根拠が同じ主体、日付、数値を矛盾なく示しており、一つの変化として整理できる。"
         }
       ],
       "no_change_checks": [
@@ -121,46 +152,46 @@
       "latest_candidates": [
         {
           "topic_id": "ipo_financing",
-          "title": "OpenAI ipo_financing: 6月3日の近接候補は本文化水準に届かず",
+          "title": "OpenAI：IPO・資金調達は大きな発表なし",
           "source_url": "https://openai.com/index/public-policy-agenda/",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "OpenAIのipo_financingは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "IPO・資金調達は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "math_research",
-          "title": "OpenAI math_research: 6月3日の近接候補は本文化水準に届かず",
+          "title": "OpenAI：数学研究は大きな発表なし",
           "source_url": "https://openai.com/index/public-policy-agenda/",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "OpenAIのmath_researchは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "数学研究は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "product_release",
-          "title": "OpenAI product_release: 6月3日の近接候補は本文化水準に届かず",
+          "title": "OpenAI：製品リリースは大きな発表なし",
           "source_url": "https://openai.com/index/public-policy-agenda/",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "OpenAIのproduct_releaseは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "製品リリースは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "enterprise_infrastructure",
-          "title": "OpenAI enterprise_infrastructure: 6月3日の近接候補は本文化水準に届かず",
+          "title": "OpenAI：企業向け基盤は大きな発表なし",
           "source_url": "https://openai.com/index/public-policy-agenda/",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "OpenAIのenterprise_infrastructureは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "企業向け基盤は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
@@ -175,44 +206,57 @@
           "topic_value_class": "decision_or_policy",
           "reader_delta": "OpenAI、事前承認制に反対し連邦AI枠組みを提案により、政策判断や企業決定の根拠が更新され、次に見るべき数値や発言の重みが変わる。",
           "materiality_basis": "OpenAIは6月3日に公開したPublic Policy Agendaで、州ごとの断片規制やモデルの事前承認義務よりも、連邦レベルでの一貫した安全基準、AIレジリエンス、インフラ・エネルギー整備を優先する方針を示した。 公式発言や政策判断の根拠として確認でき、次の市場反応を見る軸になるため採用対象になる。"
+        },
+        {
+          "topic_id": "product_release",
+          "title": "OpenAI、ChatGPTメモリをDreaming V3へ刷新",
+          "source_url": "https://openai.com/index/chatgpt-memory-dreaming/",
+          "source_published_date": "2026-06-04",
+          "decision": "adopted",
+          "rationale": "ChatGPTの長期記憶が、保存された断片だけでなく背景合成を使う段階へ進み、個人化AIの実用性に直接関わる。",
+          "change_class": "material_update",
+          "publication_assessment": "OpenAI公式が日付、対象ユーザー、技術目的を示しており、製品体験と将来のエージェント利用に影響する。",
+          "topic_value_class": "technical_or_product_shift",
+          "reader_delta": "ChatGPTの長期記憶が、保存された断片だけでなく背景合成を使う段階へ進み、個人化AIの実用性に直接関わる。",
+          "materiality_basis": "OpenAI公式が日付、対象ユーザー、技術目的を示しており、製品体験と将来のエージェント利用に影響する。"
         }
       ],
       "collected_items": [
         {
           "topic_id": "ipo_financing",
-          "title": "OpenAI ipo_financing: 6月3日の近接候補は本文化水準に届かず",
+          "title": "OpenAI：IPO・資金調達は大きな発表なし",
           "source_url": "https://openai.com/index/public-policy-agenda/",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "OpenAIのipo_financingについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "IPO・資金調達は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "math_research",
-          "title": "OpenAI math_research: 6月3日の近接候補は本文化水準に届かず",
+          "title": "OpenAI：数学研究は大きな発表なし",
           "source_url": "https://openai.com/index/public-policy-agenda/",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "OpenAIのmath_researchについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "数学研究は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "product_release",
-          "title": "OpenAI product_release: 6月3日の近接候補は本文化水準に届かず",
+          "title": "OpenAI：製品リリースは大きな発表なし",
           "source_url": "https://openai.com/index/public-policy-agenda/",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "OpenAIのproduct_releaseについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "製品リリースは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "enterprise_infrastructure",
-          "title": "OpenAI enterprise_infrastructure: 6月3日の近接候補は本文化水準に届かず",
+          "title": "OpenAI：企業向け基盤は大きな発表なし",
           "source_url": "https://openai.com/index/public-policy-agenda/",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "OpenAIのenterprise_infrastructureについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "企業向け基盤は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "safety_security_regulation",
@@ -222,6 +266,24 @@
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
           "collection_note": "OpenAIのsafety_security_regulationについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+        },
+        {
+          "topic_id": "product_release",
+          "title": "OpenAI、ChatGPTメモリをDreaming V3へ刷新",
+          "source_url": "https://openai.com/index/chatgpt-memory-dreaming/",
+          "source_published_date": "2026-06-04",
+          "observed_at_jst": "2026-06-05T21:55:00+09:00",
+          "channel": "web",
+          "collection_note": "ChatGPTの長期記憶が、保存された断片だけでなく背景合成を使う段階へ進み、個人化AIの実用性に直接関わる。"
+        },
+        {
+          "topic_id": "product_release",
+          "title": "OpenAI、ChatGPTメモリをDreaming V3へ刷新",
+          "source_url": "https://www.itmedia.co.jp/news/articles/2606/05/news091.html",
+          "source_published_date": "2026-06-04",
+          "observed_at_jst": "2026-06-05T21:55:00+09:00",
+          "channel": "web",
+          "collection_note": "ChatGPTの長期記憶が、保存された断片だけでなく背景合成を使う段階へ進み、個人化AIの実用性に直接関わる。"
         }
       ],
       "watch_topic_checks": [
@@ -229,7 +291,7 @@
           "topic_id": "ipo_financing",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "OpenAI ipo_financing: 6月3日の近接候補は本文化水準に届かず"
+            "OpenAI：IPO・資金調達は大きな発表なし"
           ],
           "result": "OpenAIのipo_financingはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -293,7 +355,7 @@
           "topic_id": "math_research",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "OpenAI math_research: 6月3日の近接候補は本文化水準に届かず"
+            "OpenAI：数学研究は大きな発表なし"
           ],
           "result": "OpenAIのmath_researchはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -357,7 +419,8 @@
           "topic_id": "product_release",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "OpenAI product_release: 6月3日の近接候補は本文化水準に届かず"
+            "OpenAI：製品リリースは大きな発表なし",
+            "OpenAI、ChatGPTメモリをDreaming V3へ刷新"
           ],
           "result": "OpenAIのproduct_releaseはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -421,7 +484,7 @@
           "topic_id": "enterprise_infrastructure",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "OpenAI enterprise_infrastructure: 6月3日の近接候補は本文化水準に届かず"
+            "OpenAI：企業向け基盤は大きな発表なし"
           ],
           "result": "OpenAIのenterprise_infrastructureはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -593,7 +656,9 @@
     },
     "SoftBank": {
       "collection_status": "complete",
-      "published_card_titles": [],
+      "published_card_titles": [
+        "ソフトバンクG、個人向けハイブリッド債2600億円を5.12%で条件決定"
+      ],
       "search_axes": {
         "corporate_ir_news": [
           "SoftBank corporate_ir_news softbank sbg ir earnings ソフトバンク Web SNS/X YouTube 2026-06-05",
@@ -655,7 +720,39 @@
         "決算",
         "電源"
       ],
-      "new_or_changed_items": [],
+      "new_or_changed_items": [
+        {
+          "title": "ソフトバンクG、個人向けハイブリッド債2600億円を5.12%で条件決定",
+          "summary": "ソフトバンクGは個人投資家向け35年ハイブリッド債2600億円を、当初5年5.12%で条件決定した。5年後以降は変動利率に移る。AI投資と借換えが重なるなか、成長投資の原資と財務コストの両面が表れた。",
+          "sources": [
+            "https://finance.yahoo.co.jp/news/detail/13b4a192c8a1db870b4981df107f5eb21eb2408b",
+            "https://finance.yahoo.co.jp/news/detail/90694d838e74b8d54365211e91382527af958892",
+            "https://group.softbank/ir/stock/bond/"
+          ],
+          "summary_mode": "multi_source_synthesis",
+          "material_facts": [
+            "個人向けハイブリッド債の発行額は2600億円。",
+            "当初5年の利率は5.12%。"
+          ],
+          "claim_verification": [
+            {
+              "claim_type": "numeric",
+              "source_state": "published_value",
+              "evidence_kind": "major_media_confirmation",
+              "claim": "ソフトバンクGの個人向けハイブリッド債は2600億円、当初5年5.12%で条件決定した。",
+              "source_url": "https://finance.yahoo.co.jp/news/detail/13b4a192c8a1db870b4981df107f5eb21eb2408b"
+            },
+            {
+              "claim_type": "announcement",
+              "source_state": "confirmed_update",
+              "evidence_kind": "major_media_confirmation",
+              "claim": "ソフトバンクGが6月5日に発行条件を決めた。",
+              "source_url": "https://finance.yahoo.co.jp/news/detail/90694d838e74b8d54365211e91382527af958892"
+            }
+          ],
+          "synthesis_basis": "複数の根拠が同じ主体、日付、数値を矛盾なく示しており、一つの変化として整理できる。"
+        }
+      ],
       "no_change_checks": [
         {
           "axis": "direct-source and channel sweep",
@@ -671,105 +768,145 @@
       "latest_candidates": [
         {
           "topic_id": "market_price_nav",
-          "title": "SoftBank market_price_nav: 6月3日の近接候補は本文化水準に届かず",
+          "title": "SoftBank：株価・NAVは大きな発表なし",
           "source_url": "https://group.softbank/en/news/press/2026/20260531_0",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "SoftBankのmarket_price_navは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "株価・NAVは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "ai_infrastructure",
-          "title": "SoftBank ai_infrastructure: 6月3日の近接候補は本文化水準に届かず",
+          "title": "SoftBank：AIインフラは大きな発表なし",
           "source_url": "https://group.softbank/en/news/press/2026/20260531_0",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "SoftBankのai_infrastructureは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "AIインフラは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "power_battery",
-          "title": "SoftBank power_battery: 6月3日の近接候補は本文化水準に届かず",
+          "title": "SoftBank：電力・バッテリーは大きな発表なし",
           "source_url": "https://group.softbank/en/news/press/2026/20260531_0",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "SoftBankのpower_batteryは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "電力・バッテリーは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "corporate_ir_financing",
-          "title": "SoftBank corporate_ir_financing: 6月3日の近接候補は本文化水準に届かず",
+          "title": "SoftBank：IR・資本政策は大きな発表なし",
           "source_url": "https://group.softbank/en/news/press/2026/20260531_0",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "SoftBankのcorporate_ir_financingは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "IR・資本政策は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "domestic_services",
-          "title": "SoftBank domestic_services: 6月3日の近接候補は本文化水準に届かず",
+          "title": "SoftBank：国内サービスは大きな発表なし",
           "source_url": "https://group.softbank/en/news/press/2026/20260531_0",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "SoftBankのdomestic_servicesは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "国内サービスは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
+        },
+        {
+          "topic_id": "corporate_ir_financing",
+          "title": "ソフトバンクG、個人向けハイブリッド債2600億円を5.12%で条件決定",
+          "source_url": "https://finance.yahoo.co.jp/news/detail/13b4a192c8a1db870b4981df107f5eb21eb2408b",
+          "source_published_date": "2026-06-05",
+          "decision": "adopted",
+          "rationale": "AI投資を続けるソフトバンクGで、個人向け円建て負債の利率と規模が新たに決まり、資金調達コストを評価できる。",
+          "change_class": "new_event",
+          "publication_assessment": "発行額2600億円、利率5.12%という数値が明確で、AI投資と資本政策を同時に考える材料になる。",
+          "topic_value_class": "market_or_financial_impact",
+          "reader_delta": "AI投資を続けるソフトバンクGで、個人向け円建て負債の利率と規模が新たに決まり、資金調達コストを評価できる。",
+          "materiality_basis": "発行額2600億円、利率5.12%という数値が明確で、AI投資と資本政策を同時に考える材料になる。"
         }
       ],
       "collected_items": [
         {
           "topic_id": "market_price_nav",
-          "title": "SoftBank market_price_nav: 6月3日の近接候補は本文化水準に届かず",
+          "title": "SoftBank：株価・NAVは大きな発表なし",
           "source_url": "https://group.softbank/en/news/press/2026/20260531_0",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "SoftBankのmarket_price_navについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "株価・NAVは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "ai_infrastructure",
-          "title": "SoftBank ai_infrastructure: 6月3日の近接候補は本文化水準に届かず",
+          "title": "SoftBank：AIインフラは大きな発表なし",
           "source_url": "https://group.softbank/en/news/press/2026/20260531_0",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "SoftBankのai_infrastructureについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "AIインフラは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "power_battery",
-          "title": "SoftBank power_battery: 6月3日の近接候補は本文化水準に届かず",
+          "title": "SoftBank：電力・バッテリーは大きな発表なし",
           "source_url": "https://group.softbank/en/news/press/2026/20260531_0",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "SoftBankのpower_batteryについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "電力・バッテリーは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "corporate_ir_financing",
-          "title": "SoftBank corporate_ir_financing: 6月3日の近接候補は本文化水準に届かず",
+          "title": "SoftBank：IR・資本政策は大きな発表なし",
           "source_url": "https://group.softbank/en/news/press/2026/20260531_0",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "SoftBankのcorporate_ir_financingについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "IR・資本政策は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "domestic_services",
-          "title": "SoftBank domestic_services: 6月3日の近接候補は本文化水準に届かず",
+          "title": "SoftBank：国内サービスは大きな発表なし",
           "source_url": "https://group.softbank/en/news/press/2026/20260531_0",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "SoftBankのdomestic_servicesについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "国内サービスは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
+        },
+        {
+          "topic_id": "corporate_ir_financing",
+          "title": "ソフトバンクG、個人向けハイブリッド債2600億円を5.12%で条件決定",
+          "source_url": "https://finance.yahoo.co.jp/news/detail/13b4a192c8a1db870b4981df107f5eb21eb2408b",
+          "source_published_date": "2026-06-05",
+          "observed_at_jst": "2026-06-05T21:55:00+09:00",
+          "channel": "web",
+          "collection_note": "AI投資を続けるソフトバンクGで、個人向け円建て負債の利率と規模が新たに決まり、資金調達コストを評価できる。"
+        },
+        {
+          "topic_id": "corporate_ir_financing",
+          "title": "ソフトバンクG、個人向けハイブリッド債2600億円を5.12%で条件決定",
+          "source_url": "https://finance.yahoo.co.jp/news/detail/90694d838e74b8d54365211e91382527af958892",
+          "source_published_date": "2026-06-05",
+          "observed_at_jst": "2026-06-05T21:55:00+09:00",
+          "channel": "web",
+          "collection_note": "AI投資を続けるソフトバンクGで、個人向け円建て負債の利率と規模が新たに決まり、資金調達コストを評価できる。"
+        },
+        {
+          "topic_id": "corporate_ir_financing",
+          "title": "ソフトバンクG、個人向けハイブリッド債2600億円を5.12%で条件決定",
+          "source_url": "https://group.softbank/ir/stock/bond/",
+          "source_published_date": "2026-06-05",
+          "observed_at_jst": "2026-06-05T21:55:00+09:00",
+          "channel": "web",
+          "collection_note": "AI投資を続けるソフトバンクGで、個人向け円建て負債の利率と規模が新たに決まり、資金調達コストを評価できる。"
         }
       ],
       "watch_topic_checks": [
@@ -777,7 +914,7 @@
           "topic_id": "market_price_nav",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "SoftBank market_price_nav: 6月3日の近接候補は本文化水準に届かず"
+            "SoftBank：株価・NAVは大きな発表なし"
           ],
           "result": "SoftBankのmarket_price_navはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -841,7 +978,7 @@
           "topic_id": "ai_infrastructure",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "SoftBank ai_infrastructure: 6月3日の近接候補は本文化水準に届かず"
+            "SoftBank：AIインフラは大きな発表なし"
           ],
           "result": "SoftBankのai_infrastructureはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -905,7 +1042,7 @@
           "topic_id": "power_battery",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "SoftBank power_battery: 6月3日の近接候補は本文化水準に届かず"
+            "SoftBank：電力・バッテリーは大きな発表なし"
           ],
           "result": "SoftBankのpower_batteryはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -969,7 +1106,8 @@
           "topic_id": "corporate_ir_financing",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "SoftBank corporate_ir_financing: 6月3日の近接候補は本文化水準に届かず"
+            "SoftBank：IR・資本政策は大きな発表なし",
+            "ソフトバンクG、個人向けハイブリッド債2600億円を5.12%で条件決定"
           ],
           "result": "SoftBankのcorporate_ir_financingはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -1033,7 +1171,7 @@
           "topic_id": "domestic_services",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "SoftBank domestic_services: 6月3日の近接候補は本文化水準に届かず"
+            "SoftBank：国内サービスは大きな発表なし"
           ],
           "result": "SoftBankのdomestic_servicesはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -1177,7 +1315,10 @@
     },
     "Honda": {
       "collection_status": "complete",
-      "published_card_titles": [],
+      "published_card_titles": [
+        "Honda中国5月販売、2万8279台で48.7%減",
+        "Hondaシビック、e:HEV RSにS+ Shiftを追加し6月5日発売"
+      ],
       "search_axes": {
         "ir_financials": [
           "Honda ir_financials honda ir earnings guidance 決算 Web SNS/X YouTube 2026-06-05",
@@ -1255,7 +1396,73 @@
         "電動化",
         "電池"
       ],
-      "new_or_changed_items": [],
+      "new_or_changed_items": [
+        {
+          "title": "Honda中国5月販売、2万8279台で48.7%減",
+          "summary": "Hondaの中国5月小売販売は2万8279台、前年同月比48.7%減だった。1〜5月累計も17万3344台で32.5%減。中国NEV市場の比率上昇と現地メーカーの競争力が、Hondaの地域戦略を圧迫している。",
+          "sources": [
+            "https://chinaevhome.com/2026/06/05/hondas-china-deliveries-nearly-halve-in-may-amid-ev-market-shift/",
+            "https://english.news18a.com/news/english_262874.html"
+          ],
+          "summary_mode": "multi_source_synthesis",
+          "material_facts": [
+            "中国5月小売販売は2万8279台。",
+            "前年同月比48.7%減、1〜5月累計は32.5%減。"
+          ],
+          "claim_verification": [
+            {
+              "claim_type": "numeric",
+              "source_state": "published_value",
+              "evidence_kind": "major_media_confirmation",
+              "claim": "Honda中国5月小売販売は2万8279台、前年同月比48.7%減だった。",
+              "source_url": "https://chinaevhome.com/2026/06/05/hondas-china-deliveries-nearly-halve-in-may-amid-ev-market-shift/"
+            },
+            {
+              "claim_type": "numeric",
+              "source_state": "published_value",
+              "evidence_kind": "major_media_confirmation",
+              "claim": "1〜5月累計は17万3344台で前年同期比32.5%減だった。",
+              "source_url": "https://english.news18a.com/news/english_262874.html"
+            }
+          ],
+          "synthesis_basis": "複数の根拠が同じ主体、日付、数値を矛盾なく示しており、一つの変化として整理できる。"
+        },
+        {
+          "title": "Hondaシビック、e:HEV RSにS+ Shiftを追加し6月5日発売",
+          "summary": "Hondaはシビックをマイナーチェンジし、e:HEV RSを追加した。PRELUDEに続いてHonda S+ Shiftを採用し、6月5日に発売する。価格は465万9600円で、後席USBなどの装備も強化した。",
+          "sources": [
+            "https://global.honda/jp/news/2026/4260604-civic.html"
+          ],
+          "summary_mode": "single_source_summary",
+          "material_facts": [
+            "e:HEV RSにHonda S+ Shiftを採用。",
+            "発売日は2026年6月5日、価格は465万9600円。"
+          ],
+          "claim_verification": [
+            {
+              "claim_type": "announcement",
+              "source_state": "confirmed_update",
+              "evidence_kind": "official_release",
+              "claim": "Hondaが6月4日にシビックのマイナーモデルチェンジを発表した。",
+              "source_url": "https://global.honda/jp/news/2026/4260604-civic.html"
+            },
+            {
+              "claim_type": "schedule",
+              "source_state": "scheduled",
+              "evidence_kind": "official_release",
+              "claim": "e:HEV RSは6月5日に発売する。",
+              "source_url": "https://global.honda/jp/news/2026/4260604-civic.html"
+            },
+            {
+              "claim_type": "numeric",
+              "source_state": "published_value",
+              "evidence_kind": "official_release",
+              "claim": "e:HEV RSの価格は465万9600円である。",
+              "source_url": "https://global.honda/jp/news/2026/4260604-civic.html"
+            }
+          ]
+        }
+      ],
       "no_change_checks": [
         {
           "axis": "direct-source and channel sweep",
@@ -1271,125 +1478,178 @@
       "latest_candidates": [
         {
           "topic_id": "market_price_reaction",
-          "title": "Honda market_price_reaction: 6月3日の近接候補は本文化水準に届かず",
+          "title": "Honda：市場反応は大きな発表なし",
           "source_url": "https://global.honda/en/newsroom/",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "Hondaのmarket_price_reactionは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "市場反応は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "earnings_guidance",
-          "title": "Honda earnings_guidance: 6月3日の近接候補は本文化水準に届かず",
+          "title": "Honda：業績見通しは大きな発表なし",
           "source_url": "https://global.honda/en/newsroom/",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "Hondaのearnings_guidanceは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "業績見通しは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "china_sales",
-          "title": "Honda china_sales: 6月3日の近接候補は本文化水準に届かず",
+          "title": "Honda：中国販売は大きな発表なし",
           "source_url": "https://global.honda/en/newsroom/",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "Hondaのchina_salesは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "中国販売は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "hybrid_ev_strategy",
-          "title": "Honda hybrid_ev_strategy: 6月3日の近接候補は本文化水準に届かず",
+          "title": "Honda：HV・EV戦略は大きな発表なし",
           "source_url": "https://global.honda/en/newsroom/",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "Hondaのhybrid_ev_strategyは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "HV・EV戦略は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "regional_production",
-          "title": "Honda regional_production: 6月3日の近接候補は本文化水準に届かず",
+          "title": "Honda：地域生産は大きな発表なし",
           "source_url": "https://global.honda/en/newsroom/",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "Hondaのregional_productionは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "地域生産は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "official_product_demand",
-          "title": "Honda official_product_demand: 6月3日の近接候補は本文化水準に届かず",
+          "title": "Honda：製品・需要は大きな発表なし",
           "source_url": "https://global.honda/en/newsroom/",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "Hondaのofficial_product_demandは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "製品・需要は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
+        },
+        {
+          "topic_id": "china_sales",
+          "title": "Honda中国5月販売、2万8279台で48.7%減",
+          "source_url": "https://chinaevhome.com/2026/06/05/hondas-china-deliveries-nearly-halve-in-may-amid-ev-market-shift/",
+          "source_published_date": "2026-06-05",
+          "decision": "adopted",
+          "rationale": "Honda中国販売の落ち込みが5月も半減近い水準で続き、EV・現地化戦略の再評価が必要な状態になった。",
+          "change_class": "new_event",
+          "publication_assessment": "販売台数と前年比が明確で、Hondaの地域戦略と日本勢の中国競争力を評価する重要な月次データである。",
+          "topic_value_class": "market_or_financial_impact",
+          "reader_delta": "Honda中国販売の落ち込みが5月も半減近い水準で続き、EV・現地化戦略の再評価が必要な状態になった。",
+          "materiality_basis": "販売台数と前年比が明確で、Hondaの地域戦略と日本勢の中国競争力を評価する重要な月次データである。"
+        },
+        {
+          "topic_id": "official_product_demand",
+          "title": "Hondaシビック、e:HEV RSにS+ Shiftを追加し6月5日発売",
+          "source_url": "https://global.honda/jp/news/2026/4260604-civic.html",
+          "source_published_date": "2026-06-04",
+          "decision": "adopted",
+          "rationale": "PRELUDE由来のS+ Shiftがシビックe:HEV RSに広がり、Hondaのハイブリッド商品戦略が明確になった。",
+          "change_class": "material_update",
+          "publication_assessment": "公式発表で発売日、技術、価格、装備変更が示され、商品戦略の変化として読める。",
+          "topic_value_class": "technical_or_product_shift",
+          "reader_delta": "PRELUDE由来のS+ Shiftがシビックe:HEV RSに広がり、Hondaのハイブリッド商品戦略が明確になった。",
+          "materiality_basis": "公式発表で発売日、技術、価格、装備変更が示され、商品戦略の変化として読める。"
         }
       ],
       "collected_items": [
         {
           "topic_id": "market_price_reaction",
-          "title": "Honda market_price_reaction: 6月3日の近接候補は本文化水準に届かず",
+          "title": "Honda：市場反応は大きな発表なし",
           "source_url": "https://global.honda/en/newsroom/",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "Hondaのmarket_price_reactionについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "市場反応は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "earnings_guidance",
-          "title": "Honda earnings_guidance: 6月3日の近接候補は本文化水準に届かず",
+          "title": "Honda：業績見通しは大きな発表なし",
           "source_url": "https://global.honda/en/newsroom/",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "Hondaのearnings_guidanceについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "業績見通しは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "china_sales",
-          "title": "Honda china_sales: 6月3日の近接候補は本文化水準に届かず",
+          "title": "Honda：中国販売は大きな発表なし",
           "source_url": "https://global.honda/en/newsroom/",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "Hondaのchina_salesについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "中国販売は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "hybrid_ev_strategy",
-          "title": "Honda hybrid_ev_strategy: 6月3日の近接候補は本文化水準に届かず",
+          "title": "Honda：HV・EV戦略は大きな発表なし",
           "source_url": "https://global.honda/en/newsroom/",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "Hondaのhybrid_ev_strategyについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "HV・EV戦略は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "regional_production",
-          "title": "Honda regional_production: 6月3日の近接候補は本文化水準に届かず",
+          "title": "Honda：地域生産は大きな発表なし",
           "source_url": "https://global.honda/en/newsroom/",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "Hondaのregional_productionについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "地域生産は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "official_product_demand",
-          "title": "Honda official_product_demand: 6月3日の近接候補は本文化水準に届かず",
+          "title": "Honda：製品・需要は大きな発表なし",
           "source_url": "https://global.honda/en/newsroom/",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "Hondaのofficial_product_demandについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "製品・需要は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
+        },
+        {
+          "topic_id": "china_sales",
+          "title": "Honda中国5月販売、2万8279台で48.7%減",
+          "source_url": "https://chinaevhome.com/2026/06/05/hondas-china-deliveries-nearly-halve-in-may-amid-ev-market-shift/",
+          "source_published_date": "2026-06-05",
+          "observed_at_jst": "2026-06-05T21:55:00+09:00",
+          "channel": "web",
+          "collection_note": "Honda中国販売の落ち込みが5月も半減近い水準で続き、EV・現地化戦略の再評価が必要な状態になった。"
+        },
+        {
+          "topic_id": "china_sales",
+          "title": "Honda中国5月販売、2万8279台で48.7%減",
+          "source_url": "https://english.news18a.com/news/english_262874.html",
+          "source_published_date": "2026-06-05",
+          "observed_at_jst": "2026-06-05T21:55:00+09:00",
+          "channel": "web",
+          "collection_note": "Honda中国販売の落ち込みが5月も半減近い水準で続き、EV・現地化戦略の再評価が必要な状態になった。"
+        },
+        {
+          "topic_id": "official_product_demand",
+          "title": "Hondaシビック、e:HEV RSにS+ Shiftを追加し6月5日発売",
+          "source_url": "https://global.honda/jp/news/2026/4260604-civic.html",
+          "source_published_date": "2026-06-04",
+          "observed_at_jst": "2026-06-05T21:55:00+09:00",
+          "channel": "web",
+          "collection_note": "PRELUDE由来のS+ Shiftがシビックe:HEV RSに広がり、Hondaのハイブリッド商品戦略が明確になった。"
         }
       ],
       "watch_topic_checks": [
@@ -1397,7 +1657,7 @@
           "topic_id": "market_price_reaction",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "Honda market_price_reaction: 6月3日の近接候補は本文化水準に届かず"
+            "Honda：市場反応は大きな発表なし"
           ],
           "result": "Hondaのmarket_price_reactionはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -1461,7 +1721,7 @@
           "topic_id": "earnings_guidance",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "Honda earnings_guidance: 6月3日の近接候補は本文化水準に届かず"
+            "Honda：業績見通しは大きな発表なし"
           ],
           "result": "Hondaのearnings_guidanceはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -1525,7 +1785,8 @@
           "topic_id": "china_sales",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "Honda china_sales: 6月3日の近接候補は本文化水準に届かず"
+            "Honda：中国販売は大きな発表なし",
+            "Honda中国5月販売、2万8279台で48.7%減"
           ],
           "result": "Hondaのchina_salesはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -1589,7 +1850,7 @@
           "topic_id": "hybrid_ev_strategy",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "Honda hybrid_ev_strategy: 6月3日の近接候補は本文化水準に届かず"
+            "Honda：HV・EV戦略は大きな発表なし"
           ],
           "result": "Hondaのhybrid_ev_strategyはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -1653,7 +1914,7 @@
           "topic_id": "regional_production",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "Honda regional_production: 6月3日の近接候補は本文化水準に届かず"
+            "Honda：地域生産は大きな発表なし"
           ],
           "result": "Hondaのregional_productionはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -1717,7 +1978,8 @@
           "topic_id": "official_product_demand",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "Honda official_product_demand: 6月3日の近接候補は本文化水準に届かず"
+            "Honda：製品・需要は大きな発表なし",
+            "Hondaシビック、e:HEV RSにS+ Shiftを追加し6月5日発売"
           ],
           "result": "Hondaのofficial_product_demandはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -1966,13 +2228,13 @@
       "latest_candidates": [
         {
           "topic_id": "race_schedule_results",
-          "title": "F1 race_schedule_results: 6月3日の近接候補は本文化水準に届かず",
+          "title": "F1：レース結果は大きな発表なし",
           "source_url": "https://www.astonmartinf1.com/en-GB/news/feature/from-rock-to-racetrack-the-story-of-maadens-monaco-grand-prix-livery",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "F1のrace_schedule_resultsは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "レース結果は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
@@ -1990,25 +2252,25 @@
         },
         {
           "topic_id": "fia_regulation_development",
-          "title": "F1 fia_regulation_development: 6月3日の近接候補は本文化水準に届かず",
+          "title": "F1：FIA規則は大きな発表なし",
           "source_url": "https://www.astonmartinf1.com/en-GB/news/feature/from-rock-to-racetrack-the-story-of-maadens-monaco-grand-prix-livery",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "F1のfia_regulation_developmentは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "FIA規則は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         }
       ],
       "collected_items": [
         {
           "topic_id": "race_schedule_results",
-          "title": "F1 race_schedule_results: 6月3日の近接候補は本文化水準に届かず",
+          "title": "F1：レース結果は大きな発表なし",
           "source_url": "https://www.astonmartinf1.com/en-GB/news/feature/from-rock-to-racetrack-the-story-of-maadens-monaco-grand-prix-livery",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "F1のrace_schedule_resultsについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "レース結果は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "honda_aston_pu",
@@ -2021,12 +2283,12 @@
         },
         {
           "topic_id": "fia_regulation_development",
-          "title": "F1 fia_regulation_development: 6月3日の近接候補は本文化水準に届かず",
+          "title": "F1：FIA規則は大きな発表なし",
           "source_url": "https://www.astonmartinf1.com/en-GB/news/feature/from-rock-to-racetrack-the-story-of-maadens-monaco-grand-prix-livery",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "F1のfia_regulation_developmentについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "FIA規則は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         }
       ],
       "watch_topic_checks": [
@@ -2034,7 +2296,7 @@
           "topic_id": "race_schedule_results",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "F1 race_schedule_results: 6月3日の近接候補は本文化水準に届かず"
+            "F1：レース結果は大きな発表なし"
           ],
           "result": "F1のrace_schedule_resultsはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -2162,7 +2424,7 @@
           "topic_id": "fia_regulation_development",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "F1 fia_regulation_development: 6月3日の近接候補は本文化水準に届かず"
+            "F1：FIA規則は大きな発表なし"
           ],
           "result": "F1のfia_regulation_developmentはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -2387,24 +2649,24 @@
       "latest_candidates": [
         {
           "topic_id": "starship_status",
-          "title": "SpaceX starship_status: 6月3日の近接候補は本文化水準に届かず",
+          "title": "SpaceX：Starship開発は大きな発表なし",
           "source_url": "https://www.spacex.com/launches/mission/?gsid=35abb496-27f8-43ea-b793-07ffc2063150&missionId=polarisdawn",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "SpaceXのstarship_statusは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "Starship開発は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "dragon_iss",
-          "title": "SpaceX dragon_iss: 6月3日の近接候補は本文化水準に届かず",
+          "title": "SpaceX：Dragon・ISSは大きな発表なし",
           "source_url": "https://www.spacex.com/launches/mission/?gsid=35abb496-27f8-43ea-b793-07ffc2063150&missionId=polarisdawn",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "SpaceXのdragon_issは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "Dragon・ISSは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
@@ -2422,34 +2684,45 @@
         },
         {
           "topic_id": "official_launch_manifest",
-          "title": "SpaceX official_launch_manifest: 6月3日の近接候補は本文化水準に届かず",
+          "title": "SpaceX：打ち上げ予定は大きな発表なし",
           "source_url": "https://www.spacex.com/launches/mission/?gsid=35abb496-27f8-43ea-b793-07ffc2063150&missionId=polarisdawn",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "SpaceXのofficial_launch_manifestは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "打ち上げ予定は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
+        },
+        {
+          "topic_id": "starship_status",
+          "title": "SpaceX Starship B20、次期ブースター準備の観測が続く",
+          "source_url": "https://www.reddit.com/r/spacex/comments/1sslxn5/starship_development_thread_63/",
+          "source_published_date": "2026-06-03",
+          "decision": "excluded",
+          "rationale": "Starshipの次機体準備としてB20の動きが注目され、Flight 12後の開発リズムを測る手がかりになる。",
+          "change_class": "material_update",
+          "publication_assessment": "観測情報はあるが、公式発表または主要報道でロールアウトの事実を十分に固めきれないため、一覧で扱う。",
+          "non_adoption_reason_class": "insufficient_evidence"
         }
       ],
       "collected_items": [
         {
           "topic_id": "starship_status",
-          "title": "SpaceX starship_status: 6月3日の近接候補は本文化水準に届かず",
+          "title": "SpaceX：Starship開発は大きな発表なし",
           "source_url": "https://www.spacex.com/launches/mission/?gsid=35abb496-27f8-43ea-b793-07ffc2063150&missionId=polarisdawn",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "SpaceXのstarship_statusについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "Starship開発は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "dragon_iss",
-          "title": "SpaceX dragon_iss: 6月3日の近接候補は本文化水準に届かず",
+          "title": "SpaceX：Dragon・ISSは大きな発表なし",
           "source_url": "https://www.spacex.com/launches/mission/?gsid=35abb496-27f8-43ea-b793-07ffc2063150&missionId=polarisdawn",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "SpaceXのdragon_issについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "Dragon・ISSは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "business_contracts",
@@ -2462,12 +2735,30 @@
         },
         {
           "topic_id": "official_launch_manifest",
-          "title": "SpaceX official_launch_manifest: 6月3日の近接候補は本文化水準に届かず",
+          "title": "SpaceX：打ち上げ予定は大きな発表なし",
           "source_url": "https://www.spacex.com/launches/mission/?gsid=35abb496-27f8-43ea-b793-07ffc2063150&missionId=polarisdawn",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "SpaceXのofficial_launch_manifestについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "打ち上げ予定は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
+        },
+        {
+          "topic_id": "starship_status",
+          "title": "SpaceX Starship B20、次期ブースター準備の観測が続く",
+          "source_url": "https://www.reddit.com/r/spacex/comments/1sslxn5/starship_development_thread_63/",
+          "source_published_date": "2026-06-03",
+          "observed_at_jst": "2026-06-05T21:55:00+09:00",
+          "channel": "web",
+          "collection_note": "Starshipの次機体準備としてB20の動きが注目され、Flight 12後の開発リズムを測る手がかりになる。"
+        },
+        {
+          "topic_id": "starship_status",
+          "title": "SpaceX Starship B20、次期ブースター準備の観測が続く",
+          "source_url": "https://www.spacex.com/launches/",
+          "source_published_date": "2026-06-03",
+          "observed_at_jst": "2026-06-05T21:55:00+09:00",
+          "channel": "web",
+          "collection_note": "Starshipの次機体準備としてB20の動きが注目され、Flight 12後の開発リズムを測る手がかりになる。"
         }
       ],
       "watch_topic_checks": [
@@ -2475,7 +2766,8 @@
           "topic_id": "starship_status",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "SpaceX starship_status: 6月3日の近接候補は本文化水準に届かず"
+            "SpaceX：Starship開発は大きな発表なし",
+            "SpaceX Starship B20、次期ブースター準備の観測が続く"
           ],
           "result": "SpaceXのstarship_statusはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -2539,7 +2831,7 @@
           "topic_id": "dragon_iss",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "SpaceX dragon_iss: 6月3日の近接候補は本文化水準に届かず"
+            "SpaceX：Dragon・ISSは大きな発表なし"
           ],
           "result": "SpaceXのdragon_issはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -2667,7 +2959,7 @@
           "topic_id": "official_launch_manifest",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "SpaceX official_launch_manifest: 6月3日の近接候補は本文化水準に届かず"
+            "SpaceX：打ち上げ予定は大きな発表なし"
           ],
           "result": "SpaceXのofficial_launch_manifestはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -2775,7 +3067,10 @@
     },
     "日本経済": {
       "collection_status": "complete",
-      "published_card_titles": [],
+      "published_card_titles": [
+        "日銀植田総裁、物価上振れなら利上げ是非を議論へ",
+        "Rapidus、政府系IPAから1500億円の追加出資を完了"
+      ],
       "search_axes": {
         "prices_wages_boj": [
           "日本経済 prices_wages_boj japan 日本 cpi wages boj Web SNS/X YouTube 2026-06-05",
@@ -2823,7 +3118,64 @@
         "金利",
         "雇用"
       ],
-      "new_or_changed_items": [],
+      "new_or_changed_items": [
+        {
+          "title": "日銀植田総裁、物価上振れなら利上げ是非を議論へ",
+          "summary": "日銀の植田総裁は6月3日、物価上振れリスクが景気下振れリスクを上回ると判断すれば、利上げ是非を議論する必要があると述べた。エネルギー高の二次波及にも触れ、6月会合への市場注目が強まった。",
+          "sources": [
+            "https://www.marketscreener.com/news/boj-chief-vows-to-debate-pros-and-cons-of-rate-hike-signals-june-action-ce7f5ddfda8df524"
+          ],
+          "summary_mode": "single_source_summary",
+          "material_facts": [
+            "植田総裁は6月3日に利上げ是非の議論へ言及した。",
+            "市場は6月利上げを約80%織り込んでいたと報じられた。"
+          ],
+          "claim_verification": [
+            {
+              "claim_type": "announcement",
+              "source_state": "confirmed_update",
+              "evidence_kind": "major_media_confirmation",
+              "claim": "植田総裁が6月3日に物価上振れ時の利上げ議論へ言及した。",
+              "source_url": "https://www.marketscreener.com/news/boj-chief-vows-to-debate-pros-and-cons-of-rate-hike-signals-june-action-ce7f5ddfda8df524"
+            },
+            {
+              "claim_type": "numeric",
+              "source_state": "published_value",
+              "evidence_kind": "major_media_confirmation",
+              "claim": "市場は6月利上げを約80%織り込んでいたと報じられた。",
+              "source_url": "https://www.marketscreener.com/news/boj-chief-vows-to-debate-pros-and-cons-of-rate-hike-signals-june-action-ce7f5ddfda8df524"
+            }
+          ]
+        },
+        {
+          "title": "Rapidus、政府系IPAから1500億円の追加出資を完了",
+          "summary": "Rapidusは6月5日、IPAから1500億円の追加出資を完了した。既存のIPA出資と民間資金を合わせ、資金調達総額は4249.5億円。2027年の最先端半導体量産へ向け、政府資本の支えがさらに大きくなった。",
+          "sources": [
+            "https://www.rapidus.inc/en/news_topics/information/20260605-2/"
+          ],
+          "summary_mode": "single_source_summary",
+          "material_facts": [
+            "IPAから1500億円の追加出資を完了。",
+            "資金調達総額は4249.5億円。"
+          ],
+          "claim_verification": [
+            {
+              "claim_type": "announcement",
+              "source_state": "confirmed_update",
+              "evidence_kind": "official_release",
+              "claim": "Rapidusが6月5日にIPAからの追加出資完了を発表した。",
+              "source_url": "https://www.rapidus.inc/en/news_topics/information/20260605-2/"
+            },
+            {
+              "claim_type": "numeric",
+              "source_state": "published_value",
+              "evidence_kind": "official_release",
+              "claim": "追加出資は1500億円で、資金調達総額は4249.5億円になった。",
+              "source_url": "https://www.rapidus.inc/en/news_topics/information/20260605-2/"
+            }
+          ]
+        }
+      ],
       "no_change_checks": [
         {
           "axis": "direct-source and channel sweep",
@@ -2837,65 +3189,109 @@
       "latest_candidates": [
         {
           "topic_id": "prices_wages_boj",
-          "title": "日本経済 prices_wages_boj: 6月3日の近接候補は本文化水準に届かず",
+          "title": "日本経済：物価・賃金・日銀は大きな発表なし",
           "source_url": "https://www.boj.or.jp/en/announcements/press",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "日本経済のprices_wages_bojは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "物価・賃金・日銀は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "employment_consumption",
-          "title": "日本経済 employment_consumption: 6月3日の近接候補は本文化水準に届かず",
+          "title": "日本経済：雇用・消費は大きな発表なし",
           "source_url": "https://www.boj.or.jp/en/announcements/press",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "日本経済のemployment_consumptionは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "雇用・消費は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "investment_policy_markets",
-          "title": "日本経済 investment_policy_markets: 6月3日の近接候補は本文化水準に届かず",
+          "title": "日本経済：投資・政策・市場は大きな発表なし",
           "source_url": "https://www.boj.or.jp/en/announcements/press",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "日本経済のinvestment_policy_marketsは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "投資・政策・市場は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
+        },
+        {
+          "topic_id": "prices_wages_boj",
+          "title": "日銀植田総裁、物価上振れなら利上げ是非を議論へ",
+          "source_url": "https://www.marketscreener.com/news/boj-chief-vows-to-debate-pros-and-cons-of-rate-hike-signals-june-action-ce7f5ddfda8df524",
+          "source_published_date": "2026-06-03",
+          "decision": "adopted",
+          "rationale": "日銀トップが物価上振れ時の利上げ議論を明言し、6月会合の政策リスクが高まった。",
+          "change_class": "material_update",
+          "publication_assessment": "総裁発言と市場織り込みが同じ方向を示しており、日本の金利・為替を左右する政策項目である。",
+          "topic_value_class": "decision_or_policy",
+          "reader_delta": "日銀トップが物価上振れ時の利上げ議論を明言し、6月会合の政策リスクが高まった。",
+          "materiality_basis": "総裁発言と市場織り込みが同じ方向を示しており、日本の金利・為替を左右する政策項目である。"
+        },
+        {
+          "topic_id": "investment_policy_markets",
+          "title": "Rapidus、政府系IPAから1500億円の追加出資を完了",
+          "source_url": "https://www.rapidus.inc/en/news_topics/information/20260605-2/",
+          "source_published_date": "2026-06-05",
+          "decision": "adopted",
+          "rationale": "Rapidusの2nm量産計画で、政府系資本の追加投入と累計調達額が明確になった。",
+          "change_class": "new_event",
+          "publication_assessment": "政府系IPAから1500億円という資本投入は、日本の半導体政策と産業投資に直結する。",
+          "topic_value_class": "decision_or_policy",
+          "reader_delta": "Rapidusの2nm量産計画で、政府系資本の追加投入と累計調達額が明確になった。",
+          "materiality_basis": "政府系IPAから1500億円という資本投入は、日本の半導体政策と産業投資に直結する。"
         }
       ],
       "collected_items": [
         {
           "topic_id": "prices_wages_boj",
-          "title": "日本経済 prices_wages_boj: 6月3日の近接候補は本文化水準に届かず",
+          "title": "日本経済：物価・賃金・日銀は大きな発表なし",
           "source_url": "https://www.boj.or.jp/en/announcements/press",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "日本経済のprices_wages_bojについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "物価・賃金・日銀は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "employment_consumption",
-          "title": "日本経済 employment_consumption: 6月3日の近接候補は本文化水準に届かず",
+          "title": "日本経済：雇用・消費は大きな発表なし",
           "source_url": "https://www.boj.or.jp/en/announcements/press",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "日本経済のemployment_consumptionについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "雇用・消費は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "investment_policy_markets",
-          "title": "日本経済 investment_policy_markets: 6月3日の近接候補は本文化水準に届かず",
+          "title": "日本経済：投資・政策・市場は大きな発表なし",
           "source_url": "https://www.boj.or.jp/en/announcements/press",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "日本経済のinvestment_policy_marketsについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "投資・政策・市場は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
+        },
+        {
+          "topic_id": "prices_wages_boj",
+          "title": "日銀植田総裁、物価上振れなら利上げ是非を議論へ",
+          "source_url": "https://www.marketscreener.com/news/boj-chief-vows-to-debate-pros-and-cons-of-rate-hike-signals-june-action-ce7f5ddfda8df524",
+          "source_published_date": "2026-06-03",
+          "observed_at_jst": "2026-06-05T21:55:00+09:00",
+          "channel": "web",
+          "collection_note": "日銀トップが物価上振れ時の利上げ議論を明言し、6月会合の政策リスクが高まった。"
+        },
+        {
+          "topic_id": "investment_policy_markets",
+          "title": "Rapidus、政府系IPAから1500億円の追加出資を完了",
+          "source_url": "https://www.rapidus.inc/en/news_topics/information/20260605-2/",
+          "source_published_date": "2026-06-05",
+          "observed_at_jst": "2026-06-05T21:55:00+09:00",
+          "channel": "web",
+          "collection_note": "Rapidusの2nm量産計画で、政府系資本の追加投入と累計調達額が明確になった。"
         }
       ],
       "watch_topic_checks": [
@@ -2903,7 +3299,8 @@
           "topic_id": "prices_wages_boj",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "日本経済 prices_wages_boj: 6月3日の近接候補は本文化水準に届かず"
+            "日本経済：物価・賃金・日銀は大きな発表なし",
+            "日銀植田総裁、物価上振れなら利上げ是非を議論へ"
           ],
           "result": "日本経済のprices_wages_bojはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -2961,7 +3358,7 @@
           "topic_id": "employment_consumption",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "日本経済 employment_consumption: 6月3日の近接候補は本文化水準に届かず"
+            "日本経済：雇用・消費は大きな発表なし"
           ],
           "result": "日本経済のemployment_consumptionはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -3019,7 +3416,8 @@
           "topic_id": "investment_policy_markets",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "日本経済 investment_policy_markets: 6月3日の近接候補は本文化水準に届かず"
+            "日本経済：投資・政策・市場は大きな発表なし",
+            "Rapidus、政府系IPAから1500億円の追加出資を完了"
           ],
           "result": "日本経済のinvestment_policy_marketsはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -3149,7 +3547,9 @@
     },
     "YOASOBI / 幾田りら": {
       "collection_status": "complete",
-      "published_card_titles": [],
+      "published_card_titles": [
+        "YOASOBI、4th EP収録曲と北米ツアー新ビジュアルを公開"
+      ],
       "search_axes": {
         "official_hp_release": [
           "YOASOBI / 幾田りら official_hp_release yoasobi 幾田りら official news release Web SNS/X YouTube 2026-06-05",
@@ -3192,7 +3592,45 @@
         "新曲",
         "海外公演"
       ],
-      "new_or_changed_items": [],
+      "new_or_changed_items": [
+        {
+          "title": "YOASOBI、4th EP収録曲と北米ツアー新ビジュアルを公開",
+          "summary": "YOASOBIは4th EP「THE BOOK for,」の収録曲内容と店舗別購入者特典を公開した。6月26日の発売に向け、初の北米ツアー「NEVER ENDING STORIES」のキービジュアルも解禁され、国内リリースと海外展開が同時に進む。",
+          "sources": [
+            "https://news.livedoor.com/article/detail/31468047/",
+            "https://www.cdjapan.co.jp/feature/YOASOBI-THE-BOOK-for"
+          ],
+          "summary_mode": "multi_source_synthesis",
+          "material_facts": [
+            "4th EP「THE BOOK for,」は6月26日発売。",
+            "初の北米ツアーのキービジュアルも解禁。"
+          ],
+          "claim_verification": [
+            {
+              "claim_type": "announcement",
+              "source_state": "confirmed_update",
+              "evidence_kind": "major_media_confirmation",
+              "claim": "YOASOBIが4th EPの収録曲内容と特典絵柄を公開した。",
+              "source_url": "https://news.livedoor.com/article/detail/31468047/"
+            },
+            {
+              "claim_type": "schedule",
+              "source_state": "scheduled",
+              "evidence_kind": "major_media_confirmation",
+              "claim": "4th EP「THE BOOK for,」は6月26日に発売される。",
+              "source_url": "https://news.livedoor.com/article/detail/31468047/"
+            },
+            {
+              "claim_type": "announcement",
+              "source_state": "confirmed_update",
+              "evidence_kind": "major_media_confirmation",
+              "claim": "初の北米ツアーのキービジュアルも公開された。",
+              "source_url": "https://news.livedoor.com/article/detail/31468047/"
+            }
+          ],
+          "synthesis_basis": "複数の根拠が同じ主体、日付、数値を矛盾なく示しており、一つの変化として整理できる。"
+        }
+      ],
       "no_change_checks": [
         {
           "axis": "direct-source and channel sweep",
@@ -3208,85 +3646,116 @@
       "latest_candidates": [
         {
           "topic_id": "official_release",
-          "title": "YOASOBI / 幾田りら official_release: 6月3日の近接候補は本文化水準に届かず",
+          "title": "YOASOBI / 幾田りら：公式リリースは大きな発表なし",
           "source_url": "https://www.yoasobi-music.jp/news/",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "YOASOBI / 幾田りらのofficial_releaseは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "公式リリースは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "staff_social_x_instagram",
-          "title": "YOASOBI / 幾田りら staff_social_x_instagram: 6月3日の近接候補は本文化水準に届かず",
+          "title": "YOASOBI / 幾田りら：SNS発信は大きな発表なし",
           "source_url": "https://www.yoasobi-music.jp/news/",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "YOASOBI / 幾田りらのstaff_social_x_instagramは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "SNS発信は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "live_tour_performance",
-          "title": "YOASOBI / 幾田りら live_tour_performance: 6月3日の近接候補は本文化水準に届かず",
+          "title": "YOASOBI / 幾田りら：ライブ・ツアーは大きな発表なし",
           "source_url": "https://www.yoasobi-music.jp/news/",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "YOASOBI / 幾田りらのlive_tour_performanceは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "ライブ・ツアーは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "music_release_chart_tieup",
-          "title": "YOASOBI / 幾田りら music_release_chart_tieup: 6月3日の近接候補は本文化水準に届かず",
+          "title": "YOASOBI / 幾田りら：音楽リリースは大きな発表なし",
           "source_url": "https://www.yoasobi-music.jp/news/",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "YOASOBI / 幾田りらのmusic_release_chart_tieupは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "音楽リリースは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
+        },
+        {
+          "topic_id": "official_release",
+          "title": "YOASOBI、4th EP収録曲と北米ツアー新ビジュアルを公開",
+          "source_url": "https://news.livedoor.com/article/detail/31468047/",
+          "source_published_date": "2026-06-05",
+          "decision": "adopted",
+          "rationale": "YOASOBIのEP発売情報が収録内容と特典、北米ツアービジュアルまで具体化した。",
+          "change_class": "material_update",
+          "publication_assessment": "発売日、収録内容、特典、北米ツアー告知が同時に動き、音楽リリースと海外展開の両面で変化がある。",
+          "topic_value_class": "cultural_or_audience_signal",
+          "reader_delta": "YOASOBIのEP発売情報が収録内容と特典、北米ツアービジュアルまで具体化した。",
+          "materiality_basis": "発売日、収録内容、特典、北米ツアー告知が同時に動き、音楽リリースと海外展開の両面で変化がある。"
         }
       ],
       "collected_items": [
         {
           "topic_id": "official_release",
-          "title": "YOASOBI / 幾田りら official_release: 6月3日の近接候補は本文化水準に届かず",
+          "title": "YOASOBI / 幾田りら：公式リリースは大きな発表なし",
           "source_url": "https://www.yoasobi-music.jp/news/",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "YOASOBI / 幾田りらのofficial_releaseについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "公式リリースは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "staff_social_x_instagram",
-          "title": "YOASOBI / 幾田りら staff_social_x_instagram: 6月3日の近接候補は本文化水準に届かず",
+          "title": "YOASOBI / 幾田りら：SNS発信は大きな発表なし",
           "source_url": "https://www.yoasobi-music.jp/news/",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "YOASOBI / 幾田りらのstaff_social_x_instagramについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "SNS発信は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "live_tour_performance",
-          "title": "YOASOBI / 幾田りら live_tour_performance: 6月3日の近接候補は本文化水準に届かず",
+          "title": "YOASOBI / 幾田りら：ライブ・ツアーは大きな発表なし",
           "source_url": "https://www.yoasobi-music.jp/news/",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "YOASOBI / 幾田りらのlive_tour_performanceについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "ライブ・ツアーは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "music_release_chart_tieup",
-          "title": "YOASOBI / 幾田りら music_release_chart_tieup: 6月3日の近接候補は本文化水準に届かず",
+          "title": "YOASOBI / 幾田りら：音楽リリースは大きな発表なし",
           "source_url": "https://www.yoasobi-music.jp/news/",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "YOASOBI / 幾田りらのmusic_release_chart_tieupについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "音楽リリースは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
+        },
+        {
+          "topic_id": "official_release",
+          "title": "YOASOBI、4th EP収録曲と北米ツアー新ビジュアルを公開",
+          "source_url": "https://news.livedoor.com/article/detail/31468047/",
+          "source_published_date": "2026-06-05",
+          "observed_at_jst": "2026-06-05T21:55:00+09:00",
+          "channel": "web",
+          "collection_note": "YOASOBIのEP発売情報が収録内容と特典、北米ツアービジュアルまで具体化した。"
+        },
+        {
+          "topic_id": "official_release",
+          "title": "YOASOBI、4th EP収録曲と北米ツアー新ビジュアルを公開",
+          "source_url": "https://www.cdjapan.co.jp/feature/YOASOBI-THE-BOOK-for",
+          "source_published_date": "2026-06-05",
+          "observed_at_jst": "2026-06-05T21:55:00+09:00",
+          "channel": "web",
+          "collection_note": "YOASOBIのEP発売情報が収録内容と特典、北米ツアービジュアルまで具体化した。"
         }
       ],
       "watch_topic_checks": [
@@ -3294,7 +3763,8 @@
           "topic_id": "official_release",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "YOASOBI / 幾田りら official_release: 6月3日の近接候補は本文化水準に届かず"
+            "YOASOBI / 幾田りら：公式リリースは大きな発表なし",
+            "YOASOBI、4th EP収録曲と北米ツアー新ビジュアルを公開"
           ],
           "result": "YOASOBI / 幾田りらのofficial_releaseはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -3358,7 +3828,7 @@
           "topic_id": "staff_social_x_instagram",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "YOASOBI / 幾田りら staff_social_x_instagram: 6月3日の近接候補は本文化水準に届かず"
+            "YOASOBI / 幾田りら：SNS発信は大きな発表なし"
           ],
           "result": "YOASOBI / 幾田りらのstaff_social_x_instagramはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -3422,7 +3892,7 @@
           "topic_id": "live_tour_performance",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "YOASOBI / 幾田りら live_tour_performance: 6月3日の近接候補は本文化水準に届かず"
+            "YOASOBI / 幾田りら：ライブ・ツアーは大きな発表なし"
           ],
           "result": "YOASOBI / 幾田りらのlive_tour_performanceはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -3486,7 +3956,7 @@
           "topic_id": "music_release_chart_tieup",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "YOASOBI / 幾田りら music_release_chart_tieup: 6月3日の近接候補は本文化水準に届かず"
+            "YOASOBI / 幾田りら：音楽リリースは大きな発表なし"
           ],
           "result": "YOASOBI / 幾田りらのmusic_release_chart_tieupはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -3631,7 +4101,9 @@
     "アジア経済": {
       "collection_status": "complete",
       "published_card_titles": [
-        "インド鉄鋼需要、5月は14.33百万トンで9.0%増 内需主導が継続"
+        "インド鉄鋼需要、5月は14.33百万トンで9.0%増 内需主導が継続",
+        "インドFY26実質GDP、7.7%成長でQ4は7.8%",
+        "Amazon、ベトナムを東南アジアEC輸出拠点へ押し上げ"
       ],
       "search_axes": {
         "india_macro_policy": [
@@ -3720,6 +4192,66 @@
               "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2268816&lang=1&reg=1"
             }
           ]
+        },
+        {
+          "title": "インドFY26実質GDP、7.7%成長でQ4は7.8%",
+          "summary": "インドのFY26実質GDPは7.7%成長、Q4FY26は7.8%成長だった。製造業とサービスが支えた一方、RBIはFY27成長見通しを6.6%へ下げた。高成長の継続と外部リスクの両方が出た。",
+          "sources": [
+            "https://www.financialexpress.com/policy/economy/indias-q4-gdp-rises-to-7-8-fy26-growth-expands-78/4260039/",
+            "https://newsonair.gov.in/indias-real-gdp-grows-by-7-7-in-2025-26/"
+          ],
+          "summary_mode": "multi_source_synthesis",
+          "material_facts": [
+            "FY26実質GDPは7.7%成長。",
+            "Q4FY26は7.8%成長、RBIのFY27見通しは6.6%。"
+          ],
+          "claim_verification": [
+            {
+              "claim_type": "numeric",
+              "source_state": "published_value",
+              "evidence_kind": "major_media_confirmation",
+              "claim": "インドのFY26実質GDPは7.7%成長だった。",
+              "source_url": "https://www.financialexpress.com/policy/economy/indias-q4-gdp-rises-to-7-8-fy26-growth-expands-78/4260039/"
+            },
+            {
+              "claim_type": "numeric",
+              "source_state": "published_value",
+              "evidence_kind": "major_media_confirmation",
+              "claim": "Q4FY26の実質GDPは7.8%成長だった。",
+              "source_url": "https://newsonair.gov.in/indias-real-gdp-grows-by-7-7-in-2025-26/"
+            }
+          ],
+          "synthesis_basis": "複数の根拠が同じ主体、日付、数値を矛盾なく示しており、一つの変化として整理できる。"
+        },
+        {
+          "title": "Amazon、ベトナムを東南アジアEC輸出拠点へ押し上げ",
+          "summary": "Amazon Global Selling Vietnamは2026年越境EC輸出サミットを開き、販売者支援、運用簡素化、AI対応ツールでベトナム企業の海外販売を強化する方針を示した。ベトナムの製造基盤とEC成長を輸出拠点化につなげる動きである。",
+          "sources": [
+            "https://vccinews.com/news/62663/amazon-reinforces-vietnam-as-southeast-asia-s-e-commerce-export-hub.html",
+            "https://vietnam.vnanet.vn/english/english/tin-van/amazon-moves-from-sales-channel-to-brand-builder-for-vietnamese-exporters-449461.html"
+          ],
+          "summary_mode": "multi_source_synthesis",
+          "material_facts": [
+            "2026年6月2日に越境EC輸出サミットを開催。",
+            "Amazonはベトナムを東南アジアのEC輸出拠点へ押し上げる方針を示した。"
+          ],
+          "claim_verification": [
+            {
+              "claim_type": "announcement",
+              "source_state": "confirmed_update",
+              "evidence_kind": "major_media_confirmation",
+              "claim": "Amazon Global Selling Vietnamが2026年越境EC輸出サミットを開いた。",
+              "source_url": "https://vccinews.com/news/62663/amazon-reinforces-vietnam-as-southeast-asia-s-e-commerce-export-hub.html"
+            },
+            {
+              "claim_type": "announcement",
+              "source_state": "confirmed_update",
+              "evidence_kind": "major_media_confirmation",
+              "claim": "Amazonがベトナム企業の海外販売とブランド化を支える方針を示した。",
+              "source_url": "https://vietnam.vnanet.vn/english/english/tin-van/amazon-moves-from-sales-channel-to-brand-builder-for-vietnamese-exporters-449461.html"
+            }
+          ],
+          "synthesis_basis": "複数の根拠が同じ主体、日付、数値を矛盾なく示しており、一つの変化として整理できる。"
         }
       ],
       "no_change_checks": [
@@ -3735,35 +4267,35 @@
       "latest_candidates": [
         {
           "topic_id": "india_macro_policy",
-          "title": "アジア経済 india_macro_policy: 6月3日の近接候補は本文化水準に届かず",
+          "title": "アジア経済：インド景気・政策は大きな発表なし",
           "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2268816&lang=1&reg=1",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "アジア経済のindia_macro_policyは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "インド景気・政策は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "vietnam_macro_investment",
-          "title": "アジア経済 vietnam_macro_investment: 6月3日の近接候補は本文化水準に届かず",
+          "title": "アジア経済：ベトナム投資・輸出は大きな発表なし",
           "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2268816&lang=1&reg=1",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "アジア経済のvietnam_macro_investmentは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "ベトナム投資・輸出は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "china_macro_policy",
-          "title": "アジア経済 china_macro_policy: 6月3日の近接候補は本文化水準に届かず",
+          "title": "アジア経済：中国景気・政策は大きな発表なし",
           "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2268816&lang=1&reg=1",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "アジア経済のchina_macro_policyは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "中国景気・政策は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
@@ -3778,35 +4310,61 @@
           "topic_value_class": "decision_or_policy",
           "reader_delta": "インド鉄鋼需要、5月は14.33百万トンで9.0%増 内需主導が継続により、政策判断や企業決定の根拠が更新され、次に見るべき数値や発言の重みが変わる。",
           "materiality_basis": "インド政府は6月4日、5月の粗鋼生産が1,421万トンで前年比2.9%増、仕上げ鋼消費が1,433万トンで同9.0%増になったと発表した。 公式発言や政策判断の根拠として確認でき、次の市場反応を見る軸になるため採用対象になる。"
+        },
+        {
+          "topic_id": "india_macro_policy",
+          "title": "インドFY26実質GDP、7.7%成長でQ4は7.8%",
+          "source_url": "https://www.financialexpress.com/policy/economy/indias-q4-gdp-rises-to-7-8-fy26-growth-expands-78/4260039/",
+          "source_published_date": "2026-06-05",
+          "decision": "adopted",
+          "rationale": "インドはFY26で7.7%成長を維持したが、RBIがFY27見通しを下げ、強さと外部リスクが同時に見える。",
+          "change_class": "new_event",
+          "publication_assessment": "GDP成長率とRBI見通しが同日に示され、アジア経済の強弱を判断する主要データである。",
+          "topic_value_class": "market_or_financial_impact",
+          "reader_delta": "インドはFY26で7.7%成長を維持したが、RBIがFY27見通しを下げ、強さと外部リスクが同時に見える。",
+          "materiality_basis": "GDP成長率とRBI見通しが同日に示され、アジア経済の強弱を判断する主要データである。"
+        },
+        {
+          "topic_id": "vietnam_macro_investment",
+          "title": "Amazon、ベトナムを東南アジアEC輸出拠点へ押し上げ",
+          "source_url": "https://vccinews.com/news/62663/amazon-reinforces-vietnam-as-southeast-asia-s-e-commerce-export-hub.html",
+          "source_published_date": "2026-06-03",
+          "decision": "adopted",
+          "rationale": "ベトナムの越境ECが単なる販売経路から、輸出産業とブランド育成の基盤へ広がっている。",
+          "change_class": "material_update",
+          "publication_assessment": "Amazonの越境EC支援が国単位の輸出拠点化と結びつき、アジア供給網の変化として重要である。",
+          "topic_value_class": "market_or_financial_impact",
+          "reader_delta": "ベトナムの越境ECが単なる販売経路から、輸出産業とブランド育成の基盤へ広がっている。",
+          "materiality_basis": "Amazonの越境EC支援が国単位の輸出拠点化と結びつき、アジア供給網の変化として重要である。"
         }
       ],
       "collected_items": [
         {
           "topic_id": "india_macro_policy",
-          "title": "アジア経済 india_macro_policy: 6月3日の近接候補は本文化水準に届かず",
+          "title": "アジア経済：インド景気・政策は大きな発表なし",
           "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2268816&lang=1&reg=1",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "アジア経済のindia_macro_policyについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "インド景気・政策は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "vietnam_macro_investment",
-          "title": "アジア経済 vietnam_macro_investment: 6月3日の近接候補は本文化水準に届かず",
+          "title": "アジア経済：ベトナム投資・輸出は大きな発表なし",
           "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2268816&lang=1&reg=1",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "アジア経済のvietnam_macro_investmentについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "ベトナム投資・輸出は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "china_macro_policy",
-          "title": "アジア経済 china_macro_policy: 6月3日の近接候補は本文化水準に届かず",
+          "title": "アジア経済：中国景気・政策は大きな発表なし",
           "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2268816&lang=1&reg=1",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "アジア経済のchina_macro_policyについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "中国景気・政策は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "india_vietnam_markets_supply_chain",
@@ -3816,6 +4374,42 @@
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
           "collection_note": "アジア経済のindia_vietnam_markets_supply_chainについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+        },
+        {
+          "topic_id": "india_macro_policy",
+          "title": "インドFY26実質GDP、7.7%成長でQ4は7.8%",
+          "source_url": "https://www.financialexpress.com/policy/economy/indias-q4-gdp-rises-to-7-8-fy26-growth-expands-78/4260039/",
+          "source_published_date": "2026-06-05",
+          "observed_at_jst": "2026-06-05T21:55:00+09:00",
+          "channel": "web",
+          "collection_note": "インドはFY26で7.7%成長を維持したが、RBIがFY27見通しを下げ、強さと外部リスクが同時に見える。"
+        },
+        {
+          "topic_id": "india_macro_policy",
+          "title": "インドFY26実質GDP、7.7%成長でQ4は7.8%",
+          "source_url": "https://newsonair.gov.in/indias-real-gdp-grows-by-7-7-in-2025-26/",
+          "source_published_date": "2026-06-05",
+          "observed_at_jst": "2026-06-05T21:55:00+09:00",
+          "channel": "web",
+          "collection_note": "インドはFY26で7.7%成長を維持したが、RBIがFY27見通しを下げ、強さと外部リスクが同時に見える。"
+        },
+        {
+          "topic_id": "vietnam_macro_investment",
+          "title": "Amazon、ベトナムを東南アジアEC輸出拠点へ押し上げ",
+          "source_url": "https://vccinews.com/news/62663/amazon-reinforces-vietnam-as-southeast-asia-s-e-commerce-export-hub.html",
+          "source_published_date": "2026-06-03",
+          "observed_at_jst": "2026-06-05T21:55:00+09:00",
+          "channel": "web",
+          "collection_note": "ベトナムの越境ECが単なる販売経路から、輸出産業とブランド育成の基盤へ広がっている。"
+        },
+        {
+          "topic_id": "vietnam_macro_investment",
+          "title": "Amazon、ベトナムを東南アジアEC輸出拠点へ押し上げ",
+          "source_url": "https://vietnam.vnanet.vn/english/english/tin-van/amazon-moves-from-sales-channel-to-brand-builder-for-vietnamese-exporters-449461.html",
+          "source_published_date": "2026-06-03",
+          "observed_at_jst": "2026-06-05T21:55:00+09:00",
+          "channel": "web",
+          "collection_note": "ベトナムの越境ECが単なる販売経路から、輸出産業とブランド育成の基盤へ広がっている。"
         }
       ],
       "watch_topic_checks": [
@@ -3823,7 +4417,8 @@
           "topic_id": "india_macro_policy",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "アジア経済 india_macro_policy: 6月3日の近接候補は本文化水準に届かず"
+            "アジア経済：インド景気・政策は大きな発表なし",
+            "インドFY26実質GDP、7.7%成長でQ4は7.8%"
           ],
           "result": "アジア経済のindia_macro_policyはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -3881,7 +4476,8 @@
           "topic_id": "vietnam_macro_investment",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "アジア経済 vietnam_macro_investment: 6月3日の近接候補は本文化水準に届かず"
+            "アジア経済：ベトナム投資・輸出は大きな発表なし",
+            "Amazon、ベトナムを東南アジアEC輸出拠点へ押し上げ"
           ],
           "result": "アジア経済のvietnam_macro_investmentはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -3939,7 +4535,7 @@
           "topic_id": "china_macro_policy",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "アジア経済 china_macro_policy: 6月3日の近接候補は本文化水準に届かず"
+            "アジア経済：中国景気・政策は大きな発表なし"
           ],
           "result": "アジア経済のchina_macro_policyはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -4225,25 +4821,36 @@
         },
         {
           "topic_id": "us_markets_fund_flows_rates",
-          "title": "北米経済 us_markets_fund_flows_rates: 6月3日の近接候補は本文化水準に届かず",
+          "title": "北米経済：米市場・金利は大きな発表なし",
           "source_url": "https://www.bls.gov/news.release/archives/prod2_06042026.htm",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "北米経済のus_markets_fund_flows_ratesは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "米市場・金利は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "north_america_investment_policy",
-          "title": "北米経済 north_america_investment_policy: 6月3日の近接候補は本文化水準に届かず",
+          "title": "北米経済：北米政策・地政学リスクは大きな発表なし",
           "source_url": "https://www.bls.gov/news.release/archives/prod2_06042026.htm",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "北米経済のnorth_america_investment_policyは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "北米政策・地政学リスクは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
+        },
+        {
+          "topic_id": "north_america_investment_policy",
+          "title": "米イラン交渉、ヒズボラ停戦拒否で最終局面が不安定化",
+          "source_url": "https://apnews.com/article/06ea585ce43fd28e26c4d21d46a4df83",
+          "source_published_date": "2026-06-04",
+          "decision": "excluded",
+          "rationale": "米イラン交渉の終盤でレバノン情勢が障害となり、原油・金利・リスク資産に関わる地政学リスクが強まった。",
+          "change_class": "material_update",
+          "publication_assessment": "北米経済そのものではないが、米外交、エネルギー価格、リスク資産へ波及するため一覧で扱う価値がある。",
+          "non_adoption_reason_class": "insufficient_relevance"
         }
       ],
       "collected_items": [
@@ -4258,21 +4865,39 @@
         },
         {
           "topic_id": "us_markets_fund_flows_rates",
-          "title": "北米経済 us_markets_fund_flows_rates: 6月3日の近接候補は本文化水準に届かず",
+          "title": "北米経済：米市場・金利は大きな発表なし",
           "source_url": "https://www.bls.gov/news.release/archives/prod2_06042026.htm",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "北米経済のus_markets_fund_flows_ratesについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "米市場・金利は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "north_america_investment_policy",
-          "title": "北米経済 north_america_investment_policy: 6月3日の近接候補は本文化水準に届かず",
+          "title": "北米経済：北米政策・地政学リスクは大きな発表なし",
           "source_url": "https://www.bls.gov/news.release/archives/prod2_06042026.htm",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "北米経済のnorth_america_investment_policyについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "北米政策・地政学リスクは既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
+        },
+        {
+          "topic_id": "north_america_investment_policy",
+          "title": "米イラン交渉、ヒズボラ停戦拒否で最終局面が不安定化",
+          "source_url": "https://apnews.com/article/06ea585ce43fd28e26c4d21d46a4df83",
+          "source_published_date": "2026-06-04",
+          "observed_at_jst": "2026-06-05T21:55:00+09:00",
+          "channel": "web",
+          "collection_note": "米イラン交渉の終盤でレバノン情勢が障害となり、原油・金利・リスク資産に関わる地政学リスクが強まった。"
+        },
+        {
+          "topic_id": "north_america_investment_policy",
+          "title": "米イラン交渉、ヒズボラ停戦拒否で最終局面が不安定化",
+          "source_url": "https://www.axios.com/2026/06/03/israel-lebanon-ceasefire-hezbollah-us",
+          "source_published_date": "2026-06-04",
+          "observed_at_jst": "2026-06-05T21:55:00+09:00",
+          "channel": "web",
+          "collection_note": "米イラン交渉の終盤でレバノン情勢が障害となり、原油・金利・リスク資産に関わる地政学リスクが強まった。"
         }
       ],
       "watch_topic_checks": [
@@ -4338,7 +4963,7 @@
           "topic_id": "us_markets_fund_flows_rates",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "北米経済 us_markets_fund_flows_rates: 6月3日の近接候補は本文化水準に届かず"
+            "北米経済：米市場・金利は大きな発表なし"
           ],
           "result": "北米経済のus_markets_fund_flows_ratesはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -4396,7 +5021,8 @@
           "topic_id": "north_america_investment_policy",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "北米経済 north_america_investment_policy: 6月3日の近接候補は本文化水準に届かず"
+            "北米経済：北米政策・地政学リスクは大きな発表なし",
+            "米イラン交渉、ヒズボラ停戦拒否で最終局面が不安定化"
           ],
           "result": "北米経済のnorth_america_investment_policyはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -4607,24 +5233,24 @@
         },
         {
           "topic_id": "bleague_games_schedule",
-          "title": "宇都宮ブレックス bleague_games_schedule: 6月3日の近接候補は本文化水準に届かず",
+          "title": "宇都宮ブレックス：Bリーグ日程は大きな発表なし",
           "source_url": "https://www.utsunomiyabrex.com/",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "宇都宮ブレックスのbleague_games_scheduleは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "Bリーグ日程は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         },
         {
           "topic_id": "media_press_video",
-          "title": "宇都宮ブレックス media_press_video: 6月3日の近接候補は本文化水準に届かず",
+          "title": "宇都宮ブレックス：メディア・動画は大きな発表なし",
           "source_url": "https://www.utsunomiyabrex.com/",
           "source_published_date": "2026-06-05",
           "decision": "no_fresh_item",
-          "rationale": "宇都宮ブレックスのmedia_press_videoは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+          "rationale": "メディア・動画は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。",
           "change_class": "background_only",
-          "publication_assessment": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+          "publication_assessment": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
           "non_adoption_reason_class": "no_material_change"
         }
       ],
@@ -4640,21 +5266,21 @@
         },
         {
           "topic_id": "bleague_games_schedule",
-          "title": "宇都宮ブレックス bleague_games_schedule: 6月3日の近接候補は本文化水準に届かず",
+          "title": "宇都宮ブレックス：Bリーグ日程は大きな発表なし",
           "source_url": "https://www.utsunomiyabrex.com/",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "宇都宮ブレックスのbleague_games_scheduleについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "Bリーグ日程は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         },
         {
           "topic_id": "media_press_video",
-          "title": "宇都宮ブレックス media_press_video: 6月3日の近接候補は本文化水準に届かず",
+          "title": "宇都宮ブレックス：メディア・動画は大きな発表なし",
           "source_url": "https://www.utsunomiyabrex.com/",
           "source_published_date": "2026-06-05",
           "observed_at_jst": "2026-06-05T21:40:00+09:00",
           "channel": "web",
-          "collection_note": "宇都宮ブレックスのmedia_press_videoについて直接資料と補助チャネルを当日照合し、本文へ加える実質差分の有無を判定した。"
+          "collection_note": "メディア・動画は既存の背景情報にとどまり、新しい発表・数値・結果はなかった。"
         }
       ],
       "watch_topic_checks": [
@@ -4726,7 +5352,7 @@
           "topic_id": "bleague_games_schedule",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "宇都宮ブレックス bleague_games_schedule: 6月3日の近接候補は本文化水準に届かず"
+            "宇都宮ブレックス：Bリーグ日程は大きな発表なし"
           ],
           "result": "宇都宮ブレックスのbleague_games_scheduleはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -4790,7 +5416,7 @@
           "topic_id": "media_press_video",
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
-            "宇都宮ブレックス media_press_video: 6月3日の近接候補は本文化水準に届かず"
+            "宇都宮ブレックス：メディア・動画は大きな発表なし"
           ],
           "result": "宇都宮ブレックスのmedia_press_videoはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [

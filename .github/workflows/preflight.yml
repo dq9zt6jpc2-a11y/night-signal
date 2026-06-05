@@ -17,10 +17,18 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check selected generated issue
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           ISSUE_DATE="$(TZ=Asia/Tokyo date +%F)"
           if [[ ! "$ISSUE_DATE" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
             echo "Computed NIGHT SIGNAL issue date is invalid: ${ISSUE_DATE}" >&2
+            exit 1
+          fi
+          if [[ ! -f "state/${ISSUE_DATE}/issue.json" \
+            && ! -f "night-brief-web-sample-${ISSUE_DATE}.html" \
+            && -z "${OPENAI_API_KEY:-}" ]]; then
+            echo "::error::OPENAI_API_KEY secret is required before the scheduled run can generate ${ISSUE_DATE} from live sources." >&2
             exit 1
           fi
           python3 scripts/night_signal_state.py --self-test

@@ -101,6 +101,9 @@ python3 scripts/simulate_quality_gate_failures.py
 - Live AI-backed collection requires `OPENAI_API_KEY`. Without it, the system can
   generate collection requests and readiness blockers, but it cannot honestly
   claim external Web/SNS/YouTube collection is complete.
+- The scheduled preflight checks `OPENAI_API_KEY` before the publication window
+  when the current issue has not already been generated. Missing credentials are
+  a blocking operations fault, not a content fallback condition.
 - The collector keeps stable model routes in the plan. Current default concrete
   models are `gpt-5-mini` for structured source extraction and `gpt-5.2` for
   frontier reasoning; use the `NIGHT_SIGNAL_MODEL_*` environment variables when
@@ -114,10 +117,10 @@ python3 scripts/simulate_quality_gate_failures.py
 - `issue.json` must include frontier, observations, candidates, decisions,
   cards, and coverage_manifest. Cards without adopted decisions, or decisions
   without closed observation slots, are invalid.
-- The top page has two layers: `Signals` shows fresh candidates from the
-  latest three calendar days, while category cards and detail pages show only
-  adopted decisions. Broad capture belongs in candidates; deep explanation
-  belongs in adopted cards.
+- The top page has two layers: `カテゴリ別新着` shows fresh candidates from the
+  latest three calendar days in the configured category order, while category
+  cards and detail pages show only adopted decisions. Broad capture belongs in
+  candidates; deep explanation belongs in adopted cards.
 - Cards must keep `candidate_title` for traceability to the adopted decision and
   `title` for the reader-facing headline.
 - Detail pages are not time-boxed summaries. Current details must carry

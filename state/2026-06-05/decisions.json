@@ -1,39 +1,39 @@
 [
   {
-    "candidate_title": "OpenAI ipo_financing: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "OpenAI：IPO・資金調達は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "technical_or_product_shift",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "OpenAIのipo_financingは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "OpenAI math_research: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "OpenAI：数学研究は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "technical_or_product_shift",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "OpenAIのmath_researchは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "OpenAI product_release: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "OpenAI：製品リリースは大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "technical_or_product_shift",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "OpenAIのproduct_releaseは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "OpenAI enterprise_infrastructure: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "OpenAI：企業向け基盤は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "technical_or_product_shift",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "OpenAIのenterprise_infrastructureは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
     "candidate_title": "OpenAI、事前承認制に反対し連邦AI枠組みを提案",
@@ -45,112 +45,112 @@
     "reject_reason": null
   },
   {
-    "candidate_title": "SoftBank market_price_nav: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "SoftBank：株価・NAVは大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "market_or_financial_impact",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "SoftBankのmarket_price_navは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "SoftBank ai_infrastructure: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "SoftBank：AIインフラは大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "market_or_financial_impact",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "SoftBankのai_infrastructureは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "SoftBank power_battery: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "SoftBank：電力・バッテリーは大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "market_or_financial_impact",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "SoftBankのpower_batteryは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "SoftBank corporate_ir_financing: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "SoftBank：IR・資本政策は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "market_or_financial_impact",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "SoftBankのcorporate_ir_financingは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "SoftBank domestic_services: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "SoftBank：国内サービスは大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "market_or_financial_impact",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "SoftBankのdomestic_servicesは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "Honda market_price_reaction: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "Honda：市場反応は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "technical_or_product_shift",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "Hondaのmarket_price_reactionは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "Honda earnings_guidance: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "Honda：業績見通しは大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "technical_or_product_shift",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "Hondaのearnings_guidanceは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "Honda china_sales: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "Honda：中国販売は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "technical_or_product_shift",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "Hondaのchina_salesは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "Honda hybrid_ev_strategy: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "Honda：HV・EV戦略は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "technical_or_product_shift",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "Hondaのhybrid_ev_strategyは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "Honda regional_production: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "Honda：地域生産は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "technical_or_product_shift",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "Hondaのregional_productionは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "Honda official_product_demand: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "Honda：製品・需要は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "technical_or_product_shift",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "Hondaのofficial_product_demandは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "F1 race_schedule_results: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "F1：レース結果は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "technical_or_product_shift",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "F1のrace_schedule_resultsは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
     "candidate_title": "Aston Martin、モナコ向け変色リバリーの技術背景を公開",
@@ -162,31 +162,31 @@
     "reject_reason": null
   },
   {
-    "candidate_title": "F1 fia_regulation_development: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "F1：FIA規則は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "technical_or_product_shift",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "F1のfia_regulation_developmentは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "SpaceX starship_status: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "SpaceX：Starship開発は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "market_or_financial_impact",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "SpaceXのstarship_statusは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "SpaceX dragon_iss: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "SpaceX：Dragon・ISSは大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "market_or_financial_impact",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "SpaceXのdragon_issは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
     "candidate_title": "SpaceX、IPO価格を135ドルに設定 Starlink基盤で750億ドル調達へ",
@@ -198,103 +198,103 @@
     "reject_reason": null
   },
   {
-    "candidate_title": "SpaceX official_launch_manifest: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "SpaceX：打ち上げ予定は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "market_or_financial_impact",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "SpaceXのofficial_launch_manifestは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "日本経済 prices_wages_boj: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "日本経済：物価・賃金・日銀は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "market_or_financial_impact",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "日本経済のprices_wages_bojは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "日本経済 employment_consumption: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "日本経済：雇用・消費は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "market_or_financial_impact",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "日本経済のemployment_consumptionは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "日本経済 investment_policy_markets: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "日本経済：投資・政策・市場は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "market_or_financial_impact",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "日本経済のinvestment_policy_marketsは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "YOASOBI / 幾田りら official_release: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "YOASOBI / 幾田りら：公式リリースは大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "cultural_or_audience_signal",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "YOASOBI / 幾田りらのofficial_releaseは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "YOASOBI / 幾田りら staff_social_x_instagram: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "YOASOBI / 幾田りら：SNS発信は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "cultural_or_audience_signal",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "YOASOBI / 幾田りらのstaff_social_x_instagramは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "YOASOBI / 幾田りら live_tour_performance: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "YOASOBI / 幾田りら：ライブ・ツアーは大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "cultural_or_audience_signal",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "YOASOBI / 幾田りらのlive_tour_performanceは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "YOASOBI / 幾田りら music_release_chart_tieup: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "YOASOBI / 幾田りら：音楽リリースは大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "cultural_or_audience_signal",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "YOASOBI / 幾田りらのmusic_release_chart_tieupは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "アジア経済 india_macro_policy: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "アジア経済：インド景気・政策は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "market_or_financial_impact",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "アジア経済のindia_macro_policyは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "アジア経済 vietnam_macro_investment: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "アジア経済：ベトナム投資・輸出は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "market_or_financial_impact",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "アジア経済のvietnam_macro_investmentは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "アジア経済 china_macro_policy: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "アジア経済：中国景気・政策は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "market_or_financial_impact",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "アジア経済のchina_macro_policyは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
     "candidate_title": "インド鉄鋼需要、5月は14.33百万トンで9.0%増 内需主導が継続",
@@ -315,22 +315,22 @@
     "reject_reason": null
   },
   {
-    "candidate_title": "北米経済 us_markets_fund_flows_rates: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "北米経済：米市場・金利は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "market_or_financial_impact",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "北米経済のus_markets_fund_flows_ratesは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "北米経済 north_america_investment_policy: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "北米経済：北米政策・地政学リスクは大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "market_or_financial_impact",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "北米経済のnorth_america_investment_policyは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
     "candidate_title": "宇都宮ブレックス、デ・ラファエレ氏を新HCに招聘",
@@ -342,21 +342,102 @@
     "reject_reason": null
   },
   {
-    "candidate_title": "宇都宮ブレックス bleague_games_schedule: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "宇都宮ブレックス：Bリーグ日程は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "event_result_or_outcome",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "宇都宮ブレックスのbleague_games_scheduleは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
   },
   {
-    "candidate_title": "宇都宮ブレックス media_press_video: 6月3日の近接候補は本文化水準に届かず",
+    "candidate_title": "宇都宮ブレックス：メディア・動画は大きな発表なし",
     "adoption_decision": "reject",
     "topic_value_class": "event_result_or_outcome",
-    "reader_delta": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-    "materiality_basis": "宇都宮ブレックスのmedia_press_videoは公式資料、独立情報、補助チャネルを横断したが、2026-06-05号で本文カードにする確定した実質差分はなかった。",
+    "reader_delta": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
+    "materiality_basis": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。",
     "reject_reason_class": "no_material_change",
-    "reject_reason": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。"
+    "reject_reason": "既存の背景情報の範囲にとどまり、新しい発表・数値・結果はなかった。"
+  },
+  {
+    "candidate_title": "OpenAI、ChatGPTメモリをDreaming V3へ刷新",
+    "adoption_decision": "adopt",
+    "topic_value_class": "technical_or_product_shift",
+    "reader_delta": "ChatGPTの長期記憶が、保存された断片だけでなく背景合成を使う段階へ進み、個人化AIの実用性に直接関わる。",
+    "materiality_basis": "OpenAI公式が日付、対象ユーザー、技術目的を示しており、製品体験と将来のエージェント利用に影響する。"
+  },
+  {
+    "candidate_title": "ソフトバンクG、個人向けハイブリッド債2600億円を5.12%で条件決定",
+    "adoption_decision": "adopt",
+    "topic_value_class": "market_or_financial_impact",
+    "reader_delta": "AI投資を続けるソフトバンクGで、個人向け円建て負債の利率と規模が新たに決まり、資金調達コストを評価できる。",
+    "materiality_basis": "発行額2600億円、利率5.12%という数値が明確で、AI投資と資本政策を同時に考える材料になる。"
+  },
+  {
+    "candidate_title": "Honda中国5月販売、2万8279台で48.7%減",
+    "adoption_decision": "adopt",
+    "topic_value_class": "market_or_financial_impact",
+    "reader_delta": "Honda中国販売の落ち込みが5月も半減近い水準で続き、EV・現地化戦略の再評価が必要な状態になった。",
+    "materiality_basis": "販売台数と前年比が明確で、Hondaの地域戦略と日本勢の中国競争力を評価する重要な月次データである。"
+  },
+  {
+    "candidate_title": "Hondaシビック、e:HEV RSにS+ Shiftを追加し6月5日発売",
+    "adoption_decision": "adopt",
+    "topic_value_class": "technical_or_product_shift",
+    "reader_delta": "PRELUDE由来のS+ Shiftがシビックe:HEV RSに広がり、Hondaのハイブリッド商品戦略が明確になった。",
+    "materiality_basis": "公式発表で発売日、技術、価格、装備変更が示され、商品戦略の変化として読める。"
+  },
+  {
+    "candidate_title": "日銀植田総裁、物価上振れなら利上げ是非を議論へ",
+    "adoption_decision": "adopt",
+    "topic_value_class": "decision_or_policy",
+    "reader_delta": "日銀トップが物価上振れ時の利上げ議論を明言し、6月会合の政策リスクが高まった。",
+    "materiality_basis": "総裁発言と市場織り込みが同じ方向を示しており、日本の金利・為替を左右する政策項目である。"
+  },
+  {
+    "candidate_title": "Rapidus、政府系IPAから1500億円の追加出資を完了",
+    "adoption_decision": "adopt",
+    "topic_value_class": "decision_or_policy",
+    "reader_delta": "Rapidusの2nm量産計画で、政府系資本の追加投入と累計調達額が明確になった。",
+    "materiality_basis": "政府系IPAから1500億円という資本投入は、日本の半導体政策と産業投資に直結する。"
+  },
+  {
+    "candidate_title": "YOASOBI、4th EP収録曲と北米ツアー新ビジュアルを公開",
+    "adoption_decision": "adopt",
+    "topic_value_class": "cultural_or_audience_signal",
+    "reader_delta": "YOASOBIのEP発売情報が収録内容と特典、北米ツアービジュアルまで具体化した。",
+    "materiality_basis": "発売日、収録内容、特典、北米ツアー告知が同時に動き、音楽リリースと海外展開の両面で変化がある。"
+  },
+  {
+    "candidate_title": "インドFY26実質GDP、7.7%成長でQ4は7.8%",
+    "adoption_decision": "adopt",
+    "topic_value_class": "market_or_financial_impact",
+    "reader_delta": "インドはFY26で7.7%成長を維持したが、RBIがFY27見通しを下げ、強さと外部リスクが同時に見える。",
+    "materiality_basis": "GDP成長率とRBI見通しが同日に示され、アジア経済の強弱を判断する主要データである。"
+  },
+  {
+    "candidate_title": "Amazon、ベトナムを東南アジアEC輸出拠点へ押し上げ",
+    "adoption_decision": "adopt",
+    "topic_value_class": "market_or_financial_impact",
+    "reader_delta": "ベトナムの越境ECが単なる販売経路から、輸出産業とブランド育成の基盤へ広がっている。",
+    "materiality_basis": "Amazonの越境EC支援が国単位の輸出拠点化と結びつき、アジア供給網の変化として重要である。"
+  },
+  {
+    "candidate_title": "米イラン交渉、ヒズボラ停戦拒否で最終局面が不安定化",
+    "adoption_decision": "reject",
+    "topic_value_class": "risk_or_safety_signal",
+    "reader_delta": "米イラン交渉の終盤でレバノン情勢が障害となり、原油・金利・リスク資産に関わる地政学リスクが強まった。",
+    "materiality_basis": "北米経済そのものではないが、米外交、エネルギー価格、リスク資産へ波及するため一覧で扱う価値がある。",
+    "reject_reason_class": "insufficient_relevance",
+    "reject_reason": "主要カテゴリの詳細枠は経済データと政策発言を優先し、地政学項目は一覧で日付と要点を示す。"
+  },
+  {
+    "candidate_title": "SpaceX Starship B20、次期ブースター準備の観測が続く",
+    "adoption_decision": "reject",
+    "topic_value_class": "operational_status_change",
+    "reader_delta": "Starshipの次機体準備としてB20の動きが注目され、Flight 12後の開発リズムを測る手がかりになる。",
+    "materiality_basis": "観測情報はあるが、公式発表または主要報道でロールアウトの事実を十分に固めきれないため、一覧で扱う。",
+    "reject_reason_class": "insufficient_evidence",
+    "reject_reason": "専門コミュニティ発の観測が中心で、公式発表との照合が十分でない。"
   }
 ]
