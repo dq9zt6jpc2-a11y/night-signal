@@ -64,6 +64,10 @@ Mission:
 - Prefer including a confirmed material item over missing it, but reject weak
   items with a concrete reason.
 - Every watch_topic_id in frontier_topics must have at least one candidate.
+- Every fresh observed claim must be represented by a candidate, even when the
+  final decision is reject. The candidate ledger is broad; cards are selective.
+- Do not merge independent events into one candidate. Honda China monthly sales
+  and a Civic product update, for example, must remain separate candidates.
 - Every candidate must have one decision.
 - Cards must correspond exactly to adopted decisions.
 - Public titles must be concise Japanese news headlines. Do not include
@@ -241,6 +245,19 @@ def validate_category_result(issue_date: str, category: str, frontier_topics: li
 
     allowed_source_dates = set(latest_three_dates(issue_date))
     allowed_urls = direct_urls(observations)
+    fresh_claim_urls: set[str] = set()
+    for observation in observations:
+        if not isinstance(observation, dict):
+            continue
+        if observation.get("slot_state") != "observed_live":
+            continue
+        if observation.get("published_date") not in allowed_source_dates:
+            continue
+        claim_atoms = observation.get("claim_atoms")
+        if isinstance(claim_atoms, list) and claim_atoms:
+            url = observation.get("url")
+            if isinstance(url, str) and url.startswith(("http://", "https://")):
+                fresh_claim_urls.add(url)
     for candidate in candidates:
         if not isinstance(candidate, dict):
             fail(f"{category} candidate must be an object")
@@ -249,6 +266,9 @@ def validate_category_result(issue_date: str, category: str, frontier_topics: li
         for url in candidate.get("source_urls", []):
             if url not in allowed_urls:
                 fail(f"{category} candidate uses URL not present in observations: {url}")
+            fresh_claim_urls.discard(url)
+    if fresh_claim_urls:
+        fail(f"{category} fresh observed claims missing from candidates: " + ", ".join(sorted(fresh_claim_urls)[:6]))
 
     decision_titles = [str(decision.get("candidate_title")) for decision in decisions if isinstance(decision, dict)]
     candidate_titles = [str(candidate.get("title")) for candidate in candidates if isinstance(candidate, dict)]
@@ -423,6 +443,69 @@ def self_test() -> None:
     for term in ("frontier_topics", "observations", "latest_allowed_source_dates"):
         if term not in content:
             fail(f"synthesis prompt missing {term}")
+    frontier_topics = [
+        {
+            "category": "OpenAI",
+            "section_id": "openai",
+            "watch_topic_id": "product_release",
+            "required_channels": ["web", "sns_x", "youtube"],
+        }
+    ]
+    observations = payload["input"][1]["content"]
+    observation_records = json.loads(observations)["observations"]
+    observations_for_issue_cache["2099-01-01"] = observation_records
+    candidates_for_validation_cache["2099-01-01"] = []
+    decisions_for_validation_cache["2099-01-01"] = []
+    cards_for_validation_cache["2099-01-01"] = []
+    covered_result = {
+        "category": "OpenAI",
+        "candidates": [
+            {
+                "category": "OpenAI",
+                "watch_topic_id": "product_release",
+                "title": "OpenAI、ChatGPTのメモリ合成を改善",
+                "source_published_date": "2099-01-01",
+                "source_urls": ["https://openai.com/"],
+                "change_class": "material_update",
+                "summary": "OpenAIがChatGPTのメモリ合成を改善し、新鮮さ、継続性、関連性を高める変更を示した。",
+                "material_facts": ["メモリ合成の改善が発表された。"],
+                "counter_evidence_checked": True,
+            }
+        ],
+        "decisions": [
+            {
+                "candidate_title": "OpenAI、ChatGPTのメモリ合成を改善",
+                "adoption_decision": "reject",
+                "topic_value_class": "technical_or_product_shift",
+                "reader_delta": "製品改善の候補として確認したが、詳細化は他項目との優先度で見送る。",
+                "materiality_basis": "公式発表の直接URLで確認した。",
+                "reject_reason_class": "lower_importance",
+                "reject_reason": "当日号では詳細化する他の変化を優先する。",
+            }
+        ],
+        "cards": [],
+        "no_change_checks": [],
+    }
+    validate_category_result("2099-01-01", "OpenAI", frontier_topics, observation_records, covered_result)
+    missing_result = json.loads(json.dumps(covered_result, ensure_ascii=False))
+    missing_result["candidates"][0]["source_urls"] = []
+    captured_failures: list[str] = []
+    original_fail = fail
+
+    def capture_fail(message: str) -> None:
+        captured_failures.append(message)
+        raise RuntimeError(message)
+
+    globals()["fail"] = capture_fail
+    try:
+        try:
+            validate_category_result("2099-01-01", "OpenAI", frontier_topics, observation_records, missing_result)
+        except RuntimeError:
+            pass
+    finally:
+        globals()["fail"] = original_fail
+    if not captured_failures or "fresh observed claims missing from candidates" not in captured_failures[0]:
+        fail("synthesis validation must reject fresh observed claims that are missing from candidates")
     print("NIGHT SIGNAL SYNTHESIS PASSED")
 
 

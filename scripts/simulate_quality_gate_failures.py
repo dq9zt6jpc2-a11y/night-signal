@@ -26,7 +26,7 @@ OPENAI_PRIMARY_DETAIL = "openai-codex-approval-remote-2026-05-24.html"
 OPENAI_SECONDARY_DETAIL = "openai-pac-federal-framework-2026-05-24.html"
 INVESTMENT_SECOND_TITLE = "米株ファンドは利回り上昇で資金流出、AI物色は続いてもポジションは軽くなる"
 INVESTMENT_SECOND_DETAIL = "north-america-us-equity-fund-outflows-2026-05-24.html"
-NEXT_ISSUE_DATE = "2026-06-05"
+NEXT_ISSUE_DATE = "2026-06-06"
 
 
 def copy_fixture() -> Path:
@@ -997,7 +997,7 @@ def main() -> int:
             "title": "OpenAIの新発表を複数原文から整理",
             "h1": "OpenAIの新発表を複数原文から整理",
             "slug": "future-information-summary.html",
-            "summary": "公式発表は公開日、対象機能、利用可能な範囲を明示し、主要報道は導入背景と既存運用との差分を補った。",
+            "summary": "公式発表は公開日、対象機能、利用可能な範囲を明示し、主要報道は導入背景、既存運用との差分、利用者が確認すべき未確定条件を補った。複数原文を合わせることで、発表済みの事実、利用時に影響する範囲、まだ確定していない条件を分けて読める内容になっている。",
             "summary_basis": {
                 "what_changed": "OpenAIが対象機能と利用範囲を公式に発表した。",
                 "why_it_matters": "読者は公式発表と主要報道を分けて、導入時期、対象範囲、残る不確定点を把握できる。",

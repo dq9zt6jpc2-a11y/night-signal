@@ -224,7 +224,12 @@
             "x.com",
             "instagram",
             "youtube",
-            "official social"
+            "official social",
+            "memory",
+            "freshness",
+            "continuity",
+            "relevance",
+            "ChatGPT memory"
           ]
         },
         {
@@ -247,7 +252,12 @@
             "supply",
             "tanstack",
             "policy",
-            "regulation"
+            "regulation",
+            "cyber",
+            "cybersecurity",
+            "Korea",
+            "South Korea",
+            "government"
           ]
         }
       ],
@@ -298,7 +308,13 @@
             "x.com",
             "instagram",
             "youtube",
-            "official social"
+            "official social",
+            "memory",
+            "freshness",
+            "continuity",
+            "relevance",
+            "ChatGPT memory",
+            "memory synthesis"
           ],
           "event_classes": [
             "product_update",
@@ -328,7 +344,14 @@
             "policy",
             "regulation",
             "certificate",
-            "supply"
+            "supply",
+            "cyber",
+            "cybersecurity",
+            "Korea",
+            "South Korea",
+            "government",
+            "public sector",
+            "defense"
           ],
           "event_classes": [
             "regulation_safety",
@@ -352,7 +375,13 @@
             "sbg",
             "ir",
             "earnings",
-            "ソフトバンク"
+            "ソフトバンク",
+            "hybrid bond",
+            "retail bond",
+            "5.12%",
+            "2600億円",
+            "個人向け",
+            "ハイブリッド債"
           ]
         },
         {
@@ -363,7 +392,12 @@
             "openai",
             "stargate",
             "vision",
-            "datacenter"
+            "datacenter",
+            "COMPUTEX",
+            "AGI CPU",
+            "AI agent",
+            "agent",
+            "Arm AGI CPU"
           ]
         },
         {
@@ -429,7 +463,13 @@
             "datacenter",
             "stargate",
             "arm",
-            "openai"
+            "openai",
+            "COMPUTEX",
+            "AGI CPU",
+            "AI agent",
+            "agent",
+            "Arm AGI CPU",
+            "Taipei"
           ],
           "event_classes": [
             "infrastructure",
@@ -459,7 +499,15 @@
             "funding",
             "debt",
             "nav",
-            "決算"
+            "決算",
+            "bond",
+            "hybrid bond",
+            "retail bond",
+            "individual investors",
+            "5.12%",
+            "2600億円",
+            "個人向け",
+            "ハイブリッド債"
           ],
           "event_classes": [
             "financials",
@@ -511,7 +559,13 @@
             "sales",
             "production",
             "中国",
-            "販売"
+            "販売",
+            "monthly sales",
+            "retail sales",
+            "China sales",
+            "May sales",
+            "5月販売",
+            "日本勢"
           ]
         },
         {
@@ -555,7 +609,14 @@
             "受注",
             "契約台数",
             "補助金",
-            "product"
+            "product",
+            "Civic",
+            "Prelude",
+            "e:HEV RS",
+            "S+ Shift",
+            "minor change",
+            "シビック",
+            "プレリュード"
           ]
         }
       ],
@@ -603,7 +664,15 @@
             "cpca",
             "gasgoo",
             "中国",
-            "販売"
+            "販売",
+            "retail sales",
+            "wholesale",
+            "monthly sales",
+            "May sales",
+            "5月販売",
+            "前年比",
+            "日本勢",
+            "ほぼ半減"
           ],
           "event_classes": [
             "operations_market",
@@ -618,7 +687,14 @@
             "hev",
             "battery",
             "acura",
-            "電動化"
+            "電動化",
+            "civic",
+            "prelude",
+            "minor change",
+            "S+ shift",
+            "S+ Shift",
+            "e:HEV RS",
+            "Civic RS"
           ],
           "event_classes": [
             "product_update",
@@ -633,7 +709,12 @@
             "north america",
             "india",
             "asean",
-            "生産"
+            "生産",
+            "china sales",
+            "monthly sales",
+            "retail sales",
+            "May sales",
+            "5月販売"
           ],
           "event_classes": [
             "operations_market",
@@ -651,7 +732,14 @@
             "受注",
             "補助金",
             "product site",
-            "official release"
+            "official release",
+            "Civic",
+            "Prelude",
+            "e:HEV RS",
+            "S+ Shift",
+            "minor change",
+            "シビック",
+            "プレリュード"
           ],
           "event_classes": [
             "product_update",
@@ -694,7 +782,14 @@
             "pu",
             "power unit",
             "ers",
-            "回生"
+            "回生",
+            "gearbox",
+            "Stroll",
+            "Aston Martin",
+            "40km/h",
+            "sync",
+            "synchronization",
+            "ギアボックス"
           ]
         },
         {
@@ -739,7 +834,15 @@
             "power unit",
             "ers",
             "energy",
-            "回生"
+            "回生",
+            "gearbox",
+            "Stroll",
+            "Aston Martin",
+            "40km/h",
+            "sync",
+            "synchronization",
+            "low speed",
+            "ギアボックス"
           ],
           "event_classes": [
             "infrastructure",
@@ -787,7 +890,12 @@
             "Starlink",
             "instagram",
             "youtube",
-            "official social"
+            "official social",
+            "B20",
+            "booster",
+            "rolling out",
+            "rollout",
+            "Starbase"
           ]
         },
         {
@@ -820,7 +928,14 @@
             "flight",
             "launch",
             "faa",
-            "test"
+            "test",
+            "B20",
+            "booster",
+            "rolling out",
+            "rollout",
+            "Starbase",
+            "ship",
+            "booster movement"
           ],
           "event_classes": [
             "schedule_result",
@@ -909,7 +1024,14 @@
             "boj",
             "日銀",
             "賃金",
-            "物価"
+            "物価",
+            "Ueda",
+            "Kazuo Ueda",
+            "rate hike",
+            "upside risk",
+            "植田",
+            "利上げ",
+            "上振れリスク"
           ]
         },
         {
@@ -939,7 +1061,15 @@
             "政府方針",
             "円",
             "金利",
-            "株"
+            "株",
+            "Rapidus",
+            "semiconductor",
+            "chip",
+            "capital injection",
+            "1500億円",
+            "ラピダス",
+            "半導体",
+            "出資"
           ]
         }
       ],
@@ -955,7 +1085,15 @@
             "日本",
             "物価",
             "賃金",
-            "日銀"
+            "日銀",
+            "Ueda",
+            "Kazuo Ueda",
+            "rate hike",
+            "upside risk",
+            "governor",
+            "植田",
+            "利上げ",
+            "上振れリスク"
           ],
           "event_classes": [
             "macro_data",
@@ -995,7 +1133,16 @@
             "政府方針",
             "金利",
             "円",
-            "株"
+            "株",
+            "Rapidus",
+            "semiconductor",
+            "chip",
+            "capital injection",
+            "investment execution",
+            "1500億円",
+            "ラピダス",
+            "半導体",
+            "出資"
           ],
           "event_classes": [
             "capital_markets",
@@ -1022,7 +1169,14 @@
             "official",
             "news",
             "release",
-            "公式HP"
+            "公式HP",
+            "THE BOOK for",
+            "EP",
+            "4th EP",
+            "North America tour",
+            "key visual",
+            "北米ツアー",
+            "キービジュアル"
           ]
         },
         {
@@ -1045,7 +1199,11 @@
             "ソウル",
             "YENA",
             "ライブ",
-            "海外公演"
+            "海外公演",
+            "North America tour",
+            "key visual",
+            "北米ツアー",
+            "キービジュアル"
           ]
         }
       ],
@@ -1058,7 +1216,14 @@
             "release",
             "yoasobi",
             "幾田りら",
-            "公式HP"
+            "公式HP",
+            "THE BOOK for",
+            "EP",
+            "4th EP",
+            "North America tour",
+            "key visual",
+            "北米ツアー",
+            "キービジュアル"
           ],
           "event_classes": [
             "official_update",
@@ -1089,7 +1254,11 @@
             "Seoul",
             "YENA",
             "ソウル",
-            "ライブ"
+            "ライブ",
+            "North America tour",
+            "key visual",
+            "北米ツアー",
+            "キービジュアル"
           ],
           "event_classes": [
             "schedule_result",
@@ -1104,7 +1273,14 @@
             "Billboard",
             "タイアップ",
             "streaming",
-            "新曲"
+            "新曲",
+            "THE BOOK for",
+            "EP",
+            "4th EP",
+            "North America tour",
+            "key visual",
+            "北米ツアー",
+            "キービジュアル"
           ],
           "event_classes": [
             "product_update",
@@ -1137,7 +1313,13 @@
             "pmi",
             "forex",
             "reserves",
-            "policy"
+            "policy",
+            "gdp",
+            "gross domestic product",
+            "growth",
+            "7.7",
+            "インドGDP",
+            "成長率"
           ]
         },
         {
@@ -1151,7 +1333,14 @@
             "gso",
             "nso",
             "manufacturing",
-            "investment"
+            "investment",
+            "Amazon",
+            "EC",
+            "e-commerce",
+            "exports",
+            "export hub",
+            "越境EC",
+            "輸出拠点"
           ]
         },
         {
@@ -1180,7 +1369,14 @@
             "インド",
             "ベトナム",
             "為替",
-            "供給網"
+            "供給網",
+            "e-commerce",
+            "Amazon",
+            "exports",
+            "Vietnam export hub",
+            "EC",
+            "越境EC",
+            "輸出拠点"
           ]
         }
       ],
@@ -1200,7 +1396,14 @@
             "forex",
             "reserves",
             "policy",
-            "インド"
+            "インド",
+            "gdp",
+            "gross domestic product",
+            "growth",
+            "7.7",
+            "quarterly GDP",
+            "インドGDP",
+            "成長率"
           ],
           "event_classes": [
             "macro_data",
@@ -1220,7 +1423,15 @@
             "nso",
             "manufacturing",
             "investment",
-            "ベトナム"
+            "ベトナム",
+            "Amazon",
+            "EC",
+            "e-commerce",
+            "exports",
+            "export hub",
+            "cross-border",
+            "越境EC",
+            "輸出拠点"
           ],
           "event_classes": [
             "macro_data",
@@ -1261,7 +1472,14 @@
             "supply",
             "manufacturing",
             "インド",
-            "ベトナム"
+            "ベトナム",
+            "e-commerce",
+            "Amazon",
+            "exports",
+            "Vietnam export hub",
+            "EC",
+            "越境EC",
+            "輸出拠点"
           ],
           "event_classes": [
             "macro_data",
@@ -1330,7 +1548,17 @@
             "tariff",
             "energy",
             "大型投資",
-            "政府方針"
+            "政府方針",
+            "Iran",
+            "Hezbollah",
+            "ceasefire",
+            "Trump",
+            "nuclear talks",
+            "Middle East",
+            "oil risk",
+            "geopolitical risk",
+            "米イラン",
+            "停戦"
           ]
         }
       ],
@@ -1386,7 +1614,17 @@
             "policy",
             "energy",
             "大型投資",
-            "政府方針"
+            "政府方針",
+            "Iran",
+            "Hezbollah",
+            "ceasefire",
+            "Trump",
+            "nuclear talks",
+            "Middle East",
+            "oil risk",
+            "geopolitical risk",
+            "米イラン",
+            "停戦"
           ],
           "event_classes": [
             "capital_markets",

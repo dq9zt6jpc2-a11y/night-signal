@@ -114,6 +114,10 @@ python3 scripts/simulate_quality_gate_failures.py
 - `issue.json` must include frontier, observations, candidates, decisions,
   cards, and coverage_manifest. Cards without adopted decisions, or decisions
   without closed observation slots, are invalid.
+- The top page has two layers: `Signals` shows fresh candidates from the
+  latest three calendar days, while category cards and detail pages show only
+  adopted decisions. Broad capture belongs in candidates; deep explanation
+  belongs in adopted cards.
 - Cards must keep `candidate_title` for traceability to the adopted decision and
   `title` for the reader-facing headline.
 - Detail pages are not time-boxed summaries. Current details must carry

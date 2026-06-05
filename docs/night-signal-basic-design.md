@@ -68,6 +68,13 @@ A required slot is closed only when it is:
 When uncertain, keep the item as a candidate. Publication can be selective, but
 collection should bias toward not missing material changes.
 
+The reader experience follows the same split. The top issue shows broad
+`Signals` built from fresh candidates from today, yesterday, and the day before,
+including items that were not promoted to full detail. Adopted category cards
+remain selective and link to detail pages. This avoids hiding collected signals
+while still preventing routine, duplicate, or weak items from becoming full
+articles.
+
 The canonical daily state is assembled from structured files:
 
 - `collection_plan.json`;
@@ -113,6 +120,12 @@ Publish an item only when it has:
 Routine schedules, repeated background items, and thin social reactions should
 remain in observations or rejected candidates unless they change what the reader
 needs to know.
+
+Candidate volume and article volume are intentionally different. The candidate
+ledger is allowed to be wider than the published card set; it is the place for
+confirmed but lower-priority signals such as monthly market figures, product
+minor changes, social/video operational movements, and official notices that do
+not yet deserve a full detail page.
 
 ## 6. Summary
 

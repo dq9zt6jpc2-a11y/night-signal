@@ -44,7 +44,7 @@
       <p>網羅性は長い説明量ではなく、抽出ログの <code>coverage-manifest</code> で証明する。各カテゴリは「調べた検索軸」「見た情報源」「採用/保留/除外/未確認」「掲載カード」を同じJSONに残す。</p>
       <p>2026-06-04以降の設計中心は、後段チェックの足し算ではなく、<code>scripts/night_signal_state.py</code> が表すAI状態機械に置く。状態は discovery frontier、source observations、candidates、topic decisions、publication plan の順に進め、欠けた状態があれば typed blocker として止める。OpenAIを使う場合も自由作文ではなく、Responses APIとStructured OutputsでこのJSON schemaを埋める。</p>
       <p>AI-backed収集は <code>scripts/night_signal_collect.py</code> が <code>collection_plan.json</code> から <code>observations.jsonl</code> を生成する。live web収集には <code>OPENAI_API_KEY</code> を必須とし、キーがない状態では外部収集完了と扱わない。</p>
-      <p>収集後の合成は <code>scripts/night_signal_synthesize.py</code> が <code>observations.jsonl</code> から <code>candidates</code>、<code>decisions</code>、<code>cards</code>、<code>coverage_manifest</code> を作る。観測だけ、候補だけ、カードだけの状態は公開可能にしない。</p>
+      <p>収集後の合成は <code>scripts/night_signal_synthesize.py</code> が <code>observations.jsonl</code> から <code>candidates</code>、<code>decisions</code>、<code>cards</code>、<code>coverage_manifest</code> を作る。観測だけ、候補だけ、カードだけの状態は公開可能にしない。新鮮な観測主張は候補に必ず残し、トップページの <code>Signals</code> では今日・昨日・一昨日の候補を広く見せる。詳細ページ化する通常カードは採用判断済みの候補だけに絞る。</p>
       <ul>
         <li>網羅性は「カテゴリごとに何かを見た」では足りない。各ウォッチ項目について、一次/公式、独立媒体またはデータ、カテゴリで必要なSNS/X、Instagram、Facebook、YouTubeの observation slot を埋める。未収集slotが残る状態は本文生成へ進めない。</li>
         <li>各カテゴリは <code>collection_status: complete</code> になるまで公開しない。</li>
@@ -57,7 +57,7 @@
         <li>2026-05-22以降、各ウォッチ項目は <code>search_sweep</code> に検索クエリと選別判断を残す。検索結果URLは公開情報として載せず、検索で見つけた直接URLだけを <code>collected_items</code> や原文確認に回す。</li>
         <li>公開カードは <code>latest_candidates</code> の <code>decision: adopted</code> からしか作らない。2026-05-22以降、元情報が3日より古い候補は公開カードにせず、背景資料としてだけ扱う。2026-06-01以降は今日・昨日・一昨日の3暦日だけを公開カードにし、カードにはどの日の情報かを表示する。</li>
         <li>2026-05-22以降、3日以内の新しい候補を採用しない場合は、重複、重要度不足、実質変化なし、根拠不足、関連不足のどれかを <code>non_adoption_reason_class</code> に残す。新しい候補を「なんとなく保留」にしない。</li>
-        <li>掲載数は固定しない。調査は全ウォッチ項目で必ず行い、公開カードは新規追加または明確な変化がある候補だけにする。更新がなければカテゴリ内のカードは0件でもよく、更新が多ければ増やす。</li>
+        <li>掲載数は固定しない。調査は全ウォッチ項目で必ず行い、候補は広く残す。公開カードは新規追加または明確な変化がある候補だけにする。更新がなければカテゴリ内のカードは0件でもよく、更新が多ければ増やす。採用しない新鮮な候補も、読者が広く眺められるよう <code>Signals</code> に日付と概要を出す。</li>
         <li>公開対象は <code>.night-signal-issue-date</code> で選ぶ。日次運用ではJSTの今日号、サンプル、抽出ログ、site配下の当日版がそろわない場合は公開前監査で止める。</li>
         <li>公開workflowは当日issue成果物と <code>.night-signal-issue-date</code> の変更だけで動かす。コード、ドキュメント、設定、方針の改善だけで過去号を再配信しない。</li>
         <li>URL根拠はカテゴリごとに8件以上、異なるホスト5件以上を最低ラインにする。公式だけ、SNSだけ、単一メディアだけでは通さない。</li>
@@ -102,7 +102,7 @@
         <li>見出しでは、矢印（→）で因果を詰めない。引用符（“ ”）で抽象語を強調しない。必要な因果は概要で一文に分けて説明する。</li>
         <li>「一次で固定」「完了扱い」「補助線」「採用前確認」「直検索」「品質ゲート」などの作業語を見出しに入れない。</li>
         <li>通常カードは1つの出来事または判断テーマにつき1詳細ページにする。同じ変化を伝える公式発表、主要報道、SNS発信、データは別カードへ分割せず、一つの詳細情報構造に統合する。別の出来事は同じ詳細ページへ混ぜない。</li>
-        <li>カテゴリごとのカード数は固定しない。重要なのは枠を埋めることではなく、Web、SNS/X、YouTube、公式、データを確認したうえで、当日の新規追加・変化点だけを出すこと。</li>
+        <li>カテゴリごとのカード数は固定しない。重要なのは枠を埋めることではなく、Web、SNS/X、YouTube、公式、データを確認したうえで、当日の新規追加・変化点だけを出すこと。多くの項目を眺めるための一覧は <code>Signals</code> が担い、詳細リンクは採用済み候補だけに付ける。</li>
         <li>「今日の最重要」を掲載する場合、選定理由と優先順位の作業説明は抽出ログへ残す。トップページには重要テーマの事実要約だけを表示する。</li>
         <li>2026-06-05号以降、詳細ページは「要点と背景」「確認した事実」「未確定点」「原文確認」で構成する。リンク先を開かなくても内容を理解できるよう、必要十分な情報スロットを満たし、必要な事実を落とさず日本語でまとめる。</li>
         <li>新規の詳細ページは原則として <code>python3 scripts/render_detail.py detail.json</code> で作成する。自由HTMLの手書きで「チェック観点」「次の確認」などの作業見出しを作らない。</li>

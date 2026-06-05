@@ -800,6 +800,79 @@ def render_priority_card(index: int, card: dict[str, Any]) -> str:
     return f"""        <article class="priority-card {priority_class}"><span class="rank">{index}</span><h3>{title}</h3><p>{summary}</p><a class="tag" href="#{section_id}">詳細へ</a></article>"""
 
 
+def signal_board_items(issue: dict[str, Any], cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    issue_date = require_str(issue, "issue_date")
+    candidates = [candidate for candidate in issue.get("candidates", []) if isinstance(candidate, dict)]
+    decisions = {
+        str(decision.get("candidate_title")): decision
+        for decision in issue.get("decisions", [])
+        if isinstance(decision, dict)
+    }
+    card_by_candidate = {str(card.get("candidate_title")): card for card in cards}
+    allowed_dates = {issue_date}
+    date_rank = {issue_date: 0}
+    try:
+        issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
+        latest_dates = [
+            issue_dt.isoformat(),
+            datetime.fromordinal(issue_dt.toordinal() - 1).date().isoformat(),
+            datetime.fromordinal(issue_dt.toordinal() - 2).date().isoformat(),
+        ]
+        allowed_dates = set(latest_dates)
+        date_rank = {date: index for index, date in enumerate(latest_dates)}
+    except ValueError:
+        pass
+    items = []
+    for candidate in candidates:
+        title = str(candidate.get("title", "")).strip()
+        source_date = str(candidate.get("source_published_date", "")).strip()
+        if not title or source_date not in allowed_dates:
+            continue
+        decision = decisions.get(title, {})
+        card = card_by_candidate.get(title)
+        items.append(
+            {
+                "title": title,
+                "summary": str(candidate.get("summary", "")).strip(),
+                "category": str(candidate.get("category", "")).strip(),
+                "source_published_date": source_date,
+                "source_date_rank": date_rank.get(source_date, 99),
+                "freshness_label": relative_day_label(issue_date, source_date),
+                "adoption_decision": str(decision.get("adoption_decision", "reject")),
+                "detail_slug": card.get("slug") if isinstance(card, dict) else "",
+            }
+        )
+    items.sort(
+        key=lambda item: (
+            item["adoption_decision"] != "adopt",
+            item["source_date_rank"],
+            item["category"],
+            item["title"],
+        )
+    )
+    return items
+
+
+def render_signal_item(item: dict[str, Any], *, issue_date: str, root: bool) -> str:
+    label = str(item.get("freshness_label") or "")
+    label_text = f"{html.escape(label)} " if label else ""
+    title = html.escape(str(item.get("title", "")))
+    summary = html.escape(str(item.get("summary", "")))
+    category = html.escape(str(item.get("category", "")))
+    source_date = html.escape(str(item.get("source_published_date", "")))
+    status = "詳細あり" if item.get("detail_slug") else "一覧のみ"
+    href_prefix = f"{html.escape(issue_date, quote=True)}/" if root else ""
+    detail = ""
+    if item.get("detail_slug"):
+        detail = f'<a class="signal-link" href="{href_prefix}details/{html.escape(str(item["detail_slug"]), quote=True)}">詳細へ</a>'
+    return f"""        <article class="signal-item">
+          <div class="signal-meta"><span>{label_text}{source_date}</span><span>{category}</span><span>{html.escape(status)}</span></div>
+          <strong>{title}</strong>
+          <p>{summary}</p>
+          {detail}
+        </article>"""
+
+
 def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, root: bool = False) -> str:
     issue_date = require_str(issue, "issue_date")
     display_date = issue_date.replace("-", ".")
@@ -812,7 +885,7 @@ def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, roo
             )
         )
     )
-    nav_links = ['<a href="#priority">Priority</a>']
+    nav_links = ['<a href="#priority">Priority</a>', '<a href="#signals">Signals</a>']
     contract = read_json(CONFIG_PATH)
     section_labels = {
         category["section_id"]: category["label"]
@@ -825,6 +898,8 @@ def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, roo
     nav_links.append(f'<a href="details/extraction-log-{html.escape(issue_date, quote=True)}.html">抽出ログ</a>')
 
     priority = "\n".join(render_priority_card(index, card) for index, card in enumerate(cards[:4], start=1))
+    signals = signal_board_items(issue, cards)
+    rendered_signals = "\n".join(render_signal_item(item, issue_date=issue_date, root=root) for item in signals)
     sections = []
     for section_id, label in section_labels.items():
         section_cards = [card for card in cards if card["section_id"] == section_id]
@@ -857,12 +932,13 @@ def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, roo
     .hero p {{ max-width:760px; color:#dce5ef; font-size:15px; }} .hero-meta {{ display:flex; flex-wrap:wrap; gap:9px; margin-top:26px; }}
     .hero-chip, .pill {{ border:1px solid var(--line); border-radius:5px; padding:7px 10px; font-size:11px; font-weight:900; }}
     .hero-chip {{ border-color:rgba(255,255,255,.18); color:#dce5ef; }} .section {{ margin-top:32px; }} .section-head {{ margin-bottom:12px; padding-top:14px; border-top:1px solid #9aa7b8; }}
-    h2 {{ margin:0; font-size:23px; }} .priority, .cards {{ display:grid; gap:14px; }} .priority {{ grid-template-columns:repeat(2,minmax(0,1fr)); }} .cards {{ grid-template-columns:repeat(3,minmax(0,1fr)); }}
+    h2 {{ margin:0; font-size:23px; }} .priority, .cards, .signal-list {{ display:grid; gap:14px; }} .priority {{ grid-template-columns:repeat(2,minmax(0,1fr)); }} .cards {{ grid-template-columns:repeat(3,minmax(0,1fr)); }} .signal-list {{ grid-template-columns:repeat(2,minmax(0,1fr)); }}
     .priority-card, .card {{ background:var(--panel); border:1px solid var(--line); border-top:4px solid var(--blue); border-radius:10px; padding:18px; }}
+    .signal-item {{ background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:14px; }} .signal-item strong {{ display:block; font-size:15px; line-height:1.35; margin-bottom:6px; }} .signal-item p {{ font-size:13px; color:#334155; }} .signal-meta {{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; color:var(--muted); font-size:11px; font-weight:800; }} .signal-link {{ font-size:12px; }}
     .priority-card.hot, .card.hot {{ border-top-color:var(--red); }} .priority-card.signal, .card.signal {{ border-top-color:var(--teal); }} .priority-card.macro, .card.macro {{ border-top-color:var(--amber); }}
     .rank {{ display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; margin-bottom:10px; border-radius:6px; background:var(--night); color:white; font-size:12px; font-weight:900; }}
     h3 {{ margin:0 0 8px; font-size:18px; line-height:1.32; }} p {{ margin:0 0 12px; }} .meta {{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; color:var(--muted); }}
-    @media (max-width:860px) {{ .priority, .cards {{ grid-template-columns:1fr; }} .bar {{ align-items:flex-start; flex-direction:column; }} }}
+    @media (max-width:860px) {{ .priority, .cards, .signal-list {{ grid-template-columns:1fr; }} .bar {{ align-items:flex-start; flex-direction:column; }} }}
   </style>
 </head>
 <body>
@@ -876,6 +952,12 @@ def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, roo
       <div class="section-head"><h2>Priority</h2><p>{len(cards)} updates</p></div>
       <div class="priority">
 {priority}
+      </div>
+    </section>
+    <section class="section" id="signals">
+      <div class="section-head"><h2>Signals</h2><p>新着{len(signals)}件</p></div>
+      <div class="signal-list">
+{rendered_signals}
       </div>
     </section>
 {chr(10).join(sections)}
@@ -991,6 +1073,8 @@ def validate_observations(issue: dict[str, Any], frontier: list[dict[str, Any]])
 
 
 def validate_candidates(issue: dict[str, Any], frontier: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    issue_date = require_str(issue, "issue_date")
+    contract = read_json(CONFIG_PATH)
     candidates = require_list(issue, "candidates")
     watch_keys = {(item["category"], item["watch_topic_id"]) for item in frontier}
     seen_by_topic = {key: 0 for key in watch_keys}
@@ -1004,9 +1088,12 @@ def validate_candidates(issue: dict[str, Any], frontier: list[dict[str, Any]]) -
         if key not in watch_keys:
             fail(f"candidates[{index}] is outside coverage contract: {category}/{topic}")
         seen_by_topic[key] += 1
-        require_str(candidate, "title")
+        title = require_str(candidate, "title")
         require_str(candidate, "source_published_date")
-        require_str(candidate, "summary")
+        summary = require_str(candidate, "summary")
+        if effective_on_or_after(contract, "public_copy_contract_effective_date", issue_date):
+            reject_public_copy(f"candidates[{index}].title", title, kind="title")
+            reject_public_copy(f"candidates[{index}].summary", summary, kind="summary")
         if candidate.get("change_class") not in allowed_change:
             fail(f"candidates[{index}] invalid change_class")
         source_urls = candidate.get("source_urls")
@@ -1612,6 +1699,56 @@ def self_test() -> None:
     )
     if "30秒概要" in rendered or "要点と背景" not in rendered or "確認した事実" not in rendered or "未確定点" not in rendered:
         fail("detail renderer must use the current information-complete structure")
+    signal_issue = {
+        "issue_date": "2099-01-03",
+        "candidates": [
+            {
+                "category": "OpenAI",
+                "title": "OpenAI、Codexに共有機能を追加",
+                "source_published_date": "2099-01-03",
+                "summary": "OpenAIがCodexの共有機能を追加し、チーム内で記録内容を共有しやすくした。",
+            },
+            {
+                "category": "Honda",
+                "title": "Honda、中国販売の月次減少を確認",
+                "source_published_date": "2099-01-02",
+                "summary": "Hondaの中国販売に月次で大きな減少があり、市場環境と日本勢の苦戦を読む材料になる。",
+            },
+            {
+                "category": "SpaceX",
+                "title": "SpaceX、古い発射実績を背景資料に残す",
+                "source_published_date": "2098-12-30",
+                "summary": "3日より古い情報は公開候補ボードには出さず、背景資料に留める。",
+            },
+        ],
+        "decisions": [
+            {"candidate_title": "OpenAI、Codexに共有機能を追加", "adoption_decision": "adopt"},
+            {"candidate_title": "Honda、中国販売の月次減少を確認", "adoption_decision": "reject"},
+            {"candidate_title": "SpaceX、古い発射実績を背景資料に残す", "adoption_decision": "reject"},
+        ],
+    }
+    signal_cards = [
+        {
+            "candidate_title": "OpenAI、Codexに共有機能を追加",
+            "title": "OpenAI、Codexに共有機能を追加",
+            "summary": "OpenAIがCodexの共有機能を追加し、チーム内で記録内容を共有しやすくした。",
+            "section_id": "openai",
+            "category": "OpenAI",
+            "source_published_date": "2099-01-03",
+            "topic_value_class": "technical_or_product_shift",
+            "priority_class": "signal",
+            "issue_date": "2099-01-03",
+            "slug": "openai-codex-sharing-2099-01-03.html",
+            "freshness_label": "今日",
+        }
+    ]
+    signal_items = signal_board_items(signal_issue, signal_cards)
+    signal_titles = [item["title"] for item in signal_items]
+    if signal_titles != ["OpenAI、Codexに共有機能を追加", "Honda、中国販売の月次減少を確認"]:
+        fail("signal board must show latest-three-day candidates with adopted items first")
+    signal_html = render_issue_html(signal_issue, signal_cards, root=False)
+    if "Signals" not in signal_html or "一覧のみ" not in signal_html or "古い発射実績" in signal_html:
+        fail("issue renderer must expose broad fresh candidates without stale background items")
     print("NIGHT SIGNAL STATE PASSED")
 
 
