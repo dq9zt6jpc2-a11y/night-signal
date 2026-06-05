@@ -1,9 +1,4 @@
-<!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>抽出ログ 2026-06-05 | NIGHT SIGNAL</title><link rel="stylesheet" href="_style.css"></head>
-<body><main><a class="back" href="../index.html">一覧へ戻る</a><article class="article"><div class="kicker">Coverage Log</div><h1>2026年6月5日版の抽出ログ</h1>
-<p>Web、SNS/X、Instagram、Facebook、YouTubeをカテゴリ別・探索軸別に横断し、公式、主要報道、専門媒体、データ、予定、反証をカテゴリごとに記録した。対象カテゴリ: OpenAI、SoftBank、Honda、F1、SpaceX、日本経済、YOASOBI / 幾田りら、アジア経済、北米経済、宇都宮ブレックス。</p>
-<h2>分類</h2><ul><li>公式 / 主要報道 / 専門媒体 / SNS/X / Instagram / Facebook / YouTube / データ / 予定 / 反証 を各カテゴリで記録。</li><li>採用 / 保留 / 除外 / 未確認 はcoverage-manifestに保存した。</li><li>new_or_changed_items と no_change_checks はカテゴリごとに記録し、掲載項目のURLは詳細ページの原文確認と重ねた。</li></ul>
-<script type="application/json" id="coverage-manifest">{
+{
   "contract_version": "2026-06-01.15",
   "date": "2026-06-05",
   "last_checked_jst": "2026-06-05T21:40:00+09:00",
@@ -4902,4 +4897,4 @@
       "critical_unresolved": []
     }
   }
-}</script></article></main></body></html>
+}

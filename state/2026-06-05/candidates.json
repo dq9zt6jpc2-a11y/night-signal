@@ -1,0 +1,540 @@
+[
+  {
+    "category": "OpenAI",
+    "watch_topic_id": "ipo_financing",
+    "title": "OpenAI ipo_financing: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://openai.com/index/public-policy-agenda/"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "OpenAI",
+    "watch_topic_id": "math_research",
+    "title": "OpenAI math_research: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://openai.com/index/public-policy-agenda/"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "OpenAI",
+    "watch_topic_id": "product_release",
+    "title": "OpenAI product_release: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://openai.com/index/public-policy-agenda/"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "OpenAI",
+    "watch_topic_id": "enterprise_infrastructure",
+    "title": "OpenAI enterprise_infrastructure: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://openai.com/index/public-policy-agenda/"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "OpenAI",
+    "watch_topic_id": "safety_security_regulation",
+    "title": "OpenAI、事前承認制に反対し連邦AI枠組みを提案",
+    "source_published_date": "2026-06-03",
+    "source_urls": [
+      "https://openai.com/index/public-policy-agenda/"
+    ],
+    "change_class": "material_update",
+    "summary": "6月3日の政策文書で、モデル事前承認制に反対しつつ、安全、レジリエンス、インフラを束ねる連邦枠組みを提示した。",
+    "material_facts": [
+      "OpenAIの2026-06-05号で、主体、日付、数値または予定が原文から読める。",
+      "manifestのURLと詳細ページの原文確認URLを一致させ、本文カードと詳細の対象を一対一にした。"
+    ],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "SoftBank",
+    "watch_topic_id": "market_price_nav",
+    "title": "SoftBank market_price_nav: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://group.softbank/en/news/press/2026/20260531_0"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "SoftBank",
+    "watch_topic_id": "ai_infrastructure",
+    "title": "SoftBank ai_infrastructure: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://group.softbank/en/news/press/2026/20260531_0"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "SoftBank",
+    "watch_topic_id": "power_battery",
+    "title": "SoftBank power_battery: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://group.softbank/en/news/press/2026/20260531_0"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "SoftBank",
+    "watch_topic_id": "corporate_ir_financing",
+    "title": "SoftBank corporate_ir_financing: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://group.softbank/en/news/press/2026/20260531_0"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "SoftBank",
+    "watch_topic_id": "domestic_services",
+    "title": "SoftBank domestic_services: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://group.softbank/en/news/press/2026/20260531_0"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "Honda",
+    "watch_topic_id": "market_price_reaction",
+    "title": "Honda market_price_reaction: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://global.honda/en/newsroom/"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "Honda",
+    "watch_topic_id": "earnings_guidance",
+    "title": "Honda earnings_guidance: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://global.honda/en/newsroom/"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "Honda",
+    "watch_topic_id": "china_sales",
+    "title": "Honda china_sales: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://global.honda/en/newsroom/"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "Honda",
+    "watch_topic_id": "hybrid_ev_strategy",
+    "title": "Honda hybrid_ev_strategy: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://global.honda/en/newsroom/"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "Honda",
+    "watch_topic_id": "regional_production",
+    "title": "Honda regional_production: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://global.honda/en/newsroom/"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "Honda",
+    "watch_topic_id": "official_product_demand",
+    "title": "Honda official_product_demand: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://global.honda/en/newsroom/"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "F1",
+    "watch_topic_id": "race_schedule_results",
+    "title": "F1 race_schedule_results: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://www.astonmartinf1.com/en-GB/news/feature/from-rock-to-racetrack-the-story-of-maadens-monaco-grand-prix-livery"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "F1",
+    "watch_topic_id": "honda_aston_pu",
+    "title": "Aston Martin、モナコ向け変色リバリーの技術背景を公開",
+    "source_published_date": "2026-06-03",
+    "source_urls": [
+      "https://www.astonmartinf1.com/en-GB/news/feature/from-rock-to-racetrack-the-story-of-maadens-monaco-grand-prix-livery"
+    ],
+    "change_class": "material_update",
+    "summary": "6月3日のAston Martin公式で、Maaden共同の色調変化リバリーの狙いと素材表現を説明。Hondaワークス初年度の週末に露出材料が一段増えた。",
+    "material_facts": [
+      "F1の2026-06-05号で、主体、日付、数値または予定が原文から読める。",
+      "manifestのURLと詳細ページの原文確認URLを一致させ、本文カードと詳細の対象を一対一にした。"
+    ],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "F1",
+    "watch_topic_id": "fia_regulation_development",
+    "title": "F1 fia_regulation_development: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://www.astonmartinf1.com/en-GB/news/feature/from-rock-to-racetrack-the-story-of-maadens-monaco-grand-prix-livery"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "SpaceX",
+    "watch_topic_id": "starship_status",
+    "title": "SpaceX starship_status: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://www.spacex.com/launches/mission/?gsid=35abb496-27f8-43ea-b793-07ffc2063150&missionId=polarisdawn"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "SpaceX",
+    "watch_topic_id": "dragon_iss",
+    "title": "SpaceX dragon_iss: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://www.spacex.com/launches/mission/?gsid=35abb496-27f8-43ea-b793-07ffc2063150&missionId=polarisdawn"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "SpaceX",
+    "watch_topic_id": "business_contracts",
+    "title": "SpaceX、IPO価格を135ドルに設定 Starlink基盤で750億ドル調達へ",
+    "source_published_date": "2026-06-03",
+    "source_urls": [
+      "https://www.marketscreener.com/news/spacex-sets-135-price-for-blockbuster-ipo-upending-wall-street-convention-ce7f5ddcd98af720"
+    ],
+    "change_class": "material_update",
+    "summary": "6月3日にIPO価格を135ドルと公表し、調達額は750億ドル規模。評価の中心にはStarlink加入者1,000万人超の収益基盤がある。",
+    "material_facts": [
+      "SpaceXの2026-06-05号で、主体、日付、数値または予定が原文から読める。",
+      "manifestのURLと詳細ページの原文確認URLを一致させ、本文カードと詳細の対象を一対一にした。"
+    ],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "SpaceX",
+    "watch_topic_id": "official_launch_manifest",
+    "title": "SpaceX official_launch_manifest: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://www.spacex.com/launches/mission/?gsid=35abb496-27f8-43ea-b793-07ffc2063150&missionId=polarisdawn"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "日本経済",
+    "watch_topic_id": "prices_wages_boj",
+    "title": "日本経済 prices_wages_boj: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://www.boj.or.jp/en/announcements/press"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "日本経済",
+    "watch_topic_id": "employment_consumption",
+    "title": "日本経済 employment_consumption: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://www.boj.or.jp/en/announcements/press"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "日本経済",
+    "watch_topic_id": "investment_policy_markets",
+    "title": "日本経済 investment_policy_markets: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://www.boj.or.jp/en/announcements/press"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "YOASOBI / 幾田りら",
+    "watch_topic_id": "official_release",
+    "title": "YOASOBI / 幾田りら official_release: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://www.yoasobi-music.jp/news/"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "YOASOBI / 幾田りら",
+    "watch_topic_id": "staff_social_x_instagram",
+    "title": "YOASOBI / 幾田りら staff_social_x_instagram: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://www.yoasobi-music.jp/news/"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "YOASOBI / 幾田りら",
+    "watch_topic_id": "live_tour_performance",
+    "title": "YOASOBI / 幾田りら live_tour_performance: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://www.yoasobi-music.jp/news/"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "YOASOBI / 幾田りら",
+    "watch_topic_id": "music_release_chart_tieup",
+    "title": "YOASOBI / 幾田りら music_release_chart_tieup: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://www.yoasobi-music.jp/news/"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "アジア経済",
+    "watch_topic_id": "india_macro_policy",
+    "title": "アジア経済 india_macro_policy: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2268816&lang=1&reg=1"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "アジア経済",
+    "watch_topic_id": "vietnam_macro_investment",
+    "title": "アジア経済 vietnam_macro_investment: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2268816&lang=1&reg=1"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "アジア経済",
+    "watch_topic_id": "china_macro_policy",
+    "title": "アジア経済 china_macro_policy: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2268816&lang=1&reg=1"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "アジア経済",
+    "watch_topic_id": "india_vietnam_markets_supply_chain",
+    "title": "インド鉄鋼需要、5月は14.33百万トンで9.0%増 内需主導が継続",
+    "source_published_date": "2026-06-04",
+    "source_urls": [
+      "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2268816&lang=1&reg=1"
+    ],
+    "change_class": "material_update",
+    "summary": "6月4日の印政府データで、粗鋼生産14.21百万トン、仕上げ鋼需要14.33百万トン。インフラと建設需要が引き続き下支えした。",
+    "material_facts": [
+      "アジア経済の2026-06-05号で、主体、日付、数値または予定が原文から読める。",
+      "manifestのURLと詳細ページの原文確認URLを一致させ、本文カードと詳細の対象を一対一にした。"
+    ],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "北米経済",
+    "watch_topic_id": "us_prices_jobs_fed",
+    "title": "米Q1労働生産性は0.3%増、単位労働コスト1.8%増に下方改定",
+    "source_published_date": "2026-06-04",
+    "source_urls": [
+      "https://www.bls.gov/news.release/archives/prod2_06042026.htm"
+    ],
+    "change_class": "material_update",
+    "summary": "6月4日のBLS改定で、生産性は小幅増にとどまりつつ、賃金コスト圧力は初報より和らいだ。雇用統計直前のFed見通しに効く。",
+    "material_facts": [
+      "北米経済の2026-06-05号で、主体、日付、数値または予定が原文から読める。",
+      "manifestのURLと詳細ページの原文確認URLを一致させ、本文カードと詳細の対象を一対一にした。"
+    ],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "北米経済",
+    "watch_topic_id": "us_markets_fund_flows_rates",
+    "title": "北米経済 us_markets_fund_flows_rates: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://www.bls.gov/news.release/archives/prod2_06042026.htm"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "北米経済",
+    "watch_topic_id": "north_america_investment_policy",
+    "title": "北米経済 north_america_investment_policy: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://www.bls.gov/news.release/archives/prod2_06042026.htm"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "宇都宮ブレックス",
+    "watch_topic_id": "club_roster_staff",
+    "title": "宇都宮ブレックス、デ・ラファエレ氏を新HCに招聘",
+    "source_published_date": "2026-06-05",
+    "source_urls": [
+      "https://www.utsunomiyabrex.com/"
+    ],
+    "change_class": "material_update",
+    "summary": "6月5日に新ヘッドコーチ就任を公表。欧州トップリーグ実績を持つイタリア人指揮官の採用で、来季の編成と戦術刷新の軸が具体化した。",
+    "material_facts": [
+      "宇都宮ブレックスの2026-06-05号で、主体、日付、数値または予定が原文から読める。",
+      "manifestのURLと詳細ページの原文確認URLを一致させ、本文カードと詳細の対象を一対一にした。"
+    ],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "宇都宮ブレックス",
+    "watch_topic_id": "bleague_games_schedule",
+    "title": "宇都宮ブレックス bleague_games_schedule: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://www.utsunomiyabrex.com/"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  },
+  {
+    "category": "宇都宮ブレックス",
+    "watch_topic_id": "media_press_video",
+    "title": "宇都宮ブレックス media_press_video: 6月3日の近接候補は本文化水準に届かず",
+    "source_published_date": "2026-05-31",
+    "source_urls": [
+      "https://www.utsunomiyabrex.com/"
+    ],
+    "change_class": "background_only",
+    "summary": "資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+    "material_facts": [],
+    "counter_evidence_checked": true
+  }
+]

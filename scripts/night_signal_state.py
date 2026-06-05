@@ -781,7 +781,7 @@ def render_card(card: dict[str, Any], *, root: bool) -> str:
     source_date = html.escape(str(card["source_published_date"]))
     label = str(card.get("freshness_label") or "")
     label_text = f"{html.escape(label)} " if label else ""
-    topic_class = html.escape(str(card.get("topic_value_class", "signal")))
+    topic_class = html.escape(str(card.get("priority_class", "signal")))
     href_prefix = f"{html.escape(str(card['issue_date']), quote=True)}/" if root else ""
     slug = html.escape(str(card["slug"]), quote=True)
     return f"""        <article class="card {topic_class}">
