@@ -2,6 +2,11 @@ name: Publish NIGHT SIGNAL
 
 on:
   workflow_dispatch:
+    inputs:
+      issue_date:
+        description: "Explicit NIGHT SIGNAL issue date to publish, e.g. 2026-06-05. Empty publishes today's JST issue."
+        required: false
+        type: string
   schedule:
     - cron: "00 11 * * *"
   push:
@@ -37,9 +42,18 @@ jobs:
       - name: Prepare site
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          REQUESTED_ISSUE_DATE: ${{ inputs.issue_date || '' }}
         run: |
           TODAY_JST="$(TZ=Asia/Tokyo date +%F)"
           ISSUE_DATE="${TODAY_JST}"
+          if [[ -n "${REQUESTED_ISSUE_DATE:-}" ]]; then
+            if [[ "${GITHUB_EVENT_NAME}" != "workflow_dispatch" ]]; then
+              echo "Manual issue date override is only allowed for workflow_dispatch." >&2
+              exit 1
+            fi
+            ISSUE_DATE="${REQUESTED_ISSUE_DATE}"
+          fi
           if [[ ! "$ISSUE_DATE" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
             echo "Computed NIGHT SIGNAL issue date is invalid: ${ISSUE_DATE}" >&2
             exit 1

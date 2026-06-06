@@ -536,6 +536,8 @@
       "required_workflow_terms": [
         ".night-signal-issue-date",
         "ISSUE_DATE=\"${TODAY_JST}\"",
+        "REQUESTED_ISSUE_DATE",
+        "Manual issue date override is only allowed for workflow_dispatch.",
         "OPENAI_API_KEY secret is required to generate the current NIGHT SIGNAL issue from live sources",
         "Verify public page date",
         "Selected NIGHT SIGNAL issue is missing",
