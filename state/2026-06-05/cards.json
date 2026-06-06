@@ -645,5 +645,89 @@
       "title": "Amazon、ベトナムを東南アジアEC輸出拠点へ押し上げ",
       "h1": "Amazon、ベトナムを東南アジアEC輸出拠点へ押し上げ"
     }
+  },
+  {
+    "candidate_title": "米イラン交渉、ヒズボラ停戦拒否で最終局面が不安定化",
+    "title": "米イラン交渉、ヒズボラ停戦拒否で最終局面が不安定化",
+    "summary": "ヒズボラがイスラエル・レバノン停戦条件を拒否。米国のイラン交渉にも関わる中東リスクとして、原油とリスク資産に波及しやすい。",
+    "section_id": "north_america",
+    "category": "北米経済",
+    "source_published_date": "2026-06-04",
+    "topic_value_class": "risk_or_safety_signal",
+    "priority_class": "warm",
+    "detail": {
+      "slug": "north-america-iran-hezbollah-risk-2026-06-05.html",
+      "summary": "Axiosは6月4日更新の記事で、イスラエルとレバノンが米国仲介の停戦条件に合意した一方、ヒズボラ指導部がその条件を拒否したと報じた。条件にはヒズボラの攻撃停止とリタニ川以南からの撤退が含まれ、合意がヒズボラ抜きで紙の上に残るリスクがある。記事は、レバノン停戦がトランプ政権とイラン側の戦争終結交渉に関わる要求の一つだとも説明している。APもイスラエル、ヒズボラ、レバノン情勢の不安定さを伝えており、北米経済では直接の統計ではないが、原油、米外交、リスク資産、金利見通しに波及しやすい政策リスクとして重要である。",
+      "summary_basis": {
+        "what_changed": "Axiosは6月4日更新の記事で、ヒズボラがイスラエル・レバノン停戦条件を拒否したと伝えた。",
+        "why_it_matters": "中東リスクは原油価格、インフレ期待、米外交、リスク資産に連鎖し、北米市場の材料になりやすい。",
+        "confirmed_facts": [
+          "Axiosは6月4日更新の記事で、ヒズボラがイスラエル・レバノン停戦条件を拒否したと伝えた。",
+          "停戦条件にはヒズボラの攻撃停止とリタニ川以南からの撤退が含まれていた。",
+          "記事はレバノン停戦が米国とイラン側の戦争終結交渉にも関わる要求の一つだと説明している。"
+        ],
+        "limits_or_unknowns": "停戦の実効性、米イラン交渉の最終条件、イスラエル側の軍事対応は流動的である。",
+        "source_dates": [
+          "2026-06-04"
+        ]
+      },
+      "sources": [
+        {
+          "label": "北米経済",
+          "url": "https://apnews.com/article/06ea585ce43fd28e26c4d21d46a4df83"
+        },
+        {
+          "label": "北米経済",
+          "url": "https://www.axios.com/2026/06/03/israel-lebanon-ceasefire-hezbollah-us"
+        }
+      ],
+      "issue_date": "2026-06-05",
+      "section_id": "north_america",
+      "kicker": "北米経済",
+      "title": "米イラン交渉、ヒズボラ停戦拒否で最終局面が不安定化",
+      "h1": "米イラン交渉、ヒズボラ停戦拒否で最終局面が不安定化"
+    }
+  },
+  {
+    "candidate_title": "SpaceX Starship B20、Fully Stacked後の試験準備が焦点に",
+    "title": "SpaceX Starship B20、Fully Stacked後の試験準備が焦点に",
+    "summary": "r/SpaceXのStarship開発スレッドではB20がFully Stacked、remaining work ongoingと整理され、次の試験準備がFlight 12後の焦点になっている。",
+    "section_id": "spacex",
+    "category": "SpaceX",
+    "source_published_date": "2026-06-03",
+    "topic_value_class": "operational_status_change",
+    "priority_class": "warm",
+    "detail": {
+      "slug": "spacex-starship-b20-readiness-2026-06-05.html",
+      "summary": "r/SpaceXのStarship Development Thread #63では、Booster 20がMega Bay 1でFully Stacked、remaining work ongoingと整理されている。スレッドは4月30日にメタンタンクがLOXタンク上に積まれ、fully stacked vehicleになった経緯も記録している。コメント欄でもB20はfully stackedで初回cryo test待ちという見方が出ており、Flight 12後のStarship開発では、次の試験機体の準備状況が注目点になる。一方、SpaceX公式Launchesページはミッション一覧を示すもので、B20固有の試験時期はまだ示していない。公式確定情報ではなく専門コミュニティの開発観測として、未確定点を分けて読む必要がある。",
+      "summary_basis": {
+        "what_changed": "r/SpaceXのStarship Development Thread #63は、Booster 20をMega Bay 1でFully Stacked、remaining work ongoingと整理している。",
+        "why_it_matters": "Starshipは試験機体の組み上げ、cryo test、static fire、打ち上げ準備の順に開発リズムが見えるため、B20の状態はFlight 12後の次段階を読む材料になる。",
+        "confirmed_facts": [
+          "r/SpaceXのStarship Development Thread #63は、Booster 20をMega Bay 1でFully Stacked、remaining work ongoingと整理している。",
+          "同スレッドは4月30日にメタンタンクがLOXタンク上に積まれ、fully stacked vehicleになった経緯を記録している。",
+          "SpaceX公式Launchesページでは、B20固有の試験時期はまだ示されていない。"
+        ],
+        "limits_or_unknowns": "現時点では公式確定情報ではなく、専門コミュニティの更新をSpaceX公式ページと分けて扱う必要がある。",
+        "source_dates": [
+          "2026-06-03"
+        ]
+      },
+      "sources": [
+        {
+          "label": "SpaceX",
+          "url": "https://www.reddit.com/r/spacex/comments/1sslxn5/starship_development_thread_63/"
+        },
+        {
+          "label": "SpaceX",
+          "url": "https://www.spacex.com/launches/"
+        }
+      ],
+      "issue_date": "2026-06-05",
+      "section_id": "spacex",
+      "kicker": "SpaceX",
+      "title": "SpaceX Starship B20、Fully Stacked後の試験準備が焦点に",
+      "h1": "SpaceX Starship B20、Fully Stacked後の試験準備が焦点に"
+    }
   }
 ]

@@ -111,16 +111,19 @@ python3 scripts/simulate_quality_gate_failures.py
 - Each observation must include `source_target_results` for every seed target in
   its task, including X, Instagram, Facebook, YouTube, official, media, and data
   sources when configured.
+- Coverage follows a reusable human-editor loop: hypothesize what could have
+  changed, triangulate primary/independent/social/video/data evidence, compare
+  with the previous state, then record candidate, no-change, unavailable, or not
+  applicable. New sources should extend this loop, not add another late gate.
 - `observations` alone are never publication-ready. The synthesis step must
   produce `candidates`, `decisions`, `cards`, and `coverage_manifest` before
   assembly and rendering.
 - `issue.json` must include frontier, observations, candidates, decisions,
   cards, and coverage_manifest. Cards without adopted decisions, or decisions
   without closed observation slots, are invalid.
-- The top page has two layers: `カテゴリ別新着` shows fresh candidates from the
-  latest three calendar days in the configured category order, while category
-  cards and detail pages show only adopted decisions. Broad capture belongs in
-  candidates; deep explanation belongs in adopted cards.
+- The top page shows only adopted detail cards inside their configured
+  categories. Broad capture belongs in candidates and coverage_manifest; reader
+  display must not use list-only items as a substitute for details.
 - Cards must keep `candidate_title` for traceability to the adopted decision and
   `title` for the reader-facing headline.
 - Detail pages are not time-boxed summaries. Current details must carry

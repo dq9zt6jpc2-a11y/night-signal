@@ -58,6 +58,14 @@ Coverage is defined by semantic slots, not by card count.
 category x watch topic x source role x channel
 ```
 
+A comprehensive run follows a human editor's loop, not an additive checklist:
+scan the horizon for what could have changed, form change hypotheses, verify
+them across primary, independent, social, video, and data sources appropriate to
+the subject, compare them with the previous state, then decide whether each
+hypothesis becomes a candidate, a no-change record, or an unavailable/not
+applicable slot. The loop is generic; adding a future source or category should
+extend the slot contract, not create another downstream gate.
+
 A required slot is closed only when it is:
 
 - observed live;
@@ -65,14 +73,12 @@ A required slot is closed only when it is:
 - unavailable with a recorded reason;
 - explicitly not applicable by contract.
 
-When uncertain, keep the item as a candidate. Publication can be selective, but
-collection should bias toward not missing material changes.
-
-The reader experience follows the same split. The top issue shows
-`カテゴリ別新着` built from fresh candidates from today, yesterday, and the day
-before, in the configured category order. Adopted category cards remain
-selective and link to detail pages. This avoids hiding collected updates while
-still preventing routine, duplicate, or weak items from becoming full articles.
+When uncertain, keep the item as a candidate. Collection should bias toward not
+missing material changes. Reader display is stricter: a public item must be an
+adopted detail card inside its configured category. There is no list-only public
+layer. If a fresh material item matters and has enough evidence, make it a full
+detail card; if it does not, keep it in the candidate ledger with a concrete
+reason.
 
 The canonical daily state is assembled from structured files:
 

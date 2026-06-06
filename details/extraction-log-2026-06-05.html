@@ -4,7 +4,7 @@
 <p>Web、SNS/X、Instagram、Facebook、YouTubeをカテゴリ別・探索軸別に横断し、公式、主要報道、専門媒体、データ、予定、反証をカテゴリごとに記録した。対象カテゴリ: OpenAI、SoftBank、Honda、F1、SpaceX、日本経済、YOASOBI / 幾田りら、アジア経済、北米経済、宇都宮ブレックス。</p>
 <h2>分類</h2><ul><li>公式 / 主要報道 / 専門媒体 / SNS/X / Instagram / Facebook / YouTube / データ / 予定 / 反証 を各カテゴリで記録。</li><li>採用 / 保留 / 除外 / 未確認 はcoverage-manifestに保存した。</li><li>new_or_changed_items と no_change_checks はカテゴリごとに記録し、掲載項目のURLは詳細ページの原文確認と重ねた。</li></ul>
 <script type="application/json" id="coverage-manifest">{
-  "contract_version": "2026-06-01.15",
+  "contract_version": "2026-06-05.01",
   "date": "2026-06-05",
   "last_checked_jst": "2026-06-05T21:55:00+09:00",
   "note": "daily collection; Web/SNS-X/YouTube and source-class evidence are recorded per category.",
@@ -2538,7 +2538,8 @@
     "SpaceX": {
       "collection_status": "complete",
       "published_card_titles": [
-        "SpaceX、IPO価格を135ドルに設定 Starlink基盤で750億ドル調達へ"
+        "SpaceX、IPO価格を135ドルに設定 Starlink基盤で750億ドル調達へ",
+        "SpaceX Starship B20、Fully Stacked後の試験準備が焦点に"
       ],
       "search_axes": {
         "launch_status": [
@@ -2637,6 +2638,36 @@
               "source_url": "https://www.marketscreener.com/news/spacex-sets-135-price-for-blockbuster-ipo-upending-wall-street-convention-ce7f5ddcd98af720"
             }
           ]
+        },
+        {
+          "title": "SpaceX Starship B20、Fully Stacked後の試験準備が焦点に",
+          "summary": "r/SpaceXのStarship開発スレッドでは、Booster 20がMega Bay 1でFully Stacked、remaining work ongoingと整理された。SpaceX公式LaunchesページはB20固有の試験時期を示しておらず、専門コミュニティの開発観測として未確定点を分けて扱う。",
+          "sources": [
+            "https://www.reddit.com/r/spacex/comments/1sslxn5/starship_development_thread_63/",
+            "https://www.spacex.com/launches/"
+          ],
+          "summary_mode": "multi_source_synthesis",
+          "material_facts": [
+            "Starship Development Thread #63はB20をFully Stacked、remaining work ongoingと整理している。",
+            "SpaceX公式LaunchesページはB20固有の試験時期を示していない。"
+          ],
+          "synthesis_basis": "複数の根拠で同じ対象の状態と未確定点を分けられるため、一つの詳細項目として整理した。",
+          "claim_verification": [
+            {
+              "claim_type": "status",
+              "source_state": "confirmed_status",
+              "evidence_kind": "direct_source",
+              "claim": "Starship Development Thread #63はB20をFully Stacked、remaining work ongoingと整理している。",
+              "source_url": "https://www.reddit.com/r/spacex/comments/1sslxn5/starship_development_thread_63/"
+            },
+            {
+              "claim_type": "status",
+              "source_state": "confirmed_status",
+              "evidence_kind": "official_release",
+              "claim": "SpaceX公式LaunchesページではB20固有の試験時期は示されていない。",
+              "source_url": "https://www.spacex.com/launches/"
+            }
+          ]
         }
       ],
       "no_change_checks": [
@@ -2700,14 +2731,16 @@
         },
         {
           "topic_id": "starship_status",
-          "title": "SpaceX Starship B20、次期ブースター準備の観測が続く",
+          "title": "SpaceX Starship B20、Fully Stacked後の試験準備が焦点に",
           "source_url": "https://www.reddit.com/r/spacex/comments/1sslxn5/starship_development_thread_63/",
           "source_published_date": "2026-06-03",
-          "decision": "excluded",
-          "rationale": "Starshipの次機体準備としてB20の動きが注目され、Flight 12後の開発リズムを測る手がかりになる。",
+          "decision": "adopted",
+          "rationale": "Starshipは試験機体の組み上げ、cryo test、static fire、打ち上げ準備の順に開発リズムが見えるため、B20の状態はFlight 12後の次段階を読む材料になる。",
           "change_class": "material_update",
-          "publication_assessment": "観測情報はあるが、公式発表または主要報道でロールアウトの事実を十分に固めきれないため、一覧で扱う。",
-          "non_adoption_reason_class": "insufficient_evidence"
+          "publication_assessment": "Starshipは試験機体の組み上げ、cryo test、static fire、打ち上げ準備の順に開発リズムが見えるため、B20の状態はFlight 12後の次段階を読む材料になる。",
+          "topic_value_class": "operational_status_change",
+          "reader_delta": "Starshipは試験機体の組み上げ、cryo test、static fire、打ち上げ準備の順に開発リズムが見えるため、B20の状態はFlight 12後の次段階を読む材料になる。",
+          "materiality_basis": "Starshipは試験機体の組み上げ、cryo test、static fire、打ち上げ準備の順に開発リズムが見えるため、B20の状態はFlight 12後の次段階を読む材料になる。"
         }
       ],
       "collected_items": [
@@ -2749,7 +2782,7 @@
         },
         {
           "topic_id": "starship_status",
-          "title": "SpaceX Starship B20、次期ブースター準備の観測が続く",
+          "title": "SpaceX Starship B20、Fully Stacked後の試験準備が焦点に",
           "source_url": "https://www.reddit.com/r/spacex/comments/1sslxn5/starship_development_thread_63/",
           "source_published_date": "2026-06-03",
           "observed_at_jst": "2026-06-05T21:55:00+09:00",
@@ -2758,7 +2791,7 @@
         },
         {
           "topic_id": "starship_status",
-          "title": "SpaceX Starship B20、次期ブースター準備の観測が続く",
+          "title": "SpaceX Starship B20、Fully Stacked後の試験準備が焦点に",
           "source_url": "https://www.spacex.com/launches/",
           "source_published_date": "2026-06-03",
           "observed_at_jst": "2026-06-05T21:55:00+09:00",
@@ -2772,7 +2805,7 @@
           "checked_at_jst": "2026-06-05T21:40:00+09:00",
           "candidate_titles": [
             "SpaceX：Starship開発は大きな発表なし",
-            "SpaceX Starship B20、次期ブースター準備の観測が続く"
+            "SpaceX Starship B20、Fully Stacked後の試験準備が焦点に"
           ],
           "result": "SpaceXのstarship_statusはWeb、SNS/X、YouTubeまたは公式データを対象に、前号後の実質差分と既報の継続情報を分けて判定した。",
           "event_classes": [
@@ -4699,7 +4732,8 @@
     "北米経済": {
       "collection_status": "complete",
       "published_card_titles": [
-        "米Q1労働生産性は0.3%増、単位労働コスト1.8%増に下方改定"
+        "米Q1労働生産性は0.3%増、単位労働コスト1.8%増に下方改定",
+        "米イラン交渉、ヒズボラ停戦拒否で最終局面が不安定化"
       ],
       "search_axes": {
         "us_prices_jobs_fed": [
@@ -4798,6 +4832,36 @@
               "source_url": "https://www.bls.gov/schedule/2026/home.htm"
             }
           ]
+        },
+        {
+          "title": "米イラン交渉、ヒズボラ停戦拒否で最終局面が不安定化",
+          "summary": "ヒズボラがイスラエル・レバノン停戦条件を拒否し、米国が関わるイラン交渉の前提にも不安定さが出た。中東の戦闘継続は、原油、インフレ期待、米外交、リスク資産に波及しやすい。",
+          "sources": [
+            "https://apnews.com/article/06ea585ce43fd28e26c4d21d46a4df83",
+            "https://www.axios.com/2026/06/03/israel-lebanon-ceasefire-hezbollah-us"
+          ],
+          "summary_mode": "multi_source_synthesis",
+          "material_facts": [
+            "ヒズボラが停戦条件を拒否した。",
+            "レバノン停戦は米国とイラン側の戦争終結交渉にも関わる。"
+          ],
+          "synthesis_basis": "複数の根拠で同じ対象の状態と未確定点を分けられるため、一つの詳細項目として整理した。",
+          "claim_verification": [
+            {
+              "claim_type": "status",
+              "source_state": "confirmed_status",
+              "evidence_kind": "major_media_confirmation",
+              "claim": "ヒズボラがイスラエル・レバノン停戦条件を拒否した。",
+              "source_url": "https://www.axios.com/2026/06/03/israel-lebanon-ceasefire-hezbollah-us"
+            },
+            {
+              "claim_type": "status",
+              "source_state": "confirmed_status",
+              "evidence_kind": "major_media_confirmation",
+              "claim": "レバノン停戦は米国とイラン側の戦争終結交渉にも関わる要求の一つと報じられた。",
+              "source_url": "https://www.axios.com/2026/06/03/israel-lebanon-ceasefire-hezbollah-us"
+            }
+          ]
         }
       ],
       "no_change_checks": [
@@ -4851,11 +4915,13 @@
           "title": "米イラン交渉、ヒズボラ停戦拒否で最終局面が不安定化",
           "source_url": "https://apnews.com/article/06ea585ce43fd28e26c4d21d46a4df83",
           "source_published_date": "2026-06-04",
-          "decision": "excluded",
-          "rationale": "米イラン交渉の終盤でレバノン情勢が障害となり、原油・金利・リスク資産に関わる地政学リスクが強まった。",
+          "decision": "adopted",
+          "rationale": "中東リスクは原油価格、インフレ期待、米外交、リスク資産に連鎖し、北米市場の材料になりやすい。",
           "change_class": "material_update",
-          "publication_assessment": "北米経済そのものではないが、米外交、エネルギー価格、リスク資産へ波及するため一覧で扱う価値がある。",
-          "non_adoption_reason_class": "insufficient_relevance"
+          "publication_assessment": "中東リスクは原油価格、インフレ期待、米外交、リスク資産に連鎖し、北米市場の材料になりやすい。",
+          "topic_value_class": "risk_or_safety_signal",
+          "reader_delta": "中東リスクは原油価格、インフレ期待、米外交、リスク資産に連鎖し、北米市場の材料になりやすい。",
+          "materiality_basis": "中東リスクは原油価格、インフレ期待、米外交、リスク資産に連鎖し、北米市場の材料になりやすい。"
         }
       ],
       "collected_items": [

@@ -208,7 +208,7 @@
       "description": "New detail pages must keep a reader-facing information structure that retains material facts, context, limits, and directly relevant sources without dropping cited evidence.",
       "contract": {
         "article_summary_effective_date": "2026-05-26",
-        "detail_information_contract_effective_date": "2026-06-06",
+        "detail_information_contract_effective_date": "2026-06-05",
         "synthesis_manifest_effective_date": "2026-05-26",
         "allowed_summary_modes": [
           "single_source_summary",

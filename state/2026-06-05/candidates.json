@@ -700,25 +700,25 @@
     "change_class": "material_update",
     "summary": "ヒズボラがイスラエル・レバノン停戦案を拒否し、米国が進めるイラン停戦延長・核交渉の前提が揺れた。中東の戦闘継続はエネルギー価格と米政策リスクに波及しやすい。",
     "material_facts": [
-      "ヒズボラが停戦案を拒否。",
-      "米イラン交渉の進展に影響。"
+      "ヒズボラが停戦条件を拒否した。",
+      "レバノン停戦は米国とイラン側の戦争終結交渉にも関わる。"
     ],
     "counter_evidence_checked": true
   },
   {
     "category": "SpaceX",
     "watch_topic_id": "starship_status",
-    "title": "SpaceX Starship B20、次期ブースター準備の観測が続く",
+    "title": "SpaceX Starship B20、Fully Stacked後の試験準備が焦点に",
     "source_published_date": "2026-06-03",
     "source_urls": [
       "https://www.reddit.com/r/spacex/comments/1sslxn5/starship_development_thread_63/",
       "https://www.spacex.com/launches/"
     ],
     "change_class": "material_update",
-    "summary": "Starship Flight 12後の次期ブースター準備として、B20関連のロールアウト観測が専門コミュニティで続いている。SpaceX公式の発表は限定的なため、詳細記事ではなくStarship開発の一覧項目に留める。",
+    "summary": "r/SpaceXのStarship開発スレッドではB20がFully Stacked、remaining work ongoingと整理され、次の試験準備がFlight 12後の焦点になっている。",
     "material_facts": [
-      "Starship開発スレッドでB20関連観測が続く。",
-      "SpaceX公式発表は限定的。"
+      "Starship Development Thread #63はB20をFully Stacked、remaining work ongoingと整理している。",
+      "SpaceX公式LaunchesページはB20固有の試験時期を示していない。"
     ],
     "counter_evidence_checked": true
   }

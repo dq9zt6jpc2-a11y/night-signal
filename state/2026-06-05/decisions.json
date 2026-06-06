@@ -424,20 +424,16 @@
   },
   {
     "candidate_title": "米イラン交渉、ヒズボラ停戦拒否で最終局面が不安定化",
-    "adoption_decision": "reject",
+    "adoption_decision": "adopt",
     "topic_value_class": "risk_or_safety_signal",
-    "reader_delta": "米イラン交渉の終盤でレバノン情勢が障害となり、原油・金利・リスク資産に関わる地政学リスクが強まった。",
-    "materiality_basis": "北米経済そのものではないが、米外交、エネルギー価格、リスク資産へ波及するため一覧で扱う価値がある。",
-    "reject_reason_class": "insufficient_relevance",
-    "reject_reason": "主要カテゴリの詳細枠は経済データと政策発言を優先し、地政学項目は一覧で日付と要点を示す。"
+    "reader_delta": "中東リスクは原油価格、インフレ期待、米外交、リスク資産に連鎖し、北米市場の材料になりやすい。",
+    "materiality_basis": "中東リスクは原油価格、インフレ期待、米外交、リスク資産に連鎖し、北米市場の材料になりやすい。"
   },
   {
-    "candidate_title": "SpaceX Starship B20、次期ブースター準備の観測が続く",
-    "adoption_decision": "reject",
+    "candidate_title": "SpaceX Starship B20、Fully Stacked後の試験準備が焦点に",
+    "adoption_decision": "adopt",
     "topic_value_class": "operational_status_change",
-    "reader_delta": "Starshipの次機体準備としてB20の動きが注目され、Flight 12後の開発リズムを測る手がかりになる。",
-    "materiality_basis": "観測情報はあるが、公式発表または主要報道でロールアウトの事実を十分に固めきれないため、一覧で扱う。",
-    "reject_reason_class": "insufficient_evidence",
-    "reject_reason": "専門コミュニティ発の観測が中心で、公式発表との照合が十分でない。"
+    "reader_delta": "Starshipは試験機体の組み上げ、cryo test、static fire、打ち上げ準備の順に開発リズムが見えるため、B20の状態はFlight 12後の次段階を読む材料になる。",
+    "materiality_basis": "Starshipは試験機体の組み上げ、cryo test、static fire、打ち上げ準備の順に開発リズムが見えるため、B20の状態はFlight 12後の次段階を読む材料になる。"
   }
 ]

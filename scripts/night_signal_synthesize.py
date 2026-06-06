@@ -59,17 +59,25 @@ Return exactly one JSON object matching category_synthesis.
 Mission:
 - Convert closed source observations into reader-facing candidates, decisions,
   cards, and no-change evidence for one category.
+- Work like a careful human editor: scan the horizon, form hypotheses about
+  what could have changed, triangulate official/independent/social evidence,
+  compare with the previous state, then decide what deserves a full article.
 - Do not publish routine schedules, old background, search-result pages, or
   extreme personal opinions unless a confirmed material change exists.
 - Prefer including a confirmed material item over missing it, but reject weak
   items with a concrete reason.
 - Every watch_topic_id in frontier_topics must have at least one candidate.
 - Every fresh observed claim must be represented by a candidate, even when the
-  final decision is reject. The candidate ledger is broad; cards are selective.
+  final decision is reject. The candidate ledger is broad and auditable.
 - Do not merge independent events into one candidate. Honda China monthly sales
   and a Civic product update, for example, must remain separate candidates.
 - Every candidate must have one decision.
-- Cards must correspond exactly to adopted decisions.
+- Cards must correspond exactly to adopted decisions. There is no public
+  list-only layer: if a fresh material candidate matters to the reader and has
+  enough source evidence for an information-complete detail page, adopt it and
+  make a card. Do not reject a material item merely to keep the page short.
+- Reject only when the item is duplicate, routine/no-material-change,
+  insufficiently evidenced, or outside the configured category's relevance.
 - Public titles must be concise Japanese news headlines. Do not include
   checklist, monitoring, collection, or authoring wording.
 - Summaries may be long when needed. Do not compress away names, dates, numbers,

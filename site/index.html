@@ -17,134 +17,28 @@
     .hero p { max-width:760px; color:#dce5ef; font-size:15px; } .hero-meta { display:flex; flex-wrap:wrap; gap:9px; margin-top:26px; }
     .hero-chip, .pill { border:1px solid var(--line); border-radius:5px; padding:7px 10px; font-size:11px; font-weight:900; }
     .hero-chip { border-color:rgba(255,255,255,.18); color:#dce5ef; } .section { margin-top:32px; } .section-head { margin-bottom:12px; padding-top:14px; border-top:1px solid #9aa7b8; }
-    h2 { margin:0; font-size:23px; } .priority, .cards, .category-update-list { display:grid; gap:14px; } .priority { grid-template-columns:repeat(2,minmax(0,1fr)); } .cards { grid-template-columns:repeat(3,minmax(0,1fr)); } .category-update-list { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    h2 { margin:0; font-size:23px; } .priority, .cards { display:grid; gap:14px; } .priority { grid-template-columns:repeat(2,minmax(0,1fr)); } .cards { grid-template-columns:repeat(3,minmax(0,1fr)); }
     .priority-card, .card { background:var(--panel); border:1px solid var(--line); border-top:4px solid var(--blue); border-radius:10px; padding:18px; }
-    .category-update-item { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:14px; } .category-update-item strong { display:block; font-size:15px; line-height:1.35; margin-bottom:6px; } .category-update-item p { font-size:13px; color:#334155; } .category-update-meta { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; color:var(--muted); font-size:11px; font-weight:800; } .category-update-link { font-size:12px; }
     .priority-card.hot, .card.hot { border-top-color:var(--red); } .priority-card.signal, .card.signal { border-top-color:var(--teal); } .priority-card.macro, .card.macro { border-top-color:var(--amber); }
     .rank { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; margin-bottom:10px; border-radius:6px; background:var(--night); color:white; font-size:12px; font-weight:900; }
     h3 { margin:0 0 8px; font-size:18px; line-height:1.32; } p { margin:0 0 12px; } .meta { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; color:var(--muted); }
-    @media (max-width:860px) { .priority, .cards, .category-update-list { grid-template-columns:1fr; } .bar { align-items:flex-start; flex-direction:column; } }
+    @media (max-width:860px) { .priority, .cards { grid-template-columns:1fr; } .bar { align-items:flex-start; flex-direction:column; } }
   </style>
 </head>
 <body>
-  <header><div class="bar"><div class="brand"><strong>NIGHT SIGNAL</strong><span>Daily Intelligence</span></div><nav><a href="#priority">Priority</a><a href="#category_updates">カテゴリ別新着</a><a href="#openai">OpenAI</a><a href="#softbank">SoftBank</a><a href="#honda">Honda</a><a href="#f1">F1</a><a href="#spacex">SpaceX</a><a href="#japan_economy">日本経済</a><a href="#yoasobi_ikuta">YOASOBI / 幾田りら</a><a href="#asia">アジア経済</a><a href="#north_america">北米経済</a><a href="#brex">宇都宮ブレックス</a><a href="2026-06-05/details/policy.html">方針</a><a href="2026-06-05/details/extraction-log-2026-06-05.html">抽出ログ</a></nav></div></header>
+  <header><div class="bar"><div class="brand"><strong>NIGHT SIGNAL</strong><span>Daily Intelligence</span></div><nav><a href="#priority">Priority</a><a href="#openai">OpenAI</a><a href="#softbank">SoftBank</a><a href="#honda">Honda</a><a href="#f1">F1</a><a href="#spacex">SpaceX</a><a href="#japan_economy">日本経済</a><a href="#yoasobi_ikuta">YOASOBI / 幾田りら</a><a href="#asia">アジア経済</a><a href="#north_america">北米経済</a><a href="#brex">宇都宮ブレックス</a><a href="2026-06-05/details/policy.html">方針</a><a href="2026-06-05/details/extraction-log-2026-06-05.html">抽出ログ</a></nav></div></header>
   <main>
     <section class="hero">
       <div class="hero-top"><div class="edition">Night Signal</div><div class="date">2026.06.05</div></div>
       <div><h1>NIGHT SIGNAL</h1><p>眠りにつく前に、世界の輪郭を整える。次の朝に見落としたくない変化だけを、出典と日付を残して読む。</p><div class="hero-meta"><span class="hero-chip">Web</span><span class="hero-chip">SNS/X</span><span class="hero-chip">Instagram</span><span class="hero-chip">Facebook</span><span class="hero-chip">YouTube</span><span class="hero-chip">Data</span></div></div>
     </section>
     <section class="section" id="priority">
-      <div class="section-head"><h2>Priority</h2><p>15 updates</p></div>
+      <div class="section-head"><h2>Priority</h2><p>17 updates</p></div>
       <div class="priority">
         <article class="priority-card hot"><span class="rank">1</span><h3>SpaceX、IPO価格を135ドルに設定 Starlink基盤で750億ドル調達へ</h3><p>6月3日にIPO価格を135ドルと公表し、調達額は750億ドル規模。評価の中心にはStarlink加入者1,000万人超の収益基盤がある。</p><a class="tag" href="#spacex">詳細へ</a></article>
         <article class="priority-card signal"><span class="rank">2</span><h3>Aston Martin、モナコ向け変色リバリーの技術背景を公開</h3><p>6月3日のAston Martin公式で、Maaden共同の色調変化リバリーの狙いと素材表現を説明。Hondaワークス初年度の週末に露出材料が一段増えた。</p><a class="tag" href="#f1">詳細へ</a></article>
         <article class="priority-card signal"><span class="rank">3</span><h3>OpenAI、事前承認制に反対し連邦AI枠組みを提案</h3><p>6月3日の政策文書で、モデル事前承認制に反対しつつ、安全、レジリエンス、インフラを束ねる連邦枠組みを提示した。</p><a class="tag" href="#openai">詳細へ</a></article>
         <article class="priority-card macro"><span class="rank">4</span><h3>インド鉄鋼需要、5月は14.33百万トンで9.0%増 内需主導が継続</h3><p>6月4日の印政府データで、粗鋼生産14.21百万トン、仕上げ鋼需要14.33百万トン。インフラと建設需要が引き続き下支えした。</p><a class="tag" href="#asia">詳細へ</a></article>
-      </div>
-    </section>
-    <section class="section" id="category_updates">
-      <div class="section-head"><h2>カテゴリ別新着</h2><p>新着17件</p></div>
-      <div class="category-update-list">
-        <article class="category-update-item">
-          <div class="category-update-meta"><span>OpenAI</span><span>昨日 2026-06-04</span><span>詳細あり</span></div>
-          <strong>OpenAI、ChatGPTメモリをDreaming V3へ刷新</strong>
-          <p>OpenAIはChatGPTのメモリ合成をDreaming V3へ更新し、古い記憶の陳腐化、正確性、スケールの課題を抑える構成にした。米国のPlus/Proから始まり、無料ユーザーにも段階展開される。</p>
-          <a class="category-update-link" href="2026-06-05/details/openai-chatgpt-memory-dreaming-2026-06-05.html">詳細へ</a>
-        </article>
-        <article class="category-update-item">
-          <div class="category-update-meta"><span>OpenAI</span><span>一昨日 2026-06-03</span><span>詳細あり</span></div>
-          <strong>OpenAI、事前承認制に反対し連邦AI枠組みを提案</strong>
-          <p>6月3日の政策文書で、モデル事前承認制に反対しつつ、安全、レジリエンス、インフラを束ねる連邦枠組みを提示した。</p>
-          <a class="category-update-link" href="2026-06-05/details/openai-signal-2026-06-05.html">詳細へ</a>
-        </article>
-        <article class="category-update-item">
-          <div class="category-update-meta"><span>SoftBank</span><span>今日 2026-06-05</span><span>詳細あり</span></div>
-          <strong>ソフトバンクG、個人向けハイブリッド債2600億円を5.12%で条件決定</strong>
-          <p>ソフトバンクグループは5日、個人投資家向け35年ハイブリッド債2600億円の条件を決め、当初5年の利率を5.12%にした。AI投資と借換えが重なる局面で、円建て負債調達コストの高さが目立つ。</p>
-          <a class="category-update-link" href="2026-06-05/details/softbank-hybrid-bond-2026-06-05.html">詳細へ</a>
-        </article>
-        <article class="category-update-item">
-          <div class="category-update-meta"><span>Honda</span><span>今日 2026-06-05</span><span>詳細あり</span></div>
-          <strong>Honda中国5月販売、2万8279台で48.7%減</strong>
-          <p>Hondaの中国5月小売販売は2万8279台で前年同月比48.7%減。1〜5月累計も17万3344台、32.5%減となり、中国NEV市場の構造変化に日本勢が追いつけていない状況が続く。</p>
-          <a class="category-update-link" href="2026-06-05/details/honda-china-sales-2026-06-05.html">詳細へ</a>
-        </article>
-        <article class="category-update-item">
-          <div class="category-update-meta"><span>Honda</span><span>昨日 2026-06-04</span><span>詳細あり</span></div>
-          <strong>Hondaシビック、e:HEV RSにS+ Shiftを追加し6月5日発売</strong>
-          <p>Hondaはシビックをマイナーチェンジし、PRELUDEに続いてHonda S+ Shiftを採用したe:HEV RSを追加した。後席USB、ステアリングヒーターなど装備変更も入り、6月5日に発売する。</p>
-          <a class="category-update-link" href="2026-06-05/details/honda-civic-ehev-rs-2026-06-05.html">詳細へ</a>
-        </article>
-        <article class="category-update-item">
-          <div class="category-update-meta"><span>F1</span><span>一昨日 2026-06-03</span><span>詳細あり</span></div>
-          <strong>Aston Martin、モナコ向け変色リバリーの技術背景を公開</strong>
-          <p>6月3日のAston Martin公式で、Maaden共同の色調変化リバリーの狙いと素材表現を説明。Hondaワークス初年度の週末に露出材料が一段増えた。</p>
-          <a class="category-update-link" href="2026-06-05/details/f1-signal-2026-06-05.html">詳細へ</a>
-        </article>
-        <article class="category-update-item">
-          <div class="category-update-meta"><span>SpaceX</span><span>一昨日 2026-06-03</span><span>詳細あり</span></div>
-          <strong>SpaceX、IPO価格を135ドルに設定 Starlink基盤で750億ドル調達へ</strong>
-          <p>6月3日にIPO価格を135ドルと公表し、調達額は750億ドル規模。評価の中心にはStarlink加入者1,000万人超の収益基盤がある。</p>
-          <a class="category-update-link" href="2026-06-05/details/spacex-signal-2026-06-05.html">詳細へ</a>
-        </article>
-        <article class="category-update-item">
-          <div class="category-update-meta"><span>SpaceX</span><span>一昨日 2026-06-03</span><span>一覧のみ</span></div>
-          <strong>SpaceX Starship B20、次期ブースター準備の観測が続く</strong>
-          <p>Starship Flight 12後の次期ブースター準備として、B20関連のロールアウト観測が専門コミュニティで続いている。SpaceX公式の発表は限定的なため、詳細記事ではなくStarship開発の一覧項目に留める。</p>
-        </article>
-        <article class="category-update-item">
-          <div class="category-update-meta"><span>日本経済</span><span>今日 2026-06-05</span><span>詳細あり</span></div>
-          <strong>Rapidus、政府系IPAから1500億円の追加出資を完了</strong>
-          <p>Rapidusは6月5日、経産省所管のIPAから1500億円の追加出資を完了したと発表した。既存分と合わせた資金調達は4249.5億円となり、2027年の2nm量産計画を支える政府資本の比重が増した。</p>
-          <a class="category-update-link" href="2026-06-05/details/rapidus-ipa-funding-2026-06-05.html">詳細へ</a>
-        </article>
-        <article class="category-update-item">
-          <div class="category-update-meta"><span>日本経済</span><span>一昨日 2026-06-03</span><span>詳細あり</span></div>
-          <strong>日銀植田総裁、物価上振れなら利上げ是非を議論へ</strong>
-          <p>日銀の植田総裁は6月3日、物価の上振れリスクが景気の下振れリスクを上回ると判断すれば、政策金利引き上げの是非を議論する必要があると述べた。市場では6月利上げ観測が強まる。</p>
-          <a class="category-update-link" href="2026-06-05/details/boj-ueda-rate-hike-risk-2026-06-05.html">詳細へ</a>
-        </article>
-        <article class="category-update-item">
-          <div class="category-update-meta"><span>YOASOBI / 幾田りら</span><span>今日 2026-06-05</span><span>詳細あり</span></div>
-          <strong>YOASOBI、4th EP収録曲と北米ツアー新ビジュアルを公開</strong>
-          <p>YOASOBIは6月26日発売の4th EP「THE BOOK for,」について、収録曲と店舗別購入特典の絵柄を公開し、初の北米ツアー「NEVER ENDING STORIES」のキービジュアルも解禁した。</p>
-          <a class="category-update-link" href="2026-06-05/details/yoasobi-the-book-for-tour-visual-2026-06-05.html">詳細へ</a>
-        </article>
-        <article class="category-update-item">
-          <div class="category-update-meta"><span>アジア経済</span><span>今日 2026-06-05</span><span>詳細あり</span></div>
-          <strong>インドFY26実質GDP、7.7%成長でQ4は7.8%</strong>
-          <p>インドのFY26実質GDPは7.7%成長、Q4は7.8%成長となった。製造業、サービス、不動産関連が伸びる一方、RBIはFY27成長率見通しを6.6%へ引き下げた。</p>
-          <a class="category-update-link" href="2026-06-05/details/india-gdp-fy26-2026-06-05.html">詳細へ</a>
-        </article>
-        <article class="category-update-item">
-          <div class="category-update-meta"><span>アジア経済</span><span>昨日 2026-06-04</span><span>詳細あり</span></div>
-          <strong>インド鉄鋼需要、5月は14.33百万トンで9.0%増 内需主導が継続</strong>
-          <p>6月4日の印政府データで、粗鋼生産14.21百万トン、仕上げ鋼需要14.33百万トン。インフラと建設需要が引き続き下支えした。</p>
-          <a class="category-update-link" href="2026-06-05/details/asia-signal-2026-06-05.html">詳細へ</a>
-        </article>
-        <article class="category-update-item">
-          <div class="category-update-meta"><span>アジア経済</span><span>一昨日 2026-06-03</span><span>詳細あり</span></div>
-          <strong>Amazon、ベトナムを東南アジアEC輸出拠点へ押し上げ</strong>
-          <p>Amazon Global Selling Vietnamは2026年の越境EC輸出サミットを開き、AI対応ツールや販売者支援を通じて、ベトナム企業の海外販売とブランド化を加速する方針を示した。</p>
-          <a class="category-update-link" href="2026-06-05/details/vietnam-amazon-ec-export-2026-06-05.html">詳細へ</a>
-        </article>
-        <article class="category-update-item">
-          <div class="category-update-meta"><span>北米経済</span><span>昨日 2026-06-04</span><span>詳細あり</span></div>
-          <strong>米Q1労働生産性は0.3%増、単位労働コスト1.8%増に下方改定</strong>
-          <p>6月4日のBLS改定で、生産性は小幅増にとどまりつつ、賃金コスト圧力は初報より和らいだ。雇用統計直前のFed見通しに効く。</p>
-          <a class="category-update-link" href="2026-06-05/details/north_america-signal-2026-06-05.html">詳細へ</a>
-        </article>
-        <article class="category-update-item">
-          <div class="category-update-meta"><span>北米経済</span><span>昨日 2026-06-04</span><span>一覧のみ</span></div>
-          <strong>米イラン交渉、ヒズボラ停戦拒否で最終局面が不安定化</strong>
-          <p>ヒズボラがイスラエル・レバノン停戦案を拒否し、米国が進めるイラン停戦延長・核交渉の前提が揺れた。中東の戦闘継続はエネルギー価格と米政策リスクに波及しやすい。</p>
-        </article>
-        <article class="category-update-item">
-          <div class="category-update-meta"><span>宇都宮ブレックス</span><span>今日 2026-06-05</span><span>詳細あり</span></div>
-          <strong>宇都宮ブレックス、デ・ラファエレ氏を新HCに招聘</strong>
-          <p>6月5日に新ヘッドコーチ就任を公表。欧州トップリーグ実績を持つイタリア人指揮官の採用で、来季の編成と戦術刷新の軸が具体化した。</p>
-          <a class="category-update-link" href="2026-06-05/details/brex-signal-2026-06-05.html">詳細へ</a>
-        </article>
       </div>
     </section>
     <section class="section" id="openai">
@@ -204,13 +98,19 @@
       </div>
     </section>
     <section class="section" id="spacex">
-      <div class="section-head"><h2>SpaceX</h2><p>1 updates</p></div>
+      <div class="section-head"><h2>SpaceX</h2><p>2 updates</p></div>
       <div class="cards">
         <article class="card hot">
           <div class="meta"><span class="pill">一昨日 2026-06-03</span><span class="pill">SpaceX</span></div>
           <h3>SpaceX、IPO価格を135ドルに設定 Starlink基盤で750億ドル調達へ</h3>
           <p>6月3日にIPO価格を135ドルと公表し、調達額は750億ドル規模。評価の中心にはStarlink加入者1,000万人超の収益基盤がある。</p>
           <a class="link" href="2026-06-05/details/spacex-signal-2026-06-05.html">詳細へ</a>
+        </article>
+        <article class="card warm">
+          <div class="meta"><span class="pill">一昨日 2026-06-03</span><span class="pill">SpaceX</span></div>
+          <h3>SpaceX Starship B20、Fully Stacked後の試験準備が焦点に</h3>
+          <p>r/SpaceXのStarship開発スレッドではB20がFully Stacked、remaining work ongoingと整理され、次の試験準備がFlight 12後の焦点になっている。</p>
+          <a class="link" href="2026-06-05/details/spacex-starship-b20-readiness-2026-06-05.html">詳細へ</a>
         </article>
       </div>
     </section>
@@ -266,13 +166,19 @@
       </div>
     </section>
     <section class="section" id="north_america">
-      <div class="section-head"><h2>北米経済</h2><p>1 updates</p></div>
+      <div class="section-head"><h2>北米経済</h2><p>2 updates</p></div>
       <div class="cards">
         <article class="card macro">
           <div class="meta"><span class="pill">昨日 2026-06-04</span><span class="pill">北米経済</span></div>
           <h3>米Q1労働生産性は0.3%増、単位労働コスト1.8%増に下方改定</h3>
           <p>6月4日のBLS改定で、生産性は小幅増にとどまりつつ、賃金コスト圧力は初報より和らいだ。雇用統計直前のFed見通しに効く。</p>
           <a class="link" href="2026-06-05/details/north_america-signal-2026-06-05.html">詳細へ</a>
+        </article>
+        <article class="card warm">
+          <div class="meta"><span class="pill">昨日 2026-06-04</span><span class="pill">北米経済</span></div>
+          <h3>米イラン交渉、ヒズボラ停戦拒否で最終局面が不安定化</h3>
+          <p>ヒズボラがイスラエル・レバノン停戦条件を拒否。米国のイラン交渉にも関わる中東リスクとして、原油とリスク資産に波及しやすい。</p>
+          <a class="link" href="2026-06-05/details/north-america-iran-hezbollah-risk-2026-06-05.html">詳細へ</a>
         </article>
       </div>
     </section>

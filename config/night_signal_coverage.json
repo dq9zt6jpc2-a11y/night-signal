@@ -6,7 +6,7 @@
       "version": "2026-05-24.12"
     },
     {
-      "through_date": "2026-06-05",
+      "through_date": "2026-06-04",
       "version": "2026-06-01.15"
     }
   ],
@@ -72,8 +72,8 @@
   "summary_quality_effective_date": "2026-05-22",
   "article_summary_effective_date": "2026-05-26",
   "detail_summary_heading": "要点と背景",
-  "detail_summary_heading_effective_date": "2026-06-06",
-  "detail_information_contract_effective_date": "2026-06-06",
+  "detail_summary_heading_effective_date": "2026-06-05",
+  "detail_information_contract_effective_date": "2026-06-05",
   "public_copy_contract_effective_date": "2026-06-06",
   "required_detail_information_slots": [
     "what_changed",
