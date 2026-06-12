@@ -26,7 +26,7 @@ import night_signal_state as state
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_STATE_ROOT = ROOT / "state"
 RESPONSES_URL = os.getenv("OPENAI_RESPONSES_URL", "https://api.openai.com/v1/responses")
-DEFAULT_SYNTHESIS_MODEL = os.getenv("NIGHT_SIGNAL_SYNTHESIS_MODEL", "gpt-5.2")
+DEFAULT_SYNTHESIS_MODEL = os.getenv("NIGHT_SIGNAL_SYNTHESIS_MODEL", "gpt-5.5")
 
 NO_CHANGE_CHECK_SCHEMA: dict[str, Any] = {
     "type": "object",
@@ -85,6 +85,8 @@ Mission:
 - Detail summary_basis must explain what changed, why it matters, confirmed
   facts, limits/unknowns, and source dates.
 - Use only absolute direct source URLs observed in the input observations.
+- Material candidates must cite at least one source URL that carries observed
+  claim_atoms, not just a URL that appeared in the sweep.
 """
 
 
@@ -235,6 +237,45 @@ def direct_urls(observations: list[dict[str, Any]]) -> set[str]:
     return urls
 
 
+def claim_source_urls(issue_date: str, observations: list[dict[str, Any]]) -> set[str]:
+    urls: set[str] = set()
+    allowed_source_dates = set(latest_three_dates(issue_date))
+    for observation in observations:
+        if not isinstance(observation, dict):
+            continue
+        if observation.get("slot_state") != "observed_live":
+            continue
+        if observation.get("published_date") not in allowed_source_dates:
+            continue
+        claim_atoms = observation.get("claim_atoms")
+        if not isinstance(claim_atoms, list) or not claim_atoms:
+            continue
+        url = observation.get("url")
+        if isinstance(url, str) and url.startswith(("http://", "https://")):
+            urls.add(url)
+        for result in observation.get("source_target_results", []):
+            if not isinstance(result, dict):
+                continue
+            result_url = result.get("url")
+            if (
+                isinstance(result_url, str)
+                and result_url.startswith(("http://", "https://"))
+                and result.get("slot_state") == "observed_live"
+                and result.get("published_date") in allowed_source_dates
+            ):
+                urls.add(result_url)
+    return urls
+
+
+def validate_claim_source_linkage(category: str, candidate: dict[str, Any], claim_urls: set[str]) -> None:
+    change_class = candidate.get("change_class")
+    if change_class not in {"new_event", "material_update"}:
+        return
+    source_urls = candidate.get("source_urls")
+    if not isinstance(source_urls, list) or not any(url in claim_urls for url in source_urls):
+        fail(f"{category} material candidate lacks claim/source linkage: {candidate.get('title')}")
+
+
 def validate_category_result(issue_date: str, category: str, frontier_topics: list[dict[str, Any]], observations: list[dict[str, Any]], result: dict[str, Any]) -> None:
     if result.get("category") != category:
         fail(f"synthesis category mismatch: {result.get('category')} != {category}")
@@ -253,6 +294,7 @@ def validate_category_result(issue_date: str, category: str, frontier_topics: li
 
     allowed_source_dates = set(latest_three_dates(issue_date))
     allowed_urls = direct_urls(observations)
+    claim_urls = claim_source_urls(issue_date, observations)
     fresh_claim_urls: set[str] = set()
     for observation in observations:
         if not isinstance(observation, dict):
@@ -275,6 +317,7 @@ def validate_category_result(issue_date: str, category: str, frontier_topics: li
             if url not in allowed_urls:
                 fail(f"{category} candidate uses URL not present in observations: {url}")
             fresh_claim_urls.discard(url)
+        validate_claim_source_linkage(category, candidate, claim_urls)
     if fresh_claim_urls:
         fail(f"{category} fresh observed claims missing from candidates: " + ", ".join(sorted(fresh_claim_urls)[:6]))
 
@@ -441,6 +484,28 @@ def self_test() -> None:
                     }
                 ],
                 "claim_atoms": [{"claim_type": "announcement", "claim": "OpenAIが発表した。", "source_state": "confirmed_update"}],
+            },
+            {
+                "category": "OpenAI",
+                "watch_topic_id": "product_release",
+                "source_role": "independent_or_media",
+                "channel": "web",
+                "slot_state": "observed_live",
+                "url": "https://example.com/background",
+                "observed_at_jst": "2099-01-01T20:01:00+09:00",
+                "published_date": "2099-01-01",
+                "evidence_summary": "背景情報のみで、新しい主張は確認できない。",
+                "source_target_results": [
+                    {
+                        "label": "Background",
+                        "url": "https://example.com/background",
+                        "channel": "web",
+                        "slot_state": "observed_live",
+                        "published_date": "2099-01-01",
+                        "evidence_summary": "背景情報のみ。",
+                    }
+                ],
+                "claim_atoms": [],
             }
         ],
     )
@@ -496,7 +561,7 @@ def self_test() -> None:
     }
     validate_category_result("2099-01-01", "OpenAI", frontier_topics, observation_records, covered_result)
     missing_result = json.loads(json.dumps(covered_result, ensure_ascii=False))
-    missing_result["candidates"][0]["source_urls"] = []
+    missing_result["candidates"][0]["source_urls"] = ["https://example.com/background"]
     captured_failures: list[str] = []
     original_fail = fail
 
@@ -512,8 +577,8 @@ def self_test() -> None:
             pass
     finally:
         globals()["fail"] = original_fail
-    if not captured_failures or "fresh observed claims missing from candidates" not in captured_failures[0]:
-        fail("synthesis validation must reject fresh observed claims that are missing from candidates")
+    if not captured_failures or "claim/source linkage" not in captured_failures[0]:
+        fail("synthesis validation must reject material candidates without claim/source linkage")
     print("NIGHT SIGNAL SYNTHESIS PASSED")
 
 

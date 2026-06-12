@@ -35,6 +35,22 @@ The operating path is intentionally small.
 
 ## Commands
 
+Normal publication uses one command:
+
+```bash
+python3 scripts/night_signal_publish.py YYYY-MM-DD
+```
+
+Preflight and public verification use the same owner:
+
+```bash
+python3 scripts/night_signal_publish.py YYYY-MM-DD --preflight
+python3 scripts/night_signal_publish.py YYYY-MM-DD --public-audit
+```
+
+The lower-level commands remain available for debugging a failed state
+transition:
+
 ```bash
 python3 scripts/night_signal_state.py --write-collection-plan YYYY-MM-DD
 python3 scripts/night_signal_collect.py YYYY-MM-DD
@@ -69,6 +85,8 @@ python3 scripts/simulate_quality_gate_failures.py
   API web search and structured output.
 - `scripts/night_signal_synthesize.py`: source-observation synthesizer for
   candidates, decisions, cards, and coverage_manifest.
+- `scripts/night_signal_publish.py`: the canonical 20:00 JST publication
+  driver. It owns collection, synthesis, rendering, site sync, and local audits.
 - `scripts/sync_site.py`: the only site sync path.
 - `scripts/coverage_audit.py`: coverage contract audit.
 - `scripts/quality_gate.py`: public issue quality audit.
@@ -105,9 +123,10 @@ python3 scripts/simulate_quality_gate_failures.py
   when the current issue has not already been generated. Missing credentials are
   a blocking operations fault, not a content fallback condition.
 - The collector keeps stable model routes in the plan. Current default concrete
-  models are `gpt-5-mini` for structured source extraction and `gpt-5.2` for
-  frontier reasoning; use the `NIGHT_SIGNAL_MODEL_*` environment variables when
-  official OpenAI model guidance changes.
+  models are `gpt-5-mini` for structured source extraction and `gpt-5.5` for
+  frontier reasoning. The synthesizer also defaults to `gpt-5.5`. Use the
+  `NIGHT_SIGNAL_MODEL_*` and `NIGHT_SIGNAL_SYNTHESIS_MODEL` environment
+  variables when official OpenAI model guidance changes.
 - Each observation must include `source_target_results` for every seed target in
   its task, including X, Instagram, Facebook, YouTube, official, media, and data
   sources when configured.
@@ -128,7 +147,12 @@ python3 scripts/simulate_quality_gate_failures.py
   `title` for the reader-facing headline.
 - Detail pages are not time-boxed summaries. Current details must carry
   `summary_basis` with what changed, why it matters, confirmed facts, limits or
-  unknowns, and source dates, then render those as reader-facing context.
+  unknowns, and source dates, then render those as reader-facing context. New
+  detail pages must preserve enough context to avoid deleting names, dates,
+  numbers, source dates, limits, and uncertainty merely to keep the article
+  short.
+- Current issue publication must run through `scripts/night_signal_publish.py`.
+  Workflow-local bash branches are not the source of truth.
 - Do not add a new gate when a state transition should own the failure.
 - Do not publish by falling back to an older issue.
 - Do not treat schedule-only or routine items as topic value.

@@ -58,54 +58,7 @@ jobs:
             echo "Computed NIGHT SIGNAL issue date is invalid: ${ISSUE_DATE}" >&2
             exit 1
           fi
-          if [[ ! -d "state/${ISSUE_DATE}" && ! -f "night-brief-web-sample-${ISSUE_DATE}.html" ]]; then
-            python3 scripts/night_signal_state.py --write-collection-plan "$ISSUE_DATE"
-          fi
-          if [[ -d "state/${ISSUE_DATE}" && ! -f "state/${ISSUE_DATE}/collection_plan.json" ]]; then
-            python3 scripts/night_signal_state.py --write-collection-plan "$ISSUE_DATE"
-          fi
-          if [[ ! -f "night-brief-web-sample-${ISSUE_DATE}.html" && ! -f "state/${ISSUE_DATE}/issue.json" ]]; then
-            if [[ -z "${OPENAI_API_KEY:-}" ]]; then
-              echo "OPENAI_API_KEY secret is required to generate the current NIGHT SIGNAL issue from live sources." >&2
-              exit 1
-            fi
-            if [[ ! -f "state/${ISSUE_DATE}/observations.jsonl" && ! -f "state/${ISSUE_DATE}/observations.json" ]]; then
-              python3 scripts/night_signal_collect.py "$ISSUE_DATE" --replace
-            fi
-            if [[ -f "state/${ISSUE_DATE}/observations.jsonl" ]]; then
-              python3 scripts/night_signal_state.py --validate-observations "state/${ISSUE_DATE}/observations.jsonl"
-            else
-              python3 scripts/night_signal_state.py --validate-observations "state/${ISSUE_DATE}/observations.json"
-            fi
-            if [[ ( ! -f "state/${ISSUE_DATE}/candidates.jsonl" && ! -f "state/${ISSUE_DATE}/candidates.json" ) \
-              || ( ! -f "state/${ISSUE_DATE}/decisions.jsonl" && ! -f "state/${ISSUE_DATE}/decisions.json" ) \
-              || ( ! -f "state/${ISSUE_DATE}/cards.jsonl" && ! -f "state/${ISSUE_DATE}/cards.json" ) \
-              || ! -f "state/${ISSUE_DATE}/coverage_manifest.json" ]]; then
-              python3 scripts/night_signal_synthesize.py "$ISSUE_DATE" --replace
-            fi
-          fi
-          if [[ -d "state/${ISSUE_DATE}" \
-            && ! -f "state/${ISSUE_DATE}/issue.json" \
-            && ( -f "state/${ISSUE_DATE}/observations.jsonl" || -f "state/${ISSUE_DATE}/observations.json" ) \
-            && ( -f "state/${ISSUE_DATE}/candidates.jsonl" || -f "state/${ISSUE_DATE}/candidates.json" ) \
-            && ( -f "state/${ISSUE_DATE}/decisions.jsonl" || -f "state/${ISSUE_DATE}/decisions.json" ) \
-            && ( -f "state/${ISSUE_DATE}/cards.jsonl" || -f "state/${ISSUE_DATE}/cards.json" ) \
-            && -f "state/${ISSUE_DATE}/coverage_manifest.json" ]]; then
-            python3 scripts/night_signal_state.py --assemble-issue-state "$ISSUE_DATE"
-          fi
-          if [[ -f "state/${ISSUE_DATE}/issue.json" ]]; then
-            python3 scripts/night_signal_state.py --validate-issue "state/${ISSUE_DATE}/issue.json"
-            python3 scripts/night_signal_state.py --generate-issue "state/${ISSUE_DATE}/issue.json"
-          fi
-          if [[ ! -f "night-brief-web-sample-${ISSUE_DATE}.html" ]]; then
-            echo "Selected NIGHT SIGNAL issue is missing: night-brief-web-sample-${ISSUE_DATE}.html" >&2
-            exit 1
-          fi
-          python3 scripts/guardrail_inventory.py
-          python3 scripts/sync_site.py "$ISSUE_DATE"
-          python3 scripts/current_issue_audit.py "$ISSUE_DATE"
-          python3 scripts/coverage_audit.py "$ISSUE_DATE"
-          python3 scripts/quality_gate.py "$ISSUE_DATE"
+          python3 scripts/night_signal_publish.py "$ISSUE_DATE"
           cp .nojekyll site/.nojekyll
           echo "ISSUE_DATE=$ISSUE_DATE" >> "$GITHUB_ENV"
 
@@ -141,4 +94,4 @@ jobs:
           exit 1
 
       - name: Audit published issue content
-        run: python3 scripts/publication_audit.py "$ISSUE_DATE" --public-content-only
+        run: python3 scripts/night_signal_publish.py "$ISSUE_DATE" --public-audit

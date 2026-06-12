@@ -44,6 +44,7 @@ def copy_fixture() -> Path:
     shutil.copyfile(ROOT / "scripts" / "night_signal_state.py", tmp / "scripts" / "night_signal_state.py")
     shutil.copyfile(ROOT / "scripts" / "night_signal_collect.py", tmp / "scripts" / "night_signal_collect.py")
     shutil.copyfile(ROOT / "scripts" / "night_signal_synthesize.py", tmp / "scripts" / "night_signal_synthesize.py")
+    shutil.copyfile(ROOT / "scripts" / "night_signal_publish.py", tmp / "scripts" / "night_signal_publish.py")
     shutil.copyfile(ROOT / "scripts" / "simulate_quality_gate_failures.py", tmp / "scripts" / "simulate_quality_gate_failures.py")
     shutil.copyfile(ROOT / "config" / "night_signal_coverage.json", tmp / "config" / "night_signal_coverage.json")
     shutil.copyfile(ROOT / "config" / "night_signal_guardrails.json", tmp / "config" / "night_signal_guardrails.json")
@@ -61,7 +62,7 @@ def copy_fixture() -> Path:
     shutil.copyfile(ROOT / "details" / "_style.css", tmp / "details" / "_style.css")
     shutil.copyfile(ROOT / "details" / "policy.html", tmp / "details" / "policy.html")
     shutil.copytree(ROOT / ".github", tmp / ".github")
-    shutil.copytree(ROOT / "site", tmp / "site")
+    (tmp / "site").mkdir()
     subprocess.run(
         [sys.executable, str(tmp / "scripts" / "sync_site.py"), ISSUE_DATE],
         cwd=tmp,
@@ -697,7 +698,7 @@ def main() -> int:
 
     assert_guardrail_fail(
         "guardrail catches published content audit mode removal",
-        lambda tmp: remove_workflow_text(tmp, " --public-content-only"),
+        lambda tmp: remove_workflow_text(tmp, " --public-audit"),
         "latest_issue_publish_only missing workflow terms",
     )
 

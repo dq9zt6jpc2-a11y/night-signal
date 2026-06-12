@@ -30,7 +30,7 @@ RESPONSES_URL = os.getenv("OPENAI_RESPONSES_URL", "https://api.openai.com/v1/res
 DEFAULT_ROUTE_MODELS = {
     "small_structured_extractor": "gpt-5-mini",
     "small_structured_extractor_then_frontier_reasoning_if_ambiguous": "gpt-5-mini",
-    "frontier_reasoning_model": "gpt-5.2",
+    "frontier_reasoning_model": "gpt-5.5",
 }
 ROUTE_MODEL_ENV = {
     "small_structured_extractor": "NIGHT_SIGNAL_MODEL_SMALL_STRUCTURED_EXTRACTOR",
@@ -114,7 +114,7 @@ def reasoning_for_route(route: str) -> dict[str, str]:
 def task_payload(task: dict[str, Any]) -> dict[str, Any]:
     schema = dict(state.SOURCE_OBSERVATION_SCHEMA)
     route = str(task.get("model_route", ""))
-    return {
+    payload = {
         "model": model_for_route(route),
         "reasoning": reasoning_for_route(route),
         "input": [
@@ -133,7 +133,7 @@ def task_payload(task: dict[str, Any]) -> dict[str, Any]:
             },
         ],
         "tools": [{"type": "web_search", "search_context_size": "medium"}],
-        "tool_choice": "auto",
+        "tool_choice": "required",
         "include": ["web_search_call.action.sources"],
         "text": {
             "format": {
@@ -144,6 +144,10 @@ def task_payload(task: dict[str, Any]) -> dict[str, Any]:
             }
         },
     }
+    prompt_cache_key = task.get("prompt_cache_key")
+    if isinstance(prompt_cache_key, str) and prompt_cache_key.strip():
+        payload["prompt_cache_key"] = prompt_cache_key.strip()
+    return payload
 
 
 def api_key() -> str:
@@ -204,6 +208,44 @@ def parse_observation(response: dict[str, Any]) -> dict[str, Any]:
     return value
 
 
+def web_search_trace(task: dict[str, Any], response: dict[str, Any]) -> dict[str, Any]:
+    raw_web_search_sources: list[Any] = []
+    web_search_calls: list[dict[str, Any]] = []
+    for item in response.get("output", []):
+        if not isinstance(item, dict) or item.get("type") != "web_search_call":
+            continue
+        action = item.get("action")
+        if not isinstance(action, dict):
+            action = {}
+        sources = action.get("sources")
+        if isinstance(sources, list):
+            raw_web_search_sources.extend(sources)
+        web_search_calls.append(
+            {
+                "id": item.get("id"),
+                "status": item.get("status"),
+                "action_type": action.get("type"),
+                "query": action.get("query"),
+                "queries": action.get("queries"),
+                "sources_count": len(sources) if isinstance(sources, list) else 0,
+            }
+        )
+    return {
+        "issue_date": task.get("issue_date"),
+        "slot_id": task.get("slot_id"),
+        "category": task.get("category"),
+        "watch_topic_id": task.get("watch_topic_id"),
+        "source_role": task.get("source_role"),
+        "channel": task.get("channel"),
+        "model_route": task.get("model_route"),
+        "prompt_cache_key": task.get("prompt_cache_key"),
+        "response_id": response.get("id"),
+        "web_search_calls": web_search_calls,
+        "raw_web_search_sources": raw_web_search_sources,
+        "usage": response.get("usage"),
+    }
+
+
 def append_jsonl(path: Path, records: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", encoding="utf-8") as handle:
@@ -233,6 +275,7 @@ def self_test() -> None:
             {"label": "OpenAI Instagram", "url": "https://www.instagram.com/openai/", "channel": "instagram"},
         ],
         "search_queries": ["OpenAI product release latest 2099-01-01"],
+        "prompt_cache_key": "night-signal-source-observation-small-structured-extractor-social-or-video-signal-sns-x",
         "acceptance": {"must_record": ["source_target_results_for_every_seed_target"]},
     }
     payload = task_payload(fake_task)
@@ -248,6 +291,13 @@ def self_test() -> None:
         fail("collector prompt must preserve source target result acceptance")
     if payload["tools"][0]["type"] != "web_search":
         fail("collector must use Responses web_search tool")
+    if payload["tool_choice"] != "required":
+        fail("collector must require web search for live observation tasks")
+    if payload.get("prompt_cache_key") != "night-signal-source-observation-small-structured-extractor-social-or-video-signal-sns-x":
+        fail("collector must pass collection plan prompt_cache_key to Responses")
+    trace = web_search_trace(fake_task, {"id": "resp_test", "output": [{"type": "web_search_call", "id": "ws_test", "status": "completed", "action": {"type": "search", "query": "OpenAI", "sources": [{"url": "https://openai.com/"}]}}]})
+    if not trace["raw_web_search_sources"] or trace["web_search_calls"][0]["sources_count"] != 1:
+        fail("collector must preserve raw web_search sources")
     print("NIGHT SIGNAL COLLECTOR PASSED")
 
 
@@ -276,15 +326,20 @@ def main() -> int:
         return 0
 
     observations: list[dict[str, Any]] = []
+    traces: list[dict[str, Any]] = []
     for index, task in enumerate(tasks, start=1):
         print(f"collecting {index}/{len(tasks)} {task.get('slot_id')}", file=sys.stderr)
-        observations.append(parse_observation(call_responses(task_payload(task), retries=args.retries)))
+        response = call_responses(task_payload(task), retries=args.retries)
+        observations.append(parse_observation(response))
+        traces.append(web_search_trace(task, response))
 
     output = state_dir / "observations.jsonl"
     if args.replace:
         write_jsonl(output, observations)
+        write_jsonl(state_dir / "source_traces.jsonl", traces)
     else:
         append_jsonl(output, observations)
+        append_jsonl(state_dir / "source_traces.jsonl", traces)
     if args.max_tasks is None and args.slot_id is None:
         frontier = state.build_frontier(state.read_json(state.CONFIG_PATH))
         state.validate_observation_records(observations, frontier)

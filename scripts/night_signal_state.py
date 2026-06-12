@@ -331,6 +331,7 @@ COLLECTION_TASK_SCHEMA: dict[str, Any] = {
         "model_route",
         "batch_group",
         "prompt_cache_key",
+        "hypotheses",
         "source_targets",
         "search_queries",
         "acceptance",
@@ -349,6 +350,7 @@ COLLECTION_TASK_SCHEMA: dict[str, Any] = {
         "model_route": {"type": "string"},
         "batch_group": {"type": "string"},
         "prompt_cache_key": {"type": "string"},
+        "hypotheses": {"type": "array", "items": {"type": "string"}},
         "source_targets": {"type": "array", "items": SOURCE_TARGET_SCHEMA},
         "search_queries": {"type": "array", "items": {"type": "string"}},
         "acceptance": {
@@ -539,14 +541,23 @@ def records_file_exists(state_dir: Path, stem: str) -> bool:
 
 def artifact_status(issue_date: str) -> dict[str, bool]:
     state_dir = DEFAULT_STATE_ROOT / issue_date
+    issue_path = state_dir / "issue.json"
+    issue: dict[str, Any] = {}
+    if issue_path.exists():
+        try:
+            loaded = json.loads(issue_path.read_text(encoding="utf-8"))
+            if isinstance(loaded, dict):
+                issue = loaded
+        except json.JSONDecodeError:
+            issue = {}
     return {
         "collection_plan": (state_dir / "collection_plan.json").exists(),
-        "observations": records_file_exists(state_dir, "observations"),
-        "candidates": records_file_exists(state_dir, "candidates"),
-        "decisions": records_file_exists(state_dir, "decisions"),
-        "cards": records_file_exists(state_dir, "cards"),
-        "coverage_manifest": (state_dir / "coverage_manifest.json").exists(),
-        "state_issue_json": (state_dir / "issue.json").exists(),
+        "observations": records_file_exists(state_dir, "observations") or isinstance(issue.get("observations"), list),
+        "candidates": records_file_exists(state_dir, "candidates") or isinstance(issue.get("candidates"), list),
+        "decisions": records_file_exists(state_dir, "decisions") or isinstance(issue.get("decisions"), list),
+        "cards": records_file_exists(state_dir, "cards") or isinstance(issue.get("cards"), list),
+        "coverage_manifest": (state_dir / "coverage_manifest.json").exists() or isinstance(issue.get("coverage_manifest"), dict),
+        "state_issue_json": issue_path.exists(),
         "marker_is_issue_date": selected_issue_date() == issue_date,
         "sample_html": (ROOT / f"night-brief-web-sample-{issue_date}.html").exists(),
         "root_site_html": (ROOT / "site" / "index.html").exists(),
@@ -684,7 +695,10 @@ def validate_summary_basis(detail: dict[str, Any], *, issue_date: str, source_da
         reject_public_copy(f"cards[{card_index}].detail.summary_basis.{key}", value, kind="summary")
 
     facts = basis.get("confirmed_facts")
-    min_facts = int(contract.get("minimum_material_facts_per_published_item", 2))
+    if effective_on_or_after(contract, "detail_depth_effective_date", issue_date):
+        min_facts = int(contract.get("minimum_current_material_facts_per_published_item", 3))
+    else:
+        min_facts = int(contract.get("minimum_material_facts_per_published_item", 2))
     if not isinstance(facts, list) or len([fact for fact in facts if isinstance(fact, str) and fact.strip()]) < min_facts:
         fail(f"cards[{card_index}].detail.summary_basis.confirmed_facts must contain confirmed material facts")
     for fact_index, fact in enumerate(facts, start=1):
@@ -1028,6 +1042,53 @@ def validate_candidates(issue: dict[str, Any], frontier: list[dict[str, Any]]) -
     return candidates
 
 
+def observed_claim_source_urls(issue_date: str, observations: list[dict[str, Any]]) -> set[str]:
+    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
+    allowed_dates = {
+        issue_dt.isoformat(),
+        issue_dt.fromordinal(issue_dt.toordinal() - 1).isoformat(),
+        issue_dt.fromordinal(issue_dt.toordinal() - 2).isoformat(),
+    }
+    urls: set[str] = set()
+    for observation in observations:
+        if not isinstance(observation, dict):
+            continue
+        if observation.get("slot_state") != "observed_live" or observation.get("published_date") not in allowed_dates:
+            continue
+        claim_atoms = observation.get("claim_atoms")
+        if not isinstance(claim_atoms, list) or not claim_atoms:
+            continue
+        url = observation.get("url")
+        if isinstance(url, str) and url.startswith(("http://", "https://")):
+            urls.add(url)
+        for result in observation.get("source_target_results", []):
+            if not isinstance(result, dict):
+                continue
+            result_url = result.get("url")
+            if (
+                isinstance(result_url, str)
+                and result_url.startswith(("http://", "https://"))
+                and result.get("slot_state") == "observed_live"
+                and result.get("published_date") in allowed_dates
+            ):
+                urls.add(result_url)
+    return urls
+
+
+def validate_claim_source_linkage(issue: dict[str, Any], observations: list[dict[str, Any]], candidates: list[dict[str, Any]]) -> None:
+    issue_date = require_str(issue, "issue_date")
+    contract = read_json(CONFIG_PATH)
+    if not effective_on_or_after(contract, "claim_source_linkage_effective_date", issue_date):
+        return
+    claim_urls = observed_claim_source_urls(issue_date, observations)
+    for index, candidate in enumerate(candidates, start=1):
+        if candidate.get("change_class") not in {"new_event", "material_update"}:
+            continue
+        source_urls = candidate.get("source_urls")
+        if not isinstance(source_urls, list) or not any(url in claim_urls for url in source_urls):
+            fail(f"candidates[{index}] material item lacks claim/source linkage")
+
+
 def validate_decisions_and_cards(issue: dict[str, Any], candidates: list[dict[str, Any]], cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
     decisions = require_list(issue, "decisions")
     candidate_titles = {str(candidate.get("title")) for candidate in candidates}
@@ -1102,8 +1163,9 @@ def validate_issue_state(issue: dict[str, Any], issue_path: Path | None = None) 
     if blockers:
         fail("issue state still has blockers: " + "; ".join(str(item) for item in blockers))
     frontier = validate_frontier(issue)
-    validate_observations(issue, frontier)
+    observations = validate_observations(issue, frontier)
     candidates = validate_candidates(issue, frontier)
+    validate_claim_source_linkage(issue, observations, candidates)
     cards = normalized_cards(issue)
     validate_decisions_and_cards(issue, candidates, cards)
     validate_manifest_alignment(issue, cards)
@@ -1264,6 +1326,18 @@ def build_search_queries(issue_date: str, frontier_item: dict[str, Any], slot: d
     ]
 
 
+def collection_hypotheses(frontier_item: dict[str, Any], slot: dict[str, str]) -> list[str]:
+    category = slot["category"]
+    topic = slot["watch_topic_id"]
+    role = slot["source_role"]
+    channel = slot["channel"]
+    return [
+        f"{category}/{topic}に前回状態から読者理解を変える新規または実質更新がある可能性。",
+        f"{category}/{topic}は定例、重複、背景、または変化なしで公開候補にしない可能性。",
+        f"{role}/{channel}で一次根拠、独立確認、または反証が見つかる可能性。",
+    ]
+
+
 def load_source_registry() -> dict[str, list[dict[str, str]]]:
     registry = read_json(SOURCES_PATH)
     categories = registry.get("categories")
@@ -1368,6 +1442,7 @@ def collection_plan(issue_date: str) -> dict[str, Any]:
             "model_route": slot["model_route"],
             "batch_group": batch_group(slot),
             "prompt_cache_key": prompt_cache_key(slot),
+            "hypotheses": collection_hypotheses(frontier_item, slot),
             "source_targets": source_targets_for_slot(source_registry, slot),
             "search_queries": build_search_queries(issue_date, frontier_item, slot),
             "acceptance": task_acceptance(slot),

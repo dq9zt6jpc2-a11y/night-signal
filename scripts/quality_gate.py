@@ -412,6 +412,8 @@ def detail_summary_heading(issue_dt) -> str:
 
 
 def detail_min_summary_chars(issue_dt) -> int:
+    if effective_on_or_after(COVERAGE_CONTRACT, "detail_depth_effective_date", issue_dt):
+        return int(COVERAGE_CONTRACT.get("minimum_current_detail_summary_chars", 240))
     if effective_on_or_after(COVERAGE_CONTRACT, "summary_quality_effective_date", issue_dt):
         return int(COVERAGE_CONTRACT.get("minimum_detail_summary_chars", 240))
     return LEGACY_MIN_SUMMARY_LEAD_CHARS

@@ -184,7 +184,8 @@ Concrete model names are not architecture. The design uses model routes:
 The current concrete model for each route must be resolved from official
 OpenAI docs when implementation changes.
 For the current collector implementation, the verified defaults are `gpt-5-mini`
-for low-cost structured source extraction and `gpt-5.2` for frontier reasoning.
+for low-cost structured source extraction and `gpt-5.5` for frontier reasoning
+and synthesis.
 They remain environment-overridable so the architecture can move with OpenAI's
 model lineup without rewriting the coverage contract.
 
@@ -199,6 +200,63 @@ Official references checked on 2026-06-05:
 - https://platform.openai.com/docs/guides/prompt-caching
 - https://platform.openai.com/docs/guides/agents
 - https://openai.github.io/openai-agents-python/tracing/
+
+Official web-research technology review checked on 2026-06-11:
+
+- https://developers.openai.com/api/docs/guides/tools-web-search
+- https://developers.openai.com/api/docs/guides/deep-research
+- https://developers.openai.com/api/docs/guides/tools-connectors-mcp
+- https://developers.openai.com/api/docs/guides/tools-tool-search
+- https://developers.openai.com/api/docs/guides/tools-file-search
+- https://developers.openai.com/api/docs/guides/batch
+- https://developers.openai.com/api/docs/guides/prompt-caching
+- https://developers.openai.com/api/docs/guides/latest-model
+- https://developers.openai.com/api/docs/models
+
+The 2026-06-12 zero-base AI collection redesign is now documented in
+`docs/night-signal-zero-base-ai-collection-redesign.md`. It supersedes the
+2026-06-11 review where it is more specific.
+
+Adoption decision after the 2026-06-11 review:
+
+- Keep Responses API web search as the daily collection owner. It is still the
+  right primitive for slot-level collection because it can use hosted web search,
+  structured outputs, bounded reasoning, and returned source metadata in one
+  auditable request.
+- Add raw web-search source capture before trusting collection completeness.
+  The web search tool can return the full `sources` list through
+  `include=["web_search_call.action.sources"]`; NIGHT SIGNAL should persist that
+  tool evidence, not only the model-written observation summary.
+- Use web search filters carefully. `allowed_domains` is useful for targeted
+  seed-source verification, while open discovery should remain less constrained
+  with only low-value `blocked_domains` where appropriate. A single filtered
+  request must not replace the current design requirement that search can
+  discover additional direct sources.
+- Use image/text search only for categories where visual evidence is part of the
+  source contract, such as product photos, venue/event assets, or social/video
+  posts. It should not become the default for every slot.
+- Keep Deep Research out of daily publication generation. Deep Research is
+  appropriate for scheduled frontier review, missed-source discovery, and
+  category contract redesign because it can perform multi-step research across
+  web search, remote MCP, file search, and code interpreter. It is too slow and
+  too broad to be the primary daily observation-slot extractor.
+- Remote MCP and OpenAI connectors are useful for authenticated or structured
+  source systems, but they should enter only as observation connectors that
+  write the same source-observation schema. They must not bypass the canonical
+  Frontier -> Observations -> Candidates -> Decisions -> Issue -> Publication
+  flow.
+- Tool Search is not needed for the current small, explicit tool surface. It
+  becomes useful only if NIGHT SIGNAL has many optional source connectors and
+  the model must dynamically load the right one.
+- Batch API and Prompt Caching fit the efficiency goal. The generated
+  `batch_group` and `prompt_cache_key` fields should become real request
+  parameters when collection is moved from synchronous one-by-one calls to a
+  queued daily collection job.
+- Model routes should be refreshed against official docs before implementation
+  changes. As of the 2026-06-11 review, official docs position GPT-5.5 for
+  complex reasoning/tool-heavy work and GPT-5.4 mini/nano for lower-cost
+  workloads. Do not blindly replace model strings without a small eval over
+  source-observation accuracy, URL evidence completeness, and token use.
 
 ## 8. Efficiency
 
