@@ -303,6 +303,9 @@ def validate_state_backed_coverage(issue_date: str, root_html: str, manifest: di
     if not isinstance(state_cards, list):
         fail("state issue cards must be a list")
     state_titles_by_section: dict[str, list[str]] = {}
+    state_candidates = issue.get("candidates", [])
+    if not isinstance(state_candidates, list):
+        fail("state issue candidates must be a list")
     for card in state_cards:
         if isinstance(card, dict):
             state_titles_by_section.setdefault(str(card.get("section_id")), []).append(str(card.get("title")))
@@ -317,6 +320,44 @@ def validate_state_backed_coverage(issue_date: str, root_html: str, manifest: di
             fail(f"{label} published_card_titles do not match page cards")
         if state_titles_by_section.get(section_id, []) != expected_titles:
             fail(f"{label} state cards do not match page cards")
+        category_candidates = [
+            candidate
+            for candidate in state_candidates
+            if isinstance(candidate, dict) and candidate.get("category") == label
+        ]
+        required_topic_ids = {
+            str(topic["id"])
+            for topic in category_config.get("watch_topics", [])
+            if isinstance(topic, dict) and isinstance(topic.get("id"), str)
+        }
+        concrete = [
+            candidate
+            for candidate in category_candidates
+            if isinstance(candidate.get("title"), str)
+            and len(candidate["title"].strip()) >= 12
+            and isinstance(candidate.get("summary"), str)
+            and len(re.sub(r"\s+", "", candidate["summary"])) >= 35
+            and not re.search(r"(大きな更新なし|no fresh|no_new_update)", candidate["title"], re.I)
+        ]
+        concrete_topic_ids = {
+            str(candidate.get("watch_topic_id"))
+            for candidate in concrete
+            if isinstance(candidate.get("watch_topic_id"), str)
+        }
+        missing_topic_ids = sorted(required_topic_ids - concrete_topic_ids)
+        if missing_topic_ids:
+            fail(
+                f"{label} state-backed coverage needs a concrete item or near-miss "
+                "candidate for every watch topic: " + ", ".join(missing_topic_ids)
+            )
+        concrete_urls = {
+            normalize_url(url)
+            for candidate in concrete
+            for url in candidate.get("source_urls", [])
+            if isinstance(url, str) and normalize_url_host(url)
+        }
+        if len(concrete_urls) < min(2, len(required_topic_ids)):
+            fail(f"{label} state-backed coverage lacks concrete source diversity")
 
 
 def string_list(entry: dict, key: str, category: str) -> list[str]:

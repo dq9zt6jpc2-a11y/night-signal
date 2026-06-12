@@ -120,6 +120,7 @@ SOURCE_OBSERVATION_SCHEMA: dict[str, Any] = {
         "evidence_summary",
         "source_target_results",
         "claim_atoms",
+        "discovery_findings",
     ],
     "properties": {
         "category": {"type": "string"},
@@ -160,6 +161,21 @@ SOURCE_OBSERVATION_SCHEMA: dict[str, Any] = {
                         "type": "string",
                         "enum": ["confirmed_update", "scheduled", "published_value", "final_result", "confirmed_award", "confirmed_status"],
                     },
+                },
+            },
+        },
+        "discovery_findings": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": False,
+                "required": ["title", "summary", "source_url", "published_date", "suggested_watch_topic_id"],
+                "properties": {
+                    "title": {"type": "string"},
+                    "summary": {"type": "string"},
+                    "source_url": {"type": "string"},
+                    "published_date": {"type": ["string", "null"]},
+                    "suggested_watch_topic_id": {"type": "string"},
                 },
             },
         },
@@ -251,6 +267,7 @@ SUMMARY_BASIS_SCHEMA: dict[str, Any] = {
         "what_changed",
         "why_it_matters",
         "confirmed_facts",
+        "fact_sources",
         "limits_or_unknowns",
         "source_dates",
     ],
@@ -258,6 +275,18 @@ SUMMARY_BASIS_SCHEMA: dict[str, Any] = {
         "what_changed": {"type": "string"},
         "why_it_matters": {"type": "string"},
         "confirmed_facts": {"type": "array", "items": {"type": "string"}},
+        "fact_sources": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": False,
+                "required": ["fact", "source_urls"],
+                "properties": {
+                    "fact": {"type": "string"},
+                    "source_urls": {"type": "array", "items": {"type": "string"}},
+                },
+            },
+        },
         "limits_or_unknowns": {"type": "string"},
         "source_dates": {"type": "array", "items": {"type": "string"}},
     },
@@ -323,7 +352,7 @@ COLLECTION_TASK_SCHEMA: dict[str, Any] = {
         "slot_id",
         "category",
         "section_id",
-        "watch_topic_id",
+        "watch_topics",
         "source_role",
         "channel",
         "priority",
@@ -342,7 +371,19 @@ COLLECTION_TASK_SCHEMA: dict[str, Any] = {
         "slot_id": {"type": "string"},
         "category": {"type": "string"},
         "section_id": {"type": "string"},
-        "watch_topic_id": {"type": "string"},
+        "watch_topics": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": False,
+                "required": ["watch_topic_id", "search_terms", "required_channels"],
+                "properties": {
+                    "watch_topic_id": {"type": "string"},
+                    "search_terms": {"type": "array", "items": {"type": "string"}},
+                    "required_channels": {"type": "array", "items": {"type": "string"}},
+                },
+            },
+        },
         "source_role": {"type": "string"},
         "channel": {"type": "string"},
         "priority": {"type": "string"},
@@ -523,6 +564,13 @@ def build_frontier(contract: dict[str, Any]) -> list[dict[str, Any]]:
                     "watch_topic_id": topic["id"],
                     "required_channels": channels,
                     "search_terms": sorted(set(axis_terms + topic_terms)),
+                    "event_classes": sorted(
+                        {
+                            value
+                            for value in topic.get("event_classes", [])
+                            if isinstance(value, str)
+                        }
+                    ),
                     "source_roles": ["primary_or_official", "independent_media_or_data", "social_or_video_signal"],
                 }
             )
@@ -709,6 +757,31 @@ def validate_summary_basis(detail: dict[str, Any], *, issue_date: str, source_da
             fact,
             kind="summary",
         )
+
+    if effective_on_or_after(contract, "claim_source_linkage_effective_date", issue_date):
+        fact_sources = basis.get("fact_sources")
+        if not isinstance(fact_sources, list) or len(fact_sources) != len(facts):
+            fail(f"cards[{card_index}].detail.summary_basis.fact_sources must cover every confirmed fact")
+        detail_source_urls = {
+            str(source.get("url"))
+            for source in detail.get("sources", [])
+            if isinstance(source, dict)
+        }
+        mapped_facts: set[str] = set()
+        for mapping_index, mapping in enumerate(fact_sources, start=1):
+            if not isinstance(mapping, dict):
+                fail(f"cards[{card_index}].detail.summary_basis.fact_sources[{mapping_index}] must be an object")
+            fact = require_str(mapping, "fact")
+            source_urls = mapping.get("source_urls")
+            if fact not in facts or fact in mapped_facts:
+                fail(f"cards[{card_index}].detail.summary_basis.fact_sources[{mapping_index}] must map one unique confirmed fact")
+            if (
+                not isinstance(source_urls, list)
+                or not source_urls
+                or any(not isinstance(url, str) or url not in detail_source_urls for url in source_urls)
+            ):
+                fail(f"cards[{card_index}].detail.summary_basis.fact_sources[{mapping_index}] must use detail source URLs")
+            mapped_facts.add(fact)
 
     source_dates = basis.get("source_dates")
     if not isinstance(source_dates, list) or not source_dates:
@@ -1424,29 +1497,99 @@ def prompt_cache_key(slot: dict[str, str]) -> str:
 def collection_plan(issue_date: str) -> dict[str, Any]:
     frontier = build_frontier(read_json(CONFIG_PATH))
     source_registry = load_source_registry()
-    frontier_by_key = {(item["category"], item["watch_topic_id"]): item for item in frontier}
+    slots = required_observation_slots(frontier)
+    grouped_slots: dict[tuple[str, str, str], list[dict[str, str]]] = {}
+    for slot in slots:
+        key = (slot["category"], slot["source_role"], slot["channel"])
+        grouped_slots.setdefault(key, []).append(slot)
+    frontier_by_category: dict[str, list[dict[str, Any]]] = {}
+    for item in frontier:
+        frontier_by_category.setdefault(str(item["category"]), []).append(item)
+
     tasks: list[dict[str, Any]] = []
     seen_ids: set[str] = set()
-    for slot in required_observation_slots(frontier):
-        frontier_item = frontier_by_key[(slot["category"], slot["watch_topic_id"])]
+    priority_rank = {"normal": 0, "high": 1}
+    route_rank = {
+        "small_structured_extractor": 0,
+        "small_structured_extractor_then_frontier_reasoning_if_ambiguous": 1,
+        "frontier_reasoning_model": 2,
+    }
+    for (category, source_role, channel), group in grouped_slots.items():
+        representative = max(group, key=lambda item: (priority_rank.get(item["priority"], 0), route_rank.get(item["model_route"], 0)))
+        category_topics = frontier_by_category[category]
+        sweep_slot = {
+            **representative,
+            "watch_topic_id": "category_sweep",
+            "category": category,
+            "source_role": source_role,
+            "channel": channel,
+        }
+        sweep_id = "-".join(
+            [
+                slug_text(category),
+                slug_text(source_role),
+                slug_text(channel),
+            ]
+        )
+        topic_payload = [
+            {
+                "watch_topic_id": str(item["watch_topic_id"]),
+                "search_terms": compact_terms(
+                    [str(term) for term in item.get("search_terms", []) if isinstance(term, str)],
+                    limit=12,
+                ),
+                "required_channels": [str(value) for value in item.get("required_channels", [])],
+                "event_classes": [
+                    str(value) for value in item.get("event_classes", [])
+                ],
+            }
+            for item in category_topics
+        ]
+        topic_ids = [item["watch_topic_id"] for item in topic_payload]
+        role_terms = " ".join(role_query_terms(source_role, channel))
+        event_classes = sorted(
+            {
+                value
+                for topic in topic_payload
+                for value in topic.get("event_classes", [])
+            }
+        )
+        discovery_lenses = [
+            "official announcement release decision",
+            "numbers results dates status change",
+            "major media independent verification",
+            "market reaction risk counter evidence",
+            "social video interview schedule correction",
+        ]
         task = {
             "issue_date": issue_date,
-            "slot_id": slot_id(slot),
-            "category": slot["category"],
-            "section_id": str(frontier_item["section_id"]),
-            "watch_topic_id": slot["watch_topic_id"],
-            "source_role": slot["source_role"],
-            "channel": slot["channel"],
-            "priority": slot["priority"],
-            "reuse_policy": slot["reuse_policy"],
-            "model_route": slot["model_route"],
-            "batch_group": batch_group(slot),
-            "prompt_cache_key": prompt_cache_key(slot),
-            "hypotheses": collection_hypotheses(frontier_item, slot),
-            "source_targets": source_targets_for_slot(source_registry, slot),
-            "search_queries": build_search_queries(issue_date, frontier_item, slot),
-            "acceptance": task_acceptance(slot),
-            "output_schema": "source_observation",
+            "slot_id": sweep_id,
+            "category": category,
+            "section_id": str(category_topics[0]["section_id"]),
+            "watch_topics": topic_payload,
+            "source_role": source_role,
+            "channel": channel,
+            "priority": representative["priority"],
+            "reuse_policy": representative["reuse_policy"],
+            "model_route": representative["model_route"],
+            "batch_group": batch_group(sweep_slot),
+            "prompt_cache_key": prompt_cache_key(sweep_slot),
+            "hypotheses": [
+                f"{category}の既知トピック（{', '.join(topic_ids)}）に当日または直近3日間の実質更新がある可能性。",
+                f"{category}に既存watch_topic_idだけでは表現できない重要変化がある可能性。",
+                f"{source_role}/{channel}で一次根拠、独立確認、反証、または変化なしを判定できる可能性。",
+            ],
+            "discovery_lenses": discovery_lenses,
+            "source_targets": source_targets_for_slot(source_registry, sweep_slot),
+            "search_queries": [
+                f"{category} latest important developments {role_terms} {channel} {issue_date}",
+                f"{category} breaking announcement change result data {role_terms} {issue_date}",
+                f"{category} {' '.join(event_classes)} {role_terms} latest {issue_date}",
+                f"{category} {' '.join(discovery_lenses)} {issue_date}",
+                f"{category} overlooked update correction contradiction {issue_date}",
+            ],
+            "acceptance": task_acceptance(sweep_slot),
+            "output_schema": "collection_sweep",
         }
         if task["slot_id"] in seen_ids:
             fail(f"duplicate collection task slot_id: {task['slot_id']}")
@@ -1622,8 +1765,8 @@ def self_test() -> None:
     plan = collection_plan("2099-01-01")
     if coverage["required_observation_slots"] <= len(frontier):
         fail("observation slots must expand source roles/channels beyond watch topics")
-    if len(plan["tasks"]) != coverage["required_observation_slots"]:
-        fail("collection plan must map one task to each required observation slot")
+    if len(plan["tasks"]) >= coverage["required_observation_slots"]:
+        fail("collection plan must consolidate observation slots into fewer category sweeps")
     if len({task["slot_id"] for task in plan["tasks"]}) != len(plan["tasks"]):
         fail("collection plan slot_id values must be unique")
     if any(not task.get("source_targets") for task in plan["tasks"]):
@@ -1639,6 +1782,26 @@ def self_test() -> None:
         fail("social source tasks must include Facebook seed targets when configured")
     if any("source_target_results_for_every_seed_target" not in task["acceptance"]["must_record"] for task in plan["tasks"]):
         fail("collection plan tasks must require source target result closure")
+    if any(len(task.get("discovery_lenses", [])) < 5 for task in plan["tasks"]):
+        fail("collection plan tasks must include generic discovery lenses")
+    planned_topic_slots = {
+        (task["category"], topic["watch_topic_id"], task["source_role"], task["channel"])
+        for task in plan["tasks"]
+        for topic in task["watch_topics"]
+    }
+    required_topic_slots = {
+        (slot["category"], slot["watch_topic_id"], slot["source_role"], slot["channel"])
+        for slot in required_observation_slots(frontier)
+    }
+    if planned_topic_slots != required_topic_slots:
+        fail("collection sweeps must preserve every required observation slot")
+    target_references = [
+        target["url"]
+        for task in plan["tasks"]
+        for target in task["source_targets"]
+    ]
+    if len(target_references) != len(set(target_references)):
+        fail("collection sweeps must inspect each seed target only once")
     if "source_target_results" not in SOURCE_OBSERVATION_SCHEMA["required"]:
         fail("source observations must record per-target results")
     if coverage["collection_complete"]:
@@ -1683,6 +1846,16 @@ def self_test() -> None:
                 "confirmed_facts": [
                     "OpenAIがCodexの共有機能を発表した。",
                     "共有対象はCodexの記録内容で、チーム利用を想定している。",
+                ],
+                "fact_sources": [
+                    {
+                        "fact": "OpenAIがCodexの共有機能を発表した。",
+                        "source_urls": ["https://openai.com/"],
+                    },
+                    {
+                        "fact": "共有対象はCodexの記録内容で、チーム利用を想定している。",
+                        "source_urls": ["https://openai.com/"],
+                    },
                 ],
                 "limits_or_unknowns": "提供範囲や利用条件は公式発表の範囲で確認済みの内容に限る。",
                 "source_dates": ["2099-01-01"],

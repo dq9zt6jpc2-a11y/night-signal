@@ -1,0 +1,808 @@
+{
+  "issue_date": "2026-06-12",
+  "checked_at_jst": "2026-06-12T16:40:32+09:00",
+  "categories": {
+    "OpenAI": {
+      "no_change_summary": "OpenAIの公式ニュース、開発者情報、主要報道、X、Instagram、YouTubeを横断し、Ona買収合意とOracle経由の提供拡大以外に本文へ加える確定差分はなかった。",
+      "signals": [
+        {
+          "watch_topic_id": "enterprise_infrastructure",
+          "title": "OpenAI、Oracle経由のモデル・Codex提供拡大を発表",
+          "summary": "OpenAIは6月10日、Oracleとのクラウド契約を通じて顧客がOpenAIモデルとCodexへアクセスできる構成を公表した。Ona買収記事に含めず候補台帳へ分離した。",
+          "source_published_date": "2026-06-10",
+          "source_url": "https://openai.com/index/oracle-cloud/",
+          "change_class": "duplicate_followup",
+          "rejection_reason_class": "duplicate_covered",
+          "rejection_reason": "企業クラウド内でCodexを長時間動かす変化はOna買収の記事で詳しく扱うため、独立記事にすると読者差分が重複する。"
+        },
+        {
+          "watch_topic_id": "ipo_financing",
+          "title": "OpenAI、非公開のS-1草案提出を6月8日に発表",
+          "summary": "OpenAIは6月8日、米SECへ非公開の登録届出書草案を提出した。前号までのIPO候補と重なり、当日新規発表ではない。",
+          "source_published_date": "2026-06-08",
+          "source_url": "https://openai.com/index/confidential-draft-registration-statement/",
+          "change_class": "duplicate_followup",
+          "rejection_reason_class": "duplicate_covered",
+          "rejection_reason": "IPO準備は前号の候補台帳と本文で扱っており、6月12日に追加の条件、規模、日程は確定していない。"
+        },
+        {
+          "watch_topic_id": "product_release",
+          "title": "ChatGPTとCodexを統合する製品再編の方向を報道",
+          "summary": "OpenAIはChatGPTを総合アシスタントへ広げ、Codexのタスク実行機能を段階的に統合する製品再編を進めていると6月12日に報じられた。提供日と最終仕様は未確定である。",
+          "source_published_date": "2026-06-12",
+          "source_url": "https://www.wired.com/story/model-behavior-interview-with-openai-codex-lead-tibo-sottiaux",
+          "change_class": "background_only",
+          "rejection_reason_class": "insufficient_evidence",
+          "rejection_reason": "責任者インタビューとして製品方向は具体的だが、機能名、対象プラン、提供開始日を伴う公式リリースには至っていない。"
+        },
+        {
+          "watch_topic_id": "math_research",
+          "title": "OpenAI Prismは数式・論文作成基盤として提供継続",
+          "summary": "OpenAIの科学研究向けPrismはLaTeX、引用管理、数式処理とAI支援を統合する。直近3日間に新しい数学成果や機能更新はなく、研究領域の基準点として残した。",
+          "source_published_date": "2026-01-27",
+          "source_url": "https://openai.com/index/introducing-prism/",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "数学・科学研究の重要製品だが、6月12日に新しい定理、評価結果、製品機能の確定差分はない。"
+        },
+        {
+          "watch_topic_id": "safety_security_regulation",
+          "title": "米政府の先端AI事前審査は任意枠組みにとどまる",
+          "summary": "米政府による先端AIモデルの事前審査方針はOpenAIを含む事業者へ影響するが、企業への強制措置や新しい法的義務はまだ伴っていない。",
+          "source_published_date": "2026-06-06",
+          "source_url": "https://www.wsj.com/pro/cybersecurity/security-chiefs-unfazed-by-federal-ai-oversight-c08dbef0",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "規制環境の候補として保持するが、直近3日間にOpenAI固有の処分、義務、提供制限は確定していない。"
+        }
+      ],
+      "items": [
+        {
+          "watch_topic_id": "enterprise_infrastructure",
+          "title": "OpenAI、Ona買収でCodexに永続クラウド実行環境を統合へ",
+          "summary": "OpenAIは6月11日、クラウド開発環境を手がけるOnaの買収合意を発表した。Onaの顧客管理型実行基盤をCodexへ組み込み、端末や単一セッションに縛られず、企業のクラウド内で長時間動くエージェントを支える。",
+          "source_published_date": "2026-06-11",
+          "topic_value_class": "technical_or_product_shift",
+          "priority_class": "hot",
+          "slug": "openai-ona-codex-cloud-2026-06-12.html",
+          "detail_summary": "OpenAIは6月11日、クラウド開発環境を手がけるOnaを買収する合意を発表した。Onaの技術は、エージェントが必要なツール、システム、文脈へ継続的に接続できる安全な永続環境を提供する。OpenAIはこれをCodexへ統合し、ノートPCを閉じた後も企業のクラウド内で作業を続けられる構成を目指す。Onaはこれまで200万人の開発者を支援しており、買収完了後はチームがOpenAIへ加わる。企業側が実行場所、資格情報、ログ、レビューを管理できる点が中心で、Codexを短い対話型ツールから数時間・数日にわたる業務基盤へ広げる動きである。買収は規制当局の承認など通常の完了条件を満たす必要があり、完了までは両社が独立して運営される。",
+          "what_changed": "OpenAIがOnaの買収合意を発表し、同社の安全なクラウド実行・オーケストレーション技術をCodexへ統合する方針を示した。",
+          "why_it_matters": "Codexが単一端末や短いセッションを越えて企業のクラウド内で長時間動き、実行場所、資格情報、ログ、レビューを組織側が管理できる方向へ進む。",
+          "confirmed_facts": [
+            "OpenAIは2026年6月11日にOnaを買収する合意を発表した。",
+            "Onaの技術はエージェント向けの安全で永続的なクラウド実行環境を提供する。",
+            "Onaはこれまで200万人の開発者を支援し、買収完了後は同社チームがOpenAIのCodexチームへ加わる。"
+          ],
+          "limits_or_unknowns": "買収は規制当局の承認を含む通常の完了条件が残り、統合機能の提供時期と価格は公表されていない。",
+          "sources": [
+            {
+              "label": "OpenAI",
+              "url": "https://openai.com/index/openai-to-acquire-ona/"
+            },
+            {
+              "label": "Ona",
+              "url": "https://ona.com/"
+            }
+          ]
+        }
+      ]
+    },
+    "SoftBank": {
+      "no_change_summary": "SoftBank Groupの公式IR、主要報道、Arm関連情報、X、YouTubeを横断し、ドル建て社債の期限前償還完了以外に直近3日間の新しい確定差分はなかった。",
+      "signals": [
+        {
+          "watch_topic_id": "corporate_ir_financing",
+          "title": "SoftBank Group、国内ハイブリッド社債の発行条件を決定",
+          "summary": "SoftBank Groupは6月5日に個人向けハイブリッド社債の条件を決定した。直近の期限前償還と同じ財務運営の流れだが、3日間の鮮度範囲外である。",
+          "source_published_date": "2026-06-05",
+          "source_url": "https://group.softbank/en/news/press/20260605",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "資本性調達の背景として重要だが、発表から7日経過しており、当日版の新しい変化としては扱わない。"
+        },
+        {
+          "watch_topic_id": "ai_infrastructure",
+          "title": "ArmとAIインフラ投資は直近3日間に追加条件なし",
+          "summary": "Arm、AIデータセンター、電力・計算資源投資の公式情報と主要報道を確認したが、新しい契約金額や稼働開始は確定していない。",
+          "source_published_date": "2026-06-10",
+          "source_url": "https://group.softbank/en/news",
+          "change_class": "background_only",
+          "rejection_reason_class": "insufficient_evidence",
+          "rejection_reason": "投資テーマの継続報道はあるが、直近3日間に公式の契約条件、金額、稼働時期を裏づける新資料がない。"
+        },
+        {
+          "watch_topic_id": "market_price_nav",
+          "title": "SoftBank Group株価とNAVの乖離を継続候補化",
+          "summary": "SoftBank Groupの株価、保有株式価値、純有利子負債から算出するNAV推移を公式IRで確認した。6月12日に算定方法や資産構成の新しい開示変更はない。",
+          "source_published_date": "2026-06-12",
+          "source_url": "https://group.softbank/en/ir/stock",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "市場価格軸は毎日保持するが、単日の値動きだけで独立記事にするほどの資産価値変化や会社発表はない。"
+        },
+        {
+          "watch_topic_id": "power_battery",
+          "title": "SoftBank、堺で水系蓄電池の量産を2028年までに計画",
+          "summary": "SoftBankは大阪・堺の拠点でAIデータセンター向け水系亜鉛ハロゲン蓄電池を生産し、2028年3月期までにGWh規模を目指す計画を進めている。",
+          "source_published_date": "2026-05-12",
+          "source_url": "https://www.tomshardware.com/tech-industry/softbank-to-manufacture-its-own-batteries-to-power-ai-data-centers",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "AI電力基盤の重要計画だが、直近3日間に工場稼働、投資額、量産開始の追加決定はない。"
+        },
+        {
+          "watch_topic_id": "domestic_services",
+          "title": "国内通信・決済サービスの公式発表を継続確認",
+          "summary": "SoftBank、Yahoo! JAPAN、PayPayを含む国内サービスの公式発表を確認した。直近3日間に業績見通しを変える大型料金改定、買収、障害確定はない。",
+          "source_published_date": "2026-06-12",
+          "source_url": "https://www.softbank.jp/corp/news/press/sbkk/",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "国内サービス軸の直接発表を候補台帳へ保持したが、当日本文へ上げる新しい確定差分はない。"
+        }
+      ],
+      "items": [
+        {
+          "watch_topic_id": "corporate_ir_financing",
+          "title": "SoftBank Group、4.0%ドル建て社債の期限前償還を完了",
+          "summary": "SoftBank Groupは6月10日、2021年発行の年4.0%ドル建てシニア社債を前日に全額償還し、残高がゼロになったと発表した。7月6日の満期を待たず負債を整理し、資金調達構成の更新を一段進めた。",
+          "source_published_date": "2026-06-10",
+          "topic_value_class": "market_or_financial_impact",
+          "priority_class": "macro",
+          "slug": "softbank-usd-notes-redemption-2026-06-12.html",
+          "detail_summary": "SoftBank Groupは6月10日、2021年に発行した年4.0%のドル建てシニア社債について、6月9日付で期限前償還を完了したと発表した。対象社債の満期は2026年7月6日だったが、満期を待たずに全額を償還し、社債は消却された。これにより対象銘柄の未償還残高はゼロになった。同社は5月28日に期限前償還を予告しており、今回の発表で計画が実行済みになったことが確定した。直近では国内ハイブリッド社債の条件も決定しており、古いドル負債を閉じながら新しい資本性調達を組み合わせる財務運営が続く。償還額や手元流動性への詳細な影響は今回の発表本文には記載されておらず、次回決算の有利子負債と支払利息が焦点となる。",
+          "what_changed": "SoftBank Groupが2021年発行の年4.0%ドル建てシニア社債を全額期限前償還し、社債を消却した。",
+          "why_it_matters": "満期前に既存ドル負債を閉じたことで、今後の資本性調達やAI投資と並行する負債構成の変化が財務数値へ反映される。",
+          "confirmed_facts": [
+            "SoftBank Groupは2026年6月9日付で対象社債の期限前償還を完了した。",
+            "対象は2021年発行、年4.0%、2026年7月6日満期のドル建てシニア社債である。",
+            "社債は全額償還後に消却され、未償還残高はゼロになった。"
+          ],
+          "limits_or_unknowns": "償還額と手元資金、支払利息への具体的な影響額は今回の発表では示されていない。",
+          "sources": [
+            {
+              "label": "SoftBank Group",
+              "url": "https://group.softbank/en/news/press/20260610"
+            }
+          ]
+        }
+      ]
+    },
+    "Honda": {
+      "no_change_summary": "Hondaの公式ニュース、IR、商品情報、北米リコール情報、主要自動車媒体、X、YouTubeを横断した。6月10日の北米サブフレーム腐食リコールは前号で扱ったため、重複掲載せず新しい確定差分なしとした。",
+      "signals": [
+        {
+          "watch_topic_id": "market_price_reaction",
+          "title": "Honda北米サブフレーム腐食リコールは前号掲載済み",
+          "summary": "Passport、Pilot、Ridgeline、Acura MDX計88万514台の腐食リスクは6月10日に報じられ、前号本文で扱った。",
+          "source_published_date": "2026-06-10",
+          "source_url": "https://www.caranddriver.com/news/a71549498/honda-880000-suvs-trucks-recall-rust-subframe/",
+          "change_class": "duplicate_followup",
+          "rejection_reason_class": "duplicate_covered",
+          "rejection_reason": "対象台数と原因は前号で詳しく掲載済みで、6月12日時点に追加対象、費用、事故件数の新情報は確認できない。"
+        },
+        {
+          "watch_topic_id": "hybrid_ev_strategy",
+          "title": "HondaのEV・ハイブリッド戦略は6月3日発表の続報待ち",
+          "summary": "Hondaは6月3日に四輪電動化戦略を更新したが、直近3日間に投資額、生産開始、販売目標の追加変更は公表されていない。",
+          "source_published_date": "2026-06-03",
+          "source_url": "https://global.honda/en/newsroom/",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "戦略自体は重要だが当日版の鮮度範囲外であり、6月10日以降に具体条件を変える新発表がない。"
+        },
+        {
+          "watch_topic_id": "china_sales",
+          "title": "中国5月乗用車販売は22.1%減、Hondaにも需要逆風",
+          "summary": "中国の5月乗用車小売は前年同月比22.1%減の151万台となり、NEV比率は62.9%へ上昇した。Hondaの中国販売を評価する市場環境として保持した。",
+          "source_published_date": "2026-06-08",
+          "source_url": "https://www.wsj.com/business/autos/china-auto-sales-stayed-weak-in-may-303d05ff",
+          "change_class": "background_only",
+          "rejection_reason_class": "lower_importance",
+          "rejection_reason": "市場全体の重要統計だがHonda単独の5月販売台数を確定する直接資料ではないため、独立記事にはしない。"
+        },
+        {
+          "watch_topic_id": "earnings_guidance",
+          "title": "HondaのEV損失処理とハイブリッド再配分方針を継続候補化",
+          "summary": "HondaはEV関連で最大2.5兆円の損失処理を見込み、2029年までの損失解消とハイブリッドへの資源再配分を示している。",
+          "source_published_date": "2026-05-14",
+          "source_url": "https://www.theverge.com/transportation/931044/honda-hybrid-prototypes-accord-acura-rdx",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "収益見通しの重要な基準点だが、直近3日間に損失額や年度計画の追加修正はない。"
+        },
+        {
+          "watch_topic_id": "regional_production",
+          "title": "Hondaの地域別生産・販売統計を公式月次資料で追跡",
+          "summary": "Hondaの日本、北米、中国、アジアにおける生産・販売・輸出台数の月次公表を確認した。直近3日間に工場停止や生産計画変更の追加発表はない。",
+          "source_published_date": "2026-06-12",
+          "source_url": "https://global.honda/en/investors/library/sales/",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "地域生産の直接統計は保持するが、当日本文へ上げる工場稼働変更や大幅な台数修正はない。"
+        },
+        {
+          "watch_topic_id": "official_product_demand",
+          "title": "次世代AccordとAcura RDXのハイブリッド投入計画を継続確認",
+          "summary": "Hondaは次世代ハイブリッドのセダンとSUVを公開し、燃費10%以上改善、システムコスト30%削減を目標としている。",
+          "source_published_date": "2026-05-14",
+          "source_url": "https://www.caranddriver.com/news/a71305316/honda-accord-acura-rdx-hybrid-prototypes-revealed/",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "商品需要を左右する計画だが、発売価格、受注、販売実績の新しい確定値は直近3日間にない。"
+        }
+      ],
+      "items": [
+        {
+          "watch_topic_id": "market_price_reaction",
+          "title": "Honda、北米104万台超を応急修理キット不具合でリコール",
+          "summary": "Hondaは北米で約104万9,883台を対象に、パンク応急修理キットのシーラント容器キャップ不具合によるリコールへ入った。前号のサブフレーム腐食とは別件で、対象車と交換対応が新たに広がる。",
+          "source_published_date": "2026-06-11",
+          "topic_value_class": "risk_or_safety_signal",
+          "priority_class": "hot",
+          "slug": "honda-tire-repair-kit-recall-2026-06-12.html",
+          "detail_summary": "Hondaは北米で約104万9,883台を対象に、車載パンク応急修理キットのシーラント容器キャップに不具合があるとしてリコールを行う。対象にはCR-V、Accordなど複数車種が含まれ、キャップの不具合でシーラントが適切に使えない可能性がある。走行装置そのものの故障ではないが、タイヤ損傷時に応急措置が機能しなければ安全な場所への移動や修理までの対応に影響する。前号で扱った後部サブフレーム腐食の約88万台とは原因も対象部品も異なるため、別の品質・サービス対応案件である。所有者への通知時期、全対象車種、交換部品の供給ペースはNHTSAとHondaの車台番号別リコール検索で確定する。",
+          "what_changed": "Hondaの北米リコールに、サブフレーム腐食とは別のパンク応急修理キット不具合案件が加わった。",
+          "why_it_matters": "100万台を超える規模で交換対応が必要となり、販売店の処理能力、部品供給、保証費用と緊急時の利用可能性に影響する。",
+          "confirmed_facts": [
+            "対象規模は約104万9,883台と報じられている。",
+            "不具合対象は車載パンク応急修理キットのシーラント容器キャップである。",
+            "前号掲載の後部サブフレーム腐食リコールとは別の原因と対象部品である。"
+          ],
+          "limits_or_unknowns": "車種・年式ごとの最終対象と所有者通知時期はNHTSAおよびHondaの車台番号別検索結果で確定する。",
+          "observation_source_role": "independent_media_or_data",
+          "sources": [
+            {
+              "label": "Road & Track",
+              "url": "https://www.roadandtrack.com/news/a71558384/honda-recall-crv-accord-faulty-tire-repair-kit-bottle-cap/"
+            },
+            {
+              "label": "NHTSA",
+              "url": "https://www.nhtsa.gov/recalls"
+            },
+            {
+              "label": "Honda Recalls",
+              "url": "https://automobiles.honda.com/recalls"
+            }
+          ]
+        }
+      ]
+    },
+    "F1": {
+      "no_change_summary": "F1、FIA、Aston Martin、Honda Racingの公式情報、主要モータースポーツ媒体、X、Instagram、Facebook、YouTubeを横断した。6月12日開幕のBarcelona-Catalunya戦は定例日程と事前コメントが中心で、結果や規則変更の確定差分はまだない。",
+      "signals": [
+        {
+          "watch_topic_id": "race_schedule_results",
+          "title": "Barcelona-Catalunya GPが6月12日に開幕",
+          "summary": "F1第7戦Barcelona-Catalunya GPは6月12日から14日の日程で始まる。現時点は走行前または初日進行中で最終結果は未確定である。",
+          "source_published_date": "2026-06-11",
+          "source_url": "https://www.formula1.com/en/racing/2026/spain",
+          "change_class": "routine_recurring",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "通常のレース週末開始であり、予選結果、決勝結果、重大事故、技術判断が確定する前の予定単独では本文価値が不足する。"
+        },
+        {
+          "watch_topic_id": "honda_aston_pu",
+          "title": "Aston Martin-HondaはBarcelona戦前コメントを公開",
+          "summary": "Aston MartinとHonda関連の事前情報を確認したが、パワーユニット仕様、投入部品、性能値に新しい確定変更はない。",
+          "source_published_date": "2026-06-11",
+          "source_url": "https://www.astonmartinf1.com/en-GB/",
+          "change_class": "routine_recurring",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "週末プレビューと意気込みが中心で、Honda製PUの仕様変更や投入時期を確定する技術資料がない。"
+        },
+        {
+          "watch_topic_id": "fia_regulation_development",
+          "title": "2027-28年PU規則修正案は承認待ち",
+          "summary": "6月10日に報じられた出力配分と燃料流量の修正方向は前号で扱った。World Motor Sport Councilの最終承認文言はまだ確定していない。",
+          "source_published_date": "2026-06-10",
+          "source_url": "https://www.theguardian.com/sport/2026/jun/10/formula-one-powerbrokers-agree-to-settle-engine-changes-for-2027-and-2028",
+          "change_class": "duplicate_followup",
+          "rejection_reason_class": "duplicate_covered",
+          "rejection_reason": "規則修正の方向性は前号で掲載済みで、当日はFIAの最終規則文書や追加数値が公表されていない。"
+        },
+        {
+          "watch_topic_id": "honda_aston_pu",
+          "title": "Stroll、AMR26の変速・エンジンブレーキ問題は即時解消せず",
+          "summary": "Lance StrollはAMR26で変速、エンジンブレーキ、回生トルクの変動が制動バランスを乱す問題を説明し、Barcelona戦での即時解消は見込んでいない。",
+          "source_published_date": "2026-06-12",
+          "source_url": "https://as.com/motor/formula_1/aston-senala-a-las-mejoras-f202606-n/",
+          "change_class": "duplicate_followup",
+          "rejection_reason_class": "duplicate_covered",
+          "rejection_reason": "車体側の操作性問題はHondaのPU改良記事で技術的な関係を説明しており、同じ読者差分を別記事に分けない。"
+        }
+      ],
+      "items": [
+        {
+          "watch_topic_id": "honda_aston_pu",
+          "title": "Honda、FIA評価を受け夏終盤のF1パワーユニット改良へ",
+          "summary": "HondaはFIAのADUO評価値を受領し、夏終盤を目標にF1パワーユニットを改良する段階へ入った。燃焼と摩擦を改善し、Aston Martinが苦しむ出力と扱いやすさの両面を引き上げる。",
+          "source_published_date": "2026-06-11",
+          "topic_value_class": "technical_or_product_shift",
+          "priority_class": "signal",
+          "slug": "honda-f1-aduo-upgrade-2026-06-12.html",
+          "detail_summary": "Barcelona-Catalunya GPを前に、HondaはFIAからADUOの評価値を受領し、2026年夏終盤を目標とするパワーユニット改良へ進むことを明らかにした。Hondaの現場責任者、折原伸太郎氏は、性能向上に向けて燃焼と摩擦の改善に取り組むと説明している。Aston Martin AMR26はモナコで、ギアチェンジ、エンジンブレーキ、回生時のトルク変動がブレーキングバランスを乱す問題を抱え、Lance Strollの事故でも扱いやすさが焦点になった。Honda側は燃焼安定性の改善で進歩があるとしつつ、モナコでは追加改善の余地が残った。FIA評価を受けた改良は単なるセットアップではなく、規則上認められるPU性能是正の具体段階であり、Aston Martin-Hondaの後半戦を左右する。最終投入時期、改良量、グリッド降格を伴う部品交換の有無は未確定である。",
+          "what_changed": "HondaがFIAのADUO評価値を受領し、夏終盤の投入を見込むF1パワーユニット改良作業へ進んだ。",
+          "why_it_matters": "Aston Martinの不足する出力だけでなく、ブレーキング時の回生、燃焼安定性、ドライバビリティを規則内で改善できる具体的な経路が開いた。",
+          "confirmed_facts": [
+            "HondaはFIAからADUOに関する評価値を受領した。",
+            "Hondaは燃焼と摩擦を改善してパワーユニット性能を高める作業を進めている。",
+            "改良投入の目標は2026年夏終盤で、モナコでは扱いやすさに追加改善の余地が残った。"
+          ],
+          "limits_or_unknowns": "投入するグランプリ、性能向上幅、交換部品、ペナルティの有無はまだ公表されていない。",
+          "observation_source_role": "independent_media_or_data",
+          "sources": [
+            {
+              "label": "AS",
+              "url": "https://as.com/motor/formula_1/aston-se-pone-en-lo-peor-f202606-n/"
+            },
+            {
+              "label": "Honda Racing",
+              "url": "https://global.honda/en/motorsports/f1/"
+            },
+            {
+              "label": "FIA",
+              "url": "https://www.fia.com/regulation/category/110"
+            }
+          ]
+        }
+      ]
+    },
+    "SpaceX": {
+      "no_change_summary": "SpaceX、NASA、規制・打ち上げ情報、主要宇宙媒体、X、YouTubeを横断し、IPO価格決定以外に直近3日間の新しい打ち上げ結果やStarshipの確定更新はなかった。",
+      "signals": [
+        {
+          "watch_topic_id": "official_launch_manifest",
+          "title": "Falcon 9のStarlink 10-35は6月8日に打ち上げ済み",
+          "summary": "Falcon 9は6月8日にStarlink衛星29機を打ち上げた。直近3日間の範囲外で、IPO価格決定と独立した当日差分ではない。",
+          "source_published_date": "2026-06-08",
+          "source_url": "https://www.space.com/space-exploration/launches-spacecraft/spacex-starlink-10-35-b1067-ccsfs-asog",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "打ち上げは正常完了したが4日前であり、当日版の鮮度範囲外かつ運用上の異常や新技術結果を伴わない。"
+        },
+        {
+          "watch_topic_id": "starship_status",
+          "title": "Starshipは直近3日間に新しい試験結果なし",
+          "summary": "SpaceX公式、規制情報、主要宇宙媒体を確認したが、6月10日から12日に飛行試験結果や新しい許可決定は出ていない。",
+          "source_published_date": "2026-06-10",
+          "source_url": "https://www.spacex.com/launches/",
+          "change_class": "background_only",
+          "rejection_reason_class": "insufficient_evidence",
+          "rejection_reason": "次回試験に関する観測や予測はあるが、公式の実施日、許可、結果として確定した新情報がない。"
+        },
+        {
+          "watch_topic_id": "dragon_iss",
+          "title": "Crew-12、ISS修理中にDragonへ一時退避",
+          "summary": "ISSのロシア区画で空気漏れ修理が行われた際、Crew-12の4人は安全措置としてSpaceX Crew Dragonへ一時退避し、その後通常業務へ戻った。",
+          "source_published_date": "2026-06-09",
+          "source_url": "https://www.space.com/space-exploration/human-spaceflight/astronaut-captures-snake-like-auroras-from-a-spacex-dragon-space-photo-of-the-day-for-june-9-2026",
+          "change_class": "background_only",
+          "rejection_reason_class": "lower_importance",
+          "rejection_reason": "Dragonの安全退避能力を示す具体事例だが、6月12日の新しいSpaceX運用変更ではなく、乗員は通常業務へ復帰している。"
+        }
+      ],
+      "items": [
+        {
+          "watch_topic_id": "business_contracts",
+          "title": "SpaceX、IPO価格を135ドルに決定し750億ドルを調達",
+          "summary": "SpaceXは6月11日、IPOで5億5,560万株を1株135ドルに設定し、750億ドルを調達した。評価額は約1.75兆ドルとなり、6月12日にNasdaqでSPCXとして取引を始める。",
+          "source_published_date": "2026-06-12",
+          "topic_value_class": "market_or_financial_impact",
+          "priority_class": "hot",
+          "slug": "spacex-ipo-pricing-2026-06-12.html",
+          "detail_summary": "SpaceXは米国時間6月11日、IPOで5億5,560万株を1株135ドルに設定した。調達額は750億ドル、上場時評価額は約1.75兆ドルとなり、公開規模では史上最大と報じられている。株式は6月12日にNasdaqでティッカーSPCXとして取引を始める予定で、個人投資家からの注文は1,000億ドルを超えた一方、個人向け配分は調達予定額の30%とされた。SpaceXの2025年売上高は187億ドル、純損失は約49億ドルで、上場価格は現在利益よりStarlink、打ち上げ、AI・宇宙インフラの将来成長を強く織り込んでいる。初値、出来高、終値は米国市場の取引開始後に確定するため、価格決定と実際の市場評価は別の指標となる。",
+          "what_changed": "SpaceXがIPOの売出価格、株数、調達額を確定し、Nasdaqでの取引開始直前まで進んだ。",
+          "why_it_matters": "過去最大規模のIPOが宇宙・AI企業の評価基準、既存テック株からの資金移動、今後の大型上場案件へ直接影響する。",
+          "confirmed_facts": [
+            "SpaceXはIPOで5億5,560万株を1株135ドルに設定した。",
+            "調達額は750億ドル、上場時評価額は約1.75兆ドルとなった。",
+            "株式は2026年6月12日にNasdaqでティッカーSPCXとして取引開始予定である。"
+          ],
+          "limits_or_unknowns": "初値、出来高、終値は米国市場の取引開始後に確定するため、本号時点では売出価格までが確定情報である。",
+          "observation_source_role": "independent_media_or_data",
+          "sources": [
+            {
+              "label": "Business Insider",
+              "url": "https://www.businessinsider.com/spacex-ipo-live-updates-pricing-spcx-stock-2026-6"
+            },
+            {
+              "label": "Nasdaq",
+              "url": "https://www.nasdaq.com/market-activity/stocks/spcx"
+            }
+          ]
+        }
+      ]
+    },
+    "日本経済": {
+      "no_change_summary": "日本銀行、総務省、厚生労働省、内閣府、主要経済報道と市場情報を横断した。6月10日から12日の公表物は日銀勘定や定例資料が中心で、本文へ加える新しい政策決定や主要統計の確定差分はなかった。",
+      "signals": [
+        {
+          "watch_topic_id": "prices_wages_boj",
+          "title": "日銀、5月の企業物価指数を6月10日に公表",
+          "summary": "日本銀行は5月の企業物価指数を公表した。価格転嫁と輸入コストの確認材料だが、金融政策決定そのものではない。",
+          "source_published_date": "2026-06-10",
+          "source_url": "https://www.boj.or.jp/en/statistics/pi/cgpi_release/index.htm",
+          "change_class": "routine_recurring",
+          "rejection_reason_class": "lower_importance",
+          "rejection_reason": "定例統計として候補化したが、当日の政策変更や市場の前提を単独で変えるほどの新しい判断材料は確認できない。"
+        },
+        {
+          "watch_topic_id": "investment_policy_markets",
+          "title": "日銀、6月10日時点の勘定を6月12日に公表",
+          "summary": "日本銀行は6月10日時点の資産・負債勘定を公表した。国債保有や当座預金の追跡には必要だが、単独の政策変更ではない。",
+          "source_published_date": "2026-06-12",
+          "source_url": "https://www.boj.or.jp/en/statistics/boj/other/acmai/release/2026/ac260610.htm",
+          "change_class": "routine_recurring",
+          "rejection_reason_class": "lower_importance",
+          "rejection_reason": "残高確認には有用だが、金融政策会合の決定、買入れ方針変更、金利変更を伴わない定例公表である。"
+        },
+        {
+          "watch_topic_id": "prices_wages_boj",
+          "title": "日銀、CBDC会合で決済インフラの論点を提示",
+          "summary": "日銀は6月11日のCBDC連絡協議会で開会挨拶を公表した。制度検討は続くが、デジタル円の発行決定ではない。",
+          "source_published_date": "2026-06-11",
+          "source_url": "https://www.boj.or.jp/en/about/press/koen_2026/index.htm",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "決済基盤の検討継続を示す資料だが、発行の可否、開始時期、制度仕様を確定する決定は含まれていない。"
+        },
+        {
+          "watch_topic_id": "employment_consumption",
+          "title": "日本の1-3月期個人消費は0.3%増、設備投資は下方修正",
+          "summary": "日本の2026年1-3月期実質GDP改定値では個人消費が前期比0.3%増となる一方、設備投資は0.7%減へ下方修正された。",
+          "source_published_date": "2026-06-08",
+          "source_url": "https://www.wsj.com/economy/global/japan-rate-hike-hopes-intact-despite-growth-miss-64a2c8c8",
+          "change_class": "background_only",
+          "rejection_reason_class": "lower_importance",
+          "rejection_reason": "消費と投資の重要な基準値だが、6月12日の新規公表ではなく、植田総裁入院と次回会合の方が当日差分として大きい。"
+        },
+        {
+          "watch_topic_id": "investment_policy_markets",
+          "title": "日本の金利・為替・景気指標を市場データで照合",
+          "summary": "日本の政策金利、国債利回り、為替、成長率、物価、雇用の系列を専門データサイトで照合し、日銀会合前の市場前提を確認した。",
+          "source_published_date": "2026-06-12",
+          "source_url": "https://tradingeconomics.com/japan/indicators",
+          "change_class": "background_only",
+          "rejection_reason_class": "duplicate_covered",
+          "rejection_reason": "専門データによる市場確認は植田総裁入院記事の背景に含め、単独の新しい政策決定としては扱わない。"
+        }
+      ],
+      "items": [
+        {
+          "watch_topic_id": "prices_wages_boj",
+          "title": "日銀・植田総裁が入院、6月会合は氷見野副総裁が議長へ",
+          "summary": "日銀の植田和男総裁が感染性肝嚢胞の治療で約2週間入院し、6月15-16日の金融政策決定会合を欠席する。氷見野副総裁が議長、内田副総裁が会見を担い、1%利上げ観測下の発信体制が変わる。",
+          "source_published_date": "2026-06-10",
+          "topic_value_class": "decision_or_policy",
+          "priority_class": "hot",
+          "slug": "boj-ueda-hospitalized-2026-06-12.html",
+          "detail_summary": "日本銀行の植田和男総裁は感染性肝嚢胞の治療のため入院し、6月15日と16日に開かれる金融政策決定会合を欠席する。入院期間は約2週間の見込みで、必要な公務は遠隔で行う。次回会合は氷見野良三副総裁が議長を務め、政策決定後の記者会見は内田眞一副総裁が担当する。市場では政策金利を0.75%から1.0%へ引き上げる観測が強く、決定そのものに加えて、その後の利上げ経路をどう説明するかが円相場と国債利回りへ大きく影響する。発表後に円は1ドル160円台まで弱含み、通常とは異なる説明体制への不確実性が意識された。総裁不在は政策委員会の判断を自動的に変えるものではないが、会見での表現と市場の受け止めが通常以上に重要になる。",
+          "what_changed": "植田総裁の入院により、6月15-16日の日銀会合の議長と決定後会見の担当が副総裁へ変更された。",
+          "why_it_matters": "1%への利上げ観測が強い局面で、決定後の政策経路説明を誰がどう伝えるかが円と国債市場の反応を左右する。",
+          "confirmed_facts": [
+            "植田総裁は感染性肝嚢胞の治療で約2週間入院する見込みである。",
+            "植田総裁は6月15-16日の金融政策決定会合を欠席し、氷見野副総裁が議長を務める。",
+            "政策決定後の記者会見は内田副総裁が担当する。"
+          ],
+          "limits_or_unknowns": "入院によって政策決定内容が変わるかは不明で、1%への利上げは本号時点では市場予想であり確定していない。",
+          "observation_source_role": "independent_media_or_data",
+          "sources": [
+            {
+              "label": "Financial Times",
+              "url": "https://www.ft.com/content/dab00437-0375-4d78-b6d2-9e15ad3e9aa3"
+            },
+            {
+              "label": "Wall Street Journal",
+              "url": "https://www.wsj.com/livecoverage/stock-market-cpi-inflation-06-10-2026/card/japanese-yen-falls-after-bank-of-japan-says-ueda-hospitalized-kHFTMQi61sYiaQkZbcKY"
+            },
+            {
+              "label": "Bank of Japan",
+              "url": "https://www.boj.or.jp/en/"
+            }
+          ]
+        }
+      ]
+    },
+    "YOASOBI / 幾田りら": {
+      "no_change_summary": "YOASOBIと幾田りらの公式サイト、スタッフ・本人のXとInstagram、主要音楽媒体、YouTubeを横断した。直近3日間に新曲配信、受賞、ツアー変更、チャート結果の新しい確定差分はなかった。",
+      "signals": [
+        {
+          "watch_topic_id": "official_release",
+          "title": "YOASOBI、CDTVで最新曲「オリオン」など7曲披露へ",
+          "summary": "YOASOBIは6月29日のCDTVライブ！ライブ！2時間SPで、テレビ初披露の「オリオン」と「アイドル」を含む7曲を披露すると6月8日に発表した。",
+          "source_published_date": "2026-06-08",
+          "source_url": "https://www.sonymusic.co.jp/PR/YOASOBI/info/584067",
+          "change_class": "background_only",
+          "rejection_reason_class": "lower_importance",
+          "rejection_reason": "内容は具体的で重要な出演情報だが、6月12日版の直近3日間より前の発表であり、当日新規差分としては扱わない。"
+        },
+        {
+          "watch_topic_id": "live_tour_performance",
+          "title": "YOASOBI、初の北米ツアービジュアルを公開",
+          "summary": "YOASOBIは8月の北米ツアー「NEVER ENDING STORIES」のビジュアルを6月5日に公開し、モントリオールからロサンゼルスまでの日程を示した。",
+          "source_published_date": "2026-06-05",
+          "source_url": "https://www.sonymusic.co.jp/PR/YOASOBI/info/584003",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "初北米ツアーは重要だが発表から7日経過しており、直近3日間に追加公演、会場変更、販売結果は出ていない。"
+        },
+        {
+          "watch_topic_id": "music_release_chart_tieup",
+          "title": "YOASOBI、4th EPの収録曲と購入特典を公開",
+          "summary": "YOASOBIは6月26日発売の4th EP「THE BOOK for,」全12曲と店舗別特典を公開した。Overwatch連動曲「オリオン」も収録される。",
+          "source_published_date": "2026-06-05",
+          "source_url": "https://www.sonymusic.co.jp/PR/YOASOBI/info/584003",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "収録内容は具体的だが当日鮮度範囲外であり、6月10日以降に配信開始、チャート結果、追加曲の変更は確認できない。"
+        },
+        {
+          "watch_topic_id": "staff_social_x_instagram",
+          "title": "YOASOBIスタッフSNSはCDTV出演と北米ツアーを継続告知",
+          "summary": "YOASOBIスタッフの公式SNSでは6月29日のCDTV出演、最新曲「オリオン」、8月の北米ツアーに関する告知が継続している。",
+          "source_published_date": "2026-06-08",
+          "source_url": "https://x.com/YOASOBI_staff",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "公式SNS導線は保持したが、6月10日以降に新曲、追加公演、販売結果を確定する新投稿はない。"
+        },
+        {
+          "watch_topic_id": "live_tour_performance",
+          "title": "北米主要紙もYOASOBIの2026年ツアー日程を紹介",
+          "summary": "YOASOBIの北米ツアーはモントリオール、シカゴ、ニューヨーク、ロサンゼルスなどを巡り、フェス出演と単独公演を組み合わせる。",
+          "source_published_date": "2026-04-15",
+          "source_url": "https://nypost.com/2026/04/15/ticket-sales/yoasobi-never-ending-stories-tour-2026-where-to-buy-tickets/",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "海外主要媒体の確認情報として保持するが、発表から時間が経過し、直近3日間の追加公演や日程変更ではない。"
+        }
+      ],
+      "items": []
+    },
+    "アジア経済": {
+      "no_change_summary": "インド、ベトナム、中国の政府・中央銀行・統計機関、主要経済報道、市場データを横断した。直近3日間に地域全体の判断を変える新しい政策決定や主要統計の確定差分はなかった。",
+      "signals": [
+        {
+          "watch_topic_id": "india_macro_policy",
+          "title": "世界銀行、インド成長率見通しを6.6%と予測",
+          "summary": "世界銀行の6月版見通しはインドの成長率を6.6%とし、主要国の中で高い伸びを維持する一方、世界全体は2.5%へ鈍化するとした。",
+          "source_published_date": "2026-06-10",
+          "source_url": "https://www.worldbank.org/en/publication/global-economic-prospects",
+          "change_class": "routine_recurring",
+          "rejection_reason_class": "lower_importance",
+          "rejection_reason": "新しい国際見通しとして候補化したが、インド固有の政策決定や直近統計ではなく、単独記事より地域背景として扱うのが妥当である。"
+        },
+        {
+          "watch_topic_id": "vietnam_macro_investment",
+          "title": "ベトナムの投資・輸出動向は既存の拡大基調を維持",
+          "summary": "政府統計、投資発表、主要報道を確認したが、直近3日間に大型案件の最終決定や政策変更を裏づける新資料はない。",
+          "source_published_date": "2026-06-10",
+          "source_url": "https://www.gso.gov.vn/en/homepage/",
+          "change_class": "background_only",
+          "rejection_reason_class": "insufficient_evidence",
+          "rejection_reason": "投資案件の報道はあるが、金額、実行時期、政府承認を同時に確認できる直近の直接資料が不足している。"
+        },
+        {
+          "watch_topic_id": "india_vietnam_markets_supply_chain",
+          "title": "インド政府、供給網移転を取り込む時間は短いと警告",
+          "summary": "インド政府の首席経済顧問は、中国からの供給網移転を製造投資へ結びつける機会は短く、より迅速な政策対応が必要だと議会へ説明した。",
+          "source_published_date": "2026-06-08",
+          "source_url": "https://m.economictimes.com/news/india/very-short-window-for-india-amid-china-supply-chain-shift-says-cea-v-anantha-nageswaran/articleshow/131573203.cms",
+          "change_class": "background_only",
+          "rejection_reason_class": "lower_importance",
+          "rejection_reason": "供給網再編の重要な政策シグナルだが、個別企業の移転決定や投資額の確定には至っていない。"
+        }
+      ],
+      "items": [
+        {
+          "watch_topic_id": "china_macro_policy",
+          "title": "中国PPI、5月は3.9%上昇し41カ月のデフレ局面を脱す",
+          "summary": "中国の5月生産者物価指数は前年比3.9%上昇し、4月の2.8%から加速した。エネルギー・商品高で3カ月連続のプラスとなり、41カ月続いた工場出荷価格のデフレ局面が反転した。",
+          "source_published_date": "2026-06-10",
+          "topic_value_class": "market_or_financial_impact",
+          "priority_class": "macro",
+          "slug": "china-ppi-inflation-2026-06-12.html",
+          "detail_summary": "中国国家統計局が公表した5月の生産者物価指数は前年同月比3.9%上昇し、4月の2.8%上昇から伸びが加速した。市場予想の3.7%も上回り、3カ月連続でプラスとなったことで、41カ月続いた工場出荷価格のデフレ局面から明確に反転した。中東情勢による原油・ガス供給の混乱がエネルギー価格を押し上げ、非鉄金属、電気機械、コンピューター関連の価格上昇も寄与した。一方、消費者物価指数は前年比1.2%で横ばい、食品価格は1.7%下落し、コアCPIも1.1%へ鈍化した。企業の投入・出荷価格が先に上がり、家計需要への転嫁が限定的なため、中国企業の利益率とアジアの製造コストに圧力がかかる構図である。資源価格が下がればPPIの加速が続かない可能性もある。",
+          "what_changed": "中国の生産者物価が前年比3.9%へ加速し、長期のデフレ局面から上昇局面へ転じた。",
+          "why_it_matters": "中国企業のコスト、輸出価格、アジアの製造業サプライチェーンに波及する一方、家計需要が弱く価格転嫁が難しいため利益率を圧迫し得る。",
+          "confirmed_facts": [
+            "中国の5月PPIは前年同月比3.9%上昇し、4月の2.8%から加速した。",
+            "PPIは3カ月連続で上昇し、41カ月続いたデフレ局面を終えた。",
+            "5月CPIは前年比1.2%で、食品価格は1.7%下落しコアCPIは1.1%へ鈍化した。"
+          ],
+          "limits_or_unknowns": "エネルギー価格による上昇が大きく、資源価格の反落時にも生産者物価の上昇が続くかは不確定である。",
+          "observation_source_role": "independent_media_or_data",
+          "sources": [
+            {
+              "label": "Wall Street Journal",
+              "url": "https://www.wsj.com/economy/chinas-producer-inflation-gains-pace-as-mideast-war-fuels-higher-prices-18ace2c4"
+            },
+            {
+              "label": "National Bureau of Statistics of China",
+              "url": "https://www.stats.gov.cn/english/PressRelease/"
+            }
+          ]
+        },
+        {
+          "watch_topic_id": "india_vietnam_markets_supply_chain",
+          "title": "ADB、アジア15カ国から40億ドルの緊急融資要請",
+          "summary": "アジア開発銀行は、エネルギー・輸送・投入価格の急騰を受け、アジア太平洋15カ国から計40億ドルの緊急融資要請を受けた。地域成長率見通しを4.7%、インフレ率を5.2%とした。",
+          "source_published_date": "2026-06-12",
+          "topic_value_class": "decision_or_policy",
+          "priority_class": "hot",
+          "slug": "adb-asia-energy-emergency-loans-2026-06-12.html",
+          "detail_summary": "アジア開発銀行は6月12日、世界的なエネルギー危機がアジアにとって想定していた最悪シナリオへ進んだとの認識を示した。中東産の石油・ガスへの依存が高い地域で、エネルギー、海運、原材料、肥料の価格上昇が同時に起き、フィリピン、インド、バングラデシュ、スリランカなど15カ国が計40億ドルの緊急融資を正式に要請した。フィリピンの要請は17.5億ドル、インドは15億ドルと報じられている。ADBは2026年の地域成長率見通しを4.7%へ引き下げ、インフレ率見通しを5.2%へ引き上げた。資金需要は外貨、防災、燃料確保、食料安全保障へ広がり、輸入国の財政と通貨へ圧力をかける。融資の国別承認額、条件、実行時期は今後の理事会判断で確定する。",
+          "what_changed": "アジア15カ国がエネルギー危機への対応としてADBへ計40億ドルの緊急融資を要請し、地域見通しも悪化した。",
+          "why_it_matters": "原油輸入、通貨、財政、食料・肥料価格を通じて、インドや東南アジアの成長と企業コストへ同時に波及する地域横断の変化である。",
+          "confirmed_facts": [
+            "アジア太平洋15カ国がADBへ計40億ドルの緊急融資を正式に要請した。",
+            "フィリピンは17.5億ドル、インドは15億ドルを要請したと報じられている。",
+            "ADBは2026年の地域成長率を4.7%、インフレ率を5.2%と見込んだ。"
+          ],
+          "limits_or_unknowns": "国別の最終承認額、融資条件、実行時期とエネルギー価格の持続期間はまだ確定していない。",
+          "observation_source_role": "independent_media_or_data",
+          "sources": [
+            {
+              "label": "Financial Times",
+              "url": "https://www.ft.com/content/087d6ccb-30a9-409e-90ea-b42b897f4fb4"
+            },
+            {
+              "label": "Asian Development Bank",
+              "url": "https://www.adb.org/"
+            }
+          ]
+        }
+      ]
+    },
+    "北米経済": {
+      "no_change_summary": "米国とカナダの政府統計、中央銀行、主要経済報道、市場・資金フロー情報を横断した。前号で扱った米CPI以降、直近3日間に本文へ加える新しい主要統計や金融政策決定はなかった。",
+      "signals": [
+        {
+          "watch_topic_id": "us_prices_jobs_fed",
+          "title": "米新規失業保険申請件数の週次公表を確認",
+          "summary": "米労働省の週次失業保険統計を確認した。労働市場の減速確認には必要だが、前号のCPIほど金融政策見通しを変える単独差分ではない。",
+          "source_published_date": "2026-06-11",
+          "source_url": "https://www.dol.gov/ui/data.pdf",
+          "change_class": "routine_recurring",
+          "rejection_reason_class": "lower_importance",
+          "rejection_reason": "週次変動の一回分であり、雇用統計やFOMC決定と組み合わせる前に方向転換を断定できない。"
+        },
+        {
+          "watch_topic_id": "north_america_investment_policy",
+          "title": "カナダ銀行、政策金利2.25%を5会合連続で据え置き",
+          "summary": "カナダ銀行は6月10日、政策金利を2.25%に据え置いた。景気の弱さとエネルギー高による物価リスクを同時に抱え、今後の利上げと利下げの両方を排除しなかった。",
+          "source_published_date": "2026-06-10",
+          "source_url": "https://www.wsj.com/economy/central-banking/bank-of-canada-holds-interest-rates-steady-as-officials-grapple-with-policy-dilemma-c0d4c39d",
+          "change_class": "routine_recurring",
+          "rejection_reason_class": "lower_importance",
+          "rejection_reason": "金融政策決定として重要だが、金利水準は5会合連続で変わらず、米PPIほど当日市場の前提を変える差分ではない。"
+        },
+        {
+          "watch_topic_id": "us_markets_fund_flows_rates",
+          "title": "米株先物、PPI上振れ後に上げ幅を縮小",
+          "summary": "米PPIと失業保険統計の公表後、ダウ、S&P500、NASDAQ100先物は上昇を維持しながら上げ幅を縮め、金利長期化リスクを織り込んだ。",
+          "source_published_date": "2026-06-11",
+          "source_url": "https://www.marketwatch.com/livecoverage/stock-market-today-dow-jones-s-p-500-nasdaq-spacex-ipo-us-iran-exchange-strikes/card/stock-market-futures-trim-gains-after-fresh-data-on-wholesale-inflation-jobless-claims-9b03GYgyrVtOXkOmUEgY",
+          "change_class": "duplicate_followup",
+          "rejection_reason_class": "duplicate_covered",
+          "rejection_reason": "市場反応は米PPI記事の影響説明に含められるため、独立記事にすると同じ材料を重複掲載する。"
+        },
+        {
+          "watch_topic_id": "north_america_investment_policy",
+          "title": "米大統領、USMCAを更新しない意向を表明",
+          "summary": "米大統領はUSMCAを更新する考えがないと述べた一方、米国とメキシコの協議は6月と7月にも続く。北米の自動車、農業、製造投資に不確実性が増した。",
+          "source_published_date": "2026-06-10",
+          "source_url": "https://www.investopedia.com/trump-says-he-wont-renew-us-canada-mexico-trade-treaty-11995252",
+          "change_class": "background_only",
+          "rejection_reason_class": "insufficient_evidence",
+          "rejection_reason": "重要な政治発言だが、協定離脱の正式通告、関税発効日、三カ国の最終合意は確定していない。"
+        }
+      ],
+      "items": [
+        {
+          "watch_topic_id": "us_prices_jobs_fed",
+          "title": "米PPI、5月は前月比1.1%・前年比6.5%へ上昇",
+          "summary": "米国の5月生産者物価指数は前月比1.1%上昇を2カ月連続で記録し、前年比では6.5%と2022年末以来の高水準になった。エネルギー価格が11%上がり、企業コストから消費者物価への波及懸念が強まる。",
+          "source_published_date": "2026-06-11",
+          "topic_value_class": "decision_or_policy",
+          "priority_class": "hot",
+          "slug": "us-ppi-inflation-2026-06-12.html",
+          "detail_summary": "米労働省が公表した5月の生産者物価指数は前月比1.1%上昇し、4月に続いて2カ月連続で同じ伸びを記録した。市場予想の0.7%を上回り、前年同月比では6.5%と2022年末以来の高水準になった。コアPPIも前月比0.8%、前年比5.1%へ上昇し、エネルギー価格は5月だけで11%上がった。同日に公表された新規失業保険申請件数は22万9,000件へ増え、2月以来の高水準となったが、雇用全体はなお堅調とみられている。CPIが前年比4.2%へ上がった翌日のPPI上振れで、企業コストが消費者価格へ波及するリスクが増し、Fedが早期利下げへ動く余地は一段狭まった。原油価格の反落が続けば先行きの上昇圧力は弱まる可能性がある。",
+          "what_changed": "米国の生産者物価が市場予想を上回って2カ月連続1.1%上昇し、前年比6.5%へ加速した。",
+          "why_it_matters": "企業段階の価格上昇が消費者物価へ波及すれば、Fedの金利据え置き長期化と実質所得の悪化につながる。",
+          "confirmed_facts": [
+            "5月PPIは前月比1.1%上昇し、市場予想の0.7%を上回った。",
+            "PPIは前年同月比6.5%で、2022年末以来の高水準となった。",
+            "コアPPIは前月比0.8%、前年比5.1%、エネルギー価格は前月比11%上昇した。"
+          ],
+          "limits_or_unknowns": "原油価格の変動が大きく、企業が上昇分を消費者価格へどの程度転嫁するかは今後のCPIとPCEが焦点となる。",
+          "observation_source_role": "independent_media_or_data",
+          "sources": [
+            {
+              "label": "MarketWatch",
+              "url": "https://www.marketwatch.com/story/wholesale-inflation-surges-again-and-keeps-the-pressure-on-businesses-and-the-u-s-economy-9a40a991"
+            },
+            {
+              "label": "U.S. Bureau of Labor Statistics",
+              "url": "https://www.bls.gov/ppi/"
+            },
+            {
+              "label": "U.S. Department of Labor",
+              "url": "https://www.dol.gov/ui/data.pdf"
+            }
+          ]
+        }
+      ]
+    },
+    "宇都宮ブレックス": {
+      "no_change_summary": "宇都宮ブレックス、B.LEAGUE、地元媒体、X、Facebook、YouTubeを横断し、2026-27シーズンの選手契約更新以外に新しい試合結果やスタッフ変更の確定差分はなかった。",
+      "signals": [
+        {
+          "watch_topic_id": "club_roster_staff",
+          "title": "比江島慎ら日本人主力も2026-27契約を継続",
+          "summary": "比江島慎、遠藤祐亮、渡邉裕規、鵤誠司らの契約継続は6月11日までに発表され、6月12日の外国籍選手更新と同じ編成記事に統合した。",
+          "source_published_date": "2026-06-11",
+          "source_url": "https://www.utsunomiyabrex.com/contract/2026-27/",
+          "change_class": "duplicate_followup",
+          "rejection_reason_class": "duplicate_covered",
+          "rejection_reason": "主力契約の全体像を一つの記事で読めるよう、フォトゥとエドワーズを含むロスター継続記事へ統合する。"
+        },
+        {
+          "watch_topic_id": "bleague_games_schedule",
+          "title": "B.LEAGUE試合日程はオフシーズンで新結果なし",
+          "summary": "公式日程と試合結果を確認したが、当日はオフシーズンで新しい試合結果や日程変更はない。",
+          "source_published_date": "2026-06-10",
+          "source_url": "https://www.bleague.jp/schedule/",
+          "change_class": "routine_recurring",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "新しい試合結果、延期、会場変更がなく、契約更新より読者の判断を変える差分がない。"
+        },
+        {
+          "watch_topic_id": "media_press_video",
+          "title": "ブレックス公式映像・会見はロスター更新を中心に展開",
+          "summary": "宇都宮ブレックスの公式YouTubeとクラブ発信では、シーズン終了後の選手・チーム情報と契約更新関連の映像を継続掲載している。",
+          "source_published_date": "2026-06-12",
+          "source_url": "https://www.youtube.com/@utsunomiyabrex",
+          "change_class": "background_only",
+          "rejection_reason_class": "duplicate_covered",
+          "rejection_reason": "映像導線は候補台帳へ保持するが、新しい事実はロスター契約記事と重なるため独立記事にはしない。"
+        }
+      ],
+      "items": [
+        {
+          "watch_topic_id": "club_roster_staff",
+          "title": "宇都宮ブレックス、フォトゥとエドワーズら主力の契約継続を発表",
+          "summary": "宇都宮ブレックスは6月12日、アイザック・フォトゥとギャビン・エドワーズの2026-27シーズン契約継続を発表した。前日までの比江島慎、遠藤祐亮、渡邉裕規、鵤誠司らと合わせ、主力の骨格を維持する。",
+          "source_published_date": "2026-06-12",
+          "topic_value_class": "operational_status_change",
+          "priority_class": "signal",
+          "slug": "brex-roster-continuations-2026-06-12.html",
+          "detail_summary": "宇都宮ブレックスは6月12日、#42アイザック・フォトゥと#33ギャビン・エドワーズについて、2026-27シーズンの選手契約継続を発表した。クラブの契約一覧では、比江島慎、小川敦也、遠藤祐亮、竹内公輔、渡邉裕規、高島紳司、石川裕大、星川開聖、鵤誠司を含む11選手が契約合意として掲載されている。一方で青木ブレイク、D.J・ニュービル、グラント・ジェレットは契約満了となり、青木とニュービルはアルティーリ千葉への移籍が決まっている。フォトゥとエドワーズの継続により、インサイドの経験と得点・守備の基盤を残しながら、日本人主力も多く維持する構成になった。外国籍枠の最終構成、新加入選手、スタッフ体制は今後の発表を待つ。",
+          "what_changed": "宇都宮ブレックスがフォトゥとエドワーズを含む2026-27シーズンの契約合意選手を更新した。",
+          "why_it_matters": "日本人主力と経験豊富なインサイド陣を残し、前季の骨格を維持したまま次季編成を進める方針が明確になった。",
+          "confirmed_facts": [
+            "アイザック・フォトゥとギャビン・エドワーズは2026年6月12日に契約継続が発表された。",
+            "クラブの契約一覧には2026-27シーズンの契約合意選手として11人が掲載されている。",
+            "青木ブレイク、D.J・ニュービル、グラント・ジェレットは契約満了となり、青木とニュービルはアルティーリ千葉への移籍が決まった。"
+          ],
+          "limits_or_unknowns": "外国籍枠の最終構成、新加入選手、スタッフ体制はまだ出そろっていない。",
+          "sources": [
+            {
+              "label": "宇都宮ブレックス 契約情報",
+              "url": "https://www.utsunomiyabrex.com/contract/2026-27/"
+            },
+            {
+              "label": "アイザック・フォトゥ 契約継続",
+              "url": "https://www.utsunomiyabrex.com/contract/2026-27_42/"
+            },
+            {
+              "label": "ギャビン・エドワーズ 契約継続",
+              "url": "https://www.utsunomiyabrex.com/contract/2026-27_33/"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

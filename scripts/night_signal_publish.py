@@ -82,6 +82,10 @@ def require_openai_key(issue_date: str) -> None:
     fail(f"OPENAI_API_KEY is required to generate {issue_date} from live sources")
 
 
+def has_research_bundle(issue_date: str) -> bool:
+    return (state_dir(issue_date) / "research_bundle.json").exists()
+
+
 def validate_observations(issue_date: str) -> None:
     base = state_dir(issue_date)
     path = base / "observations.jsonl"
@@ -92,6 +96,9 @@ def validate_observations(issue_date: str) -> None:
 
 def collect(issue_date: str, *, force_collect: bool) -> None:
     if force_collect or not has_observations(issue_date):
+        if has_research_bundle(issue_date):
+            run([sys.executable, "scripts/night_signal_import_research.py", issue_date])
+            return
         require_openai_key(issue_date)
         run([sys.executable, "scripts/night_signal_collect.py", issue_date, "--replace"])
     validate_observations(issue_date)
@@ -99,6 +106,9 @@ def collect(issue_date: str, *, force_collect: bool) -> None:
 
 def synthesize(issue_date: str, *, force_synthesize: bool) -> None:
     if force_synthesize or not has_synthesis(issue_date):
+        if has_research_bundle(issue_date):
+            run([sys.executable, "scripts/night_signal_import_research.py", issue_date])
+            return
         require_openai_key(issue_date)
         run([sys.executable, "scripts/night_signal_synthesize.py", issue_date, "--replace"])
 
@@ -112,6 +122,7 @@ def assemble_and_render(issue_date: str) -> None:
 
 
 def sync_and_audit(issue_date: str) -> None:
+    run([sys.executable, "scripts/night_signal_eval.py", issue_date])
     run([sys.executable, "scripts/guardrail_inventory.py"])
     run([sys.executable, "scripts/sync_site.py", issue_date])
     run([sys.executable, "scripts/current_issue_audit.py", issue_date])
@@ -124,6 +135,10 @@ def self_tests() -> None:
     run([sys.executable, "scripts/night_signal_state.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_collect.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_synthesize.py", "--self-test"])
+    run([sys.executable, "scripts/night_signal_eval.py", "--self-test"])
+    run([sys.executable, "scripts/night_signal_import_research.py", "--self-test"])
+    run([sys.executable, "scripts/publication_schedule_audit.py"])
+    run([sys.executable, "scripts/simulate_ai_collection_redesign.py", jst_today(), "--fail-on-weakness"])
 
 
 def readiness(issue_date: str, *, check: bool) -> dict[str, Any]:

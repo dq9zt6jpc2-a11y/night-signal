@@ -77,14 +77,17 @@ Model routes:
 | `decision_editor` | adopt/reject and reader delta | medium |
 | `deep_frontier_reviewer` | periodic missed-source review | high/xhigh |
 
-### Deep Research
+### Bounded Extended Research
 
-Do not implement Deep Research in the current basic design. It remains a
-possible later audit tool only if cheaper source-trace and evidence-link
-changes fail to surface missed-source patterns.
+The normal path remains a grouped Responses API web-search sweep. A bounded
+GPT-5.5 background research pass is now implemented only when a potentially
+material ambiguity survives that sweep.
 
 Best uses:
 
+- authoritative-source conflict resolution;
+- material findings whose direct sources are inaccessible;
+- important outside-frontier findings that still lack verification;
 - weekly or triggered missed-source discovery;
 - category coverage contract redesign;
 - "what are we systematically failing to notice?" reviews;
@@ -98,7 +101,8 @@ Controls:
 - run in background mode;
 - set `max_tool_calls`;
 - log all tool calls;
-- never let the final report directly become public copy;
+- allow no more than three daily escalations by default;
+- never let the research response directly become public copy;
 - convert its output into proposed changes to frontier/source contracts.
 
 ### Agents SDK
@@ -302,8 +306,11 @@ state/YYYY-MM-DD/
   issue.json
 ```
 
-`observations.jsonl` remains the publish-blocking collection record. It should
-be strengthened with raw source traces, not replaced by a wider artifact tree.
+`observations.jsonl` remains the publish-blocking slot record.
+`findings.jsonl` is the uncompressed result ledger: each useful direct URL,
+date, headline, summary, source role/channel, topic mapping, and finding state
+is retained before observations are summarized. `source_traces.jsonl` preserves
+the Responses tool calls and raw returned sources.
 
 ## 5. What To Remove Or Avoid
 
@@ -319,17 +326,20 @@ Do not build:
 
 ## 6. Implementation Order
 
-1. Persist raw web-search `sources` and selected `results` alongside each
-   observation.
-2. Force web search only for tasks that require live observation; keep cached or
+1. Persist all useful direct-source results in `findings.jsonl` and raw web
+   search sources in `source_traces.jsonl`.
+2. Require every watch topic to have multiple distinct findings across at least
+   two source roles/channels before synthesis.
+3. Force web search only for tasks that require live observation; keep cached or
    not-applicable checks cheap.
-3. Send `prompt_cache_key` and arrange request payloads for cache-friendly
+4. Send `prompt_cache_key` and arrange request payloads for cache-friendly
    prefixes.
-4. Add claim/source linkage to candidates and decisions.
-5. Only after those pass simulation, evaluate Batch for normal-priority tasks.
-6. Only after repeated missed-source failures, evaluate Deep Research as a
-   periodic source-contract review.
-7. Only after deterministic orchestration becomes unmanageable, evaluate Agents
+5. Require every fresh or near-miss finding URL to appear in the candidate
+   ledger before editorial selection.
+6. Add claim/source linkage to candidates and decisions.
+7. Use bounded extended research only for unresolved material ambiguity.
+8. Only after those pass simulation, evaluate Batch for normal-priority tasks.
+9. Only after deterministic orchestration becomes unmanageable, evaluate Agents
    SDK.
 
 ## 7. Acceptance Criteria
@@ -338,11 +348,14 @@ The redesign is working only when:
 
 - every published claim maps to source, date, and claim/source link;
 - every required seed source has a raw source-trace result;
+- every watch topic has a concrete reviewable finding and at least three
+  distinct URLs across two source roles/channels;
+- every fresh or near-miss finding survives into candidate review;
 - every adopted card has a rejected/accepted candidate trail;
 - no-change decisions cite checked sources;
 - repeated unchanged sources consume fewer tokens than changed sources;
-- Deep Research is absent from daily runs unless it has already proven net
-  coverage gain per token in periodic review;
+- extended research is absent from normal runs and bounded to unresolved
+  material ambiguity;
 - daily publication can fail early because collection is incomplete, not
   publish stale content.
 

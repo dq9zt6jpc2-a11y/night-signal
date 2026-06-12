@@ -48,6 +48,7 @@ def copy_fixture() -> Path:
     shutil.copyfile(ROOT / "scripts" / "simulate_quality_gate_failures.py", tmp / "scripts" / "simulate_quality_gate_failures.py")
     shutil.copyfile(ROOT / "config" / "night_signal_coverage.json", tmp / "config" / "night_signal_coverage.json")
     shutil.copyfile(ROOT / "config" / "night_signal_guardrails.json", tmp / "config" / "night_signal_guardrails.json")
+    shutil.copyfile(ROOT / "config" / "night_signal_sources.json", tmp / "config" / "night_signal_sources.json")
     shutil.copyfile(ROOT / f"night-brief-web-sample-{ISSUE_DATE}.html", tmp / f"night-brief-web-sample-{ISSUE_DATE}.html")
     shutil.copyfile(ROOT / "night-brief-web-sample-2026-05-18.html", tmp / "night-brief-web-sample-2026-05-18.html")
     sample_html = (ROOT / f"night-brief-web-sample-{ISSUE_DATE}.html").read_text(encoding="utf-8")

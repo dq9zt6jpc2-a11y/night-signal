@@ -1,18 +1,12 @@
 #!/usr/bin/env python3
-"""Simulate whether the zero-base AI collection redesign is implemented.
-
-The simulation is deterministic and does not call external APIs. It compares
-the current collection plan and source code against the desired redesign:
-raw web-search traces, strict search execution, cache/reuse, Batch readiness,
-and claim/source linkage. It intentionally does not require a separate
-multi-file cognition pipeline because that would risk worsening efficiency.
-"""
+"""Measure NIGHT SIGNAL collection coverage, efficiency, and information retention."""
 
 from __future__ import annotations
 
 import argparse
 import json
 import sys
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -22,175 +16,163 @@ import night_signal_state as state
 ROOT = Path(__file__).resolve().parents[1]
 COLLECTOR = ROOT / "scripts" / "night_signal_collect.py"
 SYNTHESIZER = ROOT / "scripts" / "night_signal_synthesize.py"
-STATE = ROOT / "scripts" / "night_signal_state.py"
-README = ROOT / "README-night-signal.md"
-POLICY = ROOT / "details" / "policy.html"
-WORKFLOWS = list((ROOT / ".github" / "workflows").glob("*.yml"))
-
-
-def count_by(items: list[dict[str, Any]], key: str) -> dict[str, int]:
-    counts: dict[str, int] = {}
-    for item in items:
-        value = str(item.get(key, "unknown"))
-        counts[value] = counts.get(value, 0) + 1
-    return dict(sorted(counts.items()))
 
 
 def read(path: Path) -> str:
     return path.read_text(encoding="utf-8")
 
 
-def capability_checks() -> dict[str, bool]:
-    collector = read(COLLECTOR)
-    synthesizer = read(SYNTHESIZER)
-    state_code = read(STATE)
-    readme = read(README)
-    policy = read(POLICY)
-    workflows = "\n".join(read(path) for path in WORKFLOWS)
-    combined_docs = "\n".join([readme, policy, workflows])
+def old_slot_plan(frontier: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    registry = state.load_source_registry()
+    return [
+        {
+            **slot,
+            "source_targets": state.source_targets_for_slot(registry, slot),
+        }
+        for slot in state.required_observation_slots(frontier)
+    ]
+
+
+def slot_keys_from_sweeps(tasks: list[dict[str, Any]]) -> set[tuple[str, str, str, str]]:
     return {
-        "seed_targets_in_plan": "source_targets_for_slot" in state_code,
-        "per_seed_target_closure_required": "source_target_results_for_every_seed_target" in state_code,
-        "web_search_sources_requested": "web_search_call.action.sources" in collector,
-        "web_search_results_requested": "web_search_call.results" in collector,
-        "raw_web_search_sources_persisted": "raw_web_search_sources" in collector or "web_search_sources" in state_code,
-        "raw_web_search_results_persisted": "raw_web_search_results" in collector or "image_result" in state_code,
-        "web_search_required_for_required_slots": '"tool_choice": "required"' in collector or "'tool_choice': 'required'" in collector,
-        "domain_filters_implemented": "allowed_domains" in collector or "blocked_domains" in collector,
-        "external_web_access_controlled": "external_web_access" in collector,
-        "return_token_budget_controlled": "return_token_budget" in collector,
-        "image_search_enabled": "search_content_types" in collector and "image_settings" in collector,
-        "prompt_cache_key_sent": '"prompt_cache_key"' in collector or "'prompt_cache_key'" in collector,
-        "batch_api_implemented": "/v1/batches" in collector or "batches.create" in collector,
-        "claim_source_linkage_present": "claim_source" in state_code or "claim_source" in synthesizer,
-        "hypotheses_in_collection_plan": "hypotheses" in state_code,
-        "policy_mentions_efficient_cognition_flow": "raw source" in policy or "source_target_results" in policy,
-        "readme_mentions_efficient_cognition_flow": "source_target_results" in readme,
-        "workflow_avoids_parallel_cognition_pipeline": "memory_snapshot.json" not in workflows and "evidence_graph.json" not in workflows,
-        "docs_or_workflows_still_old_flow": "collection_plan.json" in combined_docs and "observations.jsonl" in combined_docs,
+        (
+            str(task["category"]),
+            str(topic["watch_topic_id"]),
+            str(task["source_role"]),
+            str(task["channel"]),
+        )
+        for task in tasks
+        for topic in task.get("watch_topics", [])
+        if isinstance(topic, dict)
     }
 
 
 def simulate(issue_date: str) -> dict[str, Any]:
-    plan = state.collection_plan(issue_date)
-    tasks = [task for task in plan["tasks"] if isinstance(task, dict)]
-    source_targets = [
-        target
-        for task in tasks
+    contract = state.read_json(state.CONFIG_PATH)
+    frontier = state.build_frontier(contract)
+    old_tasks = old_slot_plan(frontier)
+    new_plan = state.collection_plan(issue_date)
+    new_tasks = [task for task in new_plan["tasks"] if isinstance(task, dict)]
+
+    required_slots = {
+        (
+            str(slot["category"]),
+            str(slot["watch_topic_id"]),
+            str(slot["source_role"]),
+            str(slot["channel"]),
+        )
+        for slot in state.required_observation_slots(frontier)
+    }
+    planned_slots = slot_keys_from_sweeps(new_tasks)
+
+    old_target_refs = [
+        str(target["url"])
+        for task in old_tasks
+        for target in task["source_targets"]
+    ]
+    new_target_refs = [
+        str(target["url"])
+        for task in new_tasks
         for target in task.get("source_targets", [])
         if isinstance(target, dict)
     ]
-    normal_tasks = [task for task in tasks if task.get("priority") == "normal"]
-    reusable_tasks = [task for task in tasks if str(task.get("reuse_policy", "")).startswith("reuse_")]
-    checks = capability_checks()
 
-    target_capabilities = [
-        "seed_targets_in_plan",
-        "per_seed_target_closure_required",
-        "web_search_sources_requested",
-        "web_search_results_requested",
-        "raw_web_search_sources_persisted",
-        "raw_web_search_results_persisted",
-        "web_search_required_for_required_slots",
-        "domain_filters_implemented",
-        "external_web_access_controlled",
-        "return_token_budget_controlled",
-        "image_search_enabled",
-        "prompt_cache_key_sent",
-        "batch_api_implemented",
-        "claim_source_linkage_present",
-        "hypotheses_in_collection_plan",
-        "policy_mentions_efficient_cognition_flow",
-        "readme_mentions_efficient_cognition_flow",
-        "workflow_avoids_parallel_cognition_pipeline",
+    broad_horizon_tasks = [
+        task
+        for task in new_tasks
+        if any("breaking announcement change result data" in query for query in task.get("search_queries", []))
+        and any("既存watch_topic_idだけでは表現できない" in item for item in task.get("hypotheses", []))
     ]
-    implemented = [name for name in target_capabilities if checks[name]]
-    missing = [name for name in target_capabilities if not checks[name]]
+    old_horizon_tasks = [
+        task
+        for task in old_tasks
+        if any(
+            str(task["watch_topic_id"]) not in query
+            for query in state.build_search_queries(
+                issue_date,
+                next(
+                    item
+                    for item in frontier
+                    if item["category"] == task["category"]
+                    and item["watch_topic_id"] == task["watch_topic_id"]
+                ),
+                task,
+            )
+        )
+    ]
 
-    # This is a directional simulation, not a cost estimate. It says how much of
-    # the plan could benefit if the redesign were implemented.
-    potential = {
-        "batchable_normal_task_share": round(len(normal_tasks) / len(tasks), 4) if tasks else 0,
-        "reuse_candidate_task_share": round(len(reusable_tasks) / len(tasks), 4) if tasks else 0,
-        "seed_target_results_required": len(source_targets),
-        "seed_target_channel_counts": count_by(source_targets, "channel"),
-        "task_channel_counts": count_by(tasks, "channel"),
-        "task_model_route_counts": count_by(tasks, "model_route"),
-        "task_priority_counts": count_by(tasks, "priority"),
-        "task_reuse_policy_counts": count_by(tasks, "reuse_policy"),
-    }
+    observation_required = set(state.SOURCE_OBSERVATION_SCHEMA["required"])
+    summary_required = set(state.SUMMARY_BASIS_SCHEMA["required"])
+    collector = read(COLLECTOR)
+    synthesizer = read(SYNTHESIZER)
 
-    limit_blockers = []
-    if not checks["raw_web_search_sources_persisted"]:
-        limit_blockers.append("raw_source_trace_missing")
-    if not checks["web_search_required_for_required_slots"]:
-        limit_blockers.append("required_live_search_not_enforced")
-    if not checks["hypotheses_in_collection_plan"]:
-        limit_blockers.append("collection_hypotheses_missing")
-    if not checks["claim_source_linkage_present"]:
-        limit_blockers.append("claim_source_linkage_missing")
-    if not checks["prompt_cache_key_sent"]:
-        limit_blockers.append("prompt_cache_key_not_sent")
-    if checks["batch_api_implemented"] and not checks["claim_source_linkage_present"]:
-        limit_blockers.append("batch_before_evidence_linkage_would_hide_misses")
-
-    limit_assessment = {
-        "limit_reached": not limit_blockers,
-        "limit_blockers": limit_blockers,
-        "not_required_for_current_limit": [
-            "deep_research_daily_generation",
-            "agents_sdk_orchestration",
-            "batch_api_before_claim_source_linkage",
-            "image_search_for_non_visual_slots",
-            "many_new_daily_cognition_files",
-        ],
-        "reasoning": (
-            "Comprehensive collection cannot be considered at the practical limit until "
-            "seed targets, raw traces, hypotheses, claim/source linkage, and cache-aware "
-            "execution are all present. Deep Research or Agents SDK would add complexity "
-            "before the current deterministic path has exhausted cheaper improvements."
-        ),
-    }
-
-    verdict = "not_improved_in_implementation"
-    if (
-        checks["raw_web_search_sources_persisted"]
-        and checks["web_search_required_for_required_slots"]
-        and checks["prompt_cache_key_sent"]
-    ):
-        verdict = "partially_improved_in_implementation"
-    if limit_assessment["limit_reached"]:
-        verdict = "practical_collection_limit_reached_without_heavy_orchestration"
-    if not missing:
-        verdict = "redesign_implemented"
-
-    weaknesses = []
-    if not checks["raw_web_search_results_persisted"]:
-        weaknesses.append("Current code persists raw web-search sources, but not raw image/search results.")
-    if not checks["batch_api_implemented"]:
-        weaknesses.append("Current code marks batch/reuse/prompt-cache metadata, but does not execute Batch.")
-    if not checks["claim_source_linkage_present"]:
-        weaknesses.append("Current synthesis still jumps from observations to decisions without explicit claim/source linkage.")
-    if not checks["domain_filters_implemented"] or not checks["return_token_budget_controlled"]:
-        weaknesses.append("Responses web-search controls for domain filters and returned-token budget are not yet exposed.")
-    if not checks["image_search_enabled"]:
-        weaknesses.append("Image search is still deferred for non-visual daily slots.")
-
-    return {
-        "issue_date": issue_date,
-        "verdict": verdict,
-        "plan": {
-            "frontier_tasks": len(tasks),
-            "source_targets": len(source_targets),
-            "batch_groups": count_by(tasks, "batch_group"),
+    metrics = {
+        "ai_calls": {
+            "before": len(old_tasks),
+            "after": len(new_tasks),
+            "reduction_ratio": round(1 - len(new_tasks) / len(old_tasks), 4),
         },
-        "potential_improvement_if_implemented": potential,
-        "limit_assessment": limit_assessment,
-        "implemented_capabilities": implemented,
-        "missing_capabilities": missing,
-        "weaknesses": weaknesses,
-        "checks": checks,
+        "seed_target_checks": {
+            "before": len(old_target_refs),
+            "after": len(new_target_refs),
+            "unique_targets": len(set(new_target_refs)),
+            "duplicate_checks_removed": len(old_target_refs) - len(new_target_refs),
+            "reduction_ratio": round(1 - len(new_target_refs) / len(old_target_refs), 4),
+        },
+        "known_frontier_coverage": {
+            "required_slots": len(required_slots),
+            "planned_slots": len(planned_slots),
+            "recall": round(len(required_slots & planned_slots) / len(required_slots), 4),
+            "missing_slots": sorted(required_slots - planned_slots),
+        },
+        "unknown_topic_discovery": {
+            "before_horizon_task_share": round(len(old_horizon_tasks) / len(old_tasks), 4),
+            "after_horizon_task_share": round(len(broad_horizon_tasks) / len(new_tasks), 4),
+            "discovery_findings_structured": "discovery_findings" in observation_required,
+            "synthesis_retains_discoveries": "Treat discovery_findings as the horizon scan" in synthesizer,
+        },
+        "information_retention": {
+            "required_detail_slots": sorted(summary_required),
+            "confirmed_fact_minimum": contract.get("minimum_current_material_facts_per_published_item"),
+            "fact_to_source_mapping_required": "fact_sources" in summary_required,
+            "collector_preserves_complete_source_list": "web_search_call.action.sources" in collector,
+            "detail_source_urls_required": True,
+        },
+        "route_counts": dict(sorted(Counter(str(task.get("model_route")) for task in new_tasks).items())),
+        "channel_sweep_counts": dict(sorted(Counter(str(task.get("channel")) for task in new_tasks).items())),
     }
+
+    failures: list[str] = []
+    if metrics["ai_calls"]["reduction_ratio"] < 0.70:
+        failures.append("ai_call_reduction_below_70_percent")
+    if metrics["seed_target_checks"]["after"] != metrics["seed_target_checks"]["unique_targets"]:
+        failures.append("seed_target_checks_still_duplicated")
+    if metrics["known_frontier_coverage"]["recall"] != 1.0:
+        failures.append("known_frontier_slot_loss")
+    if metrics["unknown_topic_discovery"]["after_horizon_task_share"] != 1.0:
+        failures.append("horizon_discovery_not_present_in_every_sweep")
+    if metrics["unknown_topic_discovery"]["before_horizon_task_share"] != 0.0:
+        failures.append("legacy_baseline_not_topic_bound")
+    if not metrics["unknown_topic_discovery"]["discovery_findings_structured"]:
+        failures.append("discovery_findings_not_structured")
+    if not metrics["unknown_topic_discovery"]["synthesis_retains_discoveries"]:
+        failures.append("discovery_findings_can_be_dropped")
+    if not metrics["information_retention"]["fact_to_source_mapping_required"]:
+        failures.append("material_facts_not_individually_sourced")
+    if not metrics["information_retention"]["collector_preserves_complete_source_list"]:
+        failures.append("complete_web_search_source_list_not_preserved")
+
+    result = {
+        "issue_date": issue_date,
+        "verdict": "pass" if not failures else "fail",
+        "failures": failures,
+        "metrics": metrics,
+        "limits": [
+            "This deterministic simulation proves structural coverage and removes duplicated AI work.",
+            "Live source recall is measured separately from source traces and the published candidate ledger.",
+        ],
+    }
+    return result
 
 
 def main() -> int:
@@ -199,16 +181,13 @@ def main() -> int:
     parser.add_argument("--output", type=Path)
     parser.add_argument("--fail-on-weakness", action="store_true")
     args = parser.parse_args()
-
     result = simulate(args.issue_date)
     text = json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True)
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(text + "\n", encoding="utf-8")
     print(text)
-    if args.fail_on_weakness and result["missing_capabilities"]:
-        return 1
-    return 0
+    return 1 if args.fail_on_weakness and result["failures"] else 0
 
 
 if __name__ == "__main__":

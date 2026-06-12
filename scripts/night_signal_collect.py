@@ -10,6 +10,7 @@ evidence.
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
 import json
 import os
 import sys
@@ -28,8 +29,8 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_STATE_ROOT = ROOT / "state"
 RESPONSES_URL = os.getenv("OPENAI_RESPONSES_URL", "https://api.openai.com/v1/responses")
 DEFAULT_ROUTE_MODELS = {
-    "small_structured_extractor": "gpt-5-mini",
-    "small_structured_extractor_then_frontier_reasoning_if_ambiguous": "gpt-5-mini",
+    "small_structured_extractor": "gpt-5.4-mini",
+    "small_structured_extractor_then_frontier_reasoning_if_ambiguous": "gpt-5.4-mini",
     "frontier_reasoning_model": "gpt-5.5",
 }
 ROUTE_MODEL_ENV = {
@@ -37,18 +38,86 @@ ROUTE_MODEL_ENV = {
     "small_structured_extractor_then_frontier_reasoning_if_ambiguous": "NIGHT_SIGNAL_MODEL_SMALL_THEN_FRONTIER",
     "frontier_reasoning_model": "NIGHT_SIGNAL_MODEL_FRONTIER_REASONING",
 }
-SYSTEM_PROMPT = """You collect NIGHT SIGNAL source observations.
+COLLECTION_SWEEP_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "additionalProperties": False,
+    "required": [
+        "needs_extended_research",
+        "extended_research_reason",
+        "findings",
+        "observations",
+    ],
+    "properties": {
+        "needs_extended_research": {"type": "boolean"},
+        "extended_research_reason": {"type": ["string", "null"]},
+        "findings": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": False,
+                "required": [
+                    "title",
+                    "url",
+                    "published_date",
+                    "summary",
+                    "watch_topic_ids",
+                    "finding_state",
+                ],
+                "properties": {
+                    "title": {"type": "string"},
+                    "url": {"type": "string"},
+                    "published_date": {"type": ["string", "null"]},
+                    "summary": {"type": "string"},
+                    "watch_topic_ids": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                    },
+                    "finding_state": {
+                        "type": "string",
+                        "enum": [
+                            "fresh_update",
+                            "near_miss",
+                            "background",
+                            "source_unavailable",
+                        ],
+                    },
+                },
+            },
+        },
+        "observations": {
+            "type": "array",
+            "items": state.SOURCE_OBSERVATION_SCHEMA,
+        }
+    },
+}
 
-Return exactly one JSON object that matches the provided source_observation
-schema. Do not write an article. Do not decide whether the topic should be
-published. Do not use search-result pages as source URLs.
+SYSTEM_PROMPT = """You collect NIGHT SIGNAL category sweeps.
+
+Return exactly one JSON object that matches the provided collection_sweep
+schema. Do not write articles or decide publication value.
 
 Rules:
-- Inspect every seed source target in source_targets. Every target must appear
-  in source_target_results with observed_live, source_unavailable,
-  reused_from_cache, or not_applicable.
-- Use web search to discover additional current direct sources, but do not let
-  discovered sources replace seed target checks.
+- Search once across the whole category and information route, then return one
+  observation for every item in watch_topics. Do not repeat the same search for
+  each watch topic.
+- Preserve the useful pre-summary information in findings. Record every
+  distinct fresh update, near miss, relevant background result, and unavailable
+  direct source that influenced the sweep. Do not collapse several URLs into
+  one representative finding.
+- For web sweeps, return at least two distinct findings for every watch topic.
+  For sns_x and youtube sweeps, return at least one finding for every watch
+  topic. One finding may cover multiple topics when the source genuinely does.
+- Every finding must use a direct source URL, concrete Japanese summary, source
+  date when available, and all applicable watch_topic_ids.
+- Inspect every seed source target exactly once during the sweep. Copy its
+  closure result into every returned observation so downstream slot validation
+  remains deterministic.
+- Use agentic web search to discover current direct sources beyond the seed
+  list. Explicitly search for important developments outside the configured
+  watch topics.
+- Put every outside-frontier finding in discovery_findings exactly once, on
+  the observation whose suggested_watch_topic_id is the closest configured
+  topic. Use an empty list on all other observations.
 - Focus on the issue date and the latest three calendar days. Older material may
   be background only and must not be described as fresh.
 - Routine schedules, repeated background, and extreme personal opinions should
@@ -57,6 +126,23 @@ Rules:
   dates, numbers, result/status, and source dates.
 - If a social page is login-limited or unavailable, record source_unavailable
   for that target with a concrete Japanese evidence_summary.
+- Set needs_extended_research=true only when a potentially material finding
+  remains unresolved because authoritative sources conflict, all authoritative
+  sources are inaccessible, or a major outside-frontier finding lacks enough
+  verification. Routine no-change results do not qualify.
+- When needs_extended_research=false, extended_research_reason must be null.
+"""
+
+EXTENDED_RESEARCH_PROMPT = """Resolve one ambiguous NIGHT SIGNAL category sweep.
+
+Use high-effort agentic web research to resolve only the ambiguity described in
+extended_research_reason. Search broadly enough to settle conflicts and verify
+important outside-frontier findings, but do not expand into a general report.
+Return the complete collection_sweep object for all watch_topics so it can
+replace the first pass. Set needs_extended_research=false after the bounded
+research pass and preserve the complete findings ledger, source URLs, dates,
+claim atoms, and no-change evidence. Do not invent certainty when sources
+remain unavailable or conflict.
 """
 
 
@@ -112,7 +198,6 @@ def reasoning_for_route(route: str) -> dict[str, str]:
 
 
 def task_payload(task: dict[str, Any]) -> dict[str, Any]:
-    schema = dict(state.SOURCE_OBSERVATION_SCHEMA)
     route = str(task.get("model_route", ""))
     payload = {
         "model": model_for_route(route),
@@ -124,7 +209,7 @@ def task_payload(task: dict[str, Any]) -> dict[str, Any]:
                 "content": json.dumps(
                     {
                         "task": task,
-                        "required_output": "one source_observation JSON object",
+                        "required_output": "one collection_sweep JSON object",
                         "observed_at_jst": jst_now(),
                     },
                     ensure_ascii=False,
@@ -132,15 +217,22 @@ def task_payload(task: dict[str, Any]) -> dict[str, Any]:
                 ),
             },
         ],
-        "tools": [{"type": "web_search", "search_context_size": "medium"}],
+        "tools": [
+            {
+                "type": "web_search",
+                "search_context_size": "high",
+                "external_web_access": True,
+                "return_token_budget": "default",
+            }
+        ],
         "tool_choice": "required",
         "include": ["web_search_call.action.sources"],
         "text": {
             "format": {
                 "type": "json_schema",
-                "name": "source_observation",
+                "name": "collection_sweep",
                 "strict": True,
-                "schema": schema,
+                "schema": COLLECTION_SWEEP_SCHEMA,
             }
         },
     }
@@ -148,6 +240,56 @@ def task_payload(task: dict[str, Any]) -> dict[str, Any]:
     if isinstance(prompt_cache_key, str) and prompt_cache_key.strip():
         payload["prompt_cache_key"] = prompt_cache_key.strip()
     return payload
+
+
+def extended_research_payload(
+    task: dict[str, Any],
+    first_pass: dict[str, Any],
+) -> dict[str, Any]:
+    return {
+        "model": os.getenv("NIGHT_SIGNAL_EXTENDED_RESEARCH_MODEL", "gpt-5.5"),
+        "reasoning": {
+            "effort": os.getenv("NIGHT_SIGNAL_EXTENDED_RESEARCH_EFFORT", "high")
+        },
+        "background": True,
+        "store": True,
+        "max_tool_calls": int(os.getenv("NIGHT_SIGNAL_EXTENDED_RESEARCH_MAX_TOOL_CALLS", "24")),
+        "input": [
+            {"role": "system", "content": EXTENDED_RESEARCH_PROMPT},
+            {
+                "role": "user",
+                "content": json.dumps(
+                    {
+                        "task": task,
+                        "first_pass": first_pass,
+                        "required_output": "one complete collection_sweep JSON object",
+                        "observed_at_jst": jst_now(),
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                ),
+            },
+        ],
+        "tools": [
+            {
+                "type": "web_search",
+                "search_context_size": "high",
+                "external_web_access": True,
+                "return_token_budget": "unlimited",
+            }
+        ],
+        "tool_choice": "required",
+        "include": ["web_search_call.action.sources"],
+        "text": {
+            "format": {
+                "type": "json_schema",
+                "name": "collection_sweep",
+                "strict": True,
+                "schema": COLLECTION_SWEEP_SCHEMA,
+            },
+            "verbosity": "low",
+        },
+    }
 
 
 def api_key() -> str:
@@ -181,6 +323,50 @@ def call_responses(payload: dict[str, Any], *, retries: int) -> dict[str, Any]:
     fail(f"Responses API request failed after {retries} attempt(s): {last_error}")
 
 
+def retrieve_response(response_id: str) -> dict[str, Any]:
+    headers = {
+        "Authorization": f"Bearer {api_key()}",
+        "Content-Type": "application/json",
+        "User-Agent": "night-signal-collector",
+    }
+    request = urllib.request.Request(
+        f"{RESPONSES_URL.rstrip('/')}/{response_id}",
+        headers=headers,
+        method="GET",
+    )
+    with urllib.request.urlopen(request, timeout=180) as response:
+        return json.loads(response.read().decode("utf-8"))
+
+
+def call_background_response(
+    payload: dict[str, Any],
+    *,
+    retries: int,
+    poll_seconds: float,
+    timeout_seconds: int,
+) -> dict[str, Any]:
+    response = call_responses(payload, retries=retries)
+    response_id = response.get("id")
+    if not isinstance(response_id, str) or not response_id:
+        fail("background Responses request returned no response id")
+    started = time.monotonic()
+    while response.get("status") in {"queued", "in_progress"}:
+        if time.monotonic() - started > timeout_seconds:
+            fail(f"background Responses request timed out: {response_id}")
+        time.sleep(max(0.5, poll_seconds))
+        try:
+            response = retrieve_response(response_id)
+        except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as exc:
+            if time.monotonic() - started > timeout_seconds:
+                fail(f"background Responses polling failed: {response_id}: {exc}")
+    if response.get("status") != "completed":
+        fail(
+            f"background Responses request ended in {response.get('status')}: "
+            f"{response.get('error') or response.get('incomplete_details')}"
+        )
+    return response
+
+
 def output_text(response: dict[str, Any]) -> str:
     if isinstance(response.get("output_text"), str):
         return response["output_text"]
@@ -197,18 +383,88 @@ def output_text(response: dict[str, Any]) -> str:
     return text
 
 
-def parse_observation(response: dict[str, Any]) -> dict[str, Any]:
+def parse_sweep(task: dict[str, Any], response: dict[str, Any]) -> dict[str, Any]:
     text = output_text(response)
     try:
         value = json.loads(text)
     except json.JSONDecodeError as exc:
         fail(f"collector output was not JSON: {exc}: {text[:500]}")
-    if not isinstance(value, dict):
-        fail("collector output must be a JSON object")
-    return value
+    if (
+        not isinstance(value, dict)
+        or not isinstance(value.get("observations"), list)
+        or not isinstance(value.get("findings"), list)
+    ):
+        fail("collector output must be a collection_sweep object")
+    needs_extended_research = value.get("needs_extended_research")
+    reason = value.get("extended_research_reason")
+    if not isinstance(needs_extended_research, bool):
+        fail("collector output must contain needs_extended_research boolean")
+    if needs_extended_research and (not isinstance(reason, str) or not reason.strip()):
+        fail("collector extended research request must contain a concrete reason")
+    if not needs_extended_research and reason is not None:
+        fail("collector extended_research_reason must be null when escalation is not needed")
+    observations = [item for item in value["observations"] if isinstance(item, dict)]
+    expected_topics = {
+        str(item.get("watch_topic_id"))
+        for item in task.get("watch_topics", [])
+        if isinstance(item, dict)
+    }
+    actual_topics = {str(item.get("watch_topic_id")) for item in observations}
+    if actual_topics != expected_topics or len(observations) != len(expected_topics):
+        fail(
+            f"{task.get('slot_id')} sweep topic mismatch: "
+            f"missing={sorted(expected_topics - actual_topics)}, extra={sorted(actual_topics - expected_topics)}"
+        )
+    for observation in observations:
+        for key in ("category", "source_role", "channel"):
+            if observation.get(key) != task.get(key):
+                fail(f"{task.get('slot_id')} observation {key} mismatch")
+    findings = [item for item in value["findings"] if isinstance(item, dict)]
+    required_findings = 2 if task.get("channel") == "web" else 1
+    finding_counts = {
+        topic_id: len(
+            {
+                str(finding.get("url"))
+                for finding in findings
+                if topic_id in finding.get("watch_topic_ids", [])
+            }
+        )
+        for topic_id in expected_topics
+    }
+    thin_topics = sorted(
+        topic_id
+        for topic_id, count in finding_counts.items()
+        if count < required_findings
+    )
+    if thin_topics:
+        fail(
+            f"{task.get('slot_id')} findings ledger lacks distinct URLs for: "
+            + ", ".join(thin_topics)
+        )
+    for finding in findings:
+        if not str(finding.get("url", "")).startswith(("http://", "https://")):
+            fail(f"{task.get('slot_id')} finding must use a direct URL")
+        finding_topics = {
+            str(topic_id) for topic_id in finding.get("watch_topic_ids", [])
+        }
+        if not finding_topics or not finding_topics <= expected_topics:
+            fail(f"{task.get('slot_id')} finding uses an unknown watch topic")
+    return {
+        "needs_extended_research": needs_extended_research,
+        "extended_research_reason": reason,
+        "findings": findings,
+        "observations": observations,
+    }
 
 
-def web_search_trace(task: dict[str, Any], response: dict[str, Any]) -> dict[str, Any]:
+def web_search_trace(
+    task: dict[str, Any],
+    response: dict[str, Any],
+    *,
+    stage: str = "initial",
+    parent_response_id: str | None = None,
+    escalation_reason: str | None = None,
+) -> dict[str, Any]:
     raw_web_search_sources: list[Any] = []
     web_search_calls: list[dict[str, Any]] = []
     for item in response.get("output", []):
@@ -234,12 +490,20 @@ def web_search_trace(task: dict[str, Any], response: dict[str, Any]) -> dict[str
         "issue_date": task.get("issue_date"),
         "slot_id": task.get("slot_id"),
         "category": task.get("category"),
-        "watch_topic_id": task.get("watch_topic_id"),
+        "watch_topic_ids": [
+            item.get("watch_topic_id")
+            for item in task.get("watch_topics", [])
+            if isinstance(item, dict)
+        ],
         "source_role": task.get("source_role"),
         "channel": task.get("channel"),
         "model_route": task.get("model_route"),
+        "stage": stage,
         "prompt_cache_key": task.get("prompt_cache_key"),
         "response_id": response.get("id"),
+        "parent_response_id": parent_response_id,
+        "escalation_reason": escalation_reason,
+        "response_status": response.get("status"),
         "web_search_calls": web_search_calls,
         "raw_web_search_sources": raw_web_search_sources,
         "usage": response.get("usage"),
@@ -266,7 +530,13 @@ def self_test() -> None:
         "issue_date": "2099-01-01",
         "slot_id": "openai-product-social",
         "category": "OpenAI",
-        "watch_topic_id": "product_release",
+        "watch_topics": [
+            {
+                "watch_topic_id": "product_release",
+                "search_terms": ["OpenAI", "product", "release"],
+                "required_channels": ["web", "sns_x", "youtube"],
+            }
+        ],
         "source_role": "social_or_video_signal",
         "channel": "sns_x",
         "model_route": "small_structured_extractor",
@@ -280,8 +550,8 @@ def self_test() -> None:
     }
     payload = task_payload(fake_task)
     text_format = payload["text"]["format"]
-    if text_format["type"] != "json_schema" or text_format["schema"] != state.SOURCE_OBSERVATION_SCHEMA:
-        fail("collector must use source observation structured output schema")
+    if text_format["type"] != "json_schema" or text_format["schema"] != COLLECTION_SWEEP_SCHEMA:
+        fail("collector must use collection sweep structured output schema")
     if payload["model"] not in set(DEFAULT_ROUTE_MODELS.values()):
         fail("collector default model must be one of the current route defaults")
     if payload["reasoning"].get("effort") not in {"low", "medium", "high"}:
@@ -291,10 +561,30 @@ def self_test() -> None:
         fail("collector prompt must preserve source target result acceptance")
     if payload["tools"][0]["type"] != "web_search":
         fail("collector must use Responses web_search tool")
+    if payload["tools"][0].get("external_web_access") is not True:
+        fail("collector must use live external web access")
+    if payload["tools"][0].get("return_token_budget") != "default":
+        fail("collector must bound returned web-search tokens by default")
     if payload["tool_choice"] != "required":
         fail("collector must require web search for live observation tasks")
     if payload.get("prompt_cache_key") != "night-signal-source-observation-small-structured-extractor-social-or-video-signal-sns-x":
         fail("collector must pass collection plan prompt_cache_key to Responses")
+    extended = extended_research_payload(
+        fake_task,
+        {
+            "needs_extended_research": True,
+            "extended_research_reason": "公式資料と報道の数値が一致しない",
+            "findings": [],
+            "observations": [],
+        },
+    )
+    if (
+        extended.get("background") is not True
+        or extended.get("store") is not True
+        or extended["tools"][0].get("return_token_budget") != "unlimited"
+        or extended["reasoning"].get("effort") not in {"high", "xhigh"}
+    ):
+        fail("extended research must use bounded background high-effort web research")
     trace = web_search_trace(fake_task, {"id": "resp_test", "output": [{"type": "web_search_call", "id": "ws_test", "status": "completed", "action": {"type": "search", "query": "OpenAI", "sources": [{"url": "https://openai.com/"}]}}]})
     if not trace["raw_web_search_sources"] or trace["web_search_calls"][0]["sources_count"] != 1:
         fail("collector must preserve raw web_search sources")
@@ -310,6 +600,10 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--replace", action="store_true")
     parser.add_argument("--retries", type=int, default=3)
+    parser.add_argument("--workers", type=int, default=4)
+    parser.add_argument("--max-extended-research", type=int, default=3)
+    parser.add_argument("--background-poll-seconds", type=float, default=3.0)
+    parser.add_argument("--background-timeout-seconds", type=int, default=1200)
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
 
@@ -325,25 +619,84 @@ def main() -> int:
         print(json.dumps({"issue_date": args.issue_date, "requests": len(tasks)}, ensure_ascii=False, indent=2))
         return 0
 
-    observations: list[dict[str, Any]] = []
-    traces: list[dict[str, Any]] = []
-    for index, task in enumerate(tasks, start=1):
+    def collect_task(index_and_task: tuple[int, dict[str, Any]]) -> tuple[int, dict[str, Any], dict[str, Any], dict[str, Any]]:
+        index, task = index_and_task
         print(f"collecting {index}/{len(tasks)} {task.get('slot_id')}", file=sys.stderr)
         response = call_responses(task_payload(task), retries=args.retries)
-        observations.append(parse_observation(response))
-        traces.append(web_search_trace(task, response))
+        return index, task, parse_sweep(task, response), web_search_trace(task, response)
+
+    observations: list[dict[str, Any]] = []
+    findings: list[dict[str, Any]] = []
+    traces: list[dict[str, Any]] = []
+    workers = max(1, min(args.workers, len(tasks)))
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
+        results = list(executor.map(collect_task, enumerate(tasks, start=1)))
+    escalations_used = 0
+    for _, task, sweep, trace in sorted(results, key=lambda item: item[0]):
+        traces.append(trace)
+        if (
+            sweep["needs_extended_research"]
+            and escalations_used < max(0, args.max_extended_research)
+        ):
+            reason = str(sweep["extended_research_reason"])
+            print(f"extended research {task.get('slot_id')}: {reason}", file=sys.stderr)
+            response = call_background_response(
+                extended_research_payload(task, sweep),
+                retries=args.retries,
+                poll_seconds=args.background_poll_seconds,
+                timeout_seconds=args.background_timeout_seconds,
+            )
+            parent_response_id = str(trace.get("response_id") or "")
+            sweep = parse_sweep(task, response)
+            traces.append(
+                web_search_trace(
+                    task,
+                    response,
+                    stage="extended_research",
+                    parent_response_id=parent_response_id or None,
+                    escalation_reason=reason,
+                )
+            )
+            escalations_used += 1
+        for finding in sweep["findings"]:
+            findings.append(
+                {
+                    **finding,
+                    "issue_date": args.issue_date,
+                    "slot_id": task.get("slot_id"),
+                    "category": task.get("category"),
+                    "source_role": task.get("source_role"),
+                    "channel": task.get("channel"),
+                    "observed_at_jst": jst_now(),
+                }
+            )
+        observations.extend(sweep["observations"])
 
     output = state_dir / "observations.jsonl"
     if args.replace:
         write_jsonl(output, observations)
+        write_jsonl(state_dir / "findings.jsonl", findings)
         write_jsonl(state_dir / "source_traces.jsonl", traces)
     else:
         append_jsonl(output, observations)
+        append_jsonl(state_dir / "findings.jsonl", findings)
         append_jsonl(state_dir / "source_traces.jsonl", traces)
     if args.max_tasks is None and args.slot_id is None:
         frontier = state.build_frontier(state.read_json(state.CONFIG_PATH))
         state.validate_observation_records(observations, frontier)
-    print(json.dumps({"issue_date": args.issue_date, "observations": len(observations), "path": str(output)}, ensure_ascii=False, indent=2))
+    print(
+        json.dumps(
+            {
+                "issue_date": args.issue_date,
+                "observations": len(observations),
+                "findings": len(findings),
+                "extended_research_runs": escalations_used,
+                "path": str(output),
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+    )
     return 0
 
 

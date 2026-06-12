@@ -168,7 +168,8 @@ Use current OpenAI technology only where it makes the canonical flow stronger:
 - Structured Outputs for observations, candidates, and decisions;
 - Function Calling/tools for source access and cache lookup;
 - Agents/tracing only for bounded workflow roles;
-- Deep Research only for scheduled frontier review, not direct daily publishing;
+- bounded background research only when a material ambiguity survives the
+  normal sweep;
 - Batch API for asynchronous extraction/classification after source fetch;
 - prompt caching and batch processing for token efficiency.
 
@@ -183,7 +184,7 @@ Concrete model names are not architecture. The design uses model routes:
 
 The current concrete model for each route must be resolved from official
 OpenAI docs when implementation changes.
-For the current collector implementation, the verified defaults are `gpt-5-mini`
+For the current collector implementation, the verified defaults are `gpt-5.4-mini`
 for low-cost structured source extraction and `gpt-5.5` for frontier reasoning
 and synthesis.
 They remain environment-overridable so the architecture can move with OpenAI's
@@ -235,11 +236,11 @@ Adoption decision after the 2026-06-11 review:
 - Use image/text search only for categories where visual evidence is part of the
   source contract, such as product photos, venue/event assets, or social/video
   posts. It should not become the default for every slot.
-- Keep Deep Research out of daily publication generation. Deep Research is
-  appropriate for scheduled frontier review, missed-source discovery, and
-  category contract redesign because it can perform multi-step research across
-  web search, remote MCP, file search, and code interpreter. It is too slow and
-  too broad to be the primary daily observation-slot extractor.
+- Keep extended research out of the normal daily path, but trigger a bounded
+  GPT-5.5 background pass when authoritative sources conflict, all direct
+  sources are inaccessible, or a potentially material outside-frontier finding
+  remains unresolved. Limit the daily escalations to three and preserve the
+  parent response, reason, sources, and tool trace.
 - Remote MCP and OpenAI connectors are useful for authenticated or structured
   source systems, but they should enter only as observation connectors that
   write the same source-observation schema. They must not bypass the canonical
@@ -257,6 +258,20 @@ Adoption decision after the 2026-06-11 review:
   complex reasoning/tool-heavy work and GPT-5.4 mini/nano for lower-cost
   workloads. Do not blindly replace model strings without a small eval over
   source-observation accuracy, URL evidence completeness, and token use.
+
+The 2026-06-12 implementation adds a pre-summary findings ledger:
+
+- every category sweep writes all useful direct-URL findings before producing
+  one representative observation per slot;
+- web sweeps require at least two distinct findings per watch topic and
+  social/video sweeps require at least one;
+- the complete daily issue requires at least three distinct URLs and two source
+  role/channel combinations per watch topic across all sweeps;
+- every watch topic requires a concrete reviewable finding, not a generic
+  "nothing changed" placeholder;
+- every fresh or near-miss finding URL must survive into the candidate ledger;
+- evaluation measures finding depth, source diversity, candidate retention,
+  claim/source mapping, and collection-call reduction.
 
 ## 8. Efficiency
 

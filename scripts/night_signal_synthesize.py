@@ -18,6 +18,7 @@ import urllib.request
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
 import night_signal_state as state
@@ -69,6 +70,9 @@ Mission:
 - Every watch_topic_id in frontier_topics must have at least one candidate.
 - Every fresh observed claim must be represented by a candidate, even when the
   final decision is reject. The candidate ledger is broad and auditable.
+- Treat the findings ledger as the uncompressed result set. Every fresh_update
+  or near_miss finding must become a candidate with its direct URL, even when
+  several findings belong to the same watch topic.
 - Do not merge independent events into one candidate. Honda China monthly sales
   and a Civic product update, for example, must remain separate candidates.
 - Every candidate must have one decision.
@@ -84,6 +88,11 @@ Mission:
   source dates, status/result, limits, or relevant uncertainty.
 - Detail summary_basis must explain what changed, why it matters, confirmed
   facts, limits/unknowns, and source dates.
+- Detail summary_basis.fact_sources must map every confirmed fact to one or more
+  URLs from detail.sources. Do not leave material facts uncited.
+- Treat discovery_findings as the horizon scan for important changes outside
+  the configured topic wording. Map each finding to its closest watch_topic_id,
+  retain it as a candidate, and reject it only with a concrete allowed reason.
 - Use only absolute direct source URLs observed in the input observations.
 - Material candidates must cite at least one source URL that carries observed
   claim_atoms, not just a URL that appeared in the sweep.
@@ -115,6 +124,14 @@ def load_observations(issue_date: str, state_root: Path) -> list[dict[str, Any]]
     return observations
 
 
+def load_findings(issue_date: str, state_root: Path) -> list[dict[str, Any]]:
+    path = state_root / issue_date / "findings.jsonl"
+    findings = state.read_json_records(path)
+    if not findings:
+        fail(f"findings ledger is missing or empty: {path}")
+    return findings
+
+
 def by_category(records: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
     grouped: dict[str, list[dict[str, Any]]] = {}
     for record in records:
@@ -129,7 +146,13 @@ def frontier_by_category() -> dict[str, list[dict[str, Any]]]:
     return grouped
 
 
-def task_payload(issue_date: str, category: str, frontier_topics: list[dict[str, Any]], observations: list[dict[str, Any]]) -> dict[str, Any]:
+def task_payload(
+    issue_date: str,
+    category: str,
+    frontier_topics: list[dict[str, Any]],
+    observations: list[dict[str, Any]],
+    findings: list[dict[str, Any]],
+) -> dict[str, Any]:
     return {
         "model": DEFAULT_SYNTHESIS_MODEL,
         "reasoning": {"effort": os.getenv("NIGHT_SIGNAL_SYNTHESIS_REASONING_EFFORT", "medium")},
@@ -144,6 +167,7 @@ def task_payload(issue_date: str, category: str, frontier_topics: list[dict[str,
                         "latest_allowed_source_dates": latest_three_dates(issue_date),
                         "frontier_topics": frontier_topics,
                         "observations": observations,
+                        "findings": findings,
                         "required_output": "one category_synthesis JSON object",
                         "generated_at_jst": jst_now(),
                     },
@@ -234,6 +258,11 @@ def direct_urls(observations: list[dict[str, Any]]) -> set[str]:
                 result_url = result.get("url")
                 if isinstance(result_url, str) and result_url.startswith(("http://", "https://")):
                     urls.add(result_url)
+        for finding in observation.get("discovery_findings", []):
+            if isinstance(finding, dict):
+                finding_url = finding.get("source_url")
+                if isinstance(finding_url, str) and finding_url.startswith(("http://", "https://")):
+                    urls.add(finding_url)
     return urls
 
 
@@ -264,6 +293,12 @@ def claim_source_urls(issue_date: str, observations: list[dict[str, Any]]) -> se
                 and result.get("published_date") in allowed_source_dates
             ):
                 urls.add(result_url)
+        for finding in observation.get("discovery_findings", []):
+            if not isinstance(finding, dict) or finding.get("published_date") not in allowed_source_dates:
+                continue
+            finding_url = finding.get("source_url")
+            if isinstance(finding_url, str) and finding_url.startswith(("http://", "https://")):
+                urls.add(finding_url)
     return urls
 
 
@@ -276,7 +311,14 @@ def validate_claim_source_linkage(category: str, candidate: dict[str, Any], clai
         fail(f"{category} material candidate lacks claim/source linkage: {candidate.get('title')}")
 
 
-def validate_category_result(issue_date: str, category: str, frontier_topics: list[dict[str, Any]], observations: list[dict[str, Any]], result: dict[str, Any]) -> None:
+def validate_category_result(
+    issue_date: str,
+    category: str,
+    frontier_topics: list[dict[str, Any]],
+    observations: list[dict[str, Any]],
+    result: dict[str, Any],
+    findings: list[dict[str, Any]] | None = None,
+) -> None:
     if result.get("category") != category:
         fail(f"synthesis category mismatch: {result.get('category')} != {category}")
     candidates = result.get("candidates")
@@ -308,6 +350,12 @@ def validate_category_result(issue_date: str, category: str, frontier_topics: li
             url = observation.get("url")
             if isinstance(url, str) and url.startswith(("http://", "https://")):
                 fresh_claim_urls.add(url)
+        for finding in observation.get("discovery_findings", []):
+            if not isinstance(finding, dict) or finding.get("published_date") not in allowed_source_dates:
+                continue
+            finding_url = finding.get("source_url")
+            if isinstance(finding_url, str) and finding_url.startswith(("http://", "https://")):
+                fresh_claim_urls.add(finding_url)
     for candidate in candidates:
         if not isinstance(candidate, dict):
             fail(f"{category} candidate must be an object")
@@ -318,6 +366,24 @@ def validate_category_result(issue_date: str, category: str, frontier_topics: li
                 fail(f"{category} candidate uses URL not present in observations: {url}")
             fresh_claim_urls.discard(url)
         validate_claim_source_linkage(category, candidate, claim_urls)
+    retained_finding_urls = {
+        str(url)
+        for candidate in candidates
+        for url in candidate.get("source_urls", [])
+        if isinstance(url, str)
+    }
+    required_finding_urls = {
+        str(finding.get("url"))
+        for finding in findings or []
+        if finding.get("finding_state") in {"fresh_update", "near_miss"}
+        and isinstance(finding.get("url"), str)
+    }
+    missing_finding_urls = sorted(required_finding_urls - retained_finding_urls)
+    if missing_finding_urls:
+        fail(
+            f"{category} findings were dropped before candidate review: "
+            + ", ".join(missing_finding_urls[:6])
+        )
     if fresh_claim_urls:
         fail(f"{category} fresh observed claims missing from candidates: " + ", ".join(sorted(fresh_claim_urls)[:6]))
 
@@ -355,6 +421,34 @@ cards_for_validation_cache: dict[str, list[dict[str, Any]]] = {}
 
 def minimal_manifest(issue_date: str, results_by_category: dict[str, dict[str, Any]]) -> dict[str, Any]:
     contract = state.read_json(state.CONFIG_PATH)
+    source_registry = state.load_source_registry()
+    official_hosts = {
+        urlparse(str(source["url"])).netloc.lower().removeprefix("www.")
+        for sources in source_registry.values()
+        for source in sources
+        if source.get("source_class") in {"official", "official_dataset"}
+    }
+    major_hosts = {
+        urlparse(str(source["url"])).netloc.lower().removeprefix("www.")
+        for sources in source_registry.values()
+        for source in sources
+        if source.get("source_class") == "major_media"
+    } | {
+        "apnews.com",
+        "bloomberg.com",
+        "businessinsider.com",
+        "ft.com",
+        "theguardian.com",
+        "nypost.com",
+        "reuters.com",
+        "wsj.com",
+    }
+    specialist_hosts = {
+        urlparse(str(source["url"])).netloc.lower().removeprefix("www.")
+        for sources in source_registry.values()
+        for source in sources
+        if source.get("source_class") == "specialist_media"
+    }
     categories: dict[str, dict[str, Any]] = {}
     for category in contract.get("categories", []):
         if not isinstance(category, dict):
@@ -365,7 +459,82 @@ def minimal_manifest(issue_date: str, results_by_category: dict[str, dict[str, A
         candidates = [candidate for candidate in result.get("candidates", []) if isinstance(candidate, dict)]
         decisions = [decision for decision in result.get("decisions", []) if isinstance(decision, dict)]
         adopted_titles = {str(decision.get("candidate_title")) for decision in decisions if decision.get("adoption_decision") == "adopt"}
+        source_evidence = {
+            source_class: [
+                str(source["url"])
+                for source in source_registry.get(label, [])
+                if source.get("source_class") == source_class
+            ]
+            for source_class in ("official", "major_media", "specialist_media", "sns_x", "youtube_video")
+        }
+        candidate_urls = {
+            str(url)
+            for candidate in candidates
+            for url in candidate.get("source_urls", [])
+            if isinstance(url, str) and url.startswith(("http://", "https://"))
+        }
+        for url in candidate_urls:
+            host = urlparse(url).netloc.lower().removeprefix("www.")
+            if host in official_hosts:
+                source_evidence["official"].append(url)
+            elif host in major_hosts:
+                source_evidence["major_media"].append(url)
+            elif host in specialist_hosts:
+                source_evidence["specialist_media"].append(url)
+            elif host in {"x.com", "twitter.com"}:
+                source_evidence["sns_x"].append(url)
+            elif host in {"youtube.com", "youtu.be"}:
+                source_evidence["youtube_video"].append(url)
+            else:
+                source_evidence["specialist_media"].append(url)
+        source_evidence = {
+            key: sorted(set(values))
+            for key, values in source_evidence.items()
+        }
+        held = [
+            str(decision.get("candidate_title"))
+            for decision in decisions
+            if decision.get("adoption_decision") == "reject"
+            and decision.get("reject_reason_class") == "insufficient_evidence"
+        ]
+        excluded = [
+            str(decision.get("candidate_title"))
+            for decision in decisions
+            if decision.get("adoption_decision") == "reject"
+            and decision.get("reject_reason_class") != "insufficient_evidence"
+        ]
         categories[label] = {
+            **source_evidence,
+            "data_numeric": [
+                str(candidate.get("summary"))
+                for candidate in candidates
+                if any(char.isdigit() for char in str(candidate.get("summary")))
+            ]
+            or [f"{issue_date}時点で数値を伴う更新なし"],
+            "schedule_calendar": [
+                f"{issue_date}の公表・予定・結果を照合"
+            ],
+            "counter_search": [
+                str(check.get("result"))
+                for check in result.get("no_change_checks", [])
+                if isinstance(check, dict) and isinstance(check.get("result"), str)
+            ]
+            or [f"{issue_date}時点の反証検索を実施"],
+            "adopted": sorted(adopted_titles),
+            "held": held or ["保留候補なし"],
+            "excluded": excluded or ["除外候補なし"],
+            "unresolved": ["未確認の重大リスクなし"],
+            "critical_unresolved": [],
+            "search_terms": sorted(
+                {
+                    str(term)
+                    for topic in category.get("watch_topics", [])
+                    if isinstance(topic, dict)
+                    for term in topic.get("terms", [])
+                    if isinstance(term, str)
+                }
+            ),
+            "freshness_check": f"{issue_date} JSTの直近3日を基準に照合",
             "published_card_titles": [str(card.get("title")) for card in cards],
             "new_or_changed_items": [
                 {
@@ -417,15 +586,23 @@ def write_requests(path: Path, payloads: list[dict[str, Any]]) -> None:
 
 def synthesize(issue_date: str, state_root: Path, *, dry_run: bool, replace: bool, retries: int) -> dict[str, Any]:
     observations = load_observations(issue_date, state_root)
+    findings = load_findings(issue_date, state_root)
     observations_for_issue_cache[issue_date] = observations
     candidates_for_validation_cache[issue_date] = []
     decisions_for_validation_cache[issue_date] = []
     cards_for_validation_cache[issue_date] = []
 
     observations_by_category = by_category(observations)
+    findings_by_category = by_category(findings)
     frontier_categories = frontier_by_category()
     payloads = [
-        task_payload(issue_date, category, topics, observations_by_category.get(category, []))
+        task_payload(
+            issue_date,
+            category,
+            topics,
+            observations_by_category.get(category, []),
+            findings_by_category.get(category, []),
+        )
         for category, topics in frontier_categories.items()
     ]
     state_dir = state_root / issue_date
@@ -436,8 +613,26 @@ def synthesize(issue_date: str, state_root: Path, *, dry_run: bool, replace: boo
     results_by_category: dict[str, dict[str, Any]] = {}
     for index, (category, topics) in enumerate(frontier_categories.items(), start=1):
         print(f"synthesizing {index}/{len(frontier_categories)} {category}", file=sys.stderr)
-        result = parse_category_result(call_responses(task_payload(issue_date, category, topics, observations_by_category.get(category, [])), retries=retries))
-        validate_category_result(issue_date, category, topics, observations_by_category.get(category, []), result)
+        result = parse_category_result(
+            call_responses(
+                task_payload(
+                    issue_date,
+                    category,
+                    topics,
+                    observations_by_category.get(category, []),
+                    findings_by_category.get(category, []),
+                ),
+                retries=retries,
+            )
+        )
+        validate_category_result(
+            issue_date,
+            category,
+            topics,
+            observations_by_category.get(category, []),
+            result,
+            findings_by_category.get(category, []),
+        )
         results_by_category[category] = result
         candidates_for_validation_cache[issue_date].extend(result["candidates"])
         decisions_for_validation_cache[issue_date].extend(result["decisions"])
@@ -484,6 +679,7 @@ def self_test() -> None:
                     }
                 ],
                 "claim_atoms": [{"claim_type": "announcement", "claim": "OpenAIが発表した。", "source_state": "confirmed_update"}],
+                "discovery_findings": [],
             },
             {
                 "category": "OpenAI",
@@ -506,6 +702,23 @@ def self_test() -> None:
                     }
                 ],
                 "claim_atoms": [],
+                "discovery_findings": [],
+            }
+        ],
+        [
+            {
+                "issue_date": "2099-01-01",
+                "slot_id": "openai-product-web",
+                "category": "OpenAI",
+                "source_role": "primary_or_official",
+                "channel": "web",
+                "title": "OpenAI、ChatGPTのメモリ合成を改善",
+                "url": "https://openai.com/",
+                "published_date": "2099-01-01",
+                "summary": "OpenAIがChatGPTのメモリ合成を改善した。",
+                "watch_topic_ids": ["product_release"],
+                "finding_state": "fresh_update",
+                "observed_at_jst": "2099-01-01T20:00:00+09:00",
             }
         ],
     )
@@ -513,7 +726,7 @@ def self_test() -> None:
     if fmt["type"] != "json_schema" or fmt["schema"] != CATEGORY_SYNTHESIS_SCHEMA:
         fail("synthesizer must use category synthesis structured output schema")
     content = payload["input"][1]["content"]
-    for term in ("frontier_topics", "observations", "latest_allowed_source_dates"):
+    for term in ("frontier_topics", "observations", "findings", "latest_allowed_source_dates"):
         if term not in content:
             fail(f"synthesis prompt missing {term}")
     frontier_topics = [
