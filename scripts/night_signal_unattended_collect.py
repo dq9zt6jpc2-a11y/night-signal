@@ -374,14 +374,6 @@ than the window belongs only in no_change_summary. If evidence is insufficient,
 return empty arrays and explain what was checked. Never invent a date, number,
 source, or certainty."""
 
-BATCH_SYSTEM_PROMPT = SYSTEM_PROMPT + """
-
-The user supplies one or two categories. Return exactly:
-{"categories":{"CATEGORY LABEL":{"items":[],"signals":[],
-"no_change_summary":"..."}}}
-Include every supplied category label exactly once."""
-
-
 def category_prompt(
     category: dict[str, Any],
     issue_date: str,
@@ -687,95 +679,69 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
             for record in news_records
             if record.get("observed")
         ]
-    for group_start in range(0, len(contracts), 2):
-        group = contracts[group_start : group_start + 2]
+    for category_index, category in enumerate(contracts):
+        label = str(category["label"])
         raw = model_request(
             token,
             [
-                {"role": "system", "content": BATCH_SYSTEM_PROMPT},
+                {"role": "system", "content": SYSTEM_PROMPT},
                 {
                     "role": "user",
                     "content": json.dumps(
-                        {
-                            "issue_date": issue_date,
-                            "categories": [
-                                category_prompt(
-                                    category,
-                                    issue_date,
-                                    records_by_category[str(category["label"])],
-                                )
-                                for category in group
-                            ],
-                        },
+                        category_prompt(
+                            category,
+                            issue_date,
+                            records_by_category[label],
+                        ),
                         ensure_ascii=False,
                     ),
                 },
             ],
         )
-        raw_categories = raw.get("categories")
-        if not isinstance(raw_categories, dict):
-            fail("GitHub Models batch omitted categories object")
-        for category in group:
-            label = str(category["label"])
-            raw_category = raw_categories.get(label)
-            if not isinstance(raw_category, dict):
-                raw_category = next(
-                    (
-                        value
-                        for key, value in raw_categories.items()
-                        if isinstance(value, dict)
-                        and (
-                            label.casefold() in str(key).casefold()
-                            or str(key).casefold() in label.casefold()
-                        )
-                    ),
-                    {},
-                )
-            if not isinstance(raw_category, dict):
-                raw_category = {}
-            normalized = normalize_result(
-                raw_category,
-                category,
-                issue_date,
-                records_by_category[label],
-            )
-            reviewed_categories[label] = normalized
-            raw_items = [
+        normalized = normalize_result(
+            raw,
+            category,
+            issue_date,
+            records_by_category[label],
+        )
+        reviewed_categories[label] = normalized
+        raw_items = [
+            {
+                "title": item.get("title"),
+                "watch_topic_id": item.get("watch_topic_id"),
+                "source_published_date": item.get("source_published_date"),
+                "topic_value_class": item.get("topic_value_class"),
+                "summary_length": len(str(item.get("summary", ""))),
+                "detail_length": len(str(item.get("detail_summary", ""))),
+                "fact_count": len(item.get("confirmed_facts", []))
+                if isinstance(item.get("confirmed_facts"), list)
+                else 0,
+                "source_urls": [
+                    source.get("url")
+                    for source in item.get("sources", [])
+                    if isinstance(source, dict)
+                ],
+            }
+            for item in raw.get("items", [])
+            if isinstance(item, dict)
+        ]
+        print(
+            json.dumps(
                 {
-                    "title": item.get("title"),
-                    "watch_topic_id": item.get("watch_topic_id"),
-                    "source_published_date": item.get("source_published_date"),
-                    "topic_value_class": item.get("topic_value_class"),
-                    "summary_length": len(str(item.get("summary", ""))),
-                    "detail_length": len(str(item.get("detail_summary", ""))),
-                    "fact_count": len(item.get("confirmed_facts", []))
-                    if isinstance(item.get("confirmed_facts"), list)
+                    "category": label,
+                    "raw_items": raw_items,
+                    "raw_signals": len(raw.get("signals", []))
+                    if isinstance(raw.get("signals"), list)
                     else 0,
-                    "source_urls": [
-                        source.get("url")
-                        for source in item.get("sources", [])
-                        if isinstance(source, dict)
-                    ],
-                }
-                for item in raw_category.get("items", [])
-                if isinstance(item, dict)
-            ]
-            print(
-                json.dumps(
-                    {
-                        "category": label,
-                        "returned_category_keys": list(raw_categories),
-                        "raw_items": raw_items,
-                        "raw_signals": len(raw_category.get("signals", []))
-                        if isinstance(raw_category.get("signals"), list)
-                        else 0,
-                        "normalized_items": len(normalized["items"]),
-                        "normalized_signals": len(normalized["signals"]),
-                    },
-                    ensure_ascii=False,
-                ),
-                flush=True,
-            )
+                    "normalized_items": len(normalized["items"]),
+                    "normalized_signals": len(normalized["signals"]),
+                },
+                ensure_ascii=False,
+            ),
+            flush=True,
+        )
+        if category_index < len(contracts) - 1:
+            time.sleep(10)
     total_items = sum(
         len(entry["items"])
         for entry in reviewed_categories.values()
