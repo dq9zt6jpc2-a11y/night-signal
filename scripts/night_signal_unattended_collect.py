@@ -289,35 +289,61 @@ def current_fresh_issue(issue_date: str) -> bool:
 
 
 def model_request(token: str, messages: list[dict[str, str]]) -> dict[str, Any]:
-    payload = {
-        "model": os.getenv("NIGHT_SIGNAL_GITHUB_MODEL", DEFAULT_MODEL),
-        "messages": messages,
-        "temperature": 0.1,
-        "max_tokens": 2600,
-        "response_format": {"type": "json_object"},
-    }
-    request = urllib.request.Request(
-        MODELS_URL,
-        data=json.dumps(payload).encode("utf-8"),
-        headers={
-            "Accept": "application/vnd.github+json",
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json",
-            "User-Agent": USER_AGENT,
-            "X-GitHub-Api-Version": "2022-11-28",
-        },
-        method="POST",
-    )
     errors: list[str] = []
+    attempt_messages = list(messages)
     for attempt in range(3):
+        payload = {
+            "model": os.getenv("NIGHT_SIGNAL_GITHUB_MODEL", DEFAULT_MODEL),
+            "messages": attempt_messages,
+            "temperature": 0.1,
+            "max_tokens": 4000,
+            "response_format": {"type": "json_object"},
+        }
+        request = urllib.request.Request(
+            MODELS_URL,
+            data=json.dumps(payload).encode("utf-8"),
+            headers={
+                "Accept": "application/vnd.github+json",
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+                "User-Agent": USER_AGENT,
+                "X-GitHub-Api-Version": "2022-11-28",
+            },
+            method="POST",
+        )
         try:
             with urllib.request.urlopen(request, timeout=90) as response:
                 value = json.loads(response.read().decode("utf-8"))
-            content = value["choices"][0]["message"]["content"]
+            choice = value["choices"][0]
+            content = choice["message"]["content"]
             if not isinstance(content, str):
                 raise ValueError("model content is not a string")
             content = re.sub(r"^```(?:json)?\s*|\s*```$", "", content.strip())
-            result = json.loads(content)
+            try:
+                result = json.loads(content)
+            except json.JSONDecodeError as exc:
+                finish_reason = str(choice.get("finish_reason", "unknown"))
+                errors.append(
+                    f"attempt {attempt + 1}: invalid JSON; "
+                    f"finish_reason={finish_reason}; chars={len(content)}; {exc}"
+                )
+                if attempt < 2:
+                    if finish_reason == "length":
+                        attempt_messages = [
+                            *messages,
+                            {
+                                "role": "user",
+                                "content": (
+                                    "The previous response exceeded the output "
+                                    "budget. Return smaller valid JSON: at most "
+                                    "1 item and 2 signals, with all supplied "
+                                    "dates and URLs preserved exactly."
+                                ),
+                            },
+                        ]
+                    time.sleep(5 * (attempt + 1))
+                    continue
+                break
             if not isinstance(result, dict):
                 raise ValueError("model result is not an object")
             return result
@@ -341,7 +367,6 @@ def model_request(token: str, messages: list[dict[str, str]]) -> dict[str, Any]:
             OSError,
             TimeoutError,
             ValueError,
-            json.JSONDecodeError,
         ) as exc:
             errors.append(f"attempt {attempt + 1}: {type(exc).__name__}: {exc}")
             if attempt < 2:
@@ -354,6 +379,9 @@ SYSTEM_PROMPT = """You are the unattended NIGHT SIGNAL evidence extractor.
 Return one JSON object with keys items, signals, no_change_summary.
 Use only the supplied evidence records and exact URLs. Do not use memory.
 The issue window is the issue date and preceding two calendar days.
+Return at most 1 item and at most 4 signals. The item is the most important
+confirmed change; retain other relevant candidates as signals instead of
+dropping them. Keep no_change_summary under 300 Japanese characters.
 
 items are publication-worthy confirmed changes. Retain names, exact dates,
 numbers, results, uncertainty, and context. Each item must contain:
@@ -361,12 +389,17 @@ watch_topic_id, title, summary, source_published_date, topic_value_class,
 priority_class, slug, detail_summary, what_changed, why_it_matters,
 confirmed_facts (at least 3), limits_or_unknowns, sources (1-3).
 Each source needs label and an exact supplied URL. summary should be clear
-Japanese with at least 100 characters; detail_summary at least 280 characters.
+Japanese with 100-180 characters; detail_summary 280-420 characters.
+what_changed and why_it_matters must each be 80-160 characters.
+Use exactly 3 confirmed_facts of 40-120 characters, limits_or_unknowns up to
+160 characters, and at most 2 sources.
 
 signals are relevant recent findings that should remain visible but are not
 strong enough for an article. Each signal must contain watch_topic_id, title,
 summary, source_published_date, source_url, source_label, change_class,
 rejection_reason_class, rejection_reason, topic_value_class.
+Keep each signal summary at 60-140 Japanese characters and rejection_reason
+under 100 characters.
 
 Unknown important changes may use the closest supplied watch_topic_id. Do not
 silently drop potentially important recent evidence. Routine background older
