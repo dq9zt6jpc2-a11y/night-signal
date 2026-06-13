@@ -17,6 +17,11 @@ on:
         required: false
         default: false
         type: boolean
+      dry_run:
+        description: "Run collection and audits without committing."
+        required: false
+        default: false
+        type: boolean
   schedule:
     - cron: "05 09 * * *"
     - cron: "35 09 * * *"
@@ -93,7 +98,7 @@ jobs:
           git diff --check
 
       - name: Commit audited issue
-        if: ${{ inputs.canary_only != true }}
+        if: ${{ inputs.canary_only != true && inputs.dry_run != true }}
         run: |
           git config user.name "night-signal-bot"
           git config user.email "night-signal-bot@users.noreply.github.com"
@@ -107,3 +112,9 @@ jobs:
           git commit -m "Publish NIGHT SIGNAL for $ISSUE_DATE"
           git pull --rebase origin main
           git push origin HEAD:main
+
+      - name: Report dry run
+        if: ${{ inputs.canary_only != true && inputs.dry_run == true }}
+        run: |
+          echo "Full unattended collection and all audits passed."
+          git status --short
