@@ -649,12 +649,27 @@ def normalize_result(
             change_class = "background_only"
         if topic_value not in ALLOWED_TOPIC_VALUES:
             topic_value = "operational_status_change"
+        signal_summary = compact_text(
+            str(signal.get("summary", "")),
+            1200,
+        )
+        if not signal_summary:
+            signal_summary = compact_text(
+                str(record.get("excerpt") or record.get("evidence") or title),
+                1200,
+            )
+        rejection_reason = compact_text(
+            str(signal.get("rejection_reason", "")),
+            600,
+        )
+        if not rejection_reason:
+            rejection_reason = "記事化に必要な確定情報が不足している。"
         seen_titles.add(title)
         signals.append(
             {
                 "watch_topic_id": topic,
                 "title": title,
-                "summary": compact_text(str(signal.get("summary", "")), 1200),
+                "summary": signal_summary,
                 "source_published_date": str(signal["source_published_date"]),
                 "source_url": url,
                 "source_label": str(record.get("label", url)),
@@ -671,15 +686,7 @@ def normalize_result(
                     }
                     else "insufficient_evidence"
                 ),
-                "rejection_reason": compact_text(
-                    str(
-                        signal.get(
-                            "rejection_reason",
-                            "記事化に必要な確定情報が不足している。",
-                        )
-                    ),
-                    600,
-                ),
+                "rejection_reason": rejection_reason,
                 "topic_value_class": topic_value,
                 "observation_source_role": str(
                     record.get("source_role", "independent_media_or_data")
@@ -927,6 +934,35 @@ def self_test() -> None:
     raw["items"][0]["sources"] = [{"url": "https://unverified.example/"}]
     if normalize_result(raw, category, "2099-01-03", records)["items"]:
         fail("normalization accepted an unverified source")
+    signal_raw = {
+        "items": [],
+        "signals": [
+            {
+                "watch_topic_id": "topic",
+                "title": "Retained candidate",
+                "summary": "",
+                "source_published_date": "2099-01-02",
+                "source_url": "https://example.com/item",
+                "change_class": "",
+                "rejection_reason_class": "",
+                "rejection_reason": "",
+                "topic_value_class": "",
+            }
+        ],
+        "no_change_summary": "All configured source roles were checked.",
+    }
+    normalized_signal = normalize_result(
+        signal_raw,
+        category,
+        "2099-01-03",
+        records,
+    )["signals"]
+    if (
+        len(normalized_signal) != 1
+        or not normalized_signal[0]["summary"]
+        or not normalized_signal[0]["rejection_reason"]
+    ):
+        fail("normalization lost a concise retained signal")
     print("NIGHT SIGNAL UNATTENDED COLLECT SELF-TEST PASSED")
 
 
