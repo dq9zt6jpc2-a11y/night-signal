@@ -108,6 +108,30 @@ def compact_text(value: str, limit: int = 1600) -> str:
     return " ".join(html.unescape(value).split())[:limit]
 
 
+PUBLIC_COPY_REPLACEMENTS = [
+    (
+        r"(?:調査|探索|監視|収集)"
+        r"(?:方法|経路|方針|対象|チャネル|チャンネル)",
+        "関連情報",
+    ),
+    (
+        r"(?:採用|掲載|公開)(?:判断|基準|可否|候補)",
+        "重要性",
+    ),
+    (
+        r"(?:見る|追う|確認する|収集する)必要がある",
+        "今後の変化が重要となる",
+    ),
+]
+
+
+def reader_facing_text(value: Any, limit: int = 1600) -> str:
+    text = compact_text(str(value), limit)
+    for pattern, replacement in PUBLIC_COPY_REPLACEMENTS:
+        text = re.sub(pattern, replacement, text)
+    return compact_text(text, limit)
+
+
 def page_text(raw: bytes, content_type: str) -> tuple[str, str]:
     charset_match = re.search(r"charset=([A-Za-z0-9._-]+)", content_type)
     charset = charset_match.group(1) if charset_match else "utf-8"
@@ -405,7 +429,8 @@ Unknown important changes may use the closest supplied watch_topic_id. Do not
 silently drop potentially important recent evidence. Routine background older
 than the window belongs only in no_change_summary. If evidence is insufficient,
 return empty arrays and explain what was checked. Never invent a date, number,
-source, or certainty."""
+source, or certainty. Public fields must explain the event itself and must not
+mention research, collection, monitoring, selection, or publication procedure."""
 
 def category_prompt(
     category: dict[str, Any],
@@ -529,21 +554,21 @@ def normalize_result(
         if not isinstance(item, dict):
             continue
         topic = str(item.get("watch_topic_id", ""))
-        title = compact_text(str(item.get("title", "")), 180)
-        summary = compact_text(str(item.get("summary", "")), 1000)
-        detail = compact_text(str(item.get("detail_summary", "")), 2600)
-        what_changed = compact_text(str(item.get("what_changed", "")), 700)
-        why_it_matters = compact_text(
-            str(item.get("why_it_matters", "")),
+        title = reader_facing_text(item.get("title", ""), 180)
+        summary = reader_facing_text(item.get("summary", ""), 1000)
+        detail = reader_facing_text(item.get("detail_summary", ""), 2600)
+        what_changed = reader_facing_text(item.get("what_changed", ""), 700)
+        why_it_matters = reader_facing_text(
+            item.get("why_it_matters", ""),
             700,
         )
         facts = [
-            compact_text(str(fact), 500)
+            reader_facing_text(fact, 500)
             for fact in item.get("confirmed_facts", [])
             if isinstance(fact, str) and fact.strip()
         ]
-        limits_or_unknowns = compact_text(
-            str(item.get("limits_or_unknowns", "")),
+        limits_or_unknowns = reader_facing_text(
+            item.get("limits_or_unknowns", ""),
             900,
         )
         if len(summary) < 100:
@@ -630,7 +655,7 @@ def normalize_result(
         if not isinstance(signal, dict):
             continue
         topic = str(signal.get("watch_topic_id", ""))
-        title = compact_text(str(signal.get("title", "")), 180)
+        title = reader_facing_text(signal.get("title", ""), 180)
         url = str(signal.get("source_url", ""))
         record = records_by_url.get(url)
         if (
@@ -649,17 +674,17 @@ def normalize_result(
             change_class = "background_only"
         if topic_value not in ALLOWED_TOPIC_VALUES:
             topic_value = "operational_status_change"
-        signal_summary = compact_text(
-            str(signal.get("summary", "")),
+        signal_summary = reader_facing_text(
+            signal.get("summary", ""),
             1200,
         )
         if not signal_summary:
-            signal_summary = compact_text(
-                str(record.get("excerpt") or record.get("evidence") or title),
+            signal_summary = reader_facing_text(
+                record.get("excerpt") or record.get("evidence") or title,
                 1200,
             )
-        rejection_reason = compact_text(
-            str(signal.get("rejection_reason", "")),
+        rejection_reason = reader_facing_text(
+            signal.get("rejection_reason", ""),
             600,
         )
         if not rejection_reason:
@@ -963,6 +988,8 @@ def self_test() -> None:
         or not normalized_signal[0]["rejection_reason"]
     ):
         fail("normalization lost a concise retained signal")
+    if reader_facing_text("収集方針を説明する。") != "関連情報を説明する。":
+        fail("public-copy normalization kept research procedure wording")
     print("NIGHT SIGNAL UNATTENDED COLLECT SELF-TEST PASSED")
 
 
