@@ -321,12 +321,23 @@ def model_request(token: str, messages: list[dict[str, str]]) -> dict[str, Any]:
             if not isinstance(result, dict):
                 raise ValueError("model result is not an object")
             return result
+        except urllib.error.HTTPError as exc:
+            retry_after = exc.headers.get("Retry-After")
+            try:
+                wait_seconds = max(10, min(120, int(retry_after or "65")))
+            except ValueError:
+                wait_seconds = 65
+            errors.append(
+                f"attempt {attempt + 1}: HTTP {exc.code}; "
+                f"retry_after={wait_seconds}"
+            )
+            if attempt < 2:
+                time.sleep(wait_seconds)
         except (
             KeyError,
             IndexError,
             OSError,
             TimeoutError,
-            urllib.error.URLError,
             ValueError,
             json.JSONDecodeError,
         ) as exc:
@@ -360,6 +371,13 @@ silently drop potentially important recent evidence. Routine background older
 than the window belongs only in no_change_summary. If evidence is insufficient,
 return empty arrays and explain what was checked. Never invent a date, number,
 source, or certainty."""
+
+BATCH_SYSTEM_PROMPT = SYSTEM_PROMPT + """
+
+The user supplies one or two categories. Return exactly:
+{"categories":{"CATEGORY LABEL":{"items":[],"signals":[],
+"no_change_summary":"..."}}}
+Include every supplied category label exactly once."""
 
 
 def category_prompt(
@@ -627,6 +645,7 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
     unavailable: dict[str, str] = {}
     evidence: dict[str, str] = {}
     reviewed_categories: dict[str, dict[str, Any]] = {}
+    records_by_category: dict[str, list[dict[str, Any]]] = {}
     for category, news_records in zip(contracts, news_lists):
         label = str(category["label"])
         seed_records = fetched_by_category[label]
@@ -638,30 +657,50 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
                     f"{checked_at}に直接取得とJina Reader経由取得を試したが、"
                     f"本文を確認できなかった。理由: {record.get('error', '不明')}"
                 )
-        records = seed_records + [
+        records_by_category[label] = seed_records + [
             record
             for record in news_records
             if record.get("observed")
         ]
+    for group_start in range(0, len(contracts), 2):
+        group = contracts[group_start : group_start + 2]
         raw = model_request(
             token,
             [
-                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "system", "content": BATCH_SYSTEM_PROMPT},
                 {
                     "role": "user",
                     "content": json.dumps(
-                        category_prompt(category, issue_date, records),
+                        {
+                            "issue_date": issue_date,
+                            "categories": [
+                                category_prompt(
+                                    category,
+                                    issue_date,
+                                    records_by_category[str(category["label"])],
+                                )
+                                for category in group
+                            ],
+                        },
                         ensure_ascii=False,
                     ),
                 },
             ],
         )
-        reviewed_categories[label] = normalize_result(
-            raw,
-            category,
-            issue_date,
-            records,
-        )
+        raw_categories = raw.get("categories")
+        if not isinstance(raw_categories, dict):
+            fail("GitHub Models batch omitted categories object")
+        for category in group:
+            label = str(category["label"])
+            raw_category = raw_categories.get(label, {})
+            if not isinstance(raw_category, dict):
+                raw_category = {}
+            reviewed_categories[label] = normalize_result(
+                raw_category,
+                category,
+                issue_date,
+                records_by_category[label],
+            )
     total_items = sum(
         len(entry["items"])
         for entry in reviewed_categories.values()
