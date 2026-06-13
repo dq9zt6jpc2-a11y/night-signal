@@ -293,7 +293,7 @@ def model_request(token: str, messages: list[dict[str, str]]) -> dict[str, Any]:
         "model": os.getenv("NIGHT_SIGNAL_GITHUB_MODEL", DEFAULT_MODEL),
         "messages": messages,
         "temperature": 0.1,
-        "max_tokens": 4000,
+        "max_tokens": 2600,
         "response_format": {"type": "json_object"},
     }
     request = urllib.request.Request(
@@ -322,6 +322,8 @@ def model_request(token: str, messages: list[dict[str, str]]) -> dict[str, Any]:
                 raise ValueError("model result is not an object")
             return result
         except urllib.error.HTTPError as exc:
+            if exc.code != 429:
+                fail(f"GitHub Models request failed with HTTP {exc.code}")
             retry_after = exc.headers.get("Retry-After")
             try:
                 wait_seconds = max(10, min(120, int(retry_after or "65")))
@@ -385,6 +387,30 @@ def category_prompt(
     issue_date: str,
     records: list[dict[str, Any]],
 ) -> dict[str, Any]:
+    observed = [
+        record
+        for record in records
+        if record.get("observed")
+    ]
+    selected: list[dict[str, Any]] = []
+    seen_routes: set[tuple[str, str]] = set()
+    for record in observed:
+        if record.get("source_class") == "discovered_media":
+            continue
+        route = (
+            str(record.get("source_role")),
+            str(record.get("channel")),
+        )
+        if route in seen_routes:
+            continue
+        seen_routes.add(route)
+        selected.append(record)
+    selected.extend(
+        record
+        for record in observed
+        if record.get("source_class") == "discovered_media"
+    )
+    selected = selected[:11]
     return {
         "issue_date": issue_date,
         "category": category["label"],
@@ -407,11 +433,10 @@ def category_prompt(
                 "channel": record.get("channel"),
                 "published_date": record.get("published_date"),
                 "title": record.get("title"),
-                "excerpt": compact_text(str(record.get("excerpt", "")), 1100),
+                "excerpt": compact_text(str(record.get("excerpt", "")), 320),
             }
-            for record in records
-            if record.get("observed")
-        ][:22],
+            for record in selected
+        ],
     }
 
 
