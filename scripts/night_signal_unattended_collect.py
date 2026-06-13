@@ -532,11 +532,56 @@ def normalize_result(
         title = compact_text(str(item.get("title", "")), 180)
         summary = compact_text(str(item.get("summary", "")), 1000)
         detail = compact_text(str(item.get("detail_summary", "")), 2600)
+        what_changed = compact_text(str(item.get("what_changed", "")), 700)
+        why_it_matters = compact_text(
+            str(item.get("why_it_matters", "")),
+            700,
+        )
         facts = [
             compact_text(str(fact), 500)
             for fact in item.get("confirmed_facts", [])
             if isinstance(fact, str) and fact.strip()
         ]
+        limits_or_unknowns = compact_text(
+            str(item.get("limits_or_unknowns", "")),
+            900,
+        )
+        if len(summary) < 100:
+            summary = compact_text(
+                "。".join(
+                    value
+                    for value in (summary, what_changed, why_it_matters)
+                    if value
+                ),
+                1000,
+            )
+        if len(detail) < 280:
+            detail = compact_text(
+                " ".join(
+                    value
+                    for value in (
+                        detail,
+                        f"変更点: {what_changed}" if what_changed else "",
+                        (
+                            f"重要性: {why_it_matters}"
+                            if why_it_matters
+                            else ""
+                        ),
+                        (
+                            "確認事実: " + " / ".join(facts)
+                            if facts
+                            else ""
+                        ),
+                        (
+                            f"未確定点: {limits_or_unknowns}"
+                            if limits_or_unknowns
+                            else ""
+                        ),
+                    )
+                    if value
+                ),
+                2600,
+            )
         sources = clean_sources(item.get("sources"), records_by_url)
         topic_value = str(item.get("topic_value_class", ""))
         if (
@@ -571,19 +616,10 @@ def normalize_result(
                     + f"-{issue_date}"
                 ),
                 "detail_summary": detail,
-                "what_changed": compact_text(
-                    str(item.get("what_changed", "")),
-                    700,
-                ),
-                "why_it_matters": compact_text(
-                    str(item.get("why_it_matters", "")),
-                    700,
-                ),
+                "what_changed": what_changed,
+                "why_it_matters": why_it_matters,
                 "confirmed_facts": facts[:8],
-                "limits_or_unknowns": compact_text(
-                    str(item.get("limits_or_unknowns", "")),
-                    900,
-                ),
+                "limits_or_unknowns": limits_or_unknowns,
                 "sources": sources,
                 "observation_source_role": first_source["source_role"],
                 "observation_channel": first_source["channel"],
@@ -862,15 +898,23 @@ def self_test() -> None:
             {
                 "watch_topic_id": "topic",
                 "title": "Concrete update",
-                "summary": "A" * 100,
+                "summary": "A short model summary.",
                 "source_published_date": "2099-01-02",
                 "topic_value_class": "decision_or_policy",
                 "priority_class": "priority",
-                "detail_summary": "B" * 280,
-                "what_changed": "Changed",
-                "why_it_matters": "Matters",
-                "confirmed_facts": ["one", "two", "three"],
-                "limits_or_unknowns": "Unknown",
+                "detail_summary": "A short model detail.",
+                "what_changed": "The confirmed operating condition changed.",
+                "why_it_matters": (
+                    "The change affects a monitored decision and its timing."
+                ),
+                "confirmed_facts": [
+                    "The official source published the update.",
+                    "The update falls inside the issue window.",
+                    "The named subject and result are explicit.",
+                ],
+                "limits_or_unknowns": (
+                    "Later effects remain unconfirmed and are stated separately."
+                ),
                 "sources": [{"url": "https://example.com/item"}],
             }
         ],
