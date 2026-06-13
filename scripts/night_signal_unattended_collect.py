@@ -775,6 +775,9 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
                     f"{checked_at}に直接取得とJina Reader経由取得を試したが、"
                     f"本文を確認できなかった。理由: {record.get('error', '不明')}"
                 )
+        for record in news_records:
+            if record.get("observed"):
+                evidence[str(record["url"])] = str(record["evidence"])
         records_by_category[label] = seed_records + [
             record
             for record in news_records
@@ -805,6 +808,19 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
             issue_date,
             records_by_category[label],
         )
+        normalized["discovery_sources"] = [
+            {
+                "label": str(record.get("label") or "Google News"),
+                "url": str(record["url"]),
+                "source_role": "independent_media_or_data",
+                "channel": "web",
+                "published_date": record.get("published_date"),
+                "evidence_summary": str(record.get("evidence", "")),
+            }
+            for record in records_by_category[label]
+            if record.get("observed")
+            and record.get("source_class") == "discovered_media"
+        ]
         reviewed_categories[label] = normalized
         raw_items = [
             {

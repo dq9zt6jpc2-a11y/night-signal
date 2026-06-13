@@ -89,8 +89,11 @@ def extra_source_check(
     source: dict[str, Any],
     checked_at: str,
 ) -> dict[str, Any]:
+    watch_topic_ids = source.get("watch_topic_ids", [topic_id])
+    if not isinstance(watch_topic_ids, list) or not watch_topic_ids:
+        watch_topic_ids = [topic_id]
     return {
-        "watch_topic_ids": [topic_id],
+        "watch_topic_ids": [str(value) for value in watch_topic_ids],
         "source_role": str(source.get("source_role", "primary_or_official")),
         "channel": str(source.get("channel", "web")),
         "label": str(source["label"]),
@@ -140,9 +143,14 @@ def apply_review(issue_date: str, bundle_path: Path, review_path: Path) -> dict[
             fail(f"{category} review must be an object")
         items = reviewed.get("items", [])
         signals = reviewed.get("signals", [])
+        discovery_sources = reviewed.get("discovery_sources", [])
         no_change_summary = reviewed.get("no_change_summary")
-        if not isinstance(items, list) or not isinstance(signals, list):
-            fail(f"{category} items and signals must be lists")
+        if (
+            not isinstance(items, list)
+            or not isinstance(signals, list)
+            or not isinstance(discovery_sources, list)
+        ):
+            fail(f"{category} items, signals, and discovery_sources must be lists")
         if not isinstance(no_change_summary, str) or len(no_change_summary) < 20:
             fail(f"{category} no_change_summary is too short")
 
@@ -159,6 +167,24 @@ def apply_review(issue_date: str, bundle_path: Path, review_path: Path) -> dict[
             if isinstance(source, dict)
         ]
         checked_urls = {str(check["url"]) for check in checks}
+        for source in discovery_sources:
+            if not isinstance(source, dict):
+                fail(f"{category} discovery source must be an object")
+            url = str(source.get("url", ""))
+            if not url.startswith(("http://", "https://")) or url in checked_urls:
+                continue
+            checks.append(
+                extra_source_check(
+                    category,
+                    str(topics[0]),
+                    {
+                        **source,
+                        "watch_topic_ids": topics,
+                    },
+                    checked_at,
+                )
+            )
+            checked_urls.add(url)
         for item in items:
             if not isinstance(item, dict):
                 fail(f"{category} item must be an object")
