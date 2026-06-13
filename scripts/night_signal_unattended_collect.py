@@ -30,6 +30,7 @@ from typing import Any
 from zoneinfo import ZoneInfo
 
 import night_signal_apply_source_review as source_review
+import night_signal_state as state_contract
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -123,12 +124,28 @@ PUBLIC_COPY_REPLACEMENTS = [
         "今後の変化が重要となる",
     ),
 ]
+PUBLIC_TERM_REPLACEMENTS = {
+    "位置づけ": "意味",
+    "競争軸": "競争の焦点",
+    "更新局面": "変化",
+    "IR文脈": "企業情報",
+    "確認して": "確認され",
+    "拾う": "捉える",
+    "導線": "手段",
+    "点検": "確認",
+    "一次資料": "公式資料",
+    "一次更新": "公式発表",
+    "補助線": "背景",
+}
 
 
 def reader_facing_text(value: Any, limit: int = 1600) -> str:
     text = compact_text(str(value), limit)
     for pattern, replacement in PUBLIC_COPY_REPLACEMENTS:
         text = re.sub(pattern, replacement, text)
+    for term in state_contract.PUBLIC_COPY_FORBIDDEN_TERMS:
+        if term in text:
+            text = text.replace(term, PUBLIC_TERM_REPLACEMENTS.get(term, ""))
     return compact_text(text, limit)
 
 
@@ -1020,6 +1037,11 @@ def self_test() -> None:
         fail("normalization lost a concise retained signal")
     if reader_facing_text("収集方針を説明する。") != "関連情報を説明する。":
         fail("public-copy normalization kept research procedure wording")
+    if state_contract.public_copy_violations(
+        reader_facing_text("この発表の位置づけと競争軸を確認して説明する。"),
+        kind="summary",
+    ):
+        fail("public-copy normalization kept a forbidden reader-facing term")
     past_checked_at = collection_checked_at("2000-01-01")
     if not past_checked_at.startswith("2000-01-01T23:59:59+09:00"):
         fail("past-date recovery timestamp escaped the requested issue date")
