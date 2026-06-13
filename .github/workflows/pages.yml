@@ -60,9 +60,9 @@ jobs:
             echo "Computed NIGHT SIGNAL issue date is invalid: ${ISSUE_DATE}" >&2
             exit 1
           fi
-          # GitHub Pages deploys only a committed, evening-fresh issue. Live
-          # collection belongs to the local Codex automation, where Web
-          # research evidence can be reviewed and committed before this step.
+          # GitHub Pages deploys only a committed, evening-fresh issue. The
+          # unattended collector owns live research and commits audited state;
+          # this workflow remains a deterministic publication boundary.
           python3 scripts/night_signal_publish.py "$ISSUE_DATE" --deploy-existing
           cp .nojekyll site/.nojekyll
           echo "ISSUE_DATE=$ISSUE_DATE" >> "$GITHUB_ENV"
