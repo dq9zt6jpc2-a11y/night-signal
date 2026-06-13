@@ -43,7 +43,7 @@
       <h2>構造化収集契約</h2>
       <p>網羅性は長い説明量ではなく、抽出ログの <code>coverage-manifest</code> で証明する。各カテゴリは「調べた検索軸」「見た情報源」「採用/保留/除外/未確認」「掲載カード」を同じJSONに残す。</p>
       <p>2026-06-04以降の設計中心は、後段チェックの足し算ではなく、<code>scripts/night_signal_state.py</code> が表すAI状態機械に置く。状態は discovery frontier、source observations、candidates、topic decisions、publication plan の順に進め、欠けた状態があれば typed blocker として止める。OpenAIを使う場合も自由作文ではなく、Responses APIとStructured OutputsでこのJSON schemaを埋める。</p>
-      <p>AI-backed収集は <code>scripts/night_signal_collect.py</code> が <code>collection_plan.json</code> から <code>observations.jsonl</code> を生成する。Responses APIを使えない場合は、ローカルCodex automationがlive Web調査を行い、実際に確認したURLだけを明示的な <code>source_checks</code> として保存する。設定にあるだけのURLを確認済みに変換しない。</p>
+      <p>AI-backed収集は <code>scripts/night_signal_collect.py</code> が <code>collection_plan.json</code> から <code>observations.jsonl</code> を生成する。Responses APIを使えない場合は、ローカルCodex automationのlive Web調査、またはGitHub Actions上の <code>scripts/night_signal_unattended_collect.py</code> が公開Web/RSSとGitHub Modelsで全10カテゴリを収集する。どの経路でも実際に確認したURLだけを明示的な <code>source_checks</code> として保存し、設定にあるだけのURLを確認済みに変換しない。</p>
       <p>収集後の合成は <code>scripts/night_signal_synthesize.py</code> が <code>observations.jsonl</code> から <code>candidates</code>、<code>decisions</code>、<code>cards</code>、<code>coverage_manifest</code> を作る。観測だけ、候補だけ、カードだけの状態は公開可能にしない。重要更新は詳細カード、直近3日の確認価値がある非採用情報は参照URL付きの確認情報として公開し、背景だけ、古い情報、未確認情報は公開面に出さない。</p>
       <ul>
         <li>網羅性は「カテゴリごとに何かを見た」では足りない。各ウォッチ項目について、一次/公式、独立媒体またはデータ、カテゴリで必要なSNS/X、Instagram、Facebook、YouTubeの observation slot を埋める。未収集slotが残る状態は本文生成へ進めない。</li>
@@ -169,10 +169,10 @@
       <h2>失敗時の扱い</h2>
       <ul>
         <li>利用枠・トークン不足を、Codex残高不足とmodel context/output token上限に分ける。さらにAPI quota、rate limit、実行時間切れ、認証不足、ネットワーク/DNS、GitHub障害、途中停止、dirty worktreeを別の故障モードとして扱い、単一の再試行でまとめない。</li>
-        <li>Codex background automationが利用枠不足で開始できず、<code>OPENAI_API_KEY</code>が利用できる場合はResponses APIへ切り替える。当日確認済みreviewed bundleまたは18:00 JST以降のfresh issueがある場合だけ、その状態から再開できる。</li>
-        <li>Codex、Responses API、確認済みbundleのいずれも利用できない場合は、古い号を当日版として出さない。独立watchdogを失敗させ、公開不能を明示する。</li>
+        <li>Codex background automationが利用枠不足で開始できず、<code>OPENAI_API_KEY</code>が利用できる場合はResponses APIへ切り替える。利用できない場合は、GitHub Modelsと公開Web/RSSを使う無人収集を18:05、18:35、19:05、19:35、19:50 JSTに実行する。当日確認済みreviewed bundleまたは18:00 JST以降のfresh issueがある場合だけ、その状態から再開できる。</li>
+        <li>Codex、Responses API、GitHub Models、確認済みbundleのいずれも利用できない場合は、古い号を当日版として出さない。独立watchdogを失敗させ、公開不能を明示する。</li>
         <li>各段階は <code>state/YYYY-MM-DD/runtime_checkpoint.json</code> に記録する。収集はslot単位、合成はカテゴリ単位でも原子的に保存し、入力hashが一致する完了部分だけを再利用する。途中停止後に全カテゴリを最初からやり直さず、DBの <code>IN_PROGRESS</code> 表示だけを稼働証拠にしない。</li>
-        <li>公開対象日は <code>.night-signal-issue-date</code> に明示した号だけを使う。GitHub Actionsは18:00 JST以降に収集済みのコミットを配布するだけとし、Actions内でlive収集したことにしない。過去号へのフォールバックは禁止。</li>
+        <li>公開対象日は <code>.night-signal-issue-date</code> に明示した号だけを使う。GitHub Actionsの無人経路は各URLの取得結果とGitHub Modelsの構造化抽出を保存し、同じcoverage/quality/pre22監査を通した場合だけcommit/pushする。Pagesは監査済みコミットだけを配布し、過去号へのフォールバックは禁止する。</li>
         <li>当日版がない、古いページが表示される、公開URLが当日版でない、GitHub Pagesだけ成功して当日ページ生成がない場合は失敗。</li>
         <li>一時クローンや別worktreeで成功しても、本番リポジトリへcommit/pushし、公開URLで当日版を確認するまで成功扱いにしない。</li>
         <li>失敗後は個別修正だけで終わらせず、ポリシー、抽出ログ形式、品質ゲート、シミュレーションのどこで止めるべきだったかを見直す。</li>

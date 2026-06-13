@@ -4,9 +4,10 @@ Checked on 2026-06-13 JST.
 
 ## Verdict
 
-Yes for the current lightweight architecture, with one operational condition:
-the 18:00 JST automation must complete the actual evening live collection.
-Static plans and morning state no longer count as final publication evidence.
+Yes for the current lightweight architecture. The 18:05 JST independent
+GitHub Actions collector now removes the local Codex process, approval prompt,
+Codex credit, and `OPENAI_API_KEY` as single points of failure. Static plans and
+morning state still do not count as final publication evidence.
 
 What has been done:
 
@@ -30,6 +31,8 @@ What has been done:
   signals;
 - final deploy requires an evening-fresh manifest and GitHub Pages deploys only
   committed state;
+- GitHub Models plus public Web/RSS collection runs at 18:05, 18:35, 19:05,
+  19:35, and 19:50 JST and commits only after the canonical audits pass;
 - `scripts/simulate_ai_collection_redesign.py` reports no current lightweight
   limit blockers;
 - existing self-tests still pass.

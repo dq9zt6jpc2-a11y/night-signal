@@ -47,6 +47,12 @@ def main() -> int:
             reviewed_bundle_usable=False,
             openai_api_key=True,
         ),
+        "github_models_unattended": runtime.decide_recovery(
+            fresh_evening_issue=False,
+            reviewed_bundle_usable=False,
+            openai_api_key=False,
+            github_models_token=True,
+        ),
         "blocked_no_honest_collector": runtime.decide_recovery(
             fresh_evening_issue=False,
             reviewed_bundle_usable=False,

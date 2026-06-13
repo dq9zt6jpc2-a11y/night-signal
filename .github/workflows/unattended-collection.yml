@@ -1,0 +1,109 @@
+name: NIGHT SIGNAL Unattended Collection
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue_date:
+        description: "JST issue date. Empty uses today's JST date."
+        required: false
+        type: string
+      canary_only:
+        description: "Verify GitHub Models access without collecting."
+        required: false
+        default: false
+        type: boolean
+      force:
+        description: "Recollect even when an evening-fresh issue exists."
+        required: false
+        default: false
+        type: boolean
+  schedule:
+    - cron: "05 09 * * *"
+    - cron: "35 09 * * *"
+    - cron: "05 10 * * *"
+    - cron: "35 10 * * *"
+    - cron: "50 10 * * *"
+
+permissions:
+  contents: write
+  models: read
+
+concurrency:
+  group: night-signal-unattended-collection
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      NIGHT_SIGNAL_GITHUB_MODEL: openai/gpt-4.1-mini
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve issue date
+        env:
+          REQUESTED_ISSUE_DATE: ${{ inputs.issue_date || '' }}
+        run: |
+          ISSUE_DATE="${REQUESTED_ISSUE_DATE:-}"
+          if [[ -z "$ISSUE_DATE" ]]; then
+            ISSUE_DATE="$(TZ=Asia/Tokyo date +%F)"
+          fi
+          if [[ ! "$ISSUE_DATE" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+            echo "Invalid NIGHT SIGNAL issue date: ${ISSUE_DATE}" >&2
+            exit 1
+          fi
+          echo "ISSUE_DATE=$ISSUE_DATE" >> "$GITHUB_ENV"
+
+      - name: Verify GitHub Models access
+        run: python3 scripts/night_signal_unattended_collect.py --canary
+
+      - name: Stop after canary
+        if: ${{ inputs.canary_only == true }}
+        run: echo "GitHub Models canary completed."
+
+      - name: Collect all categories
+        if: ${{ inputs.canary_only != true }}
+        env:
+          FORCE_COLLECTION: ${{ inputs.force || false }}
+        run: |
+          if [[ "$FORCE_COLLECTION" == "true" ]]; then
+            python3 scripts/night_signal_unattended_collect.py "$ISSUE_DATE"
+          else
+            python3 scripts/night_signal_unattended_collect.py "$ISSUE_DATE" --skip-if-fresh
+          fi
+
+      - name: Build and audit issue
+        if: ${{ inputs.canary_only != true }}
+        run: |
+          python3 scripts/night_signal_import_research.py "$ISSUE_DATE"
+          python3 scripts/night_signal_state.py --validate-issue "state/$ISSUE_DATE/issue.json"
+          python3 scripts/night_signal_state.py --generate-issue "state/$ISSUE_DATE/issue.json"
+          python3 scripts/night_signal_eval.py "$ISSUE_DATE"
+          python3 scripts/sync_site.py "$ISSUE_DATE"
+          python3 scripts/current_issue_audit.py "$ISSUE_DATE"
+          python3 scripts/coverage_audit.py "$ISSUE_DATE"
+          python3 scripts/quality_gate.py "$ISSUE_DATE"
+          python3 scripts/pre22_audit.py "$ISSUE_DATE"
+          python3 scripts/simulate_ai_collection_redesign.py "$ISSUE_DATE" --fail-on-weakness
+          PYTHONPYCACHEPREFIX=tmp/pycache python3 -m py_compile scripts/*.py
+          git diff --check
+
+      - name: Commit audited issue
+        if: ${{ inputs.canary_only != true }}
+        run: |
+          git config user.name "night-signal-bot"
+          git config user.email "night-signal-bot@users.noreply.github.com"
+          git add .night-signal-issue-date
+          git add "night-brief-web-sample-$ISSUE_DATE.html"
+          git add details site "state/$ISSUE_DATE"
+          if git diff --cached --quiet; then
+            echo "No audited issue changes to commit."
+            exit 0
+          fi
+          git commit -m "Publish NIGHT SIGNAL for $ISSUE_DATE"
+          git pull --rebase origin main
+          git push origin HEAD:main

@@ -47,6 +47,14 @@ Reviewed Codex live-Web research uses:
 python3 scripts/night_signal_publish.py YYYY-MM-DD --import-reviewed-bundle
 ```
 
+The independent no-prompt fallback uses GitHub Models plus public Web/RSS
+evidence:
+
+```bash
+GITHUB_TOKEN=... python3 scripts/night_signal_unattended_collect.py YYYY-MM-DD
+python3 scripts/night_signal_import_research.py YYYY-MM-DD
+```
+
 GitHub Pages deploys only committed evening-fresh state:
 
 ```bash
@@ -105,6 +113,10 @@ python3 scripts/simulate_quality_gate_failures.py
   driver. It owns collection, synthesis, rendering, site sync, and local audits.
 - `scripts/night_signal_runtime_audit.py`: runtime exhaustion classifier,
   recovery-path selector, and durable stage checkpoint owner.
+- `scripts/night_signal_unattended_collect.py`: GitHub Actions fallback that
+  fetches every seed source, runs broad RSS discovery for all ten categories,
+  and uses GitHub Models for schema-bound extraction without Codex approval,
+  Codex credits, `OPENAI_API_KEY`, or the local Mac.
 - `config/night_signal_resilience.json`: token/quota/network/authentication and
   partial-execution recovery contract.
 - `scripts/sync_site.py`: the only site sync path.
@@ -116,7 +128,9 @@ python3 scripts/simulate_quality_gate_failures.py
 - `.github/workflows/pages.yml`: GitHub Pages publication.
 - `.github/workflows/preflight.yml`: scheduled readiness check.
 - `.github/workflows/runtime-watchdog.yml`: independent remote failure
-  detector; it does not depend on the Codex background model starting.
+  detector and unattended-recovery dispatcher.
+- `.github/workflows/unattended-collection.yml`: independent 18:05-19:50 JST
+  collection, audit, commit, and push path.
 - `docs/night-signal-basic-design.md`: design source of truth.
 
 ## Private Data
@@ -147,8 +161,10 @@ most the currently running slot or category, not the entire daily run.
 - Responses API collection requires `OPENAI_API_KEY`. When it is unavailable,
   the local Codex automation must perform reviewed live-Web research and write
   explicit `source_checks`; it must not convert configured URLs into evidence.
-- GitHub Actions is a deployer, not the live collector. The local automation
-  owns research, synthesis, commit, push, and final public verification.
+- The primary collector remains Responses web search or reviewed Codex live-Web
+  research. GitHub Actions also owns an independent fallback collector using
+  public Web/RSS evidence and GitHub Models. It must pass the same source,
+  coverage, freshness, quality, and publication contracts before committing.
 - The collector keeps stable model routes in the plan. Current default concrete
   models are `gpt-5.4-mini` for structured source extraction and `gpt-5.5` for
   frontier reasoning. The synthesizer also defaults to `gpt-5.5`. Use the
@@ -189,7 +205,8 @@ most the currently running slot or category, not the entire daily run.
 - A run marked `IN_PROGRESS` is not evidence that an agent started. Require a
   non-null completion or durable runtime checkpoint.
 - Runtime degradation order is: deploy a fresh evening issue, import a fully
-  evidenced current reviewed bundle, use the Responses API, otherwise block.
+  evidenced current reviewed bundle, use the Responses API, use the independent
+  GitHub Models collector, otherwise block.
 - Token or credit exhaustion never permits stale publication or fabricated
   source observations.
 - Do not publish by falling back to an older issue.

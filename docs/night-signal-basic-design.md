@@ -313,10 +313,13 @@ at or after 18:00 JST. An issue generated in the morning cannot satisfy the
 evening publish attempt without a new collection. `--force-collect` style
 implicit bundle reuse is not part of the design.
 
-The local Codex automation owns live collection, synthesis, commit, push, and
-public verification. GitHub Pages owns only deployment of committed state that
-passes the evening freshness contract. GitHub Actions must not pretend to
-collect live data when the repository has no API credential.
+The primary local path owns Responses web-search or reviewed live-Web
+collection. An independent GitHub Actions path owns public Web/RSS fetching,
+GitHub Models extraction, synthesis, commit, and push when the local Codex path
+does not produce an evening issue. It uses the repository `GITHUB_TOKEN` with
+`models: read`; it does not require a user approval prompt, Codex credit, the
+local Mac, or `OPENAI_API_KEY`. GitHub Pages still deploys only committed state
+that passes the evening freshness contract.
 
 No older issue may be republished because the current issue is missing.
 The stable root shows the current issue. Dated archive folders are retained for
@@ -340,7 +343,8 @@ The runtime chooses one explicit path:
 1. deploy an already verified fresh evening issue;
 2. import a current reviewed bundle whose URLs have explicit live checks;
 3. collect and synthesize through the Responses API;
-4. block publication when no honest collector is available.
+4. collect through the independent GitHub Models Web/RSS path;
+5. block publication when no honest collector is available.
 
 Every publication stage writes `runtime_checkpoint.json`. Independent GitHub
 Actions monitoring fails when no current collection path exists, even if the
@@ -360,6 +364,9 @@ The canonical owners now exist:
 
 - `night_signal_collect.py`: Responses web search, raw source traces, findings,
   observations;
+- `night_signal_unattended_collect.py`: approval-free GitHub Actions fallback
+  using direct seed fetches, broad RSS discovery, and schema-bound GitHub
+  Models extraction;
 - `night_signal_synthesize.py`: candidates, decisions, cards, topic checks,
   manifest;
 - `night_signal_state.py`: semantic validation and rendering;

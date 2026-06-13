@@ -175,7 +175,11 @@ def validate_collection_freshness(
             f"{evening_cutoff.isoformat()}; got {completed.isoformat()}"
         )
     mode = manifest.get("collection_mode")
-    if mode not in {"responses_web_search", "reviewed_live_web"}:
+    if mode not in {
+        "responses_web_search",
+        "reviewed_live_web",
+        "github_models_unattended",
+    }:
         fail(f"unsupported collection_mode for publication: {mode}")
     return {
         "collection_completed_at_jst": completed.isoformat(),
@@ -229,6 +233,7 @@ def self_tests() -> None:
     run([sys.executable, "scripts/simulate_runtime_failures.py"])
     run([sys.executable, "scripts/night_signal_state.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_collect.py", "--self-test"])
+    run([sys.executable, "scripts/night_signal_unattended_collect.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_synthesize.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_eval.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_import_research.py", "--self-test"])

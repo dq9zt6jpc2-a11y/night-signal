@@ -725,14 +725,16 @@
         "last_agent_message",
         "fresh_evening_issue",
         "reviewed_bundle",
-        "responses_api"
+        "responses_api",
+        "github_models_unattended"
       ],
       "required_policy_terms": [
         "利用枠・トークン不足",
         "独立watchdog",
         "古い号を当日版として出さない",
         "runtime_checkpoint.json",
-        "Responses APIへ切り替える"
+        "Responses APIへ切り替える",
+        "GitHub Models"
       ],
       "required_simulation_terms": [
         "codex_credit_exhausted",
@@ -740,6 +742,7 @@
         "model_token_budget_exhausted",
         "execution_timeout",
         "blocked_no_honest_collector",
+        "github_models_unattended",
         "partial_execution",
         "collection_slot",
         "synthesis_category",
@@ -748,7 +751,8 @@
       "required_workflow_terms": [
         "NIGHT SIGNAL Runtime Watchdog",
         "night_signal_runtime_audit.py",
-        "--fail-on-blocker"
+        "unattended-collection.yml",
+        "gh workflow run"
       ]
     },
     {

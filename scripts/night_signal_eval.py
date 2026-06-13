@@ -129,7 +129,13 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
         isinstance(result.get("checked_at_jst"), str)
         and str(result.get("checked_at_jst")).startswith(issue_date)
         and result.get("verification_method")
-        in {"responses_web_search", "reviewed_live_web", "direct_fetch", "cached_result"}
+        in {
+            "responses_web_search",
+            "reviewed_live_web",
+            "github_models_unattended",
+            "direct_fetch",
+            "cached_result",
+        }
         for result in verified_results
     )
 

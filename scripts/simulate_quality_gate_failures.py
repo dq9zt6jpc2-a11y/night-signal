@@ -46,6 +46,8 @@ def copy_fixture() -> Path:
     shutil.copyfile(ROOT / "scripts" / "night_signal_synthesize.py", tmp / "scripts" / "night_signal_synthesize.py")
     shutil.copyfile(ROOT / "scripts" / "night_signal_publish.py", tmp / "scripts" / "night_signal_publish.py")
     shutil.copyfile(ROOT / "scripts" / "night_signal_runtime_audit.py", tmp / "scripts" / "night_signal_runtime_audit.py")
+    shutil.copyfile(ROOT / "scripts" / "night_signal_apply_source_review.py", tmp / "scripts" / "night_signal_apply_source_review.py")
+    shutil.copyfile(ROOT / "scripts" / "night_signal_unattended_collect.py", tmp / "scripts" / "night_signal_unattended_collect.py")
     shutil.copyfile(ROOT / "scripts" / "simulate_runtime_failures.py", tmp / "scripts" / "simulate_runtime_failures.py")
     shutil.copyfile(ROOT / "scripts" / "simulate_quality_gate_failures.py", tmp / "scripts" / "simulate_quality_gate_failures.py")
     shutil.copyfile(ROOT / "config" / "night_signal_coverage.json", tmp / "config" / "night_signal_coverage.json")

@@ -81,12 +81,21 @@
         "\"status\":\"IN_PROGRESS\""
       ],
       "action": "Resume from the last durable stage checkpoint instead of restarting completed stages."
+    },
+    "github_models_unavailable": {
+      "signals": [
+        "GitHub Models request failed",
+        "models: read",
+        "NIGHT SIGNAL GITHUB MODELS CANARY"
+      ],
+      "action": "Retry the independent GitHub Models collection at the next staged slot. Preserve the last verified issue but never publish it under a new date."
     }
   },
   "recovery_order": [
     "fresh_evening_issue",
     "reviewed_bundle",
     "responses_api",
+    "github_models_unattended",
     "blocked_no_honest_collector"
   ],
   "never_do": [

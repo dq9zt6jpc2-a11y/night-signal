@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: read
+  actions: write
 
 jobs:
   verify-remote-readiness:
@@ -18,14 +19,29 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Detect missing independent collection path
+        id: runtime
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           ISSUE_DATE="$(TZ=Asia/Tokyo date +%F)"
           python3 scripts/night_signal_runtime_audit.py "$ISSUE_DATE" \
-            --write-status \
-            --fail-on-blocker
+            --write-status
+          RECOVERY_PATH="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["recovery_path"])' "state/$ISSUE_DATE/runtime_status.json")"
+          echo "recovery_path=$RECOVERY_PATH" >> "$GITHUB_OUTPUT"
+
+      - name: Dispatch unattended recovery
+        if: steps.runtime.outputs.recovery_path != 'fresh_evening_issue'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run unattended-collection.yml \
+            --ref main \
+            -f issue_date="$(TZ=Asia/Tokyo date +%F)" \
+            -f force=true
 
       - name: Verify committed issue when available
-        if: success()
+        if: steps.runtime.outputs.recovery_path == 'fresh_evening_issue'
         run: |
           ISSUE_DATE="$(TZ=Asia/Tokyo date +%F)"
           python3 scripts/night_signal_publish.py "$ISSUE_DATE" --deploy-existing

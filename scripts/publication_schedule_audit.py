@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PUBLISH_WORKFLOW = ROOT / ".github" / "workflows" / "pages.yml"
 PREFLIGHT_WORKFLOW = ROOT / ".github" / "workflows" / "preflight.yml"
 RUNTIME_WATCHDOG_WORKFLOW = ROOT / ".github" / "workflows" / "runtime-watchdog.yml"
+UNATTENDED_WORKFLOW = ROOT / ".github" / "workflows" / "unattended-collection.yml"
 
 
 def cron_minutes(text: str) -> list[int]:
@@ -31,9 +32,11 @@ def main() -> int:
     publish = PUBLISH_WORKFLOW.read_text(encoding="utf-8")
     preflight = PREFLIGHT_WORKFLOW.read_text(encoding="utf-8")
     runtime_watchdog = RUNTIME_WATCHDOG_WORKFLOW.read_text(encoding="utf-8")
+    unattended = UNATTENDED_WORKFLOW.read_text(encoding="utf-8")
     publish_times = cron_minutes(publish)
     preflight_times = cron_minutes(preflight)
     watchdog_times = cron_minutes(runtime_watchdog)
+    unattended_times = cron_minutes(unattended)
     pre_20 = [value for value in publish_times if 18 * 60 <= value <= 20 * 60]
     if len(pre_20) < 4:
         fail(f"need at least four staged publish attempts from 18:00 through 20:00 JST: {publish_times}")
@@ -51,12 +54,30 @@ def main() -> int:
         fail("Pages workflow must not pretend to own live collection")
     if not watchdog_times or watchdog_times[0] > 19 * 60:
         fail(f"independent runtime watchdog must detect a missing issue before 19:00 JST: {watchdog_times}")
-    if "night_signal_runtime_audit.py" not in runtime_watchdog or "--fail-on-blocker" not in runtime_watchdog:
-        fail("runtime watchdog must fail independently when no honest collection path exists")
+    if (
+        "night_signal_runtime_audit.py" not in runtime_watchdog
+        or "unattended-collection.yml" not in runtime_watchdog
+        or "recovery_path != 'fresh_evening_issue'" not in runtime_watchdog
+    ):
+        fail("runtime watchdog must dispatch recovery unless the evening issue is fresh")
+    unattended_pre_20 = [
+        value
+        for value in unattended_times
+        if 18 * 60 <= value < 20 * 60
+    ]
+    if len(unattended_pre_20) < 5 or unattended_pre_20[0] > 18 * 60 + 5:
+        fail(
+            "unattended collection needs five staged attempts starting by "
+            f"18:05 JST: {unattended_times}"
+        )
+    if "models: read" not in unattended or "night_signal_unattended_collect.py" not in unattended:
+        fail("unattended workflow must use GitHub Models without an external API secret")
+    if "contents: write" not in unattended or "git push origin HEAD:main" not in unattended:
+        fail("unattended workflow must be able to commit the audited issue")
     print(
         "PUBLICATION SCHEDULE AUDIT PASSED: "
         f"publish_jst={publish_times}, preflight_jst={preflight_times}, "
-        f"watchdog_jst={watchdog_times}"
+        f"watchdog_jst={watchdog_times}, unattended_jst={unattended_times}"
     )
     return 0
 

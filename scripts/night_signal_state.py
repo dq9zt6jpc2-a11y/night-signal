@@ -1423,6 +1423,7 @@ def validate_manifest_alignment(issue: dict[str, Any], cards: list[dict[str, Any
         if manifest.get("collection_mode") not in {
             "responses_web_search",
             "reviewed_live_web",
+            "github_models_unattended",
         }:
             fail("coverage_manifest collection_mode must describe a live research path")
     if effective_on_or_after(contract, "detail_information_contract_effective_date", issue_date):

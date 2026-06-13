@@ -824,7 +824,9 @@ def import_bundle(issue_date: str, bundle_path: Path, state_root: Path) -> dict[
         issue_date,
         results_by_category,
         observations=observations,
-        collection_mode="reviewed_live_web",
+        collection_mode=str(
+            bundle.get("collection_mode", "reviewed_live_web")
+        ),
         collection_completed_at_jst=str(bundle["checked_at_jst"]),
     )
     manifest["last_checked_jst"] = str(bundle["checked_at_jst"])

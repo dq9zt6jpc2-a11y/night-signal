@@ -114,7 +114,11 @@ def manifest_state(issue_date: str, state_root: Path, now: datetime) -> dict[str
                     and current - completed <= timedelta(hours=4)
                     and completed <= current + timedelta(minutes=5)
                     and manifest.get("collection_mode")
-                    in {"responses_web_search", "reviewed_live_web"}
+                    in {
+                        "responses_web_search",
+                        "reviewed_live_web",
+                        "github_models_unattended",
+                    }
                 ),
             }
         )
@@ -144,8 +148,14 @@ def reviewed_bundle_state(issue_date: str, state_root: Path) -> dict[str, Any]:
             str(bundle.get("checked_at_jst", "")).startswith(issue_date)
             and bool(checks)
             and all(
-                check.get("verification_method") == "reviewed_live_web"
-                and check.get("slot_state") in {"observed_live", "source_unavailable"}
+                (
+                    check.get("slot_state") == "observed_live"
+                    and check.get("verification_method") == "reviewed_live_web"
+                )
+                or (
+                    check.get("slot_state") == "source_unavailable"
+                    and check.get("verification_method") == "unavailable"
+                )
                 for check in checks
             )
         )
@@ -180,6 +190,7 @@ def decide_recovery(
     fresh_evening_issue: bool,
     reviewed_bundle_usable: bool,
     openai_api_key: bool,
+    github_models_token: bool = False,
 ) -> str:
     if fresh_evening_issue:
         return "fresh_evening_issue"
@@ -187,6 +198,8 @@ def decide_recovery(
         return "reviewed_bundle"
     if openai_api_key:
         return "responses_api"
+    if github_models_token:
+        return "github_models_unattended"
     return "blocked_no_honest_collector"
 
 
@@ -293,10 +306,14 @@ def evaluate(
     manifest = manifest_state(issue_date, state_root, current)
     bundle = reviewed_bundle_state(issue_date, state_root)
     api_available = bool(os.getenv("OPENAI_API_KEY"))
+    github_models_available = bool(
+        os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")
+    )
     recovery = decide_recovery(
         fresh_evening_issue=bool(manifest["fresh_evening_issue"]),
         reviewed_bundle_usable=bool(bundle["usable"]),
         openai_api_key=api_available,
+        github_models_token=github_models_available,
     )
     result = {
         "issue_date": issue_date,
@@ -304,6 +321,7 @@ def evaluate(
         "manifest": manifest,
         "reviewed_bundle": bundle,
         "openai_api_key_available": api_available,
+        "github_models_token_available": github_models_available,
         "git": git_state(),
         "recovery_path": recovery,
         "publication_blocked": recovery == "blocked_no_honest_collector",
@@ -349,6 +367,13 @@ def self_test() -> None:
         openai_api_key=False,
     ) != "fresh_evening_issue":
         fail("fresh issue must select deploy-existing recovery")
+    if decide_recovery(
+        fresh_evening_issue=False,
+        reviewed_bundle_usable=False,
+        openai_api_key=False,
+        github_models_token=True,
+    ) != "github_models_unattended":
+        fail("GitHub token must select unattended collection fallback")
     print("NIGHT SIGNAL RUNTIME AUDIT PASSED")
 
 

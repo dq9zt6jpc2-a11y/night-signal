@@ -30,6 +30,7 @@ AUDIT_PATHS = [
     ROOT / "scripts" / "night_signal_synthesize.py",
     ROOT / "scripts" / "night_signal_publish.py",
     ROOT / "scripts" / "night_signal_runtime_audit.py",
+    ROOT / "scripts" / "night_signal_unattended_collect.py",
 ]
 SIMULATION_PATHS = [
     ROOT / "scripts" / "simulate_quality_gate_failures.py",
