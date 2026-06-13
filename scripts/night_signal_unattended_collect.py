@@ -312,6 +312,20 @@ def current_fresh_issue(issue_date: str) -> bool:
     )
 
 
+def collection_checked_at(issue_date: str) -> str:
+    issue_day = date.fromisoformat(issue_date)
+    now = datetime.now(JST)
+    if issue_day > now.date():
+        fail(f"issue date is in the future: {issue_date}")
+    if issue_day < now.date():
+        return datetime.combine(
+            issue_day,
+            datetime.max.time().replace(microsecond=0),
+            tzinfo=JST,
+        ).isoformat(timespec="seconds")
+    return now.isoformat(timespec="seconds")
+
+
 def model_request(token: str, messages: list[dict[str, str]]) -> dict[str, Any]:
     errors: list[str] = []
     attempt_messages = list(messages)
@@ -759,7 +773,7 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
     }
     for record in fetched:
         fetched_by_category[str(record["category"])].append(record)
-    checked_at = datetime.now(JST).isoformat(timespec="seconds")
+    checked_at = collection_checked_at(issue_date)
     unavailable: dict[str, str] = {}
     evidence: dict[str, str] = {}
     reviewed_categories: dict[str, dict[str, Any]] = {}
@@ -1006,6 +1020,9 @@ def self_test() -> None:
         fail("normalization lost a concise retained signal")
     if reader_facing_text("収集方針を説明する。") != "関連情報を説明する。":
         fail("public-copy normalization kept research procedure wording")
+    past_checked_at = collection_checked_at("2000-01-01")
+    if not past_checked_at.startswith("2000-01-01T23:59:59+09:00"):
+        fail("past-date recovery timestamp escaped the requested issue date")
     print("NIGHT SIGNAL UNATTENDED COLLECT SELF-TEST PASSED")
 
 
