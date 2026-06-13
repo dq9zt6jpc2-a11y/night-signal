@@ -1180,11 +1180,17 @@ def validate_observation_records(
     frontier: list[dict[str, Any]],
     *,
     issue_date: str | None = None,
+    source_registry: dict[str, list[dict[str, str]]] | None = None,
 ) -> dict[str, Any]:
     closed_states = {"observed_live", "reused_from_cache", "source_unavailable", "not_applicable"}
     allowed_roles = {"primary_or_official", "independent_media_or_data", "social_or_video_signal"}
     allowed_channels = {"web", "sns_x", "instagram", "facebook", "youtube", "data", "calendar"}
-    source_registry = load_source_registry()
+    if source_registry is None:
+        source_registry = (
+            load_source_registry_for_issue(issue_date)
+            if issue_date
+            else load_source_registry()
+        )
     for index, observation in enumerate(observations, start=1):
         if not isinstance(observation, dict):
             fail(f"observations[{index}] must be an object")
@@ -1278,12 +1284,22 @@ def validate_observation_records(
     return state
 
 
-def validate_observations(issue: dict[str, Any], frontier: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def validate_observations(
+    issue: dict[str, Any],
+    frontier: list[dict[str, Any]],
+    issue_path: Path | None = None,
+) -> list[dict[str, Any]]:
     observations = require_list(issue, "observations")
+    issue_date = require_str(issue, "issue_date")
+    plan_path = issue_path.parent / "collection_plan.json" if issue_path else None
     validate_observation_records(
         observations,
         frontier,
-        issue_date=require_str(issue, "issue_date"),
+        issue_date=issue_date,
+        source_registry=load_source_registry_for_issue(
+            issue_date,
+            plan_path=plan_path,
+        ),
     )
     return observations
 
@@ -1516,7 +1532,7 @@ def validate_issue_state(issue: dict[str, Any], issue_path: Path | None = None) 
     if blockers:
         fail("issue state still has blockers: " + "; ".join(str(item) for item in blockers))
     frontier = validate_frontier(issue)
-    observations = validate_observations(issue, frontier)
+    observations = validate_observations(issue, frontier, issue_path)
     candidates = validate_candidates(issue, frontier)
     validate_claim_source_linkage(issue, observations, candidates)
     cards = normalized_cards(issue)
@@ -1715,6 +1731,60 @@ def load_source_registry() -> dict[str, list[dict[str, str]]]:
             normalized_targets.append(normalized_target)
         normalized[category] = normalized_targets
     return normalized
+
+
+def load_source_registry_for_issue(
+    issue_date: str,
+    *,
+    plan_path: Path | None = None,
+) -> dict[str, list[dict[str, str]]]:
+    plan_path = plan_path or DEFAULT_STATE_ROOT / issue_date / "collection_plan.json"
+    if not plan_path.exists():
+        return load_source_registry()
+
+    plan = read_json(plan_path)
+    if plan.get("issue_date") != issue_date or not isinstance(plan.get("tasks"), list):
+        fail(f"collection plan snapshot is invalid: {plan_path}")
+
+    registry: dict[str, list[dict[str, str]]] = {}
+    seen_urls: dict[str, set[str]] = {}
+    for task_index, task in enumerate(plan["tasks"], start=1):
+        if not isinstance(task, dict):
+            fail(f"collection plan task[{task_index}] must be an object")
+        category = task.get("category")
+        targets = task.get("source_targets")
+        if not isinstance(category, str) or not category.strip():
+            fail(f"collection plan task[{task_index}] missing category")
+        if not isinstance(targets, list) or not targets:
+            fail(f"collection plan task[{task_index}] missing source_targets")
+        category_targets = registry.setdefault(category, [])
+        category_urls = seen_urls.setdefault(category, set())
+        for target_index, target in enumerate(targets, start=1):
+            if not isinstance(target, dict):
+                fail(
+                    f"collection plan task[{task_index}] "
+                    f"source_targets[{target_index}] must be an object"
+                )
+            normalized: dict[str, str] = {}
+            for key in ("label", "url", "source_role", "channel", "source_class"):
+                value = target.get(key)
+                if not isinstance(value, str) or not value.strip():
+                    fail(
+                        f"collection plan task[{task_index}] "
+                        f"source_targets[{target_index}] missing {key}"
+                    )
+                normalized[key] = value.strip()
+            if not normalized["url"].startswith(("https://", "http://")):
+                fail(
+                    f"collection plan task[{task_index}] "
+                    f"source_targets[{target_index}] url must be absolute"
+                )
+            if normalized["url"] not in category_urls:
+                category_targets.append(normalized)
+                category_urls.add(normalized["url"])
+    if not registry:
+        fail(f"collection plan snapshot has no source targets: {plan_path}")
+    return registry
 
 
 def target_matches_slot(target: dict[str, str], slot: dict[str, str]) -> bool:
