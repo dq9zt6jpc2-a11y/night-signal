@@ -344,6 +344,13 @@ def fetch_news(category: dict[str, Any], issue_date: str) -> list[dict[str, Any]
             if source is not None
             else "Google News"
         )
+        publisher_url = (
+            compact_text(source.get("url") or "", 1000)
+            if source is not None
+            else ""
+        )
+        if not publisher_url.startswith(("http://", "https://")):
+            publisher_url = ""
         if not title or not link.startswith(("http://", "https://")):
             continue
         records.append(
@@ -353,6 +360,7 @@ def fetch_news(category: dict[str, Any], issue_date: str) -> list[dict[str, Any]
                 "source_role": "independent_media_or_data",
                 "channel": "web",
                 "source_class": "discovered_media",
+                "publisher_url": publisher_url,
                 "observed": True,
                 "published_date": parse_rss_date(item.findtext("pubDate")),
                 "title": title,
@@ -918,6 +926,24 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
             if record.get("observed")
             and record.get("source_class") == "discovered_media"
         ]
+        normalized["discovery_sources"].extend(
+            {
+                "label": f"{record.get('label') or '配信元'} 媒体ページ",
+                "url": str(record["publisher_url"]),
+                "source_role": "independent_media_or_data",
+                "channel": "web",
+                "published_date": record.get("published_date"),
+                "evidence_summary": (
+                    f"Google News RSSのsource属性から、"
+                    f"{record.get('label') or '配信元'}の媒体URL"
+                    f"{record['publisher_url']}を確認した。"
+                ),
+            }
+            for record in records_by_category[label]
+            if record.get("observed")
+            and record.get("source_class") == "discovered_media"
+            and record.get("publisher_url")
+        )
         reviewed_categories[label] = normalized
         raw_items = [
             {

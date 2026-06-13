@@ -53,6 +53,8 @@
       {"label": "SpaceX updates", "url": "https://www.spacex.com/updates/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
       {"label": "NASA missions", "url": "https://www.nasa.gov/missions/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
       {"label": "FAA commercial space", "url": "https://www.faa.gov/space", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
+      {"label": "Reuters SpaceX search", "url": "https://www.reuters.com/site-search/?query=SpaceX", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
+      {"label": "AP SpaceX search", "url": "https://apnews.com/search?q=SpaceX", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
       {"label": "SpaceNews", "url": "https://spacenews.com/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "specialist_media"},
       {"label": "Ars Technica Space", "url": "https://arstechnica.com/space/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "specialist_media"},
       {"label": "SpaceX X", "url": "https://x.com/SpaceX", "source_role": "social_or_video_signal", "channel": "sns_x", "source_class": "sns_x"},
