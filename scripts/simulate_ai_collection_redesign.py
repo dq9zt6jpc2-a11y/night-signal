@@ -105,6 +105,14 @@ def simulate(issue_date: str) -> dict[str, Any]:
     summary_required = set(state.SUMMARY_BASIS_SCHEMA["required"])
     collector = read(COLLECTOR)
     synthesizer = read(SYNTHESIZER)
+    importer = read(ROOT / "scripts" / "night_signal_import_research.py")
+    publisher = read(ROOT / "scripts" / "night_signal_publish.py")
+    renderer = read(ROOT / "scripts" / "night_signal_state.py")
+    channel_routes: dict[str, set[str]] = {}
+    for task in new_tasks:
+        channel_routes.setdefault(str(task.get("category")), set()).add(
+            str(task.get("channel"))
+        )
 
     metrics = {
         "ai_calls": {
@@ -130,6 +138,28 @@ def simulate(issue_date: str) -> dict[str, Any]:
             "after_horizon_task_share": round(len(broad_horizon_tasks) / len(new_tasks), 4),
             "discovery_findings_structured": "discovery_findings" in observation_required,
             "synthesis_retains_discoveries": "Treat discovery_findings as the horizon scan" in synthesizer,
+        },
+        "evidence_integrity": {
+            "target_result_has_checked_at": "checked_at_jst" in state.SOURCE_OBSERVATION_SCHEMA["properties"]["source_target_results"]["items"]["required"],
+            "target_result_has_verification_method": "verification_method" in state.SOURCE_OBSERVATION_SCHEMA["properties"]["source_target_results"]["items"]["required"],
+            "collector_cross_checks_trace_urls": "observed source missing from web_search trace" in collector,
+            "reviewed_import_requires_explicit_checks": "seed targets without explicit checks" in importer,
+            "unverified_targets_excluded_from_manifest": "observed_urls_by_category" in synthesizer,
+        },
+        "all_category_channel_coverage": {
+            "categories": {
+                category: sorted(channels)
+                for category, channels in sorted(channel_routes.items())
+            },
+            "all_have_web_x_youtube": all(
+                {"web", "sns_x", "youtube"} <= channels
+                for channels in channel_routes.values()
+            ),
+        },
+        "publication_integrity": {
+            "morning_issue_does_not_skip_collection": "issue_exists" not in publisher,
+            "deploy_requires_evening_refresh": "require_evening_refresh=deploy_existing" in publisher,
+            "public_confirmation_signal_layer": "verified-signals" in renderer,
         },
         "information_retention": {
             "required_detail_slots": sorted(summary_required),
@@ -161,6 +191,12 @@ def simulate(issue_date: str) -> dict[str, Any]:
         failures.append("material_facts_not_individually_sourced")
     if not metrics["information_retention"]["collector_preserves_complete_source_list"]:
         failures.append("complete_web_search_source_list_not_preserved")
+    if not all(metrics["evidence_integrity"].values()):
+        failures.append("source_verification_provenance_is_incomplete")
+    if not metrics["all_category_channel_coverage"]["all_have_web_x_youtube"]:
+        failures.append("some_categories_lack_web_x_or_youtube")
+    if not all(metrics["publication_integrity"].values()):
+        failures.append("publication_can_still_hide_or_reuse_stale_collection")
 
     result = {
         "issue_date": issue_date,
@@ -168,8 +204,8 @@ def simulate(issue_date: str) -> dict[str, Any]:
         "failures": failures,
         "metrics": metrics,
         "limits": [
-            "This deterministic simulation proves structural coverage and removes duplicated AI work.",
-            "Live source recall is measured separately from source traces and the published candidate ledger.",
+            "This deterministic simulation proves structural coverage, provenance, and publication ownership.",
+            "Live recall still requires an evening collection run and a reviewed missed-source sample.",
         ],
     }
     return result

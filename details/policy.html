@@ -18,7 +18,7 @@
       <h2>毎日の進め方</h2>
       <ul>
         <li>20:00 JSTまでに固定URLで最新版を読める状態にする。GitHub Pages公開workflowも20:00 JSTに再実行し、当日成果物がmainにある場合は固定URLまで公開確認する。</li>
-        <li>調査開始時刻を根拠なく固定しない。発行日に入ってから、収集契約の全カテゴリ、探索軸、公式/主要報道/SNS/X/Instagram/Facebook/YouTube/データ/予定表を順次確認し、見た情報源と判断は抽出ログへ残す。</li>
+        <li>発行日に入ってから予備調査を行い、18:00 JST以降に全10カテゴリの公式/主要報道/SNS/X/Instagram/Facebook/YouTube/データを必ず再確認する。朝のissueやbundleを最終版として再利用しない。</li>
         <li>19:00までに候補整理、19:20までにトップページ要約、詳細概要、抽出ログ、品質ゲートを完了する。</li>
         <li>19:40頃までにcommit/pushし、GitHub Pagesと公開URLを確認する。</li>
         <li>決算日、レース週、打ち上げ前後、Bリーグ試合日などは前倒しする。ただし公開直前の最終差分確認は省略しない。</li>
@@ -43,25 +43,26 @@
       <h2>構造化収集契約</h2>
       <p>網羅性は長い説明量ではなく、抽出ログの <code>coverage-manifest</code> で証明する。各カテゴリは「調べた検索軸」「見た情報源」「採用/保留/除外/未確認」「掲載カード」を同じJSONに残す。</p>
       <p>2026-06-04以降の設計中心は、後段チェックの足し算ではなく、<code>scripts/night_signal_state.py</code> が表すAI状態機械に置く。状態は discovery frontier、source observations、candidates、topic decisions、publication plan の順に進め、欠けた状態があれば typed blocker として止める。OpenAIを使う場合も自由作文ではなく、Responses APIとStructured OutputsでこのJSON schemaを埋める。</p>
-      <p>AI-backed収集は <code>scripts/night_signal_collect.py</code> が <code>collection_plan.json</code> から <code>observations.jsonl</code> を生成する。live web収集には <code>OPENAI_API_KEY</code> を必須とし、キーがない状態では外部収集完了と扱わない。</p>
-      <p>収集後の合成は <code>scripts/night_signal_synthesize.py</code> が <code>observations.jsonl</code> から <code>candidates</code>、<code>decisions</code>、<code>cards</code>、<code>coverage_manifest</code> を作る。観測だけ、候補だけ、カードだけの状態は公開可能にしない。新鮮な観測主張は候補に必ず残す。公開面に出す項目は、採用済み候補から作った詳細カードだけにし、詳細なしの公開項目で代替しない。</p>
+      <p>AI-backed収集は <code>scripts/night_signal_collect.py</code> が <code>collection_plan.json</code> から <code>observations.jsonl</code> を生成する。Responses APIを使えない場合は、ローカルCodex automationがlive Web調査を行い、実際に確認したURLだけを明示的な <code>source_checks</code> として保存する。設定にあるだけのURLを確認済みに変換しない。</p>
+      <p>収集後の合成は <code>scripts/night_signal_synthesize.py</code> が <code>observations.jsonl</code> から <code>candidates</code>、<code>decisions</code>、<code>cards</code>、<code>coverage_manifest</code> を作る。観測だけ、候補だけ、カードだけの状態は公開可能にしない。重要更新は詳細カード、直近3日の確認価値がある非採用情報は参照URL付きの確認情報として公開し、背景だけ、古い情報、未確認情報は公開面に出さない。</p>
       <ul>
         <li>網羅性は「カテゴリごとに何かを見た」では足りない。各ウォッチ項目について、一次/公式、独立媒体またはデータ、カテゴリで必要なSNS/X、Instagram、Facebook、YouTubeの observation slot を埋める。未収集slotが残る状態は本文生成へ進めない。</li>
         <li>各カテゴリは <code>collection_status: complete</code> になるまで公開しない。</li>
         <li><code>published_card_titles</code> はトップページのカード見出しと完全一致させる。カードだけ更新して抽出ログが古い状態を失敗にする。</li>
         <li><code>search_axes</code> はカテゴリごとに3軸以上を必須にする。例: OpenAIなら公式/製品、企業導入/インフラ、安全/規制。経済カテゴリなら雇用、物価、金融政策、政府方針、投資案件、市場反応、資金フローを地域ごとに見る。</li>
-        <li><code>latest_candidates</code> はカテゴリごとのウォッチ項目をすべて埋める。OpenAIならIPO/資金調達、数学・研究成果、製品更新、企業導入、安全/規制を必ず候補として記録し、採用/保留/除外/新規なしの判断を残す。</li>
+        <li>全ウォッチ項目は、実候補または直接URL付きのtopic checkで閉じる。更新がない項目に近接候補を作って候補数を水増ししない。</li>
+        <li>OpenAIではIPO/資金調達、数学・研究成果、製品更新、企業導入、安全/規制をウォッチ項目として維持し、候補またはURL付き確認結果を残す。</li>
         <li><code>collected_items</code> は <code>latest_candidates</code> の各候補に対応する直接URLを必須にする。検索結果ページではなく、実際に開いた記事、公式ページ、SNS投稿/プロフィール、YouTubeチャンネル/動画などを記録する。</li>
         <li><code>watch_topic_checks</code> は各ウォッチ項目ごとに主情報源の確認URLに加え、仮説、情報源ロール、調査経路、時間窓、差分を必須にする。SNS/X、Instagram、Facebook、YouTubeが主要な発信経路であるカテゴリではそのURLも必須にする。単語の有無ではなく、人が調査するときの「何が起き得るか、どこに出るか、何を実際に見たか、昨日から何が変わったか」を公開前に証明する。</li>
-        <li>カテゴリによって主情報源は変わる。日本経済/アジア経済/北米経済は統計機関、中央銀行、政府、主要経済媒体、資金フロー/市場データを主根拠にし、国別の公式根拠を別の国のSNSや動画で代替しない。OpenAI/SpaceXは公式リリースとXを主にし、YOASOBI / 幾田りらは公式HP、スタッフX、Instagram、YouTubeを主にする。SNSや動画は情報が発信されるカテゴリで必須確認し、経済統計では関連する発信元が確認できた場合に補助根拠として残す。</li>
+        <li>カテゴリによって主情報源は変わるが、全10カテゴリでWeb、X/SNS、YouTubeを確認する。日本経済/アジア経済/北米経済は統計機関、中央銀行、政府、主要経済媒体、資金フロー/市場データを主根拠にし、中央銀行・財務当局の公式X/YouTubeを補助経路にする。国別の公式根拠を別の国のSNSや動画で代替しない。</li>
         <li>2026-05-22以降、各ウォッチ項目は <code>search_sweep</code> に検索クエリと選別判断を残す。検索結果URLは公開情報として載せず、検索で見つけた直接URLだけを <code>collected_items</code> や原文確認に回す。</li>
         <li>公開カードは <code>latest_candidates</code> の <code>decision: adopted</code> からしか作らない。2026-05-22以降、元情報が3日より古い候補は公開カードにせず、背景資料としてだけ扱う。2026-06-01以降は今日・昨日・一昨日の3暦日だけを公開カードにし、カードにはどの日の情報かを表示する。</li>
         <li>2026-05-22以降、3日以内の新しい候補を採用しない場合は、重複、重要度不足、実質変化なし、根拠不足、関連不足のどれかを <code>non_adoption_reason_class</code> に残す。新しい候補を「なんとなく保留」にしない。</li>
-        <li>掲載数は固定しない。調査は全ウォッチ項目で必ず行い、候補は広く残す。公開カードは新規追加または明確な変化がある候補だけにする。更新がなければカテゴリ内のカードは0件でもよく、更新が多ければ増やす。採用しない新鮮な候補は抽出ログに残し、公開面には詳細なしで出さない。根拠が足りる重要候補は詳細カードへ昇格させる。</li>
+        <li>掲載数は固定しない。更新がなければカテゴリ内のカードは0件でもよい。公開カードは新規追加または明確な変化がある候補だけにする。採用しない直近3日の確認価値がある候補は、日付・概要・直接URL付きの確認情報としてカテゴリ内に残す。根拠が足りる重要候補は詳細カードへ昇格させる。</li>
         <li>公開対象は <code>.night-signal-issue-date</code> で選ぶ。日次運用ではJSTの今日号、サンプル、抽出ログ、site配下の当日版がそろわない場合は公開前監査で止める。</li>
         <li>公開workflowは当日issue成果物と <code>.night-signal-issue-date</code> の変更だけで動かす。コード、ドキュメント、設定、方針の改善だけで過去号を再配信しない。</li>
         <li>URL根拠はカテゴリごとに8件以上、異なるホスト5件以上を最低ラインにする。公式だけ、SNSだけ、単一メディアだけでは通さない。</li>
-        <li><code>last_checked_jst</code> は当日の日付で記録する。日付だけ差し替えた過去ログを失敗にする。</li>
+        <li><code>last_checked_jst</code> と <code>collection_completed_at_jst</code> は当日の時刻付きで記録する。最終公開は18:00 JST以降の収集完了を必須にし、日付だけ差し替えた過去ログや朝の収集結果を失敗にする。</li>
       </ul>
 
       <h2>対象カテゴリ</h2>
@@ -126,7 +127,7 @@
         <li><code>latest_candidates</code> は topic_id、title、source_url、source_published_date、decision、rationale を必須にする。2026-05-22以降、3日以内の候補を採用しない場合は non_adoption_reason_class も必須にする。2026-05-26号以降は <code>change_class</code>（新規事実 / 実質更新 / 定例反復 / 重複追随 / 背景のみ）と <code>publication_assessment</code> を必須にし、定例や重複を掲載する場合は <code>materiality_basis</code> で実質差分を明記する。</li>
         <li>2026-06-03号以降、公開カードの採用には <code>topic_value_class</code>、<code>reader_delta</code>、<code>materiality_basis</code> を必須にする。鮮度は入口条件にすぎず、予定表、開催前情報、結果未掲載の確認だけでは採用しない。採用できる題材は、政策/決定、資金や市場、技術や製品、運用状態、結果、実質的な予定変更、安全リスク、文化的反応など、読者の見方が変わるものに限る。</li>
         <li><code>collected_items</code> は topic_id、title、source_url、source_published_date、observed_at_jst、channel、collection_note を必須にする。source_url は検索結果URLではなく、<code>latest_candidates</code> と同じ直接URLにする。</li>
-        <li>構造化観測では <code>source_target_results</code> を使い、収集タスクに含まれるseed source targetごとの確認結果を残す。公式ページ、主要媒体、X、Instagram、Facebook、YouTube、データソースは、見たか、再利用したか、取得不能か、対象外かをURL単位で閉じる。</li>
+        <li>構造化観測では <code>source_target_results</code> を使い、seed source targetごとの確認結果、<code>checked_at_jst</code>、<code>verification_method</code> を残す。<code>observed_live</code> はResponsesのraw source traceまたは明示的なreviewed live-Web checkにURLがある場合だけ許可する。各daily slotは当日runのlive URLを最低1件含める。</li>
         <li><code>watch_topic_checks</code> は topic_id、checked_at_jst、カテゴリで必須化された確認チャネル、event_classes、source_roles_checked、investigation_paths、investigation_hypotheses、time_window_jst、delta_basis、search_sweep、candidate_titles、result を必須にする。investigation_pathsには一次/公式、独立媒体またはデータ、補助シグナルの各ロールについて直接URLと発見内容を残す。国や組織を限定した探索軸では一次/公式URLをその対象に一致させ、別対象の発信元で代用しない。candidate_titles は同じカテゴリの <code>latest_candidates</code> に存在する見出しだけを許可し、探索証跡と候補判断を切り離さない。</li>
         <li><code>search_sweep</code> は検索クエリ2件以上、結果区分（new_update_found / covered_by_existing_candidate / no_new_update）、日本語の選別理由を必須にする。検索結果そのものではなく、重要情報を拾ったか、既存候補でカバーしたか、新規なしと判断したかを残す。</li>
         <li><code>no_change_checks</code> には、カテゴリの主情報源を確認したうえで採用しなかった軸、変化なしと判断した軸、保留した軸をURL付きで残す。SNS/X/YouTubeが主情報源のカテゴリでは、その確認証跡も必須にする。</li>
@@ -159,15 +160,19 @@
         <li>2026-05-26号以降は、複数原文を使うのに統合根拠を残さないケース、定例・重複だけの候補を実質差分なしで掲載するケース、新しい実質変化を曖昧な保留で落とすケースを失敗させる。2026-06-05号以降は、要点と背景、確認した事実、未確定点、出典日付のいずれかが欠ける詳細ページも失敗させる。</li>
         <li>日付だけ変えて詳細ページ概要が前日とほぼ同じ場合は失敗する。</li>
         <li>当日カードが前号日付の詳細ページへリンクする場合は失敗する。</li>
-        <li>8カテゴリすべてで、8種類の情報源クラス欠落を失敗させる。</li>
-        <li>8カテゴリすべてで、search_terms欠落を失敗させる。</li>
-        <li>8カテゴリすべてで、published_card_titles不一致、search_axes欠落、search_sweep欠落、URL根拠不足、情報源ホスト不足を失敗させる。</li>
+        <li>全10カテゴリで、8種類の情報源クラス欠落を失敗させる。</li>
+        <li>全10カテゴリで、search_terms欠落を失敗させる。</li>
+        <li>全10カテゴリで、published_card_titles不一致、search_axes欠落、search_sweep欠落、URL根拠不足、情報源ホスト不足を失敗させる。</li>
         <li>カテゴリ固有の探索軸不足、重大未確認リスク残存を失敗させる。</li>
       </ul>
 
       <h2>失敗時の扱い</h2>
       <ul>
-        <li>公開対象日は <code>.night-signal-issue-date</code> に明示した号だけを使う。GitHub Actions実行時のJST日付や最新ファイル探索で対象日を変えず、過去号へのフォールバックは禁止。</li>
+        <li>利用枠・トークン不足を、Codex残高不足とmodel context/output token上限に分ける。さらにAPI quota、rate limit、実行時間切れ、認証不足、ネットワーク/DNS、GitHub障害、途中停止、dirty worktreeを別の故障モードとして扱い、単一の再試行でまとめない。</li>
+        <li>Codex background automationが利用枠不足で開始できず、<code>OPENAI_API_KEY</code>が利用できる場合はResponses APIへ切り替える。当日確認済みreviewed bundleまたは18:00 JST以降のfresh issueがある場合だけ、その状態から再開できる。</li>
+        <li>Codex、Responses API、確認済みbundleのいずれも利用できない場合は、古い号を当日版として出さない。独立watchdogを失敗させ、公開不能を明示する。</li>
+        <li>各段階は <code>state/YYYY-MM-DD/runtime_checkpoint.json</code> に記録する。収集はslot単位、合成はカテゴリ単位でも原子的に保存し、入力hashが一致する完了部分だけを再利用する。途中停止後に全カテゴリを最初からやり直さず、DBの <code>IN_PROGRESS</code> 表示だけを稼働証拠にしない。</li>
+        <li>公開対象日は <code>.night-signal-issue-date</code> に明示した号だけを使う。GitHub Actionsは18:00 JST以降に収集済みのコミットを配布するだけとし、Actions内でlive収集したことにしない。過去号へのフォールバックは禁止。</li>
         <li>当日版がない、古いページが表示される、公開URLが当日版でない、GitHub Pagesだけ成功して当日ページ生成がない場合は失敗。</li>
         <li>一時クローンや別worktreeで成功しても、本番リポジトリへcommit/pushし、公開URLで当日版を確認するまで成功扱いにしない。</li>
         <li>失敗後は個別修正だけで終わらせず、ポリシー、抽出ログ形式、品質ゲート、シミュレーションのどこで止めるべきだったかを見直す。</li>

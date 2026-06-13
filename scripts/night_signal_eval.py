@@ -76,6 +76,16 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
         (str(item.get("category")), str(item.get("watch_topic_id")))
         for item in concrete_candidates
     }
+    manifest = issue.get("coverage_manifest", {})
+    manifest_categories = manifest.get("categories", {})
+    reviewed_topics = set(candidate_topics)
+    if isinstance(manifest_categories, dict):
+        for category, entry in manifest_categories.items():
+            if not isinstance(entry, dict):
+                continue
+            for check in entry.get("no_change_checks", []):
+                if isinstance(check, dict) and isinstance(check.get("topic_id"), str):
+                    reviewed_topics.add((str(category), str(check["topic_id"])))
 
     seed_checks = sum(
         len([target for target in task.get("source_targets", []) if isinstance(target, dict)])
@@ -104,8 +114,23 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
         for observation in observations
         for result in observation.get("source_target_results", [])
         if isinstance(result, dict)
+        and result.get("slot_state") in {"observed_live", "reused_from_cache"}
         and isinstance(result.get("url"), str)
         and str(result.get("url")).startswith(("http://", "https://"))
+    )
+    verified_results = [
+        result
+        for observation in observations
+        for result in observation.get("source_target_results", [])
+        if isinstance(result, dict)
+        and result.get("slot_state") in {"observed_live", "reused_from_cache"}
+    ]
+    provenance_complete = all(
+        isinstance(result.get("checked_at_jst"), str)
+        and str(result.get("checked_at_jst")).startswith(issue_date)
+        and result.get("verification_method")
+        in {"responses_web_search", "reviewed_live_web", "direct_fetch", "cached_result"}
+        for result in verified_results
     )
 
     mapped_facts = 0
@@ -177,20 +202,18 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
     }
     checks = {
         "all_observation_slots_closed": not coverage["missing_slots"],
-        "candidate_topic_recall_complete": candidate_topics >= expected_topics,
+        "topic_review_complete": reviewed_topics >= expected_topics,
         "fact_source_mapping_complete": confirmed_facts > 0 and mapped_facts == confirmed_facts,
         "collection_calls_reduced": len(tasks) < expected_slots,
         "extended_research_bounded": len(extended_traces) <= 3,
         "direct_source_evidence_present": bool(evidence_urls),
-        "candidate_breadth_complete": concrete_candidate_topics >= expected_topics,
+        "source_verification_provenance_complete": bool(verified_results)
+        and provenance_complete,
         "raw_finding_depth_complete": all(
             count >= 3 for count in findings_by_topic.values()
         ),
         "raw_finding_source_diversity_complete": all(
             len(classes) >= 2 for classes in finding_source_classes.values()
-        ),
-        "reviewable_finding_topic_coverage_complete": (
-            reviewable_finding_topics >= expected_topics
         ),
         "finding_candidate_retention_complete": (
             reviewable_finding_urls <= candidate_urls
@@ -203,6 +226,7 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
         "slot_recall": round(closed_slots / expected_slots, 4) if expected_slots else 0,
         "candidate_topics_expected": len(expected_topics),
         "candidate_topics_covered": len(candidate_topics & expected_topics),
+        "reviewed_topics_covered": len(reviewed_topics & expected_topics),
         "concrete_candidate_topics_covered": len(
             concrete_candidate_topics & expected_topics
         ),
@@ -217,6 +241,7 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
         "discovery_findings": len(discovery_findings),
         "evidence_urls": len(evidence_urls),
         "evidence_hosts": len({normalized_host(url) for url in evidence_urls}),
+        "verified_source_results": len(verified_results),
         "confirmed_facts": confirmed_facts,
         "facts_with_source_mapping": mapped_facts,
         "source_mapping_recall": round(mapped_facts / confirmed_facts, 4)
@@ -235,7 +260,10 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
         "reviewable_findings_retained": len(
             reviewable_finding_urls & candidate_urls
         ),
-        "collection_mode": "responses_web_search" if traces else "reviewed_research_import",
+        "collection_mode": manifest.get(
+            "collection_mode",
+            "responses_web_search" if traces else "unknown",
+        ),
     }
     return {
         "issue_date": issue_date,

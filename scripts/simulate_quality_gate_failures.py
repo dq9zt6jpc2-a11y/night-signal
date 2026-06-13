@@ -45,10 +45,13 @@ def copy_fixture() -> Path:
     shutil.copyfile(ROOT / "scripts" / "night_signal_collect.py", tmp / "scripts" / "night_signal_collect.py")
     shutil.copyfile(ROOT / "scripts" / "night_signal_synthesize.py", tmp / "scripts" / "night_signal_synthesize.py")
     shutil.copyfile(ROOT / "scripts" / "night_signal_publish.py", tmp / "scripts" / "night_signal_publish.py")
+    shutil.copyfile(ROOT / "scripts" / "night_signal_runtime_audit.py", tmp / "scripts" / "night_signal_runtime_audit.py")
+    shutil.copyfile(ROOT / "scripts" / "simulate_runtime_failures.py", tmp / "scripts" / "simulate_runtime_failures.py")
     shutil.copyfile(ROOT / "scripts" / "simulate_quality_gate_failures.py", tmp / "scripts" / "simulate_quality_gate_failures.py")
     shutil.copyfile(ROOT / "config" / "night_signal_coverage.json", tmp / "config" / "night_signal_coverage.json")
     shutil.copyfile(ROOT / "config" / "night_signal_guardrails.json", tmp / "config" / "night_signal_guardrails.json")
     shutil.copyfile(ROOT / "config" / "night_signal_sources.json", tmp / "config" / "night_signal_sources.json")
+    shutil.copyfile(ROOT / "config" / "night_signal_resilience.json", tmp / "config" / "night_signal_resilience.json")
     shutil.copyfile(ROOT / f"night-brief-web-sample-{ISSUE_DATE}.html", tmp / f"night-brief-web-sample-{ISSUE_DATE}.html")
     shutil.copyfile(ROOT / "night-brief-web-sample-2026-05-18.html", tmp / "night-brief-web-sample-2026-05-18.html")
     sample_html = (ROOT / f"night-brief-web-sample-{ISSUE_DATE}.html").read_text(encoding="utf-8")
@@ -145,6 +148,8 @@ def backfill_fixture_manifest_for_current_contract(tmp: Path) -> None:
                     "finding": "補助情報として公表ページを再確認し、話題のみの更新を切り分けた。",
                 },
             ],
+            "sns_x": ["https://x.com/RBI"],
+            "youtube": ["https://www.youtube.com/channel/UCIfCOl43tunZVNYafeC4RQA"],
             "investigation_hypotheses": [
                 "アジア経済のchina_macro_policyに前号後の新しい決定または数値変更がある可能性。",
                 "アジア経済のchina_macro_policyは定例・既報・周辺情報であり掲載に足る実質差分がない可能性。",
@@ -980,14 +985,15 @@ def main() -> int:
     assert_pass("variable card count keeps one fresh North America update", one_card_fixture)
     print("PASS variable card count keeps one fresh North America update")
 
-    economic_web_fixture = copy_fixture()
-    mutate_manifest_entry(
-        economic_web_fixture,
-        "アジア経済",
-        lambda entry: entry.update({"sns_x": [], "youtube_video": []}),
+    assert_fail(
+        "regional economy requires X and YouTube evidence",
+        lambda tmp: mutate_manifest_entry(
+            tmp,
+            "アジア経済",
+            lambda entry: entry.update({"sns_x": [], "youtube_video": []}),
+        ),
+        "missing source evidence: sns_x",
     )
-    assert_pass("regional economy does not require unrelated social source class", economic_web_fixture)
-    print("PASS regional economy does not require unrelated social source class")
 
     future_detail_fixture = copy_fixture()
     future_detail_result = run_detail_renderer(

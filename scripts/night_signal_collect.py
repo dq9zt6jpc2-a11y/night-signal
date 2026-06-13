@@ -11,9 +11,11 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
+import hashlib
 import json
 import os
 import sys
+import tempfile
 import time
 import urllib.error
 import urllib.request
@@ -112,6 +114,13 @@ Rules:
 - Inspect every seed source target exactly once during the sweep. Copy its
   closure result into every returned observation so downstream slot validation
   remains deterministic.
+- Every source_target_result must contain checked_at_jst and
+  verification_method. Use responses_web_search only when the URL is present in
+  the web_search source trace. Use unavailable with source_unavailable when the
+  source could not be verified. Never mark a seed URL observed merely because
+  it was listed in the task.
+- Every returned observation must include at least one observed_live target
+  from this run. Cached results may supplement but cannot close the daily slot.
 - Use agentic web search to discover current direct sources beyond the seed
   list. Explicitly search for important developments outside the configured
   watch topics.
@@ -419,6 +428,39 @@ def parse_sweep(task: dict[str, Any], response: dict[str, Any]) -> dict[str, Any
         for key in ("category", "source_role", "channel"):
             if observation.get(key) != task.get(key):
                 fail(f"{task.get('slot_id')} observation {key} mismatch")
+    traced_urls = web_search_source_urls(response)
+    for observation in observations:
+        observation_url = str(observation.get("url", ""))
+        if (
+            observation.get("slot_state") == "observed_live"
+            and observation_url not in traced_urls
+        ):
+            fail(
+                f"{task.get('slot_id')} observation URL missing from "
+                f"web_search trace: {observation_url}"
+            )
+        for result in observation.get("source_target_results", []):
+            if not isinstance(result, dict):
+                fail(f"{task.get('slot_id')} source target result must be an object")
+            method = result.get("verification_method")
+            state_value = result.get("slot_state")
+            url = str(result.get("url", ""))
+            if state_value == "observed_live":
+                if method != "responses_web_search":
+                    fail(f"{task.get('slot_id')} live source must use responses_web_search")
+                if url not in traced_urls:
+                    fail(f"{task.get('slot_id')} observed source missing from web_search trace: {url}")
+            if state_value == "source_unavailable" and method != "unavailable":
+                fail(f"{task.get('slot_id')} unavailable source must use unavailable method")
+        for finding in observation.get("discovery_findings", []):
+            if not isinstance(finding, dict):
+                fail(f"{task.get('slot_id')} discovery finding must be an object")
+            source_url = str(finding.get("source_url", ""))
+            if source_url not in traced_urls:
+                fail(
+                    f"{task.get('slot_id')} discovery URL missing from "
+                    f"web_search trace: {source_url}"
+                )
     findings = [item for item in value["findings"] if isinstance(item, dict)]
     required_findings = 2 if task.get("channel") == "web" else 1
     finding_counts = {
@@ -442,8 +484,14 @@ def parse_sweep(task: dict[str, Any], response: dict[str, Any]) -> dict[str, Any
             + ", ".join(thin_topics)
         )
     for finding in findings:
-        if not str(finding.get("url", "")).startswith(("http://", "https://")):
+        finding_url = str(finding.get("url", ""))
+        if not finding_url.startswith(("http://", "https://")):
             fail(f"{task.get('slot_id')} finding must use a direct URL")
+        if finding_url not in traced_urls:
+            fail(
+                f"{task.get('slot_id')} finding URL missing from "
+                f"web_search trace: {finding_url}"
+            )
         finding_topics = {
             str(topic_id) for topic_id in finding.get("watch_topic_ids", [])
         }
@@ -455,6 +503,23 @@ def parse_sweep(task: dict[str, Any], response: dict[str, Any]) -> dict[str, Any
         "findings": findings,
         "observations": observations,
     }
+
+
+def web_search_source_urls(response: dict[str, Any]) -> set[str]:
+    urls: set[str] = set()
+    for item in response.get("output", []):
+        if not isinstance(item, dict) or item.get("type") != "web_search_call":
+            continue
+        action = item.get("action")
+        if not isinstance(action, dict):
+            continue
+        for source in action.get("sources", []):
+            if not isinstance(source, dict):
+                continue
+            url = source.get("url")
+            if isinstance(url, str) and url.startswith(("http://", "https://")):
+                urls.add(url)
+    return urls
 
 
 def web_search_trace(
@@ -525,6 +590,60 @@ def write_jsonl(path: Path, records: list[dict[str, Any]]) -> None:
     )
 
 
+def task_signature(task: dict[str, Any]) -> str:
+    encoded = json.dumps(task, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def collection_part_path(state_dir: Path, task: dict[str, Any]) -> Path:
+    slot_id = str(task.get("slot_id", "unknown"))
+    safe_slot_id = "".join(char if char.isalnum() or char in "-_" else "_" for char in slot_id)
+    return state_dir / "collection_parts" / f"{safe_slot_id}.json"
+
+
+def write_collection_part(
+    state_dir: Path,
+    task: dict[str, Any],
+    sweep: dict[str, Any],
+    traces: list[dict[str, Any]],
+) -> dict[str, Any]:
+    value = {
+        "version": 1,
+        "issue_date": task.get("issue_date"),
+        "slot_id": task.get("slot_id"),
+        "task_signature": task_signature(task),
+        "completed_at_jst": jst_now(),
+        "sweep": sweep,
+        "traces": traces,
+    }
+    path = collection_part_path(state_dir, task)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp = path.with_suffix(".json.tmp")
+    temp.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    temp.replace(path)
+    return value
+
+
+def load_collection_part(state_dir: Path, task: dict[str, Any]) -> dict[str, Any] | None:
+    path = collection_part_path(state_dir, task)
+    if not path.exists():
+        return None
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None
+    if (
+        not isinstance(value, dict)
+        or value.get("issue_date") != task.get("issue_date")
+        or value.get("slot_id") != task.get("slot_id")
+        or value.get("task_signature") != task_signature(task)
+        or not isinstance(value.get("sweep"), dict)
+        or not isinstance(value.get("traces"), list)
+    ):
+        return None
+    return value
+
+
 def self_test() -> None:
     fake_task = {
         "issue_date": "2099-01-01",
@@ -588,6 +707,27 @@ def self_test() -> None:
     trace = web_search_trace(fake_task, {"id": "resp_test", "output": [{"type": "web_search_call", "id": "ws_test", "status": "completed", "action": {"type": "search", "query": "OpenAI", "sources": [{"url": "https://openai.com/"}]}}]})
     if not trace["raw_web_search_sources"] or trace["web_search_calls"][0]["sources_count"] != 1:
         fail("collector must preserve raw web_search sources")
+    if web_search_source_urls({"output": [{"type": "web_search_call", "action": {"sources": [{"url": "https://openai.com/"}]}}]}) != {"https://openai.com/"}:
+        fail("collector must expose trace URLs for observation verification")
+    with tempfile.TemporaryDirectory() as temp_dir:
+        part = write_collection_part(
+            Path(temp_dir),
+            fake_task,
+            {
+                "needs_extended_research": False,
+                "extended_research_reason": None,
+                "findings": [],
+                "observations": [],
+            },
+            [trace],
+        )
+        loaded = load_collection_part(Path(temp_dir), fake_task)
+        if loaded != part:
+            fail("collector must round-trip durable slot checkpoints")
+        changed_task = dict(fake_task)
+        changed_task["search_queries"] = ["changed"]
+        if load_collection_part(Path(temp_dir), changed_task) is not None:
+            fail("collector must invalidate a checkpoint when its task changes")
     print("NIGHT SIGNAL COLLECTOR PASSED")
 
 
@@ -599,6 +739,7 @@ def main() -> int:
     parser.add_argument("--max-tasks", type=int)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--replace", action="store_true")
+    parser.add_argument("--resume", action="store_true")
     parser.add_argument("--retries", type=int, default=3)
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--max-extended-research", type=int, default=3)
@@ -625,39 +766,70 @@ def main() -> int:
         response = call_responses(task_payload(task), retries=args.retries)
         return index, task, parse_sweep(task, response), web_search_trace(task, response)
 
+    parts_by_slot: dict[str, dict[str, Any]] = {}
+    reused_parts = 0
+    pending: list[tuple[int, dict[str, Any]]] = []
+    for index, task in enumerate(tasks, start=1):
+        part = load_collection_part(state_dir, task) if args.resume else None
+        if part is None:
+            pending.append((index, task))
+        else:
+            parts_by_slot[str(task.get("slot_id"))] = part
+            reused_parts += 1
+
+    escalations_used = 0
+    first_error: BaseException | None = None
+    workers = max(1, min(args.workers, len(pending))) if pending else 1
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
+        futures = {
+            executor.submit(collect_task, item): item
+            for item in pending
+        }
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                _, task, sweep, trace = future.result()
+                part_traces = [trace]
+                if (
+                    sweep["needs_extended_research"]
+                    and escalations_used < max(0, args.max_extended_research)
+                ):
+                    reason = str(sweep["extended_research_reason"])
+                    print(f"extended research {task.get('slot_id')}: {reason}", file=sys.stderr)
+                    response = call_background_response(
+                        extended_research_payload(task, sweep),
+                        retries=args.retries,
+                        poll_seconds=args.background_poll_seconds,
+                        timeout_seconds=args.background_timeout_seconds,
+                    )
+                    parent_response_id = str(trace.get("response_id") or "")
+                    sweep = parse_sweep(task, response)
+                    part_traces.append(
+                        web_search_trace(
+                            task,
+                            response,
+                            stage="extended_research",
+                            parent_response_id=parent_response_id or None,
+                            escalation_reason=reason,
+                        )
+                    )
+                    escalations_used += 1
+                part = write_collection_part(state_dir, task, sweep, part_traces)
+                parts_by_slot[str(task.get("slot_id"))] = part
+            except BaseException as exc:
+                if first_error is None:
+                    first_error = exc
+    if first_error is not None:
+        raise first_error
+
     observations: list[dict[str, Any]] = []
     findings: list[dict[str, Any]] = []
     traces: list[dict[str, Any]] = []
-    workers = max(1, min(args.workers, len(tasks)))
-    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
-        results = list(executor.map(collect_task, enumerate(tasks, start=1)))
-    escalations_used = 0
-    for _, task, sweep, trace in sorted(results, key=lambda item: item[0]):
-        traces.append(trace)
-        if (
-            sweep["needs_extended_research"]
-            and escalations_used < max(0, args.max_extended_research)
-        ):
-            reason = str(sweep["extended_research_reason"])
-            print(f"extended research {task.get('slot_id')}: {reason}", file=sys.stderr)
-            response = call_background_response(
-                extended_research_payload(task, sweep),
-                retries=args.retries,
-                poll_seconds=args.background_poll_seconds,
-                timeout_seconds=args.background_timeout_seconds,
-            )
-            parent_response_id = str(trace.get("response_id") or "")
-            sweep = parse_sweep(task, response)
-            traces.append(
-                web_search_trace(
-                    task,
-                    response,
-                    stage="extended_research",
-                    parent_response_id=parent_response_id or None,
-                    escalation_reason=reason,
-                )
-            )
-            escalations_used += 1
+    for task in tasks:
+        part = parts_by_slot.get(str(task.get("slot_id")))
+        if part is None:
+            fail(f"collection checkpoint missing after collection: {task.get('slot_id')}")
+        sweep = part["sweep"]
+        traces.extend(part["traces"])
         for finding in sweep["findings"]:
             findings.append(
                 {
@@ -667,7 +839,7 @@ def main() -> int:
                     "category": task.get("category"),
                     "source_role": task.get("source_role"),
                     "channel": task.get("channel"),
-                    "observed_at_jst": jst_now(),
+                    "observed_at_jst": part.get("completed_at_jst") or jst_now(),
                 }
             )
         observations.extend(sweep["observations"])
@@ -691,6 +863,7 @@ def main() -> int:
                 "observations": len(observations),
                 "findings": len(findings),
                 "extended_research_runs": escalations_used,
+                "reused_slot_checkpoints": reused_parts,
                 "path": str(output),
             },
             ensure_ascii=False,

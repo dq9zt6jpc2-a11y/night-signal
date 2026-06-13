@@ -7,6 +7,7 @@
       {"label": "OpenAI API docs changelog", "url": "https://platform.openai.com/docs/changelog", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
       {"label": "OpenAI Help Center release notes", "url": "https://help.openai.com/en/articles/6825453-chatgpt-release-notes", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
       {"label": "Reuters Technology", "url": "https://www.reuters.com/technology/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
+      {"label": "Business Insider OpenAI and Codex analysis", "url": "https://www.businessinsider.com/openai-merging-codex-into-chatgpt-lock-in-code-2026-6", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
       {"label": "The Verge AI", "url": "https://www.theverge.com/ai-artificial-intelligence", "source_role": "independent_media_or_data", "channel": "web", "source_class": "specialist_media"},
       {"label": "OpenAI X", "url": "https://x.com/OpenAI", "source_role": "social_or_video_signal", "channel": "sns_x", "source_class": "sns_x"},
       {"label": "OpenAI Developers X", "url": "https://x.com/OpenAIDevs", "source_role": "social_or_video_signal", "channel": "sns_x", "source_class": "sns_x"},
@@ -28,6 +29,7 @@
       {"label": "Honda IR", "url": "https://global.honda/en/investors/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
       {"label": "Honda Racing", "url": "https://honda.racing/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
       {"label": "Reuters Autos", "url": "https://www.reuters.com/business/autos-transportation/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
+      {"label": "AP Honda EV strategy", "url": "https://apnews.com/article/honda-ev-investment-us-tariffs-685b44de9fae0f75717be663ae63a6a8", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
       {"label": "Response Honda", "url": "https://response.jp/special/recent/105/Honda", "source_role": "independent_media_or_data", "channel": "web", "source_class": "specialist_media"},
       {"label": "Honda X", "url": "https://x.com/Honda", "source_role": "social_or_video_signal", "channel": "sns_x", "source_class": "sns_x"},
       {"label": "Honda Instagram", "url": "https://www.instagram.com/honda/", "source_role": "social_or_video_signal", "channel": "instagram", "source_class": "social"},
@@ -37,6 +39,7 @@
       {"label": "Formula 1 official", "url": "https://www.formula1.com/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
       {"label": "FIA Formula 1", "url": "https://www.fia.com/events/fia-formula-one-world-championship/season-2026/fia-formula-one-world-championship", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
       {"label": "Aston Martin F1", "url": "https://www.astonmartinf1.com/en-GB/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
+      {"label": "Guardian Formula One", "url": "https://www.theguardian.com/sport/formulaone", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
       {"label": "Motorsport.com F1", "url": "https://www.motorsport.com/f1/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "specialist_media"},
       {"label": "Autosport F1", "url": "https://www.autosport.com/f1/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "specialist_media"},
       {"label": "Formula 1 X", "url": "https://x.com/F1", "source_role": "social_or_video_signal", "channel": "sns_x", "source_class": "sns_x"},
@@ -61,18 +64,22 @@
       {"label": "Statistics Bureau of Japan", "url": "https://www.stat.go.jp/english/", "source_role": "primary_or_official", "channel": "web", "source_class": "official_dataset"},
       {"label": "Ministry of Finance Japan", "url": "https://www.mof.go.jp/english/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
       {"label": "Reuters Japan markets", "url": "https://www.reuters.com/markets/japan/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
-      {"label": "Nikkei economy", "url": "https://www.nikkei.com/news/category/economy/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"}
+      {"label": "Nikkei economy", "url": "https://www.nikkei.com/news/category/economy/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
+      {"label": "Trading Economics Japan indicators", "url": "https://tradingeconomics.com/japan/indicators", "source_role": "independent_media_or_data", "channel": "web", "source_class": "specialist_media"},
+      {"label": "Ministry of Finance Japan X", "url": "https://x.com/MOF_Japan", "source_role": "social_or_video_signal", "channel": "sns_x", "source_class": "sns_x"},
+      {"label": "Bank of Japan YouTube", "url": "https://www.youtube.com/user/BOJchannel/", "source_role": "social_or_video_signal", "channel": "youtube", "source_class": "youtube_video"}
     ],
     "YOASOBI / 幾田りら": [
       {"label": "YOASOBI official", "url": "https://www.yoasobi-music.jp/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
       {"label": "Ikuta Lilas official", "url": "https://www.ikuralilas.com/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
       {"label": "Billboard Japan", "url": "https://www.billboard-japan.com/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "specialist_media"},
       {"label": "Natalie Music", "url": "https://natalie.mu/music", "source_role": "independent_media_or_data", "channel": "web", "source_class": "specialist_media"},
+      {"label": "New York Post YOASOBI coverage", "url": "https://nypost.com/2026/04/21/ticket-sales/yoasobi-american-dream-tour-2026-where-to-buy-tickets-best-prices/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
       {"label": "YOASOBI Staff X", "url": "https://x.com/YOASOBI_staff", "source_role": "social_or_video_signal", "channel": "sns_x", "source_class": "sns_x"},
       {"label": "Ikuta Lilas X", "url": "https://x.com/ikutalilas", "source_role": "social_or_video_signal", "channel": "sns_x", "source_class": "sns_x"},
       {"label": "YOASOBI Instagram", "url": "https://www.instagram.com/yoasobi_staff_/", "source_role": "social_or_video_signal", "channel": "instagram", "source_class": "social"},
       {"label": "Ikuta Lilas Instagram", "url": "https://www.instagram.com/lilasikuta/", "source_role": "social_or_video_signal", "channel": "instagram", "source_class": "social"},
-      {"label": "YOASOBI YouTube", "url": "https://www.youtube.com/@Ayase_YOASOBI", "source_role": "social_or_video_signal", "channel": "youtube", "source_class": "youtube_video"}
+      {"label": "YOASOBI YouTube", "url": "https://www.youtube.com/channel/UCvpredjG93ifbCP1Y77JyFA", "source_role": "social_or_video_signal", "channel": "youtube", "source_class": "youtube_video"}
     ],
     "アジア経済": [
       {"label": "Reserve Bank of India", "url": "https://www.rbi.org.in/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
@@ -80,7 +87,10 @@
       {"label": "Vietnam GSO", "url": "https://www.gso.gov.vn/en/homepage/", "source_role": "primary_or_official", "channel": "web", "source_class": "official_dataset"},
       {"label": "China NBS", "url": "https://www.stats.gov.cn/english/", "source_role": "primary_or_official", "channel": "web", "source_class": "official_dataset"},
       {"label": "Reuters Asia markets", "url": "https://www.reuters.com/markets/asia/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
-      {"label": "Nikkei Asia", "url": "https://asia.nikkei.com/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"}
+      {"label": "Nikkei Asia", "url": "https://asia.nikkei.com/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
+      {"label": "Asia Briefing", "url": "https://www.asiabriefing.com/news/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "specialist_media"},
+      {"label": "Reserve Bank of India X", "url": "https://twitter.com/RBI", "source_role": "social_or_video_signal", "channel": "sns_x", "source_class": "sns_x"},
+      {"label": "Reserve Bank of India YouTube", "url": "https://www.youtube.com/channel/UCIfCOl43tunZVNYafeC4RQA", "source_role": "social_or_video_signal", "channel": "youtube", "source_class": "youtube_video"}
     ],
     "北米経済": [
       {"label": "Federal Reserve", "url": "https://www.federalreserve.gov/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
@@ -88,13 +98,16 @@
       {"label": "Bureau of Economic Analysis", "url": "https://www.bea.gov/", "source_role": "primary_or_official", "channel": "web", "source_class": "official_dataset"},
       {"label": "Investment Company Institute", "url": "https://www.ici.org/", "source_role": "primary_or_official", "channel": "web", "source_class": "official_dataset"},
       {"label": "Reuters US markets", "url": "https://www.reuters.com/markets/us/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
-      {"label": "MarketWatch", "url": "https://www.marketwatch.com/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"}
+      {"label": "MarketWatch", "url": "https://www.marketwatch.com/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
+      {"label": "Federal Reserve X", "url": "https://x.com/federalreserve", "source_role": "social_or_video_signal", "channel": "sns_x", "source_class": "sns_x"},
+      {"label": "Federal Reserve YouTube", "url": "https://www.youtube.com/federalreserve", "source_role": "social_or_video_signal", "channel": "youtube", "source_class": "youtube_video"}
     ],
     "宇都宮ブレックス": [
       {"label": "Utsunomiya Brex official", "url": "https://www.utsunomiyabrex.com/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
       {"label": "B.League official", "url": "https://www.bleague.jp/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
       {"label": "Basketball King", "url": "https://basketballking.jp/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "specialist_media"},
       {"label": "Shimotsuke sports", "url": "https://www.shimotsuke.co.jp/list/select/brex", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
+      {"label": "Japan Times basketball", "url": "https://www.japantimes.co.jp/sports/basketball/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
       {"label": "Utsunomiya Brex X", "url": "https://x.com/utsunomiyabrex", "source_role": "social_or_video_signal", "channel": "sns_x", "source_class": "sns_x"},
       {"label": "Utsunomiya Brex Instagram", "url": "https://www.instagram.com/utsunomiyabrex_official/", "source_role": "social_or_video_signal", "channel": "instagram", "source_class": "social"},
       {"label": "Utsunomiya Brex Facebook", "url": "https://www.facebook.com/utsunomiyabrex/", "source_role": "social_or_video_signal", "channel": "facebook", "source_class": "social"},

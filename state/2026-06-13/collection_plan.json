@@ -377,6 +377,13 @@
           "source_class": "major_media"
         },
         {
+          "label": "Business Insider OpenAI and Codex analysis",
+          "url": "https://www.businessinsider.com/openai-merging-codex-into-chatgpt-lock-in-code-2026-6",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "source_class": "major_media"
+        },
+        {
           "label": "The Verge AI",
           "url": "https://www.theverge.com/ai-artificial-intelligence",
           "source_role": "independent_media_or_data",
@@ -2070,6 +2077,13 @@
           "source_class": "major_media"
         },
         {
+          "label": "AP Honda EV strategy",
+          "url": "https://apnews.com/article/honda-ev-investment-us-tariffs-685b44de9fae0f75717be663ae63a6a8",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "source_class": "major_media"
+        },
+        {
           "label": "Response Honda",
           "url": "https://response.jp/special/recent/105/Honda",
           "source_role": "independent_media_or_data",
@@ -2828,6 +2842,13 @@
         "social video interview schedule correction"
       ],
       "source_targets": [
+        {
+          "label": "Guardian Formula One",
+          "url": "https://www.theguardian.com/sport/formulaone",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "source_class": "major_media"
+        },
         {
           "label": "Motorsport.com F1",
           "url": "https://www.motorsport.com/f1/",
@@ -3928,7 +3949,9 @@
             "employment"
           ],
           "required_channels": [
-            "web"
+            "web",
+            "sns_x",
+            "youtube"
           ],
           "event_classes": [
             "financials",
@@ -3952,7 +3975,9 @@
             "employment"
           ],
           "required_channels": [
-            "web"
+            "web",
+            "sns_x",
+            "youtube"
           ],
           "event_classes": [
             "macro_data",
@@ -3976,7 +4001,9 @@
             "employment"
           ],
           "required_channels": [
-            "web"
+            "web",
+            "sns_x",
+            "youtube"
           ],
           "event_classes": [
             "capital_markets",
@@ -4081,7 +4108,9 @@
             "employment"
           ],
           "required_channels": [
-            "web"
+            "web",
+            "sns_x",
+            "youtube"
           ],
           "event_classes": [
             "financials",
@@ -4105,7 +4134,9 @@
             "employment"
           ],
           "required_channels": [
-            "web"
+            "web",
+            "sns_x",
+            "youtube"
           ],
           "event_classes": [
             "macro_data",
@@ -4129,7 +4160,9 @@
             "employment"
           ],
           "required_channels": [
-            "web"
+            "web",
+            "sns_x",
+            "youtube"
           ],
           "event_classes": [
             "capital_markets",
@@ -4170,6 +4203,13 @@
           "source_role": "independent_media_or_data",
           "channel": "web",
           "source_class": "major_media"
+        },
+        {
+          "label": "Trading Economics Japan indicators",
+          "url": "https://tradingeconomics.com/japan/indicators",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "source_class": "specialist_media"
         }
       ],
       "search_queries": [
@@ -4194,6 +4234,296 @@
           "source_target_results_for_every_seed_target",
           "claim_atoms",
           "independent_confirmation_or_data_basis"
+        ],
+        "must_not_publish": [
+          "rumor_without_primary_or_major_confirmation",
+          "search_result_page_as_source",
+          "schedule_only_without_material_change",
+          "old_background_as_fresh_news"
+        ]
+      },
+      "output_schema": "collection_sweep"
+    },
+    {
+      "issue_date": "2026-06-13",
+      "slot_id": "uf4504dd258-social-or-video-signal-sns-x",
+      "category": "日本経済",
+      "section_id": "japan_economy",
+      "watch_topics": [
+        {
+          "watch_topic_id": "prices_wages_boj",
+          "search_terms": [
+            "1500億円",
+            "Kazuo Ueda",
+            "Rapidus",
+            "Ueda",
+            "boj",
+            "budget",
+            "capex",
+            "capital injection",
+            "chip",
+            "consumer",
+            "cpi",
+            "employment"
+          ],
+          "required_channels": [
+            "web",
+            "sns_x",
+            "youtube"
+          ],
+          "event_classes": [
+            "financials",
+            "macro_data"
+          ]
+        },
+        {
+          "watch_topic_id": "employment_consumption",
+          "search_terms": [
+            "1500億円",
+            "Kazuo Ueda",
+            "Rapidus",
+            "Ueda",
+            "boj",
+            "budget",
+            "capex",
+            "capital injection",
+            "chip",
+            "consumer",
+            "cpi",
+            "employment"
+          ],
+          "required_channels": [
+            "web",
+            "sns_x",
+            "youtube"
+          ],
+          "event_classes": [
+            "macro_data",
+            "operations_market"
+          ]
+        },
+        {
+          "watch_topic_id": "investment_policy_markets",
+          "search_terms": [
+            "1500億円",
+            "Kazuo Ueda",
+            "Rapidus",
+            "Ueda",
+            "boj",
+            "budget",
+            "capex",
+            "capital injection",
+            "chip",
+            "consumer",
+            "cpi",
+            "employment"
+          ],
+          "required_channels": [
+            "web",
+            "sns_x",
+            "youtube"
+          ],
+          "event_classes": [
+            "capital_markets",
+            "macro_data"
+          ]
+        }
+      ],
+      "source_role": "social_or_video_signal",
+      "channel": "sns_x",
+      "priority": "high",
+      "reuse_policy": "daily_fetch",
+      "model_route": "small_structured_extractor_then_frontier_reasoning_if_ambiguous",
+      "batch_group": "small-structured-extractor-then-frontier-reasoning-if-ambiguous-high-daily-fetch",
+      "prompt_cache_key": "night-signal-source-observation-small-structured-extractor-then-frontier-reasoning-if-ambiguous-social-or-video-signal-sns-x",
+      "hypotheses": [
+        "日本経済の既知トピック（prices_wages_boj, employment_consumption, investment_policy_markets）に当日または直近3日間の実質更新がある可能性。",
+        "日本経済に既存watch_topic_idだけでは表現できない重要変化がある可能性。",
+        "social_or_video_signal/sns_xで一次根拠、独立確認、反証、または変化なしを判定できる可能性。"
+      ],
+      "discovery_lenses": [
+        "official announcement release decision",
+        "numbers results dates status change",
+        "major media independent verification",
+        "market reaction risk counter evidence",
+        "social video interview schedule correction"
+      ],
+      "source_targets": [
+        {
+          "label": "Ministry of Finance Japan X",
+          "url": "https://x.com/MOF_Japan",
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "source_class": "sns_x"
+        }
+      ],
+      "search_queries": [
+        "日本経済 latest important developments site:x.com official x latest sns_x 2026-06-13",
+        "日本経済 breaking announcement change result data site:x.com official x latest 2026-06-13",
+        "日本経済 capital_markets financials macro_data operations_market site:x.com official x latest latest 2026-06-13",
+        "日本経済 official announcement release decision numbers results dates status change major media independent verification market reaction risk counter evidence social video interview schedule correction 2026-06-13",
+        "日本経済 overlooked update correction contradiction 2026-06-13"
+      ],
+      "acceptance": {
+        "slot_closure_states": [
+          "observed_live",
+          "reused_from_cache",
+          "source_unavailable",
+          "not_applicable"
+        ],
+        "must_record": [
+          "url_or_stable_source_id",
+          "observed_at_jst",
+          "published_date_or_null",
+          "evidence_summary",
+          "source_target_results_for_every_seed_target",
+          "claim_atoms",
+          "social_or_video_post_context"
+        ],
+        "must_not_publish": [
+          "rumor_without_primary_or_major_confirmation",
+          "search_result_page_as_source",
+          "schedule_only_without_material_change",
+          "old_background_as_fresh_news"
+        ]
+      },
+      "output_schema": "collection_sweep"
+    },
+    {
+      "issue_date": "2026-06-13",
+      "slot_id": "uf4504dd258-social-or-video-signal-youtube",
+      "category": "日本経済",
+      "section_id": "japan_economy",
+      "watch_topics": [
+        {
+          "watch_topic_id": "prices_wages_boj",
+          "search_terms": [
+            "1500億円",
+            "Kazuo Ueda",
+            "Rapidus",
+            "Ueda",
+            "boj",
+            "budget",
+            "capex",
+            "capital injection",
+            "chip",
+            "consumer",
+            "cpi",
+            "employment"
+          ],
+          "required_channels": [
+            "web",
+            "sns_x",
+            "youtube"
+          ],
+          "event_classes": [
+            "financials",
+            "macro_data"
+          ]
+        },
+        {
+          "watch_topic_id": "employment_consumption",
+          "search_terms": [
+            "1500億円",
+            "Kazuo Ueda",
+            "Rapidus",
+            "Ueda",
+            "boj",
+            "budget",
+            "capex",
+            "capital injection",
+            "chip",
+            "consumer",
+            "cpi",
+            "employment"
+          ],
+          "required_channels": [
+            "web",
+            "sns_x",
+            "youtube"
+          ],
+          "event_classes": [
+            "macro_data",
+            "operations_market"
+          ]
+        },
+        {
+          "watch_topic_id": "investment_policy_markets",
+          "search_terms": [
+            "1500億円",
+            "Kazuo Ueda",
+            "Rapidus",
+            "Ueda",
+            "boj",
+            "budget",
+            "capex",
+            "capital injection",
+            "chip",
+            "consumer",
+            "cpi",
+            "employment"
+          ],
+          "required_channels": [
+            "web",
+            "sns_x",
+            "youtube"
+          ],
+          "event_classes": [
+            "capital_markets",
+            "macro_data"
+          ]
+        }
+      ],
+      "source_role": "social_or_video_signal",
+      "channel": "youtube",
+      "priority": "high",
+      "reuse_policy": "daily_fetch",
+      "model_route": "small_structured_extractor_then_frontier_reasoning_if_ambiguous",
+      "batch_group": "small-structured-extractor-then-frontier-reasoning-if-ambiguous-high-daily-fetch",
+      "prompt_cache_key": "night-signal-source-observation-small-structured-extractor-then-frontier-reasoning-if-ambiguous-social-or-video-signal-youtube",
+      "hypotheses": [
+        "日本経済の既知トピック（prices_wages_boj, employment_consumption, investment_policy_markets）に当日または直近3日間の実質更新がある可能性。",
+        "日本経済に既存watch_topic_idだけでは表現できない重要変化がある可能性。",
+        "social_or_video_signal/youtubeで一次根拠、独立確認、反証、または変化なしを判定できる可能性。"
+      ],
+      "discovery_lenses": [
+        "official announcement release decision",
+        "numbers results dates status change",
+        "major media independent verification",
+        "market reaction risk counter evidence",
+        "social video interview schedule correction"
+      ],
+      "source_targets": [
+        {
+          "label": "Bank of Japan YouTube",
+          "url": "https://www.youtube.com/user/BOJchannel/",
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "source_class": "youtube_video"
+        }
+      ],
+      "search_queries": [
+        "日本経済 latest important developments site:youtube.com official channel latest video youtube 2026-06-13",
+        "日本経済 breaking announcement change result data site:youtube.com official channel latest video 2026-06-13",
+        "日本経済 capital_markets financials macro_data operations_market site:youtube.com official channel latest video latest 2026-06-13",
+        "日本経済 official announcement release decision numbers results dates status change major media independent verification market reaction risk counter evidence social video interview schedule correction 2026-06-13",
+        "日本経済 overlooked update correction contradiction 2026-06-13"
+      ],
+      "acceptance": {
+        "slot_closure_states": [
+          "observed_live",
+          "reused_from_cache",
+          "source_unavailable",
+          "not_applicable"
+        ],
+        "must_record": [
+          "url_or_stable_source_id",
+          "observed_at_jst",
+          "published_date_or_null",
+          "evidence_summary",
+          "source_target_results_for_every_seed_target",
+          "claim_atoms",
+          "social_or_video_post_context"
         ],
         "must_not_publish": [
           "rumor_without_primary_or_major_confirmation",
@@ -4526,6 +4856,13 @@
           "source_role": "independent_media_or_data",
           "channel": "web",
           "source_class": "specialist_media"
+        },
+        {
+          "label": "New York Post YOASOBI coverage",
+          "url": "https://nypost.com/2026/04/21/ticket-sales/yoasobi-american-dream-tour-2026-where-to-buy-tickets-best-prices/",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "source_class": "major_media"
         }
       ],
       "search_queries": [
@@ -4885,7 +5222,7 @@
       "source_targets": [
         {
           "label": "YOASOBI YouTube",
-          "url": "https://www.youtube.com/@Ayase_YOASOBI",
+          "url": "https://www.youtube.com/channel/UCvpredjG93ifbCP1Y77JyFA",
           "source_role": "social_or_video_signal",
           "channel": "youtube",
           "source_class": "youtube_video"
@@ -4946,7 +5283,9 @@
             "forex"
           ],
           "required_channels": [
-            "web"
+            "web",
+            "sns_x",
+            "youtube"
           ],
           "event_classes": [
             "financials",
@@ -4970,7 +5309,9 @@
             "fdi"
           ],
           "required_channels": [
-            "web"
+            "web",
+            "sns_x",
+            "youtube"
           ],
           "event_classes": [
             "macro_data",
@@ -4994,7 +5335,9 @@
             "forex"
           ],
           "required_channels": [
-            "web"
+            "web",
+            "sns_x",
+            "youtube"
           ],
           "event_classes": [
             "macro_data",
@@ -5018,7 +5361,9 @@
             "forex"
           ],
           "required_channels": [
-            "web"
+            "web",
+            "sns_x",
+            "youtube"
           ],
           "event_classes": [
             "capital_markets",
@@ -5130,7 +5475,9 @@
             "forex"
           ],
           "required_channels": [
-            "web"
+            "web",
+            "sns_x",
+            "youtube"
           ],
           "event_classes": [
             "financials",
@@ -5154,7 +5501,9 @@
             "fdi"
           ],
           "required_channels": [
-            "web"
+            "web",
+            "sns_x",
+            "youtube"
           ],
           "event_classes": [
             "macro_data",
@@ -5178,7 +5527,9 @@
             "forex"
           ],
           "required_channels": [
-            "web"
+            "web",
+            "sns_x",
+            "youtube"
           ],
           "event_classes": [
             "macro_data",
@@ -5202,7 +5553,9 @@
             "forex"
           ],
           "required_channels": [
-            "web"
+            "web",
+            "sns_x",
+            "youtube"
           ],
           "event_classes": [
             "capital_markets",
@@ -5243,6 +5596,13 @@
           "source_role": "independent_media_or_data",
           "channel": "web",
           "source_class": "major_media"
+        },
+        {
+          "label": "Asia Briefing",
+          "url": "https://www.asiabriefing.com/news/",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "source_class": "specialist_media"
         }
       ],
       "search_queries": [
@@ -5279,6 +5639,348 @@
     },
     {
       "issue_date": "2026-06-13",
+      "slot_id": "u23357178c4-social-or-video-signal-sns-x",
+      "category": "アジア経済",
+      "section_id": "asia",
+      "watch_topics": [
+        {
+          "watch_topic_id": "india_macro_policy",
+          "search_terms": [
+            "7.7",
+            "Amazon",
+            "EC",
+            "Vietnam export hub",
+            "china",
+            "cpi",
+            "currency",
+            "e-commerce",
+            "export hub",
+            "exports",
+            "fdi",
+            "forex"
+          ],
+          "required_channels": [
+            "web",
+            "sns_x",
+            "youtube"
+          ],
+          "event_classes": [
+            "financials",
+            "macro_data"
+          ]
+        },
+        {
+          "watch_topic_id": "vietnam_macro_investment",
+          "search_terms": [
+            "7.7",
+            "Amazon",
+            "EC",
+            "Vietnam export hub",
+            "china",
+            "cpi",
+            "cross-border",
+            "currency",
+            "e-commerce",
+            "export hub",
+            "exports",
+            "fdi"
+          ],
+          "required_channels": [
+            "web",
+            "sns_x",
+            "youtube"
+          ],
+          "event_classes": [
+            "macro_data",
+            "operations_market"
+          ]
+        },
+        {
+          "watch_topic_id": "china_macro_policy",
+          "search_terms": [
+            "7.7",
+            "Amazon",
+            "EC",
+            "Vietnam export hub",
+            "china",
+            "cpi",
+            "currency",
+            "e-commerce",
+            "export hub",
+            "exports",
+            "fdi",
+            "forex"
+          ],
+          "required_channels": [
+            "web",
+            "sns_x",
+            "youtube"
+          ],
+          "event_classes": [
+            "macro_data",
+            "operations_market"
+          ]
+        },
+        {
+          "watch_topic_id": "india_vietnam_markets_supply_chain",
+          "search_terms": [
+            "7.7",
+            "Amazon",
+            "EC",
+            "Vietnam export hub",
+            "china",
+            "cpi",
+            "currency",
+            "e-commerce",
+            "export hub",
+            "exports",
+            "fdi",
+            "forex"
+          ],
+          "required_channels": [
+            "web",
+            "sns_x",
+            "youtube"
+          ],
+          "event_classes": [
+            "capital_markets",
+            "macro_data"
+          ]
+        }
+      ],
+      "source_role": "social_or_video_signal",
+      "channel": "sns_x",
+      "priority": "normal",
+      "reuse_policy": "daily_fetch",
+      "model_route": "small_structured_extractor",
+      "batch_group": "small-structured-extractor-normal-daily-fetch",
+      "prompt_cache_key": "night-signal-source-observation-small-structured-extractor-social-or-video-signal-sns-x",
+      "hypotheses": [
+        "アジア経済の既知トピック（india_macro_policy, vietnam_macro_investment, china_macro_policy, india_vietnam_markets_supply_chain）に当日または直近3日間の実質更新がある可能性。",
+        "アジア経済に既存watch_topic_idだけでは表現できない重要変化がある可能性。",
+        "social_or_video_signal/sns_xで一次根拠、独立確認、反証、または変化なしを判定できる可能性。"
+      ],
+      "discovery_lenses": [
+        "official announcement release decision",
+        "numbers results dates status change",
+        "major media independent verification",
+        "market reaction risk counter evidence",
+        "social video interview schedule correction"
+      ],
+      "source_targets": [
+        {
+          "label": "Reserve Bank of India X",
+          "url": "https://twitter.com/RBI",
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "source_class": "sns_x"
+        }
+      ],
+      "search_queries": [
+        "アジア経済 latest important developments site:x.com official x latest sns_x 2026-06-13",
+        "アジア経済 breaking announcement change result data site:x.com official x latest 2026-06-13",
+        "アジア経済 capital_markets financials macro_data operations_market site:x.com official x latest latest 2026-06-13",
+        "アジア経済 official announcement release decision numbers results dates status change major media independent verification market reaction risk counter evidence social video interview schedule correction 2026-06-13",
+        "アジア経済 overlooked update correction contradiction 2026-06-13"
+      ],
+      "acceptance": {
+        "slot_closure_states": [
+          "observed_live",
+          "reused_from_cache",
+          "source_unavailable",
+          "not_applicable"
+        ],
+        "must_record": [
+          "url_or_stable_source_id",
+          "observed_at_jst",
+          "published_date_or_null",
+          "evidence_summary",
+          "source_target_results_for_every_seed_target",
+          "claim_atoms",
+          "social_or_video_post_context"
+        ],
+        "must_not_publish": [
+          "rumor_without_primary_or_major_confirmation",
+          "search_result_page_as_source",
+          "schedule_only_without_material_change",
+          "old_background_as_fresh_news"
+        ]
+      },
+      "output_schema": "collection_sweep"
+    },
+    {
+      "issue_date": "2026-06-13",
+      "slot_id": "u23357178c4-social-or-video-signal-youtube",
+      "category": "アジア経済",
+      "section_id": "asia",
+      "watch_topics": [
+        {
+          "watch_topic_id": "india_macro_policy",
+          "search_terms": [
+            "7.7",
+            "Amazon",
+            "EC",
+            "Vietnam export hub",
+            "china",
+            "cpi",
+            "currency",
+            "e-commerce",
+            "export hub",
+            "exports",
+            "fdi",
+            "forex"
+          ],
+          "required_channels": [
+            "web",
+            "sns_x",
+            "youtube"
+          ],
+          "event_classes": [
+            "financials",
+            "macro_data"
+          ]
+        },
+        {
+          "watch_topic_id": "vietnam_macro_investment",
+          "search_terms": [
+            "7.7",
+            "Amazon",
+            "EC",
+            "Vietnam export hub",
+            "china",
+            "cpi",
+            "cross-border",
+            "currency",
+            "e-commerce",
+            "export hub",
+            "exports",
+            "fdi"
+          ],
+          "required_channels": [
+            "web",
+            "sns_x",
+            "youtube"
+          ],
+          "event_classes": [
+            "macro_data",
+            "operations_market"
+          ]
+        },
+        {
+          "watch_topic_id": "china_macro_policy",
+          "search_terms": [
+            "7.7",
+            "Amazon",
+            "EC",
+            "Vietnam export hub",
+            "china",
+            "cpi",
+            "currency",
+            "e-commerce",
+            "export hub",
+            "exports",
+            "fdi",
+            "forex"
+          ],
+          "required_channels": [
+            "web",
+            "sns_x",
+            "youtube"
+          ],
+          "event_classes": [
+            "macro_data",
+            "operations_market"
+          ]
+        },
+        {
+          "watch_topic_id": "india_vietnam_markets_supply_chain",
+          "search_terms": [
+            "7.7",
+            "Amazon",
+            "EC",
+            "Vietnam export hub",
+            "china",
+            "cpi",
+            "currency",
+            "e-commerce",
+            "export hub",
+            "exports",
+            "fdi",
+            "forex"
+          ],
+          "required_channels": [
+            "web",
+            "sns_x",
+            "youtube"
+          ],
+          "event_classes": [
+            "capital_markets",
+            "macro_data"
+          ]
+        }
+      ],
+      "source_role": "social_or_video_signal",
+      "channel": "youtube",
+      "priority": "normal",
+      "reuse_policy": "reuse_24h_unless_primary_changed",
+      "model_route": "small_structured_extractor",
+      "batch_group": "small-structured-extractor-normal-reuse-24h-unless-primary-changed",
+      "prompt_cache_key": "night-signal-source-observation-small-structured-extractor-social-or-video-signal-youtube",
+      "hypotheses": [
+        "アジア経済の既知トピック（india_macro_policy, vietnam_macro_investment, china_macro_policy, india_vietnam_markets_supply_chain）に当日または直近3日間の実質更新がある可能性。",
+        "アジア経済に既存watch_topic_idだけでは表現できない重要変化がある可能性。",
+        "social_or_video_signal/youtubeで一次根拠、独立確認、反証、または変化なしを判定できる可能性。"
+      ],
+      "discovery_lenses": [
+        "official announcement release decision",
+        "numbers results dates status change",
+        "major media independent verification",
+        "market reaction risk counter evidence",
+        "social video interview schedule correction"
+      ],
+      "source_targets": [
+        {
+          "label": "Reserve Bank of India YouTube",
+          "url": "https://www.youtube.com/channel/UCIfCOl43tunZVNYafeC4RQA",
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "source_class": "youtube_video"
+        }
+      ],
+      "search_queries": [
+        "アジア経済 latest important developments site:youtube.com official channel latest video youtube 2026-06-13",
+        "アジア経済 breaking announcement change result data site:youtube.com official channel latest video 2026-06-13",
+        "アジア経済 capital_markets financials macro_data operations_market site:youtube.com official channel latest video latest 2026-06-13",
+        "アジア経済 official announcement release decision numbers results dates status change major media independent verification market reaction risk counter evidence social video interview schedule correction 2026-06-13",
+        "アジア経済 overlooked update correction contradiction 2026-06-13"
+      ],
+      "acceptance": {
+        "slot_closure_states": [
+          "observed_live",
+          "reused_from_cache",
+          "source_unavailable",
+          "not_applicable"
+        ],
+        "must_record": [
+          "url_or_stable_source_id",
+          "observed_at_jst",
+          "published_date_or_null",
+          "evidence_summary",
+          "source_target_results_for_every_seed_target",
+          "claim_atoms",
+          "social_or_video_post_context"
+        ],
+        "must_not_publish": [
+          "rumor_without_primary_or_major_confirmation",
+          "search_result_page_as_source",
+          "schedule_only_without_material_change",
+          "old_background_as_fresh_news"
+        ]
+      },
+      "output_schema": "collection_sweep"
+    },
+    {
+      "issue_date": "2026-06-13",
       "slot_id": "u0216a1f9dc-primary-or-official-web",
       "category": "北米経済",
       "section_id": "north_america",
@@ -5300,7 +6002,9 @@
             "energy"
           ],
           "required_channels": [
-            "web"
+            "web",
+            "sns_x",
+            "youtube"
           ],
           "event_classes": [
             "financials",
@@ -5324,7 +6028,9 @@
             "energy"
           ],
           "required_channels": [
-            "web"
+            "web",
+            "sns_x",
+            "youtube"
           ],
           "event_classes": [
             "fund_flows",
@@ -5348,7 +6054,9 @@
             "energy"
           ],
           "required_channels": [
-            "web"
+            "web",
+            "sns_x",
+            "youtube"
           ],
           "event_classes": [
             "capital_markets",
@@ -5460,7 +6168,9 @@
             "energy"
           ],
           "required_channels": [
-            "web"
+            "web",
+            "sns_x",
+            "youtube"
           ],
           "event_classes": [
             "financials",
@@ -5484,7 +6194,9 @@
             "energy"
           ],
           "required_channels": [
-            "web"
+            "web",
+            "sns_x",
+            "youtube"
           ],
           "event_classes": [
             "fund_flows",
@@ -5508,7 +6220,9 @@
             "energy"
           ],
           "required_channels": [
-            "web"
+            "web",
+            "sns_x",
+            "youtube"
           ],
           "event_classes": [
             "capital_markets",
@@ -5573,6 +6287,296 @@
           "source_target_results_for_every_seed_target",
           "claim_atoms",
           "independent_confirmation_or_data_basis"
+        ],
+        "must_not_publish": [
+          "rumor_without_primary_or_major_confirmation",
+          "search_result_page_as_source",
+          "schedule_only_without_material_change",
+          "old_background_as_fresh_news"
+        ]
+      },
+      "output_schema": "collection_sweep"
+    },
+    {
+      "issue_date": "2026-06-13",
+      "slot_id": "u0216a1f9dc-social-or-video-signal-sns-x",
+      "category": "北米経済",
+      "section_id": "north_america",
+      "watch_topics": [
+        {
+          "watch_topic_id": "us_prices_jobs_fed",
+          "search_terms": [
+            "Hezbollah",
+            "Iran",
+            "Middle East",
+            "Trump",
+            "america",
+            "canada",
+            "capex",
+            "ceasefire",
+            "cpi",
+            "dow",
+            "employment",
+            "energy"
+          ],
+          "required_channels": [
+            "web",
+            "sns_x",
+            "youtube"
+          ],
+          "event_classes": [
+            "financials",
+            "macro_data"
+          ]
+        },
+        {
+          "watch_topic_id": "us_markets_fund_flows_rates",
+          "search_terms": [
+            "Hezbollah",
+            "Iran",
+            "Middle East",
+            "Trump",
+            "america",
+            "canada",
+            "capex",
+            "ceasefire",
+            "cpi",
+            "dow",
+            "employment",
+            "energy"
+          ],
+          "required_channels": [
+            "web",
+            "sns_x",
+            "youtube"
+          ],
+          "event_classes": [
+            "fund_flows",
+            "market_reaction"
+          ]
+        },
+        {
+          "watch_topic_id": "north_america_investment_policy",
+          "search_terms": [
+            "Hezbollah",
+            "Iran",
+            "Middle East",
+            "Trump",
+            "america",
+            "canada",
+            "capex",
+            "ceasefire",
+            "cpi",
+            "dow",
+            "employment",
+            "energy"
+          ],
+          "required_channels": [
+            "web",
+            "sns_x",
+            "youtube"
+          ],
+          "event_classes": [
+            "capital_markets",
+            "macro_data"
+          ]
+        }
+      ],
+      "source_role": "social_or_video_signal",
+      "channel": "sns_x",
+      "priority": "high",
+      "reuse_policy": "daily_fetch",
+      "model_route": "small_structured_extractor_then_frontier_reasoning_if_ambiguous",
+      "batch_group": "small-structured-extractor-then-frontier-reasoning-if-ambiguous-high-daily-fetch",
+      "prompt_cache_key": "night-signal-source-observation-small-structured-extractor-then-frontier-reasoning-if-ambiguous-social-or-video-signal-sns-x",
+      "hypotheses": [
+        "北米経済の既知トピック（us_prices_jobs_fed, us_markets_fund_flows_rates, north_america_investment_policy）に当日または直近3日間の実質更新がある可能性。",
+        "北米経済に既存watch_topic_idだけでは表現できない重要変化がある可能性。",
+        "social_or_video_signal/sns_xで一次根拠、独立確認、反証、または変化なしを判定できる可能性。"
+      ],
+      "discovery_lenses": [
+        "official announcement release decision",
+        "numbers results dates status change",
+        "major media independent verification",
+        "market reaction risk counter evidence",
+        "social video interview schedule correction"
+      ],
+      "source_targets": [
+        {
+          "label": "Federal Reserve X",
+          "url": "https://x.com/federalreserve",
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "source_class": "sns_x"
+        }
+      ],
+      "search_queries": [
+        "北米経済 latest important developments site:x.com official x latest sns_x 2026-06-13",
+        "北米経済 breaking announcement change result data site:x.com official x latest 2026-06-13",
+        "北米経済 capital_markets financials fund_flows macro_data market_reaction site:x.com official x latest latest 2026-06-13",
+        "北米経済 official announcement release decision numbers results dates status change major media independent verification market reaction risk counter evidence social video interview schedule correction 2026-06-13",
+        "北米経済 overlooked update correction contradiction 2026-06-13"
+      ],
+      "acceptance": {
+        "slot_closure_states": [
+          "observed_live",
+          "reused_from_cache",
+          "source_unavailable",
+          "not_applicable"
+        ],
+        "must_record": [
+          "url_or_stable_source_id",
+          "observed_at_jst",
+          "published_date_or_null",
+          "evidence_summary",
+          "source_target_results_for_every_seed_target",
+          "claim_atoms",
+          "social_or_video_post_context"
+        ],
+        "must_not_publish": [
+          "rumor_without_primary_or_major_confirmation",
+          "search_result_page_as_source",
+          "schedule_only_without_material_change",
+          "old_background_as_fresh_news"
+        ]
+      },
+      "output_schema": "collection_sweep"
+    },
+    {
+      "issue_date": "2026-06-13",
+      "slot_id": "u0216a1f9dc-social-or-video-signal-youtube",
+      "category": "北米経済",
+      "section_id": "north_america",
+      "watch_topics": [
+        {
+          "watch_topic_id": "us_prices_jobs_fed",
+          "search_terms": [
+            "Hezbollah",
+            "Iran",
+            "Middle East",
+            "Trump",
+            "america",
+            "canada",
+            "capex",
+            "ceasefire",
+            "cpi",
+            "dow",
+            "employment",
+            "energy"
+          ],
+          "required_channels": [
+            "web",
+            "sns_x",
+            "youtube"
+          ],
+          "event_classes": [
+            "financials",
+            "macro_data"
+          ]
+        },
+        {
+          "watch_topic_id": "us_markets_fund_flows_rates",
+          "search_terms": [
+            "Hezbollah",
+            "Iran",
+            "Middle East",
+            "Trump",
+            "america",
+            "canada",
+            "capex",
+            "ceasefire",
+            "cpi",
+            "dow",
+            "employment",
+            "energy"
+          ],
+          "required_channels": [
+            "web",
+            "sns_x",
+            "youtube"
+          ],
+          "event_classes": [
+            "fund_flows",
+            "market_reaction"
+          ]
+        },
+        {
+          "watch_topic_id": "north_america_investment_policy",
+          "search_terms": [
+            "Hezbollah",
+            "Iran",
+            "Middle East",
+            "Trump",
+            "america",
+            "canada",
+            "capex",
+            "ceasefire",
+            "cpi",
+            "dow",
+            "employment",
+            "energy"
+          ],
+          "required_channels": [
+            "web",
+            "sns_x",
+            "youtube"
+          ],
+          "event_classes": [
+            "capital_markets",
+            "macro_data"
+          ]
+        }
+      ],
+      "source_role": "social_or_video_signal",
+      "channel": "youtube",
+      "priority": "high",
+      "reuse_policy": "daily_fetch",
+      "model_route": "small_structured_extractor_then_frontier_reasoning_if_ambiguous",
+      "batch_group": "small-structured-extractor-then-frontier-reasoning-if-ambiguous-high-daily-fetch",
+      "prompt_cache_key": "night-signal-source-observation-small-structured-extractor-then-frontier-reasoning-if-ambiguous-social-or-video-signal-youtube",
+      "hypotheses": [
+        "北米経済の既知トピック（us_prices_jobs_fed, us_markets_fund_flows_rates, north_america_investment_policy）に当日または直近3日間の実質更新がある可能性。",
+        "北米経済に既存watch_topic_idだけでは表現できない重要変化がある可能性。",
+        "social_or_video_signal/youtubeで一次根拠、独立確認、反証、または変化なしを判定できる可能性。"
+      ],
+      "discovery_lenses": [
+        "official announcement release decision",
+        "numbers results dates status change",
+        "major media independent verification",
+        "market reaction risk counter evidence",
+        "social video interview schedule correction"
+      ],
+      "source_targets": [
+        {
+          "label": "Federal Reserve YouTube",
+          "url": "https://www.youtube.com/federalreserve",
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "source_class": "youtube_video"
+        }
+      ],
+      "search_queries": [
+        "北米経済 latest important developments site:youtube.com official channel latest video youtube 2026-06-13",
+        "北米経済 breaking announcement change result data site:youtube.com official channel latest video 2026-06-13",
+        "北米経済 capital_markets financials fund_flows macro_data market_reaction site:youtube.com official channel latest video latest 2026-06-13",
+        "北米経済 official announcement release decision numbers results dates status change major media independent verification market reaction risk counter evidence social video interview schedule correction 2026-06-13",
+        "北米経済 overlooked update correction contradiction 2026-06-13"
+      ],
+      "acceptance": {
+        "slot_closure_states": [
+          "observed_live",
+          "reused_from_cache",
+          "source_unavailable",
+          "not_applicable"
+        ],
+        "must_record": [
+          "url_or_stable_source_id",
+          "observed_at_jst",
+          "published_date_or_null",
+          "evidence_summary",
+          "source_target_results_for_every_seed_target",
+          "claim_atoms",
+          "social_or_video_post_context"
         ],
         "must_not_publish": [
           "rumor_without_primary_or_major_confirmation",
@@ -5850,6 +6854,13 @@
         {
           "label": "Shimotsuke sports",
           "url": "https://www.shimotsuke.co.jp/list/select/brex",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "source_class": "major_media"
+        },
+        {
+          "label": "Japan Times basketball",
+          "url": "https://www.japantimes.co.jp/sports/basketball/",
           "source_role": "independent_media_or_data",
           "channel": "web",
           "source_class": "major_media"

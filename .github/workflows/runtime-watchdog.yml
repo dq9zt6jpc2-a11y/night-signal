@@ -1,0 +1,31 @@
+name: NIGHT SIGNAL Runtime Watchdog
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "50 09 * * *"
+    - cron: "40 10 * * *"
+    - cron: "55 10 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  verify-remote-readiness:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect missing independent collection path
+        run: |
+          ISSUE_DATE="$(TZ=Asia/Tokyo date +%F)"
+          python3 scripts/night_signal_runtime_audit.py "$ISSUE_DATE" \
+            --write-status \
+            --fail-on-blocker
+
+      - name: Verify committed issue when available
+        if: success()
+        run: |
+          ISSUE_DATE="$(TZ=Asia/Tokyo date +%F)"
+          python3 scripts/night_signal_publish.py "$ISSUE_DATE" --deploy-existing

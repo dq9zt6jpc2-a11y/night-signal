@@ -178,6 +178,23 @@ def card_titles_by_section(root_html: str, section_id: str) -> list[str]:
     return titles
 
 
+def signal_titles_by_section(root_html: str, section_id: str) -> list[str]:
+    body = section_before_history(root_html)
+    match = re.search(
+        rf'<section class="section" id="{re.escape(section_id)}">(.*?)(?=<section class="section" id=|\Z)',
+        body,
+        flags=re.S,
+    )
+    if not match:
+        fail(f"root page missing section for signal alignment: {section_id}")
+    titles = []
+    for item in re.findall(r'<li class="signal-item">(.*?)</li>', match.group(1), flags=re.S):
+        h3 = re.search(r"<h3>(.*?)</h3>", item, flags=re.S)
+        if h3:
+            titles.append(visible_text(h3.group(1)))
+    return titles
+
+
 def normalize_url_host(url: str) -> str | None:
     parsed = urlparse(url)
     if parsed.scheme not in {"http", "https"} or not parsed.netloc:
@@ -320,6 +337,9 @@ def validate_state_backed_coverage(issue_date: str, root_html: str, manifest: di
             fail(f"{label} published_card_titles do not match page cards")
         if state_titles_by_section.get(section_id, []) != expected_titles:
             fail(f"{label} state cards do not match page cards")
+        expected_signal_titles = signal_titles_by_section(root_html, section_id)
+        if entry.get("public_signal_titles") != expected_signal_titles:
+            fail(f"{label} public_signal_titles do not match page confirmation signals")
         category_candidates = [
             candidate
             for candidate in state_candidates
@@ -344,11 +364,39 @@ def validate_state_backed_coverage(issue_date: str, root_html: str, manifest: di
             for candidate in concrete
             if isinstance(candidate.get("watch_topic_id"), str)
         }
-        missing_topic_ids = sorted(required_topic_ids - concrete_topic_ids)
+        topic_checks = entry.get("no_change_checks")
+        if not isinstance(topic_checks, list):
+            fail(f"{label} state-backed coverage missing no_change_checks")
+        checked_topic_ids: set[str] = set()
+        checked_urls: set[str] = set()
+        for index, check in enumerate(topic_checks, start=1):
+            if not isinstance(check, dict):
+                fail(f"{label} no_change_checks[{index}] must be an object")
+            topic_id = check.get("topic_id")
+            result = check.get("result")
+            evidence_urls = check.get("evidence_urls")
+            if topic_id not in required_topic_ids:
+                fail(f"{label} no_change_checks[{index}] uses unknown topic: {topic_id}")
+            if not isinstance(result, str) or len(re.sub(r"\s+", "", result)) < 20:
+                fail(f"{label} no_change_checks[{index}] result is too weak")
+            if not isinstance(evidence_urls, list) or not evidence_urls:
+                fail(f"{label} no_change_checks[{index}] needs evidence URLs")
+            normalized = {
+                normalize_url(url)
+                for url in evidence_urls
+                if isinstance(url, str) and normalize_url_host(url)
+            }
+            if not normalized:
+                fail(f"{label} no_change_checks[{index}] lacks direct URL evidence")
+            checked_topic_ids.add(str(topic_id))
+            checked_urls.update(normalized)
+        missing_topic_ids = sorted(
+            required_topic_ids - concrete_topic_ids - checked_topic_ids
+        )
         if missing_topic_ids:
             fail(
-                f"{label} state-backed coverage needs a concrete item or near-miss "
-                "candidate for every watch topic: " + ", ".join(missing_topic_ids)
+                f"{label} state-backed coverage needs a candidate or verified "
+                "topic check for every watch topic: " + ", ".join(missing_topic_ids)
             )
         concrete_urls = {
             normalize_url(url)
@@ -356,7 +404,7 @@ def validate_state_backed_coverage(issue_date: str, root_html: str, manifest: di
             for url in candidate.get("source_urls", [])
             if isinstance(url, str) and normalize_url_host(url)
         }
-        if len(concrete_urls) < min(2, len(required_topic_ids)):
+        if len(concrete_urls | checked_urls) < min(2, len(required_topic_ids)):
             fail(f"{label} state-backed coverage lacks concrete source diversity")
 
 

@@ -30,6 +30,7 @@ CONFIG_PATH = ROOT / "config" / "night_signal_coverage.json"
 SOURCES_PATH = ROOT / "config" / "night_signal_sources.json"
 MARKER_PATH = ROOT / ".night-signal-issue-date"
 DEFAULT_STATE_ROOT = ROOT / "state"
+LIVE_EVIDENCE_CONTRACT_DATE = "2026-06-13"
 
 STATE_NAMES = [
     "frontier_built",
@@ -137,7 +138,16 @@ SOURCE_OBSERVATION_SCHEMA: dict[str, Any] = {
             "items": {
                 "type": "object",
                 "additionalProperties": False,
-                "required": ["label", "url", "channel", "slot_state", "published_date", "evidence_summary"],
+                "required": [
+                    "label",
+                    "url",
+                    "channel",
+                    "slot_state",
+                    "published_date",
+                    "evidence_summary",
+                    "checked_at_jst",
+                    "verification_method",
+                ],
                 "properties": {
                     "label": {"type": "string"},
                     "url": {"type": "string"},
@@ -145,6 +155,17 @@ SOURCE_OBSERVATION_SCHEMA: dict[str, Any] = {
                     "slot_state": {"type": "string", "enum": ["observed_live", "reused_from_cache", "source_unavailable", "not_applicable"]},
                     "published_date": {"type": ["string", "null"]},
                     "evidence_summary": {"type": "string"},
+                    "checked_at_jst": {"type": "string"},
+                    "verification_method": {
+                        "type": "string",
+                        "enum": [
+                            "responses_web_search",
+                            "reviewed_live_web",
+                            "direct_fetch",
+                            "cached_result",
+                            "unavailable",
+                        ],
+                    },
                 },
             },
         },
@@ -683,6 +704,21 @@ def effective_on_or_after(contract: dict[str, Any], key: str, issue_date: str) -
     return issue_dt >= effective_dt
 
 
+def expected_contract_version(contract: dict[str, Any], issue_date: str) -> str | None:
+    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
+    for legacy in contract.get("legacy_contract_versions", []):
+        if not isinstance(legacy, dict):
+            continue
+        try:
+            through = datetime.strptime(str(legacy.get("through_date")), "%Y-%m-%d").date()
+        except ValueError:
+            continue
+        if issue_dt <= through:
+            return str(legacy.get("version"))
+    value = contract.get("contract_version")
+    return str(value) if value is not None else None
+
+
 def public_copy_violations(text: str, *, kind: str) -> list[str]:
     stripped = text.strip()
     compact = compact_text(stripped)
@@ -887,6 +923,103 @@ def render_priority_card(index: int, card: dict[str, Any]) -> str:
     return f"""        <article class="priority-card {priority_class}"><span class="rank">{index}</span><h3>{title}</h3><p>{summary}</p><a class="tag" href="#{section_id}">詳細へ</a></article>"""
 
 
+def latest_three_dates(issue_date: str) -> set[str]:
+    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
+    return {
+        issue_dt.isoformat(),
+        issue_dt.fromordinal(issue_dt.toordinal() - 1).isoformat(),
+        issue_dt.fromordinal(issue_dt.toordinal() - 2).isoformat(),
+    }
+
+
+def observed_evidence_urls(observations: list[dict[str, Any]]) -> set[str]:
+    urls: set[str] = set()
+    for observation in observations:
+        if observation.get("slot_state") in {"observed_live", "reused_from_cache"}:
+            url = observation.get("url")
+            if isinstance(url, str) and url.startswith(("http://", "https://")):
+                urls.add(url)
+        for result in observation.get("source_target_results", []):
+            if not isinstance(result, dict):
+                continue
+            url = result.get("url")
+            if (
+                result.get("slot_state") in {"observed_live", "reused_from_cache"}
+                and isinstance(url, str)
+                and url.startswith(("http://", "https://"))
+            ):
+                urls.add(url)
+        for finding in observation.get("discovery_findings", []):
+            if not isinstance(finding, dict):
+                continue
+            url = finding.get("source_url")
+            if isinstance(url, str) and url.startswith(("http://", "https://")):
+                urls.add(url)
+    return urls
+
+
+def public_signals(issue: dict[str, Any]) -> list[dict[str, str]]:
+    issue_date = require_str(issue, "issue_date")
+    if issue_date < LIVE_EVIDENCE_CONTRACT_DATE:
+        return []
+    allowed_dates = latest_three_dates(issue_date)
+    decisions = {
+        str(decision.get("candidate_title")): decision
+        for decision in issue.get("decisions", [])
+        if isinstance(decision, dict)
+    }
+    evidence_urls = observed_evidence_urls(
+        [item for item in issue.get("observations", []) if isinstance(item, dict)]
+    )
+    signals: list[dict[str, str]] = []
+    seen: set[tuple[str, str]] = set()
+    for candidate in issue.get("candidates", []):
+        if not isinstance(candidate, dict):
+            continue
+        title = str(candidate.get("title", "")).strip()
+        decision = decisions.get(title, {})
+        if decision.get("adoption_decision") == "adopt":
+            continue
+        if candidate.get("source_published_date") not in allowed_dates:
+            continue
+        if candidate.get("change_class") == "background_only":
+            continue
+        if re.search(r"(大きな更新なし|no fresh|no_new_update)", title, re.I):
+            continue
+        source_urls = [
+            str(url)
+            for url in candidate.get("source_urls", [])
+            if isinstance(url, str) and url in evidence_urls
+        ]
+        if not source_urls:
+            continue
+        key = (str(candidate.get("category")), title)
+        if key in seen:
+            continue
+        seen.add(key)
+        signals.append(
+            {
+                "category": str(candidate.get("category")),
+                "watch_topic_id": str(candidate.get("watch_topic_id")),
+                "title": title,
+                "summary": str(candidate.get("summary", "")).strip(),
+                "source_published_date": str(candidate.get("source_published_date")),
+                "source_url": source_urls[0],
+                "decision": str(decision.get("reject_reason_class") or "not_adopted"),
+            }
+        )
+    return signals
+
+
+def render_signal(signal: dict[str, str]) -> str:
+    return f"""        <li class="signal-item">
+          <div class="signal-meta"><span>{html.escape(signal["source_published_date"])}</span><span>{html.escape(signal["watch_topic_id"])}</span></div>
+          <h3>{html.escape(signal["title"])}</h3>
+          <p>{html.escape(signal["summary"])}</p>
+          <a class="link" href="{html.escape(signal["source_url"], quote=True)}" rel="noopener noreferrer">参照元</a>
+        </li>"""
+
+
 def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, root: bool = False) -> str:
     issue_date = require_str(issue, "issue_date")
     display_date = issue_date.replace("-", ".")
@@ -912,16 +1045,30 @@ def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, roo
     nav_links.append(f'<a href="details/extraction-log-{html.escape(issue_date, quote=True)}.html">抽出ログ</a>')
 
     priority = "\n".join(render_priority_card(index, card) for index, card in enumerate(cards[:4], start=1))
+    signals = public_signals(issue)
     sections = []
     for section_id, label in section_labels.items():
         section_cards = [card for card in cards if card["section_id"] == section_id]
+        section_signals = [signal for signal in signals if signal["category"] == label]
         rendered_cards = "\n".join(render_card({**card, "issue_date": issue_date}, root=root) for card in section_cards)
+        rendered_signals = "\n".join(render_signal(signal) for signal in section_signals)
+        signal_block = (
+            f"""      <div class="verified-signals">
+        <h3>確認情報</h3>
+        <ul class="signal-list">
+{rendered_signals}
+        </ul>
+      </div>"""
+            if section_signals
+            else """      <div class="verified-signals empty"><p>直近3日で追加表示する確認情報はありません。</p></div>"""
+        )
         sections.append(
             f"""    <section class="section" id="{html.escape(section_id, quote=True)}">
-      <div class="section-head"><h2>{html.escape(label)}</h2><p>{len(section_cards)} updates</p></div>
+      <div class="section-head"><h2>{html.escape(label)}</h2><p>重要更新 {len(section_cards)}件 / 確認情報 {len(section_signals)}件</p></div>
       <div class="cards">
 {rendered_cards}
       </div>
+{signal_block}
     </section>"""
         )
 
@@ -949,7 +1096,11 @@ def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, roo
     .priority-card.hot, .card.hot {{ border-top-color:var(--red); }} .priority-card.signal, .card.signal {{ border-top-color:var(--teal); }} .priority-card.macro, .card.macro {{ border-top-color:var(--amber); }}
     .rank {{ display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; margin-bottom:10px; border-radius:6px; background:var(--night); color:white; font-size:12px; font-weight:900; }}
     h3 {{ margin:0 0 8px; font-size:18px; line-height:1.32; }} p {{ margin:0 0 12px; }} .meta {{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; color:var(--muted); }}
+    .verified-signals {{ margin-top:12px; padding:16px 18px; background:#f8fafc; border:1px solid var(--line); border-radius:10px; }} .verified-signals > h3 {{ font-size:15px; }}
+    .signal-list {{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 22px; }} .signal-item {{ padding:13px 0; border-top:1px solid var(--line); }}
+    .signal-item h3 {{ font-size:15px; }} .signal-item p {{ color:#334155; font-size:13px; }} .signal-meta {{ display:flex; gap:8px; color:var(--muted); font-size:11px; font-weight:800; }}
     @media (max-width:860px) {{ .priority, .cards {{ grid-template-columns:1fr; }} .bar {{ align-items:flex-start; flex-direction:column; }} }}
+    @media (max-width:860px) {{ .signal-list {{ grid-template-columns:1fr; }} }}
   </style>
 </head>
 <body>
@@ -1002,8 +1153,13 @@ def render_extraction_log(issue: dict[str, Any]) -> str:
 
 
 def validate_frontier(issue: dict[str, Any]) -> list[dict[str, Any]]:
-    expected = build_frontier(read_json(CONFIG_PATH))
     frontier = require_list(issue, "frontier")
+    issue_date = require_str(issue, "issue_date")
+    if issue_date < LIVE_EVIDENCE_CONTRACT_DATE:
+        if not frontier or any(not isinstance(item, dict) for item in frontier):
+            fail("legacy issue frontier must contain objects")
+        return frontier
+    expected = build_frontier(read_json(CONFIG_PATH))
     if len(frontier) != len(expected):
         fail(f"frontier count mismatch in issue state: {len(frontier)} != {len(expected)}")
     expected_keys = {(item["category"], item["watch_topic_id"]) for item in expected}
@@ -1019,7 +1175,12 @@ def validate_frontier(issue: dict[str, Any]) -> list[dict[str, Any]]:
     return expected
 
 
-def validate_observation_records(observations: list[Any], frontier: list[dict[str, Any]]) -> dict[str, Any]:
+def validate_observation_records(
+    observations: list[Any],
+    frontier: list[dict[str, Any]],
+    *,
+    issue_date: str | None = None,
+) -> dict[str, Any]:
     closed_states = {"observed_live", "reused_from_cache", "source_unavailable", "not_applicable"}
     allowed_roles = {"primary_or_official", "independent_media_or_data", "social_or_video_signal"}
     allowed_channels = {"web", "sns_x", "instagram", "facebook", "youtube", "data", "calendar"}
@@ -1040,10 +1201,24 @@ def validate_observation_records(observations: list[Any], frontier: list[dict[st
         if not isinstance(target_results, list) or not target_results:
             fail(f"observations[{index}] source_target_results must be a non-empty list")
         result_urls: set[str] = set()
+        verified_target_count = 0
+        live_target_count = 0
+        strict_live_evidence = (
+            issue_date or observation["observed_at_jst"][:10]
+        ) >= LIVE_EVIDENCE_CONTRACT_DATE
         for result_index, result in enumerate(target_results, start=1):
             if not isinstance(result, dict):
                 fail(f"observations[{index}] source_target_results[{result_index}] must be an object")
-            for key in ("label", "url", "channel", "slot_state", "evidence_summary"):
+            required_result_keys = [
+                "label",
+                "url",
+                "channel",
+                "slot_state",
+                "evidence_summary",
+            ]
+            if strict_live_evidence:
+                required_result_keys.extend(("checked_at_jst", "verification_method"))
+            for key in required_result_keys:
                 if not isinstance(result.get(key), str) or not result[key].strip():
                     fail(f"observations[{index}] source_target_results[{result_index}] missing required string: {key}")
             if result["channel"] not in allowed_channels:
@@ -1052,16 +1227,48 @@ def validate_observation_records(observations: list[Any], frontier: list[dict[st
                 fail(f"observations[{index}] source_target_results[{result_index}] invalid slot_state: {result['slot_state']}")
             if not result["url"].startswith(("http://", "https://")):
                 fail(f"observations[{index}] source_target_results[{result_index}] url must be absolute")
+            if strict_live_evidence:
+                try:
+                    checked_at = datetime.fromisoformat(result["checked_at_jst"])
+                except ValueError:
+                    fail(f"observations[{index}] source_target_results[{result_index}] checked_at_jst must be ISO-8601")
+                if checked_at.strftime("%Y-%m-%d") != observation["observed_at_jst"][:10]:
+                    fail(f"observations[{index}] source_target_results[{result_index}] checked_at_jst date mismatch")
+                allowed_methods = {
+                    "responses_web_search",
+                    "reviewed_live_web",
+                    "direct_fetch",
+                    "cached_result",
+                    "unavailable",
+                }
+                if result["verification_method"] not in allowed_methods:
+                    fail(f"observations[{index}] source_target_results[{result_index}] invalid verification_method")
+                if result["slot_state"] == "source_unavailable" and result["verification_method"] != "unavailable":
+                    fail(f"observations[{index}] source_target_results[{result_index}] unavailable source needs unavailable method")
+                if result["slot_state"] in {"observed_live", "reused_from_cache"} and result["verification_method"] == "unavailable":
+                    fail(f"observations[{index}] source_target_results[{result_index}] observed source cannot use unavailable method")
+            if result["slot_state"] in {"observed_live", "reused_from_cache"}:
+                verified_target_count += 1
+            if result["slot_state"] == "observed_live":
+                live_target_count += 1
+            if strict_live_evidence and re.search(r"時点の更新有無を確認した[。.]?$", result["evidence_summary"]):
+                fail(f"observations[{index}] source_target_results[{result_index}] evidence summary is generic, not source-specific")
             result_urls.add(result["url"])
-        expected_targets = source_targets_for_slot(source_registry, observation)
-        missing_targets = [target["url"] for target in expected_targets if target["url"] not in result_urls]
-        if missing_targets:
-            fail(f"observations[{index}] missing source target results: " + ", ".join(missing_targets[:6]))
+        unavailable_slot = observation["slot_state"] == "source_unavailable"
+        if verified_target_count == 0 and not unavailable_slot:
+            fail(f"observations[{index}] has no verified source result")
+        if strict_live_evidence and live_target_count == 0 and not unavailable_slot:
+            fail(f"observations[{index}] has no live source result for the current daily contract")
+        if strict_live_evidence:
+            expected_targets = source_targets_for_slot(source_registry, observation)
+            missing_targets = [target["url"] for target in expected_targets if target["url"] not in result_urls]
+            if missing_targets:
+                fail(f"observations[{index}] missing source target results: " + ", ".join(missing_targets[:6]))
         claim_atoms = observation.get("claim_atoms")
         if not isinstance(claim_atoms, list):
             fail(f"observations[{index}] claim_atoms must be a list")
 
-    state = coverage_state(observations)
+    state = coverage_state(observations, frontier=frontier)
     if state["missing_slots"]:
         first = state["missing_slots"][0]
         fail(
@@ -1073,7 +1280,11 @@ def validate_observation_records(observations: list[Any], frontier: list[dict[st
 
 def validate_observations(issue: dict[str, Any], frontier: list[dict[str, Any]]) -> list[dict[str, Any]]:
     observations = require_list(issue, "observations")
-    validate_observation_records(observations, frontier)
+    validate_observation_records(
+        observations,
+        frontier,
+        issue_date=require_str(issue, "issue_date"),
+    )
     return observations
 
 
@@ -1082,7 +1293,6 @@ def validate_candidates(issue: dict[str, Any], frontier: list[dict[str, Any]]) -
     contract = read_json(CONFIG_PATH)
     candidates = require_list(issue, "candidates")
     watch_keys = {(item["category"], item["watch_topic_id"]) for item in frontier}
-    seen_by_topic = {key: 0 for key in watch_keys}
     allowed_change = {"new_event", "material_update", "routine_recurring", "duplicate_followup", "background_only"}
     for index, candidate in enumerate(candidates, start=1):
         if not isinstance(candidate, dict):
@@ -1092,7 +1302,6 @@ def validate_candidates(issue: dict[str, Any], frontier: list[dict[str, Any]]) -
         key = (category, topic)
         if key not in watch_keys:
             fail(f"candidates[{index}] is outside coverage contract: {category}/{topic}")
-        seen_by_topic[key] += 1
         title = require_str(candidate, "title")
         require_str(candidate, "source_published_date")
         summary = require_str(candidate, "summary")
@@ -1109,9 +1318,6 @@ def validate_candidates(issue: dict[str, Any], frontier: list[dict[str, Any]]) -
             fail(f"candidates[{index}] material_facts must be a list")
         if not isinstance(candidate.get("counter_evidence_checked"), bool):
             fail(f"candidates[{index}] counter_evidence_checked must be boolean")
-    missing = [f"{category}/{topic}" for (category, topic), count in sorted(seen_by_topic.items()) if count == 0]
-    if missing:
-        fail("candidates missing watch topics: " + ", ".join(missing[:10]))
     return candidates
 
 
@@ -1203,13 +1409,38 @@ def validate_manifest_alignment(issue: dict[str, Any], cards: list[dict[str, Any
         fail("coverage_manifest missing categories object")
     contract = read_json(CONFIG_PATH)
     issue_date = require_str(issue, "issue_date")
+    strict_live_evidence = issue_date >= LIVE_EVIDENCE_CONTRACT_DATE
+    if strict_live_evidence:
+        completed_at = manifest.get("collection_completed_at_jst")
+        if not isinstance(completed_at, str):
+            fail("coverage_manifest missing collection_completed_at_jst")
+        try:
+            completed = datetime.fromisoformat(completed_at)
+        except ValueError:
+            fail("coverage_manifest collection_completed_at_jst must be ISO-8601")
+        if completed.strftime("%Y-%m-%d") != issue_date:
+            fail("coverage_manifest collection_completed_at_jst date mismatch")
+        if manifest.get("collection_mode") not in {
+            "responses_web_search",
+            "reviewed_live_web",
+        }:
+            fail("coverage_manifest collection_mode must describe a live research path")
     if effective_on_or_after(contract, "detail_information_contract_effective_date", issue_date):
-        expected_version = contract.get("contract_version")
+        expected_version = expected_contract_version(contract, issue_date)
         if manifest.get("contract_version") != expected_version:
             fail(f"coverage_manifest contract_version must be {expected_version}")
     cards_by_section: dict[str, list[str]] = {}
+    signals_by_category: dict[str, list[str]] = {}
+    candidate_topics_by_category: dict[str, set[str]] = {}
+    for candidate in issue.get("candidates", []):
+        if isinstance(candidate, dict):
+            candidate_topics_by_category.setdefault(
+                str(candidate.get("category")), set()
+            ).add(str(candidate.get("watch_topic_id")))
     for card in cards:
         cards_by_section.setdefault(str(card.get("section_id")), []).append(str(card.get("title")))
+    for signal in public_signals(issue):
+        signals_by_category.setdefault(signal["category"], []).append(signal["title"])
     for category in contract.get("categories", []):
         if not isinstance(category, dict):
             continue
@@ -1221,9 +1452,57 @@ def validate_manifest_alignment(issue: dict[str, Any], cards: list[dict[str, Any
         published = entry.get("published_card_titles")
         if published != cards_by_section.get(section_id, []):
             fail(f"{label} published_card_titles must match adopted cards")
-        for key in ("new_or_changed_items", "no_change_checks", "latest_candidates"):
+        if strict_live_evidence and entry.get("public_signal_titles") != signals_by_category.get(label, []):
+            fail(f"{label} public_signal_titles must match rendered confirmation signals")
+        required_lists = [
+            "new_or_changed_items",
+            "no_change_checks",
+            "latest_candidates",
+        ]
+        if strict_live_evidence:
+            required_lists.extend(("public_signal_titles", "public_signal_urls"))
+        for key in required_lists:
             if not isinstance(entry.get(key), list):
                 fail(f"{label} coverage_manifest missing list: {key}")
+        if not strict_live_evidence:
+            continue
+        observed_urls = observed_evidence_urls(
+            [
+                observation
+                for observation in issue.get("observations", [])
+                if isinstance(observation, dict)
+                and observation.get("category") == label
+            ]
+        )
+        checked_topics: set[str] = set()
+        for index, check in enumerate(entry["no_change_checks"], start=1):
+            if not isinstance(check, dict):
+                fail(f"{label} no_change_checks[{index}] must be an object")
+            topic_id = check.get("topic_id")
+            result = check.get("result")
+            evidence_urls = check.get("evidence_urls")
+            if not isinstance(topic_id, str) or not topic_id:
+                fail(f"{label} no_change_checks[{index}] missing topic_id")
+            if not isinstance(result, str) or len(compact_text(result)) < 20:
+                fail(f"{label} no_change_checks[{index}] result is too weak")
+            if (
+                not isinstance(evidence_urls, list)
+                or not evidence_urls
+                or any(url not in observed_urls for url in evidence_urls)
+            ):
+                fail(f"{label} no_change_checks[{index}] needs verified evidence URLs")
+            checked_topics.add(topic_id)
+        required_topics = {
+            str(topic.get("id"))
+            for topic in category.get("watch_topics", [])
+            if isinstance(topic, dict)
+        }
+        covered_topics = candidate_topics_by_category.get(label, set()) | checked_topics
+        if covered_topics < required_topics:
+            fail(
+                f"{label} topic review is incomplete: "
+                + ", ".join(sorted(required_topics - covered_topics))
+            )
 
 
 def validate_issue_state(issue: dict[str, Any], issue_path: Path | None = None) -> None:
@@ -1667,8 +1946,12 @@ def observation_key(observation: dict[str, Any]) -> tuple[str, str, str, str]:
     )
 
 
-def coverage_state(observations: list[dict[str, Any]] | None = None) -> dict[str, Any]:
-    frontier = build_frontier(read_json(CONFIG_PATH))
+def coverage_state(
+    observations: list[dict[str, Any]] | None = None,
+    *,
+    frontier: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    frontier = frontier or build_frontier(read_json(CONFIG_PATH))
     slots = required_observation_slots(frontier)
     observations = observations or []
     closed_states = {"observed_live", "reused_from_cache", "source_unavailable", "not_applicable"}
@@ -1867,6 +2150,20 @@ def self_test() -> None:
         fail("detail renderer must use the current information-complete structure")
     render_issue = {
         "issue_date": "2099-01-03",
+        "observations": [
+            {
+                "category": "Honda",
+                "slot_state": "observed_live",
+                "url": "https://global.honda/",
+                "source_target_results": [
+                    {
+                        "url": "https://global.honda/",
+                        "slot_state": "observed_live",
+                    }
+                ],
+                "discovery_findings": [],
+            }
+        ],
         "candidates": [
             {
                 "category": "OpenAI",
@@ -1876,9 +2173,12 @@ def self_test() -> None:
             },
             {
                 "category": "Honda",
+                "watch_topic_id": "market_price_reaction",
                 "title": "Honda、中国販売の月次減少を確認",
                 "source_published_date": "2099-01-02",
                 "summary": "Hondaの中国販売に月次で大きな減少があり、市場環境と日本勢の苦戦を読む材料になる。",
+                "source_urls": ["https://global.honda/"],
+                "change_class": "routine_recurring",
             },
             {
                 "category": "SpaceX",
@@ -1909,11 +2209,13 @@ def self_test() -> None:
         }
     ]
     render_html = render_issue_html(render_issue, render_cards, root=False)
-    banned_public_labels = ["カテゴリ別" + "新着", "一覧" + "のみ", "Honda、中国販売の月次減少を確認"]
+    banned_public_labels = ["カテゴリ別" + "新着", "一覧" + "のみ"]
     if any(label in render_html for label in banned_public_labels):
-        fail("issue renderer must expose only adopted detail cards on public category sections")
+        fail("issue renderer must avoid legacy list-only labels")
     if "OpenAI、Codexに共有機能を追加" not in render_html:
         fail("issue renderer must keep adopted detail cards visible in their category section")
+    if "Honda、中国販売の月次減少を確認" not in render_html or "参照元" not in render_html:
+        fail("issue renderer must expose recent verified non-adopted signals")
     print("NIGHT SIGNAL STATE PASSED")
 
 

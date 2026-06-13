@@ -9,9 +9,11 @@ incomplete observations, so daily publication cannot skip collection closure.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import sys
+import tempfile
 import time
 import urllib.error
 import urllib.request
@@ -67,7 +69,9 @@ Mission:
   extreme personal opinions unless a confirmed material change exists.
 - Prefer including a confirmed material item over missing it, but reject weak
   items with a concrete reason.
-- Every watch_topic_id in frontier_topics must have at least one candidate.
+- Do not invent a candidate merely to fill a watch topic. Every watch_topic_id
+  must instead have exactly one no_change_checks entry with direct evidence
+  URLs, whether the result is a material update, near miss, or no change.
 - Every fresh observed claim must be represented by a candidate, even when the
   final decision is reject. The candidate ledger is broad and auditable.
 - Treat the findings ledger as the uncompressed result set. Every fresh_update
@@ -76,10 +80,11 @@ Mission:
 - Do not merge independent events into one candidate. Honda China monthly sales
   and a Civic product update, for example, must remain separate candidates.
 - Every candidate must have one decision.
-- Cards must correspond exactly to adopted decisions. There is no public
-  list-only layer: if a fresh material candidate matters to the reader and has
-  enough source evidence for an information-complete detail page, adopt it and
-  make a card. Do not reject a material item merely to keep the page short.
+- Cards must correspond exactly to adopted decisions. If a fresh material
+  candidate matters to the reader and has enough source evidence for an
+  information-complete detail page, adopt it and make a card. Verified recent
+  non-adopted candidates remain visible as compact confirmation signals, so do
+  not distort adoption merely to populate or shorten the page.
 - Reject only when the item is duplicate, routine/no-material-change,
   insufficiently evidenced, or outside the configured category's relevance.
 - Public titles must be concise Japanese news headlines. Do not include
@@ -256,7 +261,11 @@ def direct_urls(observations: list[dict[str, Any]]) -> set[str]:
         for result in observation.get("source_target_results", []):
             if isinstance(result, dict):
                 result_url = result.get("url")
-                if isinstance(result_url, str) and result_url.startswith(("http://", "https://")):
+                if (
+                    result.get("slot_state") in {"observed_live", "reused_from_cache"}
+                    and isinstance(result_url, str)
+                    and result_url.startswith(("http://", "https://"))
+                ):
                     urls.add(result_url)
         for finding in observation.get("discovery_findings", []):
             if isinstance(finding, dict):
@@ -329,13 +338,26 @@ def validate_category_result(
         fail(f"{category} synthesis result must contain candidates, decisions, cards, and no_change_checks lists")
 
     required_topics = {str(item["watch_topic_id"]) for item in frontier_topics}
-    candidate_topics = {str(candidate.get("watch_topic_id")) for candidate in candidates if isinstance(candidate, dict)}
-    missing = sorted(required_topics - candidate_topics)
-    if missing:
-        fail(f"{category} synthesis missing candidates for watch topics: " + ", ".join(missing[:8]))
 
     allowed_source_dates = set(latest_three_dates(issue_date))
     allowed_urls = direct_urls(observations)
+    check_topics = [
+        str(check.get("topic_id"))
+        for check in no_change_checks
+        if isinstance(check, dict)
+    ]
+    if sorted(check_topics) != sorted(required_topics):
+        fail(f"{category} no_change_checks must cover every watch topic exactly once")
+    for check in no_change_checks:
+        if not isinstance(check, dict):
+            fail(f"{category} no_change_check must be an object")
+        evidence_urls = check.get("evidence_urls")
+        if (
+            not isinstance(evidence_urls, list)
+            or not evidence_urls
+            or any(url not in allowed_urls for url in evidence_urls)
+        ):
+            fail(f"{category} no_change_check must use verified observation URLs")
     claim_urls = claim_source_urls(issue_date, observations)
     fresh_claim_urls: set[str] = set()
     for observation in observations:
@@ -405,7 +427,11 @@ def validate_category_result(
         "candidates": candidates_for_validation_cache[issue_date] + candidates,
         "decisions": decisions_for_validation_cache[issue_date] + decisions,
         "cards": cards_for_validation_cache[issue_date] + cards,
-        "coverage_manifest": minimal_manifest(issue_date, {category: result}),
+        "coverage_manifest": minimal_manifest(
+            issue_date,
+            {category: result},
+            observations=observations_for_issue_cache[issue_date],
+        ),
         "blockers": [],
     }
     for card in cards:
@@ -419,7 +445,14 @@ decisions_for_validation_cache: dict[str, list[dict[str, Any]]] = {}
 cards_for_validation_cache: dict[str, list[dict[str, Any]]] = {}
 
 
-def minimal_manifest(issue_date: str, results_by_category: dict[str, dict[str, Any]]) -> dict[str, Any]:
+def minimal_manifest(
+    issue_date: str,
+    results_by_category: dict[str, dict[str, Any]],
+    *,
+    observations: list[dict[str, Any]] | None = None,
+    collection_mode: str = "responses_web_search",
+    collection_completed_at_jst: str | None = None,
+) -> dict[str, Any]:
     contract = state.read_json(state.CONFIG_PATH)
     source_registry = state.load_source_registry()
     official_hosts = {
@@ -450,6 +483,32 @@ def minimal_manifest(issue_date: str, results_by_category: dict[str, dict[str, A
         if source.get("source_class") == "specialist_media"
     }
     categories: dict[str, dict[str, Any]] = {}
+    observations = observations or []
+    observed_urls_by_category: dict[str, set[str]] = {}
+    for observation in observations:
+        if not isinstance(observation, dict):
+            continue
+        label = str(observation.get("category"))
+        if observation.get("slot_state") in {"observed_live", "reused_from_cache"}:
+            url = observation.get("url")
+            if isinstance(url, str) and url.startswith(("http://", "https://")):
+                observed_urls_by_category.setdefault(label, set()).add(url)
+        for target in observation.get("source_target_results", []):
+            if not isinstance(target, dict):
+                continue
+            url = target.get("url")
+            if (
+                target.get("slot_state") in {"observed_live", "reused_from_cache"}
+                and isinstance(url, str)
+                and url.startswith(("http://", "https://"))
+            ):
+                observed_urls_by_category.setdefault(label, set()).add(url)
+        for finding in observation.get("discovery_findings", []):
+            if not isinstance(finding, dict):
+                continue
+            url = finding.get("source_url")
+            if isinstance(url, str) and url.startswith(("http://", "https://")):
+                observed_urls_by_category.setdefault(label, set()).add(url)
     for category in contract.get("categories", []):
         if not isinstance(category, dict):
             continue
@@ -459,12 +518,13 @@ def minimal_manifest(issue_date: str, results_by_category: dict[str, dict[str, A
         candidates = [candidate for candidate in result.get("candidates", []) if isinstance(candidate, dict)]
         decisions = [decision for decision in result.get("decisions", []) if isinstance(decision, dict)]
         adopted_titles = {str(decision.get("candidate_title")) for decision in decisions if decision.get("adoption_decision") == "adopt"}
+        rejected_titles = {
+            str(decision.get("candidate_title"))
+            for decision in decisions
+            if decision.get("adoption_decision") == "reject"
+        }
         source_evidence = {
-            source_class: [
-                str(source["url"])
-                for source in source_registry.get(label, [])
-                if source.get("source_class") == source_class
-            ]
+            source_class: []
             for source_class in ("official", "major_media", "specialist_media", "sns_x", "youtube_video")
         }
         candidate_urls = {
@@ -473,7 +533,8 @@ def minimal_manifest(issue_date: str, results_by_category: dict[str, dict[str, A
             for url in candidate.get("source_urls", [])
             if isinstance(url, str) and url.startswith(("http://", "https://"))
         }
-        for url in candidate_urls:
+        candidate_urls &= observed_urls_by_category.get(label, set())
+        for url in observed_urls_by_category.get(label, set()) | candidate_urls:
             host = urlparse(url).netloc.lower().removeprefix("www.")
             if host in official_hosts:
                 source_evidence["official"].append(url)
@@ -491,6 +552,22 @@ def minimal_manifest(issue_date: str, results_by_category: dict[str, dict[str, A
             key: sorted(set(values))
             for key, values in source_evidence.items()
         }
+        public_signal_candidates = [
+            candidate
+            for candidate in candidates
+            if str(candidate.get("title")) in rejected_titles
+            and candidate.get("source_published_date") in set(latest_three_dates(issue_date))
+            and candidate.get("change_class") != "background_only"
+            and not any(
+                marker in str(candidate.get("title", ""))
+                for marker in ("大きな更新なし", "no fresh", "no_new_update")
+            )
+            and any(
+                isinstance(url, str)
+                and url in observed_urls_by_category.get(label, set())
+                for url in candidate.get("source_urls", [])
+            )
+        ]
         held = [
             str(decision.get("candidate_title"))
             for decision in decisions
@@ -536,6 +613,21 @@ def minimal_manifest(issue_date: str, results_by_category: dict[str, dict[str, A
             ),
             "freshness_check": f"{issue_date} JSTの直近3日を基準に照合",
             "published_card_titles": [str(card.get("title")) for card in cards],
+            "public_signal_titles": [
+                str(candidate.get("title"))
+                for candidate in public_signal_candidates
+            ],
+            "public_signal_urls": [
+                str(
+                    next(
+                        url
+                        for url in candidate.get("source_urls", [])
+                        if isinstance(url, str)
+                        and url in observed_urls_by_category.get(label, set())
+                    )
+                )
+                for candidate in public_signal_candidates
+            ],
             "new_or_changed_items": [
                 {
                     "title": str(card.get("title")),
@@ -563,7 +655,9 @@ def minimal_manifest(issue_date: str, results_by_category: dict[str, dict[str, A
     return {
         "contract_version": contract.get("contract_version"),
         "date": issue_date,
-        "last_checked_jst": jst_now(),
+        "last_checked_jst": collection_completed_at_jst or jst_now(),
+        "collection_completed_at_jst": collection_completed_at_jst or jst_now(),
+        "collection_mode": collection_mode,
         "categories": categories,
     }
 
@@ -584,7 +678,85 @@ def write_requests(path: Path, payloads: list[dict[str, Any]]) -> None:
     )
 
 
-def synthesize(issue_date: str, state_root: Path, *, dry_run: bool, replace: bool, retries: int) -> dict[str, Any]:
+def category_signature(
+    issue_date: str,
+    category: str,
+    topics: list[dict[str, Any]],
+    observations: list[dict[str, Any]],
+    findings: list[dict[str, Any]],
+) -> str:
+    value = {
+        "issue_date": issue_date,
+        "category": category,
+        "topics": topics,
+        "observations": observations,
+        "findings": findings,
+    }
+    encoded = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def synthesis_part_path(state_dir: Path, category: str) -> Path:
+    digest = hashlib.sha256(category.encode("utf-8")).hexdigest()[:12]
+    return state_dir / "synthesis_parts" / f"{digest}.json"
+
+
+def write_synthesis_part(
+    state_dir: Path,
+    issue_date: str,
+    category: str,
+    signature: str,
+    result: dict[str, Any],
+) -> dict[str, Any]:
+    value = {
+        "version": 1,
+        "issue_date": issue_date,
+        "category": category,
+        "input_signature": signature,
+        "completed_at_jst": jst_now(),
+        "result": result,
+    }
+    path = synthesis_part_path(state_dir, category)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp = path.with_suffix(".json.tmp")
+    temp.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    temp.replace(path)
+    return value
+
+
+def load_synthesis_part(
+    state_dir: Path,
+    issue_date: str,
+    category: str,
+    signature: str,
+) -> dict[str, Any] | None:
+    path = synthesis_part_path(state_dir, category)
+    if not path.exists():
+        return None
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None
+    if (
+        not isinstance(value, dict)
+        or value.get("issue_date") != issue_date
+        or value.get("category") != category
+        or value.get("input_signature") != signature
+        or not isinstance(value.get("result"), dict)
+    ):
+        return None
+    return value
+
+
+def synthesize(
+    issue_date: str,
+    state_root: Path,
+    *,
+    dry_run: bool,
+    replace: bool,
+    resume: bool,
+    retries: int,
+) -> dict[str, Any]:
     observations = load_observations(issue_date, state_root)
     findings = load_findings(issue_date, state_root)
     observations_for_issue_cache[issue_date] = observations
@@ -611,28 +783,50 @@ def synthesize(issue_date: str, state_root: Path, *, dry_run: bool, replace: boo
         return {"issue_date": issue_date, "requests": len(payloads), "path": str(state_dir / "synthesis_requests.jsonl")}
 
     results_by_category: dict[str, dict[str, Any]] = {}
+    reused_parts = 0
     for index, (category, topics) in enumerate(frontier_categories.items(), start=1):
-        print(f"synthesizing {index}/{len(frontier_categories)} {category}", file=sys.stderr)
-        result = parse_category_result(
-            call_responses(
-                task_payload(
-                    issue_date,
-                    category,
-                    topics,
-                    observations_by_category.get(category, []),
-                    findings_by_category.get(category, []),
-                ),
-                retries=retries,
-            )
+        category_observations = observations_by_category.get(category, [])
+        category_findings = findings_by_category.get(category, [])
+        signature = category_signature(
+            issue_date,
+            category,
+            topics,
+            category_observations,
+            category_findings,
         )
+        part = (
+            load_synthesis_part(state_dir, issue_date, category, signature)
+            if resume
+            else None
+        )
+        if part is not None:
+            print(f"resuming {index}/{len(frontier_categories)} {category}", file=sys.stderr)
+            result = part["result"]
+            reused_parts += 1
+        else:
+            print(f"synthesizing {index}/{len(frontier_categories)} {category}", file=sys.stderr)
+            result = parse_category_result(
+                call_responses(
+                    task_payload(
+                        issue_date,
+                        category,
+                        topics,
+                        category_observations,
+                        category_findings,
+                    ),
+                    retries=retries,
+                )
+            )
         validate_category_result(
             issue_date,
             category,
             topics,
-            observations_by_category.get(category, []),
+            category_observations,
             result,
-            findings_by_category.get(category, []),
+            category_findings,
         )
+        if part is None:
+            write_synthesis_part(state_dir, issue_date, category, signature, result)
         results_by_category[category] = result
         candidates_for_validation_cache[issue_date].extend(result["candidates"])
         decisions_for_validation_cache[issue_date].extend(result["decisions"])
@@ -641,7 +835,14 @@ def synthesize(issue_date: str, state_root: Path, *, dry_run: bool, replace: boo
     candidates = [candidate for result in results_by_category.values() for candidate in result["candidates"]]
     decisions = [decision for result in results_by_category.values() for decision in result["decisions"]]
     cards = [card for result in results_by_category.values() for card in result["cards"]]
-    manifest = minimal_manifest(issue_date, results_by_category)
+    completed_at = jst_now()
+    manifest = minimal_manifest(
+        issue_date,
+        results_by_category,
+        observations=observations,
+        collection_mode="responses_web_search",
+        collection_completed_at_jst=completed_at,
+    )
 
     write_jsonl(state_dir / "candidates.jsonl", candidates, replace=replace)
     write_jsonl(state_dir / "decisions.jsonl", decisions, replace=replace)
@@ -649,7 +850,14 @@ def synthesize(issue_date: str, state_root: Path, *, dry_run: bool, replace: boo
     (state_dir / "coverage_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     state.assemble_issue_state(issue_date, state_root)
-    return {"issue_date": issue_date, "categories": len(results_by_category), "candidates": len(candidates), "decisions": len(decisions), "cards": len(cards)}
+    return {
+        "issue_date": issue_date,
+        "categories": len(results_by_category),
+        "candidates": len(candidates),
+        "decisions": len(decisions),
+        "cards": len(cards),
+        "reused_category_checkpoints": reused_parts,
+    }
 
 
 def self_test() -> None:
@@ -676,6 +884,8 @@ def self_test() -> None:
                         "slot_state": "observed_live",
                         "published_date": "2099-01-01",
                         "evidence_summary": "OpenAI公式で発表を確認した。",
+                        "checked_at_jst": "2099-01-01T20:00:00+09:00",
+                        "verification_method": "responses_web_search",
                     }
                 ],
                 "claim_atoms": [{"claim_type": "announcement", "claim": "OpenAIが発表した。", "source_state": "confirmed_update"}],
@@ -699,6 +909,8 @@ def self_test() -> None:
                         "slot_state": "observed_live",
                         "published_date": "2099-01-01",
                         "evidence_summary": "背景情報のみ。",
+                        "checked_at_jst": "2099-01-01T20:01:00+09:00",
+                        "verification_method": "responses_web_search",
                     }
                 ],
                 "claim_atoms": [],
@@ -770,7 +982,13 @@ def self_test() -> None:
             }
         ],
         "cards": [],
-        "no_change_checks": [],
+        "no_change_checks": [
+            {
+                "topic_id": "product_release",
+                "result": "OpenAI公式と補助資料を照合し、候補の根拠と追加の反証有無を確認した。",
+                "evidence_urls": ["https://openai.com/"],
+            }
+        ],
     }
     validate_category_result("2099-01-01", "OpenAI", frontier_topics, observation_records, covered_result)
     missing_result = json.loads(json.dumps(covered_result, ensure_ascii=False))
@@ -792,6 +1010,36 @@ def self_test() -> None:
         globals()["fail"] = original_fail
     if not captured_failures or "claim/source linkage" not in captured_failures[0]:
         fail("synthesis validation must reject material candidates without claim/source linkage")
+    signature = category_signature(
+        "2099-01-01",
+        "OpenAI",
+        frontier_topics,
+        observation_records,
+        [],
+    )
+    with tempfile.TemporaryDirectory() as temp_dir:
+        part = write_synthesis_part(
+            Path(temp_dir),
+            "2099-01-01",
+            "OpenAI",
+            signature,
+            covered_result,
+        )
+        loaded = load_synthesis_part(
+            Path(temp_dir),
+            "2099-01-01",
+            "OpenAI",
+            signature,
+        )
+        if loaded != part:
+            fail("synthesizer must round-trip durable category checkpoints")
+        if load_synthesis_part(
+            Path(temp_dir),
+            "2099-01-01",
+            "OpenAI",
+            "changed",
+        ) is not None:
+            fail("synthesizer must invalidate a checkpoint when inputs change")
     print("NIGHT SIGNAL SYNTHESIS PASSED")
 
 
@@ -801,6 +1049,7 @@ def main() -> int:
     parser.add_argument("--state-root", type=Path, default=DEFAULT_STATE_ROOT)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--replace", action="store_true")
+    parser.add_argument("--resume", action="store_true")
     parser.add_argument("--retries", type=int, default=3)
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
@@ -808,7 +1057,20 @@ def main() -> int:
     if args.self_test:
         self_test()
         return 0
-    print(json.dumps(synthesize(args.issue_date, args.state_root, dry_run=args.dry_run, replace=args.replace, retries=args.retries), ensure_ascii=False, indent=2))
+    print(
+        json.dumps(
+            synthesize(
+                args.issue_date,
+                args.state_root,
+                dry_run=args.dry_run,
+                replace=args.replace,
+                resume=args.resume,
+                retries=args.retries,
+            ),
+            ensure_ascii=False,
+            indent=2,
+        )
+    )
     return 0
 
 

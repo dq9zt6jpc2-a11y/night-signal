@@ -69,8 +69,8 @@
       ],
       "required_policy_terms": [
         "scripts/night_signal_collect.py",
-        "OPENAI_API_KEY",
-        "外部収集完了"
+        "source_checks",
+        "設定にあるだけのURLを確認済みに変換しない"
       ],
       "required_simulation_terms": [
         "collector self-test covers Responses source observation path"
@@ -515,7 +515,7 @@
         "regional economy taxonomy rejects broad investment category",
         "regional economy taxonomy requires North America section",
         "regional economy rejects wrong-country official evidence",
-        "regional economy does not require unrelated social source class"
+        "regional economy requires X and YouTube evidence"
       ]
     },
     {
@@ -707,6 +707,48 @@
       "required_workflow_terms": [
         "scripts/night_signal_publish.py",
         "--preflight"
+      ]
+    },
+    {
+      "id": "runtime_exhaustion_and_degraded_recovery",
+      "description": "Token or credit exhaustion, API quota, authentication, network, partial execution, and dirty worktrees must select an explicit honest recovery path instead of silently leaving a run in progress.",
+      "required_audit_terms": [
+        "codex_credit_exhausted",
+        "openai_quota_exhausted",
+        "model_token_budget_exhausted",
+        "execution_timeout",
+        "blocked_no_honest_collector",
+        "runtime_checkpoint.json",
+        "task_signature",
+        "category_signature",
+        "--resume",
+        "last_agent_message",
+        "fresh_evening_issue",
+        "reviewed_bundle",
+        "responses_api"
+      ],
+      "required_policy_terms": [
+        "利用枠・トークン不足",
+        "独立watchdog",
+        "古い号を当日版として出さない",
+        "runtime_checkpoint.json",
+        "Responses APIへ切り替える"
+      ],
+      "required_simulation_terms": [
+        "codex_credit_exhausted",
+        "openai_quota_exhausted",
+        "model_token_budget_exhausted",
+        "execution_timeout",
+        "blocked_no_honest_collector",
+        "partial_execution",
+        "collection_slot",
+        "synthesis_category",
+        "changed_input_invalidates_checkpoint"
+      ],
+      "required_workflow_terms": [
+        "NIGHT SIGNAL Runtime Watchdog",
+        "night_signal_runtime_audit.py",
+        "--fail-on-blocker"
       ]
     },
     {

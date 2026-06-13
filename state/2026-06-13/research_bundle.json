@@ -1,651 +1,2046 @@
 {
   "issue_date": "2026-06-13",
-  "checked_at_jst": "2026-06-13T03:42:00+09:00",
+  "checked_at_jst": "2026-06-13T21:05:00+09:00",
   "categories": {
     "OpenAI": {
-      "no_change_summary": "OpenAIの公式Web、独立媒体・データ、X/SNS、YouTubeを2026年6月13日03時台JSTまで横断した。本文採用項目以外は、新しい決定、数値、結果、提供開始を伴う確定差分がなく、候補情報として保持した。",
-      "signals": [
-        {
-          "watch_topic_id": "enterprise_infrastructure",
-          "title": "OpenAI、Oracle経由のモデル・Codex提供拡大を発表",
-          "summary": "OpenAIは6月10日、Oracleとのクラウド契約を通じて顧客がOpenAIモデルとCodexへアクセスできる構成を公表した。Ona買収記事に含めず候補台帳へ分離した。",
-          "source_published_date": "2026-06-10",
-          "source_url": "https://openai.com/index/oracle-cloud/",
-          "change_class": "duplicate_followup",
-          "rejection_reason_class": "duplicate_covered",
-          "rejection_reason": "企業クラウド内でCodexを長時間動かす変化はOna買収の記事で詳しく扱うため、独立記事にすると読者差分が重複する。"
-        },
-        {
-          "watch_topic_id": "ipo_financing",
-          "title": "OpenAI、非公開のS-1草案提出を6月8日に発表",
-          "summary": "OpenAIは6月8日、米SECへ非公開の登録届出書草案を提出した。前号までのIPO候補と重なり、当日新規発表ではない。",
-          "source_published_date": "2026-06-08",
-          "source_url": "https://openai.com/index/confidential-draft-registration-statement/",
-          "change_class": "duplicate_followup",
-          "rejection_reason_class": "duplicate_covered",
-          "rejection_reason": "IPO準備は前号の候補台帳と本文で扱っており、6月12日に追加の条件、規模、日程は確定していない。"
-        },
-        {
-          "watch_topic_id": "product_release",
-          "title": "ChatGPTとCodexを統合する製品再編の方向を報道",
-          "summary": "OpenAIはChatGPTを総合アシスタントへ広げ、Codexのタスク実行機能を段階的に統合する製品再編を進めていると6月12日に報じられた。提供日と最終仕様は未確定である。",
-          "source_published_date": "2026-06-12",
-          "source_url": "https://www.wired.com/story/model-behavior-interview-with-openai-codex-lead-tibo-sottiaux",
-          "change_class": "background_only",
-          "rejection_reason_class": "insufficient_evidence",
-          "rejection_reason": "責任者インタビューとして製品方向は具体的だが、機能名、対象プラン、提供開始日を伴う公式リリースには至っていない。"
-        },
-        {
-          "watch_topic_id": "math_research",
-          "title": "OpenAI Prismは数式・論文作成基盤として提供継続",
-          "summary": "OpenAIの科学研究向けPrismはLaTeX、引用管理、数式処理とAI支援を統合する。直近3日間に新しい数学成果や機能更新はなく、研究領域の基準点として残した。",
-          "source_published_date": "2026-01-27",
-          "source_url": "https://openai.com/index/introducing-prism/",
-          "change_class": "background_only",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "数学・科学研究の重要製品だが、6月12日に新しい定理、評価結果、製品機能の確定差分はない。"
-        },
-        {
-          "watch_topic_id": "safety_security_regulation",
-          "title": "米政府の先端AI事前審査は任意枠組みにとどまる",
-          "summary": "米政府による先端AIモデルの事前審査方針はOpenAIを含む事業者へ影響するが、企業への強制措置や新しい法的義務はまだ伴っていない。",
-          "source_published_date": "2026-06-06",
-          "source_url": "https://www.wsj.com/pro/cybersecurity/security-chiefs-unfazed-by-federal-ai-oversight-c08dbef0",
-          "change_class": "background_only",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "規制環境の候補として保持するが、直近3日間にOpenAI固有の処分、義務、提供制限は確定していない。"
-        }
-      ],
       "items": [
         {
           "watch_topic_id": "product_release",
           "title": "OpenAI Academy、K-12教員向けにStudy modeなど3講座を公開",
-          "summary": "OpenAIは6月12日、K-12教員向けOpenAI Academyに、ChatGPT基礎、Study mode、学生向けAIリテラシーの3講座を追加した。各講座は約30分で、授業準備と学習支援の具体的な利用法を扱う。",
+          "summary": "OpenAIは6月12日、K-12教員向けOpenAI Academyに、ChatGPT基礎、Study mode、学生向けAIリテラシーの3講座を追加した。各講座は約30分で、教員が授業準備や学習支援へ生成AIを導入する際の具体的な使い方と、生徒に責任ある利用を教えるための教材を提供する。",
           "source_published_date": "2026-06-12",
           "topic_value_class": "technical_or_product_shift",
-          "priority_class": "hot",
-          "slug": "openai-academy-k12-courses-2026-06-13.html",
-          "detail_summary": "OpenAIは2026年6月12日、K-12教員向けOpenAI Academyに3つの新しいオンデマンド講座を追加した。対象はChatGPTの基礎、Study modeを使った学習支援、学生に教えるAIリテラシーで、各講座は約30分で修了できる。Study modeの講座では、答えを直接示すだけでなく、問いかけや段階的な説明を通じて生徒の理解を支える使い方を扱う。AIリテラシー講座は、教員が学生へAIの仕組み、限界、責任ある使い方を伝えるための教材を含む。教育現場での利用を製品紹介から実践研修へ広げる動きだが、受講効果、学校単位の導入状況、各国語への展開予定は公表されていない。",
-          "what_changed": "K-12教員が授業と学習支援でChatGPTを使うための3講座がOpenAI Academyへ追加された。",
-          "why_it_matters": "教育分野でのAI導入が、一般的な利用案内から、教員が短時間で学べる実践的な研修と学生向けAIリテラシー教材へ広がる。",
+          "priority_class": "priority",
+          "slug": "openai-academy-k12-courses-2026-06-13",
+          "detail_summary": "OpenAIは2026年6月12日、K-12教員向けのOpenAI Academyに3つのオンライン講座を追加した。内容はChatGPTの基本、学習過程を重視するStudy mode、学生向けAIリテラシーで、各講座は約30分。単なる製品紹介ではなく、教員が授業準備や個別学習支援にAIを組み込み、生徒へ検証・引用・責任ある利用を教えるための教育パッケージとして公開された。利用地域、受講実績、学校制度への導入効果は今後の確認が必要である。",
+          "what_changed": "K-12教員がそのまま利用できる3講座がOpenAI Academyに追加された。",
+          "why_it_matters": "教育現場でのChatGPT利用が個別の試行から、教員研修とAIリテラシーを組み合わせた体系的導入へ進むため。",
           "confirmed_facts": [
-            "OpenAIは2026年6月12日にK-12教員向けの3講座を発表した。",
+            "OpenAIは2026年6月12日にK-12教員向け3講座を発表した。",
             "講座はChatGPT基礎、Study mode、学生向けAIリテラシーを扱う。",
-            "各講座は約30分で、無料のOpenAI Academyから利用できる。"
+            "各講座の所要時間は約30分と案内されている。"
           ],
-          "limits_or_unknowns": "受講者数、学習成果、学校・教育委員会単位の採用状況、多言語展開の時期は公表されていない。",
+          "limits_or_unknowns": "対象地域、受講者数、学校単位での導入状況、学習成果への効果は公表されていない。",
           "sources": [
             {
               "label": "OpenAI",
-              "url": "https://openai.com/index/introducing-three-new-openai-academy-courses-for-k-12-educators/"
+              "url": "https://openai.com/index/introducing-three-new-openai-academy-courses-for-k-12-educators/",
+              "source_role": "primary_or_official",
+              "channel": "web",
+              "published_date": "2026-06-12",
+              "evidence_summary": "OpenAI公式記事で講座名、対象、約30分という構成を確認した。"
             }
           ]
         }
-      ]
+      ],
+      "signals": [
+        {
+          "watch_topic_id": "product_release",
+          "title": "OpenAIのCodex責任者、ChatGPTとCodexの統合方向を説明",
+          "summary": "6月12日のWIREDインタビューで、OpenAIのCodex責任者Tibo Sottiauxは、汎用ChatGPTとコーディングエージェントCodexの能力を将来的に一つの製品体験へ近づける方向を説明した。具体的な統合日程や製品仕様は未発表のため、確定したリリースではなく方向性として保持する。",
+          "source_published_date": "2026-06-12",
+          "source_url": "https://www.wired.com/story/model-behavior-interview-with-openai-codex-lead-tibo-sottiaux",
+          "source_label": "WIRED",
+          "change_class": "material_update",
+          "rejection_reason_class": "insufficient_evidence",
+          "rejection_reason": "製品統合の具体的な提供日、対象機能、公式リリースがまだ示されていない。",
+          "topic_value_class": "technical_or_product_shift"
+        }
+      ],
+      "source_checks": [
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "OpenAI News",
+          "url": "https://openai.com/news/",
+          "slot_state": "source_unavailable",
+          "published_date": null,
+          "evidence_summary": "2026-06-13 20時台JSTに直接接続したがHTTP 403で一覧本文を取得できなかった。個別公式記事と検索証跡で更新を確認し、このseed URL自体は未確認扱いにした。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "unavailable"
+        },
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "OpenAI API docs changelog",
+          "url": "https://platform.openai.com/docs/changelog",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にOpenAI API docs changelogへ直接アクセスし、応答ページを確認した。OpenAIの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "OpenAI Help Center release notes",
+          "url": "https://help.openai.com/en/articles/6825453-chatgpt-release-notes",
+          "slot_state": "source_unavailable",
+          "published_date": null,
+          "evidence_summary": "2026-06-13 20時台JSTに直接接続したがHTTP 403で本文を取得できなかったため、このseed URLは未確認扱いにした。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "unavailable"
+        },
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Reuters Technology",
+          "url": "https://www.reuters.com/technology/",
+          "slot_state": "source_unavailable",
+          "published_date": null,
+          "evidence_summary": "2026-06-13 20時台JSTに直接接続したがHTTP 401で一覧本文を取得できなかったため、このseed URLは未確認扱いにした。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "unavailable"
+        },
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Business Insider OpenAI and Codex analysis",
+          "url": "https://www.businessinsider.com/openai-merging-codex-into-chatgpt-lock-in-code-2026-6",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "Business Insiderの2026年6月7日付分析で、OpenAIがCodexをChatGPTへ統合する方向、開発者向け製品の利用定着と企業側のベンダーロックイン懸念を確認した。直近3日の新規発表ではないため掲載候補にはせず、独立大手媒体による背景確認として保持した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "The Verge AI",
+          "url": "https://www.theverge.com/ai-artificial-intelligence",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にThe Verge AIへ直接アクセスし、応答ページを確認した。OpenAIの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "OpenAI X",
+          "url": "https://x.com/OpenAI",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にOpenAI Xへ直接アクセスし、応答ページを確認した。OpenAIの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "OpenAI Developers X",
+          "url": "https://x.com/OpenAIDevs",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にOpenAI Developers Xへ直接アクセスし、応答ページを確認した。OpenAIの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "instagram",
+          "label": "OpenAI Instagram",
+          "url": "https://www.instagram.com/openai/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にOpenAI Instagramへ直接アクセスし、応答ページを確認した。OpenAIの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "label": "OpenAI YouTube",
+          "url": "https://www.youtube.com/@OpenAI",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にOpenAI YouTubeへ直接アクセスし、応答ページを確認した。OpenAIの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "product_release"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "OpenAI",
+          "url": "https://openai.com/index/introducing-three-new-openai-academy-courses-for-k-12-educators/",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-12",
+          "evidence_summary": "OpenAI公式記事で講座名、対象、約30分という構成を確認した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "product_release"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "WIRED",
+          "url": "https://www.wired.com/story/model-behavior-interview-with-openai-codex-lead-tibo-sottiaux",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-12",
+          "evidence_summary": "6月12日のWIREDインタビューで、OpenAIのCodex責任者Tibo Sottiauxは、汎用ChatGPTとコーディングエージェントCodexの能力を将来的に一つの製品体験へ近づける方向を説明した。具体的な統合日程や製品仕様は未発表のため、確定したリリースではなく方向性として保持する。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        }
+      ],
+      "no_change_summary": "6月13日夜までOpenAI公式Web、API changelog、X、Instagram、YouTube、独立AI媒体を確認した。K-12講座を採用し、Codex統合方向を確認情報として保持した。IPO、数学研究、企業基盤、安全規制では直近3日の追加確定発表を確認できなかった。"
     },
     "SoftBank": {
-      "no_change_summary": "SoftBankの公式Web、独立媒体・データ、X/SNS、YouTubeを2026年6月13日03時台JSTまで横断した。本文採用項目以外は、新しい決定、数値、結果、提供開始を伴う確定差分がなく、候補情報として保持した。",
-      "signals": [
+      "items": [],
+      "signals": [],
+      "source_checks": [
         {
-          "watch_topic_id": "corporate_ir_financing",
-          "title": "SoftBank Group、国内ハイブリッド社債の発行条件を決定",
-          "summary": "SoftBank Groupは6月5日に個人向けハイブリッド社債の条件を決定した。直近の期限前償還と同じ財務運営の流れだが、3日間の鮮度範囲外である。",
-          "source_published_date": "2026-06-05",
-          "source_url": "https://group.softbank/en/news/press/20260605",
-          "change_class": "background_only",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "資本性調達の背景として重要だが、発表から7日経過しており、当日版の新しい変化としては扱わない。"
+          "watch_topic_ids": [
+            "market_price_nav",
+            "ai_infrastructure",
+            "power_battery",
+            "corporate_ir_financing",
+            "domestic_services"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "SoftBank Group News",
+          "url": "https://group.softbank/en/news",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "SoftBank Group公式Newsを2026-06-13 20時台JSTに確認。最新のPress Releaseは6月10日の2021年発行ドル建てシニア債早期償還完了で、6月11日から13日の追加発表はなかった。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
         },
         {
-          "watch_topic_id": "ai_infrastructure",
-          "title": "ArmとAIインフラ投資は直近3日間に追加条件なし",
-          "summary": "Arm、AIデータセンター、電力・計算資源投資の公式情報と主要報道を確認したが、新しい契約金額や稼働開始は確定していない。",
-          "source_published_date": "2026-06-10",
-          "source_url": "https://group.softbank/en/news",
-          "change_class": "background_only",
-          "rejection_reason_class": "insufficient_evidence",
-          "rejection_reason": "投資テーマの継続報道はあるが、直近3日間に公式の契約条件、金額、稼働時期を裏づける新資料がない。"
+          "watch_topic_ids": [
+            "market_price_nav",
+            "ai_infrastructure",
+            "power_battery",
+            "corporate_ir_financing",
+            "domestic_services"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "SoftBank Group IR",
+          "url": "https://group.softbank/en/ir",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にSoftBank Group IRへ直接アクセスし、応答ページを確認した。SoftBankの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
         },
         {
-          "watch_topic_id": "market_price_nav",
-          "title": "SoftBank Group株価とNAVの乖離を継続候補化",
-          "summary": "SoftBank Groupの株価、保有株式価値、純有利子負債から算出するNAV推移を公式IRで確認した。6月12日に算定方法や資産構成の新しい開示変更はない。",
-          "source_published_date": "2026-06-12",
-          "source_url": "https://group.softbank/en/ir/stock",
-          "change_class": "background_only",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "市場価格軸は毎日保持するが、単日の値動きだけで独立記事にするほどの資産価値変化や会社発表はない。"
+          "watch_topic_ids": [
+            "market_price_nav",
+            "ai_infrastructure",
+            "power_battery",
+            "corporate_ir_financing",
+            "domestic_services"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Arm Newsroom",
+          "url": "https://newsroom.arm.com/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にArm Newsroomへ直接アクセスし、応答ページを確認した。SoftBankの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
         },
         {
-          "watch_topic_id": "power_battery",
-          "title": "SoftBank、堺で水系蓄電池の量産を2028年までに計画",
-          "summary": "SoftBankは大阪・堺の拠点でAIデータセンター向け水系亜鉛ハロゲン蓄電池を生産し、2028年3月期までにGWh規模を目指す計画を進めている。",
-          "source_published_date": "2026-05-12",
-          "source_url": "https://www.tomshardware.com/tech-industry/softbank-to-manufacture-its-own-batteries-to-power-ai-data-centers",
-          "change_class": "background_only",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "AI電力基盤の重要計画だが、直近3日間に工場稼働、投資額、量産開始の追加決定はない。"
+          "watch_topic_ids": [
+            "market_price_nav",
+            "ai_infrastructure",
+            "power_battery",
+            "corporate_ir_financing",
+            "domestic_services"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Reuters Business",
+          "url": "https://www.reuters.com/business/",
+          "slot_state": "source_unavailable",
+          "published_date": null,
+          "evidence_summary": "2026-06-13 20時台JSTに直接接続したがHTTP 401で一覧本文を取得できなかったため、このseed URLは未確認扱いにした。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "unavailable"
         },
         {
-          "watch_topic_id": "domestic_services",
-          "title": "国内通信・決済サービスの公式発表を継続確認",
-          "summary": "SoftBank、Yahoo! JAPAN、PayPayを含む国内サービスの公式発表を確認した。直近3日間に業績見通しを変える大型料金改定、買収、障害確定はない。",
-          "source_published_date": "2026-06-12",
-          "source_url": "https://www.softbank.jp/corp/news/press/sbkk/",
-          "change_class": "background_only",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "国内サービス軸の直接発表を候補台帳へ保持したが、当日本文へ上げる新しい確定差分はない。"
+          "watch_topic_ids": [
+            "market_price_nav",
+            "ai_infrastructure",
+            "power_battery",
+            "corporate_ir_financing",
+            "domestic_services"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Nikkei SoftBank search",
+          "url": "https://www.nikkei.com/search?keyword=%E3%82%BD%E3%83%95%E3%83%88%E3%83%90%E3%83%B3%E3%82%AF%E3%82%B0%E3%83%AB%E3%83%BC%E3%83%97",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にNikkei SoftBank searchへ直接アクセスし、応答ページを確認した。SoftBankの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_nav",
+            "ai_infrastructure",
+            "power_battery",
+            "corporate_ir_financing",
+            "domestic_services"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "SoftBank Group X",
+          "url": "https://x.com/SoftBank_Group",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にSoftBank Group Xへ直接アクセスし、応答ページを確認した。SoftBankの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_nav",
+            "ai_infrastructure",
+            "power_battery",
+            "corporate_ir_financing",
+            "domestic_services"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "facebook",
+          "label": "SoftBank Group Facebook",
+          "url": "https://www.facebook.com/SoftBankGroupCorp/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にSoftBank Group Facebookへ直接アクセスし、応答ページを確認した。SoftBankの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_nav",
+            "ai_infrastructure",
+            "power_battery",
+            "corporate_ir_financing",
+            "domestic_services"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "label": "SoftBank Group YouTube",
+          "url": "https://www.youtube.com/user/SoftBankCorp",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にSoftBank Group YouTubeへ直接アクセスし、応答ページを確認した。SoftBankの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
         }
       ],
-      "items": []
+      "no_change_summary": "SoftBank Group公式News、IR、Arm、日経検索、X、Facebook、YouTubeを6月13日夜に確認した。最新公式発表は6月10日のドル建てシニア債早期償還完了で、直近3日に新たなAI投資、電力・蓄電池、資金調達条件、国内サービスの重要確定差分はなかった。"
     },
     "Honda": {
-      "no_change_summary": "Hondaの公式Web、独立媒体・データ、X/SNS、YouTubeを2026年6月13日03時台JSTまで横断した。本文採用項目以外は、新しい決定、数値、結果、提供開始を伴う確定差分がなく、候補情報として保持した。",
-      "signals": [
+      "items": [],
+      "signals": [],
+      "source_checks": [
         {
-          "watch_topic_id": "market_price_reaction",
-          "title": "Honda北米サブフレーム腐食リコールは前号掲載済み",
-          "summary": "Passport、Pilot、Ridgeline、Acura MDX計88万514台の腐食リスクは6月10日に報じられ、前号本文で扱った。",
-          "source_published_date": "2026-06-10",
-          "source_url": "https://www.caranddriver.com/news/a71549498/honda-880000-suvs-trucks-recall-rust-subframe/",
-          "change_class": "duplicate_followup",
-          "rejection_reason_class": "duplicate_covered",
-          "rejection_reason": "対象台数と原因は前号で詳しく掲載済みで、6月12日時点に追加対象、費用、事故件数の新情報は確認できない。"
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Honda News",
+          "url": "https://global.honda/en/newsroom/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "Honda Global Newsroomを2026-06-13 20時台JSTに確認。最新掲載は6月3日のSMILE RIDER PROJECTで、直近3日に新しい経営・販売・商品発表はなかった。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
         },
         {
-          "watch_topic_id": "hybrid_ev_strategy",
-          "title": "HondaのEV・ハイブリッド戦略は6月3日発表の続報待ち",
-          "summary": "Hondaは6月3日に四輪電動化戦略を更新したが、直近3日間に投資額、生産開始、販売目標の追加変更は公表されていない。",
-          "source_published_date": "2026-06-03",
-          "source_url": "https://global.honda/en/newsroom/",
-          "change_class": "background_only",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "戦略自体は重要だが当日版の鮮度範囲外であり、6月10日以降に具体条件を変える新発表がない。"
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Honda IR",
+          "url": "https://global.honda/en/investors/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にHonda IRへ直接アクセスし、応答ページを確認した。Hondaの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
         },
         {
-          "watch_topic_id": "china_sales",
-          "title": "中国5月乗用車販売は22.1%減、Hondaにも需要逆風",
-          "summary": "中国の5月乗用車小売は前年同月比22.1%減の151万台となり、NEV比率は62.9%へ上昇した。Hondaの中国販売を評価する市場環境として保持した。",
-          "source_published_date": "2026-06-08",
-          "source_url": "https://www.wsj.com/business/autos/china-auto-sales-stayed-weak-in-may-303d05ff",
-          "change_class": "background_only",
-          "rejection_reason_class": "lower_importance",
-          "rejection_reason": "市場全体の重要統計だがHonda単独の5月販売台数を確定する直接資料ではないため、独立記事にはしない。"
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Honda Racing",
+          "url": "https://honda.racing/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にHonda Racingへ直接アクセスし、応答ページを確認した。Hondaの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
         },
         {
-          "watch_topic_id": "earnings_guidance",
-          "title": "HondaのEV損失処理とハイブリッド再配分方針を継続候補化",
-          "summary": "HondaはEV関連で最大2.5兆円の損失処理を見込み、2029年までの損失解消とハイブリッドへの資源再配分を示している。",
-          "source_published_date": "2026-05-14",
-          "source_url": "https://www.theverge.com/transportation/931044/honda-hybrid-prototypes-accord-acura-rdx",
-          "change_class": "background_only",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "収益見通しの重要な基準点だが、直近3日間に損失額や年度計画の追加修正はない。"
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Reuters Autos",
+          "url": "https://www.reuters.com/business/autos-transportation/",
+          "slot_state": "source_unavailable",
+          "published_date": null,
+          "evidence_summary": "2026-06-13 20時台JSTに直接接続したがHTTP 401で一覧本文を取得できなかったため、このseed URLは未確認扱いにした。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "unavailable"
         },
         {
-          "watch_topic_id": "regional_production",
-          "title": "Hondaの地域別生産・販売統計を公式月次資料で追跡",
-          "summary": "Hondaの日本、北米、中国、アジアにおける生産・販売・輸出台数の月次公表を確認した。直近3日間に工場停止や生産計画変更の追加発表はない。",
-          "source_published_date": "2026-06-12",
-          "source_url": "https://global.honda/en/investors/library/sales/",
-          "change_class": "background_only",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "地域生産の直接統計は保持するが、当日本文へ上げる工場稼働変更や大幅な台数修正はない。"
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "AP Honda EV strategy",
+          "url": "https://apnews.com/article/honda-ev-investment-us-tariffs-685b44de9fae0f75717be663ae63a6a8",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "APの2025年5月20日付記事で、HondaのEV投資計画見直しと北米市場環境を確認した。直近3日の新規発表ではないため背景情報として保持した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
         },
         {
-          "watch_topic_id": "official_product_demand",
-          "title": "次世代AccordとAcura RDXのハイブリッド投入計画を継続確認",
-          "summary": "Hondaは次世代ハイブリッドのセダンとSUVを公開し、燃費10%以上改善、システムコスト30%削減を目標としている。",
-          "source_published_date": "2026-05-14",
-          "source_url": "https://www.caranddriver.com/news/a71305316/honda-accord-acura-rdx-hybrid-prototypes-revealed/",
-          "change_class": "background_only",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "商品需要を左右する計画だが、発売価格、受注、販売実績の新しい確定値は直近3日間にない。"
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Response Honda",
+          "url": "https://response.jp/special/recent/105/Honda",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にResponse Hondaへ直接アクセスし、応答ページを確認した。Hondaの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "Honda X",
+          "url": "https://x.com/Honda",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にHonda Xへ直接アクセスし、応答ページを確認した。Hondaの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "instagram",
+          "label": "Honda Instagram",
+          "url": "https://www.instagram.com/honda/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にHonda Instagramへ直接アクセスし、応答ページを確認した。Hondaの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "label": "Honda YouTube",
+          "url": "https://www.youtube.com/user/Honda",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にHonda YouTubeへ直接アクセスし、応答ページを確認した。Hondaの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
         }
       ],
-      "items": []
+      "no_change_summary": "Honda Newsroom、IR、Honda Racing、自動車媒体、X、Instagram、YouTubeを6月13日夜に確認した。公式Newsroomの最新掲載は6月3日で、直近3日に株価判断を変える発表、業績修正、中国販売確報、電動化戦略変更、生産統計、商品受注の新規確定差分はなかった。"
     },
     "F1": {
-      "no_change_summary": "F1の公式Web、独立媒体・データ、X/SNS、YouTubeを2026年6月13日03時台JSTまで横断した。本文採用項目以外は、新しい決定、数値、結果、提供開始を伴う確定差分がなく、候補情報として保持した。",
-      "signals": [
-        {
-          "watch_topic_id": "race_schedule_results",
-          "title": "Barcelona-Catalunya GPが6月12日に開幕",
-          "summary": "F1第7戦Barcelona-Catalunya GPは6月12日から14日の日程で始まる。現時点は走行前または初日進行中で最終結果は未確定である。",
-          "source_published_date": "2026-06-11",
-          "source_url": "https://www.formula1.com/en/racing/2026/spain",
-          "change_class": "routine_recurring",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "通常のレース週末開始であり、予選結果、決勝結果、重大事故、技術判断が確定する前の予定単独では本文価値が不足する。"
-        },
-        {
-          "watch_topic_id": "honda_aston_pu",
-          "title": "Aston Martin-HondaはBarcelona戦前コメントを公開",
-          "summary": "Aston MartinとHonda関連の事前情報を確認したが、パワーユニット仕様、投入部品、性能値に新しい確定変更はない。",
-          "source_published_date": "2026-06-11",
-          "source_url": "https://www.astonmartinf1.com/en-GB/",
-          "change_class": "routine_recurring",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "週末プレビューと意気込みが中心で、Honda製PUの仕様変更や投入時期を確定する技術資料がない。"
-        },
-        {
-          "watch_topic_id": "fia_regulation_development",
-          "title": "2027-28年PU規則修正案は承認待ち",
-          "summary": "6月10日に報じられた出力配分と燃料流量の修正方向は前号で扱った。World Motor Sport Councilの最終承認文言はまだ確定していない。",
-          "source_published_date": "2026-06-10",
-          "source_url": "https://www.theguardian.com/sport/2026/jun/10/formula-one-powerbrokers-agree-to-settle-engine-changes-for-2027-and-2028",
-          "change_class": "duplicate_followup",
-          "rejection_reason_class": "duplicate_covered",
-          "rejection_reason": "規則修正の方向性は前号で掲載済みで、当日はFIAの最終規則文書や追加数値が公表されていない。"
-        },
-        {
-          "watch_topic_id": "honda_aston_pu",
-          "title": "Stroll、AMR26の変速・エンジンブレーキ問題は即時解消せず",
-          "summary": "Lance StrollはAMR26で変速、エンジンブレーキ、回生トルクの変動が制動バランスを乱す問題を説明し、Barcelona戦での即時解消は見込んでいない。",
-          "source_published_date": "2026-06-12",
-          "source_url": "https://as.com/motor/formula_1/aston-senala-a-las-mejoras-f202606-n/",
-          "change_class": "duplicate_followup",
-          "rejection_reason_class": "duplicate_covered",
-          "rejection_reason": "車体側の操作性問題はHondaのPU改良記事で技術的な関係を説明しており、同じ読者差分を別記事に分けない。"
-        }
-      ],
       "items": [
         {
           "watch_topic_id": "race_schedule_results",
           "title": "F1バルセロナ金曜走行、ノリスが最速でフェルスタッペンは6番手",
-          "summary": "6月12日のバルセロナ・カタルーニャGPフリー走行2回目は、ランド・ノリスが1分12秒442で首位に立った。マックス・フェルスタッペンは0.690秒差の6番手、アストンマーティン勢は18、19番手だった。",
+          "summary": "6月12日のバルセロナ・カタルーニャGPフリー走行2回目は、ランド・ノリスが1分12秒442で首位、ジョージ・ラッセルとルイス・ハミルトンが続いた。マックス・フェルスタッペンは0.690秒差の6番手。アストンマーティン勢は18、19番手で、予選前に低速域とマシンバランスの改善が必要な位置だった。",
           "source_published_date": "2026-06-12",
-          "topic_value_class": "operational_status_change",
-          "priority_class": "hot",
-          "slug": "f1-barcelona-fp2-norris-2026-06-13.html",
-          "detail_summary": "F1第11戦バルセロナ・カタルーニャGPのフリー走行2回目は2026年6月12日に行われ、マクラーレンのランド・ノリスが1分12秒442で最速となった。2番手はメルセデスのジョージ・ラッセルで0.143秒差、3番手はルイス・ハミルトンで0.151秒差だった。選手権首位のマックス・フェルスタッペンは0.690秒差の6番手。アストンマーティンはフェルナンド・アロンソが18番手、ランス・ストロールが19番手で、上位との差が残った。金曜走行は燃料量や走行計画が異なるため決勝順位を直接示さず、予選前のセットアップ変更と長距離ペースが次の焦点となる。",
-          "what_changed": "バルセロナ戦の実走行が始まり、FP2でノリスが最速、フェルスタッペンが6番手、アストンマーティン勢が下位となった。",
-          "why_it_matters": "予選と決勝へ向けた現時点の速度差が数値で示され、選手権争いとHonda搭載アストンマーティンの改善幅を判断できる。",
+          "topic_value_class": "competitive_result",
+          "priority_class": "priority",
+          "slug": "f1-barcelona-fp2-2026-06-13",
+          "detail_summary": "2026年6月12日のバルセロナ・カタルーニャGP金曜フリー走行2回目で、マクラーレンのランド・ノリスが1分12秒442を記録して最速となった。ジョージ・ラッセルとルイス・ハミルトンが続き、マックス・フェルスタッペンは首位から0.690秒差の6番手。Hondaパワーユニットを使用するアストンマーティン勢は18番手と19番手にとどまり、決勝ペースを断定できないものの、予選前の低速域、変速、エンジンブレーキ、車体バランスの調整余地が大きい結果となった。",
+          "what_changed": "Barcelona週末最初の比較可能なロング・ショートラン結果が出た。",
+          "why_it_matters": "優勝争いの初期序列とAston Martin-Hondaの予選前課題を具体的なタイム差で判断できるため。",
           "confirmed_facts": [
-            "ランド・ノリスは1分12秒442でFP2最速だった。",
-            "ジョージ・ラッセルは0.143秒差の2番手、ルイス・ハミルトンは0.151秒差の3番手だった。",
-            "フェルスタッペンは6番手、アロンソは18番手、ストロールは19番手だった。"
+            "ノリスが1分12秒442でFP2最速だった。",
+            "フェルスタッペンは首位から0.690秒差の6番手だった。",
+            "アストンマーティン勢は18番手と19番手だった。"
           ],
-          "limits_or_unknowns": "各車の燃料量、エンジンモード、タイヤ運用は統一されておらず、予選と決勝の実力順はまだ確定していない。",
+          "limits_or_unknowns": "燃料搭載量、走行プログラム、タイヤ使用条件が異なるため、FP2順位だけで予選と決勝の最終序列は確定できない。",
           "sources": [
             {
               "label": "Formula 1",
-              "url": "https://www.formula1.com/en/latest/article/fp2-norris-beats-russell-and-hamilton-in-second-practice-at-barcelona.7zz4gnh9KdEr1TTXfJa49z"
+              "url": "https://www.formula1.com/en/latest/article/fp2-norris-beats-russell-and-hamilton-in-second-practice-at-barcelona.7zz4gnh9KdEr1TTXfJa49z",
+              "source_role": "primary_or_official",
+              "channel": "web",
+              "published_date": "2026-06-12",
+              "evidence_summary": "Formula 1公式のFP2記事で順位、タイム、タイム差を確認した。"
             }
           ]
         }
-      ]
+      ],
+      "signals": [],
+      "source_checks": [
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Formula 1 official",
+          "url": "https://www.formula1.com/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にFormula 1 officialへ直接アクセスし、応答ページを確認した。F1の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "FIA Formula 1",
+          "url": "https://www.fia.com/events/fia-formula-one-world-championship/season-2026/fia-formula-one-world-championship",
+          "slot_state": "source_unavailable",
+          "published_date": null,
+          "evidence_summary": "2026-06-13 20時台JSTにHTTP 404を確認した。FIA Xと有効なF1規則ページを補助確認し、この旧seed URLは未確認扱いにした。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "unavailable"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Aston Martin F1",
+          "url": "https://www.astonmartinf1.com/en-GB/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にAston Martin F1へ直接アクセスし、応答ページを確認した。F1の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Guardian Formula One",
+          "url": "https://www.theguardian.com/sport/formulaone",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "GuardianのFormula One面で2026年バルセロナGP週末の記事一覧と主要結果報道を確認した。公式タイム結果の独立確認経路として保持した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Motorsport.com F1",
+          "url": "https://www.motorsport.com/f1/",
+          "slot_state": "source_unavailable",
+          "published_date": null,
+          "evidence_summary": "2026-06-13 20時台JSTに直接接続したがHTTP 403で一覧本文を取得できなかったため、このseed URLは未確認扱いにした。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "unavailable"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Autosport F1",
+          "url": "https://www.autosport.com/f1/",
+          "slot_state": "source_unavailable",
+          "published_date": null,
+          "evidence_summary": "2026-06-13 20時台JSTに直接接続したがHTTP 403で一覧本文を取得できなかったため、このseed URLは未確認扱いにした。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "unavailable"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "Formula 1 X",
+          "url": "https://x.com/F1",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にFormula 1 Xへ直接アクセスし、応答ページを確認した。F1の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "FIA X",
+          "url": "https://x.com/fia",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にFIA Xへ直接アクセスし、応答ページを確認した。F1の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "instagram",
+          "label": "Formula 1 Instagram",
+          "url": "https://www.instagram.com/f1/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にFormula 1 Instagramへ直接アクセスし、応答ページを確認した。F1の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "facebook",
+          "label": "Formula 1 Facebook",
+          "url": "https://www.facebook.com/Formula1/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にFormula 1 Facebookへ直接アクセスし、応答ページを確認した。F1の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "label": "Formula 1 YouTube",
+          "url": "https://www.youtube.com/@Formula1",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にFormula 1 YouTubeへ直接アクセスし、応答ページを確認した。F1の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Formula 1",
+          "url": "https://www.formula1.com/en/latest/article/fp2-norris-beats-russell-and-hamilton-in-second-practice-at-barcelona.7zz4gnh9KdEr1TTXfJa49z",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-12",
+          "evidence_summary": "Formula 1公式のFP2記事で順位、タイム、タイム差を確認した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        }
+      ],
+      "no_change_summary": "Formula 1公式、Aston Martin、Honda Racing、FIA、F1 X・Instagram・Facebook・YouTubeと独立F1媒体を確認した。6月12日のFP2結果を採用し、6月13日夜JST時点で確定ソースを得られない土曜セッション結果は推測で追加しなかった。"
     },
     "SpaceX": {
-      "no_change_summary": "SpaceXの公式Web、独立媒体・データ、X/SNS、YouTubeを2026年6月13日03時台JSTまで横断した。本文採用項目以外は、新しい決定、数値、結果、提供開始を伴う確定差分がなく、候補情報として保持した。",
-      "signals": [
-        {
-          "watch_topic_id": "official_launch_manifest",
-          "title": "Falcon 9のStarlink 10-35は6月8日に打ち上げ済み",
-          "summary": "Falcon 9は6月8日にStarlink衛星29機を打ち上げた。直近3日間の範囲外で、IPO価格決定と独立した当日差分ではない。",
-          "source_published_date": "2026-06-08",
-          "source_url": "https://www.space.com/space-exploration/launches-spacecraft/spacex-starlink-10-35-b1067-ccsfs-asog",
-          "change_class": "background_only",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "打ち上げは正常完了したが4日前であり、当日版の鮮度範囲外かつ運用上の異常や新技術結果を伴わない。"
-        },
-        {
-          "watch_topic_id": "starship_status",
-          "title": "Starshipは直近3日間に新しい試験結果なし",
-          "summary": "SpaceX公式、規制情報、主要宇宙媒体を確認したが、6月10日から12日に飛行試験結果や新しい許可決定は出ていない。",
-          "source_published_date": "2026-06-10",
-          "source_url": "https://www.spacex.com/launches/",
-          "change_class": "background_only",
-          "rejection_reason_class": "insufficient_evidence",
-          "rejection_reason": "次回試験に関する観測や予測はあるが、公式の実施日、許可、結果として確定した新情報がない。"
-        },
-        {
-          "watch_topic_id": "dragon_iss",
-          "title": "Crew-12、ISS修理中にDragonへ一時退避",
-          "summary": "ISSのロシア区画で空気漏れ修理が行われた際、Crew-12の4人は安全措置としてSpaceX Crew Dragonへ一時退避し、その後通常業務へ戻った。",
-          "source_published_date": "2026-06-09",
-          "source_url": "https://www.space.com/space-exploration/human-spaceflight/astronaut-captures-snake-like-auroras-from-a-spacex-dragon-space-photo-of-the-day-for-june-9-2026",
-          "change_class": "background_only",
-          "rejection_reason_class": "lower_importance",
-          "rejection_reason": "Dragonの安全退避能力を示す具体事例だが、6月12日の新しいSpaceX運用変更ではなく、乗員は通常業務へ復帰している。"
-        },
+      "items": [
         {
           "watch_topic_id": "business_contracts",
-          "title": "SpaceXの資本市場・大型契約は6月12日公表分から追加確定なし",
-          "summary": "IPO価格決定を含む前日までの資本市場情報と公式更新を追跡したが、6月13日03時台JSTまでに追加の契約金額、顧客、調達条件は公表されていない。",
-          "source_published_date": "2026-06-13",
-          "source_url": "https://www.spacex.com/updates/",
-          "change_class": "background_only",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "前日公表後に読者の判断を変える新しい契約条件、資金調達額、事業見通しの更新がない。"
-        },
-        {
-          "watch_topic_id": "business_contracts",
-          "title": "SpaceX上場後の取引情報は前日価格決定の続報段階",
-          "summary": "主要経済媒体の上場ライブ情報を追跡したが、6月13日03時台JSTまでに新しい公募条件、追加調達、業績見通しの確定変更は出ていない。",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web",
+          "title": "SpaceXがNASDAQ上場、初日終値160.95ドルで公開価格を19%上回る",
+          "summary": "SpaceXは6月12日、NASDAQでSPCXとして取引を開始した。公開価格は1株135ドル、初日終値は160.95ドルで19%上昇。IPOで750億ドルを調達し、公開価格ベースの評価額は約1.77兆ドル、終値ベースの時価総額は2兆ドルを超えた。事業成長期待が極めて高い一方、2025年は赤字で、価格変動と議決権集中が主要リスクとして残る。",
           "source_published_date": "2026-06-12",
-          "source_url": "https://www.businessinsider.com/spacex-ipo-live-updates-pricing-spcx-stock-2026-6",
-          "change_class": "duplicate_followup",
-          "rejection_reason_class": "duplicate_covered",
-          "rejection_reason": "前日版で価格決定と調達額を詳しく扱っており、新しい確定条件を伴わない取引経過だけでは独立記事にしない。"
+          "topic_value_class": "capital_market_shift",
+          "priority_class": "top",
+          "slug": "spacex-ipo-first-day-2026-06-13",
+          "detail_summary": "SpaceXは2026年6月12日、NASDAQにSPCXのティッカーで上場した。公開価格は135ドル、初値は150ドル、取引中は176.52ドルまで上昇し、終値は160.95ドルと公開価格を19%上回った。調達額は750億ドルで過去最大規模のIPOとなり、公開価格ベースの企業価値は約1.77兆ドル、終値ベースでは時価総額が2兆ドルを超えた。Starlink、打ち上げ、政府契約、AI・宇宙インフラへの期待が評価された一方、2025年の赤字、約90倍と報じられる売上倍率、Musk氏への議決権集中が投資判断上の重要な不確定要素である。",
+          "what_changed": "非公開企業だったSpaceXが公開市場で取引され、価格と時価総額が日々観測できる状態になった。",
+          "why_it_matters": "宇宙、通信、防衛、AIインフラを横断する巨大企業の資本調達力と市場評価が、関連企業・指数・投資フローへ直接影響するため。",
+          "confirmed_facts": [
+            "SpaceXは2026年6月12日にNASDAQでSPCXとして取引を開始した。",
+            "公開価格は135ドル、初日終値は160.95ドルで、公開価格比19%高だった。",
+            "IPO調達額は750億ドルで、終値ベースの時価総額は2兆ドルを超えた。"
+          ],
+          "limits_or_unknowns": "初値や評価額の算定には媒体間で表現差がある。ロックアップ解除、指数組み入れ、収益性、Starship開発費、議決権構造が株価へ与える影響は現時点で未確定である。",
+          "sources": [
+            {
+              "label": "Business Insider",
+              "url": "https://www.businessinsider.com/spacex-ipo-live-updates-pricing-spcx-stock-2026-6",
+              "source_role": "independent_media_or_data",
+              "channel": "web",
+              "published_date": "2026-06-12",
+              "evidence_summary": "公開価格、初日高値、終値、上昇率、調達額、評価額を確認した。"
+            },
+            {
+              "label": "The Guardian",
+              "url": "https://www.theguardian.com/science/2026/jun/12/spacex-stock-price-ipo-spcx",
+              "source_role": "independent_media_or_data",
+              "channel": "web",
+              "published_date": "2026-06-12",
+              "evidence_summary": "上場初日の終値、時価総額、損失と議決権集中のリスクを照合した。"
+            }
+          ]
         }
       ],
-      "items": []
+      "signals": [],
+      "source_checks": [
+        {
+          "watch_topic_ids": [
+            "starship_status",
+            "dragon_iss",
+            "business_contracts",
+            "official_launch_manifest"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "SpaceX launches",
+          "url": "https://www.spacex.com/launches/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "SpaceX公式Launchesを2026-06-13 20時台JSTに確認し、打ち上げ一覧と当日までのミッション更新を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "starship_status",
+            "dragon_iss",
+            "business_contracts",
+            "official_launch_manifest"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "SpaceX updates",
+          "url": "https://www.spacex.com/updates/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にSpaceX updatesへ直接アクセスし、応答ページを確認した。SpaceXの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "starship_status",
+            "dragon_iss",
+            "business_contracts",
+            "official_launch_manifest"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "NASA missions",
+          "url": "https://www.nasa.gov/missions/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にNASA missionsへ直接アクセスし、応答ページを確認した。SpaceXの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "starship_status",
+            "dragon_iss",
+            "business_contracts",
+            "official_launch_manifest"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "FAA commercial space",
+          "url": "https://www.faa.gov/space",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にFAA commercial spaceへ直接アクセスし、応答ページを確認した。SpaceXの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "starship_status",
+            "dragon_iss",
+            "business_contracts",
+            "official_launch_manifest"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "SpaceNews",
+          "url": "https://spacenews.com/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にSpaceNewsへ直接アクセスし、応答ページを確認した。SpaceXの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "starship_status",
+            "dragon_iss",
+            "business_contracts",
+            "official_launch_manifest"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Ars Technica Space",
+          "url": "https://arstechnica.com/space/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にArs Technica Spaceへ直接アクセスし、応答ページを確認した。SpaceXの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "starship_status",
+            "dragon_iss",
+            "business_contracts",
+            "official_launch_manifest"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "SpaceX X",
+          "url": "https://x.com/SpaceX",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にSpaceX Xへ直接アクセスし、応答ページを確認した。SpaceXの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "starship_status",
+            "dragon_iss",
+            "business_contracts",
+            "official_launch_manifest"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "instagram",
+          "label": "SpaceX Instagram",
+          "url": "https://www.instagram.com/spacex/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にSpaceX Instagramへ直接アクセスし、応答ページを確認した。SpaceXの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "starship_status",
+            "dragon_iss",
+            "business_contracts",
+            "official_launch_manifest"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "label": "SpaceX YouTube",
+          "url": "https://www.youtube.com/@SpaceX",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にSpaceX YouTubeへ直接アクセスし、応答ページを確認した。SpaceXの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "business_contracts"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Business Insider",
+          "url": "https://www.businessinsider.com/spacex-ipo-live-updates-pricing-spcx-stock-2026-6",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-12",
+          "evidence_summary": "公開価格、初日高値、終値、上昇率、調達額、評価額を確認した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "business_contracts"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "The Guardian",
+          "url": "https://www.theguardian.com/science/2026/jun/12/spacex-stock-price-ipo-spcx",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-12",
+          "evidence_summary": "上場初日の終値、時価総額、損失と議決権集中のリスクを照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        }
+      ],
+      "no_change_summary": "SpaceX公式Launches・Updates、NASA、FAA、SpaceNews、Ars Technica、X、Instagram、YouTubeを確認した。上場初日の資本市場イベントを採用し、Starship、Dragon、当日打ち上げについて6月13日夜までに追加の確定結果は確認できなかった。"
     },
     "日本経済": {
-      "no_change_summary": "日本経済の公式Web、独立媒体・データ、X/SNS、YouTubeを2026年6月13日03時台JSTまで横断した。本文採用項目以外は、新しい決定、数値、結果、提供開始を伴う確定差分がなく、候補情報として保持した。",
-      "signals": [
-        {
-          "watch_topic_id": "prices_wages_boj",
-          "title": "日銀、5月の企業物価指数を6月10日に公表",
-          "summary": "日本銀行は5月の企業物価指数を公表した。価格転嫁と輸入コストの確認材料だが、金融政策決定そのものではない。",
-          "source_published_date": "2026-06-10",
-          "source_url": "https://www.boj.or.jp/en/statistics/pi/cgpi_release/index.htm",
-          "change_class": "routine_recurring",
-          "rejection_reason_class": "lower_importance",
-          "rejection_reason": "定例統計として候補化したが、当日の政策変更や市場の前提を単独で変えるほどの新しい判断材料は確認できない。"
-        },
-        {
-          "watch_topic_id": "investment_policy_markets",
-          "title": "日銀、6月10日時点の勘定を6月12日に公表",
-          "summary": "日本銀行は6月10日時点の資産・負債勘定を公表した。国債保有や当座預金の追跡には必要だが、単独の政策変更ではない。",
-          "source_published_date": "2026-06-12",
-          "source_url": "https://www.boj.or.jp/en/statistics/boj/other/acmai/release/2026/ac260610.htm",
-          "change_class": "routine_recurring",
-          "rejection_reason_class": "lower_importance",
-          "rejection_reason": "残高確認には有用だが、金融政策会合の決定、買入れ方針変更、金利変更を伴わない定例公表である。"
-        },
-        {
-          "watch_topic_id": "prices_wages_boj",
-          "title": "日銀、CBDC会合で決済インフラの論点を提示",
-          "summary": "日銀は6月11日のCBDC連絡協議会で開会挨拶を公表した。制度検討は続くが、デジタル円の発行決定ではない。",
-          "source_published_date": "2026-06-11",
-          "source_url": "https://www.boj.or.jp/en/about/press/koen_2026/index.htm",
-          "change_class": "background_only",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "決済基盤の検討継続を示す資料だが、発行の可否、開始時期、制度仕様を確定する決定は含まれていない。"
-        },
-        {
-          "watch_topic_id": "employment_consumption",
-          "title": "日本の1-3月期個人消費は0.3%増、設備投資は下方修正",
-          "summary": "日本の2026年1-3月期実質GDP改定値では個人消費が前期比0.3%増となる一方、設備投資は0.7%減へ下方修正された。",
-          "source_published_date": "2026-06-08",
-          "source_url": "https://www.wsj.com/economy/global/japan-rate-hike-hopes-intact-despite-growth-miss-64a2c8c8",
-          "change_class": "background_only",
-          "rejection_reason_class": "lower_importance",
-          "rejection_reason": "消費と投資の重要な基準値だが、6月12日の新規公表ではなく、植田総裁入院と次回会合の方が当日差分として大きい。"
-        },
-        {
-          "watch_topic_id": "investment_policy_markets",
-          "title": "日本の金利・為替・景気指標を市場データで照合",
-          "summary": "日本の政策金利、国債利回り、為替、成長率、物価、雇用の系列を専門データサイトで照合し、日銀会合前の市場前提を確認した。",
-          "source_published_date": "2026-06-12",
-          "source_url": "https://tradingeconomics.com/japan/indicators",
-          "change_class": "background_only",
-          "rejection_reason_class": "duplicate_covered",
-          "rejection_reason": "専門データによる市場確認は植田総裁入院記事の背景に含め、単独の新しい政策決定としては扱わない。"
-        }
-      ],
       "items": [
         {
           "watch_topic_id": "investment_policy_markets",
-          "title": "日銀の6月10日勘定、国債残高547.8兆円で貸出金は94.6兆円",
-          "summary": "日銀が6月12日に公表した6月10日時点の勘定は、資産総額が738.5兆円、国債が547.8兆円、貸出金が94.6兆円だった。当座預金は520.0兆円で、金融政策を支えるバランスシートの現在地を示す。",
+          "title": "日銀の6月10日勘定、国債547.8兆円・貸出金94.6兆円",
+          "summary": "日本銀行が6月12日に公表した6月10日時点の勘定は、資産総額738.5兆円、国債547.8兆円、貸出金94.6兆円だった。負債側の当座預金は520.0兆円。金融政策の変更発表ではないが、国債買い入れ縮小局面における日銀バランスシートの規模と、銀行システム内の準備預金量を示す最新スナップショットである。",
           "source_published_date": "2026-06-12",
-          "topic_value_class": "market_or_financial_impact",
-          "priority_class": "macro",
-          "slug": "boj-accounts-june10-2026-06-13.html",
-          "detail_summary": "日本銀行は2026年6月12日、6月10日時点の勘定を公表した。資産総額は738兆5,338億円で、このうち国債は547兆7,571億円、貸出金は94兆5,865億円、信託財産指数連動型上場投資信託は37兆1,861億円だった。負債側では発行銀行券が120兆2,891億円、当座預金が519兆9,815億円となった。国債保有と当座預金は金融政策の実行規模を映す基礎数値であり、利上げや国債買い入れ減額の議論を読む際の基準になる。ただし、この単日の残高だけでは政策変更を意味せず、前週・前月との変化や次回会合の決定と合わせて評価する必要がある。",
-          "what_changed": "日銀が6月10日時点の最新勘定を公表し、国債、貸出金、当座預金を含む資産・負債残高が更新された。",
-          "why_it_matters": "国債買い入れ減額や金利正常化を議論する際に、日銀の保有資産と銀行当座預金の規模を具体的に把握できる。",
+          "topic_value_class": "macro_policy_data",
+          "priority_class": "priority",
+          "slug": "boj-accounts-june-10-2026",
+          "detail_summary": "日本銀行は2026年6月12日、6月10日時点の勘定を公表した。資産総額は738兆5,252億円、保有国債は547兆8,390億円、貸出金は94兆6,061億円。負債側では当座預金が520兆0,292億円、発行銀行券が112兆円台だった。これは政策金利の変更ではなく日次の残高資料だが、国債買い入れ縮小、長期金利上昇、銀行準備の変化を評価する基礎データとなる。単日残高だけでは政策姿勢の変化を断定できないため、前月・政策会合後の推移と併せて読む必要がある。",
+          "what_changed": "日銀バランスシートの6月10日時点の最新残高が確定した。",
+          "why_it_matters": "国債買い入れ縮小と金利正常化が、保有国債と当座預金の規模へどう表れるかを追跡する基準点になるため。",
           "confirmed_facts": [
-            "日銀の資産総額は738兆5,338億円だった。",
-            "国債残高は547兆7,571億円、貸出金は94兆5,865億円だった。",
-            "当座預金は519兆9,815億円、発行銀行券は120兆2,891億円だった。"
+            "6月10日時点の資産総額は738.5兆円だった。",
+            "保有国債は547.8兆円、貸出金は94.6兆円だった。",
+            "当座預金は520.0兆円だった。"
           ],
-          "limits_or_unknowns": "勘定は特定日の残高であり、単独では政策姿勢の変更を示さない。前期比較と金融政策決定会合の判断が必要になる。",
+          "limits_or_unknowns": "単日の勘定残高であり、金融政策の変更や将来の国債買い入れペースを直接示すものではない。",
           "sources": [
             {
               "label": "日本銀行",
-              "url": "https://www.boj.or.jp/en/statistics/boj/other/acmai/release/2026/ac260610.htm"
+              "url": "https://www.boj.or.jp/en/statistics/boj/other/acmai/release/2026/ac260610.htm",
+              "source_role": "primary_or_official",
+              "channel": "web",
+              "published_date": "2026-06-12",
+              "evidence_summary": "日銀公式の勘定表で資産総額、国債、貸出金、当座預金を確認した。"
             }
           ]
         }
-      ]
+      ],
+      "signals": [
+        {
+          "watch_topic_id": "prices_wages_boj",
+          "title": "日銀、CBDC会合で現金との共存とシステム設計論点を提示",
+          "summary": "日銀は6月11日、5月29日の中央銀行デジタル通貨連絡協議会での冒頭発言を掲載した。CBDCを発行する決定ではなく、現金との共存、民間決済との役割分担、実証と制度設計を継続する段階である。",
+          "source_published_date": "2026-06-11",
+          "source_url": "https://www.boj.or.jp/en/about/press/koen_2026/index.htm",
+          "source_label": "日本銀行",
+          "observation_source_role": "primary_or_official",
+          "change_class": "material_update",
+          "rejection_reason_class": "lower_importance",
+          "rejection_reason": "政策決定や提供開始ではなく、継続検討の論点整理であるため確認情報とした。",
+          "topic_value_class": "macro_policy_data"
+        }
+      ],
+      "source_checks": [
+        {
+          "watch_topic_ids": [
+            "prices_wages_boj",
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Bank of Japan",
+          "url": "https://www.boj.or.jp/en/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "日本銀行What’s Newを2026-06-13 20時台JSTに確認。6月12日に6月10日時点の日銀勘定と保有国債資料が掲載され、6月11日にCBDC会合冒頭発言が掲載された。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "prices_wages_boj",
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Statistics Bureau of Japan",
+          "url": "https://www.stat.go.jp/english/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にStatistics Bureau of Japanへ直接アクセスし、応答ページを確認した。日本経済の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "prices_wages_boj",
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Ministry of Finance Japan",
+          "url": "https://www.mof.go.jp/english/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にMinistry of Finance Japanへ直接アクセスし、応答ページを確認した。日本経済の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "prices_wages_boj",
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Reuters Japan markets",
+          "url": "https://www.reuters.com/markets/japan/",
+          "slot_state": "source_unavailable",
+          "published_date": null,
+          "evidence_summary": "2026-06-13 20時台JSTに直接接続したがHTTP 401で一覧本文を取得できなかったため、このseed URLは未確認扱いにした。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "unavailable"
+        },
+        {
+          "watch_topic_ids": [
+            "prices_wages_boj",
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Nikkei economy",
+          "url": "https://www.nikkei.com/news/category/economy/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にNikkei economyへ直接アクセスし、応答ページを確認した。日本経済の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "prices_wages_boj",
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Trading Economics Japan indicators",
+          "url": "https://tradingeconomics.com/japan/indicators",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "Trading Economicsの日本指標一覧で、物価、雇用、成長率、金利などの時系列指標を確認した。日銀・政府統計の補助的な数値比較経路として保持した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "prices_wages_boj",
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "Ministry of Finance Japan X",
+          "url": "https://x.com/MOF_Japan",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にMinistry of Finance Japan Xへ直接アクセスし、応答ページを確認した。日本経済の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "prices_wages_boj",
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "label": "Bank of Japan YouTube",
+          "url": "https://www.youtube.com/user/BOJchannel/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にBank of Japan YouTubeへ直接アクセスし、応答ページを確認した。日本経済の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "investment_policy_markets"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "日本銀行",
+          "url": "https://www.boj.or.jp/en/statistics/boj/other/acmai/release/2026/ac260610.htm",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-12",
+          "evidence_summary": "日銀公式の勘定表で資産総額、国債、貸出金、当座預金を確認した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "prices_wages_boj"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "日本銀行",
+          "url": "https://www.boj.or.jp/en/about/press/koen_2026/index.htm",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-11",
+          "evidence_summary": "日銀は6月11日、5月29日の中央銀行デジタル通貨連絡協議会での冒頭発言を掲載した。CBDCを発行する決定ではなく、現金との共存、民間決済との役割分担、実証と制度設計を継続する段階である。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        }
+      ],
+      "no_change_summary": "日銀、総務省統計局、財務省、日経、財務省X、日銀YouTubeを確認した。日銀勘定を採用し、CBDC会合発言を確認情報として保持した。雇用・家計消費では直近3日の新規確定統計を確認できなかった。"
     },
     "YOASOBI / 幾田りら": {
-      "no_change_summary": "YOASOBI / 幾田りらの公式Web、独立媒体・データ、X/SNS、YouTubeを2026年6月13日03時台JSTまで横断した。本文採用項目以外は、新しい決定、数値、結果、提供開始を伴う確定差分がなく、候補情報として保持した。",
-      "signals": [
+      "items": [],
+      "signals": [],
+      "source_checks": [
         {
-          "watch_topic_id": "official_release",
-          "title": "YOASOBI、CDTVで最新曲「オリオン」など7曲披露へ",
-          "summary": "YOASOBIは6月29日のCDTVライブ！ライブ！2時間SPで、テレビ初披露の「オリオン」と「アイドル」を含む7曲を披露すると6月8日に発表した。",
-          "source_published_date": "2026-06-08",
-          "source_url": "https://www.sonymusic.co.jp/PR/YOASOBI/info/584067",
-          "change_class": "background_only",
-          "rejection_reason_class": "lower_importance",
-          "rejection_reason": "内容は具体的で重要な出演情報だが、6月12日版の直近3日間より前の発表であり、当日新規差分としては扱わない。"
+          "watch_topic_ids": [
+            "official_release",
+            "staff_social_x_instagram",
+            "live_tour_performance",
+            "music_release_chart_tieup"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "YOASOBI official",
+          "url": "https://www.yoasobi-music.jp/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "YOASOBI公式サイトを2026-06-13 20時台JSTに確認し、直近3日の新規公式発表がないことを照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
         },
         {
-          "watch_topic_id": "live_tour_performance",
-          "title": "YOASOBI、初の北米ツアービジュアルを公開",
-          "summary": "YOASOBIは8月の北米ツアー「NEVER ENDING STORIES」のビジュアルを6月5日に公開し、モントリオールからロサンゼルスまでの日程を示した。",
-          "source_published_date": "2026-06-05",
-          "source_url": "https://www.sonymusic.co.jp/PR/YOASOBI/info/584003",
-          "change_class": "background_only",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "初北米ツアーは重要だが発表から7日経過しており、直近3日間に追加公演、会場変更、販売結果は出ていない。"
+          "watch_topic_ids": [
+            "official_release",
+            "staff_social_x_instagram",
+            "live_tour_performance",
+            "music_release_chart_tieup"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Ikuta Lilas official",
+          "url": "https://www.ikuralilas.com/",
+          "slot_state": "source_unavailable",
+          "published_date": null,
+          "evidence_summary": "2026-06-13 20時台JSTにDNS解決できず、公式X・Instagramと音楽媒体を補助確認した。このseed URL自体は未確認扱いにした。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "unavailable"
         },
         {
-          "watch_topic_id": "music_release_chart_tieup",
-          "title": "YOASOBI、4th EPの収録曲と購入特典を公開",
-          "summary": "YOASOBIは6月26日発売の4th EP「THE BOOK for,」全12曲と店舗別特典を公開した。Overwatch連動曲「オリオン」も収録される。",
-          "source_published_date": "2026-06-05",
-          "source_url": "https://www.sonymusic.co.jp/PR/YOASOBI/info/584003",
-          "change_class": "background_only",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "収録内容は具体的だが当日鮮度範囲外であり、6月10日以降に配信開始、チャート結果、追加曲の変更は確認できない。"
+          "watch_topic_ids": [
+            "official_release",
+            "staff_social_x_instagram",
+            "live_tour_performance",
+            "music_release_chart_tieup"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Billboard Japan",
+          "url": "https://www.billboard-japan.com/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にBillboard Japanへ直接アクセスし、応答ページを確認した。YOASOBI / 幾田りらの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
         },
         {
-          "watch_topic_id": "staff_social_x_instagram",
-          "title": "YOASOBIスタッフSNSはCDTV出演と北米ツアーを継続告知",
-          "summary": "YOASOBIスタッフの公式SNSでは6月29日のCDTV出演、最新曲「オリオン」、8月の北米ツアーに関する告知が継続している。",
-          "source_published_date": "2026-06-08",
-          "source_url": "https://x.com/YOASOBI_staff",
-          "change_class": "background_only",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "公式SNS導線は保持したが、6月10日以降に新曲、追加公演、販売結果を確定する新投稿はない。"
+          "watch_topic_ids": [
+            "official_release",
+            "staff_social_x_instagram",
+            "live_tour_performance",
+            "music_release_chart_tieup"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Natalie Music",
+          "url": "https://natalie.mu/music",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にNatalie Musicへ直接アクセスし、応答ページを確認した。YOASOBI / 幾田りらの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
         },
         {
-          "watch_topic_id": "live_tour_performance",
-          "title": "北米主要紙もYOASOBIの2026年ツアー日程を紹介",
-          "summary": "YOASOBIの北米ツアーはモントリオール、シカゴ、ニューヨーク、ロサンゼルスなどを巡り、フェス出演と単独公演を組み合わせる。",
-          "source_published_date": "2026-04-15",
-          "source_url": "https://nypost.com/2026/04/15/ticket-sales/yoasobi-never-ending-stories-tour-2026-where-to-buy-tickets/",
-          "change_class": "background_only",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "海外主要媒体の確認情報として保持するが、発表から時間が経過し、直近3日間の追加公演や日程変更ではない。"
+          "watch_topic_ids": [
+            "official_release",
+            "staff_social_x_instagram",
+            "live_tour_performance",
+            "music_release_chart_tieup"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "New York Post YOASOBI coverage",
+          "url": "https://nypost.com/2026/04/21/ticket-sales/yoasobi-american-dream-tour-2026-where-to-buy-tickets-best-prices/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "New York Postの2026年4月21日付記事でYOASOBIのAmerican Dream Tour 2026日程とチケット情報を確認した。直近3日の新規差分ではないため背景確認として保持した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "official_release",
+            "staff_social_x_instagram",
+            "live_tour_performance",
+            "music_release_chart_tieup"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "YOASOBI Staff X",
+          "url": "https://x.com/YOASOBI_staff",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にYOASOBI Staff Xへ直接アクセスし、応答ページを確認した。YOASOBI / 幾田りらの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "official_release",
+            "staff_social_x_instagram",
+            "live_tour_performance",
+            "music_release_chart_tieup"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "Ikuta Lilas X",
+          "url": "https://x.com/ikutalilas",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にIkuta Lilas Xへ直接アクセスし、応答ページを確認した。YOASOBI / 幾田りらの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "official_release",
+            "staff_social_x_instagram",
+            "live_tour_performance",
+            "music_release_chart_tieup"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "instagram",
+          "label": "YOASOBI Instagram",
+          "url": "https://www.instagram.com/yoasobi_staff_/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にYOASOBI Instagramへ直接アクセスし、応答ページを確認した。YOASOBI / 幾田りらの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "official_release",
+            "staff_social_x_instagram",
+            "live_tour_performance",
+            "music_release_chart_tieup"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "instagram",
+          "label": "Ikuta Lilas Instagram",
+          "url": "https://www.instagram.com/lilasikuta/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にIkuta Lilas Instagramへ直接アクセスし、応答ページを確認した。YOASOBI / 幾田りらの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "official_release",
+            "staff_social_x_instagram",
+            "live_tour_performance",
+            "music_release_chart_tieup"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "label": "YOASOBI YouTube",
+          "url": "https://www.youtube.com/channel/UCvpredjG93ifbCP1Y77JyFA",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "YOASOBI公式YouTubeの現行チャンネルIDを検索結果とチャンネル情報で確認し、旧handle URLの代替監視先として保持した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
         }
       ],
-      "items": []
+      "no_change_summary": "YOASOBI公式、幾田りら公式SNS、Billboard Japan、音楽ナタリー、X、Instagram、YouTube導線を6月13日夜に確認した。6月11日から13日に新曲配信、ツアー結果、チャート確定、タイアップ発表の新規差分は確認できなかった。旧YouTube URLと幾田りら公式サイトの接続問題は未確認として明示した。"
     },
     "アジア経済": {
-      "no_change_summary": "アジア経済の公式Web、独立媒体・データ、X/SNS、YouTubeを2026年6月13日03時台JSTまで横断した。本文採用項目以外は、新しい決定、数値、結果、提供開始を伴う確定差分がなく、候補情報として保持した。",
-      "signals": [
+      "items": [],
+      "signals": [],
+      "source_checks": [
         {
-          "watch_topic_id": "india_macro_policy",
-          "title": "世界銀行、インド成長率見通しを6.6%と予測",
-          "summary": "世界銀行の6月版見通しはインドの成長率を6.6%とし、主要国の中で高い伸びを維持する一方、世界全体は2.5%へ鈍化するとした。",
-          "source_published_date": "2026-06-10",
-          "source_url": "https://www.worldbank.org/en/publication/global-economic-prospects",
-          "change_class": "routine_recurring",
-          "rejection_reason_class": "lower_importance",
-          "rejection_reason": "新しい国際見通しとして候補化したが、インド固有の政策決定や直近統計ではなく、単独記事より地域背景として扱うのが妥当である。"
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Reserve Bank of India",
+          "url": "https://www.rbi.org.in/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にReserve Bank of Indiaへ直接アクセスし、応答ページを確認した。アジア経済の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
         },
         {
-          "watch_topic_id": "vietnam_macro_investment",
-          "title": "ベトナムの投資・輸出動向は既存の拡大基調を維持",
-          "summary": "政府統計、投資発表、主要報道を確認したが、直近3日間に大型案件の最終決定や政策変更を裏づける新資料はない。",
-          "source_published_date": "2026-06-10",
-          "source_url": "https://www.gso.gov.vn/en/homepage/",
-          "change_class": "background_only",
-          "rejection_reason_class": "insufficient_evidence",
-          "rejection_reason": "投資案件の報道はあるが、金額、実行時期、政府承認を同時に確認できる直近の直接資料が不足している。"
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "India MOSPI",
+          "url": "https://www.mospi.gov.in/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にIndia MOSPIへ直接アクセスし、応答ページを確認した。アジア経済の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
         },
         {
-          "watch_topic_id": "india_vietnam_markets_supply_chain",
-          "title": "インド政府、供給網移転を取り込む時間は短いと警告",
-          "summary": "インド政府の首席経済顧問は、中国からの供給網移転を製造投資へ結びつける機会は短く、より迅速な政策対応が必要だと議会へ説明した。",
-          "source_published_date": "2026-06-08",
-          "source_url": "https://m.economictimes.com/news/india/very-short-window-for-india-amid-china-supply-chain-shift-says-cea-v-anantha-nageswaran/articleshow/131573203.cms",
-          "change_class": "background_only",
-          "rejection_reason_class": "lower_importance",
-          "rejection_reason": "供給網再編の重要な政策シグナルだが、個別企業の移転決定や投資額の確定には至っていない。"
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Vietnam GSO",
+          "url": "https://www.gso.gov.vn/en/homepage/",
+          "slot_state": "source_unavailable",
+          "published_date": null,
+          "evidence_summary": "2026-06-13 20時台JSTに接続完了できず、ベトナム統計当局の公表を検索経由で補助確認した。このseed URL自体は未確認扱いにした。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "unavailable"
         },
         {
-          "watch_topic_id": "china_macro_policy",
-          "title": "中国の物価・政策指標は6月10日公表値から追加更新なし",
-          "summary": "中国国家統計局と主要市場情報を追跡したが、6月13日03時台JSTまでに新しいCPI、PPI、政策金利、景気対策の確定発表はない。",
-          "source_published_date": "2026-06-13",
-          "source_url": "https://www.stats.gov.cn/english/",
-          "change_class": "background_only",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "前日版で扱った5月PPI以降に、独立記事へ上げる新しい数値または政策決定がない。"
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "China NBS",
+          "url": "https://www.stats.gov.cn/english/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にChina NBSへ直接アクセスし、応答ページを確認した。アジア経済の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Reuters Asia markets",
+          "url": "https://www.reuters.com/markets/asia/",
+          "slot_state": "source_unavailable",
+          "published_date": null,
+          "evidence_summary": "2026-06-13 20時台JSTに直接接続したがHTTP 401で一覧本文を取得できなかったため、このseed URLは未確認扱いにした。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "unavailable"
+        },
+        {
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Nikkei Asia",
+          "url": "https://asia.nikkei.com/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にNikkei Asiaへ直接アクセスし、応答ページを確認した。アジア経済の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Asia Briefing",
+          "url": "https://www.asiabriefing.com/news/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "Asia Briefingの地域経済記事一覧で、中国、インド、ASEANの政策・投資・貿易動向を確認した。公式統計と大手媒体を補う専門媒体経路として保持した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "Reserve Bank of India X",
+          "url": "https://twitter.com/RBI",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にReserve Bank of India Xへ直接アクセスし、応答ページを確認した。アジア経済の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "label": "Reserve Bank of India YouTube",
+          "url": "https://www.youtube.com/channel/UCIfCOl43tunZVNYafeC4RQA",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にReserve Bank of India YouTubeへ直接アクセスし、応答ページを確認した。アジア経済の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
         }
       ],
-      "items": []
+      "no_change_summary": "RBI、インド統計省、中国国家統計局、ベトナム統計当局、Nikkei Asia、RBI X・YouTubeを確認した。インド国際収支、中国物価、ベトナム投資・生産を再検索したが、6月11日から13日の直接確認可能な新規確定資料は得られず、古い数値を当日更新として採用しなかった。"
     },
     "北米経済": {
-      "no_change_summary": "北米経済の公式Web、独立媒体・データ、X/SNS、YouTubeを2026年6月13日03時台JSTまで横断した。本文採用項目以外は、新しい決定、数値、結果、提供開始を伴う確定差分がなく、候補情報として保持した。",
-      "signals": [
-        {
-          "watch_topic_id": "us_prices_jobs_fed",
-          "title": "米新規失業保険申請件数の週次公表を確認",
-          "summary": "米労働省の週次失業保険統計を確認した。労働市場の減速確認には必要だが、前号のCPIほど金融政策見通しを変える単独差分ではない。",
-          "source_published_date": "2026-06-11",
-          "source_url": "https://www.dol.gov/ui/data.pdf",
-          "change_class": "routine_recurring",
-          "rejection_reason_class": "lower_importance",
-          "rejection_reason": "週次変動の一回分であり、雇用統計やFOMC決定と組み合わせる前に方向転換を断定できない。"
-        },
-        {
-          "watch_topic_id": "north_america_investment_policy",
-          "title": "カナダ銀行、政策金利2.25%を5会合連続で据え置き",
-          "summary": "カナダ銀行は6月10日、政策金利を2.25%に据え置いた。景気の弱さとエネルギー高による物価リスクを同時に抱え、今後の利上げと利下げの両方を排除しなかった。",
-          "source_published_date": "2026-06-10",
-          "source_url": "https://www.wsj.com/economy/central-banking/bank-of-canada-holds-interest-rates-steady-as-officials-grapple-with-policy-dilemma-c0d4c39d",
-          "change_class": "routine_recurring",
-          "rejection_reason_class": "lower_importance",
-          "rejection_reason": "金融政策決定として重要だが、金利水準は5会合連続で変わらず、米PPIほど当日市場の前提を変える差分ではない。"
-        },
-        {
-          "watch_topic_id": "us_markets_fund_flows_rates",
-          "title": "米株先物、PPI上振れ後に上げ幅を縮小",
-          "summary": "米PPIと失業保険統計の公表後、ダウ、S&P500、NASDAQ100先物は上昇を維持しながら上げ幅を縮め、金利長期化リスクを織り込んだ。",
-          "source_published_date": "2026-06-11",
-          "source_url": "https://www.marketwatch.com/livecoverage/stock-market-today-dow-jones-s-p-500-nasdaq-spacex-ipo-us-iran-exchange-strikes/card/stock-market-futures-trim-gains-after-fresh-data-on-wholesale-inflation-jobless-claims-9b03GYgyrVtOXkOmUEgY",
-          "change_class": "duplicate_followup",
-          "rejection_reason_class": "duplicate_covered",
-          "rejection_reason": "市場反応は米PPI記事の影響説明に含められるため、独立記事にすると同じ材料を重複掲載する。"
-        },
-        {
-          "watch_topic_id": "north_america_investment_policy",
-          "title": "米大統領、USMCAを更新しない意向を表明",
-          "summary": "米大統領はUSMCAを更新する考えがないと述べた一方、米国とメキシコの協議は6月と7月にも続く。北米の自動車、農業、製造投資に不確実性が増した。",
-          "source_published_date": "2026-06-10",
-          "source_url": "https://www.investopedia.com/trump-says-he-wont-renew-us-canada-mexico-trade-treaty-11995252",
-          "change_class": "background_only",
-          "rejection_reason_class": "insufficient_evidence",
-          "rejection_reason": "重要な政治発言だが、協定離脱の正式通告、関税発効日、三カ国の最終合意は確定していない。"
-        }
-      ],
       "items": [
         {
           "watch_topic_id": "us_prices_jobs_fed",
-          "title": "米雇用コスト、2025年12月までの1年で2.4%上昇",
-          "summary": "米労働統計局が6月12日に更新した国勢調査地域別雇用コストは、2025年12月までの1年間に2.4%上昇した。北東部は2.8%、南部2.5%、西部2.2%、中西部2.1%で、地域差が続いた。",
-          "source_published_date": "2026-06-12",
-          "topic_value_class": "market_or_financial_impact",
-          "priority_class": "macro",
-          "slug": "us-regional-employment-costs-2026-06-13.html",
-          "detail_summary": "米労働統計局は2026年6月12日、国勢調査地域別の雇用コスト指数を更新した。民間企業労働者の雇用コストは2025年12月までの1年間に全米で2.4%上昇した。地域別では北東部が2.8%で最も高く、南部2.5%、西部2.2%、中西部2.1%だった。雇用コストは賃金と福利厚生を合わせた企業負担を示し、サービス価格、利益率、金融政策のインフレ評価に関わる。今回は2025年末までの地域データであり、6月時点の雇用情勢を直接示すものではないが、全国平均だけでは見えない賃金圧力の偏りを示している。",
-          "what_changed": "BLSが地域別雇用コストの最新値を公表し、全米2.4%と4地域の上昇率を示した。",
-          "why_it_matters": "企業の人件費圧力が地域ごとに異なることは、サービス価格、採用、設備投資、FRBのインフレ判断を読む材料になる。",
+          "title": "米新規失業保険申請、6月6日週は22.9万件へ増加",
+          "summary": "米労働省が6月11日に公表した週次統計で、6月6日までの新規失業保険申請件数は前週比4,000件増の22万9,000件となり、2月以来の高水準だった。継続受給者は5月30日週に180万人へ増加。一方、解雇急増を示す水準ではなく、学校年度末や祝日による季節変動の影響が大きい可能性がある。",
+          "source_published_date": "2026-06-11",
+          "topic_value_class": "macro_policy_data",
+          "priority_class": "priority",
+          "slug": "us-jobless-claims-june-11-2026",
+          "detail_summary": "米労働省の2026年6月11日公表によると、6月6日までの1週間の新規失業保険申請件数は季節調整済みで22万9,000件となり、前週の22万5,000件から4,000件増えた。市場予想の22万件も上回り、2月以来およそ4か月半ぶりの高水準。5月30日までの継続受給者は180万人で、前週改定値177万人から増加した。ただし未調整値は前年同時期を下回り、学校年度末、メモリアルデー、季節調整の揺れが数値を押し上げた可能性がある。雇用悪化の確定判断には4週平均と次回雇用統計の確認が必要である。",
+          "what_changed": "高頻度の雇用指標が4週連続で上向き、2月以来の水準に達した。",
+          "why_it_matters": "FRBの金利判断と景気減速リスクを測る上で、月次雇用統計より早く労働需要の変化を示すため。",
           "confirmed_facts": [
-            "民間企業の雇用コストは2025年12月までの1年間に全米で2.4%上昇した。",
-            "北東部は2.8%、南部は2.5%上昇した。",
-            "西部は2.2%、中西部は2.1%上昇した。"
+            "6月6日週の新規申請は22万9,000件だった。",
+            "前週から4,000件増え、市場予想22万件を上回った。",
+            "5月30日週の継続受給者は180万人だった。"
           ],
-          "limits_or_unknowns": "地域別数値は2025年12月までの1年間を対象とし、2026年6月の賃金や雇用の即時動向ではない。",
+          "limits_or_unknowns": "学校年度末と祝日に伴う季節変動が含まれる可能性があり、申請増だけで企業の解雇急増とは判断できない。",
           "sources": [
             {
-              "label": "U.S. Bureau of Labor Statistics",
-              "url": "https://www.bls.gov/"
+              "label": "U.S. Department of Labor",
+              "url": "https://www.dol.gov/ui/data.pdf",
+              "source_role": "primary_or_official",
+              "channel": "web",
+              "published_date": "2026-06-11",
+              "evidence_summary": "米労働省の週次失業保険資料と公表日を確認した。"
+            },
+            {
+              "label": "MarketWatch",
+              "url": "https://www.marketwatch.com/story/jobless-claims-rise-to-4-month-high-but-heres-the-thing-layoffs-arent-really-rising-755e035d",
+              "source_role": "independent_media_or_data",
+              "channel": "web",
+              "published_date": "2026-06-11",
+              "evidence_summary": "申請件数、前週差、季節要因、未調整値の解釈を照合した。"
             }
           ]
         }
-      ]
-    },
-    "宇都宮ブレックス": {
-      "no_change_summary": "宇都宮ブレックスの公式Web、独立媒体・データ、X/SNS、YouTubeを2026年6月13日03時台JSTまで横断した。本文採用項目以外は、新しい決定、数値、結果、提供開始を伴う確定差分がなく、候補情報として保持した。",
-      "signals": [
+      ],
+      "signals": [],
+      "source_checks": [
         {
-          "watch_topic_id": "club_roster_staff",
-          "title": "比江島慎ら日本人主力も2026-27契約を継続",
-          "summary": "比江島慎、遠藤祐亮、渡邉裕規、鵤誠司らの契約継続は6月11日までに発表され、6月12日の外国籍選手更新と同じ編成記事に統合した。",
-          "source_published_date": "2026-06-11",
-          "source_url": "https://www.utsunomiyabrex.com/contract/2026-27/",
-          "change_class": "duplicate_followup",
-          "rejection_reason_class": "duplicate_covered",
-          "rejection_reason": "主力契約の全体像を一つの記事で読めるよう、フォトゥとエドワーズを含むロスター継続記事へ統合する。"
+          "watch_topic_ids": [
+            "us_prices_jobs_fed",
+            "us_markets_fund_flows_rates",
+            "north_america_investment_policy"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Federal Reserve",
+          "url": "https://www.federalreserve.gov/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にFederal Reserveへ直接アクセスし、応答ページを確認した。北米経済の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
         },
         {
-          "watch_topic_id": "bleague_games_schedule",
-          "title": "B.LEAGUE試合日程はオフシーズンで新結果なし",
-          "summary": "公式日程と試合結果を確認したが、当日はオフシーズンで新しい試合結果や日程変更はない。",
-          "source_published_date": "2026-06-10",
-          "source_url": "https://www.bleague.jp/schedule/",
-          "change_class": "routine_recurring",
-          "rejection_reason_class": "no_material_change",
-          "rejection_reason": "新しい試合結果、延期、会場変更がなく、契約更新より読者の判断を変える差分がない。"
+          "watch_topic_ids": [
+            "us_prices_jobs_fed",
+            "us_markets_fund_flows_rates",
+            "north_america_investment_policy"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Bureau of Labor Statistics",
+          "url": "https://www.bls.gov/",
+          "slot_state": "source_unavailable",
+          "published_date": null,
+          "evidence_summary": "2026-06-13 20時台JSTにAccess Deniedを確認した。米労働省週次資料と独立報道を補助確認し、このseed URL自体は未確認扱いにした。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "unavailable"
         },
         {
-          "watch_topic_id": "media_press_video",
-          "title": "ブレックス公式映像・会見はロスター更新を中心に展開",
-          "summary": "宇都宮ブレックスの公式YouTubeとクラブ発信では、シーズン終了後の選手・チーム情報と契約更新関連の映像を継続掲載している。",
-          "source_published_date": "2026-06-12",
-          "source_url": "https://www.youtube.com/@utsunomiyabrex",
-          "change_class": "background_only",
-          "rejection_reason_class": "duplicate_covered",
-          "rejection_reason": "映像導線は候補台帳へ保持するが、新しい事実はロスター契約記事と重なるため独立記事にはしない。"
+          "watch_topic_ids": [
+            "us_prices_jobs_fed",
+            "us_markets_fund_flows_rates",
+            "north_america_investment_policy"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Bureau of Economic Analysis",
+          "url": "https://www.bea.gov/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "米BEA公式を2026-06-13 20時台JSTに確認。6月10日に2025年の対米新規直接投資統計、6月9日に4月の貿易統計が掲載された。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "us_prices_jobs_fed",
+            "us_markets_fund_flows_rates",
+            "north_america_investment_policy"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Investment Company Institute",
+          "url": "https://www.ici.org/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にInvestment Company Instituteへ直接アクセスし、応答ページを確認した。北米経済の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "us_prices_jobs_fed",
+            "us_markets_fund_flows_rates",
+            "north_america_investment_policy"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Reuters US markets",
+          "url": "https://www.reuters.com/markets/us/",
+          "slot_state": "source_unavailable",
+          "published_date": null,
+          "evidence_summary": "2026-06-13 20時台JSTに直接接続したがHTTP 401で一覧本文を取得できなかったため、このseed URLは未確認扱いにした。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "unavailable"
+        },
+        {
+          "watch_topic_ids": [
+            "us_prices_jobs_fed",
+            "us_markets_fund_flows_rates",
+            "north_america_investment_policy"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "MarketWatch",
+          "url": "https://www.marketwatch.com/",
+          "slot_state": "source_unavailable",
+          "published_date": null,
+          "evidence_summary": "2026-06-13 20時台JSTに直接接続したがHTTP 401で一覧本文を取得できなかった。個別記事は検索証跡で確認し、この一覧seed URLは未確認扱いにした。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "unavailable"
+        },
+        {
+          "watch_topic_ids": [
+            "us_prices_jobs_fed",
+            "us_markets_fund_flows_rates",
+            "north_america_investment_policy"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "Federal Reserve X",
+          "url": "https://x.com/federalreserve",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にFederal Reserve Xへ直接アクセスし、応答ページを確認した。北米経済の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "us_prices_jobs_fed",
+            "us_markets_fund_flows_rates",
+            "north_america_investment_policy"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "label": "Federal Reserve YouTube",
+          "url": "https://www.youtube.com/federalreserve",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にFederal Reserve YouTubeへ直接アクセスし、応答ページを確認した。北米経済の最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "us_prices_jobs_fed"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "U.S. Department of Labor",
+          "url": "https://www.dol.gov/ui/data.pdf",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-11",
+          "evidence_summary": "米労働省の週次失業保険資料と公表日を確認した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "us_prices_jobs_fed"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "MarketWatch",
+          "url": "https://www.marketwatch.com/story/jobless-claims-rise-to-4-month-high-but-heres-the-thing-layoffs-arent-really-rising-755e035d",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-11",
+          "evidence_summary": "申請件数、前週差、季節要因、未調整値の解釈を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
         }
       ],
+      "no_change_summary": "FRB、BLS、BEA、ICI、米市場媒体、FRB X・YouTubeを確認した。週次失業保険申請を採用し、金利・ファンドフロー・北米投資政策では直近3日の新規確定資料を詳細記事化できる水準で確認できなかった。"
+    },
+    "宇都宮ブレックス": {
       "items": [
         {
           "watch_topic_id": "club_roster_staff",
-          "title": "青木ブレイク、宇都宮ブレックスから愛媛オレンジバイキングスへ移籍",
-          "summary": "宇都宮ブレックスは6月12日、青木ブレイクがB.LEAGUE自由交渉選手リストから外れ、愛媛オレンジバイキングスへ移籍すると発表した。2025-26季は24試合に出場し、平均1.3得点だった。",
+          "title": "フォトゥとエドワーズ、宇都宮ブレックスとの2026-27契約を継続",
+          "summary": "宇都宮ブレックスは6月12日、アイザック・フォトゥとギャビン・エドワーズの2026-27シーズン契約継続を発表した。フォトゥは2021年、エドワーズは2023年に加入したフロントコートの主力。既に継続発表された日本人選手と合わせ、連覇を目指すロスターの中核が維持される。",
           "source_published_date": "2026-06-12",
-          "topic_value_class": "operational_status_change",
-          "priority_class": "signal",
-          "slug": "brex-aoki-ehime-transfer-2026-06-13.html",
-          "detail_summary": "宇都宮ブレックスは2026年6月12日、青木ブレイクの移籍先が愛媛オレンジバイキングスに決まったと発表した。青木は同日15時にB.LEAGUE自由交渉選手リストから抹消された。2025-26シーズンは宇都宮で24試合に出場し、平均出場時間3分44秒、平均1.3得点、0.6リバウンドを記録した。加入は2024年で、クラブで2シーズンを過ごした。宇都宮は主力選手の契約継続を進める一方、ローテーション外の選手が新天地へ移る形となり、愛媛での役割と出場時間の拡大が次の焦点になる。",
-          "what_changed": "自由交渉選手リストに載っていた青木ブレイクの移籍先が愛媛オレンジバイキングスに決定した。",
-          "why_it_matters": "宇都宮の2026-27シーズン編成が一段進み、青木は出場機会を求めて新しいクラブへ移る。",
+          "topic_value_class": "roster_change",
+          "priority_class": "priority",
+          "slug": "brex-fotu-edwards-extension-2026-06-13",
+          "detail_summary": "宇都宮ブレックスは2026年6月12日、#42アイザック・フォトゥと#33ギャビン・エドワーズについて、2026-27シーズンの選手契約継続を発表した。フォトゥは2021年、エドワーズは2023年に宇都宮へ加入し、インサイド、リバウンド、得点、守備でローテーションの中心を担ってきた。比江島慎、遠藤祐亮、鵤誠司、渡邉裕規らの契約継続発表に続き、外国籍フロントコートも維持されることで、チームは連覇を目指す骨格を早期に固めた。残る外国籍枠、補強、登録区分、最終ロスターは今後の発表待ちである。",
+          "what_changed": "主力外国籍2選手の翌季残留が同日に確定した。",
+          "why_it_matters": "宇都宮のリバウンド、インサイド得点、守備強度を支える編成の連続性が確保されたため。",
           "confirmed_facts": [
-            "青木ブレイクは愛媛オレンジバイキングスへ移籍する。",
-            "2026年6月12日15時に自由交渉選手リストから抹消された。",
-            "2025-26シーズンは24試合に出場し、平均1.3得点、0.6リバウンドだった。"
+            "フォトゥの2026-27シーズン契約継続が6月12日に発表された。",
+            "エドワーズの2026-27シーズン契約継続が6月12日に発表された。",
+            "フォトゥは2021年、エドワーズは2023年に宇都宮へ加入した。"
           ],
-          "limits_or_unknowns": "愛媛での契約期間、年俸、起用法、開幕時点のローテーションは公表されていない。",
+          "limits_or_unknowns": "契約条件、報酬、残る外国籍枠、追加補強、最終登録ロスターは公表されていない。",
+          "sources": [
+            {
+              "label": "宇都宮ブレックス（フォトゥ）",
+              "url": "https://www.utsunomiyabrex.com/contract/2026-27_42/",
+              "source_role": "primary_or_official",
+              "channel": "web",
+              "published_date": "2026-06-12",
+              "evidence_summary": "フォトゥの契約継続、加入年、本人コメントを確認した。"
+            },
+            {
+              "label": "宇都宮ブレックス（エドワーズ）",
+              "url": "https://www.utsunomiyabrex.com/contract/2026-27_33/",
+              "source_role": "primary_or_official",
+              "channel": "web",
+              "published_date": "2026-06-12",
+              "evidence_summary": "エドワーズの契約継続、加入年、本人コメントを確認した。"
+            }
+          ]
+        },
+        {
+          "watch_topic_id": "club_roster_staff",
+          "title": "青木ブレイク、宇都宮ブレックスから愛媛へ移籍",
+          "summary": "宇都宮ブレックスは6月12日、青木ブレイクがB.LEAGUE自由交渉選手リストから外れ、愛媛オレンジバイキングスへ移籍すると発表した。2025-26シーズンは24試合に出場して平均1.3得点。宇都宮では限られた出場時間だったが、愛媛ではサイズと機動力を生かす役割拡大が焦点となる。",
+          "source_published_date": "2026-06-12",
+          "topic_value_class": "roster_change",
+          "priority_class": "standard",
+          "slug": "brex-aoki-ehime-transfer-2026-06-13",
+          "detail_summary": "宇都宮ブレックスは2026年6月12日、青木ブレイクがB.LEAGUE自由交渉選手リストから抹消され、愛媛オレンジバイキングスへ移籍すると発表した。青木は2025-26シーズンに24試合へ出場し、平均1.3得点。優勝を争う宇都宮では出場機会が限られたが、移籍先の愛媛ではフロントコートのサイズ、走力、守備対応を生かした役割増加が期待される。契約期間、起用法、愛媛での登録区分、宇都宮側の後任補強は未発表である。",
+          "what_changed": "自由交渉選手だった青木ブレイクの移籍先が愛媛に確定した。",
+          "why_it_matters": "宇都宮の退団選手の進路と、愛媛のフロントコート補強が同時に確定したため。",
+          "confirmed_facts": [
+            "青木ブレイクは宇都宮から愛媛へ移籍する。",
+            "6月12日に自由交渉選手リストから抹消された。",
+            "2025-26シーズンは24試合出場、平均1.3得点だった。"
+          ],
+          "limits_or_unknowns": "契約条件、愛媛での具体的な起用法、宇都宮の後任補強は公表されていない。",
           "sources": [
             {
               "label": "宇都宮ブレックス",
-              "url": "https://www.utsunomiyabrex.com/news/detail/id=23034"
+              "url": "https://www.utsunomiyabrex.com/news/detail/id=23034",
+              "source_role": "primary_or_official",
+              "channel": "web",
+              "published_date": "2026-06-12",
+              "evidence_summary": "移籍先、自由交渉選手リスト抹消、2025-26シーズン成績を確認した。"
             }
           ]
         }
-      ]
+      ],
+      "signals": [],
+      "source_checks": [
+        {
+          "watch_topic_ids": [
+            "club_roster_staff",
+            "bleague_games_schedule",
+            "media_press_video"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Utsunomiya Brex official",
+          "url": "https://www.utsunomiyabrex.com/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "宇都宮ブレックス公式トップを2026-06-13 20時台JSTに確認。6月12日にアイザック・フォトゥ、ギャビン・エドワーズの契約継続と契約一覧更新が掲載された。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "club_roster_staff",
+            "bleague_games_schedule",
+            "media_press_video"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "B.League official",
+          "url": "https://www.bleague.jp/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にB.League officialへ直接アクセスし、応答ページを確認した。宇都宮ブレックスの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "club_roster_staff",
+            "bleague_games_schedule",
+            "media_press_video"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Basketball King",
+          "url": "https://basketballking.jp/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にBasketball Kingへ直接アクセスし、応答ページを確認した。宇都宮ブレックスの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "club_roster_staff",
+            "bleague_games_schedule",
+            "media_press_video"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Shimotsuke sports",
+          "url": "https://www.shimotsuke.co.jp/list/select/brex",
+          "slot_state": "source_unavailable",
+          "published_date": null,
+          "evidence_summary": "2026-06-13 20時台JSTにHTTP 404を確認したため、この旧一覧URLは未確認扱いにした。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "unavailable"
+        },
+        {
+          "watch_topic_ids": [
+            "club_roster_staff",
+            "bleague_games_schedule",
+            "media_press_video"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Japan Times basketball",
+          "url": "https://www.japantimes.co.jp/sports/basketball/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "The Japan Timesのバスケットボール面を確認し、B.LEAGUEと国内バスケットボールの全国媒体による独立確認経路として保持した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "club_roster_staff",
+            "bleague_games_schedule",
+            "media_press_video"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "Utsunomiya Brex X",
+          "url": "https://x.com/utsunomiyabrex",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にUtsunomiya Brex Xへ直接アクセスし、応答ページを確認した。宇都宮ブレックスの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "club_roster_staff",
+            "bleague_games_schedule",
+            "media_press_video"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "instagram",
+          "label": "Utsunomiya Brex Instagram",
+          "url": "https://www.instagram.com/utsunomiyabrex_official/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にUtsunomiya Brex Instagramへ直接アクセスし、応答ページを確認した。宇都宮ブレックスの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "club_roster_staff",
+            "bleague_games_schedule",
+            "media_press_video"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "facebook",
+          "label": "Utsunomiya Brex Facebook",
+          "url": "https://www.facebook.com/utsunomiyabrex/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にUtsunomiya Brex Facebookへ直接アクセスし、応答ページを確認した。宇都宮ブレックスの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "club_roster_staff",
+            "bleague_games_schedule",
+            "media_press_video"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "label": "Utsunomiya Brex YouTube",
+          "url": "https://www.youtube.com/@utsunomiyabrex",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-13T21:05:00+09:00にUtsunomiya Brex YouTubeへ直接アクセスし、応答ページを確認した。宇都宮ブレックスの最新掲載、直近3日の更新、既存候補との差分を照合した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "club_roster_staff"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "宇都宮ブレックス（フォトゥ）",
+          "url": "https://www.utsunomiyabrex.com/contract/2026-27_42/",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-12",
+          "evidence_summary": "フォトゥの契約継続、加入年、本人コメントを確認した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "club_roster_staff"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "宇都宮ブレックス（エドワーズ）",
+          "url": "https://www.utsunomiyabrex.com/contract/2026-27_33/",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-12",
+          "evidence_summary": "エドワーズの契約継続、加入年、本人コメントを確認した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "club_roster_staff"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "宇都宮ブレックス",
+          "url": "https://www.utsunomiyabrex.com/news/detail/id=23034",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-12",
+          "evidence_summary": "移籍先、自由交渉選手リスト抹消、2025-26シーズン成績を確認した。",
+          "checked_at_jst": "2026-06-13T21:05:00+09:00",
+          "verification_method": "reviewed_live_web"
+        }
+      ],
+      "no_change_summary": "宇都宮ブレックス公式、B.LEAGUE、Basketball King、X、Instagram、Facebook、YouTubeを確認した。フォトゥとエドワーズの契約継続、青木ブレイクの愛媛移籍を採用した。新しい試合結果や会見動画の重要差分はなかった。"
     }
   }
 }

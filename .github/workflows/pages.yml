@@ -44,7 +44,6 @@ jobs:
 
       - name: Prepare site
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}
           REQUESTED_ISSUE_DATE: ${{ inputs.issue_date || '' }}
         run: |
@@ -61,7 +60,10 @@ jobs:
             echo "Computed NIGHT SIGNAL issue date is invalid: ${ISSUE_DATE}" >&2
             exit 1
           fi
-          python3 scripts/night_signal_publish.py "$ISSUE_DATE"
+          # GitHub Pages deploys only a committed, evening-fresh issue. Live
+          # collection belongs to the local Codex automation, where Web
+          # research evidence can be reviewed and committed before this step.
+          python3 scripts/night_signal_publish.py "$ISSUE_DATE" --deploy-existing
           cp .nojekyll site/.nojekyll
           echo "ISSUE_DATE=$ISSUE_DATE" >> "$GITHUB_ENV"
 

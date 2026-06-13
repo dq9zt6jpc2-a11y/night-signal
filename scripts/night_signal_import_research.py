@@ -20,11 +20,22 @@ import night_signal_synthesize as synthesize
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE_ROOT = ROOT / "state"
+TOPIC_VALUE_CLASS_MAP = {
+    "capital_market_shift": "market_or_financial_impact",
+    "competitive_result": "event_result_or_outcome",
+    "macro_policy_data": "market_or_financial_impact",
+    "roster_change": "operational_status_change",
+}
 
 
 def fail(message: str) -> None:
     print(f"NIGHT SIGNAL RESEARCH IMPORT FAILED: {message}", file=sys.stderr)
     raise SystemExit(1)
+
+
+def topic_value_class(value: Any) -> str:
+    normalized = str(value)
+    return TOPIC_VALUE_CLASS_MAP.get(normalized, normalized)
 
 
 def read_bundle(path: Path) -> dict[str, Any]:
@@ -55,6 +66,67 @@ def category_config() -> dict[str, dict[str, Any]]:
     }
 
 
+def validate_source_check(
+    label: str,
+    index: int,
+    check: Any,
+    *,
+    issue_date: str,
+    topic_keys: set[tuple[str, str]],
+) -> dict[str, Any]:
+    if not isinstance(check, dict):
+        fail(f"{label} source_checks[{index}] must be an object")
+    for key in (
+        "source_role",
+        "channel",
+        "label",
+        "url",
+        "slot_state",
+        "evidence_summary",
+        "checked_at_jst",
+        "verification_method",
+    ):
+        if not isinstance(check.get(key), str) or not check[key].strip():
+            fail(f"{label} source_checks[{index}] missing {key}")
+    topics = check.get("watch_topic_ids")
+    if not isinstance(topics, list) or not topics:
+        fail(f"{label} source_checks[{index}] needs watch_topic_ids")
+    unknown = [
+        str(topic_id)
+        for topic_id in topics
+        if (label, str(topic_id)) not in topic_keys
+    ]
+    if unknown:
+        fail(f"{label} source_checks[{index}] uses unknown watch topics: {unknown}")
+    if not str(check["url"]).startswith(("http://", "https://")):
+        fail(f"{label} source_checks[{index}] url must be absolute")
+    if not str(check["checked_at_jst"]).startswith(issue_date):
+        fail(f"{label} source_checks[{index}] checked_at_jst must be on the issue date")
+    if check["slot_state"] not in {"observed_live", "source_unavailable"}:
+        fail(f"{label} source_checks[{index}] slot_state must be observed_live or source_unavailable")
+    expected_method = (
+        "unavailable"
+        if check["slot_state"] == "source_unavailable"
+        else "reviewed_live_web"
+    )
+    if check["verification_method"] != expected_method:
+        fail(
+            f"{label} source_checks[{index}] {check['slot_state']} "
+            f"must use {expected_method}"
+        )
+    if check["slot_state"] == "source_unavailable" and len(str(check["evidence_summary"]).strip()) < 20:
+        fail(f"{label} source_checks[{index}] unavailable reason is too short")
+    published_date = check.get("published_date")
+    if published_date is not None and (
+        not isinstance(published_date, str) or len(published_date) != 10
+    ):
+        fail(f"{label} source_checks[{index}] published_date must be YYYY-MM-DD or null")
+    return {
+        **check,
+        "watch_topic_ids": [str(topic_id) for topic_id in topics],
+    }
+
+
 def validate_bundle(bundle: dict[str, Any], issue_date: str) -> dict[str, list[dict[str, Any]]]:
     if bundle.get("issue_date") != issue_date:
         fail(f"bundle issue_date mismatch: {bundle.get('issue_date')} != {issue_date}")
@@ -82,14 +154,27 @@ def validate_bundle(bundle: dict[str, Any], issue_date: str) -> dict[str, list[d
             fail(f"{label} bundle entry must be an object")
         items = entry.get("items")
         signals = entry.get("signals")
+        source_checks = entry.get("source_checks")
         no_change_summary = entry.get("no_change_summary")
         if not isinstance(items, list):
             fail(f"{label} items must be a list")
         if not isinstance(signals, list):
             fail(f"{label} signals must be a list")
+        if not isinstance(source_checks, list) or not source_checks:
+            fail(f"{label} source_checks must be a non-empty list")
         if not isinstance(no_change_summary, str) or len(no_change_summary.strip()) < 20:
             fail(f"{label} no_change_summary is too short")
         normalized[label] = []
+        entry["source_checks"] = [
+            validate_source_check(
+                label,
+                index,
+                check,
+                issue_date=issue_date,
+                topic_keys=topic_keys,
+            )
+            for index, check in enumerate(source_checks, start=1)
+        ]
         for index, item in enumerate(items, start=1):
             if not isinstance(item, dict):
                 fail(f"{label} items[{index}] must be an object")
@@ -151,86 +236,108 @@ def validate_bundle(bundle: dict[str, Any], issue_date: str) -> dict[str, list[d
             if signal["title"] in seen_titles:
                 fail(f"duplicate signal title: {signal['title']}")
             seen_titles.add(signal["title"])
-        required_topics = {
-            topic_id for category, topic_id in topic_keys if category == label
+        verified_checks = {
+            (str(check["url"]), str(topic_id))
+            for check in entry["source_checks"]
+            if check["slot_state"] == "observed_live"
+            for topic_id in check["watch_topic_ids"]
         }
-        concrete_topics = {
-            str(candidate["watch_topic_id"]) for candidate in [*items, *signals]
-        }
-        missing_topics = sorted(required_topics - concrete_topics)
-        if missing_topics:
-            fail(
-                f"{label} needs a concrete item or signal for every watch topic: "
-                + ", ".join(missing_topics)
-            )
+        for item in items:
+            for source in item["sources"]:
+                key = (str(source["url"]), str(item["watch_topic_id"]))
+                if key not in verified_checks:
+                    fail(
+                        f"{label} item source lacks an explicit observed source_check: "
+                        f"{source['url']}"
+                    )
+        for signal in signals:
+            key = (str(signal["source_url"]), str(signal["watch_topic_id"]))
+            if key not in verified_checks:
+                fail(
+                    f"{label} signal source lacks an explicit observed source_check: "
+                    f"{signal['source_url']}"
+                )
     return normalized
 
 
-def matching_item(
+def matching_items(
     items: list[dict[str, Any]],
     topic_id: str,
     source_role: str,
     channel: str,
-) -> dict[str, Any] | None:
-    for item in items:
-        if item["watch_topic_id"] != topic_id:
-            continue
-        if item.get("observation_source_role", "primary_or_official") != source_role:
-            continue
-        if item.get("observation_channel", "web") != channel:
-            continue
-        return item
-    return None
+) -> list[dict[str, Any]]:
+    return [
+        item
+        for item in items
+        if item["watch_topic_id"] == topic_id
+        and item.get("observation_source_role", "primary_or_official")
+        == source_role
+        and item.get("observation_channel", "web") == channel
+    ]
+
+
+def matching_signals(
+    signals: list[dict[str, Any]],
+    topic_id: str,
+    source_role: str,
+    channel: str,
+) -> list[dict[str, Any]]:
+    return [
+        signal
+        for signal in signals
+        if signal["watch_topic_id"] == topic_id
+        and signal.get(
+            "observation_source_role",
+            "independent_media_or_data",
+        )
+        == source_role
+        and signal.get("observation_channel", "web") == channel
+    ]
 
 
 def source_results(
     task: dict[str, Any],
-    items: list[dict[str, Any]],
-    signals: list[dict[str, Any]],
-    issue_date: str,
+    source_checks: list[dict[str, Any]],
+    topic_id: str,
 ) -> list[dict[str, Any]]:
-    item_sources = {
-        str(source["url"]): item
-        for item in items
-        for source in item.get("sources", [])
-        if isinstance(source, dict)
-    }
-    results: list[dict[str, Any]] = []
-    for target in task.get("source_targets", []):
-        if not isinstance(target, dict):
-            continue
-        url = str(target["url"])
-        item = item_sources.get(url)
-        results.append(
-            {
-                "label": str(target["label"]),
-                "url": url,
-                "channel": str(target["channel"]),
-                "slot_state": "observed_live",
-                "published_date": item["source_published_date"] if item else None,
-                "evidence_summary": (
-                    f"{item['title']}の直接資料を確認した。"
-                    if item
-                    else f"{issue_date}時点の更新有無を確認した。"
-                ),
-            }
+    matching = [
+        check
+        for check in source_checks
+        if topic_id in check["watch_topic_ids"]
+        and check["source_role"] == task["source_role"]
+        and (
+            check["channel"] == task["channel"]
+            or (
+                task["source_role"] == "social_or_video_signal"
+                and task["channel"] == "sns_x"
+                and check["channel"] in {"sns_x", "instagram", "facebook"}
+            )
         )
-    for signal in signals:
-        if signal.get("observation_source_role", "primary_or_official") != task["source_role"]:
-            continue
-        if signal.get("observation_channel", "web") != task["channel"]:
-            continue
-        results.append(
-            {
-                "label": str(signal["title"]),
-                "url": str(signal["source_url"]),
-                "channel": str(signal.get("observation_channel", "web")),
-                "slot_state": "observed_live",
-                "published_date": str(signal["source_published_date"]),
-                "evidence_summary": str(signal["summary"]),
-            }
+    ]
+    by_url = {str(check["url"]): check for check in matching}
+    missing_seed_urls = [
+        str(target["url"])
+        for target in task.get("source_targets", [])
+        if isinstance(target, dict) and str(target["url"]) not in by_url
+    ]
+    if missing_seed_urls:
+        fail(
+            f"{task.get('slot_id')} / {topic_id} has seed targets without explicit checks: "
+            + ", ".join(missing_seed_urls[:6])
         )
-    return results
+    return [
+        {
+            "label": str(check["label"]),
+            "url": str(check["url"]),
+            "channel": str(check["channel"]),
+            "slot_state": str(check["slot_state"]),
+            "published_date": check.get("published_date"),
+            "evidence_summary": str(check["evidence_summary"]),
+            "checked_at_jst": str(check["checked_at_jst"]),
+            "verification_method": str(check["verification_method"]),
+        }
+        for check in matching
+    ]
 
 
 def build_observations(
@@ -242,6 +349,7 @@ def build_observations(
     checked_at = str(bundle["checked_at_jst"])
     observations: list[dict[str, Any]] = []
     used_item_titles: set[str] = set()
+    used_signal_titles: set[str] = set()
     for task in plan.get("tasks", []):
         if not isinstance(task, dict):
             continue
@@ -252,45 +360,118 @@ def build_observations(
             for signal in bundle["categories"][category]["signals"]
             if isinstance(signal, dict)
         ]
-        targets = source_results(task, items, signals, issue_date)
-        if not targets:
-            fail(f"{task.get('slot_id')} has no source targets")
+        source_checks = [
+            check
+            for check in bundle["categories"][category]["source_checks"]
+            if isinstance(check, dict)
+        ]
         for topic in task.get("watch_topics", []):
             topic_id = str(topic["watch_topic_id"])
-            item = matching_item(
+            targets = source_results(task, source_checks, topic_id)
+            if not targets:
+                fail(f"{task.get('slot_id')} / {topic_id} has no explicit source checks")
+            route_items = matching_items(
                 items,
                 topic_id,
                 str(task["source_role"]),
                 str(task["channel"]),
             )
-            if item and item["title"] not in used_item_titles:
-                primary_source = item["sources"][0]
+            new_route_items = [
+                item
+                for item in route_items
+                if item["title"] not in used_item_titles
+            ]
+            route_signals = matching_signals(
+                signals,
+                topic_id,
+                str(task["source_role"]),
+                str(task["channel"]),
+            )
+            new_route_signals = [
+                signal
+                for signal in route_signals
+                if signal["title"] not in used_signal_titles
+            ]
+            if new_route_items or new_route_signals:
+                primary_source_url = (
+                    str(new_route_items[0]["sources"][0]["url"])
+                    if new_route_items
+                    else str(new_route_signals[0]["source_url"])
+                )
                 claim_atoms = [
                     {
                         "claim_type": str(item.get("claim_type", "announcement")),
                         "claim": str(fact),
                         "source_state": str(item.get("source_state", "confirmed_update")),
                     }
+                    for item in new_route_items
                     for fact in item["confirmed_facts"]
                 ]
-                observation_url = str(primary_source["url"])
-                published_date: str | None = str(item["source_published_date"])
-                evidence_summary = str(item["summary"])
-                used_item_titles.add(str(item["title"]))
+                claim_atoms.extend(
+                    {
+                        "claim_type": str(
+                            signal.get("claim_type", "reported_direction")
+                        ),
+                        "claim": str(signal["summary"]),
+                        "source_state": str(
+                            signal.get("source_state", "reported_update")
+                        ),
+                    }
+                    for signal in new_route_signals
+                )
+                observation_url = primary_source_url
+                published_date: str | None = max(
+                    [
+                        str(item["source_published_date"])
+                        for item in new_route_items
+                    ]
+                    + [
+                        str(signal["source_published_date"])
+                        for signal in new_route_signals
+                    ]
+                )
+                evidence_summary = " ".join(
+                    [
+                        str(item["summary"])
+                        for item in new_route_items
+                    ]
+                    + [
+                        str(signal["summary"])
+                        for signal in new_route_signals
+                    ]
+                )
+                used_item_titles.update(
+                    str(item["title"])
+                    for item in new_route_items
+                )
+                used_signal_titles.update(
+                    str(signal["title"])
+                    for signal in new_route_signals
+                )
             else:
-                observation_url = str(targets[0]["url"])
+                observed_targets = [
+                    target
+                    for target in targets
+                    if target["slot_state"] in {"observed_live", "reused_from_cache"}
+                ]
+                observation_url = str((observed_targets or targets)[0]["url"])
                 published_date = None
                 claim_atoms = []
                 evidence_summary = str(
                     bundle["categories"][category]["no_change_summary"]
                 )
+            slot_state = (
+                "observed_live"
+                if any(target["slot_state"] == "observed_live" for target in targets)
+                else "source_unavailable"
+            )
             observations.append(
                 {
                     "category": category,
                     "watch_topic_id": topic_id,
                     "source_role": str(task["source_role"]),
                     "channel": str(task["channel"]),
-                    "slot_state": "observed_live",
+                    "slot_state": slot_state,
                     "url": observation_url,
                     "observed_at_jst": checked_at,
                     "published_date": published_date,
@@ -310,6 +491,17 @@ def build_observations(
         fail(
             "items could not be assigned to a matching observation route: "
             + ", ".join(unused)
+        )
+    unused_signals = [
+        signal["title"]
+        for entry in bundle["categories"].values()
+        for signal in entry["signals"]
+        if signal["title"] not in used_signal_titles
+    ]
+    if unused_signals:
+        fail(
+            "signals could not be assigned to a matching observation route: "
+            + ", ".join(unused_signals)
         )
     return observations
 
@@ -355,6 +547,8 @@ def build_findings(
         source_role = str(observation["source_role"])
         channel = str(observation["channel"])
         for result in observation["source_target_results"]:
+            if result["slot_state"] not in {"observed_live", "reused_from_cache"}:
+                continue
             url = str(result["url"])
             key = (category, topic_id, url)
             base = reviewable.get(key)
@@ -433,7 +627,7 @@ def item_decision(item: dict[str, Any]) -> dict[str, Any]:
     return {
         "candidate_title": str(item["title"]),
         "adoption_decision": "adopt",
-        "topic_value_class": str(item["topic_value_class"]),
+        "topic_value_class": topic_value_class(item["topic_value_class"]),
         "reader_delta": str(item["why_it_matters"]),
         "materiality_basis": str(item["what_changed"]),
         "reject_reason_class": None,
@@ -471,7 +665,7 @@ def signal_decision(signal: dict[str, Any]) -> dict[str, Any]:
     return {
         "candidate_title": str(signal["title"]),
         "adoption_decision": "reject",
-        "topic_value_class": str(
+        "topic_value_class": topic_value_class(
             signal.get("topic_value_class", "operational_status_change")
         ),
         "reader_delta": str(signal["summary"]),
@@ -481,9 +675,19 @@ def signal_decision(signal: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def item_card(category: str, section_id: str, item: dict[str, Any]) -> dict[str, Any]:
+def item_card(
+    category: str,
+    section_id: str,
+    item: dict[str, Any],
+    issue_date: str,
+) -> dict[str, Any]:
     facts = [str(fact) for fact in item["confirmed_facts"]]
     source_urls = [str(source["url"]) for source in item["sources"]]
+    slug = str(item["slug"])
+    slug_stem = slug[:-5] if slug.endswith(".html") else slug
+    if not slug_stem.endswith(f"-{issue_date}"):
+        slug_stem = f"{slug_stem}-{issue_date}"
+    slug = f"{slug_stem}.html"
     return {
         "candidate_title": str(item["title"]),
         "title": str(item["title"]),
@@ -491,11 +695,17 @@ def item_card(category: str, section_id: str, item: dict[str, Any]) -> dict[str,
         "section_id": section_id,
         "category": category,
         "source_published_date": str(item["source_published_date"]),
-        "topic_value_class": str(item["topic_value_class"]),
+        "topic_value_class": topic_value_class(item["topic_value_class"]),
         "priority_class": str(item["priority_class"]),
         "detail": {
-            "slug": str(item["slug"]),
-            "sources": item["sources"],
+            "slug": slug,
+            "sources": [
+                {
+                    "label": str(source["label"]),
+                    "url": str(source["url"]),
+                }
+                for source in item["sources"]
+            ],
             "summary": str(item["detail_summary"]),
             "summary_basis": {
                 "what_changed": str(item["what_changed"]),
@@ -518,8 +728,7 @@ def import_bundle(issue_date: str, bundle_path: Path, state_root: Path) -> dict[
     base = state_root / issue_date
     base.mkdir(parents=True, exist_ok=True)
     plan_path = base / "collection_plan.json"
-    if not plan_path.exists():
-        state.write_collection_plan(issue_date, state_root)
+    state.write_collection_plan(issue_date, state_root)
     plan = state.read_json(plan_path)
     observations = build_observations(bundle, items_by_category, plan)
     findings = build_findings(bundle, observations)
@@ -527,10 +736,6 @@ def import_bundle(issue_date: str, bundle_path: Path, state_root: Path) -> dict[
     state.validate_observation_records(observations, frontier)
 
     configs = category_config()
-    observation_url_by_topic = {
-        (str(item["category"]), str(item["watch_topic_id"])): str(item["url"])
-        for item in observations
-    }
     results_by_category: dict[str, dict[str, Any]] = {}
     for category, config in configs.items():
         items = items_by_category[category]
@@ -539,23 +744,8 @@ def import_bundle(issue_date: str, bundle_path: Path, state_root: Path) -> dict[
             for signal in bundle["categories"][category]["signals"]
             if isinstance(signal, dict)
         ]
-        item_topics = {str(item["watch_topic_id"]) for item in items}
         candidates = [item_candidate(category, item) for item in items]
         candidates.extend(signal_candidate(category, signal) for signal in signals)
-        for frontier_item in frontier:
-            if frontier_item["category"] != category:
-                continue
-            topic_id = str(frontier_item["watch_topic_id"])
-            if topic_id in item_topics:
-                continue
-            candidates.append(
-                no_change_candidate(
-                    category,
-                    topic_id,
-                    issue_date,
-                    observation_url_by_topic[(category, topic_id)],
-                )
-            )
         item_titles = {str(item["title"]) for item in items}
         signal_titles = {str(signal["title"]) for signal in signals}
         decisions = [
@@ -569,7 +759,12 @@ def import_bundle(issue_date: str, bundle_path: Path, state_root: Path) -> dict[
             for candidate in candidates
         ]
         cards = [
-            item_card(category, str(config["section_id"]), item)
+            item_card(
+                category,
+                str(config["section_id"]),
+                item,
+                issue_date,
+            )
             for item in items
         ]
         results_by_category[category] = {
@@ -579,17 +774,34 @@ def import_bundle(issue_date: str, bundle_path: Path, state_root: Path) -> dict[
             "cards": cards,
             "no_change_checks": [
                 {
-                    "topic_id": "category_horizon",
-                    "result": str(bundle["categories"][category]["no_change_summary"]),
+                    "topic_id": str(frontier_item["watch_topic_id"]),
+                    "result": " ".join(
+                        dict.fromkeys(
+                            str(result["evidence_summary"])
+                            for observation in observations
+                            if observation["category"] == category
+                            and observation["watch_topic_id"]
+                            == frontier_item["watch_topic_id"]
+                            for result in observation["source_target_results"]
+                            if result["slot_state"]
+                            in {"observed_live", "reused_from_cache"}
+                        )
+                    ),
                     "evidence_urls": sorted(
                         {
                             str(result["url"])
                             for observation in observations
                             if observation["category"] == category
+                            and observation["watch_topic_id"]
+                            == frontier_item["watch_topic_id"]
                             for result in observation["source_target_results"]
+                            if result["slot_state"]
+                            in {"observed_live", "reused_from_cache"}
                         }
                     ),
                 }
+                for frontier_item in frontier
+                if frontier_item["category"] == category
             ],
         }
 
@@ -608,9 +820,15 @@ def import_bundle(issue_date: str, bundle_path: Path, state_root: Path) -> dict[
         for result in results_by_category.values()
         for item in result["cards"]
     ]
-    manifest = synthesize.minimal_manifest(issue_date, results_by_category)
+    manifest = synthesize.minimal_manifest(
+        issue_date,
+        results_by_category,
+        observations=observations,
+        collection_mode="reviewed_live_web",
+        collection_completed_at_jst=str(bundle["checked_at_jst"]),
+    )
     manifest["last_checked_jst"] = str(bundle["checked_at_jst"])
-    manifest["note"] = "Reviewed research imported through the canonical state contract."
+    manifest["note"] = "Explicit reviewed live-Web checks imported through the canonical state contract."
 
     write_jsonl(base / "observations.jsonl", observations)
     write_jsonl(base / "findings.jsonl", findings)
@@ -632,6 +850,20 @@ def import_bundle(issue_date: str, bundle_path: Path, state_root: Path) -> dict[
 def self_test() -> None:
     if no_change_candidate("OpenAI", "product_release", "2099-01-01", "https://openai.com/")["change_class"] != "background_only":
         fail("no-change candidate generation failed")
+    task = {
+        "slot_id": "openai-primary-web",
+        "source_role": "primary_or_official",
+        "channel": "web",
+        "source_targets": [
+            {"label": "OpenAI", "url": "https://openai.com/", "channel": "web"}
+        ],
+    }
+    try:
+        source_results(task, [], "product_release")
+    except SystemExit:
+        pass
+    else:
+        fail("reviewed import must reject seed targets without explicit checks")
     print("NIGHT SIGNAL RESEARCH IMPORT SELF-TEST PASSED")
 
 

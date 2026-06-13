@@ -29,8 +29,12 @@ AUDIT_PATHS = [
     ROOT / "scripts" / "night_signal_collect.py",
     ROOT / "scripts" / "night_signal_synthesize.py",
     ROOT / "scripts" / "night_signal_publish.py",
+    ROOT / "scripts" / "night_signal_runtime_audit.py",
 ]
-SIMULATION_PATH = ROOT / "scripts" / "simulate_quality_gate_failures.py"
+SIMULATION_PATHS = [
+    ROOT / "scripts" / "simulate_quality_gate_failures.py",
+    ROOT / "scripts" / "simulate_runtime_failures.py",
+]
 WORKFLOW_PATHS = list((ROOT / ".github" / "workflows").glob("*.yml"))
 
 
@@ -209,7 +213,7 @@ def main() -> int:
     texts = {
         "policy": POLICY_PATH.read_text(encoding="utf-8"),
         "audit": read_all(AUDIT_PATHS),
-        "simulation": SIMULATION_PATH.read_text(encoding="utf-8"),
+        "simulation": read_all(SIMULATION_PATHS),
         "workflow": read_all(WORKFLOW_PATHS),
     }
     for guard in guards:

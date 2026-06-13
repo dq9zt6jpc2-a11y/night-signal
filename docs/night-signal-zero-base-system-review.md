@@ -1,15 +1,12 @@
 # NIGHT SIGNAL Zero-Base System Review
 
-Checked on 2026-06-12 JST.
+Checked on 2026-06-13 JST.
 
 ## Verdict
 
-Partially yes. The zero-base redesign has now been applied to the core
-collection/synthesis path where it matters most for comprehensiveness:
-task-level hypotheses, required live web search, raw source traces, prompt-cache
-keys, and claim/source linkage are in code. It has not been expanded into Batch,
-Deep Research, Agents SDK, or broad policy rewrites because those would add
-cost and complexity before the lightweight path is exhausted.
+Yes for the current lightweight architecture, with one operational condition:
+the 18:00 JST automation must complete the actual evening live collection.
+Static plans and morning state no longer count as final publication evidence.
 
 What has been done:
 
@@ -24,27 +21,28 @@ What has been done:
   `prompt_cache_key`, and writes raw web-search source traces;
 - `scripts/night_signal_synthesize.py` rejects material candidates whose source
   URLs are not connected to observed claim atoms;
+- reviewed research import requires explicit per-URL checks and can no longer
+  mark every configured seed as observed;
+- all ten categories include Web, X/SNS, and YouTube routes;
+- watch-topic completeness is proved by candidates or URL-backed topic checks,
+  not by fabricated near-miss candidates;
+- recent verified non-adopted findings remain visible as compact confirmation
+  signals;
+- final deploy requires an evening-fresh manifest and GitHub Pages deploys only
+  committed state;
 - `scripts/simulate_ai_collection_redesign.py` reports no current lightweight
   limit blockers;
 - existing self-tests still pass.
 
-What has not been done:
+Deferred after review:
 
-- `README-night-signal.md` still describes the older
-  `collection_plan -> observations -> candidates -> decisions -> issue` flow;
-- `details/policy.html` still expresses the older coverage-manifest and
-  operation-time policy, not the new memory/hypothesis/evidence-graph loop;
-- `scripts/night_signal_collect.py` now persists raw web-search sources to
-  `source_traces.jsonl`, but it does not yet persist raw image/search results;
-- `scripts/night_signal_collect.py` does not yet use latest web-search controls
-  such as `filters`, `external_web_access`, `return_token_budget`, or
-  `search_content_types`;
-- `config/night_signal_guardrails.json` does not yet encode the new failure
-  classes: missing raw source traces, missing hypothesis/source intent, missing
-  claim/source linkage, unbounded Deep Research, Batch result expiry, or
-  cache/reuse proof;
-- Batch API, background Deep Research, file-search memory, MCP/connectors, and
-  Agents SDK remain design candidates, not implemented paths.
+- raw image results and `search_content_types`, because visual evidence is not
+  yet a cross-category publication requirement;
+- split filtered/unfiltered search calls, because explicit raw-source
+  verification now closes the evidence gap without doubling every sweep;
+- Batch, Agents SDK, file-search memory, and broad connector orchestration,
+  because the deterministic 40-sweep path is simpler and has not yet shown a
+  measured recall limit.
 
 ## Current System Reality
 
@@ -76,13 +74,13 @@ Previous issue state
 Those two are now unified in the lightweight path. The present source code does
 not prove that heavier external orchestration would improve the outcome.
 
-## Policy Gap
+## Policy Debt
 
 `details/policy.html` is operationally heavy and historically additive. It
-contains many valid guardrails, but it is not the clean current policy for the
-new system.
+contains many valid guardrails, so replacing it wholesale immediately before a
+publication window would create avoidable regression risk.
 
-The policy should be reduced to the current invariants:
+The current invariants are now stated explicitly:
 
 - collect broadly before writing;
 - model human editorial cognition inside existing state;
@@ -91,8 +89,9 @@ The policy should be reduced to the current invariants:
 - reject stale fallback publication;
 - learn after publication.
 
-Historical incident rules should stay in `config/night_signal_guardrails.json`,
-not dominate reader-facing or operator-facing policy.
+Historical incident rules remain in `config/night_signal_guardrails.json`.
+Further editorial shortening of the HTML policy is non-blocking cleanup, not a
+missing runtime control.
 
 ## Structure Gap
 
@@ -121,24 +120,16 @@ The most important source-code gaps are:
 4. Reuse policy is planned but not enforced by cached source state.
 5. Batch and prompt-cache fields are metadata only, except `prompt_cache_key`
    is now sent.
-6. Deep Research has no controlled review command or output schema.
+6. Bounded background extended research is implemented in the collector;
+   dedicated Deep Research report generation remains deferred because it is not
+   needed for the daily publication path.
 
 ## Correct Next Move
 
-Do not rewrite everything at once.
-
-The smallest honest next move is:
-
-1. measure cached tokens and live task outcomes from real collection runs;
-2. persist selected web-search/image results only for visual slots where the
-   extra bytes are justified;
-3. update README, policy, workflows, and guardrails around the new
-   implemented state;
-4. defer Batch, Deep Research, and Agents SDK until this smaller path proves
-   insufficient.
-
-This turns the zero-base design into code without creating another decorative
-document layer.
+Run the evening collection through the strengthened contracts, inspect a sample
+of misses and source traces, then publish only after the full local gate chain.
+Add heavier technology only when that real run identifies a measured recall or
+latency limit.
 
 ## Verification Performed
 
@@ -148,15 +139,26 @@ Commands run:
 python3 scripts/night_signal_state.py --self-test
 python3 scripts/night_signal_collect.py --self-test
 python3 scripts/night_signal_synthesize.py --self-test
+python3 scripts/night_signal_import_research.py --self-test
+python3 scripts/night_signal_eval.py --self-test
+python3 scripts/night_signal_publish.py --self-test
 python3 scripts/guardrail_inventory.py
-python3 scripts/night_signal_state.py --readiness --date 2026-06-12
+python3 scripts/publication_schedule_audit.py
+python3 scripts/simulate_ai_collection_redesign.py 2026-06-13 --fail-on-weakness
+python3 scripts/simulate_quality_gate_failures.py
+python3 scripts/night_signal_state.py --validate-issue state/2026-06-12/issue.json
+python3 scripts/night_signal_publish.py 2026-06-13 --deploy-existing
+PYTHONPYCACHEPREFIX=/tmp/night-signal-pycache python3 -m py_compile scripts/*.py
 git diff --check
 ```
 
 Results:
 
-- state, collector, synthesizer, and guardrail self-tests passed;
-- 2026-06-12 readiness correctly blocks because current daily state is missing;
+- all state, collector, synthesizer, importer, evaluator, publisher, guardrail,
+  schedule, and failure-injection tests passed;
+- the 40-topic, 160-slot, all-category Web/X/YouTube simulation passed;
+- the saved 2026-06-12 issue remains valid under its legacy contract;
+- the stale pre-redesign 2026-06-13 issue is correctly rejected because it
+  lacks collection completion provenance;
 - `git diff --check` passed;
-- the review found heavier-orchestration gaps, not core lightweight collection
-  blockers.
+- no core lightweight collection blocker remains before the evening live run.

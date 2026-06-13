@@ -74,11 +74,15 @@ A required slot is closed only when it is:
 - explicitly not applicable by contract.
 
 When uncertain, keep the item as a candidate. Collection should bias toward not
-missing material changes. Reader display is stricter: a public item must be an
-adopted detail card inside its configured category. There is no list-only public
-layer. If a fresh material item matters and has enough evidence, make it a full
-detail card; if it does not, keep it in the candidate ledger with a concrete
-reason.
+missing material changes. Reader display has two explicit depths:
+
+- adopted material changes become full detail cards;
+- verified recent non-adopted findings become compact confirmation signals with
+  source date and direct URL.
+
+Background-only, stale, generic no-change, and unverified items remain out of
+the public page. This prevents an apparently empty category without lowering
+the detail-card standard.
 
 The canonical daily state is assembled from structured files:
 
@@ -109,6 +113,16 @@ X, Instagram, Facebook, YouTube, official pages, and media/data sources from
 being silently skipped inside a broad social or web check without multiplying
 the number of expensive reasoning passes.
 
+Every target result also records `checked_at_jst` and `verification_method`.
+`observed_live` is valid only when the URL is present in the raw web-search
+source trace or in an explicit reviewed live-Web check. A listed seed URL,
+generic "checked" text, or registry membership is not evidence.
+
+Every configured watch topic must have either a real candidate or a
+topic-specific check with verified evidence URLs. Requiring a concrete
+candidate for every topic is forbidden because it creates artificial near-miss
+items when nothing changed.
+
 ## 5. Selection
 
 Freshness is eligibility, not value.
@@ -126,11 +140,10 @@ Routine schedules, repeated background items, and thin social reactions should
 remain in observations or rejected candidates unless they change what the reader
 needs to know.
 
-Candidate volume and article volume are intentionally different. The candidate
-ledger is allowed to be wider than the published card set; it is the place for
-confirmed but lower-priority signals such as monthly market figures, product
-minor changes, social/video operational movements, and official notices that do
-not yet deserve a full detail page.
+Candidate volume, compact signal volume, and article volume are intentionally
+different. The candidate ledger remains the complete review record. Recent
+verified lower-priority signals may appear compactly on the public category,
+while only adopted material changes receive detail pages.
 
 ## 6. Summary
 
@@ -267,8 +280,8 @@ The 2026-06-12 implementation adds a pre-summary findings ledger:
   social/video sweeps require at least one;
 - the complete daily issue requires at least three distinct URLs and two source
   role/channel combinations per watch topic across all sweeps;
-- every watch topic requires a concrete reviewable finding, not a generic
-  "nothing changed" placeholder;
+- every watch topic requires multiple direct findings and a verified
+  topic-specific result, but not an artificial candidate;
 - every fresh or near-miss finding URL must survive into the candidate ledger;
 - evaluation measures finding depth, source diversity, candidate retention,
   claim/source mapping, and collection-call reduction.
@@ -295,48 +308,95 @@ Publication is allowed only when:
 - coverage and quality audits pass;
 - the public root and dated URLs show the same issue date and content.
 
+For the current JST issue, the final deploy path requires collection completion
+at or after 18:00 JST. An issue generated in the morning cannot satisfy the
+evening publish attempt without a new collection. `--force-collect` style
+implicit bundle reuse is not part of the design.
+
+The local Codex automation owns live collection, synthesis, commit, push, and
+public verification. GitHub Pages owns only deployment of committed state that
+passes the evening freshness contract. GitHub Actions must not pretend to
+collect live data when the repository has no API credential.
+
 No older issue may be republished because the current issue is missing.
 The stable root shows the current issue. Dated archive folders are retained for
 the latest seven published issues; older dated site folders are pruned by the
 site sync owner, not by article generation.
 
-If `state/YYYY-MM-DD/issue.json` exists, preflight and publication regenerate
-the working artifacts from that state before auditing. This keeps daily changes
-from depending on hand-edited HTML.
+Preflight may regenerate working artifacts from existing state for diagnosis.
+Final publication either performs a fresh live collection or deploys a
+committed issue whose manifest proves the evening collection time and mode.
 
-## 10. Current Gap
+### Runtime failure model
 
-The publication path has real safeguards. The generation owner exists in
-`scripts/night_signal_state.py --generate-issue`.
+The collection model and the publication model have separate dependencies.
+Codex background credits, model context/output token limits, OpenAI API quota
+and rate limits, execution deadlines, network access, GitHub access, and the
+local worktree can fail independently. A single "automation active" flag is
+therefore not a readiness signal.
 
-The source-observation owner now exists in `scripts/night_signal_collect.py`.
-It uses the Responses API web search tool and Structured Outputs to fill
-`SOURCE_OBSERVATION_SCHEMA` from `collection_plan.json`. Live execution needs
-`OPENAI_API_KEY`; without that credential the system can generate requests and
-block readiness, but it cannot honestly claim external collection is complete.
+The runtime chooses one explicit path:
 
-The observation-to-publication-state owner now exists in
-`scripts/night_signal_synthesize.py`. It refuses incomplete observations and
-uses Structured Outputs to produce candidates, decisions, cards, and manifest
-data before `issue.json` assembly.
+1. deploy an already verified fresh evening issue;
+2. import a current reviewed bundle whose URLs have explicit live checks;
+3. collect and synthesize through the Responses API;
+4. block publication when no honest collector is available.
+
+Every publication stage writes `runtime_checkpoint.json`. Independent GitHub
+Actions monitoring fails when no current collection path exists, even if the
+Codex automation database still says `IN_PROGRESS`. No degradation level may
+republish an old issue or manufacture source evidence.
+
+Stage checkpoints alone are insufficient for token or quota exhaustion during
+a long model call sequence. Collection therefore writes one atomic part per
+source slot, and synthesis writes one atomic part per category. `--resume`
+reuses only parts whose input hash matches the current plan and evidence. A
+changed task, observation, finding, or category input invalidates the part.
+This bounds repeated work to the interrupted slot or category.
+
+## 10. Current Status And Deferred Technology
+
+The canonical owners now exist:
+
+- `night_signal_collect.py`: Responses web search, raw source traces, findings,
+  observations;
+- `night_signal_synthesize.py`: candidates, decisions, cards, topic checks,
+  manifest;
+- `night_signal_state.py`: semantic validation and rendering;
+- `night_signal_publish.py`: fresh collection or freshness-validated deploy.
+
+All ten categories now require Web, X/SNS, and YouTube routes in addition to
+official and independent/data evidence. Economic categories use official
+central-bank or ministry social/video channels instead of being Web-only.
+
+The following technologies remain deliberately deferred:
+
+- Batch API, until synchronous live runs produce stable source-trace and token
+  metrics;
+- Agents SDK, until deterministic state transitions need handoff orchestration;
+- image search, until a category-specific visual-evidence eval proves recall
+  gain;
+- domain-filtered split searches, until the extra call count beats the current
+  open discovery plus explicit trace verification.
+
+These are not unreviewed omissions. They are rejected for the current daily
+path because they add branches without proven recall improvement.
 
 Daily collection must still write structured observations, candidates,
 decisions, cards, and coverage manifest before `issue.json` can be assembled.
 Adding more documents or date-specific scripts does not solve collection.
 
-## 11. Next Architecture Move
+## 11. Next Validation Move
 
-The next real improvement is to feed `scripts/night_signal_state.py` from
-structured collection state:
+The next required step is operational evidence from the evening run:
 
-1. create current frontier;
-2. generate `collection_plan.json`;
-3. collect source observations through `scripts/night_signal_collect.py` or a
-   compatible connector that writes the same schema;
-4. normalize candidates;
-5. decide topic value;
-6. assemble and validate `state/YYYY-MM-DD/issue.json`;
-7. render the issue from accepted decisions;
+1. regenerate the current frontier and collection plan;
+2. perform the full live Web/X/YouTube sweep after 18:00 JST;
+3. inspect missed-source and unavailable-source samples;
+4. assemble, render, and pass the full local gate chain;
+5. publish and confirm both public URLs;
+6. use measured misses, latency, and token data to decide whether any deferred
+   technology has earned adoption.
 8. publish only from the current issue state.
 
 Everything else should either support that path or be deleted.

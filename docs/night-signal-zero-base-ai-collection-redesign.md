@@ -1,6 +1,6 @@
 # NIGHT SIGNAL Zero-Base AI Collection Redesign
 
-Checked on 2026-06-12 JST against current official OpenAI documentation.
+Checked on 2026-06-13 JST against current official OpenAI documentation.
 
 ## 1. Conclusion
 
@@ -47,12 +47,16 @@ Required usage:
 - use the hosted `web_search`, not legacy `web_search_preview`;
 - set `tool_choice` to required for slots that must search;
 - persist `web_search_call.action.sources` for every run;
-- persist `web_search_call.results` for image-capable slots;
-- use `filters.allowed_domains` for seed-source verification;
-- use broad search with limited `blocked_domains` for discovery;
+- persist `web_search_call.action.sources` and verify every claimed observed URL
+  against that trace;
+- use `filters.allowed_domains` only in a separate seed-verification pass when
+  an eval shows that it improves recall enough to justify another call;
+- keep daily discovery open rather than applying one filter to both seed
+  verification and unknown-source discovery;
 - use `external_web_access=false` only for cache-only unchanged checks;
 - use `return_token_budget=unlimited` only for high-value frontier reviews;
-- use `search_content_types=["image", "text"]` for visual/event/product slots.
+- add `search_content_types=["image", "text"]` only after a visual-evidence
+  category test demonstrates a real missed-signal improvement.
 
 This directly improves both comprehensiveness and auditability. The model's
 summary is no longer the only proof that a source was consulted.
@@ -329,13 +333,14 @@ Do not build:
 1. Persist all useful direct-source results in `findings.jsonl` and raw web
    search sources in `source_traces.jsonl`.
 2. Require every watch topic to have multiple distinct findings across at least
-   two source roles/channels before synthesis.
+   two source roles/channels and a URL-backed topic result before synthesis.
 3. Force web search only for tasks that require live observation; keep cached or
    not-applicable checks cheap.
 4. Send `prompt_cache_key` and arrange request payloads for cache-friendly
    prefixes.
 5. Require every fresh or near-miss finding URL to appear in the candidate
-   ledger before editorial selection.
+   ledger before editorial selection, without requiring an artificial
+   candidate for topics whose verified result is no change.
 6. Add claim/source linkage to candidates and decisions.
 7. Use bounded extended research only for unresolved material ambiguity.
 8. Only after those pass simulation, evaluate Batch for normal-priority tasks.
