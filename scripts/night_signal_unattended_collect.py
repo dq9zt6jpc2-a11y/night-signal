@@ -185,36 +185,46 @@ def jina_url(url: str) -> str:
     return "https://r.jina.ai/http://" + re.sub(r"^https?://", "", url)
 
 
-def social_search_fallback(source: dict[str, Any]) -> dict[str, Any]:
+def source_search_fallback(source: dict[str, Any]) -> dict[str, Any]:
     source_url = str(source["url"])
     parsed = urllib.parse.urlparse(source_url)
     account = f"{parsed.netloc}{parsed.path}".rstrip("/")
-    search_url = "https://www.bing.com/search?" + urllib.parse.urlencode(
-        {
-            "format": "rss",
-            "q": f'site:{account} "{source["label"]}"',
-        }
-    )
-    raw, content_type, resolved_url = request_bytes(search_url)
-    try:
-        root = ET.fromstring(raw)
-        results = [
-            " / ".join(
-                part
-                for part in (
-                    compact_text(item.findtext("title") or "", 180),
-                    compact_text(item.findtext("link") or "", 500),
-                    compact_text(item.findtext("description") or "", 300),
+    queries = [
+        f'site:{account} "{source["label"]}"',
+        f'site:{parsed.netloc} "{source["label"]}"',
+        f'"{source["label"]}"',
+    ]
+    excerpt = ""
+    resolved_url = ""
+    used_query = ""
+    for query in queries:
+        search_url = "https://www.bing.com/search?" + urllib.parse.urlencode(
+            {"format": "rss", "q": query}
+        )
+        raw, content_type, resolved_url = request_bytes(search_url)
+        try:
+            root = ET.fromstring(raw)
+            results = [
+                " / ".join(
+                    part
+                    for part in (
+                        compact_text(item.findtext("title") or "", 180),
+                        compact_text(item.findtext("link") or "", 500),
+                        compact_text(item.findtext("description") or "", 300),
+                    )
+                    if part
                 )
-                if part
-            )
-            for item in root.findall(".//item")[:5]
-        ]
-        excerpt = compact_text(" ".join(results), 1600)
-    except ET.ParseError:
-        _, excerpt = page_text(raw, content_type)
+                for item in root.findall(".//item")[:5]
+            ]
+            excerpt = compact_text(" ".join(results), 1600)
+        except ET.ParseError:
+            _, excerpt = page_text(raw, content_type)
+        if len(excerpt) >= 80:
+            used_query = query
+            break
     if len(excerpt) < 80:
-        raise ValueError("account-limited social search returned too little evidence")
+        raise ValueError("source-limited search returned too little evidence")
+    source_kind = "Xアカウント" if source.get("channel") == "sns_x" else "登録ソース"
     return {
         **source,
         "url": source_url,
@@ -223,9 +233,9 @@ def social_search_fallback(source: dict[str, Any]) -> dict[str, Any]:
         "title": f"{source['label']}限定検索",
         "excerpt": excerpt,
         "evidence": (
-            f"{source['label']}のX直取得とReader取得が利用できなかったため、"
-            f"対象アカウント{source_url}に限定したBing RSS検索を確認した。"
-            f"検索結果: {excerpt[:500]}"
+            f"{source['label']}の直取得とReader取得が利用できなかったため、"
+            f"{source_kind}{source_url}に限定したBing RSS検索を確認した。"
+            f"検索語: {used_query}。検索結果: {excerpt[:500]}"
         ),
     }
 
@@ -259,18 +269,17 @@ def fetch_source(source: dict[str, Any]) -> dict[str, Any]:
             }
         except (OSError, TimeoutError, urllib.error.URLError, ValueError) as exc:
             errors.append(f"{attempt}: {type(exc).__name__}: {exc}")
-    if source.get("channel") == "sns_x":
-        try:
-            return social_search_fallback(source)
-        except (
-            OSError,
-            TimeoutError,
-            urllib.error.URLError,
-            ValueError,
-        ) as exc:
-            errors.append(
-                f"account-limited search: {type(exc).__name__}: {exc}"
-            )
+    try:
+        return source_search_fallback(source)
+    except (
+        OSError,
+        TimeoutError,
+        urllib.error.URLError,
+        ValueError,
+    ) as exc:
+        errors.append(
+            f"source-limited search: {type(exc).__name__}: {exc}"
+        )
     return {
         **source,
         "url": url,
@@ -1099,9 +1108,9 @@ def self_test() -> None:
         kind="summary",
     ):
         fail("public-copy normalization kept a forbidden reader-facing term")
-    fallback_url = social_search_fallback.__name__
-    if fallback_url != "social_search_fallback":
-        fail("social-search fallback is unavailable")
+    fallback_name = source_search_fallback.__name__
+    if fallback_name != "source_search_fallback":
+        fail("source-search fallback is unavailable")
     past_checked_at = collection_checked_at("2000-01-01")
     if not past_checked_at.startswith("2000-01-01T23:59:59+09:00"):
         fail("past-date recovery timestamp escaped the requested issue date")
