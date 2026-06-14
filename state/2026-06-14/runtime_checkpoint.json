@@ -456,12 +456,24 @@
       "status": "completed",
       "detail": "Canonical reviewed bundle, all self-tests, audits, failure simulations, py_compile, and diff check passed",
       "recorded_at_jst": "2026-06-14T19:12:52+09:00"
+    },
+    {
+      "stage": "committed",
+      "status": "completed",
+      "detail": "Published issue commit 55aa419 and final audit commit af49f1d created",
+      "recorded_at_jst": "2026-06-14T19:14:22+09:00"
+    },
+    {
+      "stage": "pushed",
+      "status": "completed",
+      "detail": "origin/main updated through af49f1d",
+      "recorded_at_jst": "2026-06-14T19:14:22+09:00"
     }
   ],
   "last_event": {
-    "stage": "local_gates_complete",
+    "stage": "pushed",
     "status": "completed",
-    "detail": "Canonical reviewed bundle, all self-tests, audits, failure simulations, py_compile, and diff check passed",
-    "recorded_at_jst": "2026-06-14T19:12:52+09:00"
+    "detail": "origin/main updated through af49f1d",
+    "recorded_at_jst": "2026-06-14T19:14:22+09:00"
   }
 }
