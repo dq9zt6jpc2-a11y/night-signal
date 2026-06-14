@@ -1,0 +1,419 @@
+{
+  "issue_date": "2026-06-14",
+  "history": [
+    {
+      "stage": "plan_written",
+      "status": "completed",
+      "detail": "Regenerated 40-topic collection plan at startup",
+      "recorded_at_jst": "2026-06-14T16:32:34+09:00"
+    },
+    {
+      "stage": "startup",
+      "status": "started",
+      "detail": "publication driver started",
+      "recorded_at_jst": "2026-06-14T18:50:51+09:00"
+    },
+    {
+      "stage": "runtime_checked",
+      "status": "completed",
+      "detail": "runtime and failure simulations passed",
+      "recorded_at_jst": "2026-06-14T18:50:52+09:00"
+    },
+    {
+      "stage": "plan_written",
+      "status": "completed",
+      "detail": "current collection plan written",
+      "recorded_at_jst": "2026-06-14T18:50:52+09:00"
+    },
+    {
+      "stage": "collection_complete",
+      "status": "failed",
+      "detail": "publication driver exited before completing this stage",
+      "recorded_at_jst": "2026-06-14T18:50:52+09:00"
+    },
+    {
+      "stage": "startup",
+      "status": "started",
+      "detail": "publication driver started",
+      "recorded_at_jst": "2026-06-14T18:53:02+09:00"
+    },
+    {
+      "stage": "runtime_checked",
+      "status": "completed",
+      "detail": "runtime and failure simulations passed",
+      "recorded_at_jst": "2026-06-14T18:53:02+09:00"
+    },
+    {
+      "stage": "plan_written",
+      "status": "completed",
+      "detail": "current collection plan written",
+      "recorded_at_jst": "2026-06-14T18:53:02+09:00"
+    },
+    {
+      "stage": "collection_complete",
+      "status": "completed",
+      "detail": "all collection slots closed",
+      "recorded_at_jst": "2026-06-14T18:53:02+09:00"
+    },
+    {
+      "stage": "synthesis_complete",
+      "status": "completed",
+      "detail": "candidates, decisions, cards, and manifest written",
+      "recorded_at_jst": "2026-06-14T18:53:02+09:00"
+    },
+    {
+      "stage": "render_complete",
+      "status": "completed",
+      "detail": "issue and detail pages rendered",
+      "recorded_at_jst": "2026-06-14T18:53:03+09:00"
+    },
+    {
+      "stage": "local_gates_complete",
+      "status": "failed",
+      "detail": "publication driver exited before completing this stage",
+      "recorded_at_jst": "2026-06-14T18:53:03+09:00"
+    },
+    {
+      "stage": "startup",
+      "status": "started",
+      "detail": "publication driver started",
+      "recorded_at_jst": "2026-06-14T18:57:15+09:00"
+    },
+    {
+      "stage": "runtime_checked",
+      "status": "completed",
+      "detail": "runtime and failure simulations passed",
+      "recorded_at_jst": "2026-06-14T18:57:16+09:00"
+    },
+    {
+      "stage": "plan_written",
+      "status": "completed",
+      "detail": "current collection plan written",
+      "recorded_at_jst": "2026-06-14T18:57:16+09:00"
+    },
+    {
+      "stage": "collection_complete",
+      "status": "completed",
+      "detail": "all collection slots closed",
+      "recorded_at_jst": "2026-06-14T18:57:16+09:00"
+    },
+    {
+      "stage": "synthesis_complete",
+      "status": "completed",
+      "detail": "candidates, decisions, cards, and manifest written",
+      "recorded_at_jst": "2026-06-14T18:57:16+09:00"
+    },
+    {
+      "stage": "render_complete",
+      "status": "completed",
+      "detail": "issue and detail pages rendered",
+      "recorded_at_jst": "2026-06-14T18:57:16+09:00"
+    },
+    {
+      "stage": "local_gates_complete",
+      "status": "failed",
+      "detail": "publication driver exited before completing this stage",
+      "recorded_at_jst": "2026-06-14T18:57:16+09:00"
+    },
+    {
+      "stage": "startup",
+      "status": "started",
+      "detail": "publication driver started",
+      "recorded_at_jst": "2026-06-14T19:00:53+09:00"
+    },
+    {
+      "stage": "runtime_checked",
+      "status": "completed",
+      "detail": "runtime and failure simulations passed",
+      "recorded_at_jst": "2026-06-14T19:00:53+09:00"
+    },
+    {
+      "stage": "plan_written",
+      "status": "completed",
+      "detail": "current collection plan written",
+      "recorded_at_jst": "2026-06-14T19:00:53+09:00"
+    },
+    {
+      "stage": "collection_complete",
+      "status": "completed",
+      "detail": "all collection slots closed",
+      "recorded_at_jst": "2026-06-14T19:00:54+09:00"
+    },
+    {
+      "stage": "synthesis_complete",
+      "status": "completed",
+      "detail": "candidates, decisions, cards, and manifest written",
+      "recorded_at_jst": "2026-06-14T19:00:54+09:00"
+    },
+    {
+      "stage": "render_complete",
+      "status": "completed",
+      "detail": "issue and detail pages rendered",
+      "recorded_at_jst": "2026-06-14T19:00:54+09:00"
+    },
+    {
+      "stage": "local_gates_complete",
+      "status": "failed",
+      "detail": "publication driver exited before completing this stage",
+      "recorded_at_jst": "2026-06-14T19:00:54+09:00"
+    },
+    {
+      "stage": "startup",
+      "status": "started",
+      "detail": "publication driver started",
+      "recorded_at_jst": "2026-06-14T19:01:46+09:00"
+    },
+    {
+      "stage": "runtime_checked",
+      "status": "completed",
+      "detail": "runtime and failure simulations passed",
+      "recorded_at_jst": "2026-06-14T19:01:46+09:00"
+    },
+    {
+      "stage": "plan_written",
+      "status": "completed",
+      "detail": "current collection plan written",
+      "recorded_at_jst": "2026-06-14T19:01:47+09:00"
+    },
+    {
+      "stage": "collection_complete",
+      "status": "completed",
+      "detail": "all collection slots closed",
+      "recorded_at_jst": "2026-06-14T19:01:47+09:00"
+    },
+    {
+      "stage": "synthesis_complete",
+      "status": "completed",
+      "detail": "candidates, decisions, cards, and manifest written",
+      "recorded_at_jst": "2026-06-14T19:01:47+09:00"
+    },
+    {
+      "stage": "render_complete",
+      "status": "completed",
+      "detail": "issue and detail pages rendered",
+      "recorded_at_jst": "2026-06-14T19:01:47+09:00"
+    },
+    {
+      "stage": "local_gates_complete",
+      "status": "failed",
+      "detail": "publication driver exited before completing this stage",
+      "recorded_at_jst": "2026-06-14T19:01:47+09:00"
+    },
+    {
+      "stage": "startup",
+      "status": "started",
+      "detail": "publication driver started",
+      "recorded_at_jst": "2026-06-14T19:02:03+09:00"
+    },
+    {
+      "stage": "runtime_checked",
+      "status": "completed",
+      "detail": "runtime and failure simulations passed",
+      "recorded_at_jst": "2026-06-14T19:02:03+09:00"
+    },
+    {
+      "stage": "plan_written",
+      "status": "completed",
+      "detail": "current collection plan written",
+      "recorded_at_jst": "2026-06-14T19:02:03+09:00"
+    },
+    {
+      "stage": "collection_complete",
+      "status": "completed",
+      "detail": "all collection slots closed",
+      "recorded_at_jst": "2026-06-14T19:02:03+09:00"
+    },
+    {
+      "stage": "synthesis_complete",
+      "status": "completed",
+      "detail": "candidates, decisions, cards, and manifest written",
+      "recorded_at_jst": "2026-06-14T19:02:03+09:00"
+    },
+    {
+      "stage": "render_complete",
+      "status": "completed",
+      "detail": "issue and detail pages rendered",
+      "recorded_at_jst": "2026-06-14T19:02:04+09:00"
+    },
+    {
+      "stage": "local_gates_complete",
+      "status": "failed",
+      "detail": "publication driver exited before completing this stage",
+      "recorded_at_jst": "2026-06-14T19:02:04+09:00"
+    },
+    {
+      "stage": "startup",
+      "status": "started",
+      "detail": "publication driver started",
+      "recorded_at_jst": "2026-06-14T19:02:42+09:00"
+    },
+    {
+      "stage": "runtime_checked",
+      "status": "completed",
+      "detail": "runtime and failure simulations passed",
+      "recorded_at_jst": "2026-06-14T19:02:42+09:00"
+    },
+    {
+      "stage": "plan_written",
+      "status": "completed",
+      "detail": "current collection plan written",
+      "recorded_at_jst": "2026-06-14T19:02:42+09:00"
+    },
+    {
+      "stage": "collection_complete",
+      "status": "completed",
+      "detail": "all collection slots closed",
+      "recorded_at_jst": "2026-06-14T19:02:42+09:00"
+    },
+    {
+      "stage": "synthesis_complete",
+      "status": "completed",
+      "detail": "candidates, decisions, cards, and manifest written",
+      "recorded_at_jst": "2026-06-14T19:02:42+09:00"
+    },
+    {
+      "stage": "render_complete",
+      "status": "completed",
+      "detail": "issue and detail pages rendered",
+      "recorded_at_jst": "2026-06-14T19:02:42+09:00"
+    },
+    {
+      "stage": "local_gates_complete",
+      "status": "failed",
+      "detail": "publication driver exited before completing this stage",
+      "recorded_at_jst": "2026-06-14T19:02:43+09:00"
+    },
+    {
+      "stage": "startup",
+      "status": "started",
+      "detail": "publication driver started",
+      "recorded_at_jst": "2026-06-14T19:04:25+09:00"
+    },
+    {
+      "stage": "runtime_checked",
+      "status": "completed",
+      "detail": "runtime and failure simulations passed",
+      "recorded_at_jst": "2026-06-14T19:04:26+09:00"
+    },
+    {
+      "stage": "plan_written",
+      "status": "completed",
+      "detail": "current collection plan written",
+      "recorded_at_jst": "2026-06-14T19:04:26+09:00"
+    },
+    {
+      "stage": "collection_complete",
+      "status": "completed",
+      "detail": "all collection slots closed",
+      "recorded_at_jst": "2026-06-14T19:04:26+09:00"
+    },
+    {
+      "stage": "synthesis_complete",
+      "status": "completed",
+      "detail": "candidates, decisions, cards, and manifest written",
+      "recorded_at_jst": "2026-06-14T19:04:26+09:00"
+    },
+    {
+      "stage": "render_complete",
+      "status": "completed",
+      "detail": "issue and detail pages rendered",
+      "recorded_at_jst": "2026-06-14T19:04:26+09:00"
+    },
+    {
+      "stage": "local_gates_complete",
+      "status": "failed",
+      "detail": "publication driver exited before completing this stage",
+      "recorded_at_jst": "2026-06-14T19:04:27+09:00"
+    },
+    {
+      "stage": "startup",
+      "status": "started",
+      "detail": "publication driver started",
+      "recorded_at_jst": "2026-06-14T19:04:28+09:00"
+    },
+    {
+      "stage": "runtime_checked",
+      "status": "completed",
+      "detail": "runtime and failure simulations passed",
+      "recorded_at_jst": "2026-06-14T19:04:28+09:00"
+    },
+    {
+      "stage": "plan_written",
+      "status": "completed",
+      "detail": "current collection plan written",
+      "recorded_at_jst": "2026-06-14T19:04:28+09:00"
+    },
+    {
+      "stage": "collection_complete",
+      "status": "completed",
+      "detail": "all collection slots closed",
+      "recorded_at_jst": "2026-06-14T19:04:28+09:00"
+    },
+    {
+      "stage": "synthesis_complete",
+      "status": "completed",
+      "detail": "candidates, decisions, cards, and manifest written",
+      "recorded_at_jst": "2026-06-14T19:04:28+09:00"
+    },
+    {
+      "stage": "render_complete",
+      "status": "completed",
+      "detail": "issue and detail pages rendered",
+      "recorded_at_jst": "2026-06-14T19:04:29+09:00"
+    },
+    {
+      "stage": "local_gates_complete",
+      "status": "failed",
+      "detail": "publication driver exited before completing this stage",
+      "recorded_at_jst": "2026-06-14T19:04:29+09:00"
+    },
+    {
+      "stage": "startup",
+      "status": "started",
+      "detail": "publication driver started",
+      "recorded_at_jst": "2026-06-14T19:04:58+09:00"
+    },
+    {
+      "stage": "runtime_checked",
+      "status": "completed",
+      "detail": "runtime and failure simulations passed",
+      "recorded_at_jst": "2026-06-14T19:04:59+09:00"
+    },
+    {
+      "stage": "plan_written",
+      "status": "completed",
+      "detail": "current collection plan written",
+      "recorded_at_jst": "2026-06-14T19:04:59+09:00"
+    },
+    {
+      "stage": "collection_complete",
+      "status": "completed",
+      "detail": "all collection slots closed",
+      "recorded_at_jst": "2026-06-14T19:04:59+09:00"
+    },
+    {
+      "stage": "synthesis_complete",
+      "status": "completed",
+      "detail": "candidates, decisions, cards, and manifest written",
+      "recorded_at_jst": "2026-06-14T19:04:59+09:00"
+    },
+    {
+      "stage": "render_complete",
+      "status": "completed",
+      "detail": "issue and detail pages rendered",
+      "recorded_at_jst": "2026-06-14T19:04:59+09:00"
+    },
+    {
+      "stage": "local_gates_complete",
+      "status": "completed",
+      "detail": "all local publication gates passed",
+      "recorded_at_jst": "2026-06-14T19:05:00+09:00"
+    }
+  ],
+  "last_event": {
+    "stage": "local_gates_complete",
+    "status": "completed",
+    "detail": "all local publication gates passed",
+    "recorded_at_jst": "2026-06-14T19:05:00+09:00"
+  }
+}
