@@ -468,12 +468,18 @@
       "status": "completed",
       "detail": "origin/main updated through af49f1d",
       "recorded_at_jst": "2026-06-14T19:14:22+09:00"
+    },
+    {
+      "stage": "public_verified",
+      "status": "completed",
+      "detail": "Pages run 27495701508 succeeded; publication_audit and live root, dated page, and detail page verification passed",
+      "recorded_at_jst": "2026-06-14T19:17:29+09:00"
     }
   ],
   "last_event": {
-    "stage": "pushed",
+    "stage": "public_verified",
     "status": "completed",
-    "detail": "origin/main updated through af49f1d",
-    "recorded_at_jst": "2026-06-14T19:14:22+09:00"
+    "detail": "Pages run 27495701508 succeeded; publication_audit and live root, dated page, and detail page verification passed",
+    "recorded_at_jst": "2026-06-14T19:17:29+09:00"
   }
 }
