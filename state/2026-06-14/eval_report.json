@@ -1,6 +1,6 @@
 {
   "issue_date": "2026-06-14",
-  "evaluated_at_jst": "2026-06-14T20:40:03+09:00",
+  "evaluated_at_jst": "2026-06-14T20:58:48+09:00",
   "passed": true,
   "checks": {
     "all_observation_slots_closed": true,
