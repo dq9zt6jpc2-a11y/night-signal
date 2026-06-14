@@ -408,12 +408,60 @@
       "status": "completed",
       "detail": "all local publication gates passed",
       "recorded_at_jst": "2026-06-14T19:05:00+09:00"
+    },
+    {
+      "stage": "startup",
+      "status": "started",
+      "detail": "publication driver started",
+      "recorded_at_jst": "2026-06-14T19:12:18+09:00"
+    },
+    {
+      "stage": "runtime_checked",
+      "status": "completed",
+      "detail": "runtime and failure simulations passed",
+      "recorded_at_jst": "2026-06-14T19:12:18+09:00"
+    },
+    {
+      "stage": "plan_written",
+      "status": "completed",
+      "detail": "current collection plan written",
+      "recorded_at_jst": "2026-06-14T19:12:18+09:00"
+    },
+    {
+      "stage": "collection_complete",
+      "status": "completed",
+      "detail": "all collection slots closed",
+      "recorded_at_jst": "2026-06-14T19:12:18+09:00"
+    },
+    {
+      "stage": "synthesis_complete",
+      "status": "completed",
+      "detail": "candidates, decisions, cards, and manifest written",
+      "recorded_at_jst": "2026-06-14T19:12:18+09:00"
+    },
+    {
+      "stage": "render_complete",
+      "status": "completed",
+      "detail": "issue and detail pages rendered",
+      "recorded_at_jst": "2026-06-14T19:12:19+09:00"
+    },
+    {
+      "stage": "local_gates_complete",
+      "status": "completed",
+      "detail": "all local publication gates passed",
+      "recorded_at_jst": "2026-06-14T19:12:19+09:00"
+    },
+    {
+      "stage": "local_gates_complete",
+      "status": "completed",
+      "detail": "Canonical reviewed bundle, all self-tests, audits, failure simulations, py_compile, and diff check passed",
+      "recorded_at_jst": "2026-06-14T19:12:52+09:00"
     }
   ],
   "last_event": {
     "stage": "local_gates_complete",
     "status": "completed",
-    "detail": "all local publication gates passed",
-    "recorded_at_jst": "2026-06-14T19:05:00+09:00"
+    "detail": "Canonical reviewed bundle, all self-tests, audits, failure simulations, py_compile, and diff check passed",
+    "recorded_at_jst": "2026-06-14T19:12:52+09:00"
   }
 }
