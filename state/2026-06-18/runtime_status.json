@@ -1,39 +1,40 @@
 {
   "issue_date": "2026-06-18",
-  "checked_at_jst": "2026-06-18T20:00:27+09:00",
+  "checked_at_jst": "2026-06-19T01:23:19+09:00",
   "manifest": {
     "path": "/Users/shimadatakashi/Documents/Codex/2026-05-10/gpt/state/2026-06-18/coverage_manifest.json",
-    "exists": false,
-    "fresh_evening_issue": false
+    "exists": true,
+    "fresh_evening_issue": true,
+    "collection_mode": "reviewed_live_web",
+    "collection_completed_at_jst": "2026-06-18T21:37:10+09:00"
   },
   "reviewed_bundle": {
     "path": "/Users/shimadatakashi/Documents/Codex/2026-05-10/gpt/state/2026-06-18/research_bundle.json",
-    "exists": false,
-    "usable": false
+    "exists": true,
+    "usable": true,
+    "source_checks": 111
   },
   "openai_api_key_available": false,
   "github_models_token_available": false,
   "git": {
     "available": true,
-    "dirty": true,
-    "changed_paths": [
-      "state/2026-06-18/"
-    ],
+    "dirty": false,
+    "changed_paths": [],
     "error": null
   },
-  "recovery_path": "blocked_no_honest_collector",
-  "publication_blocked": true,
+  "recovery_path": "fresh_evening_issue",
+  "publication_blocked": false,
   "checkpoint": "/Users/shimadatakashi/Documents/Codex/2026-05-10/gpt/state/2026-06-18/runtime_checkpoint.json",
   "automation": {
     "available": true,
     "found": true,
-    "thread_id": "019eda62-48f4-7ea3-a383-267c15c1576e",
+    "thread_id": "019ed9a4-b242-76f3-a9ea-70eb165b6ee3",
     "status": "IN_PROGRESS",
-    "created_at_jst": "2026-06-18T19:58:54.827000+09:00",
-    "updated_at_jst": "2026-06-18T19:58:56.219000+09:00",
-    "rollout_path": "/Users/shimadatakashi/.codex/sessions/2026/06/18/rollout-2026-06-18T19-58-54-019eda62-48f4-7ea3-a383-267c15c1576e.jsonl",
-    "failure_class": "codex_credit_exhausted",
+    "created_at_jst": "2026-06-18T16:31:49.943000+09:00",
+    "updated_at_jst": "2026-06-18T16:31:51.266000+09:00",
+    "rollout_path": "/Users/shimadatakashi/.codex/sessions/2026/06/18/rollout-2026-06-18T16-31-49-019ed9a4-b242-76f3-a9ea-70eb165b6ee3.jsonl",
+    "failure_class": "model_token_budget_exhausted",
     "has_agent_completion": true,
-    "credit_exhausted": true
+    "credit_exhausted": false
   }
 }
