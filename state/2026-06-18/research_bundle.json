@@ -1,0 +1,2034 @@
+{
+  "issue_date": "2026-06-18",
+  "checked_at_jst": "2026-06-18T21:37:10+09:00",
+  "collection_mode": "reviewed_live_web",
+  "categories": {
+    "F1": {
+      "items": [],
+      "signals": [],
+      "source_checks": [
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Formula 1 official",
+          "url": "https://www.formula1.com/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでFormula 1 officialの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "FIA Formula 1",
+          "url": "https://www.fia.com/events/fia-formula-one-world-championship/season-2026/fia-formula-one-world-championship",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでFIA Formula 1の代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Aston Martin F1",
+          "url": "https://www.astonmartinf1.com/en-GB/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでAston Martin F1の代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Guardian Formula One",
+          "url": "https://www.theguardian.com/sport/formulaone",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでGuardian Formula Oneの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Motorsport.com F1",
+          "url": "https://www.motorsport.com/f1/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでMotorsport.com F1の代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Autosport F1",
+          "url": "https://www.autosport.com/f1/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでAutosport F1の代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "Formula 1 X",
+          "url": "https://x.com/F1",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでFormula 1 Xの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "FIA X",
+          "url": "https://x.com/fia",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでFIA Xの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "instagram",
+          "label": "Formula 1 Instagram",
+          "url": "https://www.instagram.com/f1/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでFormula 1 Instagramの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "facebook",
+          "label": "Formula 1 Facebook",
+          "url": "https://www.facebook.com/Formula1/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでFormula 1 Facebookの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "label": "Formula 1 YouTube",
+          "url": "https://www.youtube.com/@Formula1",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでFormula 1 YouTubeの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "BBC F1",
+          "url": "https://www.bbc.com/sport/formula1",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-18",
+          "evidence_summary": "F1補助媒体URLを21:37 JSTに照合した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "ESPN F1",
+          "url": "https://www.espn.com/f1/",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-18",
+          "evidence_summary": "F1補助媒体URLを21:37 JSTに照合した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        }
+      ],
+      "no_change_summary": "F1は2026-06-18 21:37 JST時点で公式Web、独立媒体・データ、SNS/X、YouTubeの代表URLを照合し、採用候補以外に直近3日で読者判断を大きく変える未収録更新は確認していない。"
+    },
+    "Honda": {
+      "items": [],
+      "signals": [],
+      "source_checks": [
+        {
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Honda News",
+          "url": "https://global.honda/en/newsroom/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでHonda Newsの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Honda IR",
+          "url": "https://global.honda/en/investors/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでHonda IRの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Honda Racing",
+          "url": "https://honda.racing/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでHonda Racingの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Reuters Autos",
+          "url": "https://www.reuters.com/business/autos-transportation/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでReuters Autosの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "AP Honda EV strategy",
+          "url": "https://apnews.com/article/honda-ev-investment-us-tariffs-685b44de9fae0f75717be663ae63a6a8",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでAP Honda EV strategyの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Response Honda",
+          "url": "https://response.jp/special/recent/105/Honda",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでResponse Hondaの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "Honda X",
+          "url": "https://x.com/Honda",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでHonda Xの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "instagram",
+          "label": "Honda Instagram",
+          "url": "https://www.instagram.com/honda/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでHonda Instagramの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "label": "Honda YouTube",
+          "url": "https://www.youtube.com/user/Honda",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでHonda YouTubeの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "hybrid_ev_strategy"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Yahoo Finance Honda",
+          "url": "https://finance.yahoo.com/quote/HMC/",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-18",
+          "evidence_summary": "Honda市場確認用URLを21:37 JSTに照合した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "hybrid_ev_strategy"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Honda Japan News",
+          "url": "https://global.honda/jp/news/",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-18",
+          "evidence_summary": "Honda国内ニュース確認用URLを21:37 JSTに照合した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "hybrid_ev_strategy"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Honda Automobiles News",
+          "url": "https://hondanews.com/en-US",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-18",
+          "evidence_summary": "Honda米国ニュース確認用URLを21:37 JSTに照合した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        }
+      ],
+      "no_change_summary": "Hondaは2026-06-18 21:37 JST時点で公式Web、独立媒体・データ、SNS/X、YouTubeの代表URLを照合し、採用候補以外に直近3日で読者判断を大きく変える未収録更新は確認していない。"
+    },
+    "OpenAI": {
+      "items": [],
+      "signals": [
+        {
+          "watch_topic_id": "product_release",
+          "title": "OpenAI公式Newsで6月18日付のAI Economic Blueprint台湾提言を確認",
+          "summary": "OpenAI Newsの一覧で6月18日付の「AI Economic Blueprint: Taiwan recommendations」が掲載されている。政策提言系の公開であり、当日号では国内サービス実装やFed声明より優先度を下げ、補足情報として扱う。",
+          "source_published_date": "2026-06-18",
+          "source_url": "https://openai.com/news/",
+          "source_label": "OpenAI News",
+          "observation_source_role": "primary_or_official",
+          "observation_channel": "web",
+          "change_class": "material_update",
+          "rejection_reason_class": "lower_importance",
+          "rejection_reason": "同じ主題の公式一次情報またはより重要度の高い採用カードで読者差分を説明できるため、補足情報として扱う。",
+          "topic_value_class": "decision_or_policy",
+          "claim_type": "announcement",
+          "source_state": "confirmed_update"
+        }
+      ],
+      "source_checks": [
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "OpenAI News",
+          "url": "https://openai.com/news/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでOpenAI Newsの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "OpenAI API docs changelog",
+          "url": "https://platform.openai.com/docs/changelog",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでOpenAI API docs changelogの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "OpenAI Help Center release notes",
+          "url": "https://help.openai.com/en/articles/6825453-chatgpt-release-notes",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでOpenAI Help Center release notesの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Reuters Technology",
+          "url": "https://www.reuters.com/technology/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでReuters Technologyの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Business Insider OpenAI and Codex analysis",
+          "url": "https://www.businessinsider.com/openai-merging-codex-into-chatgpt-lock-in-code-2026-6",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでBusiness Insider OpenAI and Codex analysisの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "The Verge AI",
+          "url": "https://www.theverge.com/ai-artificial-intelligence",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでThe Verge AIの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "OpenAI X",
+          "url": "https://x.com/OpenAI",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでOpenAI Xの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "OpenAI Developers X",
+          "url": "https://x.com/OpenAIDevs",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでOpenAI Developers Xの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "instagram",
+          "label": "OpenAI Instagram",
+          "url": "https://www.instagram.com/openai/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでOpenAI Instagramの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "label": "OpenAI YouTube",
+          "url": "https://www.youtube.com/@OpenAI",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでOpenAI YouTubeの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "product_release"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "OpenAI News",
+          "url": "https://openai.com/news/",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-18",
+          "evidence_summary": "OpenAI Newsの一覧で6月18日付の「AI Economic Blueprint: Taiwan recommendations」が掲載されている。政策提言系の公開であり、当日号では国内サービス実装やFed声明より優先度を下げ、補足情報として扱う。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        }
+      ],
+      "no_change_summary": "OpenAIは2026-06-18 21:37 JST時点で公式Web、独立媒体・データ、SNS/X、YouTubeの代表URLを照合し、採用候補以外に直近3日で読者判断を大きく変える未収録更新は確認していない。"
+    },
+    "SoftBank": {
+      "items": [
+        {
+          "watch_topic_id": "domestic_services",
+          "title": "SoftBank、OpenAIを使うセキュリティパッチ自動適用サービスを発表",
+          "summary": "SoftBank Corp.は6月18日、OpenAIの技術を使い、脆弱性情報の確認から修正コード作成、適用準備までを支援する「Patching as a Service Powered by OpenAI」を発表した。法人のセキュリティ運用をAIエージェントで省力化する国内サービス更新として照合した。",
+          "source_published_date": "2026-06-18",
+          "topic_value_class": "technical_or_product_shift",
+          "priority_class": "high",
+          "slug": "softbank-patching-openai-2026-06-18.html",
+          "detail_summary": "SoftBank Corp.は6月18日、OpenAIの技術を使い、脆弱性情報の確認から修正コード作成、適用準備までを支援する「Patching as a Service Powered by OpenAI」を発表した。法人のセキュリティ運用をAIエージェントで省力化する国内サービス更新として照合した。 SoftBankがOpenAI連携を国内法人セキュリティ運用へ広げる新サービスを公表した。 AI投資やArmだけでなく、国内通信・法人サービス側にも生成AI実装の利用領域が広がっていることを示す。 料金、導入企業、実運用での自動適用範囲は当日の代表ページだけでは限定的で、詳細リリース本文での続報が必要。",
+          "what_changed": "SoftBankがOpenAI連携を国内法人セキュリティ運用へ広げる新サービスを公表した。",
+          "why_it_matters": "AI投資やArmだけでなく、国内通信・法人サービス側にも生成AI実装の利用領域が広がっていることを示す。",
+          "limits_or_unknowns": "料金、導入企業、実運用での自動適用範囲は当日の代表ページだけでは限定的で、詳細リリース本文での続報が必要。",
+          "confirmed_facts": [
+            "SoftBank Group Newsに2026年6月18日付でPatching as a Service Powered by OpenAIの発表が掲載された。",
+            "サービスはOpenAI技術を使うAIエージェントでセキュリティパッチ適用を支援する。",
+            "対象は法人向けのセキュリティ運用で、国内サービスのAI活用更新として扱える。"
+          ],
+          "sources": [
+            {
+              "label": "SoftBank Group News",
+              "url": "https://group.softbank/en/news"
+            }
+          ],
+          "observation_source_role": "primary_or_official",
+          "observation_channel": "web",
+          "claim_type": "announcement",
+          "source_state": "confirmed_update",
+          "change_class": "new_event"
+        }
+      ],
+      "signals": [],
+      "source_checks": [
+        {
+          "watch_topic_ids": [
+            "market_price_nav",
+            "ai_infrastructure",
+            "power_battery",
+            "corporate_ir_financing",
+            "domestic_services"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "SoftBank Group News",
+          "url": "https://group.softbank/en/news",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでSoftBank Group Newsの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_nav",
+            "ai_infrastructure",
+            "power_battery",
+            "corporate_ir_financing",
+            "domestic_services"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "SoftBank Group IR",
+          "url": "https://group.softbank/en/ir",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでSoftBank Group IRの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_nav",
+            "ai_infrastructure",
+            "power_battery",
+            "corporate_ir_financing",
+            "domestic_services"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Arm Newsroom",
+          "url": "https://newsroom.arm.com/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでArm Newsroomの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_nav",
+            "ai_infrastructure",
+            "power_battery",
+            "corporate_ir_financing",
+            "domestic_services"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Reuters Business",
+          "url": "https://www.reuters.com/business/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでReuters Businessの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_nav",
+            "ai_infrastructure",
+            "power_battery",
+            "corporate_ir_financing",
+            "domestic_services"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Nikkei SoftBank search",
+          "url": "https://www.nikkei.com/search?keyword=%E3%82%BD%E3%83%95%E3%83%88%E3%83%90%E3%83%B3%E3%82%AF%E3%82%B0%E3%83%AB%E3%83%BC%E3%83%97",
+          "slot_state": "source_unavailable",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live Webでseed URLを確認したが、検索/接続制約で本文確認できなかったためlive根拠から除外した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "unavailable"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_nav",
+            "ai_infrastructure",
+            "power_battery",
+            "corporate_ir_financing",
+            "domestic_services"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "SoftBank Group X",
+          "url": "https://x.com/SoftBank_Group",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでSoftBank Group Xの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_nav",
+            "ai_infrastructure",
+            "power_battery",
+            "corporate_ir_financing",
+            "domestic_services"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "facebook",
+          "label": "SoftBank Group Facebook",
+          "url": "https://www.facebook.com/SoftBankGroupCorp/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでSoftBank Group Facebookの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_nav",
+            "ai_infrastructure",
+            "power_battery",
+            "corporate_ir_financing",
+            "domestic_services"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "label": "SoftBank Group YouTube",
+          "url": "https://www.youtube.com/user/SoftBankCorp",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでSoftBank Group YouTubeの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "domestic_services"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "SoftBank Group News",
+          "url": "https://group.softbank/en/news",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-18",
+          "evidence_summary": "SoftBank Corp.は6月18日、OpenAIの技術を使い、脆弱性情報の確認から修正コード作成、適用準備までを支援する「Patching as a Service Powered by OpenAI」を発表した。法人のセキュリティ運用をAIエージェントで省力化する国内サービス更新として照合した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "ai_infrastructure"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Yahoo Finance SoftBank",
+          "url": "https://finance.yahoo.com/quote/9984.T/",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-18",
+          "evidence_summary": "SoftBank株価・市場確認用URLを21:37 JSTに照合した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "ai_infrastructure"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Bloomberg SoftBank",
+          "url": "https://www.bloomberg.com/quote/9984:JP",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-18",
+          "evidence_summary": "SoftBank市場データ確認用URLを21:37 JSTに照合した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        }
+      ],
+      "no_change_summary": "SoftBankは2026-06-18 21:37 JST時点で公式Web、独立媒体・データ、SNS/X、YouTubeの代表URLを照合し、採用候補以外に直近3日で読者判断を大きく変える未収録更新は確認していない。"
+    },
+    "SpaceX": {
+      "items": [],
+      "signals": [],
+      "source_checks": [
+        {
+          "watch_topic_ids": [
+            "starship_status",
+            "dragon_iss",
+            "business_contracts",
+            "official_launch_manifest"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "SpaceX launches",
+          "url": "https://www.spacex.com/launches/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでSpaceX launchesの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "starship_status",
+            "dragon_iss",
+            "business_contracts",
+            "official_launch_manifest"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "SpaceX updates",
+          "url": "https://www.spacex.com/updates/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでSpaceX updatesの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "starship_status",
+            "dragon_iss",
+            "business_contracts",
+            "official_launch_manifest"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "NASA missions",
+          "url": "https://www.nasa.gov/missions/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでNASA missionsの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "starship_status",
+            "dragon_iss",
+            "business_contracts",
+            "official_launch_manifest"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "FAA commercial space",
+          "url": "https://www.faa.gov/space",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでFAA commercial spaceの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "starship_status",
+            "dragon_iss",
+            "business_contracts",
+            "official_launch_manifest"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Reuters SpaceX search",
+          "url": "https://www.reuters.com/site-search/?query=SpaceX",
+          "slot_state": "source_unavailable",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live Webでseed URLを確認したが、検索/接続制約で本文確認できなかったためlive根拠から除外した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "unavailable"
+        },
+        {
+          "watch_topic_ids": [
+            "starship_status",
+            "dragon_iss",
+            "business_contracts",
+            "official_launch_manifest"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "AP SpaceX search",
+          "url": "https://apnews.com/search?q=SpaceX",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでAP SpaceX searchの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "starship_status",
+            "dragon_iss",
+            "business_contracts",
+            "official_launch_manifest"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "SpaceNews",
+          "url": "https://spacenews.com/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでSpaceNewsの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "starship_status",
+            "dragon_iss",
+            "business_contracts",
+            "official_launch_manifest"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Ars Technica Space",
+          "url": "https://arstechnica.com/space/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでArs Technica Spaceの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "starship_status",
+            "dragon_iss",
+            "business_contracts",
+            "official_launch_manifest"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "SpaceX X",
+          "url": "https://x.com/SpaceX",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでSpaceX Xの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "starship_status",
+            "dragon_iss",
+            "business_contracts",
+            "official_launch_manifest"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "instagram",
+          "label": "SpaceX Instagram",
+          "url": "https://www.instagram.com/spacex/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでSpaceX Instagramの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "starship_status",
+            "dragon_iss",
+            "business_contracts",
+            "official_launch_manifest"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "label": "SpaceX YouTube",
+          "url": "https://www.youtube.com/@SpaceX",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでSpaceX YouTubeの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "official_launch_manifest"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Spaceflight Now",
+          "url": "https://spaceflightnow.com/",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-18",
+          "evidence_summary": "SpaceX打上げ補助媒体URLを21:37 JSTに照合した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "official_launch_manifest"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "NASA SpaceX",
+          "url": "https://www.nasa.gov/mission/spacex/",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-18",
+          "evidence_summary": "NASA SpaceX確認URLを21:37 JSTに照合した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        }
+      ],
+      "no_change_summary": "SpaceXは2026-06-18 21:37 JST時点で公式Web、独立媒体・データ、SNS/X、YouTubeの代表URLを照合し、採用候補以外に直近3日で読者判断を大きく変える未収録更新は確認していない。"
+    },
+    "YOASOBI / 幾田りら": {
+      "items": [],
+      "signals": [],
+      "source_checks": [
+        {
+          "watch_topic_ids": [
+            "official_release",
+            "staff_social_x_instagram",
+            "live_tour_performance",
+            "music_release_chart_tieup"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "YOASOBI official",
+          "url": "https://www.yoasobi-music.jp/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでYOASOBI officialの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "official_release",
+            "staff_social_x_instagram",
+            "live_tour_performance",
+            "music_release_chart_tieup"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Ikuta Lilas official",
+          "url": "https://www.ikuralilas.com/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでIkuta Lilas officialの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "official_release",
+            "staff_social_x_instagram",
+            "live_tour_performance",
+            "music_release_chart_tieup"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Billboard Japan",
+          "url": "https://www.billboard-japan.com/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでBillboard Japanの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "official_release",
+            "staff_social_x_instagram",
+            "live_tour_performance",
+            "music_release_chart_tieup"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Natalie Music",
+          "url": "https://natalie.mu/music",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでNatalie Musicの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "official_release",
+            "staff_social_x_instagram",
+            "live_tour_performance",
+            "music_release_chart_tieup"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "New York Post YOASOBI coverage",
+          "url": "https://nypost.com/2026/04/21/ticket-sales/yoasobi-american-dream-tour-2026-where-to-buy-tickets-best-prices/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでNew York Post YOASOBI coverageの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "official_release",
+            "staff_social_x_instagram",
+            "live_tour_performance",
+            "music_release_chart_tieup"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "YOASOBI Staff X",
+          "url": "https://x.com/YOASOBI_staff",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでYOASOBI Staff Xの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "official_release",
+            "staff_social_x_instagram",
+            "live_tour_performance",
+            "music_release_chart_tieup"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "Ikuta Lilas X",
+          "url": "https://x.com/ikutalilas",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでIkuta Lilas Xの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "official_release",
+            "staff_social_x_instagram",
+            "live_tour_performance",
+            "music_release_chart_tieup"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "instagram",
+          "label": "YOASOBI Instagram",
+          "url": "https://www.instagram.com/yoasobi_staff_/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでYOASOBI Instagramの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "official_release",
+            "staff_social_x_instagram",
+            "live_tour_performance",
+            "music_release_chart_tieup"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "instagram",
+          "label": "Ikuta Lilas Instagram",
+          "url": "https://www.instagram.com/lilasikuta/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでIkuta Lilas Instagramの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "official_release",
+            "staff_social_x_instagram",
+            "live_tour_performance",
+            "music_release_chart_tieup"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "label": "YOASOBI YouTube",
+          "url": "https://www.youtube.com/channel/UCvpredjG93ifbCP1Y77JyFA",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでYOASOBI YouTubeの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "official_release"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Oricon Music",
+          "url": "https://www.oricon.co.jp/music/",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-18",
+          "evidence_summary": "音楽媒体確認URLを21:37 JSTに照合した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "live_tour_performance"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Live Nation YOASOBI",
+          "url": "https://www.livenation.com/artist/K8vZ917bqfV/yoasobi-events",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-18",
+          "evidence_summary": "ライブ日程確認URLを21:37 JSTに照合した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        }
+      ],
+      "no_change_summary": "YOASOBI / 幾田りらは2026-06-18 21:37 JST時点で公式Web、独立媒体・データ、SNS/X、YouTubeの代表URLを照合し、採用候補以外に直近3日で読者判断を大きく変える未収録更新は確認していない。"
+    },
+    "アジア経済": {
+      "items": [],
+      "signals": [
+        {
+          "watch_topic_id": "china_macro_policy",
+          "title": "中国NBS、5月の小売売上高・工業生産など複数指標を6月16日に公表",
+          "summary": "中国国家統計局の英語サイトでは、6月16日付で2026年5月の小売売上高、工業生産、固定資産投資、不動産開発販売などの統計公表が掲載されている。当日号では北米FedとSoftBank/BREX更新を優先し、アジア経済は補足情報として扱う。",
+          "source_published_date": "2026-06-16",
+          "source_url": "https://www.stats.gov.cn/english/",
+          "source_label": "National Bureau of Statistics of China",
+          "observation_source_role": "primary_or_official",
+          "observation_channel": "web",
+          "change_class": "routine_recurring",
+          "rejection_reason_class": "lower_importance",
+          "rejection_reason": "同じ主題の公式一次情報またはより重要度の高い採用カードで読者差分を説明できるため、補足情報として扱う。",
+          "topic_value_class": "market_or_financial_impact",
+          "claim_type": "announcement",
+          "source_state": "confirmed_update"
+        }
+      ],
+      "source_checks": [
+        {
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Reserve Bank of India",
+          "url": "https://www.rbi.org.in/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでReserve Bank of Indiaの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "India MOSPI",
+          "url": "https://www.mospi.gov.in/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでIndia MOSPIの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Vietnam GSO",
+          "url": "https://www.gso.gov.vn/en/homepage/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでVietnam GSOの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "China NBS",
+          "url": "https://www.stats.gov.cn/english/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでChina NBSの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Reuters Asia markets",
+          "url": "https://www.reuters.com/markets/asia/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでReuters Asia marketsの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Nikkei Asia",
+          "url": "https://asia.nikkei.com/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでNikkei Asiaの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Asia Briefing",
+          "url": "https://www.asiabriefing.com/news/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでAsia Briefingの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "Reserve Bank of India X",
+          "url": "https://twitter.com/RBI",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでReserve Bank of India Xの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "label": "Reserve Bank of India YouTube",
+          "url": "https://www.youtube.com/channel/UCIfCOl43tunZVNYafeC4RQA",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでReserve Bank of India YouTubeの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "china_macro_policy"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "National Bureau of Statistics of China",
+          "url": "https://www.stats.gov.cn/english/",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-16",
+          "evidence_summary": "中国国家統計局の英語サイトでは、6月16日付で2026年5月の小売売上高、工業生産、固定資産投資、不動産開発販売などの統計公表が掲載されている。当日号では北米FedとSoftBank/BREX更新を優先し、アジア経済は補足情報として扱う。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        }
+      ],
+      "no_change_summary": "アジア経済は2026-06-18 21:37 JST時点で公式Web、独立媒体・データ、SNS/X、YouTubeの代表URLを照合し、採用候補以外に直近3日で読者判断を大きく変える未収録更新は確認していない。"
+    },
+    "北米経済": {
+      "items": [
+        {
+          "watch_topic_id": "us_prices_jobs_fed",
+          "title": "Fed、6月17日のFOMCで政策金利据え置きを発表",
+          "summary": "Federal Reserveは6月17日のFOMC声明で、フェデラルファンド金利の誘導目標レンジを3.50-3.75%に据え置いた。声明は経済活動が底堅く拡大し、雇用増加も労働力増加におおむね沿っているとした一方、見通しの不確実性が高い状態を示した。",
+          "source_published_date": "2026-06-17",
+          "topic_value_class": "market_or_financial_impact",
+          "priority_class": "high",
+          "slug": "fed-fomc-hold-2026-06-18.html",
+          "detail_summary": "Federal Reserveは6月17日のFOMC声明で、フェデラルファンド金利の誘導目標レンジを3.50-3.75%に据え置いた。声明は経済活動が底堅く拡大し、雇用増加も労働力増加におおむね沿っているとした一方、見通しの不確実性が高い状態を示した。 6月FOMCの一次声明で金利据え置きと景気・労働市場評価が確定した。 北米経済では市場の金利織り込み、株式・債券の反応、今後の利下げ時期に直結する公式イベントである。 声明だけでは会見での補足や各参加者の詳細な見通し変化をすべて反映できないため、議長会見・SEP・市場反応は追加確認が必要。",
+          "what_changed": "6月FOMCの一次声明で金利据え置きと景気・労働市場評価が確定した。",
+          "why_it_matters": "北米経済では市場の金利織り込み、株式・債券の反応、今後の利下げ時期に直結する公式イベントである。",
+          "limits_or_unknowns": "声明だけでは会見での補足や各参加者の詳細な見通し変化をすべて反映できないため、議長会見・SEP・市場反応は追加確認が必要。",
+          "confirmed_facts": [
+            "FOMCは2026年6月17日の声明で政策金利レンジを3.50-3.75%に据え置いた。",
+            "声明は経済活動が底堅く拡大していると評価した。",
+            "雇用増加は労働力増加におおむね沿い、失業率はここ数カ月ほぼ横ばいと説明した。"
+          ],
+          "sources": [
+            {
+              "label": "Federal Reserve",
+              "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260617a.htm"
+            }
+          ],
+          "observation_source_role": "primary_or_official",
+          "observation_channel": "web",
+          "claim_type": "numeric",
+          "source_state": "published_value",
+          "change_class": "new_event"
+        }
+      ],
+      "signals": [],
+      "source_checks": [
+        {
+          "watch_topic_ids": [
+            "us_prices_jobs_fed",
+            "us_markets_fund_flows_rates",
+            "north_america_investment_policy"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Federal Reserve",
+          "url": "https://www.federalreserve.gov/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでFederal Reserveの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "us_prices_jobs_fed",
+            "us_markets_fund_flows_rates",
+            "north_america_investment_policy"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Bureau of Labor Statistics",
+          "url": "https://www.bls.gov/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでBureau of Labor Statisticsの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "us_prices_jobs_fed",
+            "us_markets_fund_flows_rates",
+            "north_america_investment_policy"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Bureau of Economic Analysis",
+          "url": "https://www.bea.gov/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでBureau of Economic Analysisの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "us_prices_jobs_fed",
+            "us_markets_fund_flows_rates",
+            "north_america_investment_policy"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Investment Company Institute",
+          "url": "https://www.ici.org/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでInvestment Company Instituteの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "us_prices_jobs_fed",
+            "us_markets_fund_flows_rates",
+            "north_america_investment_policy"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Reuters US markets",
+          "url": "https://www.reuters.com/markets/us/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでReuters US marketsの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "us_prices_jobs_fed",
+            "us_markets_fund_flows_rates",
+            "north_america_investment_policy"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "MarketWatch",
+          "url": "https://www.marketwatch.com/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでMarketWatchの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "us_prices_jobs_fed",
+            "us_markets_fund_flows_rates",
+            "north_america_investment_policy"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "Federal Reserve X",
+          "url": "https://x.com/federalreserve",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでFederal Reserve Xの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "us_prices_jobs_fed",
+            "us_markets_fund_flows_rates",
+            "north_america_investment_policy"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "label": "Federal Reserve YouTube",
+          "url": "https://www.youtube.com/federalreserve",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでFederal Reserve YouTubeの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "us_prices_jobs_fed"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Federal Reserve",
+          "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260617a.htm",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-17",
+          "evidence_summary": "Federal Reserveは6月17日のFOMC声明で、フェデラルファンド金利の誘導目標レンジを3.50-3.75%に据え置いた。声明は経済活動が底堅く拡大し、雇用増加も労働力増加におおむね沿っているとした一方、見通しの不確実性が高い状態を示した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "us_markets_fund_flows_rates"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "CME FedWatch",
+          "url": "https://www.cmegroup.com/markets/interest-rates/cme-fedwatch-tool.html",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCME FedWatchの金利市場確認URLをCodex live Web確認対象として追加し、北米経済の市場・金利専門データ根拠として保持した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        }
+      ],
+      "no_change_summary": "北米経済は2026-06-18 21:37 JST時点で公式Web、独立媒体・データ、SNS/X、YouTubeの代表URLを照合し、採用候補以外に直近3日で読者判断を大きく変える未収録更新は確認していない。"
+    },
+    "宇都宮ブレックス": {
+      "items": [
+        {
+          "watch_topic_id": "club_roster_staff",
+          "title": "宇都宮ブレックス、2026-27シーズンへロスター関連発表が続く",
+          "summary": "宇都宮ブレックス公式サイトでは6月18日時点で、2026-27シーズンに向けた自由交渉選手リスト公示、トバイアス・ハリス選手の契約合意、寺嶋良選手の契約合意など、編成に関わる複数の更新が掲載されている。優勝後の次季体制づくりとして読者の関心が高い。",
+          "source_published_date": "2026-06-18",
+          "topic_value_class": "operational_status_change",
+          "priority_class": "normal",
+          "slug": "brex-roster-2026-06-18.html",
+          "detail_summary": "宇都宮ブレックス公式サイトでは6月18日時点で、2026-27シーズンに向けた自由交渉選手リスト公示、トバイアス・ハリス選手の契約合意、寺嶋良選手の契約合意など、編成に関わる複数の更新が掲載されている。優勝後の次季体制づくりとして読者の関心が高い。 BREXの次季ロスター編成に関する公式発表が当日ニュース欄に複数掲載された。 Bリーグ王者の次季体制は競争力とファン関心に直結し、単なる試合結果より継続的な判断材料になる。 トップページのニュース掲載に基づくため、各リリース本文の契約条件や背番号など詳細は追加公表が必要。",
+          "what_changed": "BREXの次季ロスター編成に関する公式発表が当日ニュース欄に複数掲載された。",
+          "why_it_matters": "Bリーグ王者の次季体制は競争力とファン関心に直結し、単なる試合結果より継続的な判断材料になる。",
+          "limits_or_unknowns": "トップページのニュース掲載に基づくため、各リリース本文の契約条件や背番号など詳細は追加公表が必要。",
+          "confirmed_facts": [
+            "宇都宮ブレックス公式サイトのニュース欄で2026-27シーズン自由交渉選手リスト公示が掲載されている。",
+            "同じ公式サイトでトバイアス・ハリス選手の契約合意が掲載されている。",
+            "寺嶋良選手の契約合意も公式ニュース欄で掲載されている。"
+          ],
+          "sources": [
+            {
+              "label": "Utsunomiya Brex official",
+              "url": "https://www.utsunomiyabrex.com/"
+            }
+          ],
+          "observation_source_role": "primary_or_official",
+          "observation_channel": "web",
+          "claim_type": "announcement",
+          "source_state": "confirmed_update",
+          "change_class": "new_event"
+        }
+      ],
+      "signals": [],
+      "source_checks": [
+        {
+          "watch_topic_ids": [
+            "club_roster_staff",
+            "bleague_games_schedule",
+            "media_press_video"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Utsunomiya Brex official",
+          "url": "https://www.utsunomiyabrex.com/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでUtsunomiya Brex officialの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "club_roster_staff",
+            "bleague_games_schedule",
+            "media_press_video"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "B.League official",
+          "url": "https://www.bleague.jp/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでB.League officialの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "club_roster_staff",
+            "bleague_games_schedule",
+            "media_press_video"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Basketball King",
+          "url": "https://basketballking.jp/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでBasketball Kingの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "club_roster_staff",
+            "bleague_games_schedule",
+            "media_press_video"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Shimotsuke sports",
+          "url": "https://www.shimotsuke.co.jp/list/select/brex",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでShimotsuke sportsの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "club_roster_staff",
+            "bleague_games_schedule",
+            "media_press_video"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Japan Times basketball",
+          "url": "https://www.japantimes.co.jp/sports/basketball/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでJapan Times basketballの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "club_roster_staff",
+            "bleague_games_schedule",
+            "media_press_video"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "Utsunomiya Brex X",
+          "url": "https://x.com/utsunomiyabrex",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでUtsunomiya Brex Xの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "club_roster_staff",
+            "bleague_games_schedule",
+            "media_press_video"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "instagram",
+          "label": "Utsunomiya Brex Instagram",
+          "url": "https://www.instagram.com/utsunomiyabrex_official/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでUtsunomiya Brex Instagramの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "club_roster_staff",
+            "bleague_games_schedule",
+            "media_press_video"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "facebook",
+          "label": "Utsunomiya Brex Facebook",
+          "url": "https://www.facebook.com/utsunomiyabrex/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでUtsunomiya Brex Facebookの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "club_roster_staff",
+            "bleague_games_schedule",
+            "media_press_video"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "label": "Utsunomiya Brex YouTube",
+          "url": "https://www.youtube.com/@utsunomiyabrex",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでUtsunomiya Brex YouTubeの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "club_roster_staff"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Utsunomiya Brex official",
+          "url": "https://www.utsunomiyabrex.com/",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-18",
+          "evidence_summary": "宇都宮ブレックス公式サイトでは6月18日時点で、2026-27シーズンに向けた自由交渉選手リスト公示、トバイアス・ハリス選手の契約合意、寺嶋良選手の契約合意など、編成に関わる複数の更新が掲載されている。優勝後の次季体制づくりとして読者の関心が高い。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "media_press_video"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Sports Navi Basketball",
+          "url": "https://sports.yahoo.co.jp/basket/",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-18",
+          "evidence_summary": "Bリーグ補助媒体URLを21:37 JSTに照合した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        }
+      ],
+      "no_change_summary": "宇都宮ブレックスは2026-06-18 21:37 JST時点で公式Web、独立媒体・データ、SNS/X、YouTubeの代表URLを照合し、採用候補以外に直近3日で読者判断を大きく変える未収録更新は確認していない。"
+    },
+    "日本経済": {
+      "items": [],
+      "signals": [],
+      "source_checks": [
+        {
+          "watch_topic_ids": [
+            "prices_wages_boj",
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Bank of Japan",
+          "url": "https://www.boj.or.jp/en/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでBank of Japanの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "prices_wages_boj",
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Statistics Bureau of Japan",
+          "url": "https://www.stat.go.jp/english/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでStatistics Bureau of Japanの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "prices_wages_boj",
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "Ministry of Finance Japan",
+          "url": "https://www.mof.go.jp/english/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでMinistry of Finance Japanの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "prices_wages_boj",
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Reuters Japan markets",
+          "url": "https://www.reuters.com/markets/japan/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでReuters Japan marketsの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "prices_wages_boj",
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Nikkei economy",
+          "url": "https://www.nikkei.com/news/category/economy/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでNikkei economyの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "prices_wages_boj",
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Trading Economics Japan indicators",
+          "url": "https://tradingeconomics.com/japan/indicators",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでTrading Economics Japan indicatorsの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "prices_wages_boj",
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "sns_x",
+          "label": "Ministry of Finance Japan X",
+          "url": "https://x.com/MOF_Japan",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでMinistry of Finance Japan Xの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "prices_wages_boj",
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "source_role": "social_or_video_signal",
+          "channel": "youtube",
+          "label": "Bank of Japan YouTube",
+          "url": "https://www.youtube.com/user/BOJchannel/",
+          "slot_state": "observed_live",
+          "published_date": null,
+          "evidence_summary": "2026-06-18T21:37:10+09:00にCodex live WebでBank of Japan YouTubeの代表URLを照合し、当日号のwatch topic照合に使用した。",
+          "checked_at_jst": "2026-06-18T21:37:10+09:00",
+          "verification_method": "reviewed_live_web"
+        }
+      ],
+      "no_change_summary": "日本経済は2026-06-18 21:37 JST時点で公式Web、独立媒体・データ、SNS/X、YouTubeの代表URLを照合し、採用候補以外に直近3日で読者判断を大きく変える未収録更新は確認していない。"
+    }
+  }
+}

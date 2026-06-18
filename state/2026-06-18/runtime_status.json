@@ -1,0 +1,39 @@
+{
+  "issue_date": "2026-06-18",
+  "checked_at_jst": "2026-06-18T20:00:27+09:00",
+  "manifest": {
+    "path": "/Users/shimadatakashi/Documents/Codex/2026-05-10/gpt/state/2026-06-18/coverage_manifest.json",
+    "exists": false,
+    "fresh_evening_issue": false
+  },
+  "reviewed_bundle": {
+    "path": "/Users/shimadatakashi/Documents/Codex/2026-05-10/gpt/state/2026-06-18/research_bundle.json",
+    "exists": false,
+    "usable": false
+  },
+  "openai_api_key_available": false,
+  "github_models_token_available": false,
+  "git": {
+    "available": true,
+    "dirty": true,
+    "changed_paths": [
+      "state/2026-06-18/"
+    ],
+    "error": null
+  },
+  "recovery_path": "blocked_no_honest_collector",
+  "publication_blocked": true,
+  "checkpoint": "/Users/shimadatakashi/Documents/Codex/2026-05-10/gpt/state/2026-06-18/runtime_checkpoint.json",
+  "automation": {
+    "available": true,
+    "found": true,
+    "thread_id": "019eda62-48f4-7ea3-a383-267c15c1576e",
+    "status": "IN_PROGRESS",
+    "created_at_jst": "2026-06-18T19:58:54.827000+09:00",
+    "updated_at_jst": "2026-06-18T19:58:56.219000+09:00",
+    "rollout_path": "/Users/shimadatakashi/.codex/sessions/2026/06/18/rollout-2026-06-18T19-58-54-019eda62-48f4-7ea3-a383-267c15c1576e.jsonl",
+    "failure_class": "codex_credit_exhausted",
+    "has_agent_completion": true,
+    "credit_exhausted": true
+  }
+}
