@@ -51,7 +51,7 @@ jobs:
           # GitHub Pages deploys only a committed, evening-fresh issue. The
           # unattended collector owns live research and commits audited state;
           # this workflow remains a deterministic publication boundary.
-          python3 scripts/night_signal_publish.py "$ISSUE_DATE" --deploy-existing
+          python3 scripts/night_signal_publish.py "$ISSUE_DATE" --deploy-existing --verification-profile deploy
           cp .nojekyll site/.nojekyll
           echo "ISSUE_DATE=$ISSUE_DATE" >> "$GITHUB_ENV"
 

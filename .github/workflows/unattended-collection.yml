@@ -80,7 +80,7 @@ jobs:
         if: ${{ inputs.canary_only != true }}
         run: |
           python3 scripts/night_signal_import_research.py "$ISSUE_DATE"
-          python3 scripts/night_signal_publish.py "$ISSUE_DATE" --deploy-existing
+          python3 scripts/night_signal_publish.py "$ISSUE_DATE" --deploy-existing --verification-profile deploy
           PYTHONPYCACHEPREFIX=tmp/pycache python3 -m py_compile scripts/*.py
           git diff --check
 

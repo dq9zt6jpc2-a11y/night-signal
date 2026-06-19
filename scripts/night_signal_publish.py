@@ -278,19 +278,24 @@ def sync_and_audit(issue_date: str) -> None:
     run([sys.executable, "scripts/pre22_audit.py", issue_date])
 
 
-def self_tests() -> None:
+def self_tests(profile: str) -> None:
     run([sys.executable, "scripts/night_signal_models.py"])
     run([sys.executable, "scripts/night_signal_runtime_audit.py", "--self-test"])
-    run([sys.executable, "scripts/simulate_runtime_failures.py"])
     run([sys.executable, "scripts/night_signal_state.py", "--self-test"])
+    run([sys.executable, "scripts/night_signal_publish.py", "--self-test"])
+    if profile == "deploy":
+        return
+    if profile not in {"preflight", "full"}:
+        fail(f"unknown verification profile: {profile}")
+    run([sys.executable, "scripts/simulate_runtime_failures.py"])
     run([sys.executable, "scripts/night_signal_collect.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_unattended_collect.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_synthesize.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_eval.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_import_research.py", "--self-test"])
-    run([sys.executable, "scripts/night_signal_publish.py", "--self-test"])
     run([sys.executable, "scripts/publication_schedule_audit.py"])
-    run([sys.executable, "scripts/simulate_ai_collection_redesign.py", jst_today(), "--fail-on-weakness"])
+    if profile == "full":
+        run([sys.executable, "scripts/simulate_ai_collection_redesign.py", jst_today(), "--fail-on-weakness"])
 
 
 def readiness(issue_date: str, *, check: bool) -> dict[str, Any]:
@@ -309,12 +314,13 @@ def prepare(
     *,
     import_reviewed_bundle: bool,
     deploy_existing: bool,
+    verification_profile: str,
 ) -> dict[str, Any]:
     current_stage = "startup"
     runtime.write_checkpoint(issue_date, current_stage, "started", "publication driver started", STATE_ROOT)
     try:
-        self_tests()
-        runtime.write_checkpoint(issue_date, "runtime_checked", "completed", "runtime and failure simulations passed", STATE_ROOT)
+        self_tests(verification_profile)
+        runtime.write_checkpoint(issue_date, "runtime_checked", "completed", f"{verification_profile} verification passed", STATE_ROOT)
         if deploy_existing:
             ensure_collection_plan(issue_date)
             if not (state_dir(issue_date) / "issue.json").exists():
@@ -367,8 +373,8 @@ def public_audit(issue_date: str) -> dict[str, Any]:
     return {"issue_date": issue_date, "public_content_verified": True}
 
 
-def preflight(issue_date: str) -> dict[str, Any]:
-    self_tests()
+def preflight(issue_date: str, *, verification_profile: str) -> dict[str, Any]:
+    self_tests(verification_profile)
     ensure_collection_plan(issue_date)
     if (state_dir(issue_date) / "issue.json").exists():
         assemble_and_render(issue_date)
@@ -406,6 +412,7 @@ def main() -> int:
     parser.add_argument("--preflight", action="store_true")
     parser.add_argument("--public-audit", action="store_true")
     parser.add_argument("--self-test", action="store_true")
+    parser.add_argument("--verification-profile", choices=["deploy", "preflight", "full"], default="")
     args = parser.parse_args()
 
     if args.resolve_issue_date:
@@ -424,14 +431,19 @@ def main() -> int:
     if args.import_reviewed_bundle and args.deploy_existing:
         fail("--import-reviewed-bundle and --deploy-existing are mutually exclusive")
     if args.preflight:
-        result = preflight(args.issue_date)
+        result = preflight(
+            args.issue_date,
+            verification_profile=args.verification_profile or "preflight",
+        )
     elif args.public_audit:
         result = public_audit(args.issue_date)
     else:
+        verification_profile = args.verification_profile or ("deploy" if args.deploy_existing else "full")
         result = prepare(
             args.issue_date,
             import_reviewed_bundle=args.import_reviewed_bundle,
             deploy_existing=args.deploy_existing,
+            verification_profile=verification_profile,
         )
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0

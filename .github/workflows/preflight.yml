@@ -19,4 +19,4 @@ jobs:
       - name: Check selected generated issue
         run: |
           ISSUE_DATE="$(python3 scripts/night_signal_publish.py --resolve-issue-date)"
-          python3 scripts/night_signal_publish.py "$ISSUE_DATE" --preflight
+          python3 scripts/night_signal_publish.py "$ISSUE_DATE" --preflight --verification-profile preflight

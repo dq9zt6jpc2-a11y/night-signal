@@ -45,4 +45,4 @@ jobs:
         if: steps.runtime.outputs.recovery_path == 'fresh_evening_issue'
         run: |
           ISSUE_DATE="${{ steps.runtime.outputs.issue_date }}"
-          python3 scripts/night_signal_publish.py "$ISSUE_DATE" --deploy-existing
+          python3 scripts/night_signal_publish.py "$ISSUE_DATE" --deploy-existing --verification-profile deploy
