@@ -18,9 +18,5 @@ jobs:
 
       - name: Check selected generated issue
         run: |
-          ISSUE_DATE="$(TZ=Asia/Tokyo date +%F)"
-          if [[ ! "$ISSUE_DATE" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
-            echo "Computed NIGHT SIGNAL issue date is invalid: ${ISSUE_DATE}" >&2
-            exit 1
-          fi
+          ISSUE_DATE="$(python3 scripts/night_signal_publish.py --resolve-issue-date)"
           python3 scripts/night_signal_publish.py "$ISSUE_DATE" --preflight

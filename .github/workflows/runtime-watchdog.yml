@@ -24,10 +24,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          ISSUE_DATE="$(TZ=Asia/Tokyo date +%F)"
+          ISSUE_DATE="$(python3 scripts/night_signal_publish.py --resolve-issue-date)"
           python3 scripts/night_signal_runtime_audit.py "$ISSUE_DATE" \
             --write-status
           RECOVERY_PATH="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["recovery_path"])' "state/$ISSUE_DATE/runtime_status.json")"
+          echo "issue_date=$ISSUE_DATE" >> "$GITHUB_OUTPUT"
           echo "recovery_path=$RECOVERY_PATH" >> "$GITHUB_OUTPUT"
 
       - name: Dispatch unattended recovery
@@ -37,11 +38,11 @@ jobs:
         run: |
           gh workflow run unattended-collection.yml \
             --ref main \
-            -f issue_date="$(TZ=Asia/Tokyo date +%F)" \
+            -f issue_date="${{ steps.runtime.outputs.issue_date }}" \
             -f force=true
 
       - name: Verify committed issue when available
         if: steps.runtime.outputs.recovery_path == 'fresh_evening_issue'
         run: |
-          ISSUE_DATE="$(TZ=Asia/Tokyo date +%F)"
+          ISSUE_DATE="${{ steps.runtime.outputs.issue_date }}"
           python3 scripts/night_signal_publish.py "$ISSUE_DATE" --deploy-existing

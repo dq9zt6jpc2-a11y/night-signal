@@ -42,7 +42,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ github.token }}
-      NIGHT_SIGNAL_GITHUB_MODEL: openai/gpt-4.1-mini
       NIGHT_SIGNAL_MODEL_TIMEOUT_SECONDS: 240
       NIGHT_SIGNAL_MODEL_RETRIES: 5
       NIGHT_SIGNAL_MODEL_MAX_TOKENS: 3000
@@ -56,14 +55,7 @@ jobs:
         env:
           REQUESTED_ISSUE_DATE: ${{ inputs.issue_date || '' }}
         run: |
-          ISSUE_DATE="${REQUESTED_ISSUE_DATE:-}"
-          if [[ -z "$ISSUE_DATE" ]]; then
-            ISSUE_DATE="$(TZ=Asia/Tokyo date +%F)"
-          fi
-          if [[ ! "$ISSUE_DATE" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
-            echo "Invalid NIGHT SIGNAL issue date: ${ISSUE_DATE}" >&2
-            exit 1
-          fi
+          ISSUE_DATE="$(python3 scripts/night_signal_publish.py --resolve-issue-date --event-name workflow_dispatch --requested-issue-date "${REQUESTED_ISSUE_DATE:-}")"
           echo "ISSUE_DATE=$ISSUE_DATE" >> "$GITHUB_ENV"
 
       - name: Verify GitHub Models access
@@ -88,15 +80,7 @@ jobs:
         if: ${{ inputs.canary_only != true }}
         run: |
           python3 scripts/night_signal_import_research.py "$ISSUE_DATE"
-          python3 scripts/night_signal_state.py --validate-issue "state/$ISSUE_DATE/issue.json"
-          python3 scripts/night_signal_state.py --generate-issue "state/$ISSUE_DATE/issue.json"
-          python3 scripts/night_signal_eval.py "$ISSUE_DATE"
-          python3 scripts/sync_site.py "$ISSUE_DATE"
-          python3 scripts/current_issue_audit.py "$ISSUE_DATE"
-          python3 scripts/coverage_audit.py "$ISSUE_DATE"
-          python3 scripts/quality_gate.py "$ISSUE_DATE"
-          python3 scripts/pre22_audit.py "$ISSUE_DATE"
-          python3 scripts/simulate_ai_collection_redesign.py "$ISSUE_DATE" --fail-on-weakness
+          python3 scripts/night_signal_publish.py "$ISSUE_DATE" --deploy-existing
           PYTHONPYCACHEPREFIX=tmp/pycache python3 -m py_compile scripts/*.py
           git diff --check
 

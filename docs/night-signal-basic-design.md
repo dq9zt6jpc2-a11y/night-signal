@@ -196,12 +196,12 @@ Concrete model names are not architecture. The design uses model routes:
 - `deep_frontier_reviewer`.
 
 The current concrete model for each route must be resolved from official
-OpenAI docs when implementation changes.
-For the current collector implementation, the verified defaults are `gpt-5.4-mini`
-for low-cost structured source extraction and `gpt-5.5` for frontier reasoning
-and synthesis.
-They remain environment-overridable so the architecture can move with OpenAI's
-model lineup without rewriting the coverage contract.
+OpenAI docs when implementation changes, then written once in
+`config/night_signal_models.json`.
+Code and workflows refer to route names, not scattered model literals.
+Environment variables can still override the configured defaults, so the
+architecture can move with OpenAI's model lineup without rewriting the coverage
+contract or GitHub Actions workflows.
 
 Official references checked on 2026-06-05:
 
@@ -250,7 +250,7 @@ Adoption decision after the 2026-06-11 review:
   source contract, such as product photos, venue/event assets, or social/video
   posts. It should not become the default for every slot.
 - Keep extended research out of the normal daily path, but trigger a bounded
-  GPT-5.5 background pass when authoritative sources conflict, all direct
+  frontier background pass when authoritative sources conflict, all direct
   sources are inaccessible, or a potentially material outside-frontier finding
   remains unresolved. Limit the daily escalations to three and preserve the
   parent response, reason, sources, and tool trace.
@@ -267,10 +267,9 @@ Adoption decision after the 2026-06-11 review:
   parameters when collection is moved from synchronous one-by-one calls to a
   queued daily collection job.
 - Model routes should be refreshed against official docs before implementation
-  changes. As of the 2026-06-11 review, official docs position GPT-5.5 for
-  complex reasoning/tool-heavy work and GPT-5.4 mini/nano for lower-cost
-  workloads. Do not blindly replace model strings without a small eval over
-  source-observation accuracy, URL evidence completeness, and token use.
+  changes, then updated in `config/night_signal_models.json`. Do not blindly
+  replace model strings without a small eval over source-observation accuracy,
+  URL evidence completeness, and token use.
 
 The 2026-06-12 implementation adds a pre-summary findings ledger:
 

@@ -30,6 +30,7 @@ from typing import Any
 from zoneinfo import ZoneInfo
 
 import night_signal_apply_source_review as source_review
+import night_signal_models as models
 import night_signal_state as state_contract
 
 
@@ -39,7 +40,6 @@ SOURCE_CONFIG = ROOT / "config" / "night_signal_sources.json"
 COVERAGE_CONFIG = ROOT / "config" / "night_signal_coverage.json"
 JST = ZoneInfo("Asia/Tokyo")
 MODELS_URL = "https://models.github.ai/inference/chat/completions"
-DEFAULT_MODEL = "openai/gpt-4.1-mini"
 DEFAULT_MODEL_TIMEOUT_SECONDS = 90
 DEFAULT_MODEL_RETRIES = 3
 DEFAULT_MODEL_MAX_TOKENS = 4000
@@ -428,7 +428,7 @@ def model_request(token: str, messages: list[dict[str, str]]) -> dict[str, Any]:
     max_tokens = int(os.getenv("NIGHT_SIGNAL_MODEL_MAX_TOKENS", DEFAULT_MODEL_MAX_TOKENS))
     for attempt in range(retries):
         payload = {
-            "model": os.getenv("NIGHT_SIGNAL_GITHUB_MODEL", DEFAULT_MODEL),
+            "model": models.model_for_route("github_unattended"),
             "messages": attempt_messages,
             "temperature": 0.1,
             "max_tokens": max_tokens,

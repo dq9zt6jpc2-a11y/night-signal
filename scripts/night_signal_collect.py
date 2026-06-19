@@ -24,22 +24,13 @@ from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
+import night_signal_models as models
 import night_signal_state as state
 
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_STATE_ROOT = ROOT / "state"
 RESPONSES_URL = os.getenv("OPENAI_RESPONSES_URL", "https://api.openai.com/v1/responses")
-DEFAULT_ROUTE_MODELS = {
-    "small_structured_extractor": "gpt-5.4-mini",
-    "small_structured_extractor_then_frontier_reasoning_if_ambiguous": "gpt-5.4-mini",
-    "frontier_reasoning_model": "gpt-5.5",
-}
-ROUTE_MODEL_ENV = {
-    "small_structured_extractor": "NIGHT_SIGNAL_MODEL_SMALL_STRUCTURED_EXTRACTOR",
-    "small_structured_extractor_then_frontier_reasoning_if_ambiguous": "NIGHT_SIGNAL_MODEL_SMALL_THEN_FRONTIER",
-    "frontier_reasoning_model": "NIGHT_SIGNAL_MODEL_FRONTIER_REASONING",
-}
 COLLECTION_SWEEP_SCHEMA: dict[str, Any] = {
     "type": "object",
     "additionalProperties": False,
@@ -194,21 +185,11 @@ def selected_tasks(plan: dict[str, Any], *, slot_id: str | None, max_tasks: int 
 
 
 def model_for_route(route: str) -> str:
-    env_key = ROUTE_MODEL_ENV.get(route)
-    if env_key and os.getenv(env_key):
-        return os.environ[env_key]
-    if os.getenv("NIGHT_SIGNAL_MODEL"):
-        return os.environ["NIGHT_SIGNAL_MODEL"]
-    return DEFAULT_ROUTE_MODELS.get(route, DEFAULT_ROUTE_MODELS["small_structured_extractor"])
+    return models.model_for_route(route)
 
 
 def reasoning_for_route(route: str) -> dict[str, str]:
-    effort = os.getenv("NIGHT_SIGNAL_REASONING_EFFORT")
-    if effort:
-        return {"effort": effort}
-    if route == "frontier_reasoning_model":
-        return {"effort": "medium"}
-    return {"effort": "low"}
+    return models.reasoning_for_route(route)
 
 
 def compact_json(value: Any) -> str:
@@ -263,10 +244,8 @@ def extended_research_payload(
     first_pass: dict[str, Any],
 ) -> dict[str, Any]:
     return {
-        "model": os.getenv("NIGHT_SIGNAL_EXTENDED_RESEARCH_MODEL", "gpt-5.5"),
-        "reasoning": {
-            "effort": os.getenv("NIGHT_SIGNAL_EXTENDED_RESEARCH_EFFORT", "high")
-        },
+        "model": models.model_for_route("extended_research"),
+        "reasoning": models.reasoning_for_route("extended_research"),
         "background": True,
         "store": True,
         "max_tool_calls": int(os.getenv("NIGHT_SIGNAL_EXTENDED_RESEARCH_MAX_TOOL_CALLS", "24")),
@@ -676,8 +655,8 @@ def self_test() -> None:
     text_format = payload["text"]["format"]
     if text_format["type"] != "json_schema" or text_format["schema"] != COLLECTION_SWEEP_SCHEMA:
         fail("collector must use collection sweep structured output schema")
-    if payload["model"] not in set(DEFAULT_ROUTE_MODELS.values()):
-        fail("collector default model must be one of the current route defaults")
+    if payload["model"] != models.model_for_route("small_structured_extractor"):
+        fail("collector default model must come from the configured route")
     if payload["reasoning"].get("effort") not in {"low", "medium", "high"}:
         fail("collector must set a bounded reasoning effort for web search")
     user_content = payload["input"][1]["content"]

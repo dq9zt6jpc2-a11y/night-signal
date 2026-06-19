@@ -62,6 +62,8 @@
         "NIGHT SIGNAL COLLECTOR PASSED",
         "OPENAI_API_KEY",
         "web_search",
+        "night_signal_models.py",
+        "config/night_signal_models.json",
         "json_schema",
         "source_observation",
         "source_target_results_for_every_seed_target",
@@ -526,7 +528,8 @@
         "PUBLICATION AUDIT PASSED",
         "local site/index.html has no card titles",
         "missing_titles = [title for title in local_card_titles(issue_date) if title not in root_html]",
-        "--public-content-only"
+        "--public-content-only",
+        "push publication target"
       ],
       "required_policy_terms": [
         ".night-signal-issue-date",
@@ -538,10 +541,9 @@
       ],
       "required_workflow_terms": [
         ".night-signal-issue-date",
-        "ISSUE_DATE=\"$(tr -d '[:space:]' < .night-signal-issue-date)\"",
-        "Push publication target ${ISSUE_DATE} is missing committed issue artifacts.",
+        "--resolve-issue-date",
+        "--require-push-artifacts",
         "REQUESTED_ISSUE_DATE",
-        "Manual issue date override is only allowed for workflow_dispatch.",
         "Verify public page date",
         "python3 scripts/night_signal_publish.py \"$ISSUE_DATE\"",
         "Audit published issue content",

@@ -61,14 +61,15 @@ Required usage:
 This directly improves both comprehensiveness and auditability. The model's
 summary is no longer the only proof that a source was consulted.
 
-### GPT-5.5
+### Model routes
 
-Use GPT-5.5 only for tool-heavy reasoning, ambiguity resolution, and final
-editorial decision review. Official guidance says GPT-5.5 is the current model
-family for complex production workflows, tool-heavy agents, and multi-step work.
+Use frontier models only for tool-heavy reasoning, ambiguity resolution, and
+final editorial decision review. Concrete model names live in
+`config/night_signal_models.json`; implementation changes must refresh that
+file from official model docs and a small NIGHT SIGNAL eval.
 
-Do not move every task to GPT-5.5. Low-ambiguity extraction should remain on a
-cheaper structured route after evals prove accuracy is sufficient.
+Do not move every task to the frontier route. Low-ambiguity extraction should
+remain on a cheaper structured route after evals prove accuracy is sufficient.
 
 Model routes:
 
@@ -84,7 +85,7 @@ Model routes:
 ### Bounded Extended Research
 
 The normal path remains a grouped Responses API web-search sweep. A bounded
-GPT-5.5 background research pass is now implemented only when a potentially
+frontier background research pass is implemented only when a potentially
 material ambiguity survives that sweep.
 
 Best uses:

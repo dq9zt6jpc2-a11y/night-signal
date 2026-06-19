@@ -23,13 +23,14 @@ from typing import Any
 from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
+import night_signal_models as models
 import night_signal_state as state
 
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_STATE_ROOT = ROOT / "state"
 RESPONSES_URL = os.getenv("OPENAI_RESPONSES_URL", "https://api.openai.com/v1/responses")
-DEFAULT_SYNTHESIS_MODEL = os.getenv("NIGHT_SIGNAL_SYNTHESIS_MODEL", "gpt-5.5")
+DEFAULT_SYNTHESIS_MODEL = models.model_for_route("synthesis")
 
 NO_CHANGE_CHECK_SCHEMA: dict[str, Any] = {
     "type": "object",

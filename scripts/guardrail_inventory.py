@@ -17,6 +17,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 COVERAGE_PATH = ROOT / "config" / "night_signal_coverage.json"
 GUARDRAILS_PATH = ROOT / "config" / "night_signal_guardrails.json"
+MODEL_CONFIG_PATH = ROOT / "config" / "night_signal_models.json"
 POLICY_PATH = ROOT / "details" / "policy.html"
 AUDIT_PATHS = [
     ROOT / "scripts" / "coverage_audit.py",
@@ -29,6 +30,7 @@ AUDIT_PATHS = [
     ROOT / "scripts" / "night_signal_collect.py",
     ROOT / "scripts" / "night_signal_synthesize.py",
     ROOT / "scripts" / "night_signal_publish.py",
+    ROOT / "scripts" / "night_signal_models.py",
     ROOT / "scripts" / "night_signal_runtime_audit.py",
     ROOT / "scripts" / "night_signal_unattended_collect.py",
 ]
@@ -213,7 +215,7 @@ def main() -> int:
 
     texts = {
         "policy": POLICY_PATH.read_text(encoding="utf-8"),
-        "audit": read_all(AUDIT_PATHS),
+        "audit": "config/night_signal_models.json\n" + read_all(AUDIT_PATHS + [MODEL_CONFIG_PATH]),
         "simulation": read_all(SIMULATION_PATHS),
         "workflow": read_all(WORKFLOW_PATHS),
     }

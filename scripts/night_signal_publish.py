@@ -34,6 +34,56 @@ def jst_today() -> str:
     return datetime.now(ZoneInfo("Asia/Tokyo")).date().isoformat()
 
 
+def validate_issue_date(issue_date: str) -> str:
+    if not issue_date or len(issue_date) != 10:
+        fail(f"invalid issue date: {issue_date}")
+    try:
+        datetime.strptime(issue_date, "%Y-%m-%d")
+    except ValueError:
+        fail(f"invalid issue date: {issue_date}")
+    return issue_date
+
+
+def marker_issue_date() -> str:
+    path = ROOT / ".night-signal-issue-date"
+    if not path.exists():
+        fail("push publication requires .night-signal-issue-date")
+    return validate_issue_date(path.read_text(encoding="utf-8").strip())
+
+
+def require_committed_issue_artifacts(issue_date: str) -> None:
+    missing = [
+        path.relative_to(ROOT).as_posix()
+        for path in [
+            ROOT / f"night-brief-web-sample-{issue_date}.html",
+            state_dir(issue_date) / "issue.json",
+            ROOT / "site" / issue_date / "index.html",
+        ]
+        if not path.exists()
+    ]
+    if missing:
+        fail(f"push publication target {issue_date} is missing committed issue artifacts: " + ", ".join(missing))
+
+
+def resolve_issue_date(
+    *,
+    event_name: str,
+    requested_issue_date: str,
+    require_push_artifacts: bool,
+) -> str:
+    requested = requested_issue_date.strip()
+    if requested:
+        if event_name and event_name != "workflow_dispatch":
+            fail("manual issue date override is only allowed for workflow_dispatch")
+        return validate_issue_date(requested)
+    if event_name == "push":
+        issue_date = marker_issue_date()
+        if require_push_artifacts:
+            require_committed_issue_artifacts(issue_date)
+        return issue_date
+    return validate_issue_date(jst_today())
+
+
 def run(command: list[str], *, check: bool = True) -> subprocess.CompletedProcess[str]:
     print("+ " + " ".join(command), file=sys.stderr)
     result = subprocess.run(command, cwd=ROOT, text=True, capture_output=True)
@@ -229,6 +279,7 @@ def sync_and_audit(issue_date: str) -> None:
 
 
 def self_tests() -> None:
+    run([sys.executable, "scripts/night_signal_models.py"])
     run([sys.executable, "scripts/night_signal_runtime_audit.py", "--self-test"])
     run([sys.executable, "scripts/simulate_runtime_failures.py"])
     run([sys.executable, "scripts/night_signal_state.py", "--self-test"])
@@ -346,6 +397,10 @@ def preflight(issue_date: str) -> dict[str, Any]:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("issue_date", nargs="?", default=jst_today())
+    parser.add_argument("--resolve-issue-date", action="store_true")
+    parser.add_argument("--event-name", default="")
+    parser.add_argument("--requested-issue-date", default="")
+    parser.add_argument("--require-push-artifacts", action="store_true")
     parser.add_argument("--import-reviewed-bundle", action="store_true")
     parser.add_argument("--deploy-existing", action="store_true")
     parser.add_argument("--preflight", action="store_true")
@@ -353,8 +408,16 @@ def main() -> int:
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
 
-    if not args.issue_date or len(args.issue_date) != 10:
-        fail(f"invalid issue date: {args.issue_date}")
+    if args.resolve_issue_date:
+        print(
+            resolve_issue_date(
+                event_name=args.event_name,
+                requested_issue_date=args.requested_issue_date,
+                require_push_artifacts=args.require_push_artifacts,
+            )
+        )
+        return 0
+    validate_issue_date(args.issue_date)
     if args.self_test:
         self_test()
         return 0
