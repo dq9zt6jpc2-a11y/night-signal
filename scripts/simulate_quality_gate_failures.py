@@ -86,93 +86,126 @@ def backfill_fixture_manifest_for_current_contract(tmp: Path) -> None:
     if not match:
         return
     manifest = json.loads(match.group(2))
-    asia = manifest.get("categories", {}).get("アジア経済")
-    if not isinstance(asia, dict):
-        return
-    if any(candidate.get("topic_id") == "china_macro_policy" for candidate in asia.get("latest_candidates", [])):
-        return
-    title = "アジア経済 china_macro_policy: 近接候補を確認したが掲載優先度に届かず"
-    asia.setdefault("search_axes", {})["china_macro_policy"] = [
-        f"アジア経済 china_macro_policy china 中国 pmi nbs manufacturing Web SNS/X YouTube {ISSUE_DATE}",
-        f"アジア経済 china 中国 pmi nbs manufacturing official latest update {ISSUE_DATE}",
-    ]
-    asia.setdefault("search_terms", []).extend(["china", "中国", "nbs", "pmi"])
-    asia["search_terms"] = sorted(set(asia["search_terms"]))
-    asia.setdefault("latest_candidates", []).append(
-        {
-            "topic_id": "china_macro_policy",
-            "title": title,
-            "source_url": "https://www.stats.gov.cn/english/",
-            "source_published_date": ISSUE_DATE,
-            "decision": "no_fresh_item",
-            "rationale": "アジア経済のchina_macro_policyは公式、報道、補助チャネルを確認し、近接候補の有無を見たが、当日号で新規カード化する具体的な実質差分は確認できなかった。",
-            "non_adoption_reason_class": "no_material_change",
-            "change_class": "background_only",
-            "publication_assessment": "確認した資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
-        }
-    )
-    asia.setdefault("collected_items", []).append(
-        {
-            "topic_id": "china_macro_policy",
-            "title": title,
-            "source_url": "https://www.stats.gov.cn/english/",
-            "source_published_date": ISSUE_DATE,
-            "observed_at_jst": f"{ISSUE_DATE}T21:55:00+09:00",
-            "channel": "web",
-            "collection_note": "アジア経済のchina_macro_policyについて直接ページと関連チャネルを当日照合し、当日版へ加える実質差分の有無を判定した。",
-        }
-    )
-    asia.setdefault("watch_topic_checks", []).append(
-        {
-            "topic_id": "china_macro_policy",
-            "checked_at_jst": f"{ISSUE_DATE}T21:55:00+09:00",
-            "candidate_titles": [title],
-            "result": "アジア経済のchina_macro_policyは直接資料、独立情報、補助チャネルを当日照合し、当日版への反映可否を確認済みの事実に基づいて判定した。",
-            "event_classes": ["macro_data", "operations_market"],
-            "source_roles_checked": ["primary_or_official", "independent_media_or_data", "social_or_video_signal"],
-            "investigation_paths": [
-                {
-                    "source_role": "primary_or_official",
-                    "channel": "web",
-                    "evidence_url": "https://www.stats.gov.cn/english/",
-                    "finding": "中国国家統計局の公表経路で、対象となる統計系列と公表主体を確認した。",
-                },
-                {
-                    "source_role": "independent_media_or_data",
-                    "channel": "web",
-                    "evidence_url": "https://www.reuters.com/markets/asia/",
-                    "finding": "独立報道の経路で、公式情報と矛盾する追加事実の有無を確認した。",
-                },
-                {
-                    "source_role": "social_or_video_signal",
-                    "channel": "web",
-                    "evidence_url": "https://www.stats.gov.cn/english/",
-                    "finding": "補助情報として公表ページを再確認し、話題のみの更新を切り分けた。",
-                },
-            ],
-            "sns_x": ["https://x.com/RBI"],
-            "youtube": ["https://www.youtube.com/channel/UCIfCOl43tunZVNYafeC4RQA"],
-            "investigation_hypotheses": [
-                "アジア経済のchina_macro_policyに前号後の新しい決定または数値変更がある可能性。",
-                "アジア経済のchina_macro_policyは定例・既報・周辺情報であり掲載に足る実質差分がない可能性。",
-            ],
-            "time_window_jst": {
-                "start": "2026-05-21T21:55:00+09:00",
-                "end": f"{ISSUE_DATE}T21:55:00+09:00",
-            },
-            "delta_basis": "公式日付、数値、予定、結果を前号の掲載内容と照合し、実質変化だけを本文に採用した。",
-            "search_sweep": {
-                "queries": [
-                    f"アジア経済 china_macro_policy latest {ISSUE_DATE}",
-                    f"アジア経済 china_macro_policy official update {ISSUE_DATE}",
-                ],
-                "result": "no_new_update",
-                "selection_reason": "アジア経済のchina_macro_policyについて、公式ページと関連報道の直近日付を照合し、採用または非採用の理由を確定した。",
-            },
-            "web": ["https://www.stats.gov.cn/english/", "https://www.reuters.com/markets/asia/"],
-        }
-    )
+    contract = json.loads((tmp / "config" / "night_signal_coverage.json").read_text(encoding="utf-8"))
+    categories = manifest.get("categories", {})
+    if isinstance(categories, dict):
+        for category_config in contract.get("categories", []):
+            if not isinstance(category_config, dict):
+                continue
+            label = category_config.get("label")
+            entry = categories.get(label)
+            if not isinstance(label, str) or not isinstance(entry, dict):
+                continue
+            configured_topics = [
+                topic for topic in category_config.get("watch_topics", [])
+                if isinstance(topic, dict) and isinstance(topic.get("id"), str)
+            ]
+            existing_topics = {
+                candidate.get("topic_id")
+                for candidate in entry.get("latest_candidates", [])
+                if isinstance(candidate, dict)
+            }
+            for topic in configured_topics:
+                topic_id = topic["id"]
+                if topic_id in existing_topics:
+                    continue
+                official_url = first_url(entry.get("official")) or first_url(entry.get("major_media")) or "https://example.com/"
+                media_url = first_url(entry.get("major_media")) or official_url
+                sns_url = first_url(entry.get("sns_x")) or "https://x.com/OpenAI"
+                youtube_url = first_url(entry.get("youtube_video")) or "https://www.youtube.com/@OpenAI"
+                title = f"{label} {topic_id}：近接候補を確認したが掲載優先度に届かず"
+                entry.setdefault("search_axes", {})[topic_id] = [
+                    f"{label} {topic_id} official update {ISSUE_DATE}",
+                    f"{label} {topic_id} Web SNS/X YouTube {ISSUE_DATE}",
+                ]
+                entry.setdefault("search_terms", []).extend(
+                    term for term in topic.get("terms", []) if isinstance(term, str)
+                )
+                entry["search_terms"] = sorted(set(entry["search_terms"]))
+                entry.setdefault("latest_candidates", []).append(
+                    {
+                        "topic_id": topic_id,
+                        "title": title,
+                        "source_url": official_url,
+                        "source_published_date": ISSUE_DATE,
+                        "decision": "no_fresh_item",
+                        "rationale": f"{label}の{topic_id}は公式、報道、補助チャネルを確認し、当日号で新規カード化する具体的な実質差分は確認できなかった。",
+                        "non_adoption_reason_class": "no_material_change",
+                        "change_class": "background_only",
+                        "publication_assessment": "確認した資料は既報、予定表、周辺情報にとどまり、読者向け本文へ追加する新しい決定・数値・結果ではない。",
+                    }
+                )
+                entry.setdefault("collected_items", []).append(
+                    {
+                        "topic_id": topic_id,
+                        "title": title,
+                        "source_url": official_url,
+                        "source_published_date": ISSUE_DATE,
+                        "observed_at_jst": f"{ISSUE_DATE}T21:55:00+09:00",
+                        "channel": "web",
+                        "collection_note": f"{label}の{topic_id}について公式、報道、補助チャネルを当日照合し、当日版へ加える実質差分の有無を判定した。",
+                    }
+                )
+                entry.setdefault("watch_topic_checks", []).append(
+                    {
+                        "topic_id": topic_id,
+                        "checked_at_jst": f"{ISSUE_DATE}T21:55:00+09:00",
+                        "candidate_titles": [title],
+                        "result": f"{label}の{topic_id}は公式、主要報道、補助チャネルを横断し、当日版への反映可否を確認済みの事実に基づいて判定した。",
+                        "event_classes": topic.get("event_classes", ["operations_market"]),
+                        "source_roles_checked": ["primary_or_official", "independent_media_or_data", "social_or_video_signal"],
+                        "investigation_paths": [
+                            {
+                                "source_role": "primary_or_official",
+                                "channel": "web",
+                                "evidence_url": official_url,
+                                "finding": f"{label}の{topic_id}について、公式経路で当日差分の有無を確認した。",
+                            },
+                            {
+                                "source_role": "independent_media_or_data",
+                                "channel": "web",
+                                "evidence_url": media_url,
+                                "finding": f"{label}の{topic_id}について、独立報道で追加事実の有無を確認した。",
+                            },
+                            {
+                                "source_role": "social_or_video_signal",
+                                "channel": "sns_x",
+                                "evidence_url": sns_url,
+                                "finding": f"{label}の{topic_id}について、補助情報としてSNS反応を確認した。",
+                            },
+                        ],
+                        "sns_x": [sns_url],
+                        "youtube": [youtube_url],
+                        "investigation_hypotheses": [
+                            f"{label}の{topic_id}に前号後の新しい決定または数値変更がある可能性。",
+                            f"{label}の{topic_id}は定例・既報・周辺情報であり掲載に足る実質差分がない可能性。",
+                        ],
+                        "time_window_jst": {
+                            "start": "2026-05-21T21:55:00+09:00",
+                            "end": f"{ISSUE_DATE}T21:55:00+09:00",
+                        },
+                        "delta_basis": "公式日付、数値、予定、結果を前号の掲載内容と照合し、実質変化だけを本文に採用した。",
+                        "search_sweep": {
+                            "queries": [
+                                f"{label} {topic_id} latest {ISSUE_DATE}",
+                                f"{label} {topic_id} official update {ISSUE_DATE}",
+                            ],
+                            "result": "no_new_update",
+                            "selection_reason": f"{label}の{topic_id}について、公式ページと関連報道の直近日付を照合し、採用または非採用の理由を確定した。",
+                        },
+                        "web": [official_url, media_url],
+                    }
+                )
     path.write_text(html[: match.start(2)] + json.dumps(manifest, ensure_ascii=False, indent=2) + html[match.end(2) :], encoding="utf-8")
+
+
+def first_url(value: object) -> str | None:
+    if not isinstance(value, list):
+        return None
+    for item in value:
+        if isinstance(item, str) and item.startswith(("http://", "https://")):
+            return item
+    return None
 
 
 def read(path: Path) -> str:

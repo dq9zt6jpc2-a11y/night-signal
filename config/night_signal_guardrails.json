@@ -538,7 +538,8 @@
       ],
       "required_workflow_terms": [
         ".night-signal-issue-date",
-        "ISSUE_DATE=\"${TODAY_JST}\"",
+        "ISSUE_DATE=\"$(tr -d '[:space:]' < .night-signal-issue-date)\"",
+        "Push publication target ${ISSUE_DATE} is missing committed issue artifacts.",
         "REQUESTED_ISSUE_DATE",
         "Manual issue date override is only allowed for workflow_dispatch.",
         "Verify public page date",
