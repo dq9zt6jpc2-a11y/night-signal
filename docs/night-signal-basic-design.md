@@ -74,14 +74,16 @@ A required slot is closed only when it is:
 - explicitly not applicable by contract.
 
 When uncertain, keep the item as a candidate. Collection should bias toward not
-missing material changes. Reader display has two explicit depths:
+missing material changes. Reader display has two public surfaces:
 
-- adopted material changes become full detail cards;
-- verified recent non-adopted findings become compact confirmation signals with
-  source date and direct URL.
+- source-backed recent candidates become headline topics so the reader can pick
+  what to inspect;
+- adopted material changes also become full detail cards.
 
 Background-only, stale, generic no-change, and unverified items remain out of
-the public page. This prevents an apparently empty category without lowering
+the public page. Candidate headlines are not lightweight confirmation notes;
+they are the broad topic surface. This prevents an apparently empty category
+without lowering
 the detail-card standard.
 
 The canonical daily state is assembled from structured files:

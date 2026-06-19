@@ -27,8 +27,8 @@ What has been done:
 - all ten categories include Web, X/SNS, and YouTube routes;
 - watch-topic completeness is proved by candidates or URL-backed topic checks,
   not by fabricated near-miss candidates;
-- recent verified non-adopted findings remain visible as compact confirmation
-  signals;
+- recent verified non-adopted findings remain visible as source-backed headline
+  topics, not as compact confirmation notes;
 - final deploy requires an evening-fresh manifest and GitHub Pages deploys only
   committed state;
 - GitHub Models plus public Web/RSS collection runs at 18:05, 18:35, 19:05,

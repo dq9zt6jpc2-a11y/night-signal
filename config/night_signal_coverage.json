@@ -1,5 +1,5 @@
 {
-  "contract_version": "2026-06-13.01",
+  "contract_version": "2026-06-19.01",
   "legacy_contract_versions": [
     {
       "through_date": "2026-05-25",
@@ -267,6 +267,27 @@
             "South Korea",
             "government"
           ]
+        },
+        {
+          "id": "strategic_talent_japan_gtm",
+          "terms": [
+            "Noam Shazeer",
+            "Noam",
+            "Character.AI",
+            "Gemini",
+            "Google",
+            "Attention Is All You Need",
+            "researcher",
+            "talent",
+            "Japan",
+            "日本",
+            "広告",
+            "キャンペーン",
+            "CM",
+            "Go-to-market",
+            "SB OpenAI Japan",
+            "SoftBank"
+          ]
         }
       ],
       "watch_topics": [
@@ -364,6 +385,32 @@
           "event_classes": [
             "regulation_safety",
             "official_update"
+          ]
+        },
+        {
+          "id": "strategic_talent_japan_gtm",
+          "terms": [
+            "Noam Shazeer",
+            "Noam",
+            "Character.AI",
+            "Gemini",
+            "Google",
+            "Attention Is All You Need",
+            "researcher",
+            "talent",
+            "Japan",
+            "日本",
+            "広告",
+            "キャンペーン",
+            "CM",
+            "Go-to-market",
+            "SB OpenAI Japan",
+            "SoftBank"
+          ],
+          "event_classes": [
+            "people_contracts",
+            "operations_market",
+            "partnership"
           ]
         }
       ],
@@ -926,6 +973,24 @@
             "government",
             "customer"
           ]
+        },
+        {
+          "id": "ai_mna_compute",
+          "terms": [
+            "Cursor",
+            "Anysphere",
+            "AI coding",
+            "developer tools",
+            "acquisition",
+            "買収",
+            "M&A",
+            "xAI",
+            "Grok",
+            "compute",
+            "data center",
+            "IPO",
+            "valuation"
+          ]
         }
       ],
       "watch_topics": [
@@ -1001,6 +1066,29 @@
           "event_classes": [
             "schedule_result",
             "official_update"
+          ]
+        },
+        {
+          "id": "ai_mna_compute",
+          "terms": [
+            "Cursor",
+            "Anysphere",
+            "AI coding",
+            "developer tools",
+            "acquisition",
+            "買収",
+            "M&A",
+            "xAI",
+            "Grok",
+            "compute",
+            "data center",
+            "IPO",
+            "valuation"
+          ],
+          "event_classes": [
+            "capital_markets",
+            "partnership",
+            "infrastructure"
           ]
         }
       ],
@@ -1675,6 +1763,24 @@
             "press",
             "会見"
           ]
+        },
+        {
+          "id": "arena_regional_admin",
+          "terms": [
+            "アリーナ",
+            "新アリーナ",
+            "arena",
+            "建設",
+            "施設",
+            "宇都宮市",
+            "地域行政",
+            "市議会",
+            "B.PREMIER",
+            "Bプレミア",
+            "ライセンス",
+            "収容人数",
+            "事業費"
+          ]
         }
       ],
       "watch_topics": [
@@ -1721,6 +1827,28 @@
           "event_classes": [
             "official_update",
             "schedule_result"
+          ]
+        },
+        {
+          "id": "arena_regional_admin",
+          "terms": [
+            "アリーナ",
+            "新アリーナ",
+            "arena",
+            "建設",
+            "施設",
+            "宇都宮市",
+            "地域行政",
+            "市議会",
+            "B.PREMIER",
+            "Bプレミア",
+            "ライセンス",
+            "収容人数",
+            "事業費"
+          ],
+          "event_classes": [
+            "infrastructure",
+            "official_update"
           ]
         }
       ]

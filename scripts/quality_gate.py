@@ -252,6 +252,11 @@ READER_PROCESS_LEAK_PATTERNS = [
     (r"作業(?:指示|説明|メモ|語|上|として|を書)", "authoring work wording"),
 ]
 
+FORBIDDEN_PUBLIC_CONFIRMATION_LAYER_TERMS = [
+    "確認情報",
+    "直近3日で追加表示する確認情報はありません",
+]
+
 PUBLIC_SUMMARY_PROCESS_PATTERNS = [
     (r"(?:採用|掲載|公開)(?:判断|基準|可否|候補)", "selection/publication decision"),
     (r"(?:調査|探索|監視|収集)(?:方法|経路|方針|対象|チャネル|チャンネル)", "research procedure"),
@@ -386,6 +391,13 @@ def validate_reader_process_language(context: str, html: str) -> None:
     pattern_leaks = [label for pattern, label in READER_PROCESS_LEAK_PATTERNS if re.search(pattern, text)]
     if leaks or pattern_leaks:
         fail(f"{context} contains production/process wording: " + ", ".join((leaks + pattern_leaks)[:8]))
+
+
+def validate_no_confirmation_layer(context: str, html: str) -> None:
+    text = visible_text(section_before_history(html))
+    leaks = [term for term in FORBIDDEN_PUBLIC_CONFIRMATION_LAYER_TERMS if term in text]
+    if leaks:
+        fail(f"{context} still exposes deprecated confirmation information: " + ", ".join(leaks))
 
 
 def validate_public_summary_language(context: str, text: str, issue_date: str) -> None:
@@ -862,6 +874,8 @@ def validate(issue_date: str) -> None:
     validate_priority_has_no_selection_process("dated issue page", dated_html, issue_date)
     validate_reader_process_language("root page", section_before_history(root_html))
     validate_reader_process_language("dated issue page", section_before_history(dated_html))
+    validate_no_confirmation_layer("root page", root_html)
+    validate_no_confirmation_layer("dated issue page", dated_html)
     for context, html in [("root page", root_html), ("dated issue page", dated_html)]:
         for card in card_blocks(html):
             for paragraph in re.findall(r"<p[^>]*>(.*?)</p>", card, flags=re.S):

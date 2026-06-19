@@ -65,6 +65,9 @@ Mission:
 - Work like a careful human editor: scan the horizon, form hypotheses about
   what could have changed, triangulate official/independent/social evidence,
   compare with the previous state, then decide what deserves a full article.
+- The public issue is a broad headline board plus deeper articles. Keep the
+  candidate ledger broad so the reader can decide what to inspect or request
+  deeper analysis for. Do not narrow the world to only a few adopted articles.
 - Do not publish routine schedules, old background, search-result pages, or
   extreme personal opinions unless a confirmed material change exists.
 - Prefer including a confirmed material item over missing it, but reject weak
@@ -82,9 +85,10 @@ Mission:
 - Every candidate must have one decision.
 - Cards must correspond exactly to adopted decisions. If a fresh material
   candidate matters to the reader and has enough source evidence for an
-  information-complete detail page, adopt it and make a card. Verified recent
-  non-adopted candidates remain visible as compact confirmation signals, so do
-  not distort adoption merely to populate or shorten the page.
+  information-complete detail page, adopt it and make a card. Other source-
+  backed recent candidates remain in latest_candidates and are rendered as
+  headline topics, not as thin confirmation notes. Do not discard plausible
+  headline topics merely because they are not yet full articles.
 - Reject only when the item is duplicate, routine/no-material-change,
   insufficiently evidenced, or outside the configured category's relevance.
 - Public titles must be concise Japanese news headlines. Do not include
@@ -552,22 +556,6 @@ def minimal_manifest(
             key: sorted(set(values))
             for key, values in source_evidence.items()
         }
-        public_signal_candidates = [
-            candidate
-            for candidate in candidates
-            if str(candidate.get("title")) in rejected_titles
-            and candidate.get("source_published_date") in set(latest_three_dates(issue_date))
-            and candidate.get("change_class") != "background_only"
-            and not any(
-                marker in str(candidate.get("title", ""))
-                for marker in ("大きな更新なし", "no fresh", "no_new_update")
-            )
-            and any(
-                isinstance(url, str)
-                and url in observed_urls_by_category.get(label, set())
-                for url in candidate.get("source_urls", [])
-            )
-        ]
         held = [
             str(decision.get("candidate_title"))
             for decision in decisions
@@ -613,21 +601,6 @@ def minimal_manifest(
             ),
             "freshness_check": f"{issue_date} JSTの直近3日を基準に照合",
             "published_card_titles": [str(card.get("title")) for card in cards],
-            "public_signal_titles": [
-                str(candidate.get("title"))
-                for candidate in public_signal_candidates
-            ],
-            "public_signal_urls": [
-                str(
-                    next(
-                        url
-                        for url in candidate.get("source_urls", [])
-                        if isinstance(url, str)
-                        and url in observed_urls_by_category.get(label, set())
-                    )
-                )
-                for candidate in public_signal_candidates
-            ],
             "new_or_changed_items": [
                 {
                     "title": str(card.get("title")),

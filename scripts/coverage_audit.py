@@ -41,6 +41,33 @@ CLAIM_TYPE_PATTERNS = {
     "announcement": [r"発表", r"公表", r"公開", r"リリース", r"掲載", r"更新", r"対応"],
     "status": [r"完走", r"終了", r"未掲載", r"確認", r"開幕"],
 }
+CATEGORY_IDENTITY_TERMS = {
+    "OpenAI": ["OpenAI", "ChatGPT", "Codex"],
+    "SoftBank": ["SoftBank", "ソフトバンク", "SBG", "Arm"],
+    "Honda": ["Honda", "ホンダ", "HRC", "Aston Martin", "Acura"],
+    "F1": [
+        "F1",
+        "FIA",
+        "Grand Prix",
+        "グランプリ",
+        "Formula 1",
+        "ホンダ",
+        "Honda",
+        "ADUO",
+        "PU",
+        "レッドブル",
+        "メルセデス",
+        "フェラーリ",
+        "マクラーレン",
+        "Aston Martin",
+    ],
+    "SpaceX": ["SpaceX", "Starship", "Starlink", "Dragon", "Falcon"],
+    "日本経済": ["日本", "日銀", "財務省", "CPI", "GDP", "円", "JGB"],
+    "YOASOBI / 幾田りら": ["YOASOBI", "幾田りら", "ikura"],
+    "アジア経済": ["アジア", "中国", "インド", "台湾", "韓国", "ASEAN", "ベトナム"],
+    "北米経済": ["米", "米国", "アメリカ", "Canada", "Fed", "FRB", "S&P", "Nasdaq"],
+    "宇都宮ブレックス": ["宇都宮ブレックス", "BREX", "B.LEAGUE", "Bリーグ"],
+}
 
 
 def fail(message: str) -> None:
@@ -178,23 +205,6 @@ def card_titles_by_section(root_html: str, section_id: str) -> list[str]:
     return titles
 
 
-def signal_titles_by_section(root_html: str, section_id: str) -> list[str]:
-    body = section_before_history(root_html)
-    match = re.search(
-        rf'<section class="section" id="{re.escape(section_id)}">(.*?)(?=<section class="section" id=|\Z)',
-        body,
-        flags=re.S,
-    )
-    if not match:
-        fail(f"root page missing section for signal alignment: {section_id}")
-    titles = []
-    for item in re.findall(r'<li class="signal-item">(.*?)</li>', match.group(1), flags=re.S):
-        h3 = re.search(r"<h3>(.*?)</h3>", item, flags=re.S)
-        if h3:
-            titles.append(visible_text(h3.group(1)))
-    return titles
-
-
 def normalize_url_host(url: str) -> str | None:
     parsed = urlparse(url)
     if parsed.scheme not in {"http", "https"} or not parsed.netloc:
@@ -218,6 +228,14 @@ def urls_in(values: list[str]) -> list[str]:
 
 def has_japanese(text: str) -> bool:
     return bool(JAPANESE_RE.search(text))
+
+
+def has_category_identity(category: str, text: str) -> bool:
+    terms = CATEGORY_IDENTITY_TERMS.get(category)
+    if not terms:
+        return True
+    lowered = text.lower()
+    return any(term.lower() in lowered for term in terms)
 
 
 def inferred_claim_types(text: str) -> set[str]:
@@ -337,9 +355,6 @@ def validate_state_backed_coverage(issue_date: str, root_html: str, manifest: di
             fail(f"{label} published_card_titles do not match page cards")
         if state_titles_by_section.get(section_id, []) != expected_titles:
             fail(f"{label} state cards do not match page cards")
-        expected_signal_titles = signal_titles_by_section(root_html, section_id)
-        if entry.get("public_signal_titles") != expected_signal_titles:
-            fail(f"{label} public_signal_titles do not match page confirmation signals")
         category_candidates = [
             candidate
             for candidate in state_candidates
@@ -364,6 +379,19 @@ def validate_state_backed_coverage(issue_date: str, root_html: str, manifest: di
             for candidate in concrete
             if isinstance(candidate.get("watch_topic_id"), str)
         }
+        visible_topic_candidates = [
+            candidate
+            for candidate in concrete
+            if candidate.get("decision") != "adopted"
+            and isinstance(candidate.get("source_urls"), list)
+            and candidate.get("source_urls")
+        ]
+        if not expected_titles and not visible_topic_candidates:
+            fail(f"{label} has no reader-facing article or candidate headline topics")
+        for candidate in concrete:
+            text = f"{candidate.get('title', '')} {candidate.get('summary', '')}"
+            if not has_category_identity(label, text):
+                fail(f"{label} candidate appears outside category scope: {candidate.get('title')}")
         topic_checks = entry.get("no_change_checks")
         if not isinstance(topic_checks, list):
             fail(f"{label} state-backed coverage missing no_change_checks")

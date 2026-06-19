@@ -159,7 +159,8 @@ def simulate(issue_date: str) -> dict[str, Any]:
         "publication_integrity": {
             "morning_issue_does_not_skip_collection": "issue_exists" not in publisher,
             "deploy_requires_evening_refresh": "require_evening_refresh=deploy_existing" in publisher,
-            "public_confirmation_signal_layer": "verified-signals" in renderer,
+            "no_public_confirmation_signal_layer": "verified-signals" not in renderer,
+            "broad_headline_topic_board": "候補題目" in renderer and "topic-board" in renderer,
         },
         "information_retention": {
             "required_detail_slots": sorted(summary_required),

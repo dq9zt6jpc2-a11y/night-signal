@@ -572,7 +572,7 @@ def build_frontier(contract: dict[str, Any]) -> list[dict[str, Any]]:
         topics = category.get("watch_topics", [])
         if not isinstance(axes, list) or not isinstance(topics, list):
             fail(f"{label} axes/watch_topics must be lists")
-        axis_terms = sorted({term for axis in axes if isinstance(axis, dict) for term in axis.get("terms", []) if isinstance(term, str)})
+        axis_terms = [term for axis in axes if isinstance(axis, dict) for term in axis.get("terms", []) if isinstance(term, str)]
         channels = category_required_channels(contract, category)
         for topic in topics:
             if not isinstance(topic, dict) or not isinstance(topic.get("id"), str):
@@ -584,7 +584,7 @@ def build_frontier(contract: dict[str, Any]) -> list[dict[str, Any]]:
                     "section_id": section_id,
                     "watch_topic_id": topic["id"],
                     "required_channels": channels,
-                    "search_terms": sorted(set(axis_terms + topic_terms)),
+                    "search_terms": compact_terms(topic_terms + axis_terms, limit=24),
                     "event_classes": sorted(
                         {
                             value
@@ -958,29 +958,29 @@ def observed_evidence_urls(observations: list[dict[str, Any]]) -> set[str]:
     return urls
 
 
-def public_signals(issue: dict[str, Any]) -> list[dict[str, str]]:
+def candidate_headline_topics(issue: dict[str, Any], category: str) -> list[dict[str, str]]:
     issue_date = require_str(issue, "issue_date")
-    if issue_date < LIVE_EVIDENCE_CONTRACT_DATE:
-        return []
     allowed_dates = latest_three_dates(issue_date)
     decisions = {
         str(decision.get("candidate_title")): decision
         for decision in issue.get("decisions", [])
         if isinstance(decision, dict)
     }
-    evidence_urls = observed_evidence_urls(
-        [item for item in issue.get("observations", []) if isinstance(item, dict)]
-    )
-    signals: list[dict[str, str]] = []
-    seen: set[tuple[str, str]] = set()
+    adopted_titles = {
+        str(card.get("candidate_title"))
+        for card in issue.get("cards", [])
+        if isinstance(card, dict)
+    }
+    topics: list[dict[str, str]] = []
+    seen: set[str] = set()
     for candidate in issue.get("candidates", []):
-        if not isinstance(candidate, dict):
+        if not isinstance(candidate, dict) or candidate.get("category") != category:
             continue
         title = str(candidate.get("title", "")).strip()
-        decision = decisions.get(title, {})
-        if decision.get("adoption_decision") == "adopt":
+        if not title or title in seen:
             continue
-        if candidate.get("source_published_date") not in allowed_dates:
+        source_date = str(candidate.get("source_published_date", ""))
+        if source_date not in allowed_dates:
             continue
         if candidate.get("change_class") == "background_only":
             continue
@@ -989,34 +989,34 @@ def public_signals(issue: dict[str, Any]) -> list[dict[str, str]]:
         source_urls = [
             str(url)
             for url in candidate.get("source_urls", [])
-            if isinstance(url, str) and url in evidence_urls
+            if isinstance(url, str) and url.startswith(("http://", "https://"))
         ]
         if not source_urls:
             continue
-        key = (str(candidate.get("category")), title)
-        if key in seen:
-            continue
-        seen.add(key)
-        signals.append(
+        decision = decisions.get(title, {})
+        if title in adopted_titles or decision.get("adoption_decision") == "adopt":
+            status = "詳細あり"
+        elif decision.get("reject_reason_class") == "insufficient_evidence":
+            status = "保留"
+        else:
+            status = "候補"
+        topics.append(
             {
-                "category": str(candidate.get("category")),
-                "watch_topic_id": str(candidate.get("watch_topic_id")),
                 "title": title,
-                "summary": str(candidate.get("summary", "")).strip(),
-                "source_published_date": str(candidate.get("source_published_date")),
+                "watch_topic_id": str(candidate.get("watch_topic_id", "")),
+                "source_published_date": source_date,
                 "source_url": source_urls[0],
-                "decision": str(decision.get("reject_reason_class") or "not_adopted"),
+                "status": status,
             }
         )
-    return signals
+        seen.add(title)
+    return topics
 
 
-def render_signal(signal: dict[str, str]) -> str:
-    return f"""        <li class="signal-item">
-          <div class="signal-meta"><span>{html.escape(signal["source_published_date"])}</span><span>{html.escape(signal["watch_topic_id"])}</span></div>
-          <h3>{html.escape(signal["title"])}</h3>
-          <p>{html.escape(signal["summary"])}</p>
-          <a class="link" href="{html.escape(signal["source_url"], quote=True)}" rel="noopener noreferrer">参照元</a>
+def render_candidate_topic(topic: dict[str, str]) -> str:
+    return f"""        <li class="topic-item">
+          <div class="topic-meta"><span>{html.escape(topic["status"])}</span><span>{html.escape(topic["source_published_date"])}</span><span>{html.escape(topic["watch_topic_id"])}</span></div>
+          <a href="{html.escape(topic["source_url"], quote=True)}" rel="noopener noreferrer">{html.escape(topic["title"])}</a>
         </li>"""
 
 
@@ -1045,30 +1045,29 @@ def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, roo
     nav_links.append(f'<a href="details/extraction-log-{html.escape(issue_date, quote=True)}.html">抽出ログ</a>')
 
     priority = "\n".join(render_priority_card(index, card) for index, card in enumerate(cards[:4], start=1))
-    signals = public_signals(issue)
     sections = []
     for section_id, label in section_labels.items():
         section_cards = [card for card in cards if card["section_id"] == section_id]
-        section_signals = [signal for signal in signals if signal["category"] == label]
+        section_topics = candidate_headline_topics(issue, label)
         rendered_cards = "\n".join(render_card({**card, "issue_date": issue_date}, root=root) for card in section_cards)
-        rendered_signals = "\n".join(render_signal(signal) for signal in section_signals)
-        signal_block = (
-            f"""      <div class="verified-signals">
-        <h3>確認情報</h3>
-        <ul class="signal-list">
-{rendered_signals}
+        rendered_topics = "\n".join(render_candidate_topic(topic) for topic in section_topics)
+        topic_block = (
+            f"""      <div class="topic-board">
+        <h3>候補題目</h3>
+        <ul class="topic-list">
+{rendered_topics}
         </ul>
       </div>"""
-            if section_signals
-            else """      <div class="verified-signals empty"><p>直近3日で追加表示する確認情報はありません。</p></div>"""
+            if section_topics
+            else ""
         )
         sections.append(
             f"""    <section class="section" id="{html.escape(section_id, quote=True)}">
-      <div class="section-head"><h2>{html.escape(label)}</h2><p>重要更新 {len(section_cards)}件 / 確認情報 {len(section_signals)}件</p></div>
+      <div class="section-head"><h2>{html.escape(label)}</h2><p>重要更新 {len(section_cards)}件 / 候補題目 {len(section_topics)}件</p></div>
       <div class="cards">
 {rendered_cards}
       </div>
-{signal_block}
+{topic_block}
     </section>"""
         )
 
@@ -1096,11 +1095,10 @@ def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, roo
     .priority-card.hot, .card.hot {{ border-top-color:var(--red); }} .priority-card.signal, .card.signal {{ border-top-color:var(--teal); }} .priority-card.macro, .card.macro {{ border-top-color:var(--amber); }}
     .rank {{ display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; margin-bottom:10px; border-radius:6px; background:var(--night); color:white; font-size:12px; font-weight:900; }}
     h3 {{ margin:0 0 8px; font-size:18px; line-height:1.32; }} p {{ margin:0 0 12px; }} .meta {{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; color:var(--muted); }}
-    .verified-signals {{ margin-top:12px; padding:16px 18px; background:#f8fafc; border:1px solid var(--line); border-radius:10px; }} .verified-signals > h3 {{ font-size:15px; }}
-    .signal-list {{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 22px; }} .signal-item {{ padding:13px 0; border-top:1px solid var(--line); }}
-    .signal-item h3 {{ font-size:15px; }} .signal-item p {{ color:#334155; font-size:13px; }} .signal-meta {{ display:flex; gap:8px; color:var(--muted); font-size:11px; font-weight:800; }}
-    @media (max-width:860px) {{ .priority, .cards {{ grid-template-columns:1fr; }} .bar {{ align-items:flex-start; flex-direction:column; }} }}
-    @media (max-width:860px) {{ .signal-list {{ grid-template-columns:1fr; }} }}
+    .topic-board {{ margin-top:12px; padding:15px 18px; background:#f8fafc; border:1px solid var(--line); border-radius:10px; }} .topic-board > h3 {{ font-size:15px; }}
+    .topic-list {{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 22px; }} .topic-item {{ padding:12px 0; border-top:1px solid var(--line); }}
+    .topic-item a {{ display:block; color:#102033; line-height:1.35; }} .topic-meta {{ display:flex; flex-wrap:wrap; gap:8px; color:var(--muted); font-size:11px; font-weight:800; margin-bottom:4px; }}
+    @media (max-width:860px) {{ .priority, .cards, .topic-list {{ grid-template-columns:1fr; }} .bar {{ align-items:flex-start; flex-direction:column; }} }}
   </style>
 </head>
 <body>
@@ -1447,7 +1445,6 @@ def validate_manifest_alignment(issue: dict[str, Any], cards: list[dict[str, Any
         if manifest.get("contract_version") != expected_version:
             fail(f"coverage_manifest contract_version must be {expected_version}")
     cards_by_section: dict[str, list[str]] = {}
-    signals_by_category: dict[str, list[str]] = {}
     candidate_topics_by_category: dict[str, set[str]] = {}
     for candidate in issue.get("candidates", []):
         if isinstance(candidate, dict):
@@ -1456,8 +1453,6 @@ def validate_manifest_alignment(issue: dict[str, Any], cards: list[dict[str, Any
             ).add(str(candidate.get("watch_topic_id")))
     for card in cards:
         cards_by_section.setdefault(str(card.get("section_id")), []).append(str(card.get("title")))
-    for signal in public_signals(issue):
-        signals_by_category.setdefault(signal["category"], []).append(signal["title"])
     for category in contract.get("categories", []):
         if not isinstance(category, dict):
             continue
@@ -1469,15 +1464,11 @@ def validate_manifest_alignment(issue: dict[str, Any], cards: list[dict[str, Any
         published = entry.get("published_card_titles")
         if published != cards_by_section.get(section_id, []):
             fail(f"{label} published_card_titles must match adopted cards")
-        if strict_live_evidence and entry.get("public_signal_titles") != signals_by_category.get(label, []):
-            fail(f"{label} public_signal_titles must match rendered confirmation signals")
         required_lists = [
             "new_or_changed_items",
             "no_change_checks",
             "latest_candidates",
         ]
-        if strict_live_evidence:
-            required_lists.extend(("public_signal_titles", "public_signal_urls"))
         for key in required_lists:
             if not isinstance(entry.get(key), list):
                 fail(f"{label} coverage_manifest missing list: {key}")
@@ -1695,6 +1686,124 @@ def build_search_queries(issue_date: str, frontier_item: dict[str, Any], slot: d
     ]
 
 
+def material_signal_terms(category: str) -> list[str]:
+    common = [
+        "major announcement",
+        "breaking",
+        "decision",
+        "policy",
+        "partnership",
+        "investment",
+        "acquisition",
+        "funding",
+        "market reaction",
+        "recall",
+        "safety",
+        "leadership",
+        "talent",
+        "contract",
+        "infrastructure",
+        "results",
+        "guidance",
+        "outlook",
+        "regulation",
+        "lawsuit",
+        "日本",
+        "発表",
+        "買収",
+        "提携",
+        "出資",
+        "政策",
+        "人事",
+        "広告",
+        "販売",
+        "市場反応",
+        "リコール",
+        "安全",
+        "決算",
+        "見通し",
+    ]
+    by_category = {
+        "Honda": [
+            "QuantumScape",
+            "solid-state battery",
+            "全固体電池",
+            "battery partnership",
+            "EV strategy",
+            "HEV",
+            "China sales",
+            "North America sales",
+            "production",
+            "tariff",
+            "Honda stock",
+        ],
+        "F1": [
+            "Honda",
+            "HRC",
+            "Aston Martin",
+            "power unit",
+            "PU",
+            "ERS",
+            "battery",
+            "reliability",
+            "retirement",
+            "technical directive",
+            "FIA",
+            "race result",
+            "driver comments",
+        ],
+        "日本経済": [
+            "BOJ",
+            "Ueda",
+            "CPI",
+            "wages",
+            "JGB",
+            "yen",
+            "stock market",
+            "ETF",
+            "fund flows",
+            "GDP",
+            "industrial production",
+            "retail sales",
+            "trade",
+            "tariff",
+            "government package",
+        ],
+        "OpenAI": [
+            "Noam Shazeer",
+            "Character.AI",
+            "Japan advertising",
+            "SB OpenAI Japan",
+            "model release",
+            "API",
+            "enterprise",
+            "safety",
+        ],
+        "SpaceX": [
+            "Cursor",
+            "Anysphere",
+            "xAI",
+            "Starship",
+            "Starlink",
+            "launch failure",
+            "contract",
+            "IPO",
+            "valuation",
+        ],
+        "宇都宮ブレックス": [
+            "アリーナ",
+            "新アリーナ",
+            "宇都宮市",
+            "B.PREMIER",
+            "Bプレミア",
+            "ロスター",
+            "契約",
+            "移籍",
+        ],
+    }
+    return compact_terms(by_category.get(category, []) + common, limit=28)
+
+
 def collection_hypotheses(frontier_item: dict[str, Any], slot: dict[str, str]) -> list[str]:
     category = slot["category"]
     topic = slot["watch_topic_id"]
@@ -1731,6 +1840,99 @@ def load_source_registry() -> dict[str, list[dict[str, str]]]:
             normalized_targets.append(normalized_target)
         normalized[category] = normalized_targets
     return normalized
+
+
+def validate_strategic_signal_contract(
+    contract: dict[str, Any],
+    registry: dict[str, list[dict[str, str]]],
+    plan: dict[str, Any],
+) -> None:
+    required_topics = {
+        "OpenAI": {
+            "topic": "strategic_talent_japan_gtm",
+            "terms": {"Noam Shazeer", "Character.AI", "Gemini", "日本", "広告", "SB OpenAI Japan"},
+            "sources": {"axios.com", "apnews.com"},
+            "plan_markers": {"Noam Shazeer", "日本", "広告"},
+        },
+        "SpaceX": {
+            "topic": "ai_mna_compute",
+            "terms": {"Cursor", "Anysphere", "AI coding", "acquisition", "買収", "xAI"},
+            "sources": {"businessinsider.com", "theguardian.com", "marketwatch.com"},
+            "plan_markers": {"Cursor", "Anysphere", "買収"},
+        },
+        "宇都宮ブレックス": {
+            "topic": "arena_regional_admin",
+            "terms": {"アリーナ", "新アリーナ", "建設", "宇都宮市", "地域行政", "B.PREMIER"},
+            "sources": {"city.utsunomiya.lg.jp", "bleague.jp/new-bleague", "shimotsuke.co.jp"},
+            "plan_markers": {"アリーナ", "建設", "宇都宮市"},
+        },
+    }
+
+    categories = contract.get("categories")
+    if not isinstance(categories, list):
+        fail("coverage contract missing categories")
+    by_label = {
+        category.get("label"): category
+        for category in categories
+        if isinstance(category, dict) and isinstance(category.get("label"), str)
+    }
+    for category, requirement in required_topics.items():
+        config = by_label.get(category)
+        if not isinstance(config, dict):
+            fail(f"{category} strategic signal category missing")
+        topics = config.get("watch_topics")
+        topic = next(
+            (
+                item
+                for item in topics
+                if isinstance(item, dict) and item.get("id") == requirement["topic"]
+            ),
+            None,
+        ) if isinstance(topics, list) else None
+        if not isinstance(topic, dict):
+            fail(f"{category} missing strategic watch topic: {requirement['topic']}")
+        terms = {term for term in topic.get("terms", []) if isinstance(term, str)}
+        missing_terms = sorted(requirement["terms"] - terms)
+        if missing_terms:
+            fail(f"{category} strategic watch topic missing terms: " + ", ".join(missing_terms))
+
+        source_text = " ".join(
+            f"{target.get('label', '')} {target.get('url', '')}"
+            for target in registry.get(category, [])
+        )
+        for marker in sorted(requirement["sources"]):
+            if marker not in source_text:
+                fail(f"{category} strategic source target missing: {marker}")
+
+        plan_text = " ".join(
+            " ".join(str(term) for term in topic.get("search_terms", []) if isinstance(term, str))
+            for task in plan.get("tasks", [])
+            if isinstance(task, dict) and task.get("category") == category
+            for topic in task.get("watch_topics", [])
+            if isinstance(topic, dict) and topic.get("watch_topic_id") == requirement["topic"]
+        )
+        for marker in sorted(requirement["plan_markers"]):
+            if marker not in plan_text:
+                fail(f"{category} strategic collection plan missing: {marker}")
+
+    for category in by_label:
+        terms = material_signal_terms(str(category))
+        if len(terms) < 10:
+            fail(f"{category} must have broad material signal terms")
+        category_tasks = [
+            task
+            for task in plan.get("tasks", [])
+            if isinstance(task, dict) and task.get("category") == category
+        ]
+        query_text = " ".join(
+            query
+            for task in category_tasks
+            for query in task.get("search_queries", [])
+            if isinstance(query, str)
+        )
+        missing_terms = [term for term in terms[:3] if term not in query_text]
+        if missing_terms:
+            fail(f"{category} material signal terms missing from collection queries: " + ", ".join(missing_terms))
 
 
 def load_source_registry_for_issue(
@@ -1904,6 +2106,8 @@ def collection_plan(issue_date: str) -> dict[str, Any]:
                 for value in topic.get("event_classes", [])
             }
         )
+        material_terms = material_signal_terms(category)
+        material_query = " ".join(material_terms[:14])
         discovery_lenses = [
             "official announcement release decision",
             "numbers results dates status change",
@@ -1927,6 +2131,7 @@ def collection_plan(issue_date: str) -> dict[str, Any]:
             "hypotheses": [
                 f"{category}の既知トピック（{', '.join(topic_ids)}）に当日または直近3日間の実質更新がある可能性。",
                 f"{category}に既存watch_topic_idだけでは表現できない重要変化がある可能性。",
+                f"{category}の重大変化語（{', '.join(material_terms[:10])}）に該当する題目候補が出ている可能性。",
                 f"{source_role}/{channel}で一次根拠、独立確認、反証、または変化なしを判定できる可能性。",
             ],
             "discovery_lenses": discovery_lenses,
@@ -1936,6 +2141,7 @@ def collection_plan(issue_date: str) -> dict[str, Any]:
                 f"{category} breaking announcement change result data {role_terms} {issue_date}",
                 f"{category} {' '.join(event_classes)} {role_terms} latest {issue_date}",
                 f"{category} {' '.join(discovery_lenses)} {issue_date}",
+                f"{category} {material_query} {role_terms} {issue_date}",
                 f"{category} overlooked update correction contradiction {issue_date}",
             ],
             "acceptance": task_acceptance(sweep_slot),
@@ -2108,6 +2314,7 @@ def collection_plan_summary(plan: dict[str, Any]) -> dict[str, Any]:
 def self_test() -> None:
     contract = read_json(CONFIG_PATH)
     frontier = build_frontier(contract)
+    registry = load_source_registry()
     categories = contract.get("categories", [])
     topic_count = sum(len(category.get("watch_topics", [])) for category in categories if isinstance(category, dict))
     if len(frontier) != topic_count:
@@ -2117,6 +2324,7 @@ def self_test() -> None:
             fail(f"{name} schema is not strict enough")
     coverage = coverage_state([])
     plan = collection_plan("2099-01-01")
+    validate_strategic_signal_contract(contract, registry, plan)
     if coverage["required_observation_slots"] <= len(frontier):
         fail("observation slots must expand source roles/channels beyond watch topics")
     if len(plan["tasks"]) >= coverage["required_observation_slots"]:
@@ -2285,8 +2493,10 @@ def self_test() -> None:
         fail("issue renderer must avoid legacy list-only labels")
     if "OpenAI、Codexに共有機能を追加" not in render_html:
         fail("issue renderer must keep adopted detail cards visible in their category section")
-    if "Honda、中国販売の月次減少を確認" not in render_html or "参照元" not in render_html:
-        fail("issue renderer must expose recent verified non-adopted signals")
+    if "確認情報" in render_html or "参照元" in render_html:
+        fail("issue renderer must not expose compact confirmation items")
+    if "候補題目" not in render_html or "Honda、中国販売の月次減少を確認" not in render_html:
+        fail("issue renderer must expose broad source-backed headline topics")
     print("NIGHT SIGNAL STATE PASSED")
 
 

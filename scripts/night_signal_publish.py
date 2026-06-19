@@ -103,7 +103,7 @@ def collect(issue_date: str, *, import_reviewed_bundle: bool) -> None:
         run([sys.executable, "scripts/night_signal_import_research.py", issue_date])
         return
     require_openai_key(issue_date)
-    run([sys.executable, "scripts/night_signal_collect.py", issue_date, "--replace", "--resume"])
+    run([sys.executable, "scripts/night_signal_collect.py", issue_date, "--replace", "--resume", "--quiet"])
     validate_observations(issue_date)
 
 

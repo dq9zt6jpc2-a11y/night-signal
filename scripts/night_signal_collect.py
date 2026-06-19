@@ -106,6 +106,11 @@ Rules:
   distinct fresh update, near miss, relevant background result, and unavailable
   direct source that influenced the sweep. Do not collapse several URLs into
   one representative finding.
+- Treat findings as the broad headline surface for the reader. Capture every
+  source-backed headline candidate that could change what the reader may want
+  to inspect, including cross-topic or outside-frontier material changes. The
+  synthesis step will decide depth, but collection must not hide plausible
+  headline topics.
 - For web sweeps, return at least two distinct findings for every watch topic.
   For sns_x and youtube sweeps, return at least one finding for every watch
   topic. One finding may cover multiple topics when the source genuinely does.
@@ -206,6 +211,10 @@ def reasoning_for_route(route: str) -> dict[str, str]:
     return {"effort": "low"}
 
 
+def compact_json(value: Any) -> str:
+    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+
+
 def task_payload(task: dict[str, Any]) -> dict[str, Any]:
     route = str(task.get("model_route", ""))
     payload = {
@@ -215,14 +224,12 @@ def task_payload(task: dict[str, Any]) -> dict[str, Any]:
             {"role": "system", "content": SYSTEM_PROMPT},
             {
                 "role": "user",
-                "content": json.dumps(
+                "content": compact_json(
                     {
                         "task": task,
                         "required_output": "one collection_sweep JSON object",
                         "observed_at_jst": jst_now(),
-                    },
-                    ensure_ascii=False,
-                    indent=2,
+                    }
                 ),
             },
         ],
@@ -267,15 +274,13 @@ def extended_research_payload(
             {"role": "system", "content": EXTENDED_RESEARCH_PROMPT},
             {
                 "role": "user",
-                "content": json.dumps(
+                "content": compact_json(
                     {
                         "task": task,
                         "first_pass": first_pass,
                         "required_output": "one complete collection_sweep JSON object",
                         "observed_at_jst": jst_now(),
-                    },
-                    ensure_ascii=False,
-                    indent=2,
+                    }
                 ),
             },
         ],
@@ -688,6 +693,8 @@ def self_test() -> None:
         fail("collector must require web search for live observation tasks")
     if payload.get("prompt_cache_key") != "night-signal-source-observation-small-structured-extractor-social-or-video-signal-sns-x":
         fail("collector must pass collection plan prompt_cache_key to Responses")
+    if "\n" in user_content:
+        fail("collector user payload must stay compact to avoid wasting input tokens")
     extended = extended_research_payload(
         fake_task,
         {
@@ -745,6 +752,7 @@ def main() -> int:
     parser.add_argument("--max-extended-research", type=int, default=3)
     parser.add_argument("--background-poll-seconds", type=float, default=3.0)
     parser.add_argument("--background-timeout-seconds", type=int, default=1200)
+    parser.add_argument("--quiet", action="store_true")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
 
@@ -762,7 +770,8 @@ def main() -> int:
 
     def collect_task(index_and_task: tuple[int, dict[str, Any]]) -> tuple[int, dict[str, Any], dict[str, Any], dict[str, Any]]:
         index, task = index_and_task
-        print(f"collecting {index}/{len(tasks)} {task.get('slot_id')}", file=sys.stderr)
+        if not args.quiet:
+            print(f"collecting {index}/{len(tasks)} {task.get('slot_id')}", file=sys.stderr)
         response = call_responses(task_payload(task), retries=args.retries)
         return index, task, parse_sweep(task, response), web_search_trace(task, response)
 
@@ -794,7 +803,8 @@ def main() -> int:
                     and escalations_used < max(0, args.max_extended_research)
                 ):
                     reason = str(sweep["extended_research_reason"])
-                    print(f"extended research {task.get('slot_id')}: {reason}", file=sys.stderr)
+                    if not args.quiet:
+                        print(f"extended research {task.get('slot_id')}: {reason}", file=sys.stderr)
                     response = call_background_response(
                         extended_research_payload(task, sweep),
                         retries=args.retries,

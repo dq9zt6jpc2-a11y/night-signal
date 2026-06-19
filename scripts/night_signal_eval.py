@@ -17,6 +17,37 @@ import night_signal_state as state
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE_ROOT = ROOT / "state"
+MIN_CANDIDATE_TOPIC_RECALL = 0.95
+MIN_REVIEWABLE_FINDING_TOPIC_RECALL = 0.80
+MIN_DISCOVERY_FINDINGS = 1
+
+CATEGORY_IDENTITY_TERMS = {
+    "OpenAI": ["OpenAI", "ChatGPT", "Codex"],
+    "SoftBank": ["SoftBank", "ソフトバンク", "SBG", "Arm"],
+    "Honda": ["Honda", "ホンダ", "HRC", "Aston Martin", "Acura"],
+    "F1": [
+        "F1",
+        "FIA",
+        "Grand Prix",
+        "グランプリ",
+        "Formula 1",
+        "ホンダ",
+        "Honda",
+        "ADUO",
+        "PU",
+        "レッドブル",
+        "メルセデス",
+        "フェラーリ",
+        "マクラーレン",
+        "Aston Martin",
+    ],
+    "SpaceX": ["SpaceX", "Starship", "Starlink", "Dragon", "Falcon"],
+    "日本経済": ["日本", "日銀", "財務省", "CPI", "GDP", "円", "JGB"],
+    "YOASOBI / 幾田りら": ["YOASOBI", "幾田りら", "ikura"],
+    "アジア経済": ["アジア", "中国", "インド", "台湾", "韓国", "ASEAN", "ベトナム"],
+    "北米経済": ["米", "米国", "アメリカ", "Canada", "Fed", "FRB", "S&P", "Nasdaq"],
+    "宇都宮ブレックス": ["宇都宮ブレックス", "BREX", "B.LEAGUE", "Bリーグ"],
+}
 
 
 def fail(message: str) -> None:
@@ -42,6 +73,20 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
 
 def normalized_host(url: str) -> str:
     return urlparse(url).netloc.lower().removeprefix("www.")
+
+
+def category_identity_failures(candidates: list[dict[str, Any]]) -> list[str]:
+    failures: list[str] = []
+    for candidate in candidates:
+        category = str(candidate.get("category"))
+        terms = CATEGORY_IDENTITY_TERMS.get(category)
+        if not terms:
+            continue
+        text = f"{candidate.get('title', '')} {candidate.get('summary', '')}"
+        if not any(term.lower() in text.lower() for term in terms):
+            title = str(candidate.get("title", "(no title)"))
+            failures.append(f"{category}: {title}")
+    return failures
 
 
 def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
@@ -271,6 +316,42 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
             "responses_web_search" if traces else "unknown",
         ),
     }
+    topic_recall = metrics["candidate_topic_recall"]
+    reviewable_topic_recall = (
+        len(reviewable_finding_topics & expected_topics) / len(expected_topics)
+        if expected_topics
+        else 0
+    )
+    identity_failures = category_identity_failures(candidates)
+    empty_categories = sorted(
+        {
+            category
+            for category, _topic in expected_topics
+            if not any(card.get("category") == category for card in cards)
+            and not any(candidate.get("category") == category for candidate in concrete_candidates)
+        }
+    )
+    checks.update(
+        {
+            "candidate_topic_recall_complete": topic_recall >= MIN_CANDIDATE_TOPIC_RECALL,
+            "reviewable_finding_topic_recall_complete": (
+                reviewable_topic_recall >= MIN_REVIEWABLE_FINDING_TOPIC_RECALL
+            ),
+            "discovery_horizon_scan_present": len(discovery_findings) >= MIN_DISCOVERY_FINDINGS,
+            "category_identity_complete": not identity_failures,
+            "no_empty_reader_categories": not empty_categories,
+        }
+    )
+    metrics.update(
+        {
+            "minimum_candidate_topic_recall": MIN_CANDIDATE_TOPIC_RECALL,
+            "reviewable_finding_topic_recall": round(reviewable_topic_recall, 4),
+            "minimum_reviewable_finding_topic_recall": MIN_REVIEWABLE_FINDING_TOPIC_RECALL,
+            "minimum_discovery_findings": MIN_DISCOVERY_FINDINGS,
+            "category_identity_failures": identity_failures,
+            "empty_reader_categories": empty_categories,
+        }
+    )
     return {
         "issue_date": issue_date,
         "evaluated_at_jst": datetime.now(ZoneInfo("Asia/Tokyo")).isoformat(timespec="seconds"),

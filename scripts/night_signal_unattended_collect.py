@@ -836,7 +836,7 @@ def normalize_result(
         no_change = (
             f"{issue_date}に{category['label']}の公式、独立媒体、SNS、"
             f"YouTubeを含む{observed_count}件の証跡を確認した。"
-            "直近3日の確定差分は、掲載記事または確認情報に記録した。"
+            "直近3日の確定差分は掲載記事または候補台帳に記録した。"
         )
     return {
         "items": items,
