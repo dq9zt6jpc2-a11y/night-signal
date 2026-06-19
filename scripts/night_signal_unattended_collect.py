@@ -40,6 +40,9 @@ COVERAGE_CONFIG = ROOT / "config" / "night_signal_coverage.json"
 JST = ZoneInfo("Asia/Tokyo")
 MODELS_URL = "https://models.github.ai/inference/chat/completions"
 DEFAULT_MODEL = "openai/gpt-4.1-mini"
+DEFAULT_MODEL_TIMEOUT_SECONDS = 90
+DEFAULT_MODEL_RETRIES = 3
+DEFAULT_MODEL_MAX_TOKENS = 4000
 USER_AGENT = (
     "Mozilla/5.0 (compatible; NightSignalBot/1.0; "
     "+https://dq9zt6jpc2-a11y.github.io/night-signal/)"
@@ -420,12 +423,15 @@ def collection_checked_at(issue_date: str) -> str:
 def model_request(token: str, messages: list[dict[str, str]]) -> dict[str, Any]:
     errors: list[str] = []
     attempt_messages = list(messages)
-    for attempt in range(3):
+    timeout = int(os.getenv("NIGHT_SIGNAL_MODEL_TIMEOUT_SECONDS", DEFAULT_MODEL_TIMEOUT_SECONDS))
+    retries = int(os.getenv("NIGHT_SIGNAL_MODEL_RETRIES", DEFAULT_MODEL_RETRIES))
+    max_tokens = int(os.getenv("NIGHT_SIGNAL_MODEL_MAX_TOKENS", DEFAULT_MODEL_MAX_TOKENS))
+    for attempt in range(retries):
         payload = {
             "model": os.getenv("NIGHT_SIGNAL_GITHUB_MODEL", DEFAULT_MODEL),
             "messages": attempt_messages,
             "temperature": 0.1,
-            "max_tokens": 4000,
+            "max_tokens": max_tokens,
             "response_format": {"type": "json_object"},
         }
         request = urllib.request.Request(
@@ -441,7 +447,7 @@ def model_request(token: str, messages: list[dict[str, str]]) -> dict[str, Any]:
             method="POST",
         )
         try:
-            with urllib.request.urlopen(request, timeout=90) as response:
+            with urllib.request.urlopen(request, timeout=timeout) as response:
                 value = json.loads(response.read().decode("utf-8"))
             choice = value["choices"][0]
             content = choice["message"]["content"]
@@ -456,7 +462,7 @@ def model_request(token: str, messages: list[dict[str, str]]) -> dict[str, Any]:
                     f"attempt {attempt + 1}: invalid JSON; "
                     f"finish_reason={finish_reason}; chars={len(content)}; {exc}"
                 )
-                if attempt < 2:
+                if attempt < retries - 1:
                     if finish_reason == "length":
                         attempt_messages = [
                             *messages,
@@ -488,7 +494,7 @@ def model_request(token: str, messages: list[dict[str, str]]) -> dict[str, Any]:
                 f"attempt {attempt + 1}: HTTP {exc.code}; "
                 f"retry_after={wait_seconds}"
             )
-            if attempt < 2:
+            if attempt < retries - 1:
                 time.sleep(wait_seconds)
         except (
             KeyError,
@@ -498,7 +504,7 @@ def model_request(token: str, messages: list[dict[str, str]]) -> dict[str, Any]:
             ValueError,
         ) as exc:
             errors.append(f"attempt {attempt + 1}: {type(exc).__name__}: {exc}")
-            if attempt < 2:
+            if attempt < retries - 1:
                 time.sleep(5 * (attempt + 1))
     fail("GitHub Models request failed: " + " / ".join(errors))
 
@@ -565,7 +571,7 @@ def category_prompt(
         for record in observed
         if record.get("source_class") == "discovered_media"
     )
-    selected = selected[:11]
+    selected = selected[:8]
     return {
         "issue_date": issue_date,
         "category": category["label"],
@@ -588,7 +594,7 @@ def category_prompt(
                 "channel": record.get("channel"),
                 "published_date": record.get("published_date"),
                 "title": record.get("title"),
-                "excerpt": compact_text(str(record.get("excerpt", "")), 320),
+                "excerpt": compact_text(str(record.get("excerpt", "")), 240),
             }
             for record in selected
         ],
