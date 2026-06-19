@@ -76,15 +76,13 @@ A required slot is closed only when it is:
 When uncertain, keep the item as a candidate. Collection should bias toward not
 missing material changes. Reader display has two public surfaces:
 
-- source-backed recent candidates become headline topics so the reader can pick
-  what to inspect;
-- adopted material changes also become full detail cards.
+- source-backed recent candidates should be adopted broadly as important-update
+  cards so the reader can pick what to inspect from the traditional section
+  format;
 
 Background-only, stale, generic no-change, and unverified items remain out of
-the public page. Candidate headlines are not lightweight confirmation notes;
-they are the broad topic surface. This prevents an apparently empty category
-without lowering
-the detail-card standard.
+the public page. There is no separate public candidate board; the broad topic
+surface is the important-updates card list itself.
 
 The canonical daily state is assembled from structured files:
 

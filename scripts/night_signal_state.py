@@ -958,68 +958,6 @@ def observed_evidence_urls(observations: list[dict[str, Any]]) -> set[str]:
     return urls
 
 
-def candidate_headline_topics(issue: dict[str, Any], category: str) -> list[dict[str, str]]:
-    issue_date = require_str(issue, "issue_date")
-    allowed_dates = latest_three_dates(issue_date)
-    decisions = {
-        str(decision.get("candidate_title")): decision
-        for decision in issue.get("decisions", [])
-        if isinstance(decision, dict)
-    }
-    adopted_titles = {
-        str(card.get("candidate_title"))
-        for card in issue.get("cards", [])
-        if isinstance(card, dict)
-    }
-    topics: list[dict[str, str]] = []
-    seen: set[str] = set()
-    for candidate in issue.get("candidates", []):
-        if not isinstance(candidate, dict) or candidate.get("category") != category:
-            continue
-        title = str(candidate.get("title", "")).strip()
-        if not title or title in seen:
-            continue
-        source_date = str(candidate.get("source_published_date", ""))
-        if source_date not in allowed_dates:
-            continue
-        if candidate.get("change_class") == "background_only":
-            continue
-        if re.search(r"(大きな更新なし|no fresh|no_new_update)", title, re.I):
-            continue
-        source_urls = [
-            str(url)
-            for url in candidate.get("source_urls", [])
-            if isinstance(url, str) and url.startswith(("http://", "https://"))
-        ]
-        if not source_urls:
-            continue
-        decision = decisions.get(title, {})
-        if title in adopted_titles or decision.get("adoption_decision") == "adopt":
-            status = "詳細あり"
-        elif decision.get("reject_reason_class") == "insufficient_evidence":
-            status = "保留"
-        else:
-            status = "候補"
-        topics.append(
-            {
-                "title": title,
-                "watch_topic_id": str(candidate.get("watch_topic_id", "")),
-                "source_published_date": source_date,
-                "source_url": source_urls[0],
-                "status": status,
-            }
-        )
-        seen.add(title)
-    return topics
-
-
-def render_candidate_topic(topic: dict[str, str]) -> str:
-    return f"""        <li class="topic-item">
-          <div class="topic-meta"><span>{html.escape(topic["status"])}</span><span>{html.escape(topic["source_published_date"])}</span><span>{html.escape(topic["watch_topic_id"])}</span></div>
-          <a href="{html.escape(topic["source_url"], quote=True)}" rel="noopener noreferrer">{html.escape(topic["title"])}</a>
-        </li>"""
-
-
 def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, root: bool = False) -> str:
     issue_date = require_str(issue, "issue_date")
     display_date = issue_date.replace("-", ".")
@@ -1048,26 +986,13 @@ def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, roo
     sections = []
     for section_id, label in section_labels.items():
         section_cards = [card for card in cards if card["section_id"] == section_id]
-        section_topics = candidate_headline_topics(issue, label)
         rendered_cards = "\n".join(render_card({**card, "issue_date": issue_date}, root=root) for card in section_cards)
-        rendered_topics = "\n".join(render_candidate_topic(topic) for topic in section_topics)
-        topic_block = (
-            f"""      <div class="topic-board">
-        <h3>候補題目</h3>
-        <ul class="topic-list">
-{rendered_topics}
-        </ul>
-      </div>"""
-            if section_topics
-            else ""
-        )
         sections.append(
             f"""    <section class="section" id="{html.escape(section_id, quote=True)}">
-      <div class="section-head"><h2>{html.escape(label)}</h2><p>重要更新 {len(section_cards)}件 / 候補題目 {len(section_topics)}件</p></div>
+      <div class="section-head"><h2>{html.escape(label)}</h2><p>重要更新 {len(section_cards)}件</p></div>
       <div class="cards">
 {rendered_cards}
       </div>
-{topic_block}
     </section>"""
         )
 
@@ -1095,10 +1020,7 @@ def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, roo
     .priority-card.hot, .card.hot {{ border-top-color:var(--red); }} .priority-card.signal, .card.signal {{ border-top-color:var(--teal); }} .priority-card.macro, .card.macro {{ border-top-color:var(--amber); }}
     .rank {{ display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; margin-bottom:10px; border-radius:6px; background:var(--night); color:white; font-size:12px; font-weight:900; }}
     h3 {{ margin:0 0 8px; font-size:18px; line-height:1.32; }} p {{ margin:0 0 12px; }} .meta {{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; color:var(--muted); }}
-    .topic-board {{ margin-top:12px; padding:15px 18px; background:#f8fafc; border:1px solid var(--line); border-radius:10px; }} .topic-board > h3 {{ font-size:15px; }}
-    .topic-list {{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 22px; }} .topic-item {{ padding:12px 0; border-top:1px solid var(--line); }}
-    .topic-item a {{ display:block; color:#102033; line-height:1.35; }} .topic-meta {{ display:flex; flex-wrap:wrap; gap:8px; color:var(--muted); font-size:11px; font-weight:800; margin-bottom:4px; }}
-    @media (max-width:860px) {{ .priority, .cards, .topic-list {{ grid-template-columns:1fr; }} .bar {{ align-items:flex-start; flex-direction:column; }} }}
+    @media (max-width:860px) {{ .priority, .cards {{ grid-template-columns:1fr; }} .bar {{ align-items:flex-start; flex-direction:column; }} }}
   </style>
 </head>
 <body>
@@ -2495,8 +2417,10 @@ def self_test() -> None:
         fail("issue renderer must keep adopted detail cards visible in their category section")
     if "確認情報" in render_html or "参照元" in render_html:
         fail("issue renderer must not expose compact confirmation items")
-    if "候補題目" not in render_html or "Honda、中国販売の月次減少を確認" not in render_html:
-        fail("issue renderer must expose broad source-backed headline topics")
+    if ("候補" + "題目") in render_html:
+        fail("issue renderer must not expose a separate candidate-topic section")
+    if "重要更新 1件" not in render_html:
+        fail("issue renderer must keep the traditional important-updates section format")
     print("NIGHT SIGNAL STATE PASSED")
 
 

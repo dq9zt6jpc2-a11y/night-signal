@@ -1,6 +1,6 @@
 {
   "issue_date": "2026-06-19",
-  "evaluated_at_jst": "2026-06-19T23:46:13+09:00",
+  "evaluated_at_jst": "2026-06-19T23:59:40+09:00",
   "passed": true,
   "checks": {
     "all_observation_slots_closed": true,
@@ -36,8 +36,8 @@
     "evidence_urls": 260,
     "evidence_hosts": 119,
     "verified_source_results": 1143,
-    "confirmed_facts": 21,
-    "facts_with_source_mapping": 21,
+    "confirmed_facts": 57,
+    "facts_with_source_mapping": 57,
     "source_mapping_recall": 1.0,
     "response_traces": 0,
     "extended_research_runs": 0,

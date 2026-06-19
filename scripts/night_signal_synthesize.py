@@ -83,12 +83,10 @@ Mission:
 - Do not merge independent events into one candidate. Honda China monthly sales
   and a Civic product update, for example, must remain separate candidates.
 - Every candidate must have one decision.
-- Cards must correspond exactly to adopted decisions. If a fresh material
-  candidate matters to the reader and has enough source evidence for an
-  information-complete detail page, adopt it and make a card. Other source-
-  backed recent candidates remain in latest_candidates and are rendered as
-  headline topics, not as thin confirmation notes. Do not discard plausible
-  headline topics merely because they are not yet full articles.
+- Cards must correspond exactly to adopted decisions. Fresh material candidates
+  that matter to the reader should be adopted broadly and made visible as
+  important-update cards. Do not create a separate public candidate board; the
+  reader-facing surface is the traditional important-updates list.
 - Reject only when the item is duplicate, routine/no-material-change,
   insufficiently evidenced, or outside the configured category's relevance.
 - Public titles must be concise Japanese news headlines. Do not include

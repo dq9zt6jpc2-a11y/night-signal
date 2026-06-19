@@ -255,6 +255,7 @@ READER_PROCESS_LEAK_PATTERNS = [
 FORBIDDEN_PUBLIC_CONFIRMATION_LAYER_TERMS = [
     "確認情報",
     "直近3日で追加表示する確認情報はありません",
+    "候補題目",
 ]
 
 PUBLIC_SUMMARY_PROCESS_PATTERNS = [

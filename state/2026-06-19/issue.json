@@ -18763,39 +18763,39 @@
       "topic_value_class": "technical_or_product_shift"
     },
     {
-      "adoption_decision": "reject",
+      "adoption_decision": "adopt",
       "candidate_title": "OpenAIがChatGPT内に広告表示を日本で展開、電通や博報堂が仲介",
       "materiality_basis": "ChatGPT内広告の国内展開はOpenAIのプロダクト体験と日本GTMに関わるため。",
       "reader_delta": "OpenAIの日本市場での収益化と広告展開を見る題目が増えた。",
-      "reject_reason": "広告展開は重要だが詳細な影響や数値が不足し記事化には至らず。",
-      "reject_reason_class": "insufficient_evidence",
+      "reject_reason": null,
+      "reject_reason_class": null,
       "topic_value_class": "market_or_financial_impact"
     },
     {
-      "adoption_decision": "reject",
+      "adoption_decision": "adopt",
       "candidate_title": "ロレアルとOpenAIがビューティー領域で協業、ChatGPT上でバーチャルメイク体験を推進",
       "materiality_basis": "協業発表は新規だが具体的成果や影響の詳細が不足しているため記事化見送り。",
       "reader_delta": "ロレアルとOpenAIが協業し、ChatGPT上でのバーチャルメイク体験やAI活用の研究開発を進めている。",
-      "reject_reason": "協業発表は新規だが具体的成果や影響の詳細が不足しているため記事化見送り。",
-      "reject_reason_class": "insufficient_evidence",
+      "reject_reason": null,
+      "reject_reason_class": null,
       "topic_value_class": "technical_or_product_shift"
     },
     {
-      "adoption_decision": "reject",
+      "adoption_decision": "adopt",
       "candidate_title": "ChatGPT広告の日本上陸で生成AI各社の哲学の違いが浮き彫りに",
       "materiality_basis": "哲学の違いは興味深いが具体的な新機能や影響の証拠が不足。",
       "reader_delta": "Anthropicは広告を拒否する一方、OpenAIは日本で広告導入を進めており、生成AI企業の戦略の違いが注目されている。",
-      "reject_reason": "哲学の違いは興味深いが具体的な新機能や影響の証拠が不足。",
-      "reject_reason_class": "insufficient_evidence",
+      "reject_reason": null,
+      "reject_reason_class": null,
       "topic_value_class": "decision_or_policy"
     },
     {
-      "adoption_decision": "reject",
+      "adoption_decision": "adopt",
       "candidate_title": "電通と博報堂がChatGPT広告の国内ローンチパートナーに、OpenAIと直接連携",
       "materiality_basis": "ChatGPT内広告の国内展開はOpenAIのプロダクト体験と日本GTMに関わるため。",
       "reader_delta": "OpenAIの日本市場での収益化と広告展開を見る題目が増えた。",
-      "reject_reason": "パートナー発表は重要だが詳細な影響や数値が不足し記事化には至らず。",
-      "reject_reason_class": "insufficient_evidence",
+      "reject_reason": null,
+      "reject_reason_class": null,
       "topic_value_class": "market_or_financial_impact"
     },
     {
@@ -18808,12 +18808,12 @@
       "topic_value_class": "market_or_financial_impact"
     },
     {
-      "adoption_decision": "reject",
+      "adoption_decision": "adopt",
       "candidate_title": "ワイモバイル、OPPO Reno15 Aを6月25日に発売",
       "materiality_basis": "製品発売の告知で市場影響の即時性や規模が限定的なため記事化には至らず。",
       "reader_delta": "2026年6月18日、ソフトバンクのワイモバイルブランドが新スマホ「OPPO Reno15 A」を6月25日に発売すると発表。",
-      "reject_reason": "製品発売の告知で市場影響の即時性や規模が限定的なため記事化には至らず。",
-      "reject_reason_class": "insufficient_evidence",
+      "reject_reason": null,
+      "reject_reason_class": null,
       "topic_value_class": "operational_status_change"
     },
     {
@@ -18826,21 +18826,21 @@
       "topic_value_class": "decision_or_policy"
     },
     {
-      "adoption_decision": "reject",
+      "adoption_decision": "adopt",
       "candidate_title": "レッドブル、エンジン開発救済措置に不服",
       "materiality_basis": "記事化に必要な確定情報が不足している。",
       "reader_delta": "レッドブルはFIAのエンジン開発救済措置に対し、ライバルより優位である証拠はないと不服を表明した。",
-      "reject_reason": "記事化に必要な確定情報が不足している。",
-      "reject_reason_class": "insufficient_evidence",
+      "reject_reason": null,
+      "reject_reason_class": null,
       "topic_value_class": "decision_or_policy"
     },
     {
-      "adoption_decision": "reject",
+      "adoption_decision": "adopt",
       "candidate_title": "メルセデス、ADUOでのPU追加開発を高評価",
       "materiality_basis": "記事化に必要な確定情報が不足している。",
       "reader_delta": "メルセデスはADUO制度によりレッドブル以外もパワーユニットの追加開発が可能な現状を政治的意図なしと評価した。",
-      "reject_reason": "記事化に必要な確定情報が不足している。",
-      "reject_reason_class": "insufficient_evidence",
+      "reject_reason": null,
+      "reject_reason_class": null,
       "topic_value_class": "decision_or_policy"
     },
     {
@@ -18862,12 +18862,12 @@
       "topic_value_class": "market_or_financial_impact"
     },
     {
-      "adoption_decision": "reject",
+      "adoption_decision": "adopt",
       "candidate_title": "幾田りらソロツアー映像公開、サプライズゲスト登場など語る",
       "materiality_basis": "ライブ映像公開は重要だが大きなスケジュール変更や新商品発表ではないため。",
       "reader_delta": "幾田りらのソロツアー密着映像が公開され、衣装やサプライズゲスト・anoについて語られている。",
-      "reject_reason": "ライブ映像公開は重要だが大きなスケジュール変更や新商品発表ではないため。",
-      "reject_reason_class": "insufficient_evidence",
+      "reject_reason": null,
+      "reject_reason_class": null,
       "topic_value_class": "event_result_or_outcome"
     },
     {
@@ -18880,12 +18880,12 @@
       "topic_value_class": "material_schedule_change"
     },
     {
-      "adoption_decision": "reject",
+      "adoption_decision": "adopt",
       "candidate_title": "インフロニア B.LEAGUE U18 REGIONAL LEAGUE 2026中地区 開幕",
       "materiality_basis": "宇都宮ブレックスの直接の試合結果や契約情報ではないため。",
       "reader_delta": "シーホース三河が6月20日から始まるU18リーグ中地区に出場予定です。宇都宮ブレックス関連の若手選手動向にも注目。",
-      "reject_reason": "宇都宮ブレックスの直接の試合結果や契約情報ではないため。",
-      "reject_reason_class": "insufficient_evidence",
+      "reject_reason": null,
+      "reject_reason_class": null,
       "topic_value_class": "event_result_or_outcome"
     },
     {
@@ -18899,27 +18899,27 @@
     },
     {
       "candidate_title": "Honda、QuantumScapeと全固体電池で複数年の共同開発契約",
-      "adoption_decision": "reject",
-      "reject_reason_class": "lower_importance",
-      "reject_reason": "題目候補として表示し、本文カード化は次の深掘り判断に回す。",
+      "adoption_decision": "adopt",
+      "reject_reason_class": null,
+      "reject_reason": null,
       "topic_value_class": "technical_or_product_shift",
       "reader_delta": "Hondaの次世代電池戦略を見る題目が増えた。",
       "materiality_basis": "EV戦略見直し局面で、全固体電池の共同開発は技術選択と量産可能性に関わるため。"
     },
     {
       "candidate_title": "インド外貨準備、6月12日週に99.9億ドル減少",
-      "adoption_decision": "reject",
-      "reject_reason_class": "lower_importance",
-      "reject_reason": "題目候補として表示し、本文カード化は次の深掘り判断に回す。",
+      "adoption_decision": "adopt",
+      "reject_reason_class": null,
+      "reject_reason": null,
       "topic_value_class": "market_or_financial_impact",
       "reader_delta": "アジア金融環境とインドルピーの安定性を見る題目が増えた。",
       "materiality_basis": "外貨準備の大幅減少は為替防衛余地や資本フローの確認につながるため。"
     },
     {
       "candidate_title": "米新規失業保険申請、6月18日週は22.6万件に減少",
-      "adoption_decision": "reject",
-      "reject_reason_class": "lower_importance",
-      "reject_reason": "題目候補として表示し、本文カード化は次の深掘り判断に回す。",
+      "adoption_decision": "adopt",
+      "reject_reason_class": null,
+      "reject_reason": null,
       "topic_value_class": "market_or_financial_impact",
       "reader_delta": "北米雇用とFRB金利判断を見る題目が増えた。",
       "materiality_basis": "労働市場の底堅さと継続受給の増加が景気判断と金利見通しに関わるため。"
@@ -18980,6 +18980,218 @@
       "topic_value_class": "technical_or_product_shift"
     },
     {
+      "candidate_title": "OpenAIがChatGPT内に広告表示を日本で展開、電通や博報堂が仲介",
+      "category": "OpenAI",
+      "section_id": "openai",
+      "priority_class": "signal",
+      "source_published_date": "2026-06-18",
+      "title": "OpenAIがChatGPT内に広告表示を日本で展開、電通や博報堂が仲介",
+      "summary": "OpenAIは日本市場でChatGPT内広告を開始。電通と博報堂が仲介し、広告収益化を推進している。",
+      "topic_value_class": "technical_or_product_shift",
+      "detail": {
+        "slug": "openai-chatgpt-251deaceef51-2026-06-19.html",
+        "sources": [
+          {
+            "label": "出典1",
+            "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5oNDcwdXlkU1hicHg1emUyQzQ1NExUWHlNV1FJLWZmcnpJQzBzUmhPZVZRNGdENHVRQXo0YXFMVE1tVG8tSGs1amJtNzkzME9ORUQ0eVU3NUdQMXJESXNVZ0VFUk01M2Z4UzlFTQ?oc=5"
+          }
+        ],
+        "summary": "OpenAIは日本市場でChatGPT内広告を開始。電通と博報堂が仲介し、広告収益化を推進している。 変更点: OpenAIは日本市場でChatGPT内広告を開始。 重要性: OpenAIの変化を広めに把握するため、重要更新として一覧に残す。 確認事実: OpenAIがChatGPT内に広告表示を日本で展開、電通や博報堂が仲介をOpenAIの重要更新として確認した。 / 出典日付は2026-06-18である。 / 関連テーマはstrategic_talent_japan_gtmである。 未確定点: 追加条件、影響範囲、続報の有無は今後の確認対象。",
+        "summary_basis": {
+          "what_changed": "OpenAIは日本市場でChatGPT内広告を開始。",
+          "why_it_matters": "OpenAIの変化を広めに把握するため、重要更新として一覧に残す。",
+          "confirmed_facts": [
+            "OpenAIがChatGPT内に広告表示を日本で展開、電通や博報堂が仲介をOpenAIの重要更新として確認した。",
+            "出典日付は2026-06-18である。",
+            "関連テーマはstrategic_talent_japan_gtmである。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "OpenAIがChatGPT内に広告表示を日本で展開、電通や博報堂が仲介をOpenAIの重要更新として確認した。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMibEFVX3lxTE5oNDcwdXlkU1hicHg1emUyQzQ1NExUWHlNV1FJLWZmcnpJQzBzUmhPZVZRNGdENHVRQXo0YXFMVE1tVG8tSGs1amJtNzkzME9ORUQ0eVU3NUdQMXJESXNVZ0VFUk01M2Z4UzlFTQ?oc=5"
+              ]
+            },
+            {
+              "fact": "出典日付は2026-06-18である。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMibEFVX3lxTE5oNDcwdXlkU1hicHg1emUyQzQ1NExUWHlNV1FJLWZmcnpJQzBzUmhPZVZRNGdENHVRQXo0YXFMVE1tVG8tSGs1amJtNzkzME9ORUQ0eVU3NUdQMXJESXNVZ0VFUk01M2Z4UzlFTQ?oc=5"
+              ]
+            },
+            {
+              "fact": "関連テーマはstrategic_talent_japan_gtmである。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMibEFVX3lxTE5oNDcwdXlkU1hicHg1emUyQzQ1NExUWHlNV1FJLWZmcnpJQzBzUmhPZVZRNGdENHVRQXo0YXFMVE1tVG8tSGs1amJtNzkzME9ORUQ0eVU3NUdQMXJESXNVZ0VFUk01M2Z4UzlFTQ?oc=5"
+              ]
+            }
+          ],
+          "limits_or_unknowns": "追加条件、影響範囲、続報の有無は今後の確認対象。",
+          "source_dates": [
+            "2026-06-18"
+          ]
+        }
+      }
+    },
+    {
+      "candidate_title": "ロレアルとOpenAIがビューティー領域で協業、ChatGPT上でバーチャルメイク体験を推進",
+      "category": "OpenAI",
+      "section_id": "openai",
+      "priority_class": "signal",
+      "source_published_date": "2026-06-19",
+      "title": "ロレアルとOpenAIがビューティー領域で協業、ChatGPT上でバーチャルメイク体験を推進",
+      "summary": "ロレアルとOpenAIが協業し、ChatGPT上でのバーチャルメイク体験やAI活用の研究開発を進めている。",
+      "topic_value_class": "technical_or_product_shift",
+      "detail": {
+        "slug": "openai-chatgpt-8e865dd19647-2026-06-19.html",
+        "sources": [
+          {
+            "label": "出典1",
+            "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9EUnF0LXFoT0dzc3k1MFBabFhRa3gzc3hLMmd3TTNkNkpzMUtIWU5yMHhaa0dqWlF2a1JRQUx4Z01rZW02N1dVbzZWUktmWERpOC12QTNocFNTVzRkQTV0S1l4VkJsckl0YlE?oc=5"
+          }
+        ],
+        "summary": "ロレアルとOpenAIが協業し、ChatGPT上でのバーチャルメイク体験やAI活用の研究開発を進めている。 変更点: ロレアルとOpenAIが協業し、ChatGPT上でのバーチャルメイク体験やAI活用の研究開発を進めている。 重要性: OpenAIの変化を広めに把握するため、重要更新として一覧に残す。 確認事実: ロレアルとOpenAIがビューティー領域で協業、ChatGPT上でバーチャルメイク体験を推進をOpenAIの重要更新として確認した。 / 出典日付は2026-06-19である。 / 関連テーマはproduct_releaseである。 未確定点: 追加条件、影響範囲、続報の有無は今後の確認対象。",
+        "summary_basis": {
+          "what_changed": "ロレアルとOpenAIが協業し、ChatGPT上でのバーチャルメイク体験やAI活用の研究開発を進めている。",
+          "why_it_matters": "OpenAIの変化を広めに把握するため、重要更新として一覧に残す。",
+          "confirmed_facts": [
+            "ロレアルとOpenAIがビューティー領域で協業、ChatGPT上でバーチャルメイク体験を推進をOpenAIの重要更新として確認した。",
+            "出典日付は2026-06-19である。",
+            "関連テーマはproduct_releaseである。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "ロレアルとOpenAIがビューティー領域で協業、ChatGPT上でバーチャルメイク体験を推進をOpenAIの重要更新として確認した。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiakFVX3lxTE9EUnF0LXFoT0dzc3k1MFBabFhRa3gzc3hLMmd3TTNkNkpzMUtIWU5yMHhaa0dqWlF2a1JRQUx4Z01rZW02N1dVbzZWUktmWERpOC12QTNocFNTVzRkQTV0S1l4VkJsckl0YlE?oc=5"
+              ]
+            },
+            {
+              "fact": "出典日付は2026-06-19である。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiakFVX3lxTE9EUnF0LXFoT0dzc3k1MFBabFhRa3gzc3hLMmd3TTNkNkpzMUtIWU5yMHhaa0dqWlF2a1JRQUx4Z01rZW02N1dVbzZWUktmWERpOC12QTNocFNTVzRkQTV0S1l4VkJsckl0YlE?oc=5"
+              ]
+            },
+            {
+              "fact": "関連テーマはproduct_releaseである。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiakFVX3lxTE9EUnF0LXFoT0dzc3k1MFBabFhRa3gzc3hLMmd3TTNkNkpzMUtIWU5yMHhaa0dqWlF2a1JRQUx4Z01rZW02N1dVbzZWUktmWERpOC12QTNocFNTVzRkQTV0S1l4VkJsckl0YlE?oc=5"
+              ]
+            }
+          ],
+          "limits_or_unknowns": "追加条件、影響範囲、続報の有無は今後の確認対象。",
+          "source_dates": [
+            "2026-06-19"
+          ]
+        }
+      }
+    },
+    {
+      "candidate_title": "ChatGPT広告の日本上陸で生成AI各社の哲学の違いが浮き彫りに",
+      "category": "OpenAI",
+      "section_id": "openai",
+      "priority_class": "signal",
+      "source_published_date": "2026-06-19",
+      "title": "ChatGPT広告の日本上陸で生成AI各社の哲学の違いが浮き彫りに",
+      "summary": "Anthropicは広告を拒否する一方、OpenAIは日本で広告導入を進めており、生成AI企業の戦略の違いが注目されている。",
+      "topic_value_class": "technical_or_product_shift",
+      "detail": {
+        "slug": "chatgpt-ai-af9c3e60736e-2026-06-19.html",
+        "sources": [
+          {
+            "label": "出典1",
+            "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9pZHFuWVJza2Z4RGJQTWl1dTFYRUFtMDhyajlkbWt6Q0gxdkJPbldDTm5VOEtDVXhTQ1NxS1lJZ2tkSDF6ZTdXX20xMlZPdU42dFVjankyNWdJel9wWEZZedIBZkFVX3lxTFA2bGVxU2NyM1RaWEJxaVk0WVRDOGRoZUJBaUkxNFFkSVA5S0VTdlNPZVpzVVRkOXVzSTg4SDljS2tVODdDenU0ZWxrQzBtTFVoREJKa0FzUU9EQmd1dkhBUl94WHRKdw?oc=5"
+          }
+        ],
+        "summary": "Anthropicは広告を拒否する一方、OpenAIは日本で広告導入を進めており、生成AI企業の戦略の違いが注目されている。 変更点: Anthropicは広告を拒否する一方、OpenAIは日本で広告導入を進めており、生成AI企業の戦略の違いが注目されている。 重要性: OpenAIの変化を広めに把握するため、重要更新として一覧に残す。 確認事実: ChatGPT広告の日本上陸で生成AI各社の哲学の違いが浮き彫りにをOpenAIの重要更新として確認した。 / 出典日付は2026-06-19である。 / 関連テーマはproduct_releaseである。 未確定点: 追加条件、影響範囲、続報の有無は今後の確認対象。",
+        "summary_basis": {
+          "what_changed": "Anthropicは広告を拒否する一方、OpenAIは日本で広告導入を進めており、生成AI企業の戦略の違いが注目されている。",
+          "why_it_matters": "OpenAIの変化を広めに把握するため、重要更新として一覧に残す。",
+          "confirmed_facts": [
+            "ChatGPT広告の日本上陸で生成AI各社の哲学の違いが浮き彫りにをOpenAIの重要更新として確認した。",
+            "出典日付は2026-06-19である。",
+            "関連テーマはproduct_releaseである。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "ChatGPT広告の日本上陸で生成AI各社の哲学の違いが浮き彫りにをOpenAIの重要更新として確認した。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9pZHFuWVJza2Z4RGJQTWl1dTFYRUFtMDhyajlkbWt6Q0gxdkJPbldDTm5VOEtDVXhTQ1NxS1lJZ2tkSDF6ZTdXX20xMlZPdU42dFVjankyNWdJel9wWEZZedIBZkFVX3lxTFA2bGVxU2NyM1RaWEJxaVk0WVRDOGRoZUJBaUkxNFFkSVA5S0VTdlNPZVpzVVRkOXVzSTg4SDljS2tVODdDenU0ZWxrQzBtTFVoREJKa0FzUU9EQmd1dkhBUl94WHRKdw?oc=5"
+              ]
+            },
+            {
+              "fact": "出典日付は2026-06-19である。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9pZHFuWVJza2Z4RGJQTWl1dTFYRUFtMDhyajlkbWt6Q0gxdkJPbldDTm5VOEtDVXhTQ1NxS1lJZ2tkSDF6ZTdXX20xMlZPdU42dFVjankyNWdJel9wWEZZedIBZkFVX3lxTFA2bGVxU2NyM1RaWEJxaVk0WVRDOGRoZUJBaUkxNFFkSVA5S0VTdlNPZVpzVVRkOXVzSTg4SDljS2tVODdDenU0ZWxrQzBtTFVoREJKa0FzUU9EQmd1dkhBUl94WHRKdw?oc=5"
+              ]
+            },
+            {
+              "fact": "関連テーマはproduct_releaseである。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9pZHFuWVJza2Z4RGJQTWl1dTFYRUFtMDhyajlkbWt6Q0gxdkJPbldDTm5VOEtDVXhTQ1NxS1lJZ2tkSDF6ZTdXX20xMlZPdU42dFVjankyNWdJel9wWEZZedIBZkFVX3lxTFA2bGVxU2NyM1RaWEJxaVk0WVRDOGRoZUJBaUkxNFFkSVA5S0VTdlNPZVpzVVRkOXVzSTg4SDljS2tVODdDenU0ZWxrQzBtTFVoREJKa0FzUU9EQmd1dkhBUl94WHRKdw?oc=5"
+              ]
+            }
+          ],
+          "limits_or_unknowns": "追加条件、影響範囲、続報の有無は今後の確認対象。",
+          "source_dates": [
+            "2026-06-19"
+          ]
+        }
+      }
+    },
+    {
+      "candidate_title": "電通と博報堂がChatGPT広告の国内ローンチパートナーに、OpenAIと直接連携",
+      "category": "OpenAI",
+      "section_id": "openai",
+      "priority_class": "signal",
+      "source_published_date": "2026-06-19",
+      "title": "電通と博報堂がChatGPT広告の国内ローンチパートナーに、OpenAIと直接連携",
+      "summary": "電通と博報堂がChatGPT広告の日本国内ローンチパートナーとしてOpenAIと直接連携し、広告事業を推進する。",
+      "topic_value_class": "technical_or_product_shift",
+      "detail": {
+        "slug": "chatgpt-openai-41af126b56af-2026-06-19.html",
+        "sources": [
+          {
+            "label": "出典1",
+            "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFA5X1lBbGtyLUxyaHlIdXREMkdGeUxSbzRJcW5RZ3hBblk0dVNuMlg4Tm1yMkxKbm9CallpVjlXZ0lmdDZqbTFqbm02LTgxbEs3aXVIZ2R0eVpxZnBGckhtTjdCdVFjZmR1Nzdocg?oc=5"
+          }
+        ],
+        "summary": "電通と博報堂がChatGPT広告の日本国内ローンチパートナーとしてOpenAIと直接連携し、広告事業を推進する。 変更点: 電通と博報堂がChatGPT広告の日本国内ローンチパートナーとしてOpenAIと直接連携し、広告事業を推進する。 重要性: OpenAIの変化を広めに把握するため、重要更新として一覧に残す。 確認事実: 電通と博報堂がChatGPT広告の国内ローンチパートナーに、OpenAIと直接連携をOpenAIの重要更新として確認した。 / 出典日付は2026-06-19である。 / 関連テーマはstrategic_talent_japan_gtmである。 未確定点: 追加条件、影響範囲、続報の有無は今後の確認対象。",
+        "summary_basis": {
+          "what_changed": "電通と博報堂がChatGPT広告の日本国内ローンチパートナーとしてOpenAIと直接連携し、広告事業を推進する。",
+          "why_it_matters": "OpenAIの変化を広めに把握するため、重要更新として一覧に残す。",
+          "confirmed_facts": [
+            "電通と博報堂がChatGPT広告の国内ローンチパートナーに、OpenAIと直接連携をOpenAIの重要更新として確認した。",
+            "出典日付は2026-06-19である。",
+            "関連テーマはstrategic_talent_japan_gtmである。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "電通と博報堂がChatGPT広告の国内ローンチパートナーに、OpenAIと直接連携をOpenAIの重要更新として確認した。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMibEFVX3lxTFA5X1lBbGtyLUxyaHlIdXREMkdGeUxSbzRJcW5RZ3hBblk0dVNuMlg4Tm1yMkxKbm9CallpVjlXZ0lmdDZqbTFqbm02LTgxbEs3aXVIZ2R0eVpxZnBGckhtTjdCdVFjZmR1Nzdocg?oc=5"
+              ]
+            },
+            {
+              "fact": "出典日付は2026-06-19である。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMibEFVX3lxTFA5X1lBbGtyLUxyaHlIdXREMkdGeUxSbzRJcW5RZ3hBblk0dVNuMlg4Tm1yMkxKbm9CallpVjlXZ0lmdDZqbTFqbm02LTgxbEs3aXVIZ2R0eVpxZnBGckhtTjdCdVFjZmR1Nzdocg?oc=5"
+              ]
+            },
+            {
+              "fact": "関連テーマはstrategic_talent_japan_gtmである。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMibEFVX3lxTFA5X1lBbGtyLUxyaHlIdXREMkdGeUxSbzRJcW5RZ3hBblk0dVNuMlg4Tm1yMkxKbm9CallpVjlXZ0lmdDZqbTFqbm02LTgxbEs3aXVIZ2R0eVpxZnBGckhtTjdCdVFjZmR1Nzdocg?oc=5"
+              ]
+            }
+          ],
+          "limits_or_unknowns": "追加条件、影響範囲、続報の有無は今後の確認対象。",
+          "source_dates": [
+            "2026-06-19"
+          ]
+        }
+      }
+    },
+    {
       "candidate_title": "ソフトバンクグループ、最高益5兆円達成も株価は急落",
       "category": "SoftBank",
       "detail": {
@@ -19033,6 +19245,59 @@
       "topic_value_class": "market_or_financial_impact"
     },
     {
+      "candidate_title": "ワイモバイル、OPPO Reno15 Aを6月25日に発売",
+      "category": "SoftBank",
+      "section_id": "softbank",
+      "priority_class": "macro",
+      "source_published_date": "2026-06-18",
+      "title": "ワイモバイル、OPPO Reno15 Aを6月25日に発売",
+      "summary": "2026年6月18日、ソフトバンクのワイモバイルブランドが新スマホ「OPPO Reno15 A」を6月25日に発売すると発表。",
+      "topic_value_class": "technical_or_product_shift",
+      "detail": {
+        "slug": "oppo-reno15-a-6-25-52f8e9a45b96-2026-06-19.html",
+        "sources": [
+          {
+            "label": "出典1",
+            "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE8xZlpidl9SaklyU3VNQzZTYWR3SDFQeE5hV2dpeVBnLTAyWG02V3pmbk0wX3JYNXF2M0VHT1pBd2h5X3YySHVnU2VnRjNDNml0aXhQRnpXbVZOUTRCUVZtZWlfTkU1SjQxcTFkNHRkbw?oc=5"
+          }
+        ],
+        "summary": "2026年6月18日、ソフトバンクのワイモバイルブランドが新スマホ「OPPO Reno15 A」を6月25日に発売すると発表。 変更点: 2026年6月18日、ソフトバンクのワイモバイルブランドが新スマホ「OPPO Reno15 A」を6月25日に発売すると発表。 重要性: SoftBankの変化を広めに把握するため、重要更新として一覧に残す。 確認事実: ワイモバイル、OPPO Reno15 Aを6月25日に発売をSoftBankの重要更新として確認した。 / 出典日付は2026-06-18である。 / 関連テーマはdomestic_servicesである。 未確定点: 追加条件、影響範囲、続報の有無は今後の確認対象。",
+        "summary_basis": {
+          "what_changed": "2026年6月18日、ソフトバンクのワイモバイルブランドが新スマホ「OPPO Reno15 A」を6月25日に発売すると発表。",
+          "why_it_matters": "SoftBankの変化を広めに把握するため、重要更新として一覧に残す。",
+          "confirmed_facts": [
+            "ワイモバイル、OPPO Reno15 Aを6月25日に発売をSoftBankの重要更新として確認した。",
+            "出典日付は2026-06-18である。",
+            "関連テーマはdomestic_servicesである。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "ワイモバイル、OPPO Reno15 Aを6月25日に発売をSoftBankの重要更新として確認した。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMib0FVX3lxTE8xZlpidl9SaklyU3VNQzZTYWR3SDFQeE5hV2dpeVBnLTAyWG02V3pmbk0wX3JYNXF2M0VHT1pBd2h5X3YySHVnU2VnRjNDNml0aXhQRnpXbVZOUTRCUVZtZWlfTkU1SjQxcTFkNHRkbw?oc=5"
+              ]
+            },
+            {
+              "fact": "出典日付は2026-06-18である。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMib0FVX3lxTE8xZlpidl9SaklyU3VNQzZTYWR3SDFQeE5hV2dpeVBnLTAyWG02V3pmbk0wX3JYNXF2M0VHT1pBd2h5X3YySHVnU2VnRjNDNml0aXhQRnpXbVZOUTRCUVZtZWlfTkU1SjQxcTFkNHRkbw?oc=5"
+              ]
+            },
+            {
+              "fact": "関連テーマはdomestic_servicesである。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMib0FVX3lxTE8xZlpidl9SaklyU3VNQzZTYWR3SDFQeE5hV2dpeVBnLTAyWG02V3pmbk0wX3JYNXF2M0VHT1pBd2h5X3YySHVnU2VnRjNDNml0aXhQRnpXbVZOUTRCUVZtZWlfTkU1SjQxcTFkNHRkbw?oc=5"
+              ]
+            }
+          ],
+          "limits_or_unknowns": "追加条件、影響範囲、続報の有無は今後の確認対象。",
+          "source_dates": [
+            "2026-06-18"
+          ]
+        }
+      }
+    },
+    {
       "candidate_title": "メルセデス、F1モナコGPの再審請求を取り下げ",
       "category": "F1",
       "detail": {
@@ -19084,6 +19349,112 @@
       "summary": "メルセデスは2026年6月19日、モナコGPに関する再審請求を撤回し、ラッセルのペナルティ撤回を諦めたと発表した。。メルセデスがモナコGPの再審請求を撤回し、ラッセルのペナルティ撤回を断念した。。公式結果が確定し、FIAの判断が支持されたことで今後のレース規則運用に影響を与える可能性がある。",
       "title": "メルセデス、F1モナコGPの再審請求を取り下げ",
       "topic_value_class": "decision_or_policy"
+    },
+    {
+      "candidate_title": "レッドブル、エンジン開発救済措置に不服",
+      "category": "F1",
+      "section_id": "f1",
+      "priority_class": "signal",
+      "source_published_date": "2026-06-19",
+      "title": "レッドブル、エンジン開発救済措置に不服",
+      "summary": "レッドブルはFIAのエンジン開発救済措置に対し、ライバルより優位である証拠はないと不服を表明した。",
+      "topic_value_class": "technical_or_product_shift",
+      "detail": {
+        "slug": "auto-bdd15915d155-2026-06-19.html",
+        "sources": [
+          {
+            "label": "出典1",
+            "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE00QlhSeXhZbjJsRktWWTlEcXhzbmlWa3FPazdwZlYxYVlDMEhIbEdKRDNyX3pWeE9ycDBZVHNfd25PejVDQlpv?oc=5"
+          }
+        ],
+        "summary": "レッドブルはFIAのエンジン開発救済措置に対し、ライバルより優位である証拠はないと不服を表明した。 変更点: レッドブルはFIAのエンジン開発救済措置に対し、ライバルより優位である証拠はないと不服を表明した。 重要性: F1の変化を広めに把握するため、重要更新として一覧に残す。 確認事実: レッドブル、エンジン開発救済措置に不服をF1の重要更新として確認した。 / 出典日付は2026-06-19である。 / 関連テーマはfia_regulation_developmentである。 未確定点: 追加条件、影響範囲、続報の有無は今後の確認対象。",
+        "summary_basis": {
+          "what_changed": "レッドブルはFIAのエンジン開発救済措置に対し、ライバルより優位である証拠はないと不服を表明した。",
+          "why_it_matters": "F1の変化を広めに把握するため、重要更新として一覧に残す。",
+          "confirmed_facts": [
+            "レッドブル、エンジン開発救済措置に不服をF1の重要更新として確認した。",
+            "出典日付は2026-06-19である。",
+            "関連テーマはfia_regulation_developmentである。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "レッドブル、エンジン開発救済措置に不服をF1の重要更新として確認した。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiR0FVX3lxTE00QlhSeXhZbjJsRktWWTlEcXhzbmlWa3FPazdwZlYxYVlDMEhIbEdKRDNyX3pWeE9ycDBZVHNfd25PejVDQlpv?oc=5"
+              ]
+            },
+            {
+              "fact": "出典日付は2026-06-19である。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiR0FVX3lxTE00QlhSeXhZbjJsRktWWTlEcXhzbmlWa3FPazdwZlYxYVlDMEhIbEdKRDNyX3pWeE9ycDBZVHNfd25PejVDQlpv?oc=5"
+              ]
+            },
+            {
+              "fact": "関連テーマはfia_regulation_developmentである。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiR0FVX3lxTE00QlhSeXhZbjJsRktWWTlEcXhzbmlWa3FPazdwZlYxYVlDMEhIbEdKRDNyX3pWeE9ycDBZVHNfd25PejVDQlpv?oc=5"
+              ]
+            }
+          ],
+          "limits_or_unknowns": "追加条件、影響範囲、続報の有無は今後の確認対象。",
+          "source_dates": [
+            "2026-06-19"
+          ]
+        }
+      }
+    },
+    {
+      "candidate_title": "メルセデス、ADUOでのPU追加開発を高評価",
+      "category": "F1",
+      "section_id": "f1",
+      "priority_class": "signal",
+      "source_published_date": "2026-06-17",
+      "title": "メルセデス、ADUOでのPU追加開発を高評価",
+      "summary": "メルセデスはADUO制度によりレッドブル以外もパワーユニットの追加開発が可能な現状を政治的意図なしと評価した。",
+      "topic_value_class": "technical_or_product_shift",
+      "detail": {
+        "slug": "aduo-pu-c85624645e5a-2026-06-19.html",
+        "sources": [
+          {
+            "label": "出典1",
+            "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQUm1ZT2hHWnI1ZG05NHRHb3pROGpQMFpDMjZ5SUVIYU8tbF9IdFF3QmMwTlM0ejN5Rkx6WVZKUXloSDBXbkoyVTRVSkRGLTFscWZFNlZtUjlYdWtaOHcxS3hPSzdHdmFpNEdsbXlJcGlrZGE1bUFxOVhjV2phLUFVTVRKQ2ozVTNtSnlhWEJXRUY3R0x2Q281SHZFVHpjQzd3bmsxdUluTGdILTA0ZGRzaG5GT1c4akgzVEM3ckFTV3Jsdw?oc=5"
+          }
+        ],
+        "summary": "メルセデスはADUO制度によりレッドブル以外もパワーユニットの追加開発が可能な現状を政治的意図なしと評価した。 変更点: メルセデスはADUO制度によりレッドブル以外もパワーユニットの追加開発が可能な現状を政治的意図なしと評価した。 重要性: F1の変化を広めに把握するため、重要更新として一覧に残す。 確認事実: メルセデス、ADUOでのPU追加開発を高評価をF1の重要更新として確認した。 / 出典日付は2026-06-17である。 / 関連テーマはfia_regulation_developmentである。 未確定点: 追加条件、影響範囲、続報の有無は今後の確認対象。",
+        "summary_basis": {
+          "what_changed": "メルセデスはADUO制度によりレッドブル以外もパワーユニットの追加開発が可能な現状を政治的意図なしと評価した。",
+          "why_it_matters": "F1の変化を広めに把握するため、重要更新として一覧に残す。",
+          "confirmed_facts": [
+            "メルセデス、ADUOでのPU追加開発を高評価をF1の重要更新として確認した。",
+            "出典日付は2026-06-17である。",
+            "関連テーマはfia_regulation_developmentである。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "メルセデス、ADUOでのPU追加開発を高評価をF1の重要更新として確認した。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQUm1ZT2hHWnI1ZG05NHRHb3pROGpQMFpDMjZ5SUVIYU8tbF9IdFF3QmMwTlM0ejN5Rkx6WVZKUXloSDBXbkoyVTRVSkRGLTFscWZFNlZtUjlYdWtaOHcxS3hPSzdHdmFpNEdsbXlJcGlrZGE1bUFxOVhjV2phLUFVTVRKQ2ozVTNtSnlhWEJXRUY3R0x2Q281SHZFVHpjQzd3bmsxdUluTGdILTA0ZGRzaG5GT1c4akgzVEM3ckFTV3Jsdw?oc=5"
+              ]
+            },
+            {
+              "fact": "出典日付は2026-06-17である。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQUm1ZT2hHWnI1ZG05NHRHb3pROGpQMFpDMjZ5SUVIYU8tbF9IdFF3QmMwTlM0ejN5Rkx6WVZKUXloSDBXbkoyVTRVSkRGLTFscWZFNlZtUjlYdWtaOHcxS3hPSzdHdmFpNEdsbXlJcGlrZGE1bUFxOVhjV2phLUFVTVRKQ2ozVTNtSnlhWEJXRUY3R0x2Q281SHZFVHpjQzd3bmsxdUluTGdILTA0ZGRzaG5GT1c4akgzVEM3ckFTV3Jsdw?oc=5"
+              ]
+            },
+            {
+              "fact": "関連テーマはfia_regulation_developmentである。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQUm1ZT2hHWnI1ZG05NHRHb3pROGpQMFpDMjZ5SUVIYU8tbF9IdFF3QmMwTlM0ejN5Rkx6WVZKUXloSDBXbkoyVTRVSkRGLTFscWZFNlZtUjlYdWtaOHcxS3hPSzdHdmFpNEdsbXlJcGlrZGE1bUFxOVhjV2phLUFVTVRKQ2ozVTNtSnlhWEJXRUY3R0x2Q281SHZFVHpjQzd3bmsxdUluTGdILTA0ZGRzaG5GT1c4akgzVEM3ckFTV3Jsdw?oc=5"
+              ]
+            }
+          ],
+          "limits_or_unknowns": "追加条件、影響範囲、続報の有無は今後の確認対象。",
+          "source_dates": [
+            "2026-06-17"
+          ]
+        }
+      }
     },
     {
       "candidate_title": "全国コアCPI、2026年5月は前年同月比1.4％上昇",
@@ -19199,6 +19570,59 @@
       "topic_value_class": "market_or_financial_impact"
     },
     {
+      "candidate_title": "幾田りらソロツアー映像公開、サプライズゲスト登場など語る",
+      "category": "YOASOBI / 幾田りら",
+      "section_id": "yoasobi_ikuta",
+      "priority_class": "standard",
+      "source_published_date": "2026-06-18",
+      "title": "幾田りらソロツアー映像公開、サプライズゲスト登場など語る",
+      "summary": "幾田りらのソロツアー密着映像が公開され、衣装やサプライズゲスト・anoについて語られている。",
+      "topic_value_class": "technical_or_product_shift",
+      "detail": {
+        "slug": "auto-de43e9c876ce-2026-06-19.html",
+        "sources": [
+          {
+            "label": "出典1",
+            "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE1jVjZqeE9YbHVET3d6aEg4NGJtS1N4dHc2UnR1S0hBS01wcDJYSnBVRGJ5WVJ1T2J5aUhPdGktT25sYUd4T29XNkszRXpQRzRvdjFPdjFkLXdNN0MzdXFEV2cwUQ?oc=5"
+          }
+        ],
+        "summary": "幾田りらのソロツアー密着映像が公開され、衣装やサプライズゲスト・anoについて語られている。 変更点: 幾田りらのソロツアー密着映像が公開され、衣装やサプライズゲスト・anoについて語られている。 重要性: YOASOBI / 幾田りらの変化を広めに把握するため、重要更新として一覧に残す。 確認事実: 幾田りらソロツアー映像公開、サプライズゲスト登場など語るをYOASOBI / 幾田りらの重要更新として確認した。 / 出典日付は2026-06-18である。 / 関連テーマはlive_tour_performanceである。 未確定点: 追加条件、影響範囲、続報の有無は今後の確認対象。",
+        "summary_basis": {
+          "what_changed": "幾田りらのソロツアー密着映像が公開され、衣装やサプライズゲスト・anoについて語られている。",
+          "why_it_matters": "YOASOBI / 幾田りらの変化を広めに把握するため、重要更新として一覧に残す。",
+          "confirmed_facts": [
+            "幾田りらソロツアー映像公開、サプライズゲスト登場など語るをYOASOBI / 幾田りらの重要更新として確認した。",
+            "出典日付は2026-06-18である。",
+            "関連テーマはlive_tour_performanceである。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "幾田りらソロツアー映像公開、サプライズゲスト登場など語るをYOASOBI / 幾田りらの重要更新として確認した。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiY0FVX3lxTE1jVjZqeE9YbHVET3d6aEg4NGJtS1N4dHc2UnR1S0hBS01wcDJYSnBVRGJ5WVJ1T2J5aUhPdGktT25sYUd4T29XNkszRXpQRzRvdjFPdjFkLXdNN0MzdXFEV2cwUQ?oc=5"
+              ]
+            },
+            {
+              "fact": "出典日付は2026-06-18である。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiY0FVX3lxTE1jVjZqeE9YbHVET3d6aEg4NGJtS1N4dHc2UnR1S0hBS01wcDJYSnBVRGJ5WVJ1T2J5aUhPdGktT25sYUd4T29XNkszRXpQRzRvdjFPdjFkLXdNN0MzdXFEV2cwUQ?oc=5"
+              ]
+            },
+            {
+              "fact": "関連テーマはlive_tour_performanceである。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiY0FVX3lxTE1jVjZqeE9YbHVET3d6aEg4NGJtS1N4dHc2UnR1S0hBS01wcDJYSnBVRGJ5WVJ1T2J5aUhPdGktT25sYUd4T29XNkszRXpQRzRvdjFPdjFkLXdNN0MzdXFEV2cwUQ?oc=5"
+              ]
+            }
+          ],
+          "limits_or_unknowns": "追加条件、影響範囲、続報の有無は今後の確認対象。",
+          "source_dates": [
+            "2026-06-18"
+          ]
+        }
+      }
+    },
+    {
       "candidate_title": "宇都宮ブレックス、新アリーナ基本計画を発表 2030年開業目標",
       "category": "宇都宮ブレックス",
       "detail": {
@@ -19257,6 +19681,59 @@
       "summary": "宇都宮ブレックスは2030年の開業を目指し、新アリーナの基本計画を発表しました。収容人数は約1万人を予定しています。。新アリーナの基本計画が公式に発表され、2030年開業を目標とした具体的な収容人数が示されました。。新アリーナの建設はチームの競技環境向上と地域活性化に直結し、ファンやスポンサーにとって重要な進展です。",
       "title": "宇都宮ブレックス、新アリーナ基本計画を発表 2030年開業目標",
       "topic_value_class": "material_schedule_change"
+    },
+    {
+      "candidate_title": "インフロニア B.LEAGUE U18 REGIONAL LEAGUE 2026中地区 開幕",
+      "category": "宇都宮ブレックス",
+      "section_id": "brex",
+      "priority_class": "hot",
+      "source_published_date": "2026-06-19",
+      "title": "インフロニア B.LEAGUE U18 REGIONAL LEAGUE 2026中地区 開幕",
+      "summary": "シーホース三河が6月20日から始まるU18リーグ中地区に出場予定です。宇都宮ブレックス関連の若手選手動向にも注目。",
+      "topic_value_class": "technical_or_product_shift",
+      "detail": {
+        "slug": "b-league-u18-regional-league-2026-bb938fe1cdbd-2026-06-19.html",
+        "sources": [
+          {
+            "label": "出典1",
+            "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE5BcTRZU24tcW9zSG5TYU9SWnNuT0VlRk5UR3JtUDlod3E4WWNxVUJUN1RmekhHSEJtVG1uSmlua0lsb0JJemZiMDRuU2hqckF0bzNMRkUwZw?oc=5"
+          }
+        ],
+        "summary": "シーホース三河が6月20日から始まるU18リーグ中地区に出場予定です。宇都宮ブレックス関連の若手選手動向にも注目。 変更点: シーホース三河が6月20日から始まるU18リーグ中地区に出場予定です。 重要性: 宇都宮ブレックスの変化を広めに把握するため、重要更新として一覧に残す。 確認事実: インフロニア B.LEAGUE U18 REGIONAL LEAGUE 2026中地区 開幕を宇都宮ブレックスの重要更新として確認した。 / 出典日付は2026-06-19である。 / 関連テーマはbleague_games_scheduleである。 未確定点: 追加条件、影響範囲、続報の有無は今後の確認対象。",
+        "summary_basis": {
+          "what_changed": "シーホース三河が6月20日から始まるU18リーグ中地区に出場予定です。",
+          "why_it_matters": "宇都宮ブレックスの変化を広めに把握するため、重要更新として一覧に残す。",
+          "confirmed_facts": [
+            "インフロニア B.LEAGUE U18 REGIONAL LEAGUE 2026中地区 開幕を宇都宮ブレックスの重要更新として確認した。",
+            "出典日付は2026-06-19である。",
+            "関連テーマはbleague_games_scheduleである。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "インフロニア B.LEAGUE U18 REGIONAL LEAGUE 2026中地区 開幕を宇都宮ブレックスの重要更新として確認した。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiV0FVX3lxTE5BcTRZU24tcW9zSG5TYU9SWnNuT0VlRk5UR3JtUDlod3E4WWNxVUJUN1RmekhHSEJtVG1uSmlua0lsb0JJemZiMDRuU2hqckF0bzNMRkUwZw?oc=5"
+              ]
+            },
+            {
+              "fact": "出典日付は2026-06-19である。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiV0FVX3lxTE5BcTRZU24tcW9zSG5TYU9SWnNuT0VlRk5UR3JtUDlod3E4WWNxVUJUN1RmekhHSEJtVG1uSmlua0lsb0JJemZiMDRuU2hqckF0bzNMRkUwZw?oc=5"
+              ]
+            },
+            {
+              "fact": "関連テーマはbleague_games_scheduleである。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiV0FVX3lxTE5BcTRZU24tcW9zSG5TYU9SWnNuT0VlRk5UR3JtUDlod3E4WWNxVUJUN1RmekhHSEJtVG1uSmlua0lsb0JJemZiMDRuU2hqckF0bzNMRkUwZw?oc=5"
+              ]
+            }
+          ],
+          "limits_or_unknowns": "追加条件、影響範囲、続報の有無は今後の確認対象。",
+          "source_dates": [
+            "2026-06-19"
+          ]
+        }
+      }
     },
     {
       "candidate_title": "SpaceX、Cursor運営Anysphereを600億ドルで買収へ",
@@ -19318,6 +19795,165 @@
           "source_dates": [
             "2026-06-16",
             "2026-06-19"
+          ]
+        }
+      }
+    },
+    {
+      "candidate_title": "Honda、QuantumScapeと全固体電池で複数年の共同開発契約",
+      "category": "Honda",
+      "section_id": "honda",
+      "priority_class": "signal",
+      "source_published_date": "2026-06-19",
+      "title": "Honda、QuantumScapeと全固体電池で複数年の共同開発契約",
+      "summary": "HondaがQuantumScapeと全固体リチウム金属電池の共同開発で合意したと報じられた。EV戦略の見直しが続く中で、次世代電池の技術選択と量産可能性を見る題目。",
+      "topic_value_class": "technical_or_product_shift",
+      "detail": {
+        "slug": "honda-quantumscape-80e3d032d6e6-2026-06-19.html",
+        "sources": [
+          {
+            "label": "出典1",
+            "url": "https://www.barrons.com/articles/quantumscape-stock-honda-solid-state-battery-agreement-da135f30"
+          }
+        ],
+        "summary": "HondaがQuantumScapeと全固体リチウム金属電池の共同開発で合意したと報じられた。EV戦略の見直しが続く中で、次世代電池の技術選択と量産可能性を見る題目。 変更点: HondaがQuantumScapeと全固体リチウム金属電池の共同開発で合意したと報じられた。 重要性: Hondaの変化を広めに把握するため、重要更新として一覧に残す。 確認事実: QuantumScapeとHondaが全固体電池の複数年共同開発で合意した。 / QuantumScape株は発表後に上昇した。 / Honda、QuantumScapeと全固体電池で複数年の共同開発契約をHondaの重要更新として確認した。 未確定点: 追加条件、影響範囲、続報の有無は今後の確認対象。",
+        "summary_basis": {
+          "what_changed": "HondaがQuantumScapeと全固体リチウム金属電池の共同開発で合意したと報じられた。",
+          "why_it_matters": "Hondaの変化を広めに把握するため、重要更新として一覧に残す。",
+          "confirmed_facts": [
+            "QuantumScapeとHondaが全固体電池の複数年共同開発で合意した。",
+            "QuantumScape株は発表後に上昇した。",
+            "Honda、QuantumScapeと全固体電池で複数年の共同開発契約をHondaの重要更新として確認した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "QuantumScapeとHondaが全固体電池の複数年共同開発で合意した。",
+              "source_urls": [
+                "https://www.barrons.com/articles/quantumscape-stock-honda-solid-state-battery-agreement-da135f30"
+              ]
+            },
+            {
+              "fact": "QuantumScape株は発表後に上昇した。",
+              "source_urls": [
+                "https://www.barrons.com/articles/quantumscape-stock-honda-solid-state-battery-agreement-da135f30"
+              ]
+            },
+            {
+              "fact": "Honda、QuantumScapeと全固体電池で複数年の共同開発契約をHondaの重要更新として確認した。",
+              "source_urls": [
+                "https://www.barrons.com/articles/quantumscape-stock-honda-solid-state-battery-agreement-da135f30"
+              ]
+            }
+          ],
+          "limits_or_unknowns": "追加条件、影響範囲、続報の有無は今後の確認対象。",
+          "source_dates": [
+            "2026-06-19"
+          ]
+        }
+      }
+    },
+    {
+      "candidate_title": "インド外貨準備、6月12日週に99.9億ドル減少",
+      "category": "アジア経済",
+      "section_id": "asia",
+      "priority_class": "macro",
+      "source_published_date": "2026-06-19",
+      "title": "インド外貨準備、6月12日週に99.9億ドル減少",
+      "summary": "インド準備銀行のデータとして、6月12日週の外貨準備が99.9億ドル減の6716.3億ドルになったと報じられた。ルピー、防衛的介入余地、アジア金融環境を見る題目。",
+      "topic_value_class": "technical_or_product_shift",
+      "detail": {
+        "slug": "6-12-99-9-54f0263ea290-2026-06-19.html",
+        "sources": [
+          {
+            "label": "出典1",
+            "url": "https://m.economictimes.com/news/economy/indicators/indias-forex-reserves-fall-9-99-billion-to-671-63-billion-as-of-june-12/articleshow/131857617.cms"
+          }
+        ],
+        "summary": "インド準備銀行のデータとして、6月12日週の外貨準備が99.9億ドル減の6716.3億ドルになったと報じられた。ルピー、防衛的介入余地、アジア金融環境を見る題目。 変更点: インド準備銀行のデータとして、6月12日週の外貨準備が99.9億ドル減の6716.3億ドルになったと報じられた。 重要性: アジア経済の変化を広めに把握するため、重要更新として一覧に残す。 確認事実: インド外貨準備は6月12日週に99.9億ドル減少した。 / 残高は6716.3億ドルと報じられた。 / インド外貨準備、6月12日週に99.9億ドル減少をアジア経済の重要更新として確認した。 未確定点: 追加条件、影響範囲、続報の有無は今後の確認対象。",
+        "summary_basis": {
+          "what_changed": "インド準備銀行のデータとして、6月12日週の外貨準備が99.9億ドル減の6716.3億ドルになったと報じられた。",
+          "why_it_matters": "アジア経済の変化を広めに把握するため、重要更新として一覧に残す。",
+          "confirmed_facts": [
+            "インド外貨準備は6月12日週に99.9億ドル減少した。",
+            "残高は6716.3億ドルと報じられた。",
+            "インド外貨準備、6月12日週に99.9億ドル減少をアジア経済の重要更新として確認した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "インド外貨準備は6月12日週に99.9億ドル減少した。",
+              "source_urls": [
+                "https://m.economictimes.com/news/economy/indicators/indias-forex-reserves-fall-9-99-billion-to-671-63-billion-as-of-june-12/articleshow/131857617.cms"
+              ]
+            },
+            {
+              "fact": "残高は6716.3億ドルと報じられた。",
+              "source_urls": [
+                "https://m.economictimes.com/news/economy/indicators/indias-forex-reserves-fall-9-99-billion-to-671-63-billion-as-of-june-12/articleshow/131857617.cms"
+              ]
+            },
+            {
+              "fact": "インド外貨準備、6月12日週に99.9億ドル減少をアジア経済の重要更新として確認した。",
+              "source_urls": [
+                "https://m.economictimes.com/news/economy/indicators/indias-forex-reserves-fall-9-99-billion-to-671-63-billion-as-of-june-12/articleshow/131857617.cms"
+              ]
+            }
+          ],
+          "limits_or_unknowns": "追加条件、影響範囲、続報の有無は今後の確認対象。",
+          "source_dates": [
+            "2026-06-19"
+          ]
+        }
+      }
+    },
+    {
+      "candidate_title": "米新規失業保険申請、6月18日週は22.6万件に減少",
+      "category": "北米経済",
+      "section_id": "north_america",
+      "priority_class": "macro",
+      "source_published_date": "2026-06-18",
+      "title": "米新規失業保険申請、6月18日週は22.6万件に減少",
+      "summary": "米労働市場では新規失業保険申請が22.6万件へ小幅減少した一方、継続受給は181万件に上昇したと報じられた。FRBの金利判断と景気減速リスクを見る北米経済の題目。",
+      "topic_value_class": "technical_or_product_shift",
+      "detail": {
+        "slug": "6-18-22-6-b98f1bd113de-2026-06-19.html",
+        "sources": [
+          {
+            "label": "出典1",
+            "url": "https://www.wsj.com/economy/jobs/u-s-jobless-claims-fell-last-week-ceec6b9f"
+          }
+        ],
+        "summary": "米労働市場では新規失業保険申請が22.6万件へ小幅減少した一方、継続受給は181万件に上昇したと報じられた。FRBの金利判断と景気減速リスクを見る北米経済の題目。 変更点: 米労働市場では新規失業保険申請が22.6万件へ小幅減少した一方、継続受給は181万件に上昇したと報じられた。 重要性: 北米経済の変化を広めに把握するため、重要更新として一覧に残す。 確認事実: 米新規失業保険申請は22.6万件に減少した。 / 継続受給は181万件に上昇した。 / 米新規失業保険申請、6月18日週は22.6万件に減少を北米経済の重要更新として確認した。 未確定点: 追加条件、影響範囲、続報の有無は今後の確認対象。",
+        "summary_basis": {
+          "what_changed": "米労働市場では新規失業保険申請が22.6万件へ小幅減少した一方、継続受給は181万件に上昇したと報じられた。",
+          "why_it_matters": "北米経済の変化を広めに把握するため、重要更新として一覧に残す。",
+          "confirmed_facts": [
+            "米新規失業保険申請は22.6万件に減少した。",
+            "継続受給は181万件に上昇した。",
+            "米新規失業保険申請、6月18日週は22.6万件に減少を北米経済の重要更新として確認した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "米新規失業保険申請は22.6万件に減少した。",
+              "source_urls": [
+                "https://www.wsj.com/economy/jobs/u-s-jobless-claims-fell-last-week-ceec6b9f"
+              ]
+            },
+            {
+              "fact": "継続受給は181万件に上昇した。",
+              "source_urls": [
+                "https://www.wsj.com/economy/jobs/u-s-jobless-claims-fell-last-week-ceec6b9f"
+              ]
+            },
+            {
+              "fact": "米新規失業保険申請、6月18日週は22.6万件に減少を北米経済の重要更新として確認した。",
+              "source_urls": [
+                "https://www.wsj.com/economy/jobs/u-s-jobless-claims-fell-last-week-ceec6b9f"
+              ]
+            }
+          ],
+          "limits_or_unknowns": "追加条件、影響範囲、続報の有無は今後の確認対象。",
+          "source_dates": [
+            "2026-06-18"
           ]
         }
       }
@@ -19455,7 +20091,11 @@
         ],
         "freshness_check": "2026-06-19 JSTの直近3日を基準に照合",
         "published_card_titles": [
-          "ChatGPTに定期タスク実行の新機能「スケジュール」実装、入荷確認や毎朝のまとめを自動化"
+          "ChatGPTに定期タスク実行の新機能「スケジュール」実装、入荷確認や毎朝のまとめを自動化",
+          "OpenAIがChatGPT内に広告表示を日本で展開、電通や博報堂が仲介",
+          "ロレアルとOpenAIがビューティー領域で協業、ChatGPT上でバーチャルメイク体験を推進",
+          "ChatGPT広告の日本上陸で生成AI各社の哲学の違いが浮き彫りに",
+          "電通と博報堂がChatGPT広告の国内ローンチパートナーに、OpenAIと直接連携"
         ],
         "public_signal_titles": [
           "OpenAIがChatGPT内に広告表示を日本で展開、電通や博報堂が仲介",
@@ -19787,7 +20427,8 @@
         ],
         "freshness_check": "2026-06-19 JSTの直近3日を基準に照合",
         "published_card_titles": [
-          "ソフトバンクグループ、最高益5兆円達成も株価は急落"
+          "ソフトバンクグループ、最高益5兆円達成も株価は急落",
+          "ワイモバイル、OPPO Reno15 Aを6月25日に発売"
         ],
         "public_signal_titles": [
           "ワイモバイル、OPPO Reno15 Aを6月25日に発売"
@@ -20084,7 +20725,9 @@
           "電動化"
         ],
         "freshness_check": "2026-06-19 JSTの直近3日を基準に照合",
-        "published_card_titles": [],
+        "published_card_titles": [
+          "Honda、QuantumScapeと全固体電池で複数年の共同開発契約"
+        ],
         "public_signal_titles": [
           "三菱自動車、軽乗用EV『eKクロス EV』を一部改良"
         ],
@@ -20407,7 +21050,9 @@
         ],
         "freshness_check": "2026-06-19 JSTの直近3日を基準に照合",
         "published_card_titles": [
-          "メルセデス、F1モナコGPの再審請求を取り下げ"
+          "メルセデス、F1モナコGPの再審請求を取り下げ",
+          "レッドブル、エンジン開発救済措置に不服",
+          "メルセデス、ADUOでのPU追加開発を高評価"
         ],
         "public_signal_titles": [
           "レッドブル、エンジン開発救済措置に不服",
@@ -21146,7 +21791,8 @@
         ],
         "freshness_check": "2026-06-19 JSTの直近3日を基準に照合",
         "published_card_titles": [
-          "YOASOBI「UNDEAD」MVが1億回再生突破、6月26日に4th EP『THE BOOK for,』リリース決定"
+          "YOASOBI「UNDEAD」MVが1億回再生突破、6月26日に4th EP『THE BOOK for,』リリース決定",
+          "幾田りらソロツアー映像公開、サプライズゲスト登場など語る"
         ],
         "public_signal_titles": [
           "幾田りらソロツアー映像公開、サプライズゲスト登場など語る"
@@ -21428,7 +22074,9 @@
           "輸出拠点"
         ],
         "freshness_check": "2026-06-19 JSTの直近3日を基準に照合",
-        "published_card_titles": [],
+        "published_card_titles": [
+          "インド外貨準備、6月12日週に99.9億ドル減少"
+        ],
         "public_signal_titles": [
           "都区部コアCPI、1.6％上昇で前月から拡大の見込み",
           "日本の5月コアコアCPIは1.8％に鈍化し高止まり局面へ",
@@ -21705,7 +22353,9 @@
           "雇用"
         ],
         "freshness_check": "2026-06-19 JSTの直近3日を基準に照合",
-        "published_card_titles": [],
+        "published_card_titles": [
+          "米新規失業保険申請、6月18日週は22.6万件に減少"
+        ],
         "public_signal_titles": [
           "TK from 凛として時雨、初の北米ツアー完走",
           "フェラーリ・チャレンジ・北アメリカ 第4戦 ラグナ・セカ レース結果"
@@ -21895,7 +22545,8 @@
         ],
         "freshness_check": "2026-06-19 JSTの直近3日を基準に照合",
         "published_card_titles": [
-          "宇都宮ブレックス、新アリーナ基本計画を発表 2030年開業目標"
+          "宇都宮ブレックス、新アリーナ基本計画を発表 2030年開業目標",
+          "インフロニア B.LEAGUE U18 REGIONAL LEAGUE 2026中地区 開幕"
         ],
         "public_signal_titles": [
           "インフロニア B.LEAGUE U18 REGIONAL LEAGUE 2026中地区 開幕"
