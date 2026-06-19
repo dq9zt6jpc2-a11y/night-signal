@@ -1,5 +1,5 @@
 {
-  "contract_version": "2026-06-13.01",
+  "contract_version": "2026-06-19.01",
   "date": "2026-06-19",
   "last_checked_jst": "2026-06-19T21:53:31+09:00",
   "collection_completed_at_jst": "2026-06-19T21:53:31+09:00",
@@ -158,51 +158,11 @@
         }
       ],
       "latest_candidates": [
-        {
-          "topic_id": "product_release",
-          "title": "ChatGPTに定期タスク実行の新機能「スケジュール」実装、入荷確認や毎朝のまとめを自動化",
-          "source_url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9VU1Zja3VIMmhOR0hfbEU5a0pGMWNVY2tRNWdMRHFjQVh3U29OZ05EZWNqVmFuWG03MEQxaFd4ek56cHpkRXdKeF9tcHREb3N4M3F4bTgtekx4TkNGNEVhUUJkZ1doTEE?oc=5",
-          "source_published_date": "2026-06-19",
-          "decision": "adopted",
-          "change_class": "new_event",
-          "rationale": "ChatGPTが新機能「スケジュール」を導入。定期的なタスク実行や通知が可能となり、ユーザーの利便性が向上した。。ChatGPTに定期タスクを自動実行し通知する新機能「スケジュール」が追加された。。ユーザーの作業効率が向上し、ChatGPTの実用性と利便性が大幅に強化されるため重要。"
-        },
-        {
-          "topic_id": "product_release",
-          "title": "OpenAIがChatGPT内に広告表示を日本で展開、電通や博報堂が仲介",
-          "source_url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5oNDcwdXlkU1hicHg1emUyQzQ1NExUWHlNV1FJLWZmcnpJQzBzUmhPZVZRNGdENHVRQXo0YXFMVE1tVG8tSGs1amJtNzkzME9ORUQ0eVU3NUdQMXJESXNVZ0VFUk01M2Z4UzlFTQ?oc=5",
-          "source_published_date": "2026-06-18",
-          "decision": "no_fresh_item",
-          "change_class": "new_event",
-          "rationale": "OpenAIは日本市場でChatGPT内広告を開始。電通と博報堂が仲介し、広告収益化を推進している。"
-        },
-        {
-          "topic_id": "product_release",
-          "title": "ロレアルとOpenAIがビューティー領域で協業、ChatGPT上でバーチャルメイク体験を推進",
-          "source_url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9EUnF0LXFoT0dzc3k1MFBabFhRa3gzc3hLMmd3TTNkNkpzMUtIWU5yMHhaa0dqWlF2a1JRQUx4Z01rZW02N1dVbzZWUktmWERpOC12QTNocFNTVzRkQTV0S1l4VkJsckl0YlE?oc=5",
-          "source_published_date": "2026-06-19",
-          "decision": "no_fresh_item",
-          "change_class": "new_event",
-          "rationale": "ロレアルとOpenAIが協業し、ChatGPT上でのバーチャルメイク体験やAI活用の研究開発を進めている。"
-        },
-        {
-          "topic_id": "product_release",
-          "title": "ChatGPT広告の日本上陸で生成AI各社の哲学の違いが浮き彫りに",
-          "source_url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9pZHFuWVJza2Z4RGJQTWl1dTFYRUFtMDhyajlkbWt6Q0gxdkJPbldDTm5VOEtDVXhTQ1NxS1lJZ2tkSDF6ZTdXX20xMlZPdU42dFVjankyNWdJel9wWEZZedIBZkFVX3lxTFA2bGVxU2NyM1RaWEJxaVk0WVRDOGRoZUJBaUkxNFFkSVA5S0VTdlNPZVpzVVRkOXVzSTg4SDljS2tVODdDenU0ZWxrQzBtTFVoREJKa0FzUU9EQmd1dkhBUl94WHRKdw?oc=5",
-          "source_published_date": "2026-06-19",
-          "decision": "no_fresh_item",
-          "change_class": "background_only",
-          "rationale": "Anthropicは広告を拒否する一方、OpenAIは日本で広告導入を進めており、生成AI企業の戦略の違いが注目されている。"
-        },
-        {
-          "topic_id": "product_release",
-          "title": "電通と博報堂がChatGPT広告の国内ローンチパートナーに、OpenAIと直接連携",
-          "source_url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFA5X1lBbGtyLUxyaHlIdXREMkdGeUxSbzRJcW5RZ3hBblk0dVNuMlg4Tm1yMkxKbm9CallpVjlXZ0lmdDZqbTFqbm02LTgxbEs3aXVIZ2R0eVpxZnBGckhtTjdCdVFjZmR1Nzdocg?oc=5",
-          "source_published_date": "2026-06-19",
-          "decision": "no_fresh_item",
-          "change_class": "new_event",
-          "rationale": "電通と博報堂がChatGPT広告の日本国内ローンチパートナーとしてOpenAIと直接連携し、広告事業を推進する。"
-        }
+        "ChatGPTに定期タスク実行の新機能「スケジュール」実装、入荷確認や毎朝のまとめを自動化",
+        "OpenAIがChatGPT内に広告表示を日本で展開、電通や博報堂が仲介",
+        "ロレアルとOpenAIがビューティー領域で協業、ChatGPT上でバーチャルメイク体験を推進",
+        "ChatGPT広告の日本上陸で生成AI各社の哲学の違いが浮き彫りに",
+        "電通と博報堂がChatGPT広告の国内ローンチパートナーに、OpenAIと直接連携"
       ],
       "no_change_checks": [
         {
@@ -526,24 +486,8 @@
         }
       ],
       "latest_candidates": [
-        {
-          "topic_id": "market_price_nav",
-          "title": "ソフトバンクグループ、最高益5兆円達成も株価は急落",
-          "source_url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE4xc1NqNGIzMFFGNS14X01Sb0s4eDdQX3lmT3hWM0pfay1pMWRJcDdkZ0tja0Z2a2NqS2pTVWs1VzhtV3o0NV9ic2syRkNRb2ZaV0pJcTdtYURVUEE?oc=5",
-          "source_published_date": "2026-06-19",
-          "decision": "adopted",
-          "change_class": "new_event",
-          "rationale": "2026年6月19日、ソフトバンクグループは日本最高益5兆円を発表したが、株価は急落し市場に衝撃を与えた。。ソフトバンクグループが過去最高益5兆円を発表したが、株価は急落した。。最高益発表にもかかわらず株価が下落したことで市場の評価や投資家心理に大きな影響を与えた。"
-        },
-        {
-          "topic_id": "domestic_services",
-          "title": "ワイモバイル、OPPO Reno15 Aを6月25日に発売",
-          "source_url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE8xZlpidl9SaklyU3VNQzZTYWR3SDFQeE5hV2dpeVBnLTAyWG02V3pmbk0wX3JYNXF2M0VHT1pBd2h5X3YySHVnU2VnRjNDNml0aXhQRnpXbVZOUTRCUVZtZWlfTkU1SjQxcTFkNHRkbw?oc=5",
-          "source_published_date": "2026-06-18",
-          "decision": "no_fresh_item",
-          "change_class": "new_event",
-          "rationale": "2026年6月18日、ソフトバンクのワイモバイルブランドが新スマホ「OPPO Reno15 A」を6月25日に発売すると発表。"
-        }
+        "ソフトバンクグループ、最高益5兆円達成も株価は急落",
+        "ワイモバイル、OPPO Reno15 Aを6月25日に発売"
       ],
       "no_change_checks": [
         {
@@ -824,15 +768,7 @@
       ],
       "new_or_changed_items": [],
       "latest_candidates": [
-        {
-          "topic_id": "earnings_guidance",
-          "title": "三菱自動車、軽乗用EV『eKクロス EV』を一部改良",
-          "source_url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNc0o5M0lrLUp2eVQydV9iUHZIck5XcU5OdFlVSklUcF80Y0M3OTVGeHQxRjhKVGNCeTg3TGQzVFUwTzNDcFB0TzFQNFc0OGJka055LVU2S2VCQUNKZ0kwSEw0b3dnNjg4OGJyVElYejJ4el82YmprWkdFai12OW9CcUNqWEU?oc=5",
-          "source_published_date": "2026-06-18",
-          "decision": "no_fresh_item",
-          "change_class": "material_update",
-          "rationale": "三菱自動車は2026年6月18日に軽乗用EV『eKクロス EV』の一部改良を発表。優しい顔つきのデザイン変更が好評。"
-        }
+        "Honda、QuantumScapeと全固体電池で複数年の共同開発契約"
       ],
       "no_change_checks": [
         {
@@ -1172,33 +1108,9 @@
         }
       ],
       "latest_candidates": [
-        {
-          "topic_id": "fia_regulation_development",
-          "title": "メルセデス、F1モナコGPの再審請求を取り下げ",
-          "source_url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPN2Z6ck1nWlUzcnJOVFlGRnV3ajk3cDBwclRhQUQ4dFM3RGZPVWo0cjFncHZrUFNieGJhZG9kTHlyeS01UHVRRDZ2S2ZxLURaSHkwQWliV0ZwQm1uejJOcm1IcWsyWGtvREhuVXVYZXRPMzFlOXRuYVgzcE5CYlQ1N1AyZngxNEdP?oc=5",
-          "source_published_date": "2026-06-19",
-          "decision": "adopted",
-          "change_class": "new_event",
-          "rationale": "メルセデスは2026年6月19日、モナコGPに関する再審請求を撤回し、ラッセルのペナルティ撤回を諦めたと発表した。。メルセデスがモナコGPの再審請求を撤回し、ラッセルのペナルティ撤回を断念した。。公式結果が確定し、FIAの判断が支持されたことで今後のレース規則運用に影響を与える可能性がある。"
-        },
-        {
-          "topic_id": "fia_regulation_development",
-          "title": "レッドブル、エンジン開発救済措置に不服",
-          "source_url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE00QlhSeXhZbjJsRktWWTlEcXhzbmlWa3FPazdwZlYxYVlDMEhIbEdKRDNyX3pWeE9ycDBZVHNfd25PejVDQlpv?oc=5",
-          "source_published_date": "2026-06-19",
-          "decision": "no_fresh_item",
-          "change_class": "material_update",
-          "rationale": "レッドブルはFIAのエンジン開発救済措置に対し、ライバルより優位である証拠はないと不服を表明した。"
-        },
-        {
-          "topic_id": "fia_regulation_development",
-          "title": "メルセデス、ADUOでのPU追加開発を高評価",
-          "source_url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQUm1ZT2hHWnI1ZG05NHRHb3pROGpQMFpDMjZ5SUVIYU8tbF9IdFF3QmMwTlM0ejN5Rkx6WVZKUXloSDBXbkoyVTRVSkRGLTFscWZFNlZtUjlYdWtaOHcxS3hPSzdHdmFpNEdsbXlJcGlrZGE1bUFxOVhjV2phLUFVTVRKQ2ozVTNtSnlhWEJXRUY3R0x2Q281SHZFVHpjQzd3bmsxdUluTGdILTA0ZGRzaG5GT1c4akgzVEM3ckFTV3Jsdw?oc=5",
-          "source_published_date": "2026-06-17",
-          "decision": "no_fresh_item",
-          "change_class": "material_update",
-          "rationale": "メルセデスはADUO制度によりレッドブル以外もパワーユニットの追加開発が可能な現状を政治的意図なしと評価した。"
-        }
+        "メルセデス、F1モナコGPの再審請求を取り下げ",
+        "レッドブル、エンジン開発救済措置に不服",
+        "メルセデス、ADUOでのPU追加開発を高評価"
       ],
       "no_change_checks": [
         {
@@ -1408,11 +1320,15 @@
         "打ち上げ予定"
       ],
       "freshness_check": "2026-06-19 JSTの直近3日を基準に照合",
-      "published_card_titles": [],
+      "published_card_titles": [
+        "SpaceX、Cursor運営Anysphereを600億ドルで買収へ"
+      ],
       "public_signal_titles": [],
       "public_signal_urls": [],
       "new_or_changed_items": [],
-      "latest_candidates": [],
+      "latest_candidates": [
+        "SpaceX、Cursor運営Anysphereを600億ドルで買収へ"
+      ],
       "no_change_checks": [
         {
           "topic_id": "starship_status",
@@ -1699,15 +1615,7 @@
         }
       ],
       "latest_candidates": [
-        {
-          "topic_id": "prices_wages_boj",
-          "title": "全国コアCPI、2026年5月は前年同月比1.4％上昇",
-          "source_url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPYTVtamxha01xUkg4c1pxUktNajM2YWJCUmh4bXBRbUNsUjZqZ1k3dW1rUlI1VUxOdS1maVlNRWhnMHFRLU1yM2d0RzBJYUIwdGJRS2JCMUFkbWhfbUJ6ckUxSG12NGZuWXYwbXVSejg3OXpKQ3ZyRFcxWlI0QXZWRg?oc=5",
-          "source_published_date": "2026-06-19",
-          "decision": "adopted",
-          "change_class": "new_event",
-          "rationale": "2026年5月の全国コア消費者物価指数は前年同月比1.4％上昇し、4カ月連続で1％台を維持したが、コメ類は価格下落に転じた。。2026年5月の全国コアCPIが前年同月比1.4％上昇し、4カ月連続で1％台を維持したが、コメ類価格が下落に転じた。。物価上昇の持続性や構成品目の変化は日銀の金融政策判断や賃金動向に影響し、日本経済のインフレ見通しに重要な示唆を与える。"
-        }
+        "全国コアCPI、2026年5月は前年同月比1.4％上昇"
       ],
       "no_change_checks": [
         {
@@ -1938,24 +1846,8 @@
         }
       ],
       "latest_candidates": [
-        {
-          "topic_id": "music_release_chart_tieup",
-          "title": "YOASOBI「UNDEAD」MVが1億回再生突破、6月26日に4th EP『THE BOOK for,』リリース決定",
-          "source_url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE1tQmQxbzF0TDBPVWhIbFJMVi13ak5EZGFmemlXV3JJTzRjZ29TUWkwZWtZWFVIOGt3SDNtSFN4RUpZcVlEdm9CcHpEZHE4ZEE3TUN0ZlJpOXJtdkF1eFI4dm5zbm1fR3JOQ01vVU1CNU9GblBoYUhiTUtQc0VVUms?oc=5",
-          "source_published_date": "2026-06-18",
-          "decision": "adopted",
-          "change_class": "new_event",
-          "rationale": "YOASOBIの「UNDEAD」MVが1億回再生を突破。6月26日に4th EP『THE BOOK for,』のリリースが予定されている。。「UNDEAD」MVの再生回数が1億回を突破し、4th EPのリリース日が6月26日に決定した。。大ヒット曲のMV再生回数1億回突破は人気の証明であり、新EPリリースは今後の活動に注目が集まるため重要。"
-        },
-        {
-          "topic_id": "live_tour_performance",
-          "title": "幾田りらソロツアー映像公開、サプライズゲスト登場など語る",
-          "source_url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE1jVjZqeE9YbHVET3d6aEg4NGJtS1N4dHc2UnR1S0hBS01wcDJYSnBVRGJ5WVJ1T2J5aUhPdGktT25sYUd4T29XNkszRXpQRzRvdjFPdjFkLXdNN0MzdXFEV2cwUQ?oc=5",
-          "source_published_date": "2026-06-18",
-          "decision": "no_fresh_item",
-          "change_class": "new_event",
-          "rationale": "幾田りらのソロツアー密着映像が公開され、衣装やサプライズゲスト・anoについて語られている。"
-        }
+        "YOASOBI「UNDEAD」MVが1億回再生突破、6月26日に4th EP『THE BOOK for,』リリース決定",
+        "幾田りらソロツアー映像公開、サプライズゲスト登場など語る"
       ],
       "no_change_checks": [
         {
@@ -2211,9 +2103,7 @@
         "輸出拠点"
       ],
       "freshness_check": "2026-06-19 JSTの直近3日を基準に照合",
-      "published_card_titles": [
-        "全国コアCPI、5月は1.4％上昇し4カ月連続1％台を維持"
-      ],
+      "published_card_titles": [],
       "public_signal_titles": [
         "都区部コアCPI、1.6％上昇で前月から拡大の見込み",
         "日本の5月コアコアCPIは1.8％に鈍化し高止まり局面へ",
@@ -2243,51 +2133,7 @@
         }
       ],
       "latest_candidates": [
-        {
-          "topic_id": "india_macro_policy",
-          "title": "全国コアCPI、5月は1.4％上昇し4カ月連続1％台を維持",
-          "source_url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxPYTVtamxha01xUkg4c1pxUktNajM2YWJCUmh4bXBRbUNsUjZqZ1k3dW1rUlI1VUxOdS1maVlNRWhnMHFRLU1yM2d0RzBJYUIwdGJRS2JCMUFkbWhfbUJ6ckUxSG12NGZuWXYwbXVSejg3OXpKQ3ZyRFcxWlI0QXZWRg?oc=5",
-          "source_published_date": "2026-06-19",
-          "decision": "adopted",
-          "change_class": "new_event",
-          "rationale": "2026年5月の全国コア消費者物価指数（CPI）は前年同月比1.4％上昇し、4カ月連続で1％台の伸びを示した。コメ類の価格は下落に転じた。。5月の全国コアCPIが前年同月比1.4％上昇し、4カ月連続で1％台の伸びを示したこと。。物価上昇率の安定は経済政策や金融政策の方向性に影響し、消費者や企業の経済活動に重要な指標となるため。"
-        },
-        {
-          "topic_id": "india_macro_policy",
-          "title": "都区部コアCPI、1.6％上昇で前月から拡大の見込み",
-          "source_url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQVHA5Zi1rZDJ6VkxmbThFbTFLWTlMQTJ0enlyVlQ3Tzh0OURHS1hTQUxNR0c4b3V1akhTQTZyeEM4VzIyY0VVNDlfTFhBQWoya2x4Z1FGNWhxc0RpeHd0bGpSaGdyWTV0YTVqdk5QTDFKRVczNWFmQk5sQU9VamxYVXNiZnB2UE0?oc=5",
-          "source_published_date": "2026-06-19",
-          "decision": "no_fresh_item",
-          "change_class": "material_update",
-          "rationale": "2026年5月の東京都区部コアCPIは前年同月比1.6％上昇し、前月から上昇幅が拡大する見込みと報じられた。"
-        },
-        {
-          "topic_id": "india_macro_policy",
-          "title": "日本の5月コアコアCPIは1.8％に鈍化し高止まり局面へ",
-          "source_url": "https://news.google.com/rss/articles/CBMidEFVX3lxTFA1Z1l2c1NZdWdtUlZVa3hVS3MxaTJGMi1zeDdVdUQ2ZGFsSnMyQ1FBOTg1Y0sxMUVaSEkxdjF3ZFBHeDFQdjB1OThDd0NTejhXd21YQ0loZ0U2cktZWk5lV1ZJNWplbzJWQnNUNG1CTlpuMUd5?oc=5",
-          "source_published_date": "2026-06-19",
-          "decision": "no_fresh_item",
-          "change_class": "material_update",
-          "rationale": "日本の2026年5月のコアコアCPIは前年同月比1.8％に鈍化し、物価は高止まりの局面に入ったと報じられた。"
-        },
-        {
-          "topic_id": "india_macro_policy",
-          "title": "7月までの米追加利下げを完全織り込み、CPIが雇用統計の影響を消す",
-          "source_url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxNZ3A0ejRQbDVBMVR3LVlpUEhQaF96Y2VyckN3V3M4bXNvQUp1X1V3b2RqWVFLWTdqNS1YWW5jeTZGN0FDMDlQUjJHV3JBcks2cnloQnlDYkVHV3VGSy05SkpFQzJCX3VQMFphbVBpdUNFUThja0Iyb096aWpOV1NHOVR6TGlMYzA?oc=5",
-          "source_published_date": "2026-06-19",
-          "decision": "no_fresh_item",
-          "change_class": "material_update",
-          "rationale": "米国では2026年7月までの追加利下げが市場に完全織り込まれ、CPIが雇用統計の影響を相殺したと報じられた。"
-        },
-        {
-          "topic_id": "vietnam_macro_investment",
-          "title": "「シンチャオ！ふなばし Vietnam Fes 2026」開催決定",
-          "source_url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBkLVhSS2FyS3BCNG1HSGpFLTEwSkJYa3FBNlBXS01SWlhMd1N0b21PNi1HcjR0c1duWVcwMVU4d1JjNllncTdWRGo1WXRqYmIycUNGOE9ZX3VfZ2hhSks0b3VzVS1BWm95cWc?oc=5",
-          "source_published_date": "2026-06-19",
-          "decision": "no_fresh_item",
-          "change_class": "new_event",
-          "rationale": "2026年に船橋市とベトナムをつなぐ国際交流イベント「シンチャオ！ふなばし Vietnam Fes 2026」が開催されることが決定した。"
-        }
+        "インド外貨準備、6月12日週に99.9億ドル減少"
       ],
       "no_change_checks": [
         {
@@ -2545,24 +2391,7 @@
       ],
       "new_or_changed_items": [],
       "latest_candidates": [
-        {
-          "topic_id": "north_america_investment_policy",
-          "title": "TK from 凛として時雨、初の北米ツアー完走",
-          "source_url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFAyRFBvVXpSSXY1bWwyMEU2R2hOcFozWDVnTjlOdmgtV21LNFo3Z2JLSVRPdTN5dS1PMG1ET3RjSFlBdndteHZKeEJZeW9rdmFHbEVBNEJuTVFjREZ3M2hidHNQU0xERVpQTHRBa0d2QzI2S1cxeU5LRWs3elBkRVU?oc=5",
-          "source_published_date": "2026-06-19",
-          "decision": "no_fresh_item",
-          "change_class": "new_event",
-          "rationale": "TK from 凛として時雨が2026年の北米ツアーを完走し、現地での音楽活動を成功させた。"
-        },
-        {
-          "topic_id": "north_america_investment_policy",
-          "title": "フェラーリ・チャレンジ・北アメリカ 第4戦 ラグナ・セカ レース結果",
-          "source_url": "https://news.google.com/rss/articles/CBMickFVX3lxTFAxZDBUNkxNYURUOTBJNFV2LUwzbFdzU0RhMmN2Q0xielZseHdMV0x2Q1VScXIteHR2Sk9qbDhkc2gtYUlDZThlazJwb2FHSFk1ZlE3aVVRUVNVMl93aUhjbTFBM2VQeDNFOUt3TmIzb0R4UQ?oc=5",
-          "source_published_date": "2026-06-19",
-          "decision": "no_fresh_item",
-          "change_class": "new_event",
-          "rationale": "2026年6月19日に開催されたフェラーリ・チャレンジ北アメリカ第4戦のレース1とレース2の結果が報告された。"
-        }
+        "米新規失業保険申請、6月18日週は22.6万件に減少"
       ],
       "no_change_checks": [
         {
@@ -2766,24 +2595,8 @@
         }
       ],
       "latest_candidates": [
-        {
-          "topic_id": "club_roster_staff",
-          "title": "宇都宮ブレックス、新アリーナ基本計画を発表 2030年開業目標",
-          "source_url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1OeTJ1QzBPTVN0NU1uaUw3bi1NUFhEZkJTdEdQTXlnNl9PTXlvX0JRSUUzZVQ5M1d0VzRmVnFsYVMzOWpLUDRaQjB6TDhtOVQ0TWFZTHM2WTFUY1JkbkliSERCZmV6eEZQN3pyQQ?oc=5",
-          "source_published_date": "2026-06-19",
-          "decision": "adopted",
-          "change_class": "new_event",
-          "rationale": "宇都宮ブレックスは2030年の開業を目指し、新アリーナの基本計画を発表しました。収容人数は約1万人を予定しています。。新アリーナの基本計画が公式に発表され、2030年開業を目標とした具体的な収容人数が示されました。。新アリーナの建設はチームの競技環境向上と地域活性化に直結し、ファンやスポンサーにとって重要な進展です。"
-        },
-        {
-          "topic_id": "bleague_games_schedule",
-          "title": "インフロニア B.LEAGUE U18 REGIONAL LEAGUE 2026中地区 開幕",
-          "source_url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE5BcTRZU24tcW9zSG5TYU9SWnNuT0VlRk5UR3JtUDlod3E4WWNxVUJUN1RmekhHSEJtVG1uSmlua0lsb0JJemZiMDRuU2hqckF0bzNMRkUwZw?oc=5",
-          "source_published_date": "2026-06-19",
-          "decision": "no_fresh_item",
-          "change_class": "new_event",
-          "rationale": "シーホース三河が6月20日から始まるU18リーグ中地区に出場予定です。宇都宮ブレックス関連の若手選手動向にも注目。"
-        }
+        "宇都宮ブレックス、新アリーナ基本計画を発表 2030年開業目標",
+        "インフロニア B.LEAGUE U18 REGIONAL LEAGUE 2026中地区 開幕"
       ],
       "no_change_checks": [
         {
