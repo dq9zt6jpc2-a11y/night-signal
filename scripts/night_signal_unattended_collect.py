@@ -127,6 +127,10 @@ PUBLIC_COPY_REPLACEMENTS = [
         "今後の変化が重要となる",
     ),
 ]
+SUMMARY_LABEL_RE = re.compile(r"(?:変更点|重要性|確認事実|未確定点)\s*[:：]")
+GENERIC_IMPORTANCE_RE = re.compile(
+    r"重要更新として一覧に残す|変化を広めに把握|関連テーマは|出典日付は"
+)
 PUBLIC_TERM_REPLACEMENTS = {
     "位置づけ": "意味",
     "競争軸": "競争の焦点",
@@ -150,6 +154,76 @@ def reader_facing_text(value: Any, limit: int = 1600) -> str:
         if term in text:
             text = text.replace(term, PUBLIC_TERM_REPLACEMENTS.get(term, ""))
     return compact_text(text, limit)
+
+
+def useful_fact(fact: str, category_label: str) -> bool:
+    text = reader_facing_text(fact, 500)
+    if len(text) < 18:
+        return False
+    if GENERIC_IMPORTANCE_RE.search(text):
+        return False
+    if category_label and f"{category_label}の重要更新として確認" in text:
+        return False
+    return True
+
+
+def useful_importance(value: str) -> bool:
+    text = reader_facing_text(value, 700)
+    return bool(text) and not GENERIC_IMPORTANCE_RE.search(text)
+
+
+def natural_detail_summary(
+    *,
+    summary: str,
+    detail: str,
+    what_changed: str,
+    why_it_matters: str,
+    facts: list[str],
+    limits_or_unknowns: str,
+    category_label: str,
+) -> str:
+    existing = reader_facing_text(detail, 2600)
+    if len(existing) >= 280 and not SUMMARY_LABEL_RE.search(existing):
+        return existing
+
+    lead = reader_facing_text(what_changed or summary or existing, 700)
+    if lead and not lead.endswith("。"):
+        lead = f"{lead}。"
+
+    useful_facts = [
+        reader_facing_text(fact, 500)
+        for fact in facts
+        if useful_fact(fact, category_label)
+    ][:3]
+    fact_sentence = ""
+    if useful_facts:
+        joined = "、".join(fact.rstrip("。") for fact in useful_facts)
+        fact_sentence = f"確認できた点は、{joined}。"
+
+    importance_sentence = ""
+    if useful_importance(why_it_matters):
+        importance = reader_facing_text(why_it_matters, 700).rstrip("。")
+        importance_sentence = f"{importance}。"
+
+    limits_sentence = ""
+    limits = reader_facing_text(limits_or_unknowns, 700)
+    if limits:
+        limits_sentence = limits if limits.endswith("。") else f"{limits}。"
+
+    composed = compact_text(
+        " ".join(
+            part
+            for part in (
+                lead,
+                fact_sentence,
+                importance_sentence,
+                limits_sentence,
+            )
+            if part
+        ),
+        2600,
+    )
+    return composed or existing
 
 
 def page_text(raw: bytes, content_type: str) -> tuple[str, str]:
@@ -541,7 +615,11 @@ silently drop potentially important recent evidence. Routine background older
 than the window belongs only in no_change_summary. If evidence is insufficient,
 return empty arrays and explain what was checked. Never invent a date, number,
 source, or certainty. Public fields must explain the event itself and must not
-mention research, collection, monitoring, selection, or publication procedure."""
+mention research, collection, monitoring, selection, or publication procedure.
+detail_summary must be one natural Japanese paragraph. Do not use labels such
+as 変更点, 重要性, 確認事実, or 未確定点, and do not say that an item is kept in
+the list or monitored broadly. Include concrete facts, why the change matters,
+and remaining uncertainty without repeating the same sentence."""
 
 def category_prompt(
     category: dict[str, Any],
@@ -691,32 +769,15 @@ def normalize_result(
                 ),
                 1000,
             )
-        if len(detail) < 280:
-            detail = compact_text(
-                " ".join(
-                    value
-                    for value in (
-                        detail,
-                        f"変更点: {what_changed}" if what_changed else "",
-                        (
-                            f"重要性: {why_it_matters}"
-                            if why_it_matters
-                            else ""
-                        ),
-                        (
-                            "確認事実: " + " / ".join(facts)
-                            if facts
-                            else ""
-                        ),
-                        (
-                            f"未確定点: {limits_or_unknowns}"
-                            if limits_or_unknowns
-                            else ""
-                        ),
-                    )
-                    if value
-                ),
-                2600,
+        if len(detail) < 280 or SUMMARY_LABEL_RE.search(detail):
+            detail = natural_detail_summary(
+                summary=summary,
+                detail=detail,
+                what_changed=what_changed,
+                why_it_matters=why_it_matters,
+                facts=facts,
+                limits_or_unknowns=limits_or_unknowns,
+                category_label=str(category.get("label", "")),
             )
         sources = clean_sources(item.get("sources"), records_by_url)
         topic_value = str(item.get("topic_value_class", ""))
@@ -1101,6 +1162,9 @@ def self_test() -> None:
     normalized = normalize_result(raw, category, "2099-01-03", records)
     if len(normalized["items"]) != 1:
         fail("normalization self-test lost a valid item")
+    detail_summary = normalized["items"][0]["detail_summary"]
+    if SUMMARY_LABEL_RE.search(detail_summary) or GENERIC_IMPORTANCE_RE.search(detail_summary):
+        fail("normalization created label-heavy or internal detail copy")
     raw["items"][0]["sources"] = [{"url": "https://unverified.example/"}]
     if normalize_result(raw, category, "2099-01-03", records)["items"]:
         fail("normalization accepted an unverified source")

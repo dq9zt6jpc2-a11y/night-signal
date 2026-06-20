@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -26,6 +27,10 @@ TOPIC_VALUE_CLASS_MAP = {
     "macro_policy_data": "market_or_financial_impact",
     "roster_change": "operational_status_change",
 }
+SUMMARY_LABEL_RE = re.compile(r"(?:変更点|重要性|確認事実|未確定点)\s*[:：]")
+GENERIC_IMPORTANCE_RE = re.compile(
+    r"重要更新として一覧に残す|変化を広めに把握|関連テーマは|出典日付は"
+)
 
 
 def fail(message: str) -> None:
@@ -36,6 +41,70 @@ def fail(message: str) -> None:
 def topic_value_class(value: Any) -> str:
     normalized = str(value)
     return TOPIC_VALUE_CLASS_MAP.get(normalized, normalized)
+
+
+def compact_text(value: Any, limit: int = 1600) -> str:
+    return " ".join(str(value).split())[:limit]
+
+
+def useful_fact(fact: Any, category: str) -> bool:
+    text = compact_text(fact, 500)
+    if len(text) < 18:
+        return False
+    if GENERIC_IMPORTANCE_RE.search(text):
+        return False
+    if category and f"{category}の重要更新として確認" in text:
+        return False
+    return True
+
+
+def useful_importance(value: Any) -> bool:
+    text = compact_text(value, 700)
+    return bool(text) and not GENERIC_IMPORTANCE_RE.search(text)
+
+
+def canonical_detail_summary(category: str, item: dict[str, Any]) -> str:
+    existing = compact_text(item.get("detail_summary", ""), 2600)
+    if len(existing) >= 280 and not SUMMARY_LABEL_RE.search(existing):
+        return existing
+
+    lead = compact_text(item.get("what_changed") or item.get("summary") or existing, 700)
+    if lead and not lead.endswith("。"):
+        lead = f"{lead}。"
+
+    facts = [
+        compact_text(fact, 500)
+        for fact in item.get("confirmed_facts", [])
+        if useful_fact(fact, category)
+    ][:3]
+    fact_sentence = ""
+    if facts:
+        fact_sentence = "確認できた点は、" + "、".join(
+            fact.rstrip("。") for fact in facts
+        ) + "。"
+
+    importance_sentence = ""
+    if useful_importance(item.get("why_it_matters", "")):
+        importance = compact_text(item.get("why_it_matters", ""), 700).rstrip("。")
+        importance_sentence = f"{importance}。"
+
+    limits = compact_text(item.get("limits_or_unknowns", ""), 700)
+    limits_sentence = limits if not limits or limits.endswith("。") else f"{limits}。"
+
+    composed = compact_text(
+        " ".join(
+            part
+            for part in (
+                lead,
+                fact_sentence,
+                importance_sentence,
+                limits_sentence,
+            )
+            if part
+        ),
+        2600,
+    )
+    return composed or existing
 
 
 def read_bundle(path: Path) -> dict[str, Any]:
@@ -706,7 +775,7 @@ def item_card(
                 }
                 for source in item["sources"]
             ],
-            "summary": str(item["detail_summary"]),
+            "summary": canonical_detail_summary(category, item),
             "summary_basis": {
                 "what_changed": str(item["what_changed"]),
                 "why_it_matters": str(item["why_it_matters"]),
@@ -850,6 +919,26 @@ def import_bundle(issue_date: str, bundle_path: Path, state_root: Path) -> dict[
 
 
 def self_test() -> None:
+    summary = canonical_detail_summary(
+        "Honda",
+        {
+            "summary": "HondaがQuantumScapeと全固体電池の共同開発で合意した。",
+            "detail_summary": (
+                "変更点: HondaがQuantumScapeと共同開発で合意した。 "
+                "重要性: Hondaの変化を広めに把握するため、重要更新として一覧に残す。"
+            ),
+            "what_changed": "HondaがQuantumScapeと全固体リチウム金属電池の複数年共同開発で合意した。",
+            "why_it_matters": "EV戦略の見直しが続く中で、次世代電池の技術選択と量産可能性を確認する材料になる。",
+            "confirmed_facts": [
+                "QuantumScapeとHondaが全固体電池の複数年共同開発で合意した。",
+                "QuantumScape株は発表後に上昇した。",
+                "共同開発の追加条件や量産時期はまだ確認対象として残る。",
+            ],
+            "limits_or_unknowns": "追加条件、影響範囲、続報の有無は今後の確認対象。",
+        },
+    )
+    if SUMMARY_LABEL_RE.search(summary) or GENERIC_IMPORTANCE_RE.search(summary):
+        fail("canonical detail summary kept label-heavy or internal copy")
     if no_change_candidate("OpenAI", "product_release", "2099-01-01", "https://openai.com/")["change_class"] != "background_only":
         fail("no-change candidate generation failed")
     task = {

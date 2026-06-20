@@ -220,8 +220,6 @@ def render_sources(sources: list[Any], allow_multiple: bool) -> str:
 
 
 def render_information_basis(summary: str, basis: dict[str, Any]) -> str:
-    what_changed = html.escape(required_str(basis, "what_changed"))
-    why_it_matters = html.escape(required_str(basis, "why_it_matters"))
     limits = html.escape(required_str(basis, "limits_or_unknowns"))
     facts = [
         f"        <li>{html.escape(str(fact).strip())}</li>"
@@ -232,8 +230,6 @@ def render_information_basis(summary: str, basis: dict[str, Any]) -> str:
     return f"""      <h2>要点と背景</h2>
       <div class="article-summary">
         <p>{html.escape(summary)}</p>
-        <p>{what_changed}</p>
-        <p>{why_it_matters}</p>
         <p class="source-dates">確認日付: {dates}</p>
       </div>
 
