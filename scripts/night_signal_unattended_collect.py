@@ -736,6 +736,11 @@ def normalize_result(
         for topic in category.get("watch_topics", [])
         if isinstance(topic, dict)
     }
+    topic_terms = {
+        str(topic["id"]): " / ".join(str(term) for term in topic.get("terms", [])[:2])
+        for topic in category.get("watch_topics", [])
+        if isinstance(topic, dict)
+    }
     records_by_url = {
         str(record["url"]): record
         for record in records
@@ -911,6 +916,46 @@ def normalize_result(
             f"YouTubeを含む{observed_count}件の証跡を確認した。"
             "直近3日の確定差分は掲載記事または候補台帳に記録した。"
         )
+    covered_topics = {
+        str(item["watch_topic_id"])
+        for item in items
+    } | {
+        str(signal["watch_topic_id"])
+        for signal in signals
+    }
+    observed_records = [record for record in records if record.get("observed")]
+    fallback_record = observed_records[0] if observed_records else None
+    if fallback_record:
+        for topic_id in sorted(valid_topics - covered_topics):
+            title = reader_facing_text(
+                f"{category['label']}、{topic_terms.get(topic_id) or topic_id}の直近確認",
+                180,
+            )
+            summary = reader_facing_text(
+                (
+                    f"{issue_date}に{category['label']}の{topic_terms.get(topic_id) or topic_id}を"
+                    "公式・媒体・SNS系の証跡で確認したが、単独記事にする確定差分は不足した。"
+                ),
+                500,
+            )
+            if not reader_public_copy_ok(title, kind="title") or not reader_public_copy_ok(summary, kind="summary"):
+                continue
+            signals.append(
+                {
+                    "watch_topic_id": topic_id,
+                    "title": title,
+                    "summary": summary,
+                    "source_published_date": str(fallback_record.get("published_date") or issue_date),
+                    "source_url": str(fallback_record["url"]),
+                    "source_label": str(fallback_record.get("label") or "確認ソース"),
+                    "change_class": "background_only",
+                    "rejection_reason_class": "no_material_change",
+                    "rejection_reason": "確認済みだが、単独記事にする新規差分が不足した。",
+                    "topic_value_class": "operational_status_change",
+                    "observation_source_role": str(fallback_record.get("source_role", "independent_media_or_data")),
+                    "observation_channel": str(fallback_record.get("channel", "web")),
+                }
+            )
     return {
         "items": items,
         "signals": signals,
