@@ -953,8 +953,24 @@ def validate(issue_date: str) -> None:
         fail("stale cards found: " + "; ".join(stale[:8]))
     if label_failures:
         fail("cards missing 今日/昨日/一昨日 freshness labels: " + "; ".join(label_failures[:8]))
-    # Publication volume is determined by adopted material changes in the
-    # coverage manifest; requiring filler cards would conflict with that rule.
+    if effective_on_or_after(COVERAGE_CONTRACT, "rolling_display_cards_effective_date", issue_dt):
+        display_cards = normal_card_blocks(root_html)
+        minimum_display_cards = int(COVERAGE_CONTRACT.get("minimum_rolling_display_cards", 0))
+        if len(display_cards) < minimum_display_cards:
+            fail(f"rolling three-day display has too few cards: {len(display_cards)} < {minimum_display_cards}")
+        expected_dates = {
+            issue_dt.fromordinal(issue_dt.toordinal() - offset).isoformat()
+            for offset in range(3)
+        }
+        visible_dates = {
+            date
+            for card in display_cards
+            for date in card_dates(card)
+            if date in expected_dates
+        }
+        missing_dates = sorted(expected_dates - visible_dates)
+        if missing_dates:
+            fail("rolling three-day display missing dates: " + ", ".join(missing_dates))
 
     validate_category_sections(root_html)
     validate_unique_detail_links("root page", root_html)
