@@ -172,6 +172,10 @@ def useful_importance(value: str) -> bool:
     return bool(text) and not GENERIC_IMPORTANCE_RE.search(text)
 
 
+def reader_public_copy_ok(text: str, *, kind: str) -> bool:
+    return not state_contract.public_copy_violations(text, kind=kind)
+
+
 def natural_detail_summary(
     *,
     summary: str,
@@ -784,6 +788,11 @@ def normalize_result(
         if (
             topic not in valid_topics
             or not title
+            or not reader_public_copy_ok(title, kind="title")
+            or not reader_public_copy_ok(summary, kind="summary")
+            or not reader_public_copy_ok(detail, kind="summary")
+            or not reader_public_copy_ok(what_changed, kind="summary")
+            or not reader_public_copy_ok(why_it_matters, kind="summary")
             or title in seen_titles
             or len(summary) < 80
             or len(detail) < 220
@@ -833,6 +842,7 @@ def normalize_result(
         if (
             topic not in valid_topics
             or not title
+            or not reader_public_copy_ok(title, kind="title")
             or title in seen_titles
             or not record
             or not valid_date(signal.get("source_published_date"), issue_date)
@@ -855,6 +865,8 @@ def normalize_result(
                 record.get("excerpt") or record.get("evidence") or title,
                 1200,
             )
+        if not reader_public_copy_ok(signal_summary, kind="summary"):
+            continue
         rejection_reason = reader_facing_text(
             signal.get("rejection_reason", ""),
             600,
