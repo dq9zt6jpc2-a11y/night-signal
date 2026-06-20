@@ -2795,12 +2795,35 @@
           "claim": "2026年6月18日、OpenAIが日本でChatGPT内広告表示を開始し、電通や博報堂が仲介役を務めると報じられた。",
           "claim_type": "reported_direction",
           "source_state": "reported_update"
+        },
+        {
+          "claim": "ChatGPTのAIアシスタント市場シェアが46.4%と報じられ、50%を下回った。",
+          "claim_type": "numeric",
+          "source_state": "published_value"
+        },
+        {
+          "claim": "ChatGPTはなお11億人超の月間利用者を持つと報じられている。",
+          "claim_type": "numeric",
+          "source_state": "published_value"
+        },
+        {
+          "claim": "Geminiは27.7%、Claudeは10.3%まで伸びたと報じられている。",
+          "claim_type": "numeric",
+          "source_state": "published_value"
         }
       ],
-      "discovery_findings": [],
-      "evidence_summary": "OpenAIは2026年6月20日、次世代モデルGPT-5.6を来週投入予定と報じられ、日本での広告事業も本格的に開始した。。OpenAIがGPT-5.6モデルを来週投入予定とし、日本での広告事業を本格的に開始した。。新モデル投入と広告事業開始はOpenAIの技術進化と収益拡大を示し、日本市場での影響力強化につながる。 2026年6月18日、OpenAIが日本でChatGPT内広告表示を開始し、電通や博報堂が仲介役を務めると報じられた。",
+      "discovery_findings": [
+        {
+          "published_date": "2026-06-18",
+          "source_url": "https://www.techradar.com/pro/the-end-of-the-ai-honeymoon-chatgpt-market-share-falls-below-50-percent-for-first-time",
+          "suggested_watch_topic_id": "product_release",
+          "summary": "Sensor Tower系の集計として、ChatGPTのAIアシスタント市場シェアが46.4%まで低下し、初めて50%を割ったと報じられた。月間利用者は11億人超を維持する一方、Geminiが27.7%、Claudeが10.3%まで伸び、OpenAIの課題は利用者規模から競争防衛へ移っている。",
+          "title": "ChatGPT、AIアシスタント市場シェアが50%を下回る"
+        }
+      ],
+      "evidence_summary": "Sensor Tower系の集計として、ChatGPTのAIアシスタント市場シェアが46.4%まで低下し、初めて50%を割ったと報じられた。月間利用者は11億人超を維持する一方、Geminiが27.7%、Claudeが10.3%まで伸び、OpenAIの課題は利用者規模から競争防衛へ移っている。",
       "observed_at_jst": "2026-06-20T22:29:59+09:00",
-      "published_date": "2026-06-20",
+      "published_date": "2026-06-18",
       "slot_state": "observed_live",
       "source_role": "independent_media_or_data",
       "source_target_results": [
@@ -3052,6 +3075,36 @@
           "published_date": "2026-06-19",
           "slot_state": "observed_live",
           "url": "https://realsound.jp",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "channel": "web",
+          "checked_at_jst": "2026-06-20T23:45:00+09:00",
+          "evidence_summary": "Sensor Tower系の集計として、ChatGPTのAIアシスタント市場シェアが46.4%まで低下し、初めて50%を割ったと報じられた。月間利用者は11億人超を維持する一方、Geminiが27.7%、Claudeが10.3%まで伸び、OpenAIの課題は利用者規模から競争防衛へ移っている。",
+          "label": "TechRadar",
+          "published_date": "2026-06-18",
+          "slot_state": "observed_live",
+          "url": "https://www.techradar.com/pro/the-end-of-the-ai-honeymoon-chatgpt-market-share-falls-below-50-percent-for-first-time",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "channel": "web",
+          "checked_at_jst": "2026-06-20T23:45:00+09:00",
+          "evidence_summary": "Sensor Tower系の集計として、ChatGPTのAIアシスタント市場シェアが46.4%まで低下し、初めて50%を割ったと報じられた。月間利用者は11億人超を維持する一方、Geminiが27.7%、Claudeが10.3%まで伸び、OpenAIの課題は利用者規模から競争防衛へ移っている。",
+          "label": "Times of India",
+          "published_date": "2026-06-18",
+          "slot_state": "observed_live",
+          "url": "https://timesofindia.indiatimes.com/technology/tech-news/chatgpt-share-falls-below-50-for-the-first-time-ever-here-are-the-ai-chatbots-that-have-taken-away-share-from-sam-altmans-company/articleshow/131795132.cms",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "channel": "web",
+          "checked_at_jst": "2026-06-20T23:45:00+09:00",
+          "evidence_summary": "Sensor Tower系の集計として、ChatGPTのAIアシスタント市場シェアが46.4%まで低下し、初めて50%を割ったと報じられた。月間利用者は11億人超を維持する一方、Geminiが27.7%、Claudeが10.3%まで伸び、OpenAIの課題は利用者規模から競争防衛へ移っている。",
+          "label": "Economic Times",
+          "published_date": "2026-06-18",
+          "slot_state": "observed_live",
+          "url": "https://m.economictimes.com/tech/technology/chatgpts-market-share-dips-below-50-key-ai-trends-to-know/articleshow/131792884.cms",
           "verification_method": "reviewed_live_web"
         }
       ],
@@ -3591,11 +3644,35 @@
     {
       "category": "OpenAI",
       "channel": "web",
-      "claim_atoms": [],
-      "discovery_findings": [],
-      "evidence_summary": "2026年6月18日以降、OpenAIは日本市場での広告事業を本格化させ、ChatGPT内に広告表示を導入した。これらは収益基盤強化の一環であり、GPT-5.6の投入準備も進行中である。過去の情報では新モデルの詳細性能や広告効果の具体的な影響は未発表のままである。",
+      "claim_atoms": [
+        {
+          "claim": "Noam ShazeerがGoogleからOpenAIへ移ると報じられた。",
+          "claim_type": "status",
+          "source_state": "confirmed_status"
+        },
+        {
+          "claim": "ShazeerはTransformer論文の主要著者で、Character.AI創業後にGoogleでGeminiを率いていた。",
+          "claim_type": "status",
+          "source_state": "confirmed_status"
+        },
+        {
+          "claim": "John JumperはGoogle DeepMindからAnthropicへ移ると報じられ、トップAI人材の移動が同時に起きている。",
+          "claim_type": "status",
+          "source_state": "confirmed_status"
+        }
+      ],
+      "discovery_findings": [
+        {
+          "published_date": "2026-06-18",
+          "source_url": "https://www.axios.com/2026/06/18/noam-shazeer-google-openai-characterai",
+          "suggested_watch_topic_id": "talent_leadership",
+          "summary": "Transformer論文の主要著者でGemini共同リードだったNoam ShazeerがGoogleを離れてOpenAIへ移ると報じられた。同時期にAlphaFoldのJohn JumperはAnthropicへ移る見通しで、モデル性能だけでなく、少数の中核研究者を確保できるかがOpenAI、Google、Anthropicの主な争点になっている。",
+          "title": "OpenAI、Noam Shazeer獲得でAI人材争奪が再燃"
+        }
+      ],
+      "evidence_summary": "Transformer論文の主要著者でGemini共同リードだったNoam ShazeerがGoogleを離れてOpenAIへ移ると報じられた。同時期にAlphaFoldのJohn JumperはAnthropicへ移る見通しで、モデル性能だけでなく、少数の中核研究者を確保できるかがOpenAI、Google、Anthropicの主な争点になっている。",
       "observed_at_jst": "2026-06-20T22:29:59+09:00",
-      "published_date": null,
+      "published_date": "2026-06-18",
       "slot_state": "observed_live",
       "source_role": "independent_media_or_data",
       "source_target_results": [
@@ -3847,6 +3924,36 @@
           "published_date": "2026-06-19",
           "slot_state": "observed_live",
           "url": "https://realsound.jp",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "channel": "web",
+          "checked_at_jst": "2026-06-20T23:45:00+09:00",
+          "evidence_summary": "Transformer論文の主要著者でGemini共同リードだったNoam ShazeerがGoogleを離れてOpenAIへ移ると報じられた。同時期にAlphaFoldのJohn JumperはAnthropicへ移る見通しで、モデル性能だけでなく、少数の中核研究者を確保できるかがOpenAI、Google、Anthropicの主な争点になっている。",
+          "label": "Axios",
+          "published_date": "2026-06-18",
+          "slot_state": "observed_live",
+          "url": "https://www.axios.com/2026/06/18/noam-shazeer-google-openai-characterai",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "channel": "web",
+          "checked_at_jst": "2026-06-20T23:45:00+09:00",
+          "evidence_summary": "Transformer論文の主要著者でGemini共同リードだったNoam ShazeerがGoogleを離れてOpenAIへ移ると報じられた。同時期にAlphaFoldのJohn JumperはAnthropicへ移る見通しで、モデル性能だけでなく、少数の中核研究者を確保できるかがOpenAI、Google、Anthropicの主な争点になっている。",
+          "label": "MarketWatch",
+          "published_date": "2026-06-18",
+          "slot_state": "observed_live",
+          "url": "https://www.marketwatch.com/story/google-shake-up-highlights-how-human-brains-may-be-the-scarcest-ai-resource-of-all-1ea41ac7",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "channel": "web",
+          "checked_at_jst": "2026-06-20T23:45:00+09:00",
+          "evidence_summary": "Transformer論文の主要著者でGemini共同リードだったNoam ShazeerがGoogleを離れてOpenAIへ移ると報じられた。同時期にAlphaFoldのJohn JumperはAnthropicへ移る見通しで、モデル性能だけでなく、少数の中核研究者を確保できるかがOpenAI、Google、Anthropicの主な争点になっている。",
+          "label": "Business Insider",
+          "published_date": "2026-06-18",
+          "slot_state": "observed_live",
+          "url": "https://www.businessinsider.com/alphafold-john-jumper-leaves-google-deepmind-anthropic-demis-hassabis-nobel-2026-6",
           "verification_method": "reviewed_live_web"
         }
       ],
@@ -9645,11 +9752,35 @@
     {
       "category": "SpaceX",
       "channel": "web",
-      "claim_atoms": [],
-      "discovery_findings": [],
-      "evidence_summary": "2026年6月18日から20日の間に、SpaceXの公式サイトやSNSでの新たな打ち上げ予定や技術的な更新情報は確認できなかった。ドラゴン宇宙船のISS関連の公式発表も見当たらず、Starshipの試験飛行やFAA関連の進展も報告されていない。",
+      "claim_atoms": [
+        {
+          "claim": "SpaceXが200億ドル規模の社債発行を検討していると報じられた。",
+          "claim_type": "numeric",
+          "source_state": "published_value"
+        },
+        {
+          "claim": "社債は2027年期限の200億ドルブリッジローン借り換えに使われる可能性がある。",
+          "claim_type": "numeric",
+          "source_state": "published_value"
+        },
+        {
+          "claim": "Moody’sはSpaceXにBaa1を付与し、投資適格として扱われる。",
+          "claim_type": "numeric",
+          "source_state": "published_value"
+        }
+      ],
+      "discovery_findings": [
+        {
+          "published_date": "2026-06-18",
+          "source_url": "https://www.barrons.com/articles/spacex-stock-price-losing-streak-730ebe94",
+          "suggested_watch_topic_id": "business_contracts",
+          "summary": "SpaceXが200億ドル規模の社債発行を検討し、既存の200億ドルブリッジローンの借り換えに使う可能性が報じられた。Moody’sはBaa1を付与し、投資適格として扱われるため、IPO後の株式資金だけでなく社債市場もAI・Starlink・Starship投資の資金源になり始めている。",
+          "title": "SpaceX、200億ドル社債と投資適格格付けでAI資金調達を広げる"
+        }
+      ],
+      "evidence_summary": "SpaceXが200億ドル規模の社債発行を検討し、既存の200億ドルブリッジローンの借り換えに使う可能性が報じられた。Moody’sはBaa1を付与し、投資適格として扱われるため、IPO後の株式資金だけでなく社債市場もAI・Starlink・Starship投資の資金源になり始めている。",
       "observed_at_jst": "2026-06-20T22:29:59+09:00",
-      "published_date": null,
+      "published_date": "2026-06-18",
       "slot_state": "observed_live",
       "source_role": "independent_media_or_data",
       "source_target_results": [
@@ -9921,6 +10052,36 @@
           "published_date": "2026-06-19",
           "slot_state": "observed_live",
           "url": "https://natalie.mu",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "channel": "web",
+          "checked_at_jst": "2026-06-20T23:45:00+09:00",
+          "evidence_summary": "SpaceXが200億ドル規模の社債発行を検討し、既存の200億ドルブリッジローンの借り換えに使う可能性が報じられた。Moody’sはBaa1を付与し、投資適格として扱われるため、IPO後の株式資金だけでなく社債市場もAI・Starlink・Starship投資の資金源になり始めている。",
+          "label": "Barron’s",
+          "published_date": "2026-06-18",
+          "slot_state": "observed_live",
+          "url": "https://www.barrons.com/articles/spacex-stock-price-losing-streak-730ebe94",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "channel": "web",
+          "checked_at_jst": "2026-06-20T23:45:00+09:00",
+          "evidence_summary": "SpaceXが200億ドル規模の社債発行を検討し、既存の200億ドルブリッジローンの借り換えに使う可能性が報じられた。Moody’sはBaa1を付与し、投資適格として扱われるため、IPO後の株式資金だけでなく社債市場もAI・Starlink・Starship投資の資金源になり始めている。",
+          "label": "Investor’s Business Daily",
+          "published_date": "2026-06-18",
+          "slot_state": "observed_live",
+          "url": "https://www.investors.com/news/spacex-stock-price-target-lunar-economy-spcx-supply-demand-imbalance-relativity-space-nasa-mars/",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "channel": "web",
+          "checked_at_jst": "2026-06-20T23:45:00+09:00",
+          "evidence_summary": "SpaceXが200億ドル規模の社債発行を検討し、既存の200億ドルブリッジローンの借り換えに使う可能性が報じられた。Moody’sはBaa1を付与し、投資適格として扱われるため、IPO後の株式資金だけでなく社債市場もAI・Starlink・Starship投資の資金源になり始めている。",
+          "label": "Wall Street Journal",
+          "published_date": "2026-06-18",
+          "slot_state": "observed_live",
+          "url": "https://www.wsj.com/livecoverage/stock-market-today-dow-sp-500-nasdaq-06-18-2026/card/spacex-is-officially-investment-grade-egF7QqYTk7ZVJt6Kr3qg",
           "verification_method": "reviewed_live_web"
         }
       ],
@@ -10215,11 +10376,35 @@
     {
       "category": "SpaceX",
       "channel": "web",
-      "claim_atoms": [],
-      "discovery_findings": [],
-      "evidence_summary": "2026年6月18日から20日の間に、SpaceXの公式サイトやSNSでの新たな打ち上げ予定や技術的な更新情報は確認できなかった。ドラゴン宇宙船のISS関連の公式発表も見当たらず、Starshipの試験飛行やFAA関連の進展も報告されていない。",
+      "claim_atoms": [
+        {
+          "claim": "SpaceXとTeslaの統合観測について投資家が利点と課題を議論していると報じられた。",
+          "claim_type": "status",
+          "source_state": "confirmed_status"
+        },
+        {
+          "claim": "AreteはSpaceX株に401ドル目標、Zephirinは310ドル、Oppenheimerは250ドル目標を示したと報じられた。",
+          "claim_type": "numeric",
+          "source_state": "published_value"
+        },
+        {
+          "claim": "SpaceXオプション取引の開始が市場イベントとして注目されている。",
+          "claim_type": "status",
+          "source_state": "confirmed_status"
+        }
+      ],
+      "discovery_findings": [
+        {
+          "published_date": "2026-06-18",
+          "source_url": "https://www.businessinsider.com/tesla-spacex-merger-explained-investors-challenges-2026-6",
+          "suggested_watch_topic_id": "ai_mna_compute",
+          "summary": "SpaceX上場後、Teslaとの統合観測やAI事業との一体運営をめぐる見方が強まり、Areteは401ドル、Zephirinは310ドル、Oppenheimerは250ドルへ目標株価を示したと報じられた。Starlink V3、Cursor買収、Tesla側のAI・ロボティクス投資が同じ投資テーマとして読まれ始めている。",
+          "title": "SpaceX、Tesla統合観測と401ドル目標で市場評価が膨らむ"
+        }
+      ],
+      "evidence_summary": "SpaceX上場後、Teslaとの統合観測やAI事業との一体運営をめぐる見方が強まり、Areteは401ドル、Zephirinは310ドル、Oppenheimerは250ドルへ目標株価を示したと報じられた。Starlink V3、Cursor買収、Tesla側のAI・ロボティクス投資が同じ投資テーマとして読まれ始めている。",
       "observed_at_jst": "2026-06-20T22:29:59+09:00",
-      "published_date": null,
+      "published_date": "2026-06-18",
       "slot_state": "observed_live",
       "source_role": "independent_media_or_data",
       "source_target_results": [
@@ -10491,6 +10676,36 @@
           "published_date": "2026-06-19",
           "slot_state": "observed_live",
           "url": "https://natalie.mu",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "channel": "web",
+          "checked_at_jst": "2026-06-20T23:45:00+09:00",
+          "evidence_summary": "SpaceX上場後、Teslaとの統合観測やAI事業との一体運営をめぐる見方が強まり、Areteは401ドル、Zephirinは310ドル、Oppenheimerは250ドルへ目標株価を示したと報じられた。Starlink V3、Cursor買収、Tesla側のAI・ロボティクス投資が同じ投資テーマとして読まれ始めている。",
+          "label": "Business Insider",
+          "published_date": "2026-06-18",
+          "slot_state": "observed_live",
+          "url": "https://www.businessinsider.com/tesla-spacex-merger-explained-investors-challenges-2026-6",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "channel": "web",
+          "checked_at_jst": "2026-06-20T23:45:00+09:00",
+          "evidence_summary": "SpaceX上場後、Teslaとの統合観測やAI事業との一体運営をめぐる見方が強まり、Areteは401ドル、Zephirinは310ドル、Oppenheimerは250ドルへ目標株価を示したと報じられた。Starlink V3、Cursor買収、Tesla側のAI・ロボティクス投資が同じ投資テーマとして読まれ始めている。",
+          "label": "Investor’s Business Daily",
+          "published_date": "2026-06-18",
+          "slot_state": "observed_live",
+          "url": "https://www.investors.com/news/spacex-stock-price-target-lunar-economy-spcx-supply-demand-imbalance-relativity-space-nasa-mars/",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "channel": "web",
+          "checked_at_jst": "2026-06-20T23:45:00+09:00",
+          "evidence_summary": "SpaceX上場後、Teslaとの統合観測やAI事業との一体運営をめぐる見方が強まり、Areteは401ドル、Zephirinは310ドル、Oppenheimerは250ドルへ目標株価を示したと報じられた。Starlink V3、Cursor買収、Tesla側のAI・ロボティクス投資が同じ投資テーマとして読まれ始めている。",
+          "label": "MarketWatch",
+          "published_date": "2026-06-18",
+          "slot_state": "observed_live",
+          "url": "https://www.marketwatch.com/story/options-traders-are-bracing-for-a-very-busy-week-with-june-triple-witching-and-launch-of-spacex-contracts-on-deck-b38fbf62",
           "verification_method": "reviewed_live_web"
         }
       ],
@@ -17871,6 +18086,82 @@
       "summary": "2026-06-20に宇都宮ブレックスのpress / youtubeを公式・媒体・SNS系の証跡で確認したが、単独記事にする確定差分は不足した。",
       "title": "宇都宮ブレックス、press / youtubeの直近確認",
       "watch_topic_id": "media_press_video"
+    },
+    {
+      "category": "OpenAI",
+      "change_class": "material_update",
+      "counter_evidence_checked": true,
+      "material_facts": [
+        "ChatGPTのAIアシスタント市場シェアが46.4%と報じられ、50%を下回った。",
+        "ChatGPTはなお11億人超の月間利用者を持つと報じられている。",
+        "Geminiは27.7%、Claudeは10.3%まで伸びたと報じられている。"
+      ],
+      "source_published_date": "2026-06-18",
+      "source_urls": [
+        "https://www.techradar.com/pro/the-end-of-the-ai-honeymoon-chatgpt-market-share-falls-below-50-percent-for-first-time",
+        "https://timesofindia.indiatimes.com/technology/tech-news/chatgpt-share-falls-below-50-for-the-first-time-ever-here-are-the-ai-chatbots-that-have-taken-away-share-from-sam-altmans-company/articleshow/131795132.cms",
+        "https://m.economictimes.com/tech/technology/chatgpts-market-share-dips-below-50-key-ai-trends-to-know/articleshow/131792884.cms"
+      ],
+      "summary": "Sensor Tower系の集計として、ChatGPTのAIアシスタント市場シェアが46.4%まで低下し、初めて50%を割ったと報じられた。月間利用者は11億人超を維持する一方、Geminiが27.7%、Claudeが10.3%まで伸び、OpenAIの課題は利用者規模から競争防衛へ移っている。",
+      "title": "ChatGPT、AIアシスタント市場シェアが50%を下回る",
+      "watch_topic_id": "product_release"
+    },
+    {
+      "category": "OpenAI",
+      "change_class": "new_event",
+      "counter_evidence_checked": true,
+      "material_facts": [
+        "Noam ShazeerがGoogleからOpenAIへ移ると報じられた。",
+        "ShazeerはTransformer論文の主要著者で、Character.AI創業後にGoogleでGeminiを率いていた。",
+        "John JumperはGoogle DeepMindからAnthropicへ移ると報じられ、トップAI人材の移動が同時に起きている。"
+      ],
+      "source_published_date": "2026-06-18",
+      "source_urls": [
+        "https://www.axios.com/2026/06/18/noam-shazeer-google-openai-characterai",
+        "https://www.marketwatch.com/story/google-shake-up-highlights-how-human-brains-may-be-the-scarcest-ai-resource-of-all-1ea41ac7",
+        "https://www.businessinsider.com/alphafold-john-jumper-leaves-google-deepmind-anthropic-demis-hassabis-nobel-2026-6"
+      ],
+      "summary": "Transformer論文の主要著者でGemini共同リードだったNoam ShazeerがGoogleを離れてOpenAIへ移ると報じられた。同時期にAlphaFoldのJohn JumperはAnthropicへ移る見通しで、モデル性能だけでなく、少数の中核研究者を確保できるかがOpenAI、Google、Anthropicの主な争点になっている。",
+      "title": "OpenAI、Noam Shazeer獲得でAI人材争奪が再燃",
+      "watch_topic_id": "strategic_talent_japan_gtm"
+    },
+    {
+      "category": "SpaceX",
+      "change_class": "new_event",
+      "counter_evidence_checked": true,
+      "material_facts": [
+        "SpaceXが200億ドル規模の社債発行を検討していると報じられた。",
+        "社債は2027年期限の200億ドルブリッジローン借り換えに使われる可能性がある。",
+        "Moody’sはSpaceXにBaa1を付与し、投資適格として扱われる。"
+      ],
+      "source_published_date": "2026-06-18",
+      "source_urls": [
+        "https://www.barrons.com/articles/spacex-stock-price-losing-streak-730ebe94",
+        "https://www.investors.com/news/spacex-stock-price-target-lunar-economy-spcx-supply-demand-imbalance-relativity-space-nasa-mars/",
+        "https://www.wsj.com/livecoverage/stock-market-today-dow-sp-500-nasdaq-06-18-2026/card/spacex-is-officially-investment-grade-egF7QqYTk7ZVJt6Kr3qg"
+      ],
+      "summary": "SpaceXが200億ドル規模の社債発行を検討し、既存の200億ドルブリッジローンの借り換えに使う可能性が報じられた。Moody’sはBaa1を付与し、投資適格として扱われるため、IPO後の株式資金だけでなく社債市場もAI・Starlink・Starship投資の資金源になり始めている。",
+      "title": "SpaceX、200億ドル社債と投資適格格付けでAI資金調達を広げる",
+      "watch_topic_id": "business_contracts"
+    },
+    {
+      "category": "SpaceX",
+      "change_class": "material_update",
+      "counter_evidence_checked": true,
+      "material_facts": [
+        "SpaceXとTeslaの統合観測について投資家が利点と課題を議論していると報じられた。",
+        "AreteはSpaceX株に401ドル目標、Zephirinは310ドル、Oppenheimerは250ドル目標を示したと報じられた。",
+        "SpaceXオプション取引の開始が市場イベントとして注目されている。"
+      ],
+      "source_published_date": "2026-06-18",
+      "source_urls": [
+        "https://www.businessinsider.com/tesla-spacex-merger-explained-investors-challenges-2026-6",
+        "https://www.investors.com/news/spacex-stock-price-target-lunar-economy-spcx-supply-demand-imbalance-relativity-space-nasa-mars/",
+        "https://www.marketwatch.com/story/options-traders-are-bracing-for-a-very-busy-week-with-june-triple-witching-and-launch-of-spacex-contracts-on-deck-b38fbf62"
+      ],
+      "summary": "SpaceX上場後、Teslaとの統合観測やAI事業との一体運営をめぐる見方が強まり、Areteは401ドル、Zephirinは310ドル、Oppenheimerは250ドルへ目標株価を示したと報じられた。Starlink V3、Cursor買収、Tesla側のAI・ロボティクス投資が同じ投資テーマとして読まれ始めている。",
+      "title": "SpaceX、Tesla統合観測と401ドル目標で市場評価が膨らむ",
+      "watch_topic_id": "ai_mna_compute"
     }
   ],
   "decisions": [
@@ -18296,6 +18587,42 @@
       "reject_reason": "確認済みだが、単独記事にする新規差分が不足した。",
       "reject_reason_class": "no_material_change",
       "topic_value_class": "operational_status_change"
+    },
+    {
+      "adoption_decision": "adopt",
+      "candidate_title": "ChatGPT、AIアシスタント市場シェアが50%を下回る",
+      "materiality_basis": "直近3日内に市場シェア、人材、資金調達、株式評価の具体的な差分が報じられ、読者が翌朝確認すべき材料に該当する。",
+      "reader_delta": "Sensor Tower系の集計として、ChatGPTのAIアシスタント市場シェアが46.4%まで低下し、初めて50%を割ったと報じられた。月間利用者は11億人超を維持する一方、Geminiが27.7%、Claudeが10.3%まで伸び、OpenAIの課題は利用者規模から競争防衛へ移っている。",
+      "reject_reason": null,
+      "reject_reason_class": null,
+      "topic_value_class": "market_or_financial_impact"
+    },
+    {
+      "adoption_decision": "adopt",
+      "candidate_title": "OpenAI、Noam Shazeer獲得でAI人材争奪が再燃",
+      "materiality_basis": "直近3日内に市場シェア、人材、資金調達、株式評価の具体的な差分が報じられ、読者が翌朝確認すべき材料に該当する。",
+      "reader_delta": "Transformer論文の主要著者でGemini共同リードだったNoam ShazeerがGoogleを離れてOpenAIへ移ると報じられた。同時期にAlphaFoldのJohn JumperはAnthropicへ移る見通しで、モデル性能だけでなく、少数の中核研究者を確保できるかがOpenAI、Google、Anthropicの競争軸になっている。",
+      "reject_reason": null,
+      "reject_reason_class": null,
+      "topic_value_class": "technical_or_product_shift"
+    },
+    {
+      "adoption_decision": "adopt",
+      "candidate_title": "SpaceX、200億ドル社債と投資適格格付けでAI資金調達を広げる",
+      "materiality_basis": "直近3日内に市場シェア、人材、資金調達、株式評価の具体的な差分が報じられ、読者が翌朝確認すべき材料に該当する。",
+      "reader_delta": "SpaceXが200億ドル規模の社債発行を検討し、既存の200億ドルブリッジローンの借り換えに使う可能性が報じられた。Moody’sはBaa1を付与し、投資適格として扱われるため、IPO後の株式資金だけでなく社債市場もAI・Starlink・Starship投資の資金源になり始めている。",
+      "reject_reason": null,
+      "reject_reason_class": null,
+      "topic_value_class": "market_or_financial_impact"
+    },
+    {
+      "adoption_decision": "adopt",
+      "candidate_title": "SpaceX、Tesla統合観測と401ドル目標で市場評価が膨らむ",
+      "materiality_basis": "直近3日内に市場シェア、人材、資金調達、株式評価の具体的な差分が報じられ、読者が翌朝確認すべき材料に該当する。",
+      "reader_delta": "SpaceX上場後、Teslaとの統合観測やAI事業との一体運営をめぐる見方が強まり、Areteは401ドル、Zephirinは310ドル、Oppenheimerは250ドルへ目標株価を示したと報じられた。Starlink V3、Cursor買収、Tesla側のAI・ロボティクス投資が同じ投資テーマとして読まれ始めている。",
+      "reject_reason": null,
+      "reject_reason_class": null,
+      "topic_value_class": "market_or_financial_impact"
     }
   ],
   "cards": [
@@ -18411,6 +18738,274 @@
       "summary": "Hondaは2026年6月に、電動化戦略の一環としてe:HEV RS搭載のシビックRSとプレリュードS+ Shiftのマイナーチェンジを公式発表しました。。シビックRSにe:HEV RSハイブリッドシステムを搭載し、プレリュードはS+ Shift仕様にマイナーチェンジされた。。Hondaの電動化戦略の進展を示し、環境性能と走行性能の両立で市場競争力を強化するため重要。",
       "title": "Honda、e:HEV RS搭載のシビックRSとプレリュードS+ Shiftのマイナーチェンジを発表",
       "topic_value_class": "technical_or_product_shift"
+    },
+    {
+      "candidate_title": "ChatGPT、AIアシスタント市場シェアが50%を下回る",
+      "category": "OpenAI",
+      "detail": {
+        "slug": "chatgpt-ai-50-2026-06-20.html",
+        "sources": [
+          {
+            "label": "TechRadar",
+            "url": "https://www.techradar.com/pro/the-end-of-the-ai-honeymoon-chatgpt-market-share-falls-below-50-percent-for-first-time"
+          },
+          {
+            "label": "Times of India",
+            "url": "https://timesofindia.indiatimes.com/technology/tech-news/chatgpt-share-falls-below-50-for-the-first-time-ever-here-are-the-ai-chatbots-that-have-taken-away-share-from-sam-altmans-company/articleshow/131795132.cms"
+          },
+          {
+            "label": "Economic Times",
+            "url": "https://m.economictimes.com/tech/technology/chatgpts-market-share-dips-below-50-key-ai-trends-to-know/articleshow/131792884.cms"
+          }
+        ],
+        "summary": "Sensor Tower系の集計として、ChatGPTのAIアシスタント市場シェアが46.4%まで低下し、初めて50%を割ったと報じられた。月間利用者は11億人超を維持する一方、Geminiが27.7%、Claudeが10.3%まで伸び、OpenAIの課題は利用者規模から競争防衛へ移っている。 Sensor Tower系レポートに基づく市場シェアであり、OpenAI自身の公式KPIではない。地域別・有料利用者別の内訳は追加確認が必要。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "ChatGPTのAIアシスタント市場シェアが46.4%と報じられ、50%を下回った。",
+            "ChatGPTはなお11億人超の月間利用者を持つと報じられている。",
+            "Geminiは27.7%、Claudeは10.3%まで伸びたと報じられている。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "ChatGPTのAIアシスタント市場シェアが46.4%と報じられ、50%を下回った。",
+              "source_urls": [
+                "https://www.techradar.com/pro/the-end-of-the-ai-honeymoon-chatgpt-market-share-falls-below-50-percent-for-first-time",
+                "https://timesofindia.indiatimes.com/technology/tech-news/chatgpt-share-falls-below-50-for-the-first-time-ever-here-are-the-ai-chatbots-that-have-taken-away-share-from-sam-altmans-company/articleshow/131795132.cms",
+                "https://m.economictimes.com/tech/technology/chatgpts-market-share-dips-below-50-key-ai-trends-to-know/articleshow/131792884.cms"
+              ]
+            },
+            {
+              "fact": "ChatGPTはなお11億人超の月間利用者を持つと報じられている。",
+              "source_urls": [
+                "https://www.techradar.com/pro/the-end-of-the-ai-honeymoon-chatgpt-market-share-falls-below-50-percent-for-first-time",
+                "https://timesofindia.indiatimes.com/technology/tech-news/chatgpt-share-falls-below-50-for-the-first-time-ever-here-are-the-ai-chatbots-that-have-taken-away-share-from-sam-altmans-company/articleshow/131795132.cms",
+                "https://m.economictimes.com/tech/technology/chatgpts-market-share-dips-below-50-key-ai-trends-to-know/articleshow/131792884.cms"
+              ]
+            },
+            {
+              "fact": "Geminiは27.7%、Claudeは10.3%まで伸びたと報じられている。",
+              "source_urls": [
+                "https://www.techradar.com/pro/the-end-of-the-ai-honeymoon-chatgpt-market-share-falls-below-50-percent-for-first-time",
+                "https://timesofindia.indiatimes.com/technology/tech-news/chatgpt-share-falls-below-50-for-the-first-time-ever-here-are-the-ai-chatbots-that-have-taken-away-share-from-sam-altmans-company/articleshow/131795132.cms",
+                "https://m.economictimes.com/tech/technology/chatgpts-market-share-dips-below-50-key-ai-trends-to-know/articleshow/131792884.cms"
+              ]
+            }
+          ],
+          "limits_or_unknowns": "Sensor Tower系レポートに基づく市場シェアであり、OpenAI自身の公式KPIではない。地域別・有料利用者別の内訳は追加確認が必要。",
+          "source_dates": [
+            "2026-06-18"
+          ],
+          "what_changed": "ChatGPTのAIアシスタント市場シェアが46.4%と報じられ、50%を下回った。",
+          "why_it_matters": "資本市場、利用者シェア、トップ研究者、AI統合の評価が同時に動き、企業の競争力と投資判断に直接影響する。"
+        }
+      },
+      "priority_class": "hot",
+      "section_id": "openai",
+      "source_published_date": "2026-06-18",
+      "summary": "Sensor Tower系の集計として、ChatGPTのAIアシスタント市場シェアが46.4%まで低下し、初めて50%を割ったと報じられた。月間利用者は11億人超を維持する一方、Geminiが27.7%、Claudeが10.3%まで伸び、OpenAIの課題は利用者規模から競争防衛へ移っている。",
+      "title": "ChatGPT、AIアシスタント市場シェアが50%を下回る",
+      "topic_value_class": "market_or_financial_impact"
+    },
+    {
+      "candidate_title": "OpenAI、Noam Shazeer獲得でAI人材争奪が再燃",
+      "category": "OpenAI",
+      "detail": {
+        "slug": "openai-noam-shazeer-ai-2026-06-20.html",
+        "sources": [
+          {
+            "label": "Axios",
+            "url": "https://www.axios.com/2026/06/18/noam-shazeer-google-openai-characterai"
+          },
+          {
+            "label": "MarketWatch",
+            "url": "https://www.marketwatch.com/story/google-shake-up-highlights-how-human-brains-may-be-the-scarcest-ai-resource-of-all-1ea41ac7"
+          },
+          {
+            "label": "Business Insider",
+            "url": "https://www.businessinsider.com/alphafold-john-jumper-leaves-google-deepmind-anthropic-demis-hassabis-nobel-2026-6"
+          }
+        ],
+        "summary": "Transformer論文の主要著者でGemini共同リードだったNoam ShazeerがGoogleを離れてOpenAIへ移ると報じられた。同時期にAlphaFoldのJohn JumperはAnthropicへ移る見通しで、モデル性能だけでなく、少数の中核研究者を確保できるかがOpenAI、Google、Anthropicの主な争点になっている。 Noam ShazeerのOpenAIでの正式役職や担当領域、John JumperのAnthropicでの役割は追加発表を待つ必要がある。Jeff Dean本人のOpenAI移籍は確認できていないため、記事ではGoogle側の人材流動として扱う。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Noam ShazeerがGoogleからOpenAIへ移ると報じられた。",
+            "ShazeerはTransformer論文の主要著者で、Character.AI創業後にGoogleでGeminiを率いていた。",
+            "John JumperはGoogle DeepMindからAnthropicへ移ると報じられ、トップAI人材の移動が同時に起きている。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Noam ShazeerがGoogleからOpenAIへ移ると報じられた。",
+              "source_urls": [
+                "https://www.axios.com/2026/06/18/noam-shazeer-google-openai-characterai",
+                "https://www.marketwatch.com/story/google-shake-up-highlights-how-human-brains-may-be-the-scarcest-ai-resource-of-all-1ea41ac7",
+                "https://www.businessinsider.com/alphafold-john-jumper-leaves-google-deepmind-anthropic-demis-hassabis-nobel-2026-6"
+              ]
+            },
+            {
+              "fact": "ShazeerはTransformer論文の主要著者で、Character.AI創業後にGoogleでGeminiを率いていた。",
+              "source_urls": [
+                "https://www.axios.com/2026/06/18/noam-shazeer-google-openai-characterai",
+                "https://www.marketwatch.com/story/google-shake-up-highlights-how-human-brains-may-be-the-scarcest-ai-resource-of-all-1ea41ac7",
+                "https://www.businessinsider.com/alphafold-john-jumper-leaves-google-deepmind-anthropic-demis-hassabis-nobel-2026-6"
+              ]
+            },
+            {
+              "fact": "John JumperはGoogle DeepMindからAnthropicへ移ると報じられ、トップAI人材の移動が同時に起きている。",
+              "source_urls": [
+                "https://www.axios.com/2026/06/18/noam-shazeer-google-openai-characterai",
+                "https://www.marketwatch.com/story/google-shake-up-highlights-how-human-brains-may-be-the-scarcest-ai-resource-of-all-1ea41ac7",
+                "https://www.businessinsider.com/alphafold-john-jumper-leaves-google-deepmind-anthropic-demis-hassabis-nobel-2026-6"
+              ]
+            }
+          ],
+          "limits_or_unknowns": "Noam ShazeerのOpenAIでの正式役職や担当領域、John JumperのAnthropicでの役割は追加発表を待つ必要がある。Jeff Dean本人のOpenAI移籍は確認できていないため、記事ではGoogle側の人材流動として扱う。",
+          "source_dates": [
+            "2026-06-18"
+          ],
+          "what_changed": "Noam ShazeerがGoogleからOpenAIへ移ると報じられた。",
+          "why_it_matters": "資本市場、利用者シェア、トップ研究者、AI統合の評価が同時に動き、企業の競争力と投資判断に直接影響する。"
+        }
+      },
+      "priority_class": "signal",
+      "section_id": "openai",
+      "source_published_date": "2026-06-18",
+      "summary": "Transformer論文の主要著者でGemini共同リードだったNoam ShazeerがGoogleを離れてOpenAIへ移ると報じられた。同時期にAlphaFoldのJohn JumperはAnthropicへ移る見通しで、モデル性能だけでなく、少数の中核研究者を確保できるかがOpenAI、Google、Anthropicの主な争点になっている。",
+      "title": "OpenAI、Noam Shazeer獲得でAI人材争奪が再燃",
+      "topic_value_class": "technical_or_product_shift"
+    },
+    {
+      "candidate_title": "SpaceX、200億ドル社債と投資適格格付けでAI資金調達を広げる",
+      "category": "SpaceX",
+      "detail": {
+        "slug": "spacex-200-ai-2026-06-20.html",
+        "sources": [
+          {
+            "label": "Barron’s",
+            "url": "https://www.barrons.com/articles/spacex-stock-price-losing-streak-730ebe94"
+          },
+          {
+            "label": "Investor’s Business Daily",
+            "url": "https://www.investors.com/news/spacex-stock-price-target-lunar-economy-spcx-supply-demand-imbalance-relativity-space-nasa-mars/"
+          },
+          {
+            "label": "Wall Street Journal",
+            "url": "https://www.wsj.com/livecoverage/stock-market-today-dow-sp-500-nasdaq-06-18-2026/card/spacex-is-officially-investment-grade-egF7QqYTk7ZVJt6Kr3qg"
+          }
+        ],
+        "summary": "SpaceXが200億ドル規模の社債発行を検討し、既存の200億ドルブリッジローンの借り換えに使う可能性が報じられた。Moody’sはBaa1を付与し、投資適格として扱われるため、IPO後の株式資金だけでなく社債市場もAI・Starlink・Starship投資の資金源になり始めている。 社債発行は検討段階の報道であり、条件、利率、最終発行額は確定していない。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "SpaceXが200億ドル規模の社債発行を検討していると報じられた。",
+            "社債は2027年期限の200億ドルブリッジローン借り換えに使われる可能性がある。",
+            "Moody’sはSpaceXにBaa1を付与し、投資適格として扱われる。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "SpaceXが200億ドル規模の社債発行を検討していると報じられた。",
+              "source_urls": [
+                "https://www.barrons.com/articles/spacex-stock-price-losing-streak-730ebe94",
+                "https://www.investors.com/news/spacex-stock-price-target-lunar-economy-spcx-supply-demand-imbalance-relativity-space-nasa-mars/",
+                "https://www.wsj.com/livecoverage/stock-market-today-dow-sp-500-nasdaq-06-18-2026/card/spacex-is-officially-investment-grade-egF7QqYTk7ZVJt6Kr3qg"
+              ]
+            },
+            {
+              "fact": "社債は2027年期限の200億ドルブリッジローン借り換えに使われる可能性がある。",
+              "source_urls": [
+                "https://www.barrons.com/articles/spacex-stock-price-losing-streak-730ebe94",
+                "https://www.investors.com/news/spacex-stock-price-target-lunar-economy-spcx-supply-demand-imbalance-relativity-space-nasa-mars/",
+                "https://www.wsj.com/livecoverage/stock-market-today-dow-sp-500-nasdaq-06-18-2026/card/spacex-is-officially-investment-grade-egF7QqYTk7ZVJt6Kr3qg"
+              ]
+            },
+            {
+              "fact": "Moody’sはSpaceXにBaa1を付与し、投資適格として扱われる。",
+              "source_urls": [
+                "https://www.barrons.com/articles/spacex-stock-price-losing-streak-730ebe94",
+                "https://www.investors.com/news/spacex-stock-price-target-lunar-economy-spcx-supply-demand-imbalance-relativity-space-nasa-mars/",
+                "https://www.wsj.com/livecoverage/stock-market-today-dow-sp-500-nasdaq-06-18-2026/card/spacex-is-officially-investment-grade-egF7QqYTk7ZVJt6Kr3qg"
+              ]
+            }
+          ],
+          "limits_or_unknowns": "社債発行は検討段階の報道であり、条件、利率、最終発行額は確定していない。",
+          "source_dates": [
+            "2026-06-18"
+          ],
+          "what_changed": "SpaceXが200億ドル規模の社債発行を検討していると報じられた。",
+          "why_it_matters": "資本市場、利用者シェア、トップ研究者、AI統合の評価が同時に動き、企業の競争力と投資判断に直接影響する。"
+        }
+      },
+      "priority_class": "hot",
+      "section_id": "spacex",
+      "source_published_date": "2026-06-18",
+      "summary": "SpaceXが200億ドル規模の社債発行を検討し、既存の200億ドルブリッジローンの借り換えに使う可能性が報じられた。Moody’sはBaa1を付与し、投資適格として扱われるため、IPO後の株式資金だけでなく社債市場もAI・Starlink・Starship投資の資金源になり始めている。",
+      "title": "SpaceX、200億ドル社債と投資適格格付けでAI資金調達を広げる",
+      "topic_value_class": "market_or_financial_impact"
+    },
+    {
+      "candidate_title": "SpaceX、Tesla統合観測と401ドル目標で市場評価が膨らむ",
+      "category": "SpaceX",
+      "detail": {
+        "slug": "spacex-tesla-401-2026-06-20.html",
+        "sources": [
+          {
+            "label": "Business Insider",
+            "url": "https://www.businessinsider.com/tesla-spacex-merger-explained-investors-challenges-2026-6"
+          },
+          {
+            "label": "Investor’s Business Daily",
+            "url": "https://www.investors.com/news/spacex-stock-price-target-lunar-economy-spcx-supply-demand-imbalance-relativity-space-nasa-mars/"
+          },
+          {
+            "label": "MarketWatch",
+            "url": "https://www.marketwatch.com/story/options-traders-are-bracing-for-a-very-busy-week-with-june-triple-witching-and-launch-of-spacex-contracts-on-deck-b38fbf62"
+          }
+        ],
+        "summary": "SpaceX上場後、Teslaとの統合観測やAI事業との一体運営をめぐる見方が強まり、Areteは401ドル、Zephirinは310ドル、Oppenheimerは250ドルへ目標株価を示したと報じられた。Starlink V3、Cursor買収、Tesla側のAI・ロボティクス投資が同じ投資テーマとして読まれ始めている。 Teslaとの統合は観測・議論段階であり、正式提案や取締役会決議は確認されていない。目標株価は各社アナリストの見方で、実現を保証しない。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "SpaceXとTeslaの統合観測について投資家が利点と課題を議論していると報じられた。",
+            "AreteはSpaceX株に401ドル目標、Zephirinは310ドル、Oppenheimerは250ドル目標を示したと報じられた。",
+            "SpaceXオプション取引の開始が市場イベントとして注目されている。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "SpaceXとTeslaの統合観測について投資家が利点と課題を議論していると報じられた。",
+              "source_urls": [
+                "https://www.businessinsider.com/tesla-spacex-merger-explained-investors-challenges-2026-6",
+                "https://www.investors.com/news/spacex-stock-price-target-lunar-economy-spcx-supply-demand-imbalance-relativity-space-nasa-mars/",
+                "https://www.marketwatch.com/story/options-traders-are-bracing-for-a-very-busy-week-with-june-triple-witching-and-launch-of-spacex-contracts-on-deck-b38fbf62"
+              ]
+            },
+            {
+              "fact": "AreteはSpaceX株に401ドル目標、Zephirinは310ドル、Oppenheimerは250ドル目標を示したと報じられた。",
+              "source_urls": [
+                "https://www.businessinsider.com/tesla-spacex-merger-explained-investors-challenges-2026-6",
+                "https://www.investors.com/news/spacex-stock-price-target-lunar-economy-spcx-supply-demand-imbalance-relativity-space-nasa-mars/",
+                "https://www.marketwatch.com/story/options-traders-are-bracing-for-a-very-busy-week-with-june-triple-witching-and-launch-of-spacex-contracts-on-deck-b38fbf62"
+              ]
+            },
+            {
+              "fact": "SpaceXオプション取引の開始が市場イベントとして注目されている。",
+              "source_urls": [
+                "https://www.businessinsider.com/tesla-spacex-merger-explained-investors-challenges-2026-6",
+                "https://www.investors.com/news/spacex-stock-price-target-lunar-economy-spcx-supply-demand-imbalance-relativity-space-nasa-mars/",
+                "https://www.marketwatch.com/story/options-traders-are-bracing-for-a-very-busy-week-with-june-triple-witching-and-launch-of-spacex-contracts-on-deck-b38fbf62"
+              ]
+            }
+          ],
+          "limits_or_unknowns": "Teslaとの統合は観測・議論段階であり、正式提案や取締役会決議は確認されていない。目標株価は各社アナリストの見方で、実現を保証しない。",
+          "source_dates": [
+            "2026-06-18"
+          ],
+          "what_changed": "SpaceXとTeslaの統合観測について投資家が利点と課題を議論していると報じられた。",
+          "why_it_matters": "資本市場、利用者シェア、トップ研究者、AI統合の評価が同時に動き、企業の競争力と投資判断に直接影響する。"
+        }
+      },
+      "priority_class": "hot",
+      "section_id": "spacex",
+      "source_published_date": "2026-06-18",
+      "summary": "SpaceX上場後、Teslaとの統合観測やAI事業との一体運営をめぐる見方が強まり、Areteは401ドル、Zephirinは310ドル、Oppenheimerは250ドルへ目標株価を示したと報じられた。Starlink V3、Cursor買収、Tesla側のAI・ロボティクス投資が同じ投資テーマとして読まれ始めている。",
+      "title": "SpaceX、Tesla統合観測と401ドル目標で市場評価が膨らむ",
+      "topic_value_class": "market_or_financial_impact"
     }
   ],
   "coverage_manifest": {
@@ -18571,7 +19166,9 @@
         ],
         "freshness_check": "2026-06-20 JSTの直近3日を基準に照合",
         "published_card_titles": [
-          "OpenAI、GPT-5.6を来週投入か 日本で広告事業も本格始動"
+          "OpenAI、GPT-5.6を来週投入か 日本で広告事業も本格始動",
+          "ChatGPT、AIアシスタント市場シェアが50%を下回る",
+          "OpenAI、Noam Shazeer獲得でAI人材争奪が再燃"
         ],
         "new_or_changed_items": [
           {
@@ -18586,6 +19183,36 @@
               "2026年6月20日にGPT-5.6の来週投入が報じられた。",
               "日本での広告事業が本格始動し、電通や博報堂が仲介している。",
               "ChatGPT内に広告表示を導入し、会話型広告フォーマットを開発中。"
+            ]
+          },
+          {
+            "title": "ChatGPT、AIアシスタント市場シェアが50%を下回る",
+            "summary": "Sensor Tower系の集計として、ChatGPTのAIアシスタント市場シェアが46.4%まで低下し、初めて50%を割ったと報じられた。月間利用者は11億人超を維持する一方、Geminiが27.7%、Claudeが10.3%まで伸び、OpenAIの課題は利用者規模から競争防衛へ移っている。",
+            "sources": [
+              "https://www.techradar.com/pro/the-end-of-the-ai-honeymoon-chatgpt-market-share-falls-below-50-percent-for-first-time",
+              "https://timesofindia.indiatimes.com/technology/tech-news/chatgpt-share-falls-below-50-for-the-first-time-ever-here-are-the-ai-chatbots-that-have-taken-away-share-from-sam-altmans-company/articleshow/131795132.cms",
+              "https://m.economictimes.com/tech/technology/chatgpts-market-share-dips-below-50-key-ai-trends-to-know/articleshow/131792884.cms"
+            ],
+            "summary_mode": "multi_source_synthesis",
+            "material_facts": [
+              "ChatGPTのAIアシスタント市場シェアが46.4%と報じられ、50%を下回った。",
+              "ChatGPTはなお11億人超の月間利用者を持つと報じられている。",
+              "Geminiは27.7%、Claudeは10.3%まで伸びたと報じられている。"
+            ]
+          },
+          {
+            "title": "OpenAI、Noam Shazeer獲得でAI人材争奪が再燃",
+            "summary": "Transformer論文の主要著者でGemini共同リードだったNoam ShazeerがGoogleを離れてOpenAIへ移ると報じられた。同時期にAlphaFoldのJohn JumperはAnthropicへ移る見通しで、モデル性能だけでなく、少数の中核研究者を確保できるかがOpenAI、Google、Anthropicの主な争点になっている。",
+            "sources": [
+              "https://www.axios.com/2026/06/18/noam-shazeer-google-openai-characterai",
+              "https://www.marketwatch.com/story/google-shake-up-highlights-how-human-brains-may-be-the-scarcest-ai-resource-of-all-1ea41ac7",
+              "https://www.businessinsider.com/alphafold-john-jumper-leaves-google-deepmind-anthropic-demis-hassabis-nobel-2026-6"
+            ],
+            "summary_mode": "multi_source_synthesis",
+            "material_facts": [
+              "Noam ShazeerがGoogleからOpenAIへ移ると報じられた。",
+              "ShazeerはTransformer論文の主要著者で、Character.AI創業後にGoogleでGeminiを率いていた。",
+              "John JumperはGoogle DeepMindからAnthropicへ移ると報じられ、トップAI人材の移動が同時に起きている。"
             ]
           }
         ],
@@ -18652,6 +19279,22 @@
             "decision": "no_fresh_item",
             "change_class": "background_only",
             "rationale": "2026-06-20にOpenAIのNoam Shazeer / Noamを公式・媒体・SNS系の証跡で確認したが、単独記事にする確定差分は不足した。"
+          },
+          {
+            "title": "ChatGPT、AIアシスタント市場シェアが50%を下回る",
+            "summary": "Sensor Tower系の集計として、ChatGPTのAIアシスタント市場シェアが46.4%まで低下し、初めて50%を割ったと報じられた。月間利用者は11億人超を維持する一方、Geminiが27.7%、Claudeが10.3%まで伸び、OpenAIの課題は利用者規模から競争防衛へ移っている。",
+            "source_url": "https://www.techradar.com/pro/the-end-of-the-ai-honeymoon-chatgpt-market-share-falls-below-50-percent-for-first-time",
+            "published_date": "2026-06-18",
+            "watch_topic_id": "product_release",
+            "adoption": "adopted"
+          },
+          {
+            "title": "OpenAI、Noam Shazeer獲得でAI人材争奪が再燃",
+            "summary": "Transformer論文の主要著者でGemini共同リードだったNoam ShazeerがGoogleを離れてOpenAIへ移ると報じられた。同時期にAlphaFoldのJohn JumperはAnthropicへ移る見通しで、モデル性能だけでなく、少数の中核研究者を確保できるかがOpenAI、Google、Anthropicの主な争点になっている。",
+            "source_url": "https://www.axios.com/2026/06/18/noam-shazeer-google-openai-characterai",
+            "published_date": "2026-06-18",
+            "watch_topic_id": "strategic_talent_japan_gtm",
+            "adoption": "adopted"
           }
         ],
         "no_change_checks": [
@@ -19977,8 +20620,42 @@
           "買収"
         ],
         "freshness_check": "2026-06-20 JSTの直近3日を基準に照合",
-        "published_card_titles": [],
-        "new_or_changed_items": [],
+        "published_card_titles": [
+          "SpaceX、200億ドル社債と投資適格格付けでAI資金調達を広げる",
+          "SpaceX、Tesla統合観測と401ドル目標で市場評価が膨らむ"
+        ],
+        "new_or_changed_items": [
+          {
+            "title": "SpaceX、200億ドル社債と投資適格格付けでAI資金調達を広げる",
+            "summary": "SpaceXが200億ドル規模の社債発行を検討し、既存の200億ドルブリッジローンの借り換えに使う可能性が報じられた。Moody’sはBaa1を付与し、投資適格として扱われるため、IPO後の株式資金だけでなく社債市場もAI・Starlink・Starship投資の資金源になり始めている。",
+            "sources": [
+              "https://www.barrons.com/articles/spacex-stock-price-losing-streak-730ebe94",
+              "https://www.investors.com/news/spacex-stock-price-target-lunar-economy-spcx-supply-demand-imbalance-relativity-space-nasa-mars/",
+              "https://www.wsj.com/livecoverage/stock-market-today-dow-sp-500-nasdaq-06-18-2026/card/spacex-is-officially-investment-grade-egF7QqYTk7ZVJt6Kr3qg"
+            ],
+            "summary_mode": "multi_source_synthesis",
+            "material_facts": [
+              "SpaceXが200億ドル規模の社債発行を検討していると報じられた。",
+              "社債は2027年期限の200億ドルブリッジローン借り換えに使われる可能性がある。",
+              "Moody’sはSpaceXにBaa1を付与し、投資適格として扱われる。"
+            ]
+          },
+          {
+            "title": "SpaceX、Tesla統合観測と401ドル目標で市場評価が膨らむ",
+            "summary": "SpaceX上場後、Teslaとの統合観測やAI事業との一体運営をめぐる見方が強まり、Areteは401ドル、Zephirinは310ドル、Oppenheimerは250ドルへ目標株価を示したと報じられた。Starlink V3、Cursor買収、Tesla側のAI・ロボティクス投資が同じ投資テーマとして読まれ始めている。",
+            "sources": [
+              "https://www.businessinsider.com/tesla-spacex-merger-explained-investors-challenges-2026-6",
+              "https://www.investors.com/news/spacex-stock-price-target-lunar-economy-spcx-supply-demand-imbalance-relativity-space-nasa-mars/",
+              "https://www.marketwatch.com/story/options-traders-are-bracing-for-a-very-busy-week-with-june-triple-witching-and-launch-of-spacex-contracts-on-deck-b38fbf62"
+            ],
+            "summary_mode": "multi_source_synthesis",
+            "material_facts": [
+              "SpaceXとTeslaの統合観測について投資家が利点と課題を議論していると報じられた。",
+              "AreteはSpaceX株に401ドル目標、Zephirinは310ドル、Oppenheimerは250ドル目標を示したと報じられた。",
+              "SpaceXオプション取引の開始が市場イベントとして注目されている。"
+            ]
+          }
+        ],
         "latest_candidates": [
           {
             "topic_id": "ai_mna_compute",
@@ -20024,6 +20701,22 @@
             "decision": "no_fresh_item",
             "change_class": "background_only",
             "rationale": "2026-06-20にSpaceXのstarship / flightを公式・媒体・SNS系の証跡で確認したが、単独記事にする確定差分は不足した。"
+          },
+          {
+            "title": "SpaceX、200億ドル社債と投資適格格付けでAI資金調達を広げる",
+            "summary": "SpaceXが200億ドル規模の社債発行を検討し、既存の200億ドルブリッジローンの借り換えに使う可能性が報じられた。Moody’sはBaa1を付与し、投資適格として扱われるため、IPO後の株式資金だけでなく社債市場もAI・Starlink・Starship投資の資金源になり始めている。",
+            "source_url": "https://www.barrons.com/articles/spacex-stock-price-losing-streak-730ebe94",
+            "published_date": "2026-06-18",
+            "watch_topic_id": "business_contracts",
+            "adoption": "adopted"
+          },
+          {
+            "title": "SpaceX、Tesla統合観測と401ドル目標で市場評価が膨らむ",
+            "summary": "SpaceX上場後、Teslaとの統合観測やAI事業との一体運営をめぐる見方が強まり、Areteは401ドル、Zephirinは310ドル、Oppenheimerは250ドルへ目標株価を示したと報じられた。Starlink V3、Cursor買収、Tesla側のAI・ロボティクス投資が同じ投資テーマとして読まれ始めている。",
+            "source_url": "https://www.businessinsider.com/tesla-spacex-merger-explained-investors-challenges-2026-6",
+            "published_date": "2026-06-18",
+            "watch_topic_id": "ai_mna_compute",
+            "adoption": "adopted"
           }
         ],
         "no_change_checks": [
