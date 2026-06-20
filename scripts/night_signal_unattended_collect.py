@@ -64,6 +64,22 @@ ALLOWED_CHANGE_CLASSES = {
     "duplicate_followup",
     "background_only",
 }
+MATERIAL_SIGNAL_RE = re.compile(
+    r"("
+    r"\d+(?:\.\d+)?\s*(?:%|％|億|兆|万|ドル|円|bps|bp)|"
+    r"bond|bonds|社債|債券|debt|loan|bridge loan|借り換え|資金調達|"
+    r"rating|ratings|格付|投資適格|investment grade|Baa|BBB|"
+    r"market share|シェア|share falls|50%|50％|"
+    r"target price|price target|目標株価|buy rating|sell rating|"
+    r"IPO|上場|Nasdaq|時価総額|valuation|"
+    r"merger|合併|統合|tie-up|acquisition|買収|M&A|"
+    r"hire|hiring|joins|leaves|departing|移籍|獲得|退社|人材|"
+    r"契約|受注|提携|partnership|contract|"
+    r"launch result|打ち上げ結果|docking|ドッキング|"
+    r"policy|regulation|規制|安全|recall|リコール"
+    r")",
+    re.I,
+)
 CATEGORY_IDENTITY_TERMS = {
     "OpenAI": ["OpenAI", "ChatGPT", "Codex"],
     "SoftBank": ["SoftBank", "ソフトバンク", "SBG", "Arm"],
@@ -194,6 +210,11 @@ def category_identity_ok(category_label: str, title: str, summary: str) -> bool:
         return True
     text = f"{title} {summary}".lower()
     return any(term.lower() in text for term in terms)
+
+
+def contains_material_signal(*values: str) -> bool:
+    text = " ".join(str(value or "") for value in values)
+    return bool(MATERIAL_SIGNAL_RE.search(text))
 
 
 def natural_detail_summary(
@@ -894,6 +915,48 @@ def normalize_result(
         if not reader_public_copy_ok(signal_summary, kind="summary"):
             continue
         if not category_identity_ok(str(category.get("label", "")), title, signal_summary):
+            continue
+        material_signal = contains_material_signal(title, signal_summary, str(record.get("excerpt", "")))
+        if material_signal and change_class in {"background_only", "duplicate_followup"}:
+            change_class = "material_update"
+        if material_signal and topic_value == "operational_status_change":
+            topic_value = "market_or_financial_impact"
+        if material_signal and len(signal_summary) >= 120 and url:
+            seen_titles.add(title)
+            items.append(
+                {
+                    "watch_topic_id": topic,
+                    "title": title,
+                    "summary": signal_summary,
+                    "source_published_date": str(signal["source_published_date"]),
+                    "topic_value_class": topic_value,
+                    "priority_class": "priority",
+                    "slug": (
+                        "auto-"
+                        + hashlib.sha1(title.encode("utf-8")).hexdigest()[:12]
+                        + f"-{issue_date}"
+                    ),
+                    "detail_summary": signal_summary,
+                    "what_changed": signal_summary,
+                    "why_it_matters": signal_summary,
+                    "confirmed_facts": [
+                        signal_summary,
+                        f"出典は{record.get('label', url)}で確認した。",
+                        f"出典日付は{signal['source_published_date']}として扱う。",
+                    ],
+                    "limits_or_unknowns": "追加の公式発表や詳細条件は継続確認が必要。",
+                    "sources": [
+                        {
+                            "label": str(record.get("label", url)),
+                            "url": url,
+                            "source_role": str(record.get("source_role", "independent_media_or_data")),
+                            "channel": str(record.get("channel", "web")),
+                        }
+                    ],
+                    "observation_source_role": str(record.get("source_role", "independent_media_or_data")),
+                    "observation_channel": str(record.get("channel", "web")),
+                }
+            )
             continue
         rejection_reason = reader_facing_text(
             signal.get("rejection_reason", ""),

@@ -41,6 +41,23 @@ STATE_NAMES = [
     "publication_ready",
 ]
 
+MATERIAL_SIGNAL_RE = re.compile(
+    r"("
+    r"\d+(?:\.\d+)?\s*(?:%|％|億|兆|万|ドル|円|bps|bp)|"
+    r"bond|bonds|社債|債券|debt|loan|bridge loan|借り換え|資金調達|"
+    r"rating|ratings|格付|投資適格|investment grade|Baa|BBB|"
+    r"market share|シェア|share falls|50%|50％|"
+    r"target price|price target|目標株価|buy rating|sell rating|"
+    r"IPO|上場|Nasdaq|時価総額|valuation|"
+    r"merger|合併|統合|tie-up|acquisition|買収|M&A|"
+    r"hire|hiring|joins|leaves|departing|移籍|獲得|退社|人材|"
+    r"契約|受注|提携|partnership|contract|"
+    r"launch result|打ち上げ結果|docking|ドッキング|"
+    r"policy|regulation|規制|安全|recall|リコール"
+    r")",
+    re.I,
+)
+
 PUBLIC_COPY_FORBIDDEN_TERMS = sorted(
     set(
         DETAIL_FORBIDDEN_TEXT
@@ -1365,7 +1382,8 @@ def validate_claim_source_linkage(issue: dict[str, Any], observations: list[dict
 
 def validate_decisions_and_cards(issue: dict[str, Any], candidates: list[dict[str, Any]], cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
     decisions = require_list(issue, "decisions")
-    candidate_titles = {str(candidate.get("title")) for candidate in candidates}
+    candidate_by_title = {str(candidate.get("title")): candidate for candidate in candidates}
+    candidate_titles = set(candidate_by_title)
     adopted_titles: list[str] = []
     allowed_values = set(TOPIC_DECISION_SCHEMA["properties"]["topic_value_class"]["enum"])
     for index, decision in enumerate(decisions, start=1):
@@ -1381,6 +1399,9 @@ def validate_decisions_and_cards(issue: dict[str, Any], candidates: list[dict[st
             fail(f"decisions[{index}] invalid topic_value_class")
         require_str(decision, "reader_delta")
         require_str(decision, "materiality_basis")
+        candidate = candidate_by_title[title]
+        if rejects_material_signal(decision, candidate):
+            fail(f"decisions[{index}] rejects material signal as no-change: {title}")
         if adoption == "adopt":
             adopted_titles.append(title)
         elif not decision.get("reject_reason_class") or not decision.get("reject_reason"):
@@ -1393,6 +1414,19 @@ def validate_decisions_and_cards(issue: dict[str, Any], candidates: list[dict[st
     if len(public_titles) != len(set(public_titles)):
         fail("cards must have unique public titles")
     return decisions
+
+
+def rejects_material_signal(decision: dict[str, Any], candidate: dict[str, Any]) -> bool:
+    candidate_text = " ".join(
+        str(candidate.get(key, ""))
+        for key in ("title", "summary", "change_class")
+    )
+    return (
+        decision.get("adoption_decision") == "reject"
+        and decision.get("reject_reason_class") in {"no_material_change", "lower_importance"}
+        and candidate.get("change_class") in {"new_event", "material_update"}
+        and bool(MATERIAL_SIGNAL_RE.search(candidate_text))
+    )
 
 
 def validate_manifest_alignment(issue: dict[str, Any], cards: list[dict[str, Any]]) -> None:
@@ -2376,6 +2410,63 @@ def self_test() -> None:
         },
         [{"title": "OpenAI Codex sharing candidate"}],
         [{"candidate_title": "OpenAI Codex sharing candidate", "title": "OpenAI、Codexに共有機能を追加"}],
+    )
+    if not rejects_material_signal(
+        {
+            "candidate_title": "SpaceX、200億ドル社債を検討",
+            "adoption_decision": "reject",
+            "topic_value_class": "market_or_financial_impact",
+            "reader_delta": "SpaceXが200億ドル規模の社債を検討している。",
+            "materiality_basis": "資金調達と投資判断に関わる。",
+            "reject_reason_class": "no_material_change",
+            "reject_reason": "単独記事にする差分が不足した。",
+        },
+        {
+            "title": "SpaceX、200億ドル社債を検討",
+            "summary": "SpaceXが200億ドル規模の社債を検討している。",
+            "change_class": "material_update",
+        },
+    ):
+        fail("material candidate rejection guard must reject no-change decisions")
+    if rejects_material_signal(
+        {
+            "candidate_title": "OpenAI、IPOの直近確認",
+            "adoption_decision": "reject",
+            "topic_value_class": "market_or_financial_impact",
+            "reader_delta": "直近確認では確定差分が不足した。",
+            "materiality_basis": "監視対象を確認した。",
+            "reject_reason_class": "no_material_change",
+            "reject_reason": "単独記事にする差分が不足した。",
+        },
+        {
+            "title": "OpenAI、IPOの直近確認",
+            "summary": "確定差分は不足した。",
+            "change_class": "background_only",
+        },
+    ):
+        fail("material candidate guard must allow background watch-topic checks")
+    validate_decisions_and_cards(
+        {
+            "decisions": [
+                {
+                    "candidate_title": "SpaceX、200億ドル社債を検討",
+                    "adoption_decision": "adopt",
+                    "topic_value_class": "market_or_financial_impact",
+                    "reader_delta": "SpaceXが200億ドル規模の社債を検討している。",
+                    "materiality_basis": "資金調達と投資判断に関わる。",
+                    "reject_reason_class": None,
+                    "reject_reason": None,
+                }
+            ]
+        },
+        [
+            {
+                "title": "SpaceX、200億ドル社債を検討",
+                "summary": "SpaceXが200億ドル規模の社債を検討している。",
+                "change_class": "material_update",
+            }
+        ],
+        [{"candidate_title": "SpaceX、200億ドル社債を検討", "title": "SpaceX、200億ドル社債を検討"}],
     )
     rendered = render_detail_html(
         {
