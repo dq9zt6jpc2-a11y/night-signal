@@ -31,6 +31,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
   models: read
 
 concurrency:
@@ -99,6 +100,15 @@ jobs:
           git commit -m "Publish NIGHT SIGNAL for $ISSUE_DATE"
           git pull --rebase origin main
           git push origin HEAD:main
+
+      - name: Dispatch Pages publication
+        if: ${{ inputs.canary_only != true && inputs.dry_run != true }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run pages.yml \
+            --ref main \
+            -f issue_date="$ISSUE_DATE"
 
       - name: Report dry run
         if: ${{ inputs.canary_only != true && inputs.dry_run == true }}

@@ -74,6 +74,8 @@ def main() -> int:
         fail("unattended workflow must use GitHub Models without an external API secret")
     if "contents: write" not in unattended or "git push origin HEAD:main" not in unattended:
         fail("unattended workflow must be able to commit the audited issue")
+    if "actions: write" not in unattended or "gh workflow run pages.yml" not in unattended:
+        fail("unattended workflow must explicitly dispatch Pages after bot push")
     print(
         "PUBLICATION SCHEDULE AUDIT PASSED: "
         f"publish_jst={publish_times}, preflight_jst={preflight_times}, "
