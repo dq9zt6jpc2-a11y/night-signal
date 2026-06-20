@@ -13,6 +13,7 @@ import re
 import urllib.request
 from datetime import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,7 +25,11 @@ def issue_date_from_args() -> str:
     args = [arg for arg in sys.argv[1:] if arg != PUBLIC_CONTENT_ONLY_FLAG]
     if args:
         return args[0]
-    return datetime.now().strftime("%Y-%m-%d")
+    return datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d")
+
+
+def jst_today() -> str:
+    return datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d")
 
 
 def public_content_only() -> bool:
@@ -151,6 +156,9 @@ def ensure_public_url(issue_date: str) -> None:
 
 def main() -> int:
     issue_date = issue_date_from_args()
+    today = jst_today()
+    if issue_date != today:
+        fail(f"refusing stale publication audit: {issue_date} != JST today {today}")
     latest_issue = latest_available_issue_date()
     if latest_issue and issue_date != latest_issue:
         fail(f"{issue_date} is not the latest local issue; latest is {latest_issue}")

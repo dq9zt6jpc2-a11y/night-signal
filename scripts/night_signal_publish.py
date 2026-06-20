@@ -34,6 +34,12 @@ def jst_today() -> str:
     return datetime.now(ZoneInfo("Asia/Tokyo")).date().isoformat()
 
 
+def require_jst_current_issue(issue_date: str) -> None:
+    today = jst_today()
+    if issue_date != today:
+        fail(f"refusing to publish stale issue as latest: {issue_date} != JST today {today}")
+
+
 def validate_issue_date(issue_date: str) -> str:
     if not issue_date or len(issue_date) != 10:
         fail(f"invalid issue date: {issue_date}")
@@ -75,13 +81,18 @@ def resolve_issue_date(
     if requested:
         if event_name and event_name != "workflow_dispatch":
             fail("manual issue date override is only allowed for workflow_dispatch")
-        return validate_issue_date(requested)
+        issue_date = validate_issue_date(requested)
+        require_jst_current_issue(issue_date)
+        return issue_date
     if event_name == "push":
         issue_date = marker_issue_date()
         if require_push_artifacts:
             require_committed_issue_artifacts(issue_date)
+        require_jst_current_issue(issue_date)
         return issue_date
-    return validate_issue_date(jst_today())
+    issue_date = validate_issue_date(jst_today())
+    require_jst_current_issue(issue_date)
+    return issue_date
 
 
 def run(command: list[str], *, check: bool = True) -> subprocess.CompletedProcess[str]:
@@ -239,6 +250,12 @@ def validate_collection_freshness(
 
 
 def self_test() -> None:
+    try:
+        require_jst_current_issue("1900-01-01")
+    except SystemExit:
+        pass
+    else:
+        fail("stale issue date must never be publishable as latest")
     current = datetime.fromisoformat("2099-01-01T19:30:00+09:00")
     fresh = {
         "collection_completed_at_jst": "2099-01-01T18:30:00+09:00",
@@ -269,10 +286,11 @@ def self_test() -> None:
 
 
 def sync_and_audit(issue_date: str) -> None:
+    require_jst_current_issue(issue_date)
     run([sys.executable, "scripts/night_signal_eval.py", issue_date])
     run([sys.executable, "scripts/guardrail_inventory.py"])
     run([sys.executable, "scripts/sync_site.py", issue_date])
-    run([sys.executable, "scripts/current_issue_audit.py", issue_date])
+    run([sys.executable, "scripts/current_issue_audit.py"])
     run([sys.executable, "scripts/coverage_audit.py", issue_date])
     run([sys.executable, "scripts/quality_gate.py", issue_date])
     run([sys.executable, "scripts/pre22_audit.py", issue_date])
@@ -316,6 +334,7 @@ def prepare(
     deploy_existing: bool,
     verification_profile: str,
 ) -> dict[str, Any]:
+    require_jst_current_issue(issue_date)
     current_stage = "startup"
     runtime.write_checkpoint(issue_date, current_stage, "started", "publication driver started", STATE_ROOT)
     try:
@@ -369,6 +388,7 @@ def prepare(
 
 
 def public_audit(issue_date: str) -> dict[str, Any]:
+    require_jst_current_issue(issue_date)
     run([sys.executable, "scripts/publication_audit.py", issue_date, "--public-content-only"])
     return {"issue_date": issue_date, "public_content_verified": True}
 
