@@ -53,6 +53,7 @@ def rewrite_root_links(html: str) -> str:
     # Dated issue navigation may contain a link back to the stable root URL.
     # It must not survive when that same HTML is promoted to site/index.html.
     html = re.sub(r'\n\s*<a href="\.\./index\.html">最新号</a>', "", html)
+    html = re.sub(r'href="\.\./(20\d{2}-\d{2}-\d{2}/details/)', r'href="\1', html)
     return html.replace('href="details/', f'href="{ISSUE_DATE}/details/')
 
 

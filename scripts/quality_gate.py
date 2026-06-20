@@ -299,6 +299,19 @@ def normal_card_blocks(html: str) -> list[str]:
     return [card for card in card_blocks(html) if "priority-card" not in card]
 
 
+def retained_card(card: str) -> bool:
+    match = re.search(r'<article class="([^"]*)"', card)
+    return bool(match and "retained" in match.group(1).split())
+
+
+def current_card_blocks(html: str) -> list[str]:
+    return [card for card in card_blocks(html) if not retained_card(card)]
+
+
+def without_retained_cards(html: str) -> str:
+    return re.sub(r'<article class="[^"]*\bretained\b[^"]*">.*?</article>', "", html, flags=re.S)
+
+
 def card_dates(card: str) -> list[str]:
     # Only visible metadata dates count. Links such as
     # href="2026-05-13/details/..." are publication paths, not item dates.
@@ -318,6 +331,15 @@ def card_detail_href(card: str) -> str | None:
     if not match:
         return None
     return match.group(2)
+
+
+def card_detail_target(issue_date: str, card: str) -> tuple[str, str] | None:
+    match = re.search(r'href="([^"]*details/([^"#?]+\.html))', card)
+    if not match:
+        return None
+    href = match.group(1)
+    dated = re.search(r'(?:^|\.\./)(20\d{2}-\d{2}-\d{2})/details/', href)
+    return (dated.group(1) if dated else issue_date, match.group(2))
 
 
 def page_titles(html: str) -> list[str]:
@@ -481,8 +503,8 @@ def validate_daily_delta(issue_date: str, sample_html: str) -> None:
     if not previous_path:
         return
     previous_html = read(previous_path)
-    current_cards = [card_signature(card) for card in card_blocks(sample_html)]
-    previous_cards = set(card_signature(card) for card in card_blocks(previous_html))
+    current_cards = [card_signature(card) for card in current_card_blocks(sample_html)]
+    previous_cards = set(card_signature(card) for card in current_card_blocks(previous_html))
     if not current_cards or not previous_cards:
         return
     unchanged = sum(1 for signature in current_cards if signature in previous_cards)
@@ -496,8 +518,8 @@ def validate_daily_delta(issue_date: str, sample_html: str) -> None:
             f"against {previous_path.name}"
         )
 
-    current_body = normalize_for_similarity(section_before_history(sample_html))
-    previous_body = normalize_for_similarity(section_before_history(previous_html))
+    current_body = normalize_for_similarity(without_retained_cards(section_before_history(sample_html)))
+    previous_body = normalize_for_similarity(without_retained_cards(section_before_history(previous_html)))
     similarity = difflib.SequenceMatcher(None, current_body, previous_body).ratio()
     if similarity > MAX_ISSUE_SIMILARITY_VS_PREVIOUS:
         fail(f"issue body too similar to previous day ({similarity:.1%}) against {previous_path.name}")
@@ -551,18 +573,18 @@ def alignment_keywords(title: str) -> list[str]:
 
 def validate_card_detail_alignment(issue_date: str, root_html: str, dated_html: str) -> None:
     cards = card_blocks(root_html) + card_blocks(dated_html)
-    by_detail: dict[str, set[str]] = {}
+    by_detail: dict[tuple[str, str], set[str]] = {}
     for card in cards:
-        name = card_detail_href(card)
-        if not name:
+        target = card_detail_target(issue_date, card)
+        if not target:
             continue
-        by_detail.setdefault(name, set()).add(card_title(card))
+        by_detail.setdefault(target, set()).add(card_title(card))
 
     failures = []
-    for name, titles in sorted(by_detail.items()):
+    for (detail_issue_date, name), titles in sorted(by_detail.items()):
         if name in {"policy.html", f"extraction-log-{issue_date}.html"}:
             continue
-        path = SITE_ROOT / issue_date / "details" / name
+        path = SITE_ROOT / detail_issue_date / "details" / name
         html = read(path)
         primary = " ".join(heading_texts(html, ("title", "h1")))
         body = " ".join(heading_texts(html, ("title", "h1", "h2")))

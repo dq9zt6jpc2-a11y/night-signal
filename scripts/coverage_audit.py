@@ -198,8 +198,11 @@ def card_titles_by_section(root_html: str, section_id: str) -> list[str]:
     if not match:
         fail(f"root page missing section for coverage contract: {section_id}")
     titles = []
-    for article in re.findall(r'<article class="card[^"]*">(.*?)</article>', match.group(1), flags=re.S):
-        h3 = re.search(r"<h3>(.*?)</h3>", article, flags=re.S)
+    for article in re.findall(r'<article class="([^"]*\bcard\b[^"]*)">(.*?)</article>', match.group(1), flags=re.S):
+        classes, body = article
+        if "retained" in classes.split():
+            continue
+        h3 = re.search(r"<h3>(.*?)</h3>", body, flags=re.S)
         if h3:
             titles.append(visible_text(h3.group(1)))
     return titles

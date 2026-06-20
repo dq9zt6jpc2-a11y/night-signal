@@ -905,9 +905,17 @@ def render_card(card: dict[str, Any], *, root: bool) -> str:
     label = str(card.get("freshness_label") or "")
     label_text = f"{html.escape(label)} " if label else ""
     topic_class = html.escape(str(card.get("priority_class", "signal")))
-    href_prefix = f"{html.escape(str(card['issue_date']), quote=True)}/" if root else ""
+    issue_date = str(card["issue_date"])
+    detail_issue_date = str(card.get("detail_issue_date") or issue_date)
+    if root:
+        href_prefix = f"{html.escape(detail_issue_date, quote=True)}/"
+    elif detail_issue_date != issue_date:
+        href_prefix = f"../{html.escape(detail_issue_date, quote=True)}/"
+    else:
+        href_prefix = ""
     slug = html.escape(str(card["slug"]), quote=True)
-    return f"""        <article class="card {topic_class}">
+    retained_class = " retained" if card.get("retained_from_issue_date") else ""
+    return f"""        <article class="card{retained_class} {topic_class}">
           <div class="meta"><span class="pill">{label_text}{source_date}</span><span class="pill">{html.escape(str(card.get("category", "")))}</span></div>
           <h3>{title}</h3>
           <p>{summary}</p>
@@ -930,6 +938,57 @@ def latest_three_dates(issue_date: str) -> set[str]:
         issue_dt.fromordinal(issue_dt.toordinal() - 1).isoformat(),
         issue_dt.fromordinal(issue_dt.toordinal() - 2).isoformat(),
     }
+
+
+def rolling_display_cards(issue_path: Path, issue: dict[str, Any], current_cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    issue_date = require_str(issue, "issue_date")
+    allowed_source_dates = latest_three_dates(issue_date)
+    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
+    state_root = issue_path.parent.parent if issue_path.parent.parent.exists() else DEFAULT_STATE_ROOT
+    display_cards: list[dict[str, Any]] = []
+    seen: set[tuple[str, str, str]] = set()
+
+    def add_card(card: dict[str, Any], *, detail_issue_date: str, retained_from_issue_date: str | None = None) -> None:
+        source_date = str(card.get("source_published_date", ""))
+        if source_date not in allowed_source_dates:
+            return
+        key = (
+            re.sub(r"\s+", " ", str(card.get("title", "")).strip()).lower(),
+            str(card.get("category", "")),
+            source_date,
+        )
+        if key in seen:
+            return
+        seen.add(key)
+        display_cards.append(
+            {
+                **card,
+                "issue_date": issue_date,
+                "detail_issue_date": detail_issue_date,
+                "freshness_label": relative_day_label(issue_date, source_date),
+                **({"retained_from_issue_date": retained_from_issue_date} if retained_from_issue_date else {}),
+            }
+        )
+
+    for card in current_cards:
+        add_card(card, detail_issue_date=issue_date)
+
+    issue_files: list[tuple[datetime.date, Path]] = []
+    for candidate in state_root.glob("20??-??-??/issue.json"):
+        try:
+            candidate_dt = datetime.strptime(candidate.parent.name, "%Y-%m-%d").date()
+        except ValueError:
+            continue
+        if candidate_dt >= issue_dt or (issue_dt - candidate_dt).days > 7:
+            continue
+        issue_files.append((candidate_dt, candidate))
+
+    for candidate_dt, candidate_path in sorted(issue_files, reverse=True):
+        previous_issue = read_json(candidate_path)
+        for card in normalized_cards(previous_issue):
+            add_card(card, detail_issue_date=candidate_dt.isoformat(), retained_from_issue_date=candidate_dt.isoformat())
+
+    return display_cards
 
 
 def observed_evidence_urls(observations: list[dict[str, Any]]) -> set[str]:
@@ -1485,6 +1544,7 @@ def generate_issue(issue_path: Path, output_root: Path, *, write_marker: bool) -
     validate_issue_state(issue, issue_path)
     issue_date = require_str(issue, "issue_date")
     cards = normalized_cards(issue)
+    display_cards = rolling_display_cards(issue_path, issue, cards)
     details_dir = output_root / "details"
     details_dir.mkdir(parents=True, exist_ok=True)
 
@@ -1499,7 +1559,7 @@ def generate_issue(issue_path: Path, output_root: Path, *, write_marker: bool) -
         (details_dir / card["slug"]).write_text(render_detail_html(detail), encoding="utf-8")
 
     (output_root / f"night-brief-web-sample-{issue_date}.html").write_text(
-        render_issue_html(issue, cards, root=False),
+        render_issue_html(issue, display_cards, root=False),
         encoding="utf-8",
     )
     (details_dir / f"extraction-log-{issue_date}.html").write_text(render_extraction_log(issue), encoding="utf-8")
@@ -1508,6 +1568,7 @@ def generate_issue(issue_path: Path, output_root: Path, *, write_marker: bool) -
     return {
         "issue_date": issue_date,
         "cards": len(cards),
+        "display_cards": len(display_cards),
         "sample_html": str(output_root / f"night-brief-web-sample-{issue_date}.html"),
         "extraction_log": str(details_dir / f"extraction-log-{issue_date}.html"),
         "marker_written": write_marker,
