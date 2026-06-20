@@ -64,6 +64,18 @@ ALLOWED_CHANGE_CLASSES = {
     "duplicate_followup",
     "background_only",
 }
+CATEGORY_IDENTITY_TERMS = {
+    "OpenAI": ["OpenAI", "ChatGPT", "Codex"],
+    "SoftBank": ["SoftBank", "ソフトバンク", "SBG", "Arm"],
+    "Honda": ["Honda", "ホンダ", "HRC", "Aston Martin", "Acura"],
+    "F1": ["F1", "FIA", "Grand Prix", "グランプリ", "Formula 1", "ホンダ", "Honda", "ADUO", "PU", "レッドブル", "メルセデス", "フェラーリ", "マクラーレン", "Aston Martin"],
+    "SpaceX": ["SpaceX", "Starship", "Starlink", "Dragon", "Falcon"],
+    "日本経済": ["日本", "日銀", "財務省", "CPI", "GDP", "円", "JGB"],
+    "YOASOBI / 幾田りら": ["YOASOBI", "幾田りら", "ikura"],
+    "アジア経済": ["アジア", "中国", "インド", "台湾", "韓国", "ASEAN", "ベトナム"],
+    "北米経済": ["米", "米国", "アメリカ", "Canada", "Fed", "FRB", "S&P", "Nasdaq"],
+    "宇都宮ブレックス": ["宇都宮ブレックス", "BREX", "B.LEAGUE", "Bリーグ"],
+}
 
 
 def fail(message: str) -> None:
@@ -174,6 +186,14 @@ def useful_importance(value: str) -> bool:
 
 def reader_public_copy_ok(text: str, *, kind: str) -> bool:
     return not state_contract.public_copy_violations(text, kind=kind)
+
+
+def category_identity_ok(category_label: str, title: str, summary: str) -> bool:
+    terms = CATEGORY_IDENTITY_TERMS.get(category_label)
+    if not terms:
+        return True
+    text = f"{title} {summary}".lower()
+    return any(term.lower() in text for term in terms)
 
 
 def natural_detail_summary(
@@ -798,6 +818,7 @@ def normalize_result(
             or not reader_public_copy_ok(detail, kind="summary")
             or not reader_public_copy_ok(what_changed, kind="summary")
             or not reader_public_copy_ok(why_it_matters, kind="summary")
+            or not category_identity_ok(str(category.get("label", "")), title, summary)
             or title in seen_titles
             or len(summary) < 80
             or len(detail) < 220
@@ -871,6 +892,8 @@ def normalize_result(
                 1200,
             )
         if not reader_public_copy_ok(signal_summary, kind="summary"):
+            continue
+        if not category_identity_ok(str(category.get("label", "")), title, signal_summary):
             continue
         rejection_reason = reader_facing_text(
             signal.get("rejection_reason", ""),
