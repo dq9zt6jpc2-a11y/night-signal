@@ -83,6 +83,8 @@ def main() -> int:
         fail("unattended workflow must be able to commit the audited issue")
     if "actions: write" not in unattended or "gh workflow run pages.yml" not in unattended:
         fail("unattended workflow must explicitly dispatch Pages after bot push")
+    if "gh run watch \"$RUN_ID\" --exit-status" not in unattended or "--workflow pages.yml" not in unattended:
+        fail("unattended workflow must wait for Pages publication before succeeding")
     print(
         "PUBLICATION SCHEDULE AUDIT PASSED: "
         f"publish_jst={publish_times}, preflight_jst={preflight_times}, "

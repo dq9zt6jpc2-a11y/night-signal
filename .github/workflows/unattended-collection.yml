@@ -106,9 +106,35 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          echo "PAGES_DISPATCHED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
           gh workflow run pages.yml \
             --ref main \
             -f issue_date="$ISSUE_DATE"
+
+      - name: Wait for Pages publication
+        if: ${{ inputs.canary_only != true && inputs.dry_run != true }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          RUN_ID=""
+          for attempt in $(seq 1 40); do
+            RUN_ID="$(gh run list \
+              --workflow pages.yml \
+              --branch main \
+              --event workflow_dispatch \
+              --json databaseId,createdAt \
+              --jq '.[] | select(.createdAt >= env.PAGES_DISPATCHED_AT) | .databaseId' \
+              | head -n 1)"
+            if [[ -n "$RUN_ID" ]]; then
+              break
+            fi
+            sleep 15
+          done
+          if [[ -z "$RUN_ID" ]]; then
+            echo "No Pages publication run appeared after $PAGES_DISPATCHED_AT" >&2
+            exit 1
+          fi
+          gh run watch "$RUN_ID" --exit-status
 
       - name: Report dry run
         if: ${{ inputs.canary_only != true && inputs.dry_run == true }}
