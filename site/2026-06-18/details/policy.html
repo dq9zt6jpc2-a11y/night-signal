@@ -17,7 +17,7 @@
 
       <h2>毎日の進め方</h2>
       <ul>
-        <li>20:00 JSTまでに固定URLで最新版を読める状態にする。GitHub Pages公開workflowも20:00 JSTに再実行し、当日成果物がmainにある場合は固定URLまで公開確認する。</li>
+        <li>20:00 JSTまでに固定URLで最新版を読める状態にする。定時の主経路は無人収集workflowで、収集、監査、commit、Pages dispatch、公開完了確認まで同じバックグラウンド経路で閉じる。</li>
         <li>発行日に入ってから予備調査を行い、18:00 JST以降に全10カテゴリの公式/主要報道/SNS/X/Instagram/Facebook/YouTube/データを必ず再確認する。朝のissueやbundleを最終版として再利用しない。</li>
         <li>19:00までに候補整理、19:20までにトップページ要約、詳細概要、抽出ログ、品質ゲートを完了する。</li>
         <li>19:40頃までにcommit/pushし、GitHub Pagesと公開URLを確認する。</li>
@@ -58,9 +58,9 @@
         <li>2026-05-22以降、各ウォッチ項目は <code>search_sweep</code> に検索クエリと選別判断を残す。検索結果URLは公開情報として載せず、検索で見つけた直接URLだけを <code>collected_items</code> や原文確認に回す。</li>
         <li>公開カードは <code>latest_candidates</code> の <code>decision: adopted</code> からしか作らない。2026-05-22以降、元情報が3日より古い候補は公開カードにせず、背景資料としてだけ扱う。2026-06-01以降は今日・昨日・一昨日の3暦日だけを公開カードにし、カードにはどの日の情報かを表示する。</li>
         <li>2026-05-22以降、3日以内の新しい候補を採用しない場合は、重複、重要度不足、実質変化なし、根拠不足、関連不足のどれかを <code>non_adoption_reason_class</code> に残す。新しい候補を「なんとなく保留」にしない。</li>
-        <li>掲載数は固定しない。更新がなければカテゴリ内のカードは0件でもよい。公開カードは新規追加または明確な変化がある候補だけにする。採用しない直近3日の確認価値がある候補は、日付・概要・直接URL付きの確認情報としてカテゴリ内に残す。根拠が足りる重要候補は詳細カードへ昇格させる。</li>
-        <li>公開対象は <code>.night-signal-issue-date</code> で選ぶ。日次運用ではJSTの今日号、サンプル、抽出ログ、site配下の当日版がそろわない場合は公開前監査で止める。</li>
-        <li>公開workflowは当日issue成果物と <code>.night-signal-issue-date</code> の変更だけで動かす。コード、ドキュメント、設定、方針の改善だけで過去号を再配信しない。</li>
+        <li>掲載数は固定しない。更新がなければカテゴリ内のカードは0件でもよい。公開カードは新規追加または明確な変化がある候補だけにし、定例ニュースで件数を埋めない。採用しない直近3日の確認価値がある候補は、日付・概要・直接URL付きの確認情報としてカテゴリ内に残す。根拠が足りる重要候補は詳細カードへ昇格させる。</li>
+        <li>公開対象はJSTの今日号だけにする。日次運用では当日号、サンプル、抽出ログ、site配下の当日版がそろわない場合は公開前監査で止める。<code>.night-signal-issue-date</code> は生成済み当日号を照合する監査マーカーであり、Pagesの起動条件や日付選択には使わない。</li>
+        <li>Pages workflowはdispatch専用とし、scheduleやpushでは起動しない。コード、ドキュメント、設定、方針の改善だけで過去号を再配信しない。</li>
         <li>URL根拠はカテゴリごとに8件以上、異なるホスト5件以上を最低ラインにする。公式だけ、SNSだけ、単一メディアだけでは通さない。</li>
         <li><code>last_checked_jst</code> と <code>collection_completed_at_jst</code> は当日の時刻付きで記録する。最終公開は18:00 JST以降の収集完了を必須にし、日付だけ差し替えた過去ログや朝の収集結果を失敗にする。</li>
       </ul>
@@ -136,20 +136,19 @@
         <li>重大未確認リスクが残る場合は公開しない。決算資料、イベント結果、公式発表、固有名詞ニュース、SNSで大きく話題化した件は重大リスクとして扱う。</li>
       </ul>
 
-      <h2>品質ゲート</h2>
-      <p>方針文だけでは再発防止にならないため、公開前に必ず機械的なゲートを通します。</p>
+      <h2>品質境界</h2>
+      <p>品質は後段チェックを増やして担保しない。生成、同期、公開の各発生点で不正な状態を作れない構造にし、通常運用のゲートは重複させない。</p>
       <ul>
-        <li><code>python3 scripts/guardrail_inventory.py</code>: 過去の不具合対策が設定、方針、監査コード、失敗シミュレーションに残っているか確認する。個別HTMLだけを直した状態を失敗させる。</li>
+        <li><code>python3 scripts/guardrail_inventory.py</code>: 設計変更時に、過去の不具合対策が設定、方針、監査コード、失敗シミュレーションに残っているか確認する。日次運用で工程を増やすためではなく、発生点の設計が退行していないかを見る。</li>
         <li><code>python3 scripts/sync_site.py YYYY-MM-DD</code>: 当日版をsiteへ同期する。過去号へのフォールバックは禁止。</li>
         <li><code>site/index.html</code> の固定URLには、日付別ページ用の <code>最新号</code> 相対リンクを残さない。日付別ページから固定URLへ戻る導線を編集元が含んでいても、同期時に固定URL側から除去する。</li>
         <li><code>python3 scripts/render_detail.py detail.json</code>: 詳細ページを許可された構造だけで生成する。2026-06-05号以降は要点と背景、確認した事実、未確定点、必要な原文リンクを扱い、作業見出しや情報不足の本文は作成時点で失敗させる。</li>
         <li><code>python3 scripts/coverage_audit.py YYYY-MM-DD</code>: 構造化収集契約に沿って、探索軸、ウォッチ項目別の主情報源証跡、最新候補、情報源の多様性、掲載カードと抽出ログの一致、詳細ページへ残した事実と使用参照先、定例・重複の掲載判断、変化なし確認の証跡を確認する。</li>
         <li><code>python3 scripts/quality_gate.py YYYY-MM-DD</code>: 日付、鮮度、可変掲載、読者向け見出し、カードと詳細ページの整合、通常カードの詳細リンク重複、詳細情報構造、リンク、coverage-manifest、カテゴリ固有検索軸、詳細ページの前日コピーを検査する。</li>
         <li>2026-05-26号以降、掲載カードがリンクする詳細ページ名は当日の日付を含める。前号詳細へのリンクをカードの日付だけ変更して再掲する状態は品質ゲートで失敗させる。</li>
-        <li><code>python3 scripts/pre22_audit.py YYYY-MM-DD</code>: 当日成果物と品質ゲートを公開前に確認する。</li>
-        <li>commit/push後に <code>python3 scripts/publication_audit.py YYYY-MM-DD</code> を実行し、未コミット差分、未push、remote不一致、公開URLの日付不一致に加え、掲載した全カード見出しの公開ページ不一致を失敗扱いにする。掲載件数は変化の有無に応じて可変とし、定例ニュースで件数を埋めない。</li>
+        <li><code>python3 scripts/night_signal_publish.py YYYY-MM-DD</code> が通常運用の品質境界を所有する。sync、current issue、coverage、qualityを一度だけ通し、同じ内容検査を別名の事前監査で繰り返さない。</li>
+        <li>commit/push後の <code>python3 scripts/publication_audit.py YYYY-MM-DD</code> は、未コミット差分、未push、remote不一致、公開URLの日付不一致、掲載した全カード見出しの公開ページ不一致だけを見る。内容品質はcommit前に落とし、公開監査で再実行しない。</li>
         <li>GitHub Pagesの公開処理でも <code>publication_audit.py --public-content-only</code> を実行し、日付だけが新しく本文が不整合な状態を公開成功扱いにしない。CIでは生成後の作業ツリー状態ではなく、配信HTMLと採用見出しの一致を検証する。</li>
-        <li>コマンドは必ず直列で実行する。順序は sync → coverage_audit → quality_gate → pre22_audit → commit → push → publication_audit。</li>
       </ul>
 
       <h2>ゲート検証</h2>
@@ -172,7 +171,7 @@
         <li>Codex background automationが利用枠不足で開始できず、<code>OPENAI_API_KEY</code>が利用できる場合はResponses APIへ切り替える。利用できない場合は、GitHub Modelsと公開Web/RSSを使う無人収集を18:05、18:35、19:05、19:35、19:50 JSTに実行する。当日確認済みreviewed bundleまたは18:00 JST以降のfresh issueがある場合だけ、その状態から再開できる。</li>
         <li>Codex、Responses API、GitHub Models、確認済みbundleのいずれも利用できない場合は、古い号を当日版として出さない。独立watchdogを失敗させ、公開不能を明示する。</li>
         <li>各段階は <code>state/YYYY-MM-DD/runtime_checkpoint.json</code> に記録する。収集はslot単位、合成はカテゴリ単位でも原子的に保存し、入力hashが一致する完了部分だけを再利用する。途中停止後に全カテゴリを最初からやり直さず、DBの <code>IN_PROGRESS</code> 表示だけを稼働証拠にしない。</li>
-        <li>公開対象日は <code>.night-signal-issue-date</code> に明示した号だけを使う。GitHub Actionsの無人経路は各URLの取得結果とGitHub Modelsの構造化抽出を保存し、同じcoverage/quality/pre22監査を通した場合だけcommit/pushする。Pagesは監査済みコミットだけを配布し、過去号へのフォールバックは禁止する。</li>
+        <li>公開対象日はJSTの今日号だけを使う。GitHub Actionsの無人経路は各URLの取得結果とGitHub Modelsの構造化抽出を保存し、生成時点のcoverage/quality境界を通した場合だけcommit/pushする。Pagesは監査済みコミットをdispatchされた場合だけ配布し、過去号へのフォールバックは禁止する。</li>
         <li>当日版がない、古いページが表示される、公開URLが当日版でない、GitHub Pagesだけ成功して当日ページ生成がない場合は失敗。</li>
         <li>一時クローンや別worktreeで成功しても、本番リポジトリへcommit/pushし、公開URLで当日版を確認するまで成功扱いにしない。</li>
         <li>失敗後は個別修正だけで終わらせず、ポリシー、抽出ログ形式、品質ゲート、シミュレーションのどこで止めるべきだったかを見直す。</li>

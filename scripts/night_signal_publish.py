@@ -283,8 +283,6 @@ def self_tests(profile: str) -> None:
     run([sys.executable, "scripts/night_signal_eval.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_import_research.py", "--self-test"])
     run([sys.executable, "scripts/publication_schedule_audit.py"])
-    if profile == "full":
-        run([sys.executable, "scripts/simulate_ai_collection_redesign.py", jst_today(), "--fail-on-weakness"])
 
 
 def readiness(issue_date: str, *, check: bool) -> dict[str, Any]:

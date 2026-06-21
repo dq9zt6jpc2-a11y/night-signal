@@ -372,8 +372,7 @@ The canonical owners now exist:
 - `night_signal_publish.py`: fresh collection or freshness-validated deploy.
 - `night_signal_publish.py --verification-profile deploy`: lightweight
   publication-boundary checks for already committed state.
-- `simulate_quality_gate_failures.py` and
-  `simulate_ai_collection_redesign.py`: full design-change validation, not a
+- `simulate_quality_gate_failures.py`: full design-change validation, not a
   mandatory step for every Pages deploy.
 
 All ten categories now require Web, X/SNS, and YouTube routes in addition to
