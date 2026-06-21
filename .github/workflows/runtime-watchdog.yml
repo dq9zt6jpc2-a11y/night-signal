@@ -24,7 +24,6 @@ jobs:
 
       - name: Detect missing independent collection path
         id: runtime
-        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
@@ -32,6 +31,10 @@ jobs:
           python3 scripts/night_signal_runtime_audit.py "$ISSUE_DATE" \
             --write-status
           RECOVERY_PATH="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["recovery_path"])' "state/$ISSUE_DATE/runtime_status.json")"
+          if [[ -z "$ISSUE_DATE" || -z "$RECOVERY_PATH" ]]; then
+            echo "Runtime audit did not produce issue_date/recovery_path" >&2
+            exit 1
+          fi
           echo "issue_date=$ISSUE_DATE" >> "$GITHUB_OUTPUT"
           echo "recovery_path=$RECOVERY_PATH" >> "$GITHUB_OUTPUT"
 

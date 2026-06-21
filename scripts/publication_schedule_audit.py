@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail when NIGHT SIGNAL no longer has enough pre-20:00 JST publish attempts."""
+"""Fail when NIGHT SIGNAL background publication is no longer single-owner."""
 
 from __future__ import annotations
 
@@ -10,7 +10,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLISH_WORKFLOW = ROOT / ".github" / "workflows" / "pages.yml"
-PREFLIGHT_WORKFLOW = ROOT / ".github" / "workflows" / "preflight.yml"
 RUNTIME_WATCHDOG_WORKFLOW = ROOT / ".github" / "workflows" / "runtime-watchdog.yml"
 UNATTENDED_WORKFLOW = ROOT / ".github" / "workflows" / "unattended-collection.yml"
 
@@ -30,24 +29,19 @@ def fail(message: str) -> None:
 
 def main() -> int:
     publish = PUBLISH_WORKFLOW.read_text(encoding="utf-8")
-    preflight = PREFLIGHT_WORKFLOW.read_text(encoding="utf-8")
     runtime_watchdog = RUNTIME_WATCHDOG_WORKFLOW.read_text(encoding="utf-8")
     unattended = UNATTENDED_WORKFLOW.read_text(encoding="utf-8")
     publish_times = cron_minutes(publish)
-    preflight_times = cron_minutes(preflight)
     watchdog_times = cron_minutes(runtime_watchdog)
     unattended_times = cron_minutes(unattended)
-    pre_20 = [value for value in publish_times if 18 * 60 <= value <= 20 * 60]
-    if len(pre_20) < 4:
-        fail(f"need at least four staged publish attempts from 18:00 through 20:00 JST: {publish_times}")
-    if pre_20[0] > 18 * 60 + 30:
-        fail(f"first publish attempt must be no later than 18:30 JST: {publish_times}")
-    if pre_20[-2] > 19 * 60 + 45:
-        fail(f"penultimate publish attempt must be no later than 19:45 JST: {publish_times}")
-    if not preflight_times or preflight_times[0] > 17 * 60:
-        fail(f"first preflight must run by 17:00 JST: {preflight_times}")
-    if "scripts/night_signal_publish.py" not in publish or "scripts/night_signal_publish.py" not in preflight:
-        fail("both workflows must use the canonical publication owner")
+    if publish_times:
+        fail(f"Pages workflow must not run on a schedule; collector owns timed publication: {publish_times}")
+    if re.search(r"\n\s+push:", publish):
+        fail("Pages workflow must not run on push; collector/watchdog must dispatch and wait for it")
+    if (ROOT / ".github" / "workflows" / "preflight.yml").exists():
+        fail("preflight workflow is obsolete; background collector and watchdog own readiness")
+    if "scripts/night_signal_publish.py" not in publish:
+        fail("Pages workflow must use the canonical publication owner")
     if '--deploy-existing' not in publish:
         fail("Pages workflow must deploy only committed, freshness-validated state")
     if "OPENAI_API_KEY" in publish:
@@ -60,6 +54,8 @@ def main() -> int:
         or "recovery_path != 'fresh_evening_issue'" not in runtime_watchdog
     ):
         fail("runtime watchdog must dispatch recovery unless the evening issue is fresh")
+    if "continue-on-error" in runtime_watchdog:
+        fail("runtime watchdog must not continue after readiness classification fails")
     if (
         "gh run watch \"$RUN_ID\" --exit-status" not in runtime_watchdog
         or "--workflow unattended-collection.yml" not in runtime_watchdog
@@ -87,8 +83,8 @@ def main() -> int:
         fail("unattended workflow must wait for Pages publication before succeeding")
     print(
         "PUBLICATION SCHEDULE AUDIT PASSED: "
-        f"publish_jst={publish_times}, preflight_jst={preflight_times}, "
-        f"watchdog_jst={watchdog_times}, unattended_jst={unattended_times}"
+        f"pages_jst={publish_times}, watchdog_jst={watchdog_times}, "
+        f"unattended_jst={unattended_times}"
     )
     return 0
 

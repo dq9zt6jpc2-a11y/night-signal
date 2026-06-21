@@ -7,19 +7,6 @@ on:
         description: "Explicit NIGHT SIGNAL issue date to publish, e.g. 2026-06-05. Empty publishes today's JST issue."
         required: false
         type: string
-  schedule:
-    - cron: "30 09 * * *"
-    - cron: "15 10 * * *"
-    - cron: "45 10 * * *"
-    - cron: "00 11 * * *"
-  push:
-    branches:
-      - main
-    paths:
-      - ".night-signal-issue-date"
-      - "night-brief-web-sample-*.html"
-      - "state/**"
-      - "site/**"
 
 permissions:
   contents: read
