@@ -83,7 +83,6 @@ python3 scripts/night_signal_state.py --generate-issue state/YYYY-MM-DD/issue.js
 python3 scripts/sync_site.py YYYY-MM-DD
 python3 scripts/coverage_audit.py YYYY-MM-DD
 python3 scripts/quality_gate.py YYYY-MM-DD
-python3 scripts/pre22_audit.py YYYY-MM-DD
 python3 scripts/publication_audit.py YYYY-MM-DD
 ```
 
@@ -94,7 +93,6 @@ python3 scripts/night_signal_runtime_audit.py YYYY-MM-DD --automation-id night-s
 python3 scripts/simulate_runtime_failures.py
 python3 scripts/night_signal_state.py --self-test
 python3 scripts/night_signal_state.py --readiness --date YYYY-MM-DD
-python3 scripts/pre22_audit.py YYYY-MM-DD
 python3 scripts/simulate_quality_gate_failures.py
 ```
 
@@ -124,8 +122,8 @@ python3 scripts/simulate_quality_gate_failures.py
 - `scripts/coverage_audit.py`: coverage contract audit.
 - `scripts/quality_gate.py`: public issue quality audit.
 - `scripts/current_issue_audit.py`: current JST issue audit.
-- `scripts/pre22_audit.py`: pre-publication local audit.
-- `scripts/publication_audit.py`: pushed/public URL audit.
+- `scripts/publication_audit.py`: pushed/public URL audit. It does not repeat
+  generation quality checks; those fail before commit in the publication driver.
 - `.github/workflows/pages.yml`: dispatch-only GitHub Pages publication
   boundary.
 - `.github/workflows/runtime-watchdog.yml`: background recovery orchestrator

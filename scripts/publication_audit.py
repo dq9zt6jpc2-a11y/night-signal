@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Verify that today's NIGHT SIGNAL is not just generated, but published.
+"""Verify that today's NIGHT SIGNAL committed issue is actually published.
 
-This audit is stricter than pre22_audit.py. It is intended to run after
-commit/push and fails when local work exists only on this machine.
+Generation quality is rejected before commit by the publication driver. This
+boundary checks only the external publication state: clean/pushed git state and
+public URL/content alignment.
 """
 
 from __future__ import annotations
@@ -57,16 +58,6 @@ def run(args: list[str], *, check: bool = True) -> subprocess.CompletedProcess[s
         detail = (result.stderr or result.stdout).strip()
         fail(f"{' '.join(args)} failed: {detail}")
     return result
-
-
-def run_quality_gate(issue_date: str) -> None:
-    result = run([sys.executable, str(ROOT / "scripts" / "quality_gate.py"), issue_date], check=False)
-    if result.stdout:
-        print(result.stdout, end="")
-    if result.stderr:
-        print(result.stderr, end="", file=sys.stderr)
-    if result.returncode != 0:
-        fail(f"quality gate failed for {issue_date}")
 
 
 def ensure_clean_worktree() -> None:
@@ -162,7 +153,6 @@ def main() -> int:
     latest_issue = latest_available_issue_date()
     if latest_issue and issue_date != latest_issue:
         fail(f"{issue_date} is not the latest local issue; latest is {latest_issue}")
-    run_quality_gate(issue_date)
     if not public_content_only():
         ensure_clean_worktree()
         ensure_pushed_to_origin()

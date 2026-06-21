@@ -265,7 +265,6 @@ def sync_and_audit(issue_date: str) -> None:
     run([sys.executable, "scripts/current_issue_audit.py"])
     run([sys.executable, "scripts/coverage_audit.py", issue_date])
     run([sys.executable, "scripts/quality_gate.py", issue_date])
-    run([sys.executable, "scripts/pre22_audit.py", issue_date])
 
 
 def self_tests(profile: str) -> None:
