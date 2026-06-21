@@ -844,6 +844,66 @@ def validate_summary_basis(detail: dict[str, Any], *, issue_date: str, source_da
         fail(f"cards[{card_index}].detail.summary_basis.source_dates must include card source date {source_date}")
 
 
+def content_terms(text: str) -> set[str]:
+    terms = set(re.findall(r"[A-Za-z][A-Za-z0-9.+-]{2,}|\d+(?:\.\d+)?|[一-龯ァ-ヶー]{2,}", text))
+    return {
+        term.lower()
+        for term in terms
+        if term
+        and term not in {
+            "する",
+            "した",
+            "いる",
+            "ある",
+            "なる",
+            "できる",
+            "確認",
+            "発表",
+            "公開",
+            "更新",
+            "情報",
+            "詳細",
+            "背景",
+        }
+    }
+
+
+def text_overlap(left: str, right: str) -> int:
+    return len(content_terms(left) & content_terms(right))
+
+
+def validate_card_candidate_binding(raw: dict[str, Any], candidate: dict[str, Any], *, card_index: int) -> None:
+    candidate_title = require_str(raw, "candidate_title")
+    card_title = require_str(raw, "title")
+    card_summary = require_str(raw, "summary")
+    detail = raw.get("detail")
+    if not isinstance(detail, dict):
+        fail(f"cards[{card_index}] missing detail object")
+    detail_summary = require_str(detail, "summary")
+    basis = detail.get("summary_basis")
+    basis_text = ""
+    if isinstance(basis, dict):
+        basis_values: list[str] = []
+        for key in ("what_changed", "why_it_matters", "limits_or_unknowns"):
+            value = basis.get(key)
+            if isinstance(value, str):
+                basis_values.append(value)
+        facts = basis.get("confirmed_facts")
+        if isinstance(facts, list):
+            basis_values.extend(str(fact) for fact in facts if isinstance(fact, str))
+        basis_text = " ".join(basis_values)
+
+    candidate_text = " ".join(
+        str(candidate.get(key, ""))
+        for key in ("title", "summary", "change_class", "source_published_date")
+    )
+    public_text = " ".join([card_summary, detail_summary, basis_text])
+    if text_overlap(public_text, candidate_text) < 2:
+        fail(f"cards[{card_index}] public copy is not bound to its candidate facts: {candidate_title}")
+    if text_overlap(card_summary, detail_summary) < 2 and text_overlap(card_summary, basis_text) < 2:
+        fail(f"cards[{card_index}] summary and detail describe different facts: {card_title}")
+
+
 def validate_public_card_copy(raw: dict[str, Any], detail: dict[str, Any], *, issue_date: str, card_index: int) -> None:
     title = require_str(raw, "title")
     summary = require_str(raw, "summary")
@@ -1413,6 +1473,11 @@ def validate_decisions_and_cards(issue: dict[str, Any], candidates: list[dict[st
     public_titles = [str(card.get("title")) for card in cards]
     if len(public_titles) != len(set(public_titles)):
         fail("cards must have unique public titles")
+    for card_index, card in enumerate(cards, start=1):
+        if not isinstance(card, dict):
+            fail(f"cards[{card_index}] must be an object")
+        candidate_title = require_str(card, "candidate_title")
+        validate_card_candidate_binding(card, candidate_by_title[candidate_title], card_index=card_index)
     return decisions
 
 
@@ -2394,6 +2459,22 @@ def self_test() -> None:
     clean_title_violations = public_copy_violations("OpenAI、Codexの共有機能を追加", kind="title")
     if clean_title_violations:
         fail("public copy guard rejected a reader-facing title: " + "; ".join(clean_title_violations))
+    def self_test_card(candidate_title: str, title: str, summary: str) -> dict[str, Any]:
+        return {
+            "candidate_title": candidate_title,
+            "title": title,
+            "summary": summary,
+            "detail": {
+                "summary": summary,
+                "summary_basis": {
+                    "what_changed": summary,
+                    "why_it_matters": summary,
+                    "confirmed_facts": [summary],
+                    "limits_or_unknowns": "未確定点は公表範囲に限られる。",
+                },
+            },
+        }
+
     validate_decisions_and_cards(
         {
             "decisions": [
@@ -2408,8 +2489,21 @@ def self_test() -> None:
                 }
             ]
         },
-        [{"title": "OpenAI Codex sharing candidate"}],
-        [{"candidate_title": "OpenAI Codex sharing candidate", "title": "OpenAI、Codexに共有機能を追加"}],
+        [
+            {
+                "title": "OpenAI Codex sharing candidate",
+                "summary": "OpenAI Codex sharing candidateとして、Codexの共有機能が追加された。",
+                "change_class": "material_update",
+                "source_published_date": "2099-01-01",
+            }
+        ],
+        [
+            self_test_card(
+                "OpenAI Codex sharing candidate",
+                "OpenAI、Codexに共有機能を追加",
+                "OpenAI Codex sharing candidateとして、Codexの共有機能が追加された。",
+            )
+        ],
     )
     if not rejects_material_signal(
         {
@@ -2466,8 +2560,58 @@ def self_test() -> None:
                 "change_class": "material_update",
             }
         ],
-        [{"candidate_title": "SpaceX、200億ドル社債を検討", "title": "SpaceX、200億ドル社債を検討"}],
+        [
+            self_test_card(
+                "SpaceX、200億ドル社債を検討",
+                "SpaceX、200億ドル社債を検討",
+                "SpaceXが200億ドル規模の社債を検討している。",
+            )
+        ],
     )
+    try:
+        validate_decisions_and_cards(
+            {
+                "decisions": [
+                    {
+                        "candidate_title": "ChatGPT安全更新",
+                        "adoption_decision": "adopt",
+                        "topic_value_class": "technical_or_product_shift",
+                        "reader_delta": "安全更新により応答制御が変わる。",
+                        "materiality_basis": "公式発表で新しい安全更新を確認できる。",
+                        "reject_reason_class": None,
+                        "reject_reason": None,
+                    }
+                ]
+            },
+            [
+                {
+                    "title": "ChatGPT安全更新",
+                    "summary": "ChatGPTが会話の流れからリスク兆候を拾い、応答を調整する安全更新を発表した。",
+                    "change_class": "material_update",
+                    "source_published_date": "2099-01-01",
+                }
+            ],
+            [
+                {
+                    "candidate_title": "ChatGPT安全更新",
+                    "title": "ChatGPT安全更新",
+                    "summary": "ChatGPTに家計管理プレビューが加わり、口座連携を始めた。",
+                    "detail": {
+                        "summary": "家計管理プレビューでは口座連携とダッシュボードを提供する。",
+                        "summary_basis": {
+                            "what_changed": "家計管理プレビューが始まった。",
+                            "why_it_matters": "金融データ連携に関係する。",
+                            "confirmed_facts": ["口座連携が提供される。"],
+                            "limits_or_unknowns": "対象地域は限定される。",
+                        },
+                    },
+                }
+            ],
+        )
+    except SystemExit:
+        pass
+    else:
+        fail("card/candidate binding must reject mismatched title and summary facts")
     rendered = render_detail_html(
         {
             "issue_date": "2099-01-01",
