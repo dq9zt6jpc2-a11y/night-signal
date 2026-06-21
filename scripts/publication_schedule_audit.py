@@ -60,6 +60,13 @@ def main() -> int:
         or "recovery_path != 'fresh_evening_issue'" not in runtime_watchdog
     ):
         fail("runtime watchdog must dispatch recovery unless the evening issue is fresh")
+    if (
+        "gh run watch \"$RUN_ID\" --exit-status" not in runtime_watchdog
+        or "--workflow unattended-collection.yml" not in runtime_watchdog
+        or "--workflow pages.yml" not in runtime_watchdog
+        or "night-signal-background-orchestrator" not in runtime_watchdog
+    ):
+        fail("runtime watchdog must wait for collection and Pages publication as one background loop")
     unattended_pre_20 = [
         value
         for value in unattended_times

@@ -11,6 +11,10 @@ permissions:
   contents: read
   actions: write
 
+concurrency:
+  group: night-signal-background-orchestrator
+  cancel-in-progress: false
+
 jobs:
   verify-remote-readiness:
     runs-on: ubuntu-latest
@@ -36,10 +40,62 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          echo "ORCHESTRATOR_STARTED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
           gh workflow run unattended-collection.yml \
             --ref main \
             -f issue_date="${{ steps.runtime.outputs.issue_date }}" \
             -f force=true
+
+      - name: Wait for unattended recovery
+        if: steps.runtime.outputs.recovery_path != 'fresh_evening_issue'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          RUN_ID=""
+          for attempt in $(seq 1 40); do
+            RUN_ID="$(gh run list \
+              --workflow unattended-collection.yml \
+              --branch main \
+              --event workflow_dispatch \
+              --json databaseId,createdAt \
+              --jq '.[] | select(.createdAt >= env.ORCHESTRATOR_STARTED_AT) | .databaseId' \
+              | head -n 1)"
+            if [[ -n "$RUN_ID" ]]; then
+              break
+            fi
+            sleep 15
+          done
+          if [[ -z "$RUN_ID" ]]; then
+            echo "No unattended collection run appeared after $ORCHESTRATOR_STARTED_AT" >&2
+            exit 1
+          fi
+          echo "UNATTENDED_RUN_ID=$RUN_ID" >> "$GITHUB_ENV"
+          gh run watch "$RUN_ID" --exit-status
+
+      - name: Wait for Pages publication
+        if: steps.runtime.outputs.recovery_path != 'fresh_evening_issue'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          RUN_ID=""
+          for attempt in $(seq 1 40); do
+            RUN_ID="$(gh run list \
+              --workflow pages.yml \
+              --branch main \
+              --event workflow_dispatch \
+              --json databaseId,createdAt \
+              --jq '.[] | select(.createdAt >= env.ORCHESTRATOR_STARTED_AT) | .databaseId' \
+              | head -n 1)"
+            if [[ -n "$RUN_ID" ]]; then
+              break
+            fi
+            sleep 15
+          done
+          if [[ -z "$RUN_ID" ]]; then
+            echo "No Pages publication run appeared after unattended collection $UNATTENDED_RUN_ID" >&2
+            exit 1
+          fi
+          gh run watch "$RUN_ID" --exit-status
 
       - name: Verify committed issue when available
         if: steps.runtime.outputs.recovery_path == 'fresh_evening_issue'
