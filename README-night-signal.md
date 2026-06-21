@@ -69,30 +69,20 @@ Public verification uses the same owner:
 python3 scripts/night_signal_publish.py YYYY-MM-DD --public-audit
 ```
 
-The lower-level commands remain available for debugging a failed state
-transition:
+Debug failed state transitions through the canonical owner first:
 
 ```bash
-python3 scripts/night_signal_state.py --write-collection-plan YYYY-MM-DD
-python3 scripts/night_signal_collect.py YYYY-MM-DD --replace --resume
-python3 scripts/night_signal_state.py --validate-observations state/YYYY-MM-DD/observations.jsonl
-python3 scripts/night_signal_synthesize.py YYYY-MM-DD --replace --resume
-python3 scripts/night_signal_state.py --assemble-issue-state YYYY-MM-DD
-python3 scripts/night_signal_state.py --validate-issue state/YYYY-MM-DD/issue.json
-python3 scripts/night_signal_state.py --generate-issue state/YYYY-MM-DD/issue.json
-python3 scripts/sync_site.py YYYY-MM-DD
-python3 scripts/coverage_audit.py YYYY-MM-DD
-python3 scripts/quality_gate.py YYYY-MM-DD
-python3 scripts/publication_audit.py YYYY-MM-DD
+python3 scripts/night_signal_runtime_audit.py YYYY-MM-DD --write-status
+python3 scripts/night_signal_state.py --readiness --date YYYY-MM-DD
 ```
 
-Useful structural checks:
+Design-change checks are separate from daily publication:
 
 ```bash
-python3 scripts/night_signal_runtime_audit.py YYYY-MM-DD --automation-id night-signal-5-21-3
-python3 scripts/simulate_runtime_failures.py
 python3 scripts/night_signal_state.py --self-test
-python3 scripts/night_signal_state.py --readiness --date YYYY-MM-DD
+python3 scripts/night_signal_publish.py --self-test
+python3 scripts/guardrail_inventory.py
+python3 scripts/publication_schedule_audit.py
 python3 scripts/simulate_quality_gate_failures.py
 ```
 
@@ -118,10 +108,9 @@ python3 scripts/simulate_quality_gate_failures.py
   Codex credits, `OPENAI_API_KEY`, or the local Mac.
 - `config/night_signal_resilience.json`: token/quota/network/authentication and
   partial-execution recovery contract.
-- `scripts/sync_site.py`: the only site sync path.
-- `scripts/coverage_audit.py`: coverage contract audit.
-- `scripts/quality_gate.py`: public issue quality audit.
-- `scripts/current_issue_audit.py`: current JST issue audit.
+- `scripts/sync_site.py`, `scripts/coverage_audit.py`,
+  `scripts/quality_gate.py`, and `scripts/current_issue_audit.py`: internal
+  publication-driver boundaries, not separate daily operating paths.
 - `scripts/publication_audit.py`: pushed/public URL audit. It does not repeat
   generation quality checks; those fail before commit in the publication driver.
 - `.github/workflows/pages.yml`: dispatch-only GitHub Pages publication
