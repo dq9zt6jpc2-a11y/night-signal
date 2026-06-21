@@ -34,7 +34,7 @@ jobs:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
           REQUESTED_ISSUE_DATE: ${{ inputs.issue_date || '' }}
         run: |
-          ISSUE_DATE="$(python3 scripts/night_signal_publish.py --resolve-issue-date --event-name "$GITHUB_EVENT_NAME" --requested-issue-date "${REQUESTED_ISSUE_DATE:-}" --require-push-artifacts)"
+          ISSUE_DATE="$(python3 scripts/night_signal_publish.py --resolve-issue-date --event-name "$GITHUB_EVENT_NAME" --requested-issue-date "${REQUESTED_ISSUE_DATE:-}")"
           # GitHub Pages deploys only a committed, evening-fresh issue. The
           # unattended collector owns live research and commits audited state;
           # this workflow remains a deterministic publication boundary.

@@ -50,44 +50,16 @@ def validate_issue_date(issue_date: str) -> str:
     return issue_date
 
 
-def marker_issue_date() -> str:
-    path = ROOT / ".night-signal-issue-date"
-    if not path.exists():
-        fail("push publication requires .night-signal-issue-date")
-    return validate_issue_date(path.read_text(encoding="utf-8").strip())
-
-
-def require_committed_issue_artifacts(issue_date: str) -> None:
-    missing = [
-        path.relative_to(ROOT).as_posix()
-        for path in [
-            ROOT / f"night-brief-web-sample-{issue_date}.html",
-            state_dir(issue_date) / "issue.json",
-            ROOT / "site" / issue_date / "index.html",
-        ]
-        if not path.exists()
-    ]
-    if missing:
-        fail(f"push publication target {issue_date} is missing committed issue artifacts: " + ", ".join(missing))
-
-
 def resolve_issue_date(
     *,
     event_name: str,
     requested_issue_date: str,
-    require_push_artifacts: bool,
 ) -> str:
     requested = requested_issue_date.strip()
     if requested:
         if event_name and event_name != "workflow_dispatch":
             fail("manual issue date override is only allowed for workflow_dispatch")
         issue_date = validate_issue_date(requested)
-        require_jst_current_issue(issue_date)
-        return issue_date
-    if event_name == "push":
-        issue_date = marker_issue_date()
-        if require_push_artifacts:
-            require_committed_issue_artifacts(issue_date)
         require_jst_current_issue(issue_date)
         return issue_date
     issue_date = validate_issue_date(jst_today())
@@ -303,7 +275,7 @@ def self_tests(profile: str) -> None:
     run([sys.executable, "scripts/night_signal_publish.py", "--self-test"])
     if profile == "deploy":
         return
-    if profile not in {"preflight", "full"}:
+    if profile != "full":
         fail(f"unknown verification profile: {profile}")
     run([sys.executable, "scripts/simulate_runtime_failures.py"])
     run([sys.executable, "scripts/night_signal_collect.py", "--self-test"])
@@ -393,46 +365,17 @@ def public_audit(issue_date: str) -> dict[str, Any]:
     return {"issue_date": issue_date, "public_content_verified": True}
 
 
-def preflight(issue_date: str, *, verification_profile: str) -> dict[str, Any]:
-    self_tests(verification_profile)
-    ensure_collection_plan(issue_date)
-    if (state_dir(issue_date) / "issue.json").exists():
-        assemble_and_render(issue_date)
-        run([sys.executable, "scripts/sync_site.py", issue_date])
-        run([sys.executable, "scripts/current_issue_audit.py", issue_date])
-        run([sys.executable, "scripts/coverage_audit.py", issue_date])
-        run([sys.executable, "scripts/quality_gate.py", issue_date])
-    run([sys.executable, "scripts/guardrail_inventory.py"])
-    status = readiness(issue_date, check=False)
-    freshness: dict[str, Any] | None = None
-    try:
-        freshness = collection_freshness(
-            issue_date,
-            require_evening_refresh=False,
-        )
-    except (SystemExit, FileNotFoundError, json.JSONDecodeError):
-        freshness = {"ready": False}
-    return {
-        "issue_date": issue_date,
-        "preflight": True,
-        "freshness": freshness,
-        "readiness": status,
-    }
-
-
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("issue_date", nargs="?", default=jst_today())
     parser.add_argument("--resolve-issue-date", action="store_true")
     parser.add_argument("--event-name", default="")
     parser.add_argument("--requested-issue-date", default="")
-    parser.add_argument("--require-push-artifacts", action="store_true")
     parser.add_argument("--import-reviewed-bundle", action="store_true")
     parser.add_argument("--deploy-existing", action="store_true")
-    parser.add_argument("--preflight", action="store_true")
     parser.add_argument("--public-audit", action="store_true")
     parser.add_argument("--self-test", action="store_true")
-    parser.add_argument("--verification-profile", choices=["deploy", "preflight", "full"], default="")
+    parser.add_argument("--verification-profile", choices=["deploy", "full"], default="")
     args = parser.parse_args()
 
     if args.resolve_issue_date:
@@ -440,7 +383,6 @@ def main() -> int:
             resolve_issue_date(
                 event_name=args.event_name,
                 requested_issue_date=args.requested_issue_date,
-                require_push_artifacts=args.require_push_artifacts,
             )
         )
         return 0
@@ -450,12 +392,7 @@ def main() -> int:
         return 0
     if args.import_reviewed_bundle and args.deploy_existing:
         fail("--import-reviewed-bundle and --deploy-existing are mutually exclusive")
-    if args.preflight:
-        result = preflight(
-            args.issue_date,
-            verification_profile=args.verification_profile or "preflight",
-        )
-    elif args.public_audit:
+    if args.public_audit:
         result = public_audit(args.issue_date)
     else:
         verification_profile = args.verification_profile or ("deploy" if args.deploy_existing else "full")

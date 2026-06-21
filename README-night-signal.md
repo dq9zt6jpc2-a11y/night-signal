@@ -55,16 +55,17 @@ GITHUB_TOKEN=... python3 scripts/night_signal_unattended_collect.py YYYY-MM-DD
 python3 scripts/night_signal_import_research.py YYYY-MM-DD
 ```
 
-GitHub Pages deploys only committed evening-fresh state:
+GitHub Pages is dispatch-only. It deploys only committed evening-fresh state
+after `unattended-collection.yml` or `runtime-watchdog.yml` starts it and waits
+for completion:
 
 ```bash
 python3 scripts/night_signal_publish.py YYYY-MM-DD --deploy-existing
 ```
 
-Preflight and public verification use the same owner:
+Public verification uses the same owner:
 
 ```bash
-python3 scripts/night_signal_publish.py YYYY-MM-DD --preflight
 python3 scripts/night_signal_publish.py YYYY-MM-DD --public-audit
 ```
 
@@ -125,12 +126,12 @@ python3 scripts/simulate_quality_gate_failures.py
 - `scripts/current_issue_audit.py`: current JST issue audit.
 - `scripts/pre22_audit.py`: pre-publication local audit.
 - `scripts/publication_audit.py`: pushed/public URL audit.
-- `.github/workflows/pages.yml`: GitHub Pages publication.
-- `.github/workflows/preflight.yml`: scheduled readiness check.
-- `.github/workflows/runtime-watchdog.yml`: independent remote failure
-  detector and unattended-recovery dispatcher.
+- `.github/workflows/pages.yml`: dispatch-only GitHub Pages publication
+  boundary.
+- `.github/workflows/runtime-watchdog.yml`: background recovery orchestrator
+  that dispatches unattended collection and waits for collection and Pages.
 - `.github/workflows/unattended-collection.yml`: independent 18:05-19:50 JST
-  collection, audit, commit, and push path.
+  collection, audit, commit, push, Pages dispatch, and Pages completion path.
 - `docs/night-signal-basic-design.md`: design source of truth.
 
 ## Private Data

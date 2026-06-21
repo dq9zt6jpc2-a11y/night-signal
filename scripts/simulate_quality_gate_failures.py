@@ -718,7 +718,7 @@ def main() -> int:
         lambda tmp: append_workflow_text(
             tmp,
             'elif [[ -f ".night-signal-issue-date" ]]; then\n'
-            '  echo "No current state issue or selected issue marker found" >&2',
+            '  echo "No current state issue; falling back to .night-signal-issue-date" >&2',
         ),
         "latest_issue_publish_only forbidden workflow terms",
     )

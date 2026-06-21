@@ -524,15 +524,14 @@
       "id": "latest_issue_publish_only",
       "description": "Publishing must not silently fall back to an old issue or a stale root page.",
       "required_audit_terms": [
-        "Refusing to publish",
+        "refusing to publish stale issue as latest",
         "PUBLICATION AUDIT PASSED",
         "local site/index.html has no card titles",
         "missing_titles = [title for title in local_card_titles(issue_date) if title not in root_html]",
-        "--public-content-only",
-        "push publication target"
+        "--public-content-only"
       ],
       "required_policy_terms": [
-        ".night-signal-issue-date",
+        "公開対象日はJSTの今日号だけ",
         "過去号へのフォールバックは禁止",
         "publication_audit",
         "掲載した全カード見出し",
@@ -540,9 +539,8 @@
         "--public-content-only"
       ],
       "required_workflow_terms": [
-        ".night-signal-issue-date",
+        "workflow_dispatch:",
         "--resolve-issue-date",
-        "--require-push-artifacts",
         "REQUESTED_ISSUE_DATE",
         "Verify public page date",
         "python3 scripts/night_signal_publish.py \"$ISSUE_DATE\"",
@@ -556,7 +554,9 @@
         "git diff --name-only",
         "using latest committed issue",
         "No pushed issue file",
-        "selected issue marker"
+        "No current state issue",
+        "push:",
+        "paths:"
       ],
       "required_simulation_terms": [
         "guardrail catches workflow fallback to latest issue",
@@ -667,7 +667,7 @@
     },
     {
       "id": "jst_current_issue_publication",
-      "description": "Daily publication must fail when the selected issue marker and generated artifacts are not today's JST issue.",
+      "description": "Daily publication must fail unless the generated, audited, and published issue is today in JST; the marker is only a local audit cross-check, not a Pages trigger.",
       "required_audit_terms": [
         "CURRENT ISSUE AUDIT FAILED",
         ".night-signal-issue-date",
@@ -676,13 +676,15 @@
       ],
       "required_policy_terms": [
         ".night-signal-issue-date",
+        "監査マーカー",
         "JSTの今日号",
         "20:00 JSTまで",
-        "当日版がそろわない場合は公開前監査で止める"
+        "当日号、サンプル、抽出ログ、site配下の当日版がそろわない場合は公開前監査で止める"
       ],
       "required_workflow_terms": [
-        "scripts/night_signal_publish.py",
-        "cron: \"00 11 * * *\""
+        "NIGHT SIGNAL Unattended Collection",
+        "NIGHT SIGNAL Runtime Watchdog",
+        "gh run watch \"$RUN_ID\" --exit-status"
       ]
     },
     {
@@ -709,7 +711,8 @@
       ],
       "required_workflow_terms": [
         "scripts/night_signal_publish.py",
-        "--preflight"
+        "scripts/night_signal_unattended_collect.py",
+        "gh run watch \"$RUN_ID\" --exit-status"
       ]
     },
     {
@@ -760,22 +763,23 @@
     },
     {
       "id": "publish_trigger_issue_artifacts_only",
-      "description": "Code, docs, and policy changes must not republish a stale selected issue through the Pages workflow.",
+      "description": "Pages must be dispatch-only; timed collection and watchdog orchestration own publication so code/docs/policy changes cannot republish a stale issue.",
       "required_policy_terms": [
+        "Pages workflowはdispatch専用",
         "コード、ドキュメント、設定、方針の改善だけで過去号を再配信しない"
       ],
       "required_workflow_terms": [
-        "paths:",
-        ".night-signal-issue-date",
-        "night-brief-web-sample-*.html",
-        "site/**"
+        "workflow_dispatch:",
+        "gh workflow run pages.yml",
+        "gh run watch \"$RUN_ID\" --exit-status"
       ],
       "forbidden_workflow_terms": [
+        "push:",
+        "paths:",
         "details/**",
         "scripts/**",
         "docs/**",
-        "config/**",
-        ".github/workflows/pages.yml"
+        "config/**"
       ]
     }
   ]
