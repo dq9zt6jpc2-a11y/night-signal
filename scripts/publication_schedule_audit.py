@@ -75,6 +75,10 @@ def main() -> int:
         )
     if "models: read" not in unattended or "night_signal_unattended_collect.py" not in unattended:
         fail("unattended workflow must use GitHub Models without an external API secret")
+    if "--event-name workflow_dispatch" in unattended:
+        fail("unattended workflow must pass the real GitHub event name when resolving the issue date")
+    if '--event-name "$GITHUB_EVENT_NAME"' not in unattended:
+        fail("unattended workflow must resolve the issue date from the real GitHub event")
     if "contents: write" not in unattended or "git push origin HEAD:main" not in unattended:
         fail("unattended workflow must be able to commit the audited issue")
     if "actions: write" not in unattended or "gh workflow run pages.yml" not in unattended:

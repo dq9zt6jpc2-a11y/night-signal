@@ -56,7 +56,7 @@ jobs:
         env:
           REQUESTED_ISSUE_DATE: ${{ inputs.issue_date || '' }}
         run: |
-          ISSUE_DATE="$(python3 scripts/night_signal_publish.py --resolve-issue-date --event-name workflow_dispatch --requested-issue-date "${REQUESTED_ISSUE_DATE:-}")"
+          ISSUE_DATE="$(python3 scripts/night_signal_publish.py --resolve-issue-date --event-name "$GITHUB_EVENT_NAME" --requested-issue-date "${REQUESTED_ISSUE_DATE:-}")"
           echo "ISSUE_DATE=$ISSUE_DATE" >> "$GITHUB_ENV"
 
       - name: Verify GitHub Models access
