@@ -12,6 +12,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import sys
 import tempfile
 import time
@@ -84,6 +85,8 @@ Mission:
 - Do not merge independent events into one candidate. Honda China monthly sales
   and a Civic product update, for example, must remain separate candidates.
 - Every candidate must have one decision.
+- No-change verification text is not a candidate. Phrases like 直近確認,
+  確定差分は不足, or 単独記事にする確定差分 belong only in no_change_checks.
 - Cards must correspond exactly to adopted decisions. Fresh material candidates
   that matter to the reader should be adopted broadly and made visible as
   important-update cards. Do not create a separate public candidate board; the
@@ -323,6 +326,22 @@ def validate_claim_source_linkage(category: str, candidate: dict[str, Any], clai
         fail(f"{category} material candidate lacks claim/source linkage: {candidate.get('title')}")
 
 
+def validate_candidate_is_not_placeholder(issue_date: str, category: str, candidate: dict[str, Any]) -> None:
+    contract = state.read_json(state.CONFIG_PATH)
+    if not state.effective_on_or_after(contract, "candidate_placeholder_ban_effective_date", issue_date):
+        return
+    text = " ".join([str(candidate.get("title", "")), str(candidate.get("summary", ""))])
+    placeholder_patterns = [
+        r"直近確認",
+        r"確定差分は不足",
+        r"単独記事にする確定差分",
+        r"公式・媒体・SNS系の証跡で確認した",
+    ]
+    hits = [pattern for pattern in placeholder_patterns if re.search(pattern, text)]
+    if hits:
+        fail(f"{category} no-change placeholder must stay out of candidates: {candidate.get('title')}")
+
+
 def validate_category_result(
     issue_date: str,
     category: str,
@@ -390,6 +409,7 @@ def validate_category_result(
             if url not in allowed_urls:
                 fail(f"{category} candidate uses URL not present in observations: {url}")
             fresh_claim_urls.discard(url)
+        validate_candidate_is_not_placeholder(issue_date, category, candidate)
         validate_claim_source_linkage(category, candidate, claim_urls)
     retained_finding_urls = {
         str(url)

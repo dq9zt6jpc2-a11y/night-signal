@@ -122,6 +122,12 @@ VAGUE_TITLE_PHRASES = [
 ]
 SCHEDULE_ONLY_TERMS = ["開幕予定", "開催予定", "決勝予定", "予定通り"]
 SCHEDULE_MATERIAL_TERMS = ["変更", "決定", "発表", "延期", "前倒し", "中止", "追加", "確定"]
+CANDIDATE_PLACEHOLDER_PATTERNS = [
+    r"直近確認",
+    r"確定差分は不足",
+    r"単独記事にする確定差分",
+    r"公式・媒体・SNS系の証跡で確認した",
+]
 
 SOURCE_OBSERVATION_SCHEMA: dict[str, Any] = {
     "type": "object",
@@ -1398,6 +1404,17 @@ def validate_candidates(issue: dict[str, Any], frontier: list[dict[str, Any]]) -
         if effective_on_or_after(contract, "public_copy_contract_effective_date", issue_date):
             reject_public_copy(f"candidates[{index}].title", title, kind="title")
             reject_public_copy(f"candidates[{index}].summary", summary, kind="summary")
+        if effective_on_or_after(contract, "candidate_placeholder_ban_effective_date", issue_date):
+            placeholder_hits = [
+                pattern
+                for pattern in CANDIDATE_PLACEHOLDER_PATTERNS
+                if re.search(pattern, title) or re.search(pattern, summary)
+            ]
+            if placeholder_hits:
+                fail(
+                    f"candidates[{index}] is a no-change placeholder, not a candidate: "
+                    + ", ".join(placeholder_hits)
+                )
         if candidate.get("change_class") not in allowed_change:
             fail(f"candidates[{index}] invalid change_class")
         source_urls = candidate.get("source_urls")
@@ -2477,6 +2494,42 @@ def self_test() -> None:
     clean_title_violations = public_copy_violations("OpenAI、Codexの共有機能を追加", kind="title")
     if clean_title_violations:
         fail("public copy guard rejected a reader-facing title: " + "; ".join(clean_title_violations))
+    placeholder_failures: list[str] = []
+    original_fail = fail
+
+    def capture_placeholder_failure(message: str) -> None:
+        placeholder_failures.append(message)
+        raise RuntimeError(message)
+
+    globals()["fail"] = capture_placeholder_failure
+    try:
+        try:
+            validate_candidates(
+                {
+                    "issue_date": "2099-01-01",
+                    "candidates": [
+                        {
+                            "category": "OpenAI",
+                            "watch_topic_id": "product_release",
+                            "title": "OpenAI、product_releaseの直近確認",
+                            "source_published_date": "2099-01-01",
+                            "source_urls": ["https://openai.com/"],
+                            "change_class": "background_only",
+                            "summary": "OpenAIのproduct_releaseを公式・媒体・SNS系の証跡で確認したが、単独記事にする確定差分は不足した。",
+                            "material_facts": [],
+                            "counter_evidence_checked": True,
+                        }
+                    ],
+                },
+                frontier,
+            )
+        except RuntimeError:
+            pass
+    finally:
+        globals()["fail"] = original_fail
+    if not placeholder_failures or "no-change placeholder" not in placeholder_failures[0]:
+        fail("candidate validation must reject no-change placeholders")
+
     def self_test_card(candidate_title: str, title: str, summary: str) -> dict[str, Any]:
         return {
             "candidate_title": candidate_title,
