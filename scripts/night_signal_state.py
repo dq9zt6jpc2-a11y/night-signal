@@ -931,6 +931,22 @@ def relative_day_label(issue_date: str, source_date: str) -> str:
     return {0: "今日", 1: "昨日", 2: "一昨日"}.get(delta, "")
 
 
+def normalize_public_summary(text: str) -> str:
+    text = re.sub(r"\s+", " ", str(text).strip())
+    text = re.sub(r"[。．.]{2,}", "。", text)
+    text = re.sub(r"([！？!?]){2,}", r"\1", text)
+    parts = [part.strip() for part in re.split(r"(?<=[。！？!?])", text) if part.strip()]
+    seen: set[str] = set()
+    kept: list[str] = []
+    for part in parts:
+        key = re.sub(r"[、。．.!！?？\s「」『』（）()]", "", part).lower()
+        if key and key in seen:
+            continue
+        seen.add(key)
+        kept.append(part)
+    return " ".join(kept) if kept else text
+
+
 def normalized_cards(issue: dict[str, Any]) -> list[dict[str, Any]]:
     issue_date = require_str(issue, "issue_date")
     cards = require_list(issue, "cards")
@@ -943,7 +959,7 @@ def normalized_cards(issue: dict[str, Any]) -> list[dict[str, Any]]:
             fail(f"cards[{index}] must be an object")
         candidate_title = require_str(raw, "candidate_title")
         title = require_str(raw, "title")
-        summary = require_str(raw, "summary")
+        summary = normalize_public_summary(require_str(raw, "summary"))
         section_id = require_str(raw, "section_id")
         category = require_str(raw, "category")
         source_date = require_str(raw, "source_published_date")
@@ -951,7 +967,9 @@ def normalized_cards(issue: dict[str, Any]) -> list[dict[str, Any]]:
         if not isinstance(detail, dict):
             fail(f"cards[{index}] missing detail object")
         slug = require_str(detail, "slug")
-        validate_public_card_copy(raw, detail, issue_date=issue_date, card_index=index)
+        detail = {**detail, "summary": normalize_public_summary(require_str(detail, "summary"))}
+        raw_for_validation = {**raw, "summary": summary, "detail": detail}
+        validate_public_card_copy(raw_for_validation, detail, issue_date=issue_date, card_index=index)
         if not slug.endswith(f"-{issue_date}.html"):
             fail(f"detail slug must end with -{issue_date}.html: {slug}")
         if slug in seen_slugs:

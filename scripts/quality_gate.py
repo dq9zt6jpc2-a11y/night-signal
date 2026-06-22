@@ -424,6 +424,15 @@ def validate_no_confirmation_layer(context: str, html: str) -> None:
 
 
 def validate_public_summary_language(context: str, text: str, issue_date: str) -> None:
+    if re.search(r"[。．.]{2,}|[！？!?]{2,}", text):
+        fail(f"{context} contains repeated punctuation")
+    sentences = [part.strip() for part in re.split(r"(?<=[。！？!?])", text) if part.strip()]
+    seen_sentences: set[str] = set()
+    for sentence in sentences:
+        key = re.sub(r"[、。．.!！?？\s「」『』（）()]", "", sentence).lower()
+        if key and key in seen_sentences:
+            fail(f"{context} repeats the same sentence")
+        seen_sentences.add(key)
     violations = [
         label
         for pattern, label in PUBLIC_SUMMARY_PROCESS_PATTERNS

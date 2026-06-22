@@ -242,6 +242,22 @@ def render_information_basis(summary: str, basis: dict[str, Any]) -> str:
       <p class="limits">{limits}</p>"""
 
 
+def normalize_public_summary(text: str) -> str:
+    text = re.sub(r"\s+", " ", str(text).strip())
+    text = re.sub(r"[。．.]{2,}", "。", text)
+    text = re.sub(r"([！？!?]){2,}", r"\1", text)
+    parts = [part.strip() for part in re.split(r"(?<=[。！？!?])", text) if part.strip()]
+    seen: set[str] = set()
+    kept: list[str] = []
+    for part in parts:
+        key = re.sub(r"[、。．.!！?？\s「」『』（）()]", "", part).lower()
+        if key and key in seen:
+            continue
+        seen.add(key)
+        kept.append(part)
+    return " ".join(kept) if kept else text
+
+
 def render(data: dict[str, Any]) -> str:
     issue_date = required_str(data, "issue_date")
     section_id = required_str(data, "section_id")
@@ -251,7 +267,7 @@ def render(data: dict[str, Any]) -> str:
     sources = required_list(data, "sources")
     if data.get("body_paragraphs"):
         fail("body_paragraphs are not supported; integrate reader-facing facts into the article summary")
-    summary = required_str(data, "summary")
+    summary = normalize_public_summary(required_str(data, "summary"))
 
     for label, text in [
         ("title", title),
