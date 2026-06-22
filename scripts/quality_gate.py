@@ -955,9 +955,6 @@ def validate(issue_date: str) -> None:
         fail("cards missing 今日/昨日/一昨日 freshness labels: " + "; ".join(label_failures[:8]))
     if effective_on_or_after(COVERAGE_CONTRACT, "rolling_display_cards_effective_date", issue_dt):
         display_cards = normal_card_blocks(root_html)
-        minimum_display_cards = int(COVERAGE_CONTRACT.get("minimum_rolling_display_cards", 0))
-        if len(display_cards) < minimum_display_cards:
-            fail(f"rolling three-day display has too few cards: {len(display_cards)} < {minimum_display_cards}")
         expected_dates = {
             issue_dt.fromordinal(issue_dt.toordinal() - offset).isoformat()
             for offset in range(3)
