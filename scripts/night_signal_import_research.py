@@ -730,6 +730,22 @@ def signal_candidate(category: str, signal: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+NO_CHANGE_PLACEHOLDER_PATTERNS = [
+    "直近確認",
+    "確定差分は不足",
+    "単独記事にする確定差分",
+    "公式・媒体・SNS系の証跡で確認した",
+]
+
+
+def no_change_placeholder_signal(signal: dict[str, Any]) -> bool:
+    text = " ".join(
+        str(signal.get(key, ""))
+        for key in ("title", "summary", "rejection_reason", "materiality_basis")
+    )
+    return any(pattern in text for pattern in NO_CHANGE_PLACEHOLDER_PATTERNS)
+
+
 def signal_decision(signal: dict[str, Any]) -> dict[str, Any]:
     return {
         "candidate_title": str(signal["title"]),
@@ -813,15 +829,20 @@ def import_bundle(issue_date: str, bundle_path: Path, state_root: Path) -> dict[
             for signal in bundle["categories"][category]["signals"]
             if isinstance(signal, dict)
         ]
+        candidate_signals = [
+            signal
+            for signal in signals
+            if not no_change_placeholder_signal(signal)
+        ]
         candidates = [item_candidate(category, item) for item in items]
-        candidates.extend(signal_candidate(category, signal) for signal in signals)
+        candidates.extend(signal_candidate(category, signal) for signal in candidate_signals)
         item_titles = {str(item["title"]) for item in items}
-        signal_titles = {str(signal["title"]) for signal in signals}
+        signal_titles = {str(signal["title"]) for signal in candidate_signals}
         decisions = [
             item_decision(next(item for item in items if item["title"] == candidate["title"]))
             if candidate["title"] in item_titles
             else signal_decision(
-                next(signal for signal in signals if signal["title"] == candidate["title"])
+                next(signal for signal in candidate_signals if signal["title"] == candidate["title"])
             )
             if candidate["title"] in signal_titles
             else rejected_decision(candidate)
@@ -941,6 +962,13 @@ def self_test() -> None:
         fail("canonical detail summary kept label-heavy or internal copy")
     if no_change_candidate("OpenAI", "product_release", "2099-01-01", "https://openai.com/")["change_class"] != "background_only":
         fail("no-change candidate generation failed")
+    if not no_change_placeholder_signal(
+        {
+            "title": "OpenAI、product_releaseの直近確認",
+            "summary": "公式・媒体・SNS系の証跡で確認したが、単独記事にする確定差分は不足した。",
+        }
+    ):
+        fail("reviewed import must keep no-change placeholders out of candidates")
     task = {
         "slot_id": "openai-primary-web",
         "source_role": "primary_or_official",
