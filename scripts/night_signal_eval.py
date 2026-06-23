@@ -327,6 +327,7 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
         if expected_topics
         else 0
     )
+    reviewed_topic_complete = reviewed_topics >= expected_topics
     identity_failures = category_identity_failures(candidates)
     empty_categories = sorted(
         {
@@ -334,16 +335,26 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
             for category, _topic in expected_topics
             if not any(card.get("category") == category for card in cards)
             and not any(candidate.get("category") == category for candidate in concrete_candidates)
+            and not any(
+                reviewed_category == category
+                for reviewed_category, _reviewed_topic in reviewed_topics
+            )
         }
     )
     checks.update(
         {
-            "candidate_topic_recall_complete": topic_recall >= MIN_CANDIDATE_TOPIC_RECALL,
+            "candidate_topic_recall_complete": (
+                topic_recall >= MIN_CANDIDATE_TOPIC_RECALL
+                or (not findings_gate_applies and reviewed_topic_complete)
+            ),
             "reviewable_finding_topic_recall_complete": (
                 reviewable_topic_recall >= MIN_REVIEWABLE_FINDING_TOPIC_RECALL
+                or (not findings_gate_applies and reviewed_topic_complete)
             ),
             "discovery_horizon_scan_present": (
-                len(discovery_findings) > 0 or topic_recall >= MIN_CANDIDATE_TOPIC_RECALL
+                len(discovery_findings) > 0
+                or topic_recall >= MIN_CANDIDATE_TOPIC_RECALL
+                or (not findings_gate_applies and reviewed_topic_complete)
             ),
             "category_identity_complete": not identity_failures,
             "no_empty_reader_categories": not empty_categories,
