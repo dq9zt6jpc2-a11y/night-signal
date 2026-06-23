@@ -389,8 +389,6 @@ def validate_state_backed_coverage(issue_date: str, root_html: str, manifest: di
             and isinstance(candidate.get("source_urls"), list)
             and candidate.get("source_urls")
         ]
-        if not expected_titles and not visible_topic_candidates:
-            fail(f"{label} has no reader-facing article or candidate headline topics")
         for candidate in concrete:
             text = f"{candidate.get('title', '')} {candidate.get('summary', '')}"
             if not has_category_identity(label, text):
@@ -421,6 +419,8 @@ def validate_state_backed_coverage(issue_date: str, root_html: str, manifest: di
                 fail(f"{label} no_change_checks[{index}] lacks direct URL evidence")
             checked_topic_ids.add(str(topic_id))
             checked_urls.update(normalized)
+        if not expected_titles and not visible_topic_candidates and not checked_topic_ids:
+            fail(f"{label} has no reader-facing article, candidate headline topics, or verified no-change topics")
         missing_topic_ids = sorted(
             required_topic_ids - concrete_topic_ids - checked_topic_ids
         )
