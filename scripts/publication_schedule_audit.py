@@ -29,40 +29,23 @@ def fail(message: str) -> None:
 
 def main() -> int:
     publish = PUBLISH_WORKFLOW.read_text(encoding="utf-8")
-    runtime_watchdog = RUNTIME_WATCHDOG_WORKFLOW.read_text(encoding="utf-8")
     unattended = UNATTENDED_WORKFLOW.read_text(encoding="utf-8")
     publish_times = cron_minutes(publish)
-    watchdog_times = cron_minutes(runtime_watchdog)
     unattended_times = cron_minutes(unattended)
+    if RUNTIME_WATCHDOG_WORKFLOW.exists():
+        fail("runtime-watchdog workflow is obsolete; unattended collection must be the only timed owner")
     if publish_times:
         fail(f"Pages workflow must not run on a schedule; collector owns timed publication: {publish_times}")
     if re.search(r"\n\s+push:", publish):
-        fail("Pages workflow must not run on push; collector/watchdog must dispatch and wait for it")
+        fail("Pages workflow must not run on push; unattended collection must dispatch and wait for it")
     if (ROOT / ".github" / "workflows" / "preflight.yml").exists():
-        fail("preflight workflow is obsolete; background collector and watchdog own readiness")
+        fail("preflight workflow is obsolete; unattended collection owns readiness")
     if "scripts/night_signal_publish.py" not in publish:
         fail("Pages workflow must use the canonical publication owner")
     if '--deploy-existing' not in publish:
         fail("Pages workflow must deploy only committed, freshness-validated state")
     if "OPENAI_API_KEY" in publish:
         fail("Pages workflow must not pretend to own live collection")
-    if not watchdog_times or watchdog_times[0] > 19 * 60:
-        fail(f"independent runtime watchdog must detect a missing issue before 19:00 JST: {watchdog_times}")
-    if (
-        "night_signal_runtime_audit.py" not in runtime_watchdog
-        or "unattended-collection.yml" not in runtime_watchdog
-        or "recovery_path != 'fresh_evening_issue'" not in runtime_watchdog
-    ):
-        fail("runtime watchdog must dispatch recovery unless the evening issue is fresh")
-    if "continue-on-error" in runtime_watchdog:
-        fail("runtime watchdog must not continue after readiness classification fails")
-    if (
-        "gh run watch \"$RUN_ID\" --exit-status" not in runtime_watchdog
-        or "--workflow unattended-collection.yml" not in runtime_watchdog
-        or "--workflow pages.yml" not in runtime_watchdog
-        or "night-signal-background-orchestrator" not in runtime_watchdog
-    ):
-        fail("runtime watchdog must wait for collection and Pages publication as one background loop")
     unattended_pre_20 = [
         value
         for value in unattended_times
@@ -73,6 +56,12 @@ def main() -> int:
             "unattended collection needs five staged attempts starting by "
             f"18:05 JST: {unattended_times}"
         )
+    if max(unattended_pre_20) < 19 * 60 + 50:
+        fail(f"unattended collection needs a final pre-20:00 JST attempt: {unattended_times}")
+    if "night-signal-unattended-collection" not in unattended:
+        fail("unattended workflow must own the single background concurrency group")
+    if "cancel-in-progress: false" not in unattended:
+        fail("unattended workflow must not cancel an in-flight publication attempt")
     if "models: read" not in unattended or "night_signal_unattended_collect.py" not in unattended:
         fail("unattended workflow must use GitHub Models without an external API secret")
     if "--event-name workflow_dispatch" in unattended:
@@ -85,10 +74,13 @@ def main() -> int:
         fail("unattended workflow must explicitly dispatch Pages after bot push")
     if "gh run watch \"$RUN_ID\" --exit-status" not in unattended or "--workflow pages.yml" not in unattended:
         fail("unattended workflow must wait for Pages publication before succeeding")
+    if "python3 scripts/night_signal_runtime_audit.py \"$ISSUE_DATE\"" not in unattended:
+        fail("unattended workflow must classify readiness before and after collection")
+    if "python3 scripts/publication_audit.py \"$ISSUE_DATE\"" not in unattended:
+        fail("unattended workflow must run the public/local publication audit after Pages succeeds")
     print(
         "PUBLICATION SCHEDULE AUDIT PASSED: "
-        f"pages_jst={publish_times}, watchdog_jst={watchdog_times}, "
-        f"unattended_jst={unattended_times}"
+        f"pages_jst={publish_times}, unattended_jst={unattended_times}"
     )
     return 0
 

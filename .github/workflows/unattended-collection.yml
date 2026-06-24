@@ -59,6 +59,9 @@ jobs:
           ISSUE_DATE="$(python3 scripts/night_signal_publish.py --resolve-issue-date --event-name "$GITHUB_EVENT_NAME" --requested-issue-date "${REQUESTED_ISSUE_DATE:-}")"
           echo "ISSUE_DATE=$ISSUE_DATE" >> "$GITHUB_ENV"
 
+      - name: Classify startup readiness
+        run: python3 scripts/night_signal_runtime_audit.py "$ISSUE_DATE"
+
       - name: Verify GitHub Models access
         run: python3 scripts/night_signal_unattended_collect.py --canary
 
@@ -81,6 +84,7 @@ jobs:
         if: ${{ inputs.canary_only != true }}
         run: |
           python3 scripts/night_signal_import_research.py "$ISSUE_DATE"
+          python3 scripts/night_signal_runtime_audit.py "$ISSUE_DATE"
           python3 scripts/night_signal_publish.py "$ISSUE_DATE" --deploy-existing --verification-profile deploy
           PYTHONPYCACHEPREFIX=tmp/pycache python3 -m py_compile scripts/*.py
           git diff --check
@@ -135,6 +139,7 @@ jobs:
             exit 1
           fi
           gh run watch "$RUN_ID" --exit-status
+          python3 scripts/publication_audit.py "$ISSUE_DATE"
 
       - name: Report dry run
         if: ${{ inputs.canary_only != true && inputs.dry_run == true }}

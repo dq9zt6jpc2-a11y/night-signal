@@ -683,7 +683,6 @@
       ],
       "required_workflow_terms": [
         "NIGHT SIGNAL Unattended Collection",
-        "NIGHT SIGNAL Runtime Watchdog",
         "gh run watch \"$RUN_ID\" --exit-status"
       ]
     },
@@ -736,7 +735,7 @@
       ],
       "required_policy_terms": [
         "利用枠・トークン不足",
-        "独立watchdog",
+        "単一owner",
         "古い号を当日版として出さない",
         "runtime_checkpoint.json",
         "Responses APIへ切り替える",
@@ -755,15 +754,14 @@
         "changed_input_invalidates_checkpoint"
       ],
       "required_workflow_terms": [
-        "NIGHT SIGNAL Runtime Watchdog",
+        "NIGHT SIGNAL Unattended Collection",
         "night_signal_runtime_audit.py",
-        "unattended-collection.yml",
-        "gh workflow run"
+        "gh workflow run pages.yml"
       ]
     },
     {
       "id": "publish_trigger_issue_artifacts_only",
-      "description": "Pages must be dispatch-only; timed collection and watchdog orchestration own publication so code/docs/policy changes cannot republish a stale issue.",
+      "description": "Pages must be dispatch-only; unattended collection owns timed collection and publication so code/docs/policy changes cannot republish a stale issue.",
       "required_policy_terms": [
         "Pages workflowはdispatch専用",
         "コード、ドキュメント、設定、方針の改善だけで過去号を再配信しない"

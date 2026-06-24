@@ -56,8 +56,10 @@ python3 scripts/night_signal_import_research.py YYYY-MM-DD
 ```
 
 GitHub Pages is dispatch-only. It deploys only committed evening-fresh state
-after `unattended-collection.yml` or `runtime-watchdog.yml` starts it and waits
-for completion:
+after `unattended-collection.yml` starts it and waits for completion. Timed
+background publication has a single owner（単一owner）: the unattended collection
+workflow owns collection, audit, commit, push, Pages dispatch, and final public
+verification.
 
 ```bash
 python3 scripts/night_signal_publish.py YYYY-MM-DD --deploy-existing
@@ -115,8 +117,6 @@ python3 scripts/simulate_quality_gate_failures.py
   generation quality checks; those fail before commit in the publication driver.
 - `.github/workflows/pages.yml`: dispatch-only GitHub Pages publication
   boundary.
-- `.github/workflows/runtime-watchdog.yml`: background recovery orchestrator
-  that dispatches unattended collection and waits for collection and Pages.
 - `.github/workflows/unattended-collection.yml`: independent 18:05-19:50 JST
   collection, audit, commit, push, Pages dispatch, and Pages completion path.
 - `docs/night-signal-basic-design.md`: design source of truth.

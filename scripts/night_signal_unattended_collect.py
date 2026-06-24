@@ -766,6 +766,130 @@ def clean_sources(
     return cleaned
 
 
+def sentence_key(value: str) -> str:
+    return re.sub(r"[、。．.!！?？\s「」『』（）()]", "", value).lower()
+
+
+def sentence_parts(value: str) -> list[str]:
+    parts: list[str] = []
+    for part in re.split(r"(?<=[。！？!?])", reader_facing_text(value, 2400)):
+        text = part.strip()
+        if text:
+            parts.append(text if text.endswith(("。", "！", "？", "!", "?")) else f"{text}。")
+    if not parts and value:
+        text = reader_facing_text(value, 700).strip()
+        if text:
+            parts.append(text if text.endswith("。") else f"{text}。")
+    return parts
+
+
+def unique_sentences(value: str, limit: int = 1200) -> str:
+    seen: set[str] = set()
+    kept: list[str] = []
+    for sentence in sentence_parts(value):
+        key = sentence_key(sentence)
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        kept.append(sentence)
+    return compact_text("".join(kept), limit)
+
+
+def unique_nonempty(values: list[str], limit: int) -> list[str]:
+    seen: set[str] = set()
+    kept: list[str] = []
+    for value in values:
+        text = unique_sentences(value, limit)
+        key = sentence_key(text)
+        if not text or not key or key in seen:
+            continue
+        seen.add(key)
+        kept.append(text)
+    return kept
+
+
+def promoted_signal_item(
+    *,
+    topic: str,
+    title: str,
+    signal: dict[str, Any],
+    signal_summary: str,
+    topic_value: str,
+    issue_date: str,
+    record: dict[str, Any],
+) -> dict[str, Any]:
+    source_date = str(signal["source_published_date"])
+    source_label = str(record.get("label") or signal.get("source_label") or record.get("url"))
+    source_url = str(record.get("url") or signal.get("source_url"))
+    excerpt = reader_facing_text(record.get("excerpt") or record.get("evidence") or "", 900)
+    summary = unique_sentences(signal_summary, 900)
+    summary_sentences = sentence_parts(summary)
+    what_changed = summary_sentences[0] if summary_sentences else summary
+    why_it_matters = unique_sentences(
+        " ".join(summary_sentences[1:]) or (
+            f"{title}は、{category_hint_from_title(title)}に関わる新しい材料として、"
+            "投資判断、事業運営、予定確認のいずれかに影響しうる。"
+        ),
+        700,
+    )
+    facts = unique_nonempty(
+        [
+            title,
+            what_changed,
+            summary,
+            f"{source_label}が{source_date}付の情報として配信した。",
+            excerpt,
+        ],
+        500,
+    )[:4]
+    if len(facts) < 3:
+        facts.append(f"{source_date}を出典日として扱う。")
+    detail = natural_detail_summary(
+        summary=summary,
+        detail="",
+        what_changed=what_changed,
+        why_it_matters=why_it_matters,
+        facts=facts,
+        limits_or_unknowns="追加の公式発表、条件、数値の内訳は今後の確認対象となる。",
+        category_label="",
+    )
+    return {
+        "watch_topic_id": topic,
+        "title": title,
+        "summary": summary,
+        "source_published_date": source_date,
+        "topic_value_class": topic_value,
+        "priority_class": "priority",
+        "slug": (
+            "auto-"
+            + hashlib.sha1(title.encode("utf-8")).hexdigest()[:12]
+            + f"-{issue_date}"
+        ),
+        "detail_summary": detail,
+        "what_changed": what_changed,
+        "why_it_matters": why_it_matters,
+        "confirmed_facts": facts[:4],
+        "limits_or_unknowns": "追加の公式発表、条件、数値の内訳は今後の確認対象となる。",
+        "sources": [
+            {
+                "label": source_label,
+                "url": source_url,
+                "source_role": str(record.get("source_role", "independent_media_or_data")),
+                "channel": str(record.get("channel", "web")),
+            }
+        ],
+        "observation_source_role": str(record.get("source_role", "independent_media_or_data")),
+        "observation_channel": str(record.get("channel", "web")),
+    }
+
+
+def category_hint_from_title(title: str) -> str:
+    for category, terms in CATEGORY_IDENTITY_TERMS.items():
+        if any(term.lower() in title.lower() for term in terms):
+            return category
+    return "当該テーマ"
+
+
 def normalize_result(
     raw: dict[str, Any],
     category: dict[str, Any],
@@ -819,6 +943,10 @@ def normalize_result(
                 ),
                 1000,
             )
+        summary = unique_sentences(summary, 1000)
+        what_changed = unique_sentences(what_changed, 700)
+        why_it_matters = unique_sentences(why_it_matters, 700)
+        facts = unique_nonempty(facts, 500)
         if len(detail) < 280 or SUMMARY_LABEL_RE.search(detail):
             detail = natural_detail_summary(
                 summary=summary,
@@ -829,6 +957,7 @@ def normalize_result(
                 limits_or_unknowns=limits_or_unknowns,
                 category_label=str(category.get("label", "")),
             )
+        detail = unique_sentences(detail, 2600)
         sources = clean_sources(item.get("sources"), records_by_url)
         topic_value = str(item.get("topic_value_class", ""))
         if (
@@ -924,38 +1053,15 @@ def normalize_result(
         if material_signal and len(signal_summary) >= 120 and url:
             seen_titles.add(title)
             items.append(
-                {
-                    "watch_topic_id": topic,
-                    "title": title,
-                    "summary": signal_summary,
-                    "source_published_date": str(signal["source_published_date"]),
-                    "topic_value_class": topic_value,
-                    "priority_class": "priority",
-                    "slug": (
-                        "auto-"
-                        + hashlib.sha1(title.encode("utf-8")).hexdigest()[:12]
-                        + f"-{issue_date}"
-                    ),
-                    "detail_summary": signal_summary,
-                    "what_changed": signal_summary,
-                    "why_it_matters": signal_summary,
-                    "confirmed_facts": [
-                        signal_summary,
-                        f"出典は{record.get('label', url)}で確認した。",
-                        f"出典日付は{signal['source_published_date']}として扱う。",
-                    ],
-                    "limits_or_unknowns": "追加の公式発表や詳細条件は継続確認が必要。",
-                    "sources": [
-                        {
-                            "label": str(record.get("label", url)),
-                            "url": url,
-                            "source_role": str(record.get("source_role", "independent_media_or_data")),
-                            "channel": str(record.get("channel", "web")),
-                        }
-                    ],
-                    "observation_source_role": str(record.get("source_role", "independent_media_or_data")),
-                    "observation_channel": str(record.get("channel", "web")),
-                }
+                promoted_signal_item(
+                    topic=topic,
+                    title=title,
+                    signal=signal,
+                    signal_summary=signal_summary,
+                    topic_value=topic_value,
+                    issue_date=issue_date,
+                    record=record,
+                )
             )
             continue
         rejection_reason = reader_facing_text(
@@ -1303,6 +1409,56 @@ def self_test() -> None:
         or not normalized_signal[0]["rejection_reason"]
     ):
         fail("normalization lost a concise retained signal")
+    material_signal_raw = {
+        "items": [],
+        "signals": [
+            {
+                "watch_topic_id": "topic",
+                "title": "SpaceXが200億ドル規模の社債を検討",
+                "summary": (
+                    "SpaceXが200億ドル規模の社債発行を検討していると報じられた。"
+                    "格付や資金使途、テスラとの関係を含む資本政策の見方に影響する。"
+                    "大型資金調達は宇宙事業の投資余力と市場評価を読む材料になる。"
+                    "Starship、Starlink、打ち上げインフラへの資本配分もあわせて注目される。"
+                ),
+                "source_published_date": "2099-01-02",
+                "source_url": "https://example.com/item",
+                "change_class": "background_only",
+                "rejection_reason_class": "",
+                "rejection_reason": "",
+                "topic_value_class": "operational_status_change",
+            }
+        ],
+        "no_change_summary": "All configured source roles were checked.",
+    }
+    promoted_items = normalize_result(
+        material_signal_raw,
+        category,
+        "2099-01-03",
+        [
+            {
+                **records[0],
+                "label": "Financial Times",
+                "excerpt": (
+                    "SpaceXが200億ドル規模の社債発行を検討し、"
+                    "格付、資金調達条件、テスラとの関係が市場で注目されている。"
+                ),
+            }
+        ],
+    )["items"]
+    if len(promoted_items) != 1:
+        fail("material signal was not promoted into a publication item")
+    promoted = promoted_items[0]
+    copied_fields = {
+        promoted["summary"],
+        promoted["detail_summary"],
+        promoted["what_changed"],
+        promoted["why_it_matters"],
+    }
+    if len(copied_fields) < 3:
+        fail("material signal promotion copied one sentence into public fields")
+    if len(set(promoted["confirmed_facts"])) < 3:
+        fail("material signal promotion did not create distinct facts")
     quiet_result = normalize_result(
         {"items": [], "signals": [], "no_change_summary": "All configured source roles were checked."},
         category,

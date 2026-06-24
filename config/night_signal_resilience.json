@@ -10,7 +10,7 @@
         "\"balance\":\"0\"",
         "usage limit"
       ],
-      "action": "Use the Responses API path when OPENAI_API_KEY is available. Otherwise block publication and raise an independent watchdog failure."
+      "action": "Use the Responses API path when OPENAI_API_KEY is available. Otherwise let the unattended GitHub Models owner block publication honestly."
     },
     "openai_quota_exhausted": {
       "signals": [
@@ -41,7 +41,7 @@
         "deadline exceeded",
         "command timed out"
       ],
-      "action": "Preserve completed parts, retry only the interrupted unit, and use the deadline watchdog to decide whether publication must block."
+      "action": "Preserve completed parts, retry only the interrupted unit, and let the unattended owner decide whether publication must block."
     },
     "authentication_unavailable": {
       "signals": [
