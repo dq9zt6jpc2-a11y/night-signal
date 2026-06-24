@@ -275,7 +275,7 @@ def sync_and_audit(issue_date: str) -> None:
     run([sys.executable, "scripts/night_signal_eval.py", issue_date])
     run([sys.executable, "scripts/guardrail_inventory.py"])
     run([sys.executable, "scripts/sync_site.py", issue_date])
-    run([sys.executable, "scripts/current_issue_audit.py"])
+    run([sys.executable, "scripts/current_issue_audit.py", issue_date])
     run([sys.executable, "scripts/coverage_audit.py", issue_date])
     run([sys.executable, "scripts/quality_gate.py", issue_date])
 
