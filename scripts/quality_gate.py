@@ -326,6 +326,16 @@ def card_title(card: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+def card_cluster_key(card: str) -> str:
+    text = visible_text(card)
+    text = re.sub(r"https?://\S+", " ", text)
+    text = re.sub(r"20\d{2}[-/.]\d{1,2}[-/.]\d{1,2}", " ", text)
+    text = re.sub(r"[^\w一-龥ぁ-んァ-ンー%％$]+", " ", text.lower())
+    stopwords = {"news", "latest", "update", "updates", "発表", "速報", "ニュース", "最新", "今日", "昨日", "一昨日"}
+    tokens = [token for token in text.split() if token and token not in stopwords]
+    return " ".join(tokens[:22])
+
+
 def card_detail_href(card: str) -> str | None:
     match = re.search(r'href="([^"]*details/([^"#?]+\.html))', card)
     if not match:
@@ -635,6 +645,22 @@ def validate_unique_detail_links(context: str, html: str) -> None:
     ]
     if duplicates:
         fail(f"{context} duplicate detail links; split unrelated topics into separate detail pages: " + "; ".join(duplicates[:8]))
+
+
+def validate_unique_display_clusters(context: str, html: str) -> None:
+    seen: dict[str, str] = {}
+    duplicates: list[str] = []
+    for card in normal_card_blocks(html):
+        key = card_cluster_key(card)
+        title = card_title(card)
+        if not key:
+            continue
+        if key in seen:
+            duplicates.append(f"{seen[key]} / {title}")
+        else:
+            seen[key] = title
+    if duplicates:
+        fail(f"{context} duplicate displayed news clusters: " + "; ".join(duplicates[:8]))
 
 
 def local_href_targets(html: str, base: Path) -> list[Path]:
@@ -981,6 +1007,8 @@ def validate(issue_date: str) -> None:
     validate_category_sections(root_html)
     validate_unique_detail_links("root page", root_html)
     validate_unique_detail_links("dated issue page", dated_html)
+    validate_unique_display_clusters("root page", root_html)
+    validate_unique_display_clusters("dated issue page", dated_html)
     validate_coverage_contract(issue_date, root_html, extraction_log_html)
     validate_detail_quality(issue_date, root_html, dated_html)
     validate_card_detail_alignment(issue_date, root_html, dated_html)

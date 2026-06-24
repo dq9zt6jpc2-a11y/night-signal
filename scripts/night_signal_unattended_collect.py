@@ -70,6 +70,7 @@ MATERIAL_SIGNAL_RE = re.compile(
     r"bond|bonds|社債|債券|debt|loan|bridge loan|借り換え|資金調達|"
     r"rating|ratings|格付|投資適格|investment grade|Baa|BBB|"
     r"market share|シェア|share falls|50%|50％|"
+    r"benchmark|ベンチマーク|model|モデル|cyber|サイバー|security|脆弱性|"
     r"target price|price target|目標株価|buy rating|sell rating|"
     r"IPO|上場|Nasdaq|時価総額|valuation|"
     r"merger|合併|統合|tie-up|acquisition|買収|M&A|"
@@ -80,8 +81,12 @@ MATERIAL_SIGNAL_RE = re.compile(
     r")",
     re.I,
 )
+HIGH_THROUGHPUT_CATEGORIES = {"OpenAI", "SpaceX", "SoftBank", "宇都宮ブレックス"}
+MAX_CATEGORY_EVIDENCE = 18
+MAX_CATEGORY_ITEMS = 3
+MAX_CATEGORY_SIGNALS = 8
 CATEGORY_IDENTITY_TERMS = {
-    "OpenAI": ["OpenAI", "ChatGPT", "Codex"],
+    "OpenAI": ["OpenAI", "ChatGPT", "Codex", "Azure OpenAI", "生成AI", "AIモデル"],
     "SoftBank": ["SoftBank", "ソフトバンク", "SBG", "Arm"],
     "Honda": ["Honda", "ホンダ", "HRC", "Aston Martin", "Acura"],
     "F1": ["F1", "FIA", "Grand Prix", "グランプリ", "Formula 1", "ホンダ", "Honda", "ADUO", "PU", "レッドブル", "メルセデス", "フェラーリ", "マクラーレン", "Aston Martin"],
@@ -138,6 +143,95 @@ class VisibleTextParser(HTMLParser):
 
 def compact_text(value: str, limit: int = 1600) -> str:
     return " ".join(html.unescape(value).split())[:limit]
+
+
+def normalized_topic_key(*values: Any) -> str:
+    text = " ".join(str(value or "") for value in values)
+    text = re.sub(r"https?://\S+", " ", text)
+    text = re.sub(r"\b20\d{2}[-/.]\d{1,2}[-/.]\d{1,2}\b", " ", text)
+    text = re.sub(r"\b(?:today|yesterday|latest|breaking)\b", " ", text, flags=re.I)
+    text = re.sub(r"[^\w一-龥ぁ-んァ-ンー%％$]+", " ", text.lower())
+    stopwords = {
+        "news",
+        "latest",
+        "update",
+        "updates",
+        "発表",
+        "速報",
+        "ニュース",
+        "最新",
+        "確認",
+        "について",
+    }
+    tokens = [token for token in text.split() if token and token not in stopwords]
+    return " ".join(tokens[:18])
+
+
+def record_cluster_key(record: dict[str, Any]) -> str:
+    publisher = urllib.parse.urlparse(str(record.get("publisher_url") or record.get("url") or "")).netloc
+    return normalized_topic_key(
+        record.get("title"),
+        record.get("excerpt"),
+        publisher,
+    )
+
+
+def cluster_priority(record: dict[str, Any], category: dict[str, Any]) -> tuple[int, str]:
+    title = str(record.get("title", ""))
+    excerpt = str(record.get("excerpt", ""))
+    text = f"{title} {excerpt}"
+    score = 0
+    if record.get("source_class") != "discovered_media":
+        score += 4
+    if MATERIAL_SIGNAL_RE.search(text):
+        score += 6
+    if any(
+        str(term).lower() in text.lower()
+        for topic in category.get("watch_topics", [])
+        if isinstance(topic, dict)
+        for term in topic.get("terms", [])[:8]
+    ):
+        score += 3
+    if record.get("published_date"):
+        score += 1
+    if str(record.get("publisher_url", "")).startswith(("http://", "https://")):
+        score += 1
+    return score, compact_text(title or excerpt, 160)
+
+
+def select_clustered_evidence(
+    category: dict[str, Any],
+    records: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    observed = [record for record in records if record.get("observed")]
+    clustered: dict[str, dict[str, Any]] = {}
+    for record in observed:
+        key = record_cluster_key(record)
+        if not key:
+            key = str(record.get("url", ""))
+        current = clustered.get(key)
+        if current is None or cluster_priority(record, category) > cluster_priority(current, category):
+            clustered[key] = record
+    records_by_score = sorted(
+        clustered.values(),
+        key=lambda record: cluster_priority(record, category),
+        reverse=True,
+    )
+    seed = [record for record in records_by_score if record.get("source_class") != "discovered_media"]
+    discovered = [record for record in records_by_score if record.get("source_class") == "discovered_media"]
+    selected: list[dict[str, Any]] = []
+    seen_routes: set[tuple[str, str]] = set()
+    for record in seed:
+        route = (str(record.get("source_role")), str(record.get("channel")))
+        if route in seen_routes and not MATERIAL_SIGNAL_RE.search(
+            f"{record.get('title', '')} {record.get('excerpt', '')}"
+        ):
+            continue
+        seen_routes.add(route)
+        selected.append(record)
+    selected.extend(discovered)
+    limit = MAX_CATEGORY_EVIDENCE if category.get("label") in HIGH_THROUGHPUT_CATEGORIES else 12
+    return selected[:limit]
 
 
 PUBLIC_COPY_REPLACEMENTS = [
@@ -421,13 +515,33 @@ def parse_rss_date(value: str | None) -> str | None:
 
 
 def news_query(category: dict[str, Any], issue_date: str) -> str:
-    terms = [str(category["label"])]
-    for topic in category.get("watch_topics", [])[:4]:
+    label = str(category["label"])
+    terms: list[str] = []
+    material_terms = [
+        "partnership",
+        "security",
+        "market share",
+        "benchmark",
+        "funding",
+        "debt",
+        "rating",
+        "hiring",
+        "contract",
+        "Japan company",
+        "official",
+    ]
+    for axis in category.get("axes", [])[:3]:
+        if isinstance(axis, dict):
+            terms.extend(str(term) for term in axis.get("terms", [])[:3])
+    for topic in category.get("watch_topics", [])[:6]:
         if not isinstance(topic, dict):
             continue
-        terms.extend(str(term) for term in topic.get("terms", [])[:2])
+        terms.extend(str(term) for term in topic.get("terms", [])[:3])
+        terms.extend(str(event) for event in topic.get("event_classes", [])[:2])
+    terms.extend(material_terms)
     start = date.fromisoformat(issue_date) - timedelta(days=3)
-    return f"({' OR '.join(dict.fromkeys(terms[:9]))}) after:{start.isoformat()}"
+    scoped_terms = " OR ".join(dict.fromkeys(terms[:24]))
+    return f"({label}) ({scoped_terms}) after:{start.isoformat()}"
 
 
 def fetch_news(category: dict[str, Any], issue_date: str) -> list[dict[str, Any]]:
@@ -633,9 +747,10 @@ SYSTEM_PROMPT = """You are the unattended NIGHT SIGNAL evidence extractor.
 Return one JSON object with keys items, signals, no_change_summary.
 Use only the supplied evidence records and exact URLs. Do not use memory.
 The issue window is the issue date and preceding two calendar days.
-Return at most 1 item and at most 4 signals. The item is the most important
-confirmed change; retain other relevant candidates as signals instead of
-dropping them. Keep no_change_summary under 300 Japanese characters.
+Return up to 3 items and up to 8 signals when distinct material clusters are
+present. Do not force one item per category. Retain other relevant candidates
+as signals instead of dropping them. Keep no_change_summary under 300 Japanese
+characters.
 
 items are publication-worthy confirmed changes. Retain names, exact dates,
 numbers, results, uncertainty, and context. Each item must contain:
@@ -671,30 +786,7 @@ def category_prompt(
     issue_date: str,
     records: list[dict[str, Any]],
 ) -> dict[str, Any]:
-    observed = [
-        record
-        for record in records
-        if record.get("observed")
-    ]
-    selected: list[dict[str, Any]] = []
-    seen_routes: set[tuple[str, str]] = set()
-    for record in observed:
-        if record.get("source_class") == "discovered_media":
-            continue
-        route = (
-            str(record.get("source_role")),
-            str(record.get("channel")),
-        )
-        if route in seen_routes:
-            continue
-        seen_routes.add(route)
-        selected.append(record)
-    selected.extend(
-        record
-        for record in observed
-        if record.get("source_class") == "discovered_media"
-    )
-    selected = selected[:8]
+    selected = select_clustered_evidence(category, records)
     return {
         "issue_date": issue_date,
         "category": category["label"],
@@ -718,6 +810,12 @@ def category_prompt(
                 "published_date": record.get("published_date"),
                 "title": record.get("title"),
                 "excerpt": compact_text(str(record.get("excerpt", "")), 240),
+                "cluster_key": record_cluster_key(record),
+                "material_signal": bool(
+                    MATERIAL_SIGNAL_RE.search(
+                        f"{record.get('title', '')} {record.get('excerpt', '')}"
+                    )
+                ),
             }
             for record in selected
         ],
@@ -913,6 +1011,7 @@ def normalize_result(
     }
     items: list[dict[str, Any]] = []
     seen_titles: set[str] = set()
+    seen_clusters: set[str] = set()
     for item in raw.get("items", []):
         if not isinstance(item, dict):
             continue
@@ -959,6 +1058,8 @@ def normalize_result(
             )
         detail = unique_sentences(detail, 2600)
         sources = clean_sources(item.get("sources"), records_by_url)
+        source_cluster = record_cluster_key(records_by_url.get(sources[0]["url"], {})) if sources else ""
+        item_cluster = normalized_topic_key(title, summary, source_cluster)
         topic_value = str(item.get("topic_value_class", ""))
         if (
             topic not in valid_topics
@@ -974,11 +1075,13 @@ def normalize_result(
             or len(detail) < 220
             or len(facts) < 3
             or not sources
+            or item_cluster in seen_clusters
             or topic_value not in ALLOWED_TOPIC_VALUES
             or not valid_date(item.get("source_published_date"), issue_date)
         ):
             continue
         seen_titles.add(title)
+        seen_clusters.add(item_cluster)
         first_source = sources[0]
         items.append(
             {
@@ -1015,11 +1118,13 @@ def normalize_result(
         title = reader_facing_text(signal.get("title", ""), 180)
         url = str(signal.get("source_url", ""))
         record = records_by_url.get(url)
+        signal_cluster = normalized_topic_key(title, signal.get("summary", ""), record_cluster_key(record or {}))
         if (
             topic not in valid_topics
             or not title
             or not reader_public_copy_ok(title, kind="title")
             or title in seen_titles
+            or signal_cluster in seen_clusters
             or not record
             or not valid_date(signal.get("source_published_date"), issue_date)
         ):
@@ -1052,6 +1157,7 @@ def normalize_result(
             topic_value = "market_or_financial_impact"
         if material_signal and len(signal_summary) >= 120 and url:
             seen_titles.add(title)
+            seen_clusters.add(signal_cluster)
             items.append(
                 promoted_signal_item(
                     topic=topic,
@@ -1071,6 +1177,7 @@ def normalize_result(
         if not rejection_reason:
             rejection_reason = "記事化に必要な確定情報が不足している。"
         seen_titles.add(title)
+        seen_clusters.add(signal_cluster)
         signals.append(
             {
                 "watch_topic_id": topic,
@@ -1100,6 +1207,8 @@ def normalize_result(
                 "observation_channel": str(record.get("channel", "web")),
             }
         )
+    items = items[:MAX_CATEGORY_ITEMS]
+    signals = signals[:MAX_CATEGORY_SIGNALS]
     no_change = compact_text(str(raw.get("no_change_summary", "")), 1500)
     if len(no_change) < 20:
         observed_count = sum(bool(record.get("observed")) for record in records)

@@ -1041,23 +1041,37 @@ def latest_three_dates(issue_date: str) -> set[str]:
     }
 
 
+def display_cluster_key(card: dict[str, Any]) -> tuple[str, str]:
+    text = " ".join(
+        str(card.get(key, ""))
+        for key in ("title", "candidate_title", "summary", "source_url")
+    )
+    text = re.sub(r"https?://\S+", " ", text)
+    text = re.sub(r"\b20\d{2}[-/.]\d{1,2}[-/.]\d{1,2}\b", " ", text)
+    text = re.sub(r"[^\w一-龥ぁ-んァ-ンー%％$]+", " ", text.lower())
+    tokens = [
+        token
+        for token in text.split()
+        if token
+        and token
+        not in {"news", "latest", "update", "updates", "発表", "速報", "ニュース", "最新", "確認"}
+    ]
+    return (str(card.get("category", "")), " ".join(tokens[:18]))
+
+
 def rolling_display_cards(issue_path: Path, issue: dict[str, Any], current_cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
     issue_date = require_str(issue, "issue_date")
     allowed_source_dates = latest_three_dates(issue_date)
     issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
     state_root = issue_path.parent.parent if issue_path.parent.parent.exists() else DEFAULT_STATE_ROOT
     display_cards: list[dict[str, Any]] = []
-    seen: set[tuple[str, str, str]] = set()
+    seen: set[tuple[str, str]] = set()
 
     def add_card(card: dict[str, Any], *, detail_issue_date: str, retained_from_issue_date: str | None = None) -> None:
         source_date = str(card.get("source_published_date", ""))
         if source_date not in allowed_source_dates:
             return
-        key = (
-            re.sub(r"\s+", " ", str(card.get("title", "")).strip()).lower(),
-            str(card.get("category", "")),
-            source_date,
-        )
+        key = display_cluster_key(card)
         if key in seen:
             return
         seen.add(key)
