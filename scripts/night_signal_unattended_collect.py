@@ -1058,6 +1058,42 @@ def normalize_result(
             )
         detail = unique_sentences(detail, 2600)
         sources = clean_sources(item.get("sources"), records_by_url)
+        first_record = records_by_url.get(sources[0]["url"], {}) if sources else {}
+        if sources and len(summary) < 80:
+            summary = unique_sentences(
+                " ".join(
+                    value
+                    for value in (
+                        summary,
+                        what_changed,
+                        why_it_matters,
+                        str(first_record.get("excerpt") or first_record.get("evidence") or ""),
+                    )
+                    if value
+                ),
+                1000,
+            )
+        if sources and len(facts) < 3:
+            facts = unique_nonempty(
+                [
+                    *facts,
+                    title,
+                    summary,
+                    f"{sources[0]['label']}が{item.get('source_published_date')}付の情報として配信した。",
+                ],
+                500,
+            )
+        if len(detail) < 280 or SUMMARY_LABEL_RE.search(detail):
+            detail = natural_detail_summary(
+                summary=summary,
+                detail=detail,
+                what_changed=what_changed,
+                why_it_matters=why_it_matters,
+                facts=facts,
+                limits_or_unknowns=limits_or_unknowns,
+                category_label=str(category.get("label", "")),
+            )
+            detail = unique_sentences(detail, 2600)
         source_cluster = record_cluster_key(records_by_url.get(sources[0]["url"], {})) if sources else ""
         item_cluster = normalized_topic_key(title, summary, source_cluster)
         topic_value = str(item.get("topic_value_class", ""))
