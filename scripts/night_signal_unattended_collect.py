@@ -988,6 +988,143 @@ def category_hint_from_title(title: str) -> str:
     return "当該テーマ"
 
 
+def best_topic_for_record(category: dict[str, Any], record: dict[str, Any]) -> str:
+    text = f"{record.get('title', '')} {record.get('excerpt', '')}".lower()
+    best_topic = ""
+    best_score = -1
+    for topic in category.get("watch_topics", []):
+        if not isinstance(topic, dict):
+            continue
+        score = sum(
+            1
+            for term in topic.get("terms", [])
+            if isinstance(term, str) and term.lower() in text
+        )
+        if score > best_score:
+            best_score = score
+            best_topic = str(topic.get("id", ""))
+    return best_topic
+
+
+def topic_value_from_record(record: dict[str, Any]) -> str:
+    text = f"{record.get('title', '')} {record.get('excerpt', '')}".lower()
+    if re.search(r"security|cyber|サイバー|安全|脆弱性|regulation|規制", text):
+        return "risk_or_safety_signal"
+    if re.search(r"社債|debt|rating|格付|market share|シェア|株価|price target|funding|資金調達", text):
+        return "market_or_financial_impact"
+    if re.search(r"model|モデル|api|release|launch|製品|技術|benchmark|ベンチマーク", text):
+        return "technical_or_product_shift"
+    if re.search(r"契約|提携|partnership|contract|採用|移籍|退団|hiring|joins|leaves", text):
+        return "decision_or_policy"
+    if re.search(r"result|結果|score|勝|敗|打ち上げ|docking|ドッキング", text):
+        return "event_result_or_outcome"
+    return "operational_status_change"
+
+
+def fallback_item_from_record(
+    category: dict[str, Any],
+    issue_date: str,
+    record: dict[str, Any],
+) -> dict[str, Any] | None:
+    source_date = str(record.get("published_date") or "")
+    title = reader_facing_text(record.get("title", ""), 180)
+    excerpt = reader_facing_text(record.get("excerpt") or record.get("evidence") or "", 1200)
+    category_label = str(category.get("label", ""))
+    topic = best_topic_for_record(category, record)
+    if (
+        not topic
+        or not title
+        or not excerpt
+        or not valid_date(source_date, issue_date)
+        or not reader_public_copy_ok(title, kind="title")
+        or not category_identity_ok(category_label, title, excerpt)
+        or not contains_material_signal(title, excerpt)
+    ):
+        return None
+    summary = unique_sentences(f"{title}。{excerpt}", 1000)
+    if len(summary) < 80:
+        return None
+    what_changed = sentence_parts(summary)[0] if sentence_parts(summary) else summary
+    why_it_matters = unique_sentences(
+        f"{title}は、{category_label}の直近3日内の具体的な変化として、"
+        "事業、競争環境、予定、または市場評価に影響しうる材料になる。",
+        700,
+    )
+    facts = unique_nonempty(
+        [
+            title,
+            excerpt,
+            f"{record.get('label') or '確認元'}が{source_date}付の情報として配信した。",
+        ],
+        500,
+    )
+    if len(facts) < 3:
+        return None
+    limits = "詳細条件、正式な続報、数値の内訳は追加確認の対象となる。"
+    detail = natural_detail_summary(
+        summary=summary,
+        detail="",
+        what_changed=what_changed,
+        why_it_matters=why_it_matters,
+        facts=facts,
+        limits_or_unknowns=limits,
+        category_label=category_label,
+    )
+    return {
+        "watch_topic_id": topic,
+        "title": title,
+        "summary": summary,
+        "source_published_date": source_date,
+        "topic_value_class": topic_value_from_record(record),
+        "priority_class": "priority",
+        "slug": (
+            "auto-"
+            + hashlib.sha1(title.encode("utf-8")).hexdigest()[:12]
+            + f"-{issue_date}"
+        ),
+        "detail_summary": detail,
+        "what_changed": what_changed,
+        "why_it_matters": why_it_matters,
+        "confirmed_facts": facts[:4],
+        "limits_or_unknowns": limits,
+        "sources": [
+            {
+                "label": str(record.get("label") or record.get("url")),
+                "url": str(record.get("url")),
+                "source_role": str(record.get("source_role", "independent_media_or_data")),
+                "channel": str(record.get("channel", "web")),
+            }
+        ],
+        "observation_source_role": str(record.get("source_role", "independent_media_or_data")),
+        "observation_channel": str(record.get("channel", "web")),
+    }
+
+
+def backfill_items_from_evidence(
+    normalized: dict[str, Any],
+    category: dict[str, Any],
+    issue_date: str,
+    records: list[dict[str, Any]],
+) -> None:
+    target = 2 if category.get("label") in HIGH_THROUGHPUT_CATEGORIES else 1
+    seen = {
+        normalized_topic_key(item.get("title"), item.get("summary"))
+        for item in normalized.get("items", [])
+        if isinstance(item, dict)
+    }
+    for record in select_clustered_evidence(category, records):
+        if len(normalized["items"]) >= min(MAX_CATEGORY_ITEMS, target):
+            break
+        item = fallback_item_from_record(category, issue_date, record)
+        if not item:
+            continue
+        key = normalized_topic_key(item.get("title"), item.get("summary"))
+        if key in seen:
+            continue
+        seen.add(key)
+        normalized["items"].append(item)
+
+
 def normalize_result(
     raw: dict[str, Any],
     category: dict[str, Any],
@@ -1330,6 +1467,12 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
         )
         normalized = normalize_result(
             raw,
+            category,
+            issue_date,
+            records_by_category[label],
+        )
+        backfill_items_from_evidence(
+            normalized,
             category,
             issue_date,
             records_by_category[label],
