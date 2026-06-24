@@ -226,12 +226,21 @@ def validate_collection_freshness(
 
 
 def self_test() -> None:
+    original_allow_stale = os.environ.pop("NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE", None)
     try:
+        try:
+            require_jst_current_issue("1900-01-01")
+        except SystemExit:
+            pass
+        else:
+            fail("stale issue date must not be publishable without explicit override")
+        os.environ["NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE"] = "1"
         require_jst_current_issue("1900-01-01")
-    except SystemExit:
-        pass
-    else:
-        fail("stale issue date must never be publishable as latest")
+    finally:
+        if original_allow_stale is None:
+            os.environ.pop("NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE", None)
+        else:
+            os.environ["NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE"] = original_allow_stale
     current = datetime.fromisoformat("2099-01-01T19:30:00+09:00")
     fresh = {
         "collection_completed_at_jst": "2099-01-01T18:30:00+09:00",
