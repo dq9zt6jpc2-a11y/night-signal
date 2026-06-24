@@ -1042,10 +1042,9 @@ def latest_three_dates(issue_date: str) -> set[str]:
 
 
 def display_cluster_key(card: dict[str, Any]) -> tuple[str, str]:
-    text = " ".join(
-        str(card.get(key, ""))
-        for key in ("title", "candidate_title", "summary", "source_url")
-    )
+    text = str(card.get("title") or card.get("candidate_title") or "")
+    text = re.sub(r"\s+執筆(?:\s+[-–—].*)?$", " ", text)
+    text = re.sub(r"\s+[-–—]\s+[^。]{1,120}$", " ", text)
     text = re.sub(r"https?://\S+", " ", text)
     text = re.sub(r"\b20\d{2}[-/.]\d{1,2}[-/.]\d{1,2}\b", " ", text)
     text = re.sub(r"[^\w一-龥ぁ-んァ-ンー%％$]+", " ", text.lower())
@@ -1056,7 +1055,7 @@ def display_cluster_key(card: dict[str, Any]) -> tuple[str, str]:
         and token
         not in {"news", "latest", "update", "updates", "発表", "速報", "ニュース", "最新", "確認"}
     ]
-    return (str(card.get("category", "")), " ".join(tokens[:18]))
+    return (str(card.get("category", "")), " ".join(tokens[:14]))
 
 
 def rolling_display_cards(issue_path: Path, issue: dict[str, Any], current_cards: list[dict[str, Any]]) -> list[dict[str, Any]]:

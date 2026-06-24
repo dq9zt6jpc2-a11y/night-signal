@@ -147,6 +147,8 @@ def compact_text(value: str, limit: int = 1600) -> str:
 
 def normalized_topic_key(*values: Any) -> str:
     text = " ".join(str(value or "") for value in values)
+    text = re.sub(r"\s+執筆(?:\s+[-–—].*)?$", " ", text)
+    text = re.sub(r"\s+[-–—]\s+[^。]{1,120}$", " ", text)
     text = re.sub(r"https?://\S+", " ", text)
     text = re.sub(r"\b20\d{2}[-/.]\d{1,2}[-/.]\d{1,2}\b", " ", text)
     text = re.sub(r"\b(?:today|yesterday|latest|breaking)\b", " ", text, flags=re.I)
@@ -164,16 +166,11 @@ def normalized_topic_key(*values: Any) -> str:
         "について",
     }
     tokens = [token for token in text.split() if token and token not in stopwords]
-    return " ".join(tokens[:18])
+    return " ".join(tokens[:14])
 
 
 def record_cluster_key(record: dict[str, Any]) -> str:
-    publisher = urllib.parse.urlparse(str(record.get("publisher_url") or record.get("url") or "")).netloc
-    return normalized_topic_key(
-        record.get("title"),
-        record.get("excerpt"),
-        publisher,
-    )
+    return normalized_topic_key(record.get("title"))
 
 
 def cluster_priority(record: dict[str, Any], category: dict[str, Any]) -> tuple[int, str]:
@@ -1122,9 +1119,9 @@ def backfill_items_from_evidence(
     issue_date: str,
     records: list[dict[str, Any]],
 ) -> None:
-    target = 2 if category.get("label") in HIGH_THROUGHPUT_CATEGORIES else 1
+    target = 3 if category.get("label") in HIGH_THROUGHPUT_CATEGORIES else 1
     seen = {
-        normalized_topic_key(item.get("title"), item.get("summary"))
+        normalized_topic_key(item.get("title"))
         for item in normalized.get("items", [])
         if isinstance(item, dict)
     }
@@ -1134,7 +1131,7 @@ def backfill_items_from_evidence(
         item = fallback_item_from_record(category, issue_date, record)
         if not item:
             continue
-        key = normalized_topic_key(item.get("title"), item.get("summary"))
+        key = normalized_topic_key(item.get("title"))
         if key in seen:
             continue
         seen.add(key)
@@ -1248,7 +1245,7 @@ def normalize_result(
             )
             detail = unique_sentences(detail, 2600)
         source_cluster = record_cluster_key(records_by_url.get(sources[0]["url"], {})) if sources else ""
-        item_cluster = normalized_topic_key(title, summary, source_cluster)
+        item_cluster = normalized_topic_key(title, source_cluster)
         topic_value = str(item.get("topic_value_class", ""))
         if (
             topic not in valid_topics
@@ -1307,7 +1304,7 @@ def normalize_result(
         title = reader_facing_text(signal.get("title", ""), 180)
         url = str(signal.get("source_url", ""))
         record = records_by_url.get(url)
-        signal_cluster = normalized_topic_key(title, signal.get("summary", ""), record_cluster_key(record or {}))
+        signal_cluster = normalized_topic_key(title, record_cluster_key(record or {}))
         if (
             topic not in valid_topics
             or not title

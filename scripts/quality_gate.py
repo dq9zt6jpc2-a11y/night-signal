@@ -327,13 +327,15 @@ def card_title(card: str) -> str:
 
 
 def card_cluster_key(card: str) -> str:
-    text = visible_text(card)
+    text = card_title(card)
+    text = re.sub(r"\s+執筆(?:\s+[-–—].*)?$", " ", text)
+    text = re.sub(r"\s+[-–—]\s+[^。]{1,120}$", " ", text)
     text = re.sub(r"https?://\S+", " ", text)
     text = re.sub(r"20\d{2}[-/.]\d{1,2}[-/.]\d{1,2}", " ", text)
     text = re.sub(r"[^\w一-龥ぁ-んァ-ンー%％$]+", " ", text.lower())
     stopwords = {"news", "latest", "update", "updates", "発表", "速報", "ニュース", "最新", "今日", "昨日", "一昨日"}
     tokens = [token for token in text.split() if token and token not in stopwords]
-    return " ".join(tokens[:22])
+    return " ".join(tokens[:14])
 
 
 def card_detail_href(card: str) -> str | None:
