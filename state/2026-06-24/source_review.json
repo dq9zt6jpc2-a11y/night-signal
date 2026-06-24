@@ -1,6 +1,6 @@
 {
   "issue_date": "2026-06-24",
-  "checked_at_jst": "2026-06-24T22:17:43+09:00",
+  "checked_at_jst": "2026-06-24T22:42:13+09:00",
   "unavailable_urls": {},
   "evidence_by_url": {
     "https://openai.com/news/": "OpenAI NewsをJina Reader mirrorで取得し、ページ「Title: OpenAI News URL Source: http://openai.com/news/ Markdown Content: * * * Switch cards to show Media Switch cards to hide Media ![Image 1: OpenAI and Broadcom Jalapeño inferen」の本文を確認した。抽出内容: Title: OpenAI News URL Source: http://openai.com/news/ Markdown Content: * * * Switch cards to show Media Switch cards to hide Media ![Image 1: OpenAI and Broadcom Jalapeño inference chip card image](https://images.ctfassets.net/kftzwdyauwt9/21KcazqOHUF7Cq71Hpfcnc/81ad98a1978845b441ab14e008168c75/openai-broadcom-jalape",
@@ -31,7 +31,7 @@
     "https://www.reuters.com/business/": "Reuters BusinessをJina Reader mirrorで取得し、ページ「Title: reuters.com URL Source: http://www.reuters.com/business/ Warning: This page maybe requiring CAPTCHA, please make sure you are authorized to access this page. Markdown Conten」の本文を確認した。抽出内容: Title: reuters.com URL Source: http://www.reuters.com/business/ Warning: This page maybe requiring CAPTCHA, please make sure you are authorized to access this page. Markdown Content:",
     "https://www.nikkei.com/search?keyword=%E3%82%BD%E3%83%95%E3%83%88%E3%83%90%E3%83%B3%E3%82%AF%E3%82%B0%E3%83%AB%E3%83%BC%E3%83%97": "Nikkei SoftBank searchをJina Reader mirrorで取得し、ページ「Title: 検索 - 日本経済新聞 URL Source: http://www.nikkei.com/search?keyword=%E3%82%BD%E3%83%95%E3%83%88%E3%83%90%E3%83%B3%E3%82%AF%E3%82%B0%E3%83%AB%E3%83%BC%E3%83%97 Published Time: Mon, 」の本文を確認した。抽出内容: Title: 検索 - 日本経済新聞 URL Source: http://www.nikkei.com/search?keyword=%E3%82%BD%E3%83%95%E3%83%88%E3%83%90%E3%83%B3%E3%82%AF%E3%82%B0%E3%83%AB%E3%83%BC%E3%83%97 Published Time: Mon, 06 Oct 2025 07:08:16 GMT Markdown Content: 話題のトピック * [#イラン軍事衝突](https://www.nikkei.com/theme/?dw=19061400) * [#ナフサ高騰](https://www.nikkei.com",
     "https://x.com/SoftBank_Group": "SoftBank Group Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/SoftBank_Groupに限定したBing RSS検索を確認した。検索語: site:x.com/SoftBank_Group \"SoftBank Group X\"。検索結果: SoftBank Group - Wikipedia / https://en.wikipedia.org/wiki/SoftBank_Group / SoftBank Corporation, its spun-out affiliate and former flagship business, is the third-largest wireless carrier in Japan, with 45.621 million subscribers as of March 2021. [24] SoftBank was ranked in the 2025 Forbes Global 2000 list as the 130th largest public company in the world. [25] SoftBank / https://www.softbank.jp/en/ / SoftBank's official homepage provides information on mobile (smartphone, mobile phone, tablet,",
-    "https://www.facebook.com/SoftBankGroupCorp/": "SoftBank Group FacebookをJina Reader mirrorで取得し、ページ「Title: Facebook URL Source: http://www.facebook.com/SoftBankGroupCorp/ Markdown Content: Explore the things you love. Log into Facebook Email or mobile number Password - [x] Log in」の本文を確認した。抽出内容: Title: Facebook URL Source: http://www.facebook.com/SoftBankGroupCorp/ Markdown Content: Explore the things you love. Log into Facebook Email or mobile number Password - [x] Log in [Forgot password?](https://www.facebook.com/recover/initiate/?privacy_mutation_token=eyJ0eXBlIjo1LCJjcmVhdGlvbl90aW1lIjoxNzgyMzA3MDM5fQ%3D%",
+    "https://www.facebook.com/SoftBankGroupCorp/": "SoftBank Group FacebookをJina Reader mirrorで取得し、ページ「Title: Facebook URL Source: http://www.facebook.com/SoftBankGroupCorp/ Markdown Content: ![Image 1](http://www.facebook.com/images/login/QrCodeLoginPizza.jpg) Logged in on your pho」の本文を確認した。抽出内容: Title: Facebook URL Source: http://www.facebook.com/SoftBankGroupCorp/ Markdown Content: ![Image 1](http://www.facebook.com/images/login/QrCodeLoginPizza.jpg) Logged in on your phone? Scan with your phone's camera and confirm the codes match. NDI-IDK-VYLH Log into Facebook Email or mobile number Password - [x] Log in [",
     "https://www.youtube.com/user/SoftBankCorp": "SoftBank Group YouTubeをJina Reader mirrorで取得し、ページ「Title: SoftBank Group URL Source: http://www.youtube.com/user/SoftBankCorp Warning: Target URL returned error 403: Forbidden Warning: This page contains iframe that are currently h」の本文を確認した。抽出内容: Title: SoftBank Group URL Source: http://www.youtube.com/user/SoftBankCorp Warning: Target URL returned error 403: Forbidden Warning: This page contains iframe that are currently hidden, consider enabling iframe processing. Warning: This page maybe requiring CAPTCHA, please make sure you are authorized to access this p",
     "https://news.google.com/rss/articles/CBMib0FVX3lxTE5ESFNTcVUzaHpVZ05FN0lCaXhaaXNRb1JxMFQ5WGFhVW5zeFNqNTFnOFJOeWdXVW0ydVI1a21YcnFlQXQ3ejBQblNrakU5TWlQSDVCU2cwQkZ4UV9wZGZyV1hYaVRnQzZjWjhuMTNjRQ?oc=5": "Google News RSSで「ネオクラウド事業として、 「Infrinia AI Cloud OS」を搭載した 「AIデータセンター GPUクラウド」を 2026年10月に提供開始 - ソフトバンク」を確認した。配信元はソフトバンク、配信日は2026-05-25。",
     "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5SM1dqNThNcXNkaHEzajdieFBMcFRRcVFMOGFyamJ2eXMwVS1vLUN5VjFQaVo2QjNxQmk4ODhYZ2RSY3RJU2tmcUczWmxzWHRiQkE?oc=5": "Google News RSSで「SoftBank to Develop 5-Gigawatt AI Data Center Capacity in France - 時事通信ニュース」を確認した。配信元は時事通信ニュース、配信日は2026-05-31。",
@@ -45,8 +45,8 @@
     "https://news.google.com/rss/articles/CBMilgFBVV95cUxNSkd2UUFwd1FZVWVTcFEyS19wenBpVF9wdExmdUM5cXdkTE1fTG5hUVFHbzlMMFlLOGdlZ0ZCRGFfeGt5bWUzZ09iX3ZwY3FaR1dYd3ByWGZ3LUtyZ3NiOTNpNURYMFhGZWNHMG9fNEVTclpCREhnN0lwNV9lRUFrTWo0b29uX1RSd3licjZmUndCMWtBbGc?oc=5": "Google News RSSで「ロボティクス部門をソフトバンクグループに売却へ - ABB」を確認した。配信元はABB、配信日は2025-10-08。",
     "https://global.honda/en/newsroom/": "Honda Newsをdirectで取得し、ページ「NewsRoom | Honda Global Corporate Website」の本文を確認した。抽出内容: NewsRoom | Honda Global Corporate Website HONDA The Power of Dreams HONDA The Power of Dreams Home Newsroom Newsroom Honda’s latest news releases and topics 2026.06.18 Corporate Honda to Rename Rugby Team “TOCHIGI Honda HEAT” to Coincide with the Team’s New Base of Operation Sports 8 2026.06.15 Power Products, Marine H",
     "https://global.honda/en/investors/": "Honda IRをdirectで取得し、ページ「Investor Relations | Honda Motor Co., Ltd.」の本文を確認した。抽出内容: Investor Relations | Honda Motor Co., Ltd. Investor Relations CLOSE MENU HONDA The Power of Dreams HONDA The Power of Dreams Honda Motor Co., Ltd. Investor Relations Investor Relations サブ-ナビゲーション 現在位置: Investor Relations IR News Management Policy IR Library Financial Data Stock and Bond Information IR Calendar For Indi",
-    "https://honda.racing/": "Honda RacingをJina Reader mirrorで取得し、ページ「Title: The official home of Honda Racing URL Source: http://honda.racing/ Markdown Content: * [Media Registration](http://honda.racing/register) * [Media Login](http://honda.racing」の本文を確認した。抽出内容: Title: The official home of Honda Racing URL Source: http://honda.racing/ Markdown Content: * [Media Registration](http://honda.racing/register) * [Media Login](http://honda.racing/login)[Media](http://honda.racing/login) [](https://global.honda/) ![Image 6: EN](https://geoip.mcsvr.net/flags/gb.svg)![Image 7: JA](https",
-    "https://www.reuters.com/business/autos-transportation/": "Reuters AutosをJina Reader mirrorで取得し、ページ「Title: reuters.com URL Source: http://www.reuters.com/business/autos-transportation/ Warning: This page maybe requiring CAPTCHA, please make sure you are authorized to access this 」の本文を確認した。抽出内容: Title: reuters.com URL Source: http://www.reuters.com/business/autos-transportation/ Warning: This page maybe requiring CAPTCHA, please make sure you are authorized to access this page. Markdown Content:",
+    "https://honda.racing/": "Honda Racingをdirectで取得し、ページ「Honda.Racing - The official home of Honda Racing」の本文を確認した。抽出内容: Honda.Racing - The official home of Honda Racing Media Registration Media Login Media Select Series Features Reports Calendar Products Company Features Reports Calendar Products Company Heritage Fan Zone Partners Media Links HRC ORIGINALS TOKYO Media Registration Media Login Connect with Honda Racing Global Connect wit",
+    "https://www.reuters.com/business/autos-transportation/": "Reuters AutosをJina Reader mirrorで取得し、ページ「Title: reuters.com URL Source: http://www.reuters.com/business/autos-transportation/ Warning: This page maybe not yet fully loaded, consider explicitly specify a timeout. Warning: 」の本文を確認した。抽出内容: Title: reuters.com URL Source: http://www.reuters.com/business/autos-transportation/ Warning: This page maybe not yet fully loaded, consider explicitly specify a timeout. Warning: This page maybe requiring CAPTCHA, please make sure you are authorized to access this page. Markdown Content:",
     "https://apnews.com/article/honda-ev-investment-us-tariffs-685b44de9fae0f75717be663ae63a6a8": "AP Honda EV strategyをJina Reader mirrorで取得し、ページ「Title: Page unavailable URL Source: http://apnews.com/article/honda-ev-investment-us-tariffs-685b44de9fae0f75717be663ae63a6a8 Published Time: Tue, 14 Apr 2026 00:11:48 GMT Markdown」の本文を確認した。抽出内容: Title: Page unavailable URL Source: http://apnews.com/article/honda-ev-investment-us-tariffs-685b44de9fae0f75717be663ae63a6a8 Published Time: Tue, 14 Apr 2026 00:11:48 GMT Markdown Content: [Enable accessibility](http://apnews.com/article/honda-ev-investment-us-tariffs-685b44de9fae0f75717be663ae63a6a8#) **0** [![Image ",
     "https://response.jp/special/recent/105/Honda": "Response Hondaをdirectで取得し、ページ「インターナビニュースまとめ | レスポンス（Response.jp）」の本文を確認した。抽出内容: インターナビニュースまとめ | レスポンス（Response.jp） ホーム カーニュース ニューモデル 試乗記 道路交通/社会 鉄道 船舶 航空 宇宙 モーターサイクル ニュース ニューモデル 試乗記 カーライフ カスタマイズ カーグッズ カーオーディオ モータースポーツ/エンタメ リペア・ メンテナンス EV特集 ロボット AI ビジネス プレミアム 業界動向 テクノロジー キーパーソンインタビュー セミナー 見逃し配信 レポート リスキリング 講座 ビジネス 会員について ホーム › インターナビ 特別編集 インターナビに関するニュースまとめ一覧 関連インデックス ホンダ（本田技研工業） G-BOOK、G-Link カーウイン",
     "https://x.com/Honda": "Honda Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/Hondaに限定したBing RSS検索を確認した。検索語: site:x.com/Honda \"Honda X\"。検索結果: American Honda Motor Co., Inc. - Official Site / https://www.honda.com/ / Explore an innovative line of quality products from American Honda Motor Company. Find the latest news and information on Honda and Acura brand products. Route 22 Honda | New & Used Car Dealership in Hillside, NJ / https://www.route22honda.com/ / Route 22 Honda of Hillside NJ serving Irvington, Elizabeth, Union, is one of the finest Hillside Honda dealers. Official Honda Autos USA | Honda / https://automobiles.honda.com/ /",
@@ -71,7 +71,7 @@
     "https://x.com/F1": "Formula 1 Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/F1に限定したBing RSS検索を確認した。検索語: site:x.com/F1 \"Formula 1 X\"。検索結果: F1 - The Official Home of Formula 1® Racing / https://www.formula1.com/ / Enter the world of Formula 1. Your go-to source for the latest F1 news, video highlights, GP results, live timing, in-depth analysis and expert commentary. Formula - Wikipedia / https://en.wikipedia.org/wiki/Formula / In science, a formula is a concise way of expressing information symbolically, as in a mathematical formula or a chemical formula. The informal use of the term formula in science refers to the general constru",
     "https://x.com/fia": "FIA Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/fiaに限定したBing RSS検索を確認した。検索語: site:x.com/fia \"FIA X\"。検索結果: Federation Internationale de l'Automobile / https://www.fia.com/ / The FIA is the governing body of motor sport and promotes safe, sustainable and accessible mobility for all road users across the world. THE FIA - Federation Internationale de l'Automobile / https://www.fia.com/fia / The FIA is the governing body for world motor sport and the federation of the world’s leading motoring organisations. Founded in 1904, with headquarters in Paris, the Fédération Internationale de l'Automobile (FIA) i",
     "https://www.instagram.com/f1/": "Formula 1 Instagramの直取得とReader取得が利用できなかったため、登録ソースhttps://www.instagram.com/f1/に限定したBing RSS検索を確認した。検索語: site:www.instagram.com/f1 \"Formula 1 Instagram\"。検索結果: F1 - The Official Home of Formula 1® Racing / https://www.formula1.com/ / Enter the world of Formula 1. Your go-to source for the latest F1 news, video highlights, GP results, live timing, in-depth analysis and expert commentary. Formula - Wikipedia / https://en.wikipedia.org/wiki/Formula / In science, a formula is a concise way of expressing information symbolically, as in a mathematical formula or a chemical formula. The informal use of the term formula in science refers to the general constru",
-    "https://www.facebook.com/Formula1/": "Formula 1 FacebookをJina Reader mirrorで取得し、ページ「Title: Facebook URL Source: http://www.facebook.com/Formula1/ Markdown Content: Explore the things you love. Log into Facebook Email or mobile number Password - [x] Log in [Forgot 」の本文を確認した。抽出内容: Title: Facebook URL Source: http://www.facebook.com/Formula1/ Markdown Content: Explore the things you love. Log into Facebook Email or mobile number Password - [x] Log in [Forgot password?](https://www.facebook.com/recover/initiate/?privacy_mutation_token=eyJ0eXBlIjo1LCJjcmVhdGlvbl90aW1lIjoxNzgyMzA3MDQxfQ%3D%3D&ars=fa",
+    "https://www.facebook.com/Formula1/": "Formula 1 FacebookをJina Reader mirrorで取得し、ページ「Title: Facebook URL Source: http://www.facebook.com/Formula1/ Markdown Content: Explore the things you love. Log into Facebook Email or mobile number Password - [x] Log in [Forgot 」の本文を確認した。抽出内容: Title: Facebook URL Source: http://www.facebook.com/Formula1/ Markdown Content: Explore the things you love. Log into Facebook Email or mobile number Password - [x] Log in [Forgot password?](https://www.facebook.com/recover/initiate/?privacy_mutation_token=eyJ0eXBlIjo1LCJjcmVhdGlvbl90aW1lIjoxNzgyMzA4NTI1fQ%3D%3D&ars=fa",
     "https://www.youtube.com/@Formula1": "Formula 1 YouTubeをJina Reader mirrorで取得し、ページ「Title: FORMULA 1 URL Source: http://www.youtube.com/@Formula1 Warning: Target URL returned error 403: Forbidden Warning: This page contains iframe that are currently hidden, consid」の本文を確認した。抽出内容: Title: FORMULA 1 URL Source: http://www.youtube.com/@Formula1 Warning: Target URL returned error 403: Forbidden Warning: This page contains iframe that are currently hidden, consider enabling iframe processing. Warning: This page maybe requiring CAPTCHA, please make sure you are authorized to access this page. Markdown",
     "https://news.google.com/rss/articles/CBMif0FVX3lxTFByazlXYTFqcUljWHI2bHRQTGhYdy1RdmR4VEY2cW9URUM0YVAyT29KSVFURTYtOTRtanJIREUtTmJQNjVjUGxIMlU4OFJkN1VLLUdzZERra3UwTFNxRWtxVFJacmVlREJsVVFvUWpNZVVDQUZ5ZzhWOWxYM0MxZlE?oc=5": "Google News RSSで「FIAがPU救済策を拡大、ホンダとフェラーリに追い風か 13億円の追加予算認可へ（TopNews） - Yahoo!ニュース」を確認した。配信元はYahoo!ニュース、配信日は2026-05-13。",
     "https://news.google.com/rss/articles/CBMisAFBVV95cUxOTW9hU1NlbE94a2xyVUw5cWNjTEZOV0xibFJtQmIyZnJLa2Vja2c1cUVaUkphYm9nV1pNQldhRGt1VzlOc2U3cHg3Qkx4VkpuY3J2b0hTNGFBbWVuTGFucWpFU1FmWU9Ga002X2taRi1XRXFrRTVGRzJJS09mdWlZaHZCdEk5MndPTi1QMXhqdThzaDFHS0JpV3h2OUx4MHdjN0VrWTlfUm02SVFGWVVXVg?oc=5": "Google News RSSで「FIA、PUの追加開発を認めるADUOシステムを微調整。今シーズンに限った追加予算も盛り込む - motorsport.com 日本版｜モータースポーツ情報サイト」を確認した。配信元はmotorsport.com 日本版｜モータースポーツ情報サイト、配信日は2026-05-08。",
@@ -90,7 +90,7 @@
     "https://www.reuters.com/site-search/?query=SpaceX": "Reuters SpaceX searchをJina Reader mirrorで取得し、ページ「Title: reuters.com URL Source: http://www.reuters.com/site-search/?query=SpaceX Warning: This page maybe requiring CAPTCHA, please make sure you are authorized to access this page.」の本文を確認した。抽出内容: Title: reuters.com URL Source: http://www.reuters.com/site-search/?query=SpaceX Warning: This page maybe requiring CAPTCHA, please make sure you are authorized to access this page. Markdown Content:",
     "https://apnews.com/search?q=SpaceX": "AP SpaceX searchをdirectで取得し、ページ「AP News Search | AP News」の本文を確認した。抽出内容: AP News Search | AP News Menu World SECTIONS Iran war Russia-Ukraine war Español China Asia Pacific Latin America Europe Africa TOP STORIES Ukraine says it hit a railway bridge to Crimea, seeking to isolate the Russian-held peninsula China’s newest aircraft carrier sails through the Taiwan Strait Archaeologists find hu",
     "https://www.businessinsider.com/tech": "Business Insider Techをdirectで取得し、ページ「Tech - Business Insider」の本文を確認した。抽出内容: Tech - Business Insider Subscribe Newsletters Tech Science AI Enterprise Transportation Startups Innovation Latest Stories Search Business Strategy Economy Finance Retail Advertising Careers Law Media Real Estate Small Business The Better Work Project Personal Finance Tech Science AI Enterprise Transportation Startups ",
-    "https://www.theguardian.com/technology": "The Guardian Technologyをdirectで取得し、ページ「Technology news, features and analysis from Guardian US | The Guardian」の本文を確認した。抽出内容: Technology news, features and analysis from Guardian US | The Guardian Skip to main content Skip to navigation Print subscriptions Newsletters Sign in US US edition UK edition Australia edition Europe edition International edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more H",
+    "https://www.theguardian.com/technology": "The Guardian Technologyをdirectで取得し、ページ「Technology news, features and analysis from Guardian US | The Guardian」の本文を確認した。抽出内容: Technology news, features and analysis from Guardian US | The Guardian Skip to main content Skip to navigation Print subscriptions Newsletters Sign in",
     "https://www.marketwatch.com/technology": "MarketWatch TechnologyをJina Reader mirrorで取得し、ページ「Title: Page Not Found - MarketWatch URL Source: http://www.marketwatch.com/technology Published Time: Fri, 26 Apr 2024 16:31:08 GMT Markdown Content: [Skip to main content](http://」の本文を確認した。抽出内容: Title: Page Not Found - MarketWatch URL Source: http://www.marketwatch.com/technology Published Time: Fri, 26 Apr 2024 16:31:08 GMT Markdown Content: [Skip to main content](http://www.marketwatch.com/technology#maincontent) Main Menu * [Latest News](https://www.marketwatch.com/latest-news?mod=side_nav) * [Watchlist](ht",
     "https://spacenews.com/": "SpaceNewsをdirectで取得し、ページ「SpaceNews: The space industry's source」の本文を確認した。抽出内容: SpaceNews: The space industry's source Close Subscribe Sign In Search for: Search News Open dropdown menu Latest Civil Commercial Launch Military Opinion Policy & Politics Video & Audio Open dropdown menu Virtual Events Space Minds Podcast First Up Audio Commerical Space Transformers Leading Women Newsletters Magazine ",
     "https://arstechnica.com/space/": "Ars Technica Spaceをdirectで取得し、ページ「Category: Space - Ars Technica」の本文を確認した。抽出内容: Category: Space - Ars Technica Skip to content Ars Technica home Sections Forum Subscribe Search AI Biz & IT Cars Culture Gaming Health Policy Science Security Space Tech Feature Reviews AI Biz & IT Cars Culture Gaming Health Policy Science Security Space Tech Forum Subscribe Theme HyperLight Day & Night Dark System Se",
@@ -102,11 +102,11 @@
     "https://news.google.com/rss/articles/CBMiR0FVX3lxTFAwdG5XN0plT1g3ak1MUFUtaUxQMndFRE8ycVc4Ulo0WW10WWg1NFduNE92VGtTWDQwVlQ2aXJYUmxFeVI2aHhF?oc=5": "Google News RSSで「【世界最大級の宇宙企業】SpaceXの事業内容・収益構造・競争優位性を徹底解説 - space-connect.jp」を確認した。配信元はspace-connect.jp、配信日は2026-06-19。",
     "https://news.google.com/rss/articles/CBMiYkFVX3lxTFBsa0ZsMlZBd3FEUDBoYlVWZERsYnZVaDlCTFRSano3RWNURzMtaklvMlZMbHZTQzVUMERYdXM4aGpkYnVUbEJSVkwwWnp6RnVrMURKekVhekVpRHN4bnFIM0Vn?oc=5": "Google News RSSで「【G17-54】スペースXがスターリンク衛星24機を軌道投入 上場後初のファルコン9打ち上げ - sorae 宇宙へのポータルサイト」を確認した。配信元はsorae 宇宙へのポータルサイト、配信日は2026-06-16。",
     "https://news.google.com/rss/articles/CBMibEFVX3lxTE9iYWVwVDBrcHRzNEx0V0pONWI1NWNDUmIyWnVBNW1acVJHMUt1d2VZNnUzUzRGUUwxS0c0cGtSR2hSZWZLMjBJMDZtdmpkV1dUUzg5ZVdqRFdQQ05IcHgyeGJjdEpUazlMOUlEOQ?oc=5": "Google News RSSで「SpaceX、NASDAQに上場――公開価格135ドル、初日終値は約19％高で約12兆円調達 - ITmedia」を確認した。配信元はITmedia、配信日は2026-06-13。",
-    "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5qaXBHMFFVTEoxWDlKNGlob2w2RGp5Q3Q3Ty0wZlNuMGNVbURMdF93alNMWjZwOGdZdF91WldjUmJkWHpCbTlnR1Y1Zm5ESXlYcnJpdVAtdGQ1TVVELS1yUmg3cGo?oc=5": "Google News RSSで「金利上昇でAI相場は終わるのか？注目の「SpaceX」IPOと次なる主役銘柄／西原里江氏【月曜マネーLIVE】 - テレ東BIZ」を確認した。配信元はテレ東BIZ、配信日は2026-06-01。",
     "https://news.google.com/rss/articles/CBMicEFVX3lxTFBkYy1LSFF2Qzh2UkNEQldkdllSQmI2ZmV0MnRuNDVqc3IxenJpaVpxMkI2dWVoa0xfc1BhOVVCcHl6WXQ5NnBRNWhTX1BRb1RzbmxzUXEzVk84TVRJaUZXbEg1d2NxcUZRYXpkaHNEVDM?oc=5": "Google News RSSで「SpaceXガイド：史上最大のIPOについて知っておくべきこと 執筆 - Investing.com - FX | 株式市場 | ファイナンス | 金融ニュース」を確認した。配信元はInvesting.com - FX | 株式市場 | ファイナンス | 金融ニュース、配信日は2026-06-12。",
-    "https://news.google.com/rss/articles/CBMif0FVX3lxTE5hWnl3eXdwSUkwRTBYWTlKalRLV1pPUGkzamhUMFA3TXBxejcyMDJ6ZXA1U2tmVldIbWtmQ1MxOHZ5dlV0MVdFalBKWnJadXlBWWZXZHpkRDNaRkpxeVg5N1JTUFRnc0lXWUpBakxxUmYxSUJvMi1aOVNtQU5JOW8?oc=5": "Google News RSSで「スペースX、ファルコン9でスターリンク衛星29機を打ち上げ 上場初日のミッションに成功（sorae 宇宙へのポータルサイト） - Yahoo!ニュース」を確認した。配信元はYahoo!ニュース、配信日は2026-06-14。",
+    "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5qaXBHMFFVTEoxWDlKNGlob2w2RGp5Q3Q3Ty0wZlNuMGNVbURMdF93alNMWjZwOGdZdF91WldjUmJkWHpCbTlnR1Y1Zm5ESXlYcnJpdVAtdGQ1TVVELS1yUmg3cGo?oc=5": "Google News RSSで「金利上昇でAI相場は終わるのか？注目の「SpaceX」IPOと次なる主役銘柄／西原里江氏【月曜マネーLIVE】 - テレ東BIZ」を確認した。配信元はテレ東BIZ、配信日は2026-06-01。",
     "https://news.google.com/rss/articles/CBMiZkFVX3lxTE54ck9oblRHT3F5eENGaW1vcEFSOU91VlU2S1IyeENfUHMzb0UzZDI3OHVZWlJyeThsQ0lnVmdBMHdyay0yU1lfUEMwZHcwODFrU0FrWWNjSTVrcWhSUnIwQ2Vha2o1Zw?oc=5": "Google News RSSで「SpaceXがいよいよ株式公開 個人も参加できる大型上場 - Impress Watch」を確認した。配信元はImpress Watch、配信日は2026-06-09。",
     "https://news.google.com/rss/articles/CBMiZkFVX3lxTE13aElmS1F3b1NqSVpZUVZkSXkzc1o5amIxX3dMakluOGFsVFlWRko3RG85c0hkamJFM054ZVlBSHJJNkhLZ2NmcXZzc3BzOXd5VGMtN1FwOC1MSGZsNlhBMmxDcEtIUQ?oc=5": "Google News RSSで「Investor says 'difficult to justify participating' in SpaceX IPO - Reuters」を確認した。配信元はReuters、配信日は2026-06-11。",
+    "https://news.google.com/rss/articles/CBMidEFVX3lxTE9mRWd6RDB3T1dPYnpYc0U4R2VSWU14NUtOOW9oWUhkbEtNYzd6VmM4Q1FnR0RoOGl6eXVEenZRZ3dPajRKT0RSZUtCTkFFTkx1OElqZFpiYzZCOXpWaE9yREtsQlRFdUtYZS1PV3BWcDdobVU5?oc=5": "Google News RSSで「SpaceX、IPO直前のMSCI ESG評価で「ロシア並み」の最低ランク - finance.biggo.jp」を確認した。配信元はfinance.biggo.jp、配信日は2026-06-22。",
     "https://www.boj.or.jp/en/": "Bank of Japanをdirectで取得し、ページ「Home : 日本銀行 Bank of Japan」の本文を確認した。抽出内容: Home : 日本銀行 Bank of Japan Skip to main content 日本語 English Home About the Bank About the Bank Outline of the Bank Outline of the Bank History List of Governors Location (Guide Map to Head Office) / Visiting the Bank Head Office, Branches, and Overseas Offices Archives Organization of the Bank Organization of the Bank P",
     "https://www.stat.go.jp/english/": "Statistics Bureau of Japanをdirectで取得し、ページ「Statistics Bureau Home Page」の本文を確認した。抽出内容: Statistics Bureau Home Page Search the site Inquiry Site Map Japanese Search the site Inquiry Site Map Japanese HOME Statistics Public Relations FAQ ABOUT US close Latest indicators Preliminary counts of population of Japan 12,285 ten thousand June 1,2026 Consumer Price Index 1.5 % May 2026 change over the year Unemplo",
     "https://www.mof.go.jp/english/": "Ministry of Finance Japanをdirectで取得し、ページ「Ministry of Finance Japan」の本文を確認した。抽出内容: ﻿ Ministry of Finance Japan Skip to Content Japanese Site Map The Policy of MOF The Policy of MOF Budget Tax Policy Customs & Tariff International Policy Financial System Stabilization Policy Research Institute Japanese Government Bonds Fiscal Investment and Loan Program Exchequer Currency Government Assets CLOSE About",
@@ -117,23 +117,23 @@
     "https://www.youtube.com/user/BOJchannel/": "Bank of Japan YouTubeの直取得とReader取得が利用できなかったため、登録ソースhttps://www.youtube.com/user/BOJchannel/に限定したBing RSS検索を確認した。検索語: site:www.youtube.com/user/BOJchannel \"Bank of Japan YouTube\"。検索結果: Bank of America - Banking, Credit Cards, Loans and Merrill Investing / https://www.bankofamerica.com/ / What would you like the power to do? At Bank of America, our purpose is to help make financial lives better through the power of every connection. Personal Banking, Credit Cards, Loans & Investing | U.S. Bank / https://www.usbank.com/index.html / Experience personalized banking services for your unique needs with U.S. Bank - Checking, credit cards, home loans & convenient online banking. Membe",
     "https://news.google.com/rss/articles/CBMibEFVX3lxTE1adUctQ25pV2ppMURCZEVCSHVMekdnTFF1U213Zi1hNGFEUWtMVWdzbXdqeFFKTG5jdDVUcy1iSWlpeHpPbU1majBzeVFrSXJJMnpWMWZnbUZkcXBaVjE1WG44dWVRSVhYTGlCVQ?oc=5": "Google News RSSで「「名古屋ほど適した場所ない」 広沢市長、副首都法案提出めぐり - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。",
     "https://news.google.com/rss/articles/CBMibEFVX3lxTE5fMGlRdHB2UmNCLUtyeXhfYVR5b2hXVjdvV0hFVTJOeElfd00wdGlocUtDc05laXp0cmNBcXdnOGYxdnUtcU84UG1QdUpmY3ZDYkpyYUpPanpUZTZzV0VsdzNPSjUteXF6blg4eA?oc=5": "Google News RSSで「ダイドー、缶コーヒーなど10〜15%値上げ 10月から83品目で - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。",
-    "https://news.google.com/rss/articles/CBMibEFVX3lxTE8weFdmaktMRTlkczV3ajVROHM1U0o2RC01VkZjRUZ4SS00U1prcDl4dHJNUmVBRTd3UzdvUVBCbmhTdnRhX0JQNDVsN3hhRUQxY2x5cWtjRm80X2daSHdZMDNlM1BoSUNjR3FGMQ?oc=5": "Google News RSSで「2040年度の民間投資230兆円超に 戦略17分野で官民投資計画 - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。",
     "https://news.google.com/rss/articles/CBMibEFVX3lxTE1pdHlOTjNxMmdtckN5LWVtMS1xd1BCLWNoclNEQUFRVTlFblQ5Wjl2UVkxeE50bXktcWY2VWFHUzcyc3B5U0cxdUFZaWVITUVZMGdRWklHT3ZMeEVjQ2lYM2IxZVhZbk5DNGFjLQ?oc=5": "Google News RSSで「KADOKAWA株主総会、夏野社長再任案を可決 - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。",
     "https://news.google.com/rss/articles/CBMibEFVX3lxTFBjOVpuWEt4WnZpZzE3WGttZllxTjlFSTJZY2l6QjZfVF9HZTFVMVJhbGxkMmpWb2c3MGYzUlltX3N6YXdkbVMzUkt2TS1fSFZkcXJhRC1pcHBzc09GbWpVWVRMV0U4blJaRXBhSQ?oc=5": "Google News RSSで「JERA、石炭火力電力の販売再開を検討 中東情勢受け企業向けに安く - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。",
+    "https://news.google.com/rss/articles/CBMibEFVX3lxTE8weFdmaktMRTlkczV3ajVROHM1U0o2RC01VkZjRUZ4SS00U1prcDl4dHJNUmVBRTd3UzdvUVBCbmhTdnRhX0JQNDVsN3hhRUQxY2x5cWtjRm80X2daSHdZMDNlM1BoSUNjR3FGMQ?oc=5": "Google News RSSで「2040年度の民間投資230兆円超に 戦略17分野で官民投資計画 - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。",
+    "https://news.google.com/rss/articles/CBMibEFVX3lxTFBNMzBmZ1RJMXpVTXV5QmNQTFFSeUIwMDQwSjZKdVowVmJWLUdhRjZjaUs5eEhPU2pFOTkzYkNzZDNrWmRTOE5JeXlkZ0VLQ05ySkozdlZsM2x2am1sck5tbm1hczlXWkIteWRSRg?oc=5": "Google News RSSで「24日の高市首相の動静 - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。",
     "https://news.google.com/rss/articles/CBMibEFVX3lxTE1IdnhKMHFkenFJU1lRZmVYSy1yQTNWZlYwZENNV1VBQlA3Vzl1UEc1bDVqRTBXYWI1LWtidmNVa1pUQlp5WWtBSDFobDFfaGJLRWZYcy1UZVlzMUhmRTdVOGFjbExTREVERUFpQw?oc=5": "Google News RSSで「スパコン世界ランキング、中国「霊晟」トップ 9年ぶり返り咲き - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。",
     "https://news.google.com/rss/articles/CBMibEFVX3lxTFBkM2pjb1RpY0tUNUVIanRTUkRKT3VfbThsOHdZT2taZkVvaW53SnpMMXZsa2dicnlXT1VoZUVhRDdwT181X0NMTjBCNXZGR1VHYmxZZHlJalpfcV8zZm5tTmQyRndkZE5hTjRQQg?oc=5": "Google News RSSで「重電大手の日本人社員2人、中国で拘束 レアアース規制関連か - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。",
     "https://news.google.com/rss/articles/CBMibEFVX3lxTE96ODl2U1NKVWR5Rm1ZZUUtcFY4VzRzakVjWGw2NDBOUlkyODNaVklrOHBmcVZ0R3o4QzBmRUNJQUtZNmNwaGFfekJMY1ZsdTdEQksyM2FxcWYxUlk5cWVyQ3FheFJHMFJxNnpSNg?oc=5": "Google News RSSで「［社説］子供のデジタル力育む安全なSNSに - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。",
     "https://news.google.com/rss/articles/CBMibEFVX3lxTE50S1JkOHhRb29vcDJCZXl4Ulk3NDh2RmZSNlkzUFNob2o2bUlqZ0Yya3MtVWxTVGNaRFd5LXJDVUFxZjMyS0dHaGhvZjVRdkhPZzNEQUtXb09yVWlBTHRGYXY0Z2FYNDBiTzdYQQ?oc=5": "Google News RSSで「マクロン氏が提起した「経済不均衡」 日本も対岸の火事ではない - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。",
-    "https://news.google.com/rss/articles/CBMibEFVX3lxTE8tcFY1RzFGZENRa3VqOXIzSWdYQ2I1V2FVRjJsZ1g4RS1aNklkb0t1Q0VZbFc5TjFiTmtTMmF3bVJ1UDBERGJBeW50UGR5R2l4dXVOQ1huX3lad3U3R0RHZko4SUZxYlhDR1lpUw?oc=5": "Google News RSSで「欧州の王室、目立つ王女の「継承1位」 男女問わぬ長子優先にシフト - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。",
     "https://www.yoasobi-music.jp/": "YOASOBI officialの直取得とReader取得が利用できなかったため、登録ソースhttps://www.yoasobi-music.jp/に限定したBing RSS検索を確認した。検索語: site:www.yoasobi-music.jp \"YOASOBI official\"。検索結果: Yoasobi - Wikipedia / https://en.m.wikipedia.org/wiki/Yoasobi / Yoasobi[A] is a Japanese musical duo formed in 2019. It consists of songwriter and producer Ayase and vocalist Ikura. Represented by the slogan \"novel into music\", the duo's narrative -driven songs are originally based on selected fictional stories posted on the website Monogatary.com. Later, source YOASOBI オフィシャルサイト / https://www.yoasobi-music.jp/ / YOASOBIの公式サイト。最新情報、ライブ、楽曲、小説など、YOASOBIに関するすべてがここに集結。 YOASOBI - YouTube / https://ww",
-    "https://www.ikuralilas.com/": "Ikuta Lilas officialの直取得とReader取得が利用できなかったため、登録ソースhttps://www.ikuralilas.com/に限定したBing RSS検索を確認した。検索語: site:www.ikuralilas.com \"Ikuta Lilas official\"。検索結果: Year-to-date employee payroll reports? : r/ADP - Reddit / https://www.reddit.com/r/ADP/comments/12s9z60/yeartodate_employee_payroll_reports/ / I would also suggest posting your question on the ADP Bridge. I've always found the community and Bridge moderators to be far more helpful & responsive than ADP Support. Alternatively, I'm a freelancer who helps companies with their ADP Workforce Now system. If custom reports are tough to figure out ADP is AWFUL : r/humanresources - Reddit / https://www.r",
+    "https://www.ikuralilas.com/": "Ikuta Lilas officialの直取得とReader取得が利用できなかったため、登録ソースhttps://www.ikuralilas.com/に限定したBing RSS検索を確認した。検索語: site:www.ikuralilas.com \"Ikuta Lilas official\"。検索結果: Procurement Process Flow — Chart and Essential Steps / https://procurementtactics.com/procurement-process-flow/ / To visualize the procurement process flow, we have made a chart for you to easily identify each process. You must note that this is only the standard procurement process flow. As we said, it varies for each company. Procurement Timeline Stages: From Planning to Closeout / https://legalclarity.org/procurement-timeline-stages-from-planning-to-closeout/ / A practical walkthrough of the ",
     "https://www.billboard-japan.com/": "Billboard Japanをdirectで取得し、ページ「Billboard JAPAN」の本文を確認した。抽出内容: Billboard JAPAN このページをスキップする 閉じる CHART INSIGHT ＋ MUSIC CHART INSIGHT CHART INSIGHT GLOBAL BOOKS BOOK CHART INSIGHT CHARTS ＋ MUSIC JAPAN CHARTS WORLD CHARTS YEAR END (JAPAN) YEAR END (WORLD) BOOKS JAPAN CHARTS NEWS ＋ ALL JAPAN OVERSEAS SPECIAL WOMEN IN MUSIC BOOK SHOPPING CART SHOPPING CART Chart Hot100 Report Column In",
-    "https://natalie.mu/music": "Natalie Musicをdirectで取得し、ページ「音楽ナタリー - 新曲リリース・ライブ情報などの音楽ニュースを毎日配信」の本文を確認した。抽出内容: 音楽ナタリー - 新曲リリース・ライブ情報などの音楽ニュースを毎日配信 ホーム 音楽 コミック お笑い 映画 ステージ ストア ライブ 送信 音楽ナタリー トップページ ニュース コラム 特集・インタビュー 注目の1曲 アクセスランキング 記事アクセスランキング 画像アクセスランキング 話題のアーティスト 話題の動画 ライブレポート リリース ライブ・ツアー情報 イベントレポート X YouTube ナタリー 音楽 ライブ・ツアー情報 indigo la End自身最大規模ワンマンをKアリーナ横浜で開催 indigo la Endのワンマンライブ「蒼き花束 vol.4」が2027年2月23日に神奈川・Kアリーナ横浜で開催される。 2",
+    "https://natalie.mu/music": "Natalie Musicをdirectで取得し、ページ「音楽ナタリー - 新曲リリース・ライブ情報などの音楽ニュースを毎日配信」の本文を確認した。抽出内容: 音楽ナタリー - 新曲リリース・ライブ情報などの音楽ニュースを毎日配信 ホーム 音楽 コミック お笑い 映画 ステージ ストア ライブ 送信 音楽ナタリー トップページ ニュース コラム 特集・インタビュー 注目の1曲 アクセスランキング 記事アクセスランキング 画像アクセスランキング 話題のアーティスト 話題の動画 ライブレポート リリース ライブ・ツアー情報 イベントレポート X YouTube ナタリー 音楽 ライブレポート / 写真いっぱい 牧野真莉愛、モーニング娘。愛爆発の卒業コンサートで明るくサヨナラ 新庄剛志もエールの手紙 モーニング娘。'26が本日6月24日、東京・日本武道館にて全国ツアーの最終公演となる「モーニング",
     "https://nypost.com/2026/04/21/ticket-sales/yoasobi-american-dream-tour-2026-where-to-buy-tickets-best-prices/": "New York Post YOASOBI coverageの直取得とReader取得が利用できなかったため、登録ソースhttps://nypost.com/2026/04/21/ticket-sales/yoasobi-american-dream-tour-2026-where-to-buy-tickets-best-prices/に限定したBing RSS検索を確認した。検索語: site:nypost.com/2026/04/21/ticket-sales/yoasobi-american-dream-tour-2026-where-to-buy-tickets-best-prices \"New York Post YOASOBI coverage\"。検索結果: Google News / https://news.google.com/ / Stay updated with the latest news and stories from around the world on Google News. Fox News - Breaking News Updates | Latest News Headlines | Photos ... / https://www.foxnews.com/ / Breaking News, Latest News and Current News from FOXNews.com. Breaking news and video. Latest Current News: U.S., World, Entertainment, Health, Business, Technology ... The New York Times - Breaking News, US News, World News and Videos / https://www.nytimes.com/ / Live news, ",
     "https://x.com/YOASOBI_staff": "YOASOBI Staff Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/YOASOBI_staffに限定したBing RSS検索を確認した。検索語: site:x.com/YOASOBI_staff \"YOASOBI Staff X\"。検索結果: Yoasobi - Wikipedia / https://en.m.wikipedia.org/wiki/Yoasobi / Yoasobi[A] is a Japanese musical duo formed in 2019. It consists of songwriter and producer Ayase and vocalist Ikura. Represented by the slogan \"novel into music\", the duo's narrative -driven songs are originally based on selected fictional stories posted on the website Monogatary.com. Later, source YOASOBI オフィシャルサイト / https://www.yoasobi-music.jp/ / YOASOBIの公式サイト。最新情報、ライブ、楽曲、小説など、YOASOBIに関するすべてがここに集結。 YOASOBI - YouTube / https://ww",
-    "https://x.com/ikutalilas": "Ikuta Lilas Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/ikutalilasに限定したBing RSS検索を確認した。検索語: site:x.com/ikutalilas \"Ikuta Lilas X\"。検索結果: 行百里者半九十 | The last leg of a journey marks the halfway point.行百里者半九十。表达 ... / https://www.zhihu.com/pin/1754441763316850688 / 行百里者半九十 | The last leg of a journey marks the halfway point.行百里者半九十。表达积累1.the last leg of a journey旅程的最后一段leg n. 〔旅程或赛程的〕一段，一程the last/final leg 指旅程或比赛中… 如何输入直角引号（「」和『』 ）？ - 知乎 / https://www.zhihu.com/question/19755746 / 说一下使用 win10 自带输入法输入直角引号较为便捷的一个办法: 设置 自定义用户词组。 我自定义的是输入在拼音输入下键入「yh」,就会在候选窗口第一和第二的位置出现「」和『 』的候选项，效果如下： Marks Discussions, Offers & Promotions - RedFlagDeals",
+    "https://x.com/ikutalilas": "Ikuta Lilas Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/ikutalilasに限定したBing RSS検索を確認した。検索語: site:x.com/ikutalilas \"Ikuta Lilas X\"。検索結果: Good Morning Song | An Original Song by Gracie’s Corner | Kids Songs ... / https://www.youtube.com/watch?v=dduOP1D4Vxg / Join Gracie and friends as they sing the Good Morning Song to express their excitement for the new day. For free learning activities and Gracie's Corner merch, visit www.GraciesCornerTV.com. Good Morning Song + More Fun Songs for Kids | Gracie’s Corner 2-Hour ... / https://www.youtube.com/watch?v=fr9iqt7NU3c / The Good Morning Song, Twinkle Twinkle Little Star, and countless o",
     "https://www.instagram.com/yoasobi_staff_/": "YOASOBI Instagramの直取得とReader取得が利用できなかったため、登録ソースhttps://www.instagram.com/yoasobi_staff_/に限定したBing RSS検索を確認した。検索語: site:www.instagram.com/yoasobi_staff_ \"YOASOBI Instagram\"。検索結果: Yoasobi - Wikipedia / https://en.m.wikipedia.org/wiki/Yoasobi / Yoasobi[A] is a Japanese musical duo formed in 2019. It consists of songwriter and producer Ayase and vocalist Ikura. Represented by the slogan \"novel into music\", the duo's narrative -driven songs are originally based on selected fictional stories posted on the website Monogatary.com. Later, source YOASOBI オフィシャルサイト / https://www.yoasobi-music.jp/ / YOASOBIの公式サイト。最新情報、ライブ、楽曲、小説など、YOASOBIに関するすべてがここに集結。 YOASOBI - YouTube / https://ww",
-    "https://www.instagram.com/lilasikuta/": "Ikuta Lilas Instagramの直取得とReader取得が利用できなかったため、登録ソースhttps://www.instagram.com/lilasikuta/に限定したBing RSS検索を確認した。検索語: site:www.instagram.com/lilasikuta \"Ikuta Lilas Instagram\"。検索結果: The Best Watch Order for the X-Men films leading up to Deadpool ... / https://www.reddit.com/r/marvelstudios/comments/1bulfh4/the_best_watch_order_for_the_xmen_films_leading/ / With Deadpool & Wolverine on the way, I've been thinking about what the best watch order for the X-Men films would be, especially for a first time viewer. Most people online recommend either release or chronological orders. [Marvel] Can Deadpool be killed? : r/AskScienceFiction - Reddit / https://www.reddit.com/r/AskScien",
+    "https://www.instagram.com/lilasikuta/": "Ikuta Lilas Instagramの直取得とReader取得が利用できなかったため、登録ソースhttps://www.instagram.com/lilasikuta/に限定したBing RSS検索を確認した。検索語: site:www.instagram.com/lilasikuta \"Ikuta Lilas Instagram\"。検索結果: You'll know it when you see it. - Reddit / https://www.reddit.com/r/porn/top/?t=all / /r/Porn is a NSFW image hub for the vast array of pornography across reddit. All images posted here originate on other subreddits and are then posted here with the [subreddit] in the title. This subreddit is LGBT-friendly (as far as mod influence goes, at least, since mods can't control voting). If Reddit - Dive into anything / https://www.reddit.com/ / Reddit is a network of communities where people can dive i",
     "https://www.youtube.com/channel/UCvpredjG93ifbCP1Y77JyFA": "YOASOBI YouTubeの直取得とReader取得が利用できなかったため、登録ソースhttps://www.youtube.com/channel/UCvpredjG93ifbCP1Y77JyFAに限定したBing RSS検索を確認した。検索語: site:www.youtube.com/channel/UCvpredjG93ifbCP1Y77JyFA \"YOASOBI YouTube\"。検索結果: Yoasobi - Wikipedia / https://en.m.wikipedia.org/wiki/Yoasobi / Yoasobi[A] is a Japanese musical duo formed in 2019. It consists of songwriter and producer Ayase and vocalist Ikura. Represented by the slogan \"novel into music\", the duo's narrative -driven songs are originally based on selected fictional stories posted on the website Monogatary.com. Later, source YOASOBI オフィシャルサイト / https://www.yoasobi-music.jp/ / YOASOBIの公式サイト。最新情報、ライブ、楽曲、小説など、YOASOBIに関するすべてがここに集結。 YOASOBI - YouTube / https://ww",
     "https://news.google.com/rss/articles/CBMiakFVX3lxTE5kR0Y3cU5sYVEwaGxDUExyWVdDcm4wZllYdDFnZVlTSGJldUpVWkhRbk5QZ1V1QzNHMG80VGtFal9UWERnNWlfMWhUbGdxVzNVQ1hUXzNrQ0RNTVZGNHpuQ09oRVlybTVuelE?oc=5": "Google News RSSで「幾田りら「あやせとのんでる」報告にYOASOBIファン歓喜「ちょっと安心した」「楽しそうでなにより」「完全にアルコール入ってる笑」 - オリコンニュース」を確認した。配信元はオリコンニュース、配信日は2026-05-28。",
     "https://news.google.com/rss/articles/CBMiakFVX3lxTE16RmhqVDF2UEJ6SG1uYi1NbEJFUE9Ndkt2N1VDajFibjM0T1JfYkN1bG0xZXhIUFdJLVBUaXhhMXN6RjRGdm9tVlNXVWM1QTlULXdkV0VadEFhNi0xd0ZVQ1labTZHZnNnNWc?oc=5": "Google News RSSで「幾田りら ニューアルバム『Laugh』のトレーラー&特設サイトを公開！さらに1/14(水)発売のパッケージ画像も解禁！ - PR TIMES」を確認した。配信元はPR TIMES、配信日は2025-12-08。",
@@ -149,10 +149,10 @@
     "https://www.mospi.gov.in/": "India MOSPIの直取得とReader取得が利用できなかったため、登録ソースhttps://www.mospi.gov.in/に限定したBing RSS検索を確認した。検索語: site:www.mospi.gov.in \"India MOSPI\"。検索結果: India - Wikipedia / https://en.wikipedia.org/wiki/India / India, officially the Republic of India, [j][19] is a country in South Asia. India | History, Maps, Population, Economy, & Facts | Britannica / https://www.britannica.com/place/India / India is a country that occupies the greater part of South Asia. It is a constitutional republic that represents a highly diverse population consisting of thousands of ethnic groups. It is made up of eight union territories and 28 states, and its capital is",
     "https://www.gso.gov.vn/en/homepage/": "Vietnam GSOの直取得とReader取得が利用できなかったため、登録ソースhttps://www.gso.gov.vn/en/homepage/に限定したBing RSS検索を確認した。検索語: site:www.gso.gov.vn/en/homepage \"Vietnam GSO\"。検索結果: Vietnam - Wikipedia / https://en.wikipedia.org/wiki/Vietnam / Upon the North Vietnamese victory in 1975, Vietnam reunified as a communist state that self-designated as a socialist state under the Communist Party of Vietnam (CPV) in 1976. An ineffective planned economy, a trade embargo by the West, and wars with Cambodia and China crippled the country further. Visit Vietnam: The Official Tourism Website of Vietnam / https://vietnam.travel/ / Discover the highlights of Vietnam through the country'",
     "https://www.stats.gov.cn/english/": "China NBSをdirectで取得し、ページ「National Bureau of Statistics of China」の本文を確認した。抽出内容: National Bureau of Statistics of China Chinese(GB) RSS Organizational Chart Data Communiqués Legal Framework Classifications & Methods Latest Releases International Cooperation Understanding Statistics Agency National Economy Showed Steady Momentum with Innovation-led and High-quality Development in May Statistical dat",
-    "https://www.reuters.com/markets/asia/": "Reuters Asia marketsをJina Reader mirrorで取得し、ページ「Title: reuters.com URL Source: http://www.reuters.com/markets/asia/ Warning: This page maybe requiring CAPTCHA, please make sure you are authorized to access this page. Markdown Co」の本文を確認した。抽出内容: Title: reuters.com URL Source: http://www.reuters.com/markets/asia/ Warning: This page maybe requiring CAPTCHA, please make sure you are authorized to access this page. Markdown Content:",
+    "https://www.reuters.com/markets/asia/": "Reuters Asia marketsの直取得とReader取得が利用できなかったため、登録ソースhttps://www.reuters.com/markets/asia/に限定したBing RSS検索を確認した。検索語: site:www.reuters.com/markets/asia \"Reuters Asia markets\"。検索結果: Reuters | Breaking International News & Views / https://www.reuters.com/ / Find latest news from every corner of the globe at Reuters.com, your online source for breaking international news coverage. World News | Latest Top Stories | Reuters / https://www.reuters.com/world/ / Just one in four Americans believes President Donald Trump's war with Iran was worth its costs ‌and a majority worry that a truce with Tehran is unlikely to last, a Reuters/Ipsos poll found. Reuters - Wikipedia / https://en",
     "https://asia.nikkei.com/": "Nikkei Asiaをdirectで取得し、ページ「Nikkei Asia - Business, Politics, Economy and Tech News & Analysis」の本文を確認した。抽出内容: Nikkei Asia - Business, Politics, Economy and Tech News & Analysis World China Japan India South Korea Indonesia Taiwan Thailand U.S. East Asia China Hong Kong Macao Taiwan Mongolia Japan South Korea North Korea Southeast Asia Indonesia Thailand Malaysia Singapore Philippines Vietnam Myanmar Cambodia Laos Brunei East T",
     "https://www.asiabriefing.com/news/": "Asia Briefingをdirectで取得し、ページ「Asia Briefing News - Latest Business and Regulatory Updates」の本文を確認した。抽出内容: ﻿ Asia Briefing News - Latest Business and Regulatory Updates × About Us Dezan Shira & Associates Personnel Publication Store Asiapedia Events Media Pack Connect with Us × Search × Please login to continue Email Password Login Subscribe Forgot your password? click here . More Information Latest Asia News By Region: ASE",
-    "https://twitter.com/RBI": "Reserve Bank of India Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://twitter.com/RBIに限定したBing RSS検索を確認した。検索語: site:twitter.com/RBI \"Reserve Bank of India X\"。検索結果: RESERVE Definition & Meaning - Merriam-Webster / https://www.merriam-webster.com/dictionary/reserve / The meaning of RESERVE is to make arrangements for use or possession of (something) at a later time. How to use reserve in a sentence. Synonym Discussion of Reserve. Camping & Campground Reservations Online | ReserveAmerica / https://www.reserveamerica.com/ / Reservations made easy! Reserve campgrounds, lodging, boat slips, and day-use locations online with ReserveAmerica. Plan your adventure to",
+    "https://twitter.com/RBI": "Reserve Bank of India XをJina Reader mirrorで取得し、ページ「Title: 520: Web server is returning an unknown error URL Source: http://twitter.com/RBI Warning: Target URL returned error 520: <none> Warning: This page maybe not yet fully loaded」の本文を確認した。抽出内容: Title: 520: Web server is returning an unknown error URL Source: http://twitter.com/RBI Warning: Target URL returned error 520: <none> Warning: This page maybe not yet fully loaded, consider explicitly specify a timeout. Markdown Content: ## What can I do? ### If you are a visitor of this website: Please try again in a",
     "https://www.youtube.com/channel/UCIfCOl43tunZVNYafeC4RQA": "Reserve Bank of India YouTubeの直取得とReader取得が利用できなかったため、登録ソースhttps://www.youtube.com/channel/UCIfCOl43tunZVNYafeC4RQAに限定したBing RSS検索を確認した。検索語: site:www.youtube.com/channel/UCIfCOl43tunZVNYafeC4RQA \"Reserve Bank of India YouTube\"。検索結果: RESERVE Definition & Meaning - Merriam-Webster / https://www.merriam-webster.com/dictionary/reserve / The meaning of RESERVE is to make arrangements for use or possession of (something) at a later time. How to use reserve in a sentence. Synonym Discussion of Reserve. Camping & Campground Reservations Online | ReserveAmerica / https://www.reserveamerica.com/ / Reservations made easy! Reserve campgrounds, lodging, boat slips, and day-use locations online with ReserveAmerica. Plan your adventure to",
     "https://news.google.com/rss/articles/CBMihwFBVV95cUxNZ3hfTEIxQVBjRm42dTFib2pMZk02Uk83NTNFLURxNHhXZ1lkbTdCVVhXMldMeTE5T3kzTjl5MC1lWUgtOUIwWFRpdUNOakJuWmk0alFxOEtQYko3eVgwMUl3X090NGQ5MWxrWmhOQUJlRFlnbjZZQUFyNENTV21qNGE1cFFpODQ?oc=5": "Google News RSSで「23日のインド市場見通し：上値重いか、弱い経済指標やアジア市場の下落で(フィスコ) - Yahoo!ファイナンス」を確認した。配信元はYahoo!ファイナンス、配信日は2026-06-23。",
     "https://news.google.com/rss/articles/CBMibEFVX3lxTFBFLUtXTVFRTURvdVVEbEFuenRMeWRtcHN3Z0d2SXNHcFZ6cHVHVUlhZmxhS05tOWNhZUU0SWdjT3dEeVlTS1lMNVhLQ1hPUkdpTk5XV1ZHek9fWHplQlJISWRIbHdYSDJhTGVWcQ?oc=5": "Google News RSSで「ベトナムは乱世の映し鏡 米中「G2」下でアジア外交攻勢の思惑 - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-23。",
@@ -162,8 +162,8 @@
     "https://news.google.com/rss/articles/CBMiWEFVX3lxTE8zd0ZJMXkyd3pTRVBFTzREeEI0TEpFTFVWLTZFT0lXRHFPRlZtYWdoY1lKVjlzU250am91M1hfYzJRMzdrWmxJYW9YUm1QWDFseDZMSElVRno?oc=5": "Google News RSSで「不動産バブル崩壊の中国が共産党系新聞で「日本はダメな国」批判 - 現代ビジネス」を確認した。配信元は現代ビジネス、配信日は2026-06-23。",
     "https://news.google.com/rss/articles/CBMilgFBVV95cUxPUDZPUXFqU3oyc1Z0R0JuNlNnOHRaNjJNWF93bXhjWTd5aUpRdzFrMUtFcUlmWGpWU1V6cEhJSUhwSmpLRkFUclliRFVCT3JDOU5hTzJFbHVJZ2hOd29kMTRRdVkzQUNIeDJEcE1wSll1c3FfSXFFTVU3Z09MeUJQWm8zUjBueU9LdFdSLWFPZUEyVVc0NEE?oc=5": "Google News RSSで「米イラン協議の見通しがアジア株を押し上げた。 - Vietnam.vn」を確認した。配信元はVietnam.vn、配信日は2026-06-22。",
     "https://news.google.com/rss/articles/CBMihwFBVV95cUxPb012Sm9JNDg0dHl1QUJWblNQdHhEdzBhU3JEYy1nQnJzYk1WUXZ4Ml9IT0djYlhqTmtiM3VNdVVXWDJEbVFMMEstbVRvQW9JQ1NtSGdYby1tb3hUUXdBNkNXeENYdTZSVXpLbVJBdkpjTVRDZVZXeFhXdEc2RmF6VWlQQ3p2SzQ?oc=5": "Google News RSSで「中国・香港株式市場・大引け＝下落、アジア市場に追随(ロイター) - Yahoo!ファイナンス」を確認した。配信元はYahoo!ファイナンス、配信日は2026-06-23。",
+    "https://news.google.com/rss/articles/CBMie0FVX3lxTE1PbWJNRnFUM3NUM29mUEtiRXRyODRTbllpSHEtQUFFVUU2VnlsU3pCa2ZUaHh2NHBxRmlrcnpUTEhFM3p4X1JvXy1UbWhOZ1hNZjY0WUxkQU9CUnJlaUY2b1FSd3RrdnNRZ0RXb204OFQ3RTFEbVpVMGx4NA?oc=5": "Google News RSSで「交流模索へ 日本の経済団体視察 中国“サプライチェーン”博覧会 - au Webポータル」を確認した。配信元はau Webポータル、配信日は2026-06-23。",
     "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5OMmQwdDZpQUdxVWRBT1FXWDc0al84ZmE1ZTgwbzM4NHExcGFaSUF4SEVhM1BqLTRfOEc1NzdxdWFOd2Fka3dsLWFqeDUyZE9fWHA3ZjlVN0hCbS0tWDZwalUwWTDSAWRBVV95cUxOTjJkMHQ2aUFHcVVkQU9RV1g3NGpfOGZhNWU4MG8zODRxMXBhWklBeEhFYTNQai00XzhHNTc3cXVhTndhZGt3bC1hang1MmRPX1hwN2Y5VTdIQm0tLVg2cGpVMFkw?oc=5": "Google News RSSで「【中国】外資誘致へ15措置、投資の利便性向上［経済］ | チバテレ＋プラス - 千葉テレビ放送株式会社」を確認した。配信元は千葉テレビ放送株式会社、配信日は2026-06-24。",
-    "https://news.google.com/rss/articles/CBMiRkFVX3lxTFBzcW1zWW9FMmZrQngtbWNjYXJmSmx6RXhjWmVRWFlMT29CSWRTRWRYSjU2S2EtdUU3MXh1VTJSZ1dfUS0zenc?oc=5": "Google News RSSで「５月ＣＰＩは2.0％上昇、伸び加速 - nna.jp」を確認した。配信元はnna.jp、配信日は2026-06-22。",
     "https://www.federalreserve.gov/": "Federal Reserveをdirectで取得し、ページ「Federal Reserve Board - Home」の本文を確認した。抽出内容: ﻿ Federal Reserve Board - Home Skip to main content An official website of the United States Government Here's how you know Official websites use .gov A .gov website belongs to an official government organization in the United States. Secure .gov websites use HTTPS A lock ( ) or https:// means you've safely connected t",
     "https://www.bls.gov/": "Bureau of Labor Statisticsの直取得とReader取得が利用できなかったため、登録ソースhttps://www.bls.gov/に限定したBing RSS検索を確認した。検索語: site:www.bls.gov \"Bureau of Labor Statistics\"。検索結果: U.S. Bureau of Labor Statistics / https://www.bls.gov/ / The Bureau of Labor Statistics is the principal fact-finding agency for the Federal Government in the broad field of labor economics and statistics. home : U.S. Bureau of Labor Statistics / https://www.bls.gov/beta/home.htm / The Bureau of Labor Statistics is exploring a substantial change to the format of our news releases. Our objective is to improve readability, accessibility, and relevance while maintaining the BLS gold standard of acc",
     "https://www.bea.gov/": "Bureau of Economic Analysisをdirectで取得し、ページ「U.S. Bureau of Economic Analysis (BEA)」の本文を確認した。抽出内容: U.S. Bureau of Economic Analysis (BEA) Skip to main content An official website of the United States government Toggle navigation Main navigation Data by Topic by Place by Economic Account Tools Interactive Data Application Programming Interface (API) Global Value Chain Analyzer Income Distribution Analysis Tool (IDAT)",
@@ -188,7 +188,7 @@
     "https://www.city.utsunomiya.lg.jp/": "Utsunomiya City officialをdirectで取得し、ページ「宇都宮市公式Webサイト」の本文を確認した。抽出内容: 宇都宮市公式Webサイト エンターキーを押すと、ナビゲーション部分をスキップし本文へ移動します。 いざという時に イベント情報 サイト内検索 検索の使い方 閉じる 注目ワード 職員採用 LRT 会計年度任用職員 バス路線 ゆうあいひろば ハザードマップ マイナンバーカード 本庁舎駐車場 印鑑証明 住民票 防災メール ページID検索 もしもの時は 防災・（災害） 消防 休日・夜間の急病 閉じる メニュー Translation service 文字サイズ・色の変更 音声読み上げ ふりがな ふりがなをけす やさしい日本語 暮らし・手続き 子育て・教育 健康・医療・福祉 イベント・文化・スポーツ 産業・ビジネス 市政情報 こんなときには ",
     "https://www.city.utsunomiya.lg.jp/gikai/": "Utsunomiya City Councilをdirectで取得し、ページ「宇都宮市議会｜宇都宮市公式Webサイト」の本文を確認した。抽出内容: 宇都宮市議会｜宇都宮市公式Webサイト エンターキーを押すと、ナビゲーション部分をスキップし本文へ移動します。 メニュー Translation service 文字サイズ・色の変更 音声読み上げ ふりがな ふりがなをけす やさしい日本語 会議の日程 議会中継 録画配信 会議録 あなたと市議会 メインメニュー MAIN MENU 市議会とは 市議会の概要 議会に関する条例等 キッズページ（宇都宮市議会） 用語解説（宇都宮市議会） 議員紹介 議長あいさつ 議長・副議長 議員名簿（個人） 委員会等名簿 会派紹介 議会改革・活性化 議会改革の取組 パブリックコメント 議場ジャズコンサート 議会体験 ご意見募集 会議の案内 議会の日程 質問",
     "https://basketballking.jp/": "Basketball Kingをdirectで取得し、ページ「バスケットボールキング | 国内外のバスケニュースを見るなら！」の本文を確認した。抽出内容: バスケットボールキング | 国内外のバスケニュースを見るなら！ Bリーグ B.LEAGUE B1ニュース一覧 B2ニュース一覧 日程結果 順位表 個人成績 B1選手名鑑 富永 啓生 富樫 勇樹 イ ヒョンジュン 比江島 慎 ジャレット・カルバー 渡邊 雄太 馬場 雄大 岸本 隆一 D.J・ニュービル 菊地 祥平 B2選手名鑑 トレイ・ボイド 白谷 柱誠 ジャック ヨーリ・チャイルズ 松野 遥弥 西田 公陽 アンジェロ・チョル 橋本 竜馬 寺園 脩斗 バローン マーテル 加納 誠也 日本代表 AKATSUKI FIVE 男子日本代表 男子日本代表ニュース 男子日本代表選手一覧 女子日本代表 女子日本代表ニュース 女子日本代表選手一覧 ",
-    "https://www.shimotsuke.co.jp/list/select/brex": "Shimotsuke sportsの直取得とReader取得が利用できなかったため、登録ソースhttps://www.shimotsuke.co.jp/list/select/brexに限定したBing RSS検索を確認した。検索語: site:www.shimotsuke.co.jp/list/select/brex \"Shimotsuke sports\"。検索結果: eCAC - Centro Virtual de Atendimento / https://cav.receita.fazenda.gov.br/autenticacao/ / eCAC - Centro Virtual de Atendimento Para cadastrar um procurador, o contribuinte pode utilizar: a opção \"Procuração Eletrônica\", disponível no Portal e-CAC (o contribuinte e seu procurador precisam ter Conta GovBr com nível de confiabilidade Prata ou Ouro); a opção \"Solicitação de Procuração para a eCAC - Centro Virtual de Atendimento / https://cav.receita.fazenda.gov.br/autenticacao/Login/LogoutGovBR / Lo",
+    "https://www.shimotsuke.co.jp/list/select/brex": "Shimotsuke sportsの直取得とReader取得が利用できなかったため、登録ソースhttps://www.shimotsuke.co.jp/list/select/brexに限定したBing RSS検索を確認した。検索語: site:www.shimotsuke.co.jp/list/select/brex \"Shimotsuke sports\"。検索結果: 1 - Wikipedia / https://en.wikipedia.org/wiki/1 / 1 (one, unit, unity) is a number, numeral, and grapheme. It is the first and smallest positive integer of the infinite sequence of natural numbers. 1 (number) | Math Wiki | Fandom / https://math.fandom.com/wiki/1_(number) / 1 is the natural number following 0 and preceding 2, the Hindu-Arabic numeral for the number one (the unit). It is the smallest positive integer, and smallest natural number. 1 is the multiplicative identity, i.e. any number m",
     "https://www.shimotsuke.co.jp/": "Shimotsuke regional newsをdirectで取得し、ページ「栃木のニュースなら下野新聞デジタル｜下野新聞社」の本文を確認した。抽出内容: 栃木のニュースなら下野新聞デジタル｜下野新聞社 宇都宮 --- ／ --- 朝刊夕刊 紙面 おくやみ 災害防災 アプリ 会員情報 とちぽ 購読案内 ログイン トップ 速報 事件事故 交通事故 火災 交通情報 地域 宇都宮市 足利市 栃木市 佐野市 鹿沼市 日光市 小山市 真岡市 大田原市 矢板市 那須塩原市 さくら市 那須烏山市 下野市 上三川町 益子町 茂木町 市貝町 芳賀町 壬生町 野木町 塩谷町 高根沢町 那須町 那珂川町 スポーツ 高校野球 ブレックス 栃木SC 栃木シティ バックス ブリッツェン ゴールデンブレーブス 小中高校生 大学生・一般 デジタル発 あなとち あなとち＋ 下野新聞デジタル発 エスポルとち 1分ニュース",
     "https://www.japantimes.co.jp/sports/basketball/": "Japan Times basketballをdirectで取得し、ページ「Basketball - Sports - The Japan Times」の本文を確認した。抽出内容: Basketball - Sports - The Japan Times Subscribe Digital Print June 24, 2026 Subscribe Digital Print World Cup Iran talks Falling yen Latest News Today's print edition Home Delivery JAPAN Politics Society Crime & Legal Science & Health Explainer History WORLD Politics Crime & Legal Science & Health Society ASIA PACIFIC ",
     "https://x.com/utsunomiyabrex": "Utsunomiya Brex Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/utsunomiyabrexに限定したBing RSS検索を確認した。検索語: site:x.com/utsunomiyabrex \"Utsunomiya Brex X\"。検索結果: Utsunomiya - Wikipedia / https://en.wikipedia.org/wiki/Utsunomiya / Utsunomiya is the commercial and industrial center of Tochigi Prefecture. Utsunomiya is home to a Canon optical manufacturing plant, a Japan Tobacco plant, Honda design centers, and various other industrial concerns in the Kiyohara Industrial Park. Utsunomiya Travel Guide - What to do in Utsunomiya City / https://www.japan-guide.com/e/e3860.html / Utsunomiya (宇都宮) is the capital of Tochigi and the largest city in the prefecture,",
@@ -207,216 +207,25 @@
     "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9EaUN6RlJHLUxZNUtOS3ZUSThHRU9DaExGbEZpUDg4TDRQczZiaU81RnByRk11aHd1T2ljc3BvQWFmTVlCQ3BBcnB3MjBlZzFZWnNxNnRiTFZNRklacERPMHhlMFg4d2FD?oc=5": "Google News RSSで「【6月9日の契約情報】宇都宮が4選手の去就発表…古巣復帰も含め移籍相次ぐ - バスケットボールキング」を確認した。配信元はバスケットボールキング、配信日は2026-06-09。"
   },
   "categories": {
-    "Honda": {
-      "items": [],
-      "signals": [],
-      "no_change_summary": "今回の証拠では2026年6月24日を含む直近3日間にホンダの新たな決算発表や市場反応、製品戦略の具体的な更新情報は確認できなかった。過去の2026年3月期決算の赤字計上やEV関連損失の報道は既報であり、直近の新規情報は見当たらない。",
-      "discovery_sources": [
-        {
-          "label": "Car Watch",
-          "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE11VjUzelRfWVhmamJIVkVEV2RHR21KM3R5d3NjRVFCUDhYMkFvQjJMaTdxRGhsLVh1Z3pJSmpNRjVyLXhFckdXcTM2Mm01ODd1R25QeHozOEtNRnY2aUJ5UnNMTTM?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-05-14",
-          "evidence_summary": "Google News RSSで「ホンダ、2026年3月期通期決算 売上収益は0.5％減の21兆7966億円だが、EV関連損失の1兆4536億円が影響して営業利益は4143億円の赤字に - Car Watch」を確認した。配信元はCar Watch、配信日は2026-05-14。"
-        },
-        {
-          "label": "BBC",
-          "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE9Vc2MxVmIwd0o4Nkl1UjMtbDR6ci1IcHU2dDJubU1OSTRNSGRBOXR0VGR5a3F4QmczMHVlOEpPbGtuRHZVVkROWnhmSTF3ak1KeThkWGJPWjNXMmt3MHkw0gFkQVVfeXFMTTc5QkZSUWhUcTAwS1dEZy1reHBIOEpqRWFhaGl1LTFTMERxV212b1ZRUDJkdHlmU2Q4NG1TLWdCSGdJYUR2bHQ2UnNaUjNtSm1hTTBIalFKNkwycFM3dlBIRW5MZw?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-05-15",
-          "evidence_summary": "Google News RSSで「ホンダ、上場約70年で初の最終赤字 2026年3月期 - BBC」を確認した。配信元はBBC、配信日は2026-05-15。"
-        },
-        {
-          "label": "日本経済新聞",
-          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9rRDhReFNyakN6WmZyWWhla2FrQkJTVGRvRVBiZG9oNXQ2cGdEWmNqNzIzNWNYOWRuaXNVRmpEVFFUZ3hoay1jZTdrUXJFbk4zSHFGeW5VZWZtZnM5RVpuazR0MUd3WXBGU2dUMw?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-05-08",
-          "evidence_summary": "Google News RSSで「決算:ホンダ初の営業赤字4000億円 26年3月期、EV関連損失響く - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-05-08。"
-        },
-        {
-          "label": "時事通信ニュース",
-          "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE45NzRKRTNKSHhKV2phZWxyX0hXbFJ1c1NnWGRxY3lNamZmSm1xTVNwU1R3U3M3THJmZWN4QmNZTXRtdU1MVmRCYlBscE00UXU3M3c?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-03-12",
-          "evidence_summary": "Google News RSSで「Honda Expects Up to 690 B. Yen in Net Loss for FY 2025 - 時事通信ニュース」を確認した。配信元は時事通信ニュース、配信日は2026-03-12。"
-        },
-        {
-          "label": "Business Insider Japan",
-          "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE5vLTdyTHFfaEdKQW5yaFc3aWtiRVdrcnlfblJOOHNkaEpiM3FTVkFmdUp4U3ZHVlVrQUhSTVlhTGdUWURlYXByY1A5TEhzN0cxYVNfNDdCVG92b0dUZTEzYzZKMzlaaGJIOEIzdUVJclAxNm5iT0E4b05R?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-03-25",
-          "evidence_summary": "Google News RSSで「ホンダ、損失最大2.5兆円の衝撃。二輪では世界トップも四輪は「迷走」。巨額EV損失が示す決定的課題 - Business Insider Japan」を確認した。配信元はBusiness Insider Japan、配信日は2026-03-25。"
-        },
-        {
-          "label": "Reuters",
-          "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE96elduMklzdkdYbGh3Y2ZoSzJFZmttTmF3WGZwbnc3QjZvWVdMX3h0WlRJbFg0N2JpUVBwd1JwM0g1V2g0d254cFpEVUw5ci14QVpRamRaRWt6YmJSQXdSQnI0Zkh4UQ?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-03-12",
-          "evidence_summary": "Google News RSSで「Honda flags first annual loss, hit by $15.7 billion EV charge - Reuters」を確認した。配信元はReuters、配信日は2026-03-12。"
-        },
-        {
-          "label": "ACN Newswire",
-          "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOTXJZcUNuMUM3MThPdXhjc0pLNFFfT3pRb2w5WWdYYzNxbHB6NDQwMWtyS0JPYXRmMExtVzNYak53bGhhOWpkVDNjN3FkV3hXb0R4N1lzWWI2QTcxc0VZV0o5M3VRdXVFRkZxZTlya3pyRkpncHIxaXpROE1sSlJfVzRRMTFmSWNzREtlVmhsZFBPc3kwS2RvSGtsMWVIVnVFOWZwYXF3NGtmZUNDbmtScTRfOA?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-03-05",
-          "evidence_summary": "Google News RSSで「Honda to Begin Sales of Two U.S.-built Vehicles in Japan - ACN Newswire」を確認した。配信元はACN Newswire、配信日は2026-03-05。"
-        },
-        {
-          "label": "Yahoo!ファイナンス",
-          "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1qOFNxaWtUODZ3N1dCb013YWQzM2hoTHNjR0ZkTzdsbXNJMW44aU1yS3Z4dGRYR3JGeEl3Uy1uNXJ6N1Z1OUluYVY5ZmJkeFVsYU9oazl1cHEyZ0RKMGhQUw?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-05-14",
-          "evidence_summary": "Google News RSSで「ホンダ【7267】：決算情報 - Yahoo!ファイナンス」を確認した。配信元はYahoo!ファイナンス、配信日は2026-05-14。"
-        },
-        {
-          "label": "ヤングマシン",
-          "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE9mZjlJUmFDNnVpZE4tejJtb3pUSjRlcllrU2Vsa2FjbWZqZXhmNVVHSG5WZVhSSkVHR2NWQkhjVUk4Wl9IQ0NFTVRlRkV2YTNfRHpNd3VRTQ?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-05-23",
-          "evidence_summary": "Google News RSSで「現代に蘇った「F」を思いのままに操る。ウッドストックがCB1000F/SEに捧ぐ、機能美に満ちたバックステップキット登場【HONDAカスタム】 - ヤングマシン」を確認した。配信元はヤングマシン、配信日は2026-05-23。"
-        },
-        {
-          "label": "ウェビック",
-          "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBvNlRRV2VuRG5RWGJsSEFUNUJKbkhmNzVuMjE3czY2S21kODZEdk5RY2xUQ29ITHhITUw0bDMxcmhWV2xhT1JzWEN3OVJpTTZyaGk0ZHlHa05NbzA?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2025-10-02",
-          "evidence_summary": "Google News RSSで「EWCスーパーストック再び2位のKaedear-Dafy-RAC 41-Honda、印象的な走りを続ける - ウェビック」を確認した。配信元はウェビック、配信日は2025-10-02。"
-        },
-        {
-          "label": "Car Watch 媒体ページ",
-          "url": "https://car.watch.impress.co.jp",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-05-14",
-          "evidence_summary": "Google News RSSのsource属性から、Car Watchの媒体URLhttps://car.watch.impress.co.jpを確認した。"
-        },
-        {
-          "label": "BBC 媒体ページ",
-          "url": "https://www.bbc.com",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-05-15",
-          "evidence_summary": "Google News RSSのsource属性から、BBCの媒体URLhttps://www.bbc.comを確認した。"
-        },
-        {
-          "label": "日本経済新聞 媒体ページ",
-          "url": "https://www.nikkei.com",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-05-08",
-          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
-        },
-        {
-          "label": "時事通信ニュース 媒体ページ",
-          "url": "https://sp.m.jiji.com",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-03-12",
-          "evidence_summary": "Google News RSSのsource属性から、時事通信ニュースの媒体URLhttps://sp.m.jiji.comを確認した。"
-        },
-        {
-          "label": "Business Insider Japan 媒体ページ",
-          "url": "https://www.businessinsider.jp",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-03-25",
-          "evidence_summary": "Google News RSSのsource属性から、Business Insider Japanの媒体URLhttps://www.businessinsider.jpを確認した。"
-        },
-        {
-          "label": "Reuters 媒体ページ",
-          "url": "https://jp.reuters.com",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-03-12",
-          "evidence_summary": "Google News RSSのsource属性から、Reutersの媒体URLhttps://jp.reuters.comを確認した。"
-        },
-        {
-          "label": "ACN Newswire 媒体ページ",
-          "url": "https://www.acnnewswire.com",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-03-05",
-          "evidence_summary": "Google News RSSのsource属性から、ACN Newswireの媒体URLhttps://www.acnnewswire.comを確認した。"
-        },
-        {
-          "label": "Yahoo!ファイナンス 媒体ページ",
-          "url": "https://finance.yahoo.co.jp",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-05-14",
-          "evidence_summary": "Google News RSSのsource属性から、Yahoo!ファイナンスの媒体URLhttps://finance.yahoo.co.jpを確認した。"
-        },
-        {
-          "label": "ヤングマシン 媒体ページ",
-          "url": "https://young-machine.com",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-05-23",
-          "evidence_summary": "Google News RSSのsource属性から、ヤングマシンの媒体URLhttps://young-machine.comを確認した。"
-        },
-        {
-          "label": "ウェビック 媒体ページ",
-          "url": "https://www.webike.net",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2025-10-02",
-          "evidence_summary": "Google News RSSのsource属性から、ウェビックの媒体URLhttps://www.webike.netを確認した。"
-        }
-      ]
-    },
     "SoftBank": {
-      "items": [
+      "items": [],
+      "signals": [
         {
           "watch_topic_id": "corporate_ir_financing",
-          "title": "ソフトバンクグループ、2026年6月24日に新株予約権発行と取締役・監査役の人事を発表",
-          "summary": "ソフトバンクグループは2026年6月24日に新株予約権の発行と取締役および監査役の人事異動を公式発表した。新株予約権の発行と取締役・監査役の人事異動が2026年6月24日に公式発表された。資本政策と経営体制の変更は企業価値や株主利益に直接影響し、今後の経営戦略の方向性を示すため重要である。",
+          "title": "ソフトバンクグループ、2026年6月24日に第46回定時株主総会開催",
+          "summary": "ソフトバンクグループは2026年6月24日に第46回定時株主総会を開催し、経営方針や決算報告を行った。",
           "source_published_date": "2026-06-24",
+          "source_url": "https://group.softbank/en/ir",
+          "source_label": "SoftBank Group IR",
+          "change_class": "routine_recurring",
+          "rejection_reason_class": "insufficient_evidence",
+          "rejection_reason": "定時株主総会の開催は毎年の定例イベントであり、新規性のある変更ではないため。",
           "topic_value_class": "decision_or_policy",
-          "priority_class": "standard",
-          "slug": "auto-876af492b8c9-2026-06-24",
-          "detail_summary": "新株予約権の発行と取締役・監査役の人事異動が2026年6月24日に公式発表された。確認できた点は、2026年6月24日に新株予約権発行を公式発表した、同日に取締役および監査役の人事異動を公表した、発表はソフトバンクグループの公式ニュースリリースによる。資本政策と経営体制の変更は企業価値や株主利益に直接影響し、今後の経営戦略の方向性を示すため重要である。新株予約権の具体的な発行数や条件、取締役・監査役の詳細な人事内容は未公開であり、影響の全容は不明。",
-          "what_changed": "新株予約権の発行と取締役・監査役の人事異動が2026年6月24日に公式発表された。",
-          "why_it_matters": "資本政策と経営体制の変更は企業価値や株主利益に直接影響し、今後の経営戦略の方向性を示すため重要である。",
-          "confirmed_facts": [
-            "2026年6月24日に新株予約権発行を公式発表した。",
-            "同日に取締役および監査役の人事異動を公表した。",
-            "発表はソフトバンクグループの公式ニュースリリースによる。"
-          ],
-          "limits_or_unknowns": "新株予約権の具体的な発行数や条件、取締役・監査役の詳細な人事内容は未公開であり、影響の全容は不明。",
-          "sources": [
-            {
-              "label": "SoftBank Group News",
-              "url": "https://group.softbank/en/news",
-              "source_role": "primary_or_official",
-              "channel": "web",
-              "published_date": null,
-              "evidence_summary": "SoftBank Group Newsをdirectで取得し、ページ「News | SoftBank Group Corp.」の本文を確認した。抽出内容: News | SoftBank Group Corp. Home News News Press Release IR Jun. 24, 2026 Issuance of Stock Acquisition Rights (Stock Options) Corporate Jun. 24, 2026 Personnel Change and Formation of Board Directors, Audit & Supervisory Board Members, and Corporate Officers Corporate Jun. 16, 2026 The SoftBank Group Announces “Patchi"
-            },
-            {
-              "label": "SoftBank Group IR",
-              "url": "https://group.softbank/en/ir",
-              "source_role": "primary_or_official",
-              "channel": "web",
-              "published_date": null,
-              "evidence_summary": "SoftBank Group IRをdirectで取得し、ページ「Investor Relations | SoftBank Group Corp.」の本文を確認した。抽出内容: Investor Relations | SoftBank Group Corp. Home Investor Relations Investor Relations The 46th Annual General Meeting of Shareholders June 24, 2026 Net Asset Value per Share Materials For Earnings Investor Briefing Latest IR News Loading stock price data... Details Details IR News Shareholders' Meeting Jun. 24, 2026 [We"
-            }
-          ],
           "observation_source_role": "primary_or_official",
           "observation_channel": "web"
         }
       ],
-      "signals": [],
-      "no_change_summary": "2026年6月24日を中心とした期間において、ソフトバンクグループの株価急騰やストップ高・ストップ安の報告は確認されなかった。AIインフラ関連では既報のフランスでの大規模AIデータセンター建設計画や国内GPUクラウドサービス開始予定の続報があるが、新たな確定的な資本市場の動きや大規模な提携発表はなかった。",
+      "no_change_summary": "2026年6月24日までの期間に、ソフトバンクグループは株式取得権発行を公式に発表したほか、定時株主総会を開催した。AIデータセンター関連では、フランスでの大型建設計画や新サービス開始予定の報道があるが、公式発表や具体的詳細は未確認である。",
       "discovery_sources": [
         {
           "label": "ソフトバンク",
@@ -580,177 +389,220 @@
         }
       ]
     },
-    "F1": {
+    "Honda": {
       "items": [],
-      "signals": [],
-      "no_change_summary": "今回の証拠には2026年6月24日を含む直近3日間のF1レース結果やスケジュールの変更、ホンダ・アストンマーティンのパワーユニットに関する新たな技術的変更、FIAの規制アップデートの具体的な発表は含まれていません。過去のPU救済策拡大や安全問題の報道はありますが、最新の動きは確認できません。",
+      "signals": [
+        {
+          "watch_topic_id": "market_price_reaction",
+          "title": "ホンダ株価の市場反応に関する最新情報なし",
+          "summary": "2026年6月24日付近のホンダ株価の急騰や急落、ストップ高・ストップ安の報告は確認されていない。",
+          "source_published_date": "2026-06-24",
+          "source_url": "https://global.honda/en/investors/",
+          "source_label": "Honda IR",
+          "change_class": "material_update",
+          "rejection_reason_class": "insufficient_evidence",
+          "rejection_reason": "該当期間の株価急変に関する具体的な情報がないため。",
+          "topic_value_class": "market_or_financial_impact",
+          "observation_source_role": "primary_or_official",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "china_sales",
+          "title": "ホンダの中国販売に関する新情報なし",
+          "summary": "2026年6月24日付近のホンダの中国市場での販売動向や前年比の大幅減少に関する新たな報告は見当たらない。",
+          "source_published_date": "2026-06-24",
+          "source_url": "https://response.jp/special/recent/105/Honda",
+          "source_label": "Response Honda",
+          "change_class": "material_update",
+          "rejection_reason_class": "insufficient_evidence",
+          "rejection_reason": "最新の中国販売データや動向の具体的な更新がないため。",
+          "topic_value_class": "market_or_financial_impact",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "hybrid_ev_strategy",
+          "title": "ホンダの電動化戦略に関する新たな発表なし",
+          "summary": "2026年6月24日付近でホンダのハイブリッドやEV戦略、モデルのマイナーチェンジに関する新情報は確認されていない。",
+          "source_published_date": "2026-06-24",
+          "source_url": "https://global.honda/en/newsroom/",
+          "source_label": "Honda News",
+          "change_class": "material_update",
+          "rejection_reason_class": "insufficient_evidence",
+          "rejection_reason": "該当期間の電動化関連の新発表が見当たらないため。",
+          "topic_value_class": "technical_or_product_shift",
+          "observation_source_role": "primary_or_official",
+          "observation_channel": "web"
+        }
+      ],
+      "no_change_summary": "2026年6月24日付近のホンダ関連情報では、2026年3月期の決算で初の営業赤字計上（約4000億円）とEV関連損失の拡大が主要な話題である。株価の急変、中国販売動向、電動化戦略の新たな発表は確認されていない。",
       "discovery_sources": [
         {
-          "label": "Yahoo!ニュース",
-          "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFByazlXYTFqcUljWHI2bHRQTGhYdy1RdmR4VEY2cW9URUM0YVAyT29KSVFURTYtOTRtanJIREUtTmJQNjVjUGxIMlU4OFJkN1VLLUdzZERra3UwTFNxRWtxVFJacmVlREJsVVFvUWpNZVVDQUZ5ZzhWOWxYM0MxZlE?oc=5",
+          "label": "Car Watch",
+          "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE11VjUzelRfWVhmamJIVkVEV2RHR21KM3R5d3NjRVFCUDhYMkFvQjJMaTdxRGhsLVh1Z3pJSmpNRjVyLXhFckdXcTM2Mm01ODd1R25QeHozOEtNRnY2aUJ5UnNMTTM?oc=5",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2026-05-13",
-          "evidence_summary": "Google News RSSで「FIAがPU救済策を拡大、ホンダとフェラーリに追い風か 13億円の追加予算認可へ（TopNews） - Yahoo!ニュース」を確認した。配信元はYahoo!ニュース、配信日は2026-05-13。"
+          "published_date": "2026-05-14",
+          "evidence_summary": "Google News RSSで「ホンダ、2026年3月期通期決算 売上収益は0.5％減の21兆7966億円だが、EV関連損失の1兆4536億円が影響して営業利益は4143億円の赤字に - Car Watch」を確認した。配信元はCar Watch、配信日は2026-05-14。"
         },
         {
-          "label": "motorsport.com 日本版｜モータースポーツ情報サイト",
-          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOTW9hU1NlbE94a2xyVUw5cWNjTEZOV0xibFJtQmIyZnJLa2Vja2c1cUVaUkphYm9nV1pNQldhRGt1VzlOc2U3cHg3Qkx4VkpuY3J2b0hTNGFBbWVuTGFucWpFU1FmWU9Ga002X2taRi1XRXFrRTVGRzJJS09mdWlZaHZCdEk5MndPTi1QMXhqdThzaDFHS0JpV3h2OUx4MHdjN0VrWTlfUm02SVFGWVVXVg?oc=5",
+          "label": "BBC",
+          "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE9Vc2MxVmIwd0o4Nkl1UjMtbDR6ci1IcHU2dDJubU1OSTRNSGRBOXR0VGR5a3F4QmczMHVlOEpPbGtuRHZVVkROWnhmSTF3ak1KeThkWGJPWjNXMmt3MHkw0gFkQVVfeXFMTTc5QkZSUWhUcTAwS1dEZy1reHBIOEpqRWFhaGl1LTFTMERxV212b1ZRUDJkdHlmU2Q4NG1TLWdCSGdJYUR2bHQ2UnNaUjNtSm1hTTBIalFKNkwycFM3dlBIRW5MZw?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-05-15",
+          "evidence_summary": "Google News RSSで「ホンダ、上場約70年で初の最終赤字 2026年3月期 - BBC」を確認した。配信元はBBC、配信日は2026-05-15。"
+        },
+        {
+          "label": "日本経済新聞",
+          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9rRDhReFNyakN6WmZyWWhla2FrQkJTVGRvRVBiZG9oNXQ2cGdEWmNqNzIzNWNYOWRuaXNVRmpEVFFUZ3hoay1jZTdrUXJFbk4zSHFGeW5VZWZtZnM5RVpuazR0MUd3WXBGU2dUMw?oc=5",
           "source_role": "independent_media_or_data",
           "channel": "web",
           "published_date": "2026-05-08",
-          "evidence_summary": "Google News RSSで「FIA、PUの追加開発を認めるADUOシステムを微調整。今シーズンに限った追加予算も盛り込む - motorsport.com 日本版｜モータースポーツ情報サイト」を確認した。配信元はmotorsport.com 日本版｜モータースポーツ情報サイト、配信日は2026-05-08。"
+          "evidence_summary": "Google News RSSで「決算:ホンダ初の営業赤字4000億円 26年3月期、EV関連損失響く - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-05-08。"
         },
         {
-          "label": "webスポルティーバ",
-          "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNQXhRdWVlNHhlT0VDTGRuMDFLaWtFTUFIRGV5MV8tc1hWaWNyQmFxVTlVN1hxZ3NDYlVFeVJmS2NZbTZncktYeEtVcG5IUHRVZFRkQVVSQUFfcHhPaFAxZV9VVUNBOXpyY2k3VzhVZDlqRVhRWklFR3l5dHNZaEZYeFZwWk0?oc=5",
+          "label": "時事通信ニュース",
+          "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE45NzRKRTNKSHhKV2phZWxyX0hXbFJ1c1NnWGRxY3lNamZmSm1xTVNwU1R3U3M3THJmZWN4QmNZTXRtdU1MVmRCYlBscE00UXU3M3c?oc=5",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2026-03-27",
-          "evidence_summary": "Google News RSSで「【F1】日本GPの結果次第でホンダPUの「異常振動」問題が長期化する可能性......浅木泰昭が推察 - webスポルティーバ」を確認した。配信元はwebスポルティーバ、配信日は2026-03-27。"
+          "published_date": "2026-03-12",
+          "evidence_summary": "Google News RSSで「Honda Expects Up to 690 B. Yen in Net Loss for FY 2025 - 時事通信ニュース」を確認した。配信元は時事通信ニュース、配信日は2026-03-12。"
         },
         {
-          "label": "Honda Global",
-          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTFAtdFVXaDVLYXVfeHJuNzlTOXEtNUtib01WZG8yOFIyTXhoY2NjcW5CaG9oczloa0xGZEttUmJfcjV5Ym0wM0dWSEJxUE5jTXZ1YTUtcjhlRFRPVkdBWUdHeXVxckRRUXNuWnVPSlgwVXp2MjlWdUdRTE1xUFVqQQ?oc=5",
+          "label": "Business Insider Japan",
+          "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE5vLTdyTHFfaEdKQW5yaFc3aWtiRVdrcnlfblJOOHNkaEpiM3FTVkFmdUp4U3ZHVlVrQUhSTVlhTGdUWURlYXByY1A5TEhzN0cxYVNfNDdCVG92b0dUZTEzYzZKMzlaaGJIOEIzdUVJclAxNm5iT0E4b05R?oc=5",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2025-11-05",
-          "evidence_summary": "Google News RSSで「Honda & Red Bull | Legacy in Motion: A Tribute to 8 Years of F1 Success｜Videos｜F1｜Honda - Honda Global」を確認した。配信元はHonda Global、配信日は2025-11-05。"
+          "published_date": "2026-03-25",
+          "evidence_summary": "Google News RSSで「ホンダ、損失最大2.5兆円の衝撃。二輪では世界トップも四輪は「迷走」。巨額EV損失が示す決定的課題 - Business Insider Japan」を確認した。配信元はBusiness Insider Japan、配信日は2026-03-25。"
         },
         {
-          "label": "Formula1-Data",
-          "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQeF9KdWtTZ3hzMXdWb3JsOGtfWXNwTG44djduSTZjbDFFOE9jNUloeC1QdzczQzZReWJwZTh2LTE3UjNZNVBXVU1PbDJMOWNLWS1seUJoam93aTE0aG01WE5NbnRWRkhWekE2SU5VcXNSQ3VXRXV1aXRRVTRQYTFIcnBCOWZjRk0?oc=5",
+          "label": "Reuters",
+          "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE96elduMklzdkdYbGh3Y2ZoSzJFZmttTmF3WGZwbnc3QjZvWVdMX3h0WlRJbFg0N2JpUVBwd1JwM0g1V2g0d254cFpEVUw5ci14QVpRamRaRWt6YmJSQXdSQnI0Zkh4UQ?oc=5",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2026-05-05",
-          "evidence_summary": "Google News RSSで「2社がV8支持を表明、次世代F1エンジン議論が新段階へ。浮上した「1200馬力」構想 - Formula1-Data」を確認した。配信元はFormula1-Data、配信日は2026-05-05。"
+          "published_date": "2026-03-12",
+          "evidence_summary": "Google News RSSで「Honda flags first annual loss, hit by $15.7 billion EV charge - Reuters」を確認した。配信元はReuters、配信日は2026-03-12。"
         },
         {
-          "label": "電通報",
-          "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5sRjZhS1psVUlwcUxwN0VlaXkwYjhSaEdpR0VjMldRUy1XMzFBRjRscVJJQ2FGR21QMTlyQl8zVXhKU0hVZmx3cE1rZmdkRDg?oc=5",
+          "label": "ACN Newswire",
+          "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOTXJZcUNuMUM3MThPdXhjc0pLNFFfT3pRb2w5WWdYYzNxbHB6NDQwMWtyS0JPYXRmMExtVzNYak53bGhhOWpkVDNjN3FkV3hXb0R4N1lzWWI2QTcxc0VZV0o5M3VRdXVFRkZxZTlya3pyRkpncHIxaXpROE1sSlJfVzRRMTFmSWNzREtlVmhsZFBPc3kwS2RvSGtsMWVIVnVFOWZwYXF3NGtmZUNDbmtScTRfOA?oc=5",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2025-10-31",
-          "evidence_summary": "Google News RSSで「The \"Lenovo All Players Challenge\" offered an authentic F1 experience in Shibuya. It fully took over 13 screens at the Scramble Crossing. - 電通報」を確認した。配信元は電通報、配信日は2025-10-31。"
+          "published_date": "2026-03-05",
+          "evidence_summary": "Google News RSSで「Honda to Begin Sales of Two U.S.-built Vehicles in Japan - ACN Newswire」を確認した。配信元はACN Newswire、配信日は2026-03-05。"
         },
         {
-          "label": "Fathom Journal",
-          "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5JcDRjeGRNQXhHWUVYMWphaHY1bjVodGVranVjZmdOQWQwZFhzdmZJVWp1ckFyY1hyYUxjbWJ4UWp0Z0tYX2hteVdtV3FHNGlDSGk3T211bjh1UWtXLXRpQkl4MmM?oc=5",
+          "label": "Yahoo!ファイナンス",
+          "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1qOFNxaWtUODZ3N1dCb013YWQzM2hoTHNjR0ZkTzdsbXNJMW44aU1yS3Z4dGRYR3JGeEl3Uy1uNXJ6N1Z1OUluYVY5ZmJkeFVsYU9oazl1cHEyZ0RKMGhQUw?oc=5",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2026-06-17",
-          "evidence_summary": "Google News RSSで「⚡🏁 衝撃発表間近！F1『ADUO』制度でPUメーカー格差が完全可視化😱 Kirklees Local Elections 2026 Results (TJ7UTW507E) - Fathom Journal」を確認した。配信元はFathom Journal、配信日は2026-06-17。"
+          "published_date": "2026-05-14",
+          "evidence_summary": "Google News RSSで「ホンダ【7267】：決算情報 - Yahoo!ファイナンス」を確認した。配信元はYahoo!ファイナンス、配信日は2026-05-14。"
         },
         {
-          "label": "タイランドハイパーリンクス",
-          "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE1NcHc1emQ2WlZMSVUwRU9oNHFfWC1lOGRqRFBiN295dmxpV0xrTjFQR1pUbkZLaXZwV21qRTdhWWlhOXUtR1ZkRWE2NF92UkxXd0tSag?oc=5",
+          "label": "ヤングマシン",
+          "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE9mZjlJUmFDNnVpZE4tejJtb3pUSjRlcllrU2Vsa2FjbWZqZXhmNVVHSG5WZVhSSkVHR2NWQkhjVUk4Wl9IQ0NFTVRlRkV2YTNfRHpNd3VRTQ?oc=5",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2025-11-27",
-          "evidence_summary": "Google News RSSで「「F1 Thailand Grand Prix 2028」がバンコク・チャトチャックで開催案、市街地レースを検討 - タイランドハイパーリンクス」を確認した。配信元はタイランドハイパーリンクス、配信日は2025-11-27。"
+          "published_date": "2026-05-23",
+          "evidence_summary": "Google News RSSで「現代に蘇った「F」を思いのままに操る。ウッドストックがCB1000F/SEに捧ぐ、機能美に満ちたバックステップキット登場【HONDAカスタム】 - ヤングマシン」を確認した。配信元はヤングマシン、配信日は2026-05-23。"
         },
         {
-          "label": "Yahoo!ニュース",
-          "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE96UFBzZEx0d1V3WDAyVElXOWZUX1BWVWxnbzdvd0RzTzA3TWluZnVRTnM4aHZKak5NV2lWRjYtcmVOQ3RfREpPTWpYWHlRRklxdmJISXFZc3FpLURpOXlCZnh1V1BRLTRWa2x4dlVzUzVlc1JOSVNOV21adzdSVTA?oc=5",
+          "label": "ウェビック",
+          "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTFBvNlRRV2VuRG5RWGJsSEFUNUJKbkhmNzVuMjE3czY2S21kODZEdk5RY2xUQ29ITHhITUw0bDMxcmhWV2xhT1JzWEN3OVJpTTZyaGk0ZHlHa05NbzA?oc=5",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2026-03-19",
-          "evidence_summary": "Google News RSSで「GP2エンジンの悪夢が再び現実になるのか...F1アストン・ホンダ「ドライバーの安全に関わる問題」で日本GP出走停止、またはエンジン制限の可能性（THE DIGEST） - Yahoo!ニュース」を確認した。配信元はYahoo!ニュース、配信日は2026-03-19。"
+          "published_date": "2025-10-02",
+          "evidence_summary": "Google News RSSで「EWCスーパーストック再び2位のKaedear-Dafy-RAC 41-Honda、印象的な走りを続ける - ウェビック」を確認した。配信元はウェビック、配信日は2025-10-02。"
         },
         {
-          "label": "motorsport.com 日本版｜モータースポーツ情報サイト",
-          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNeFMyTURjYTBMbjFuSHdDT3h3YU5fQ0liNnhXWEdmM1RPY1pxS2YydnlYakpJRUdFemplZ3JkTW9vZkxDZmkwVjJsbW5oYUdxRU1yRThUakVuTGM1Tkt3NnlmQjlzZTZFd3dMTEdFYnJFMHExYTlUZnA5NDZxT3hYQnpHOE9SVENNRGNfR0s4aGlvQ3FLaVJUdDdqUGU5WFBF?oc=5",
+          "label": "Car Watch 媒体ページ",
+          "url": "https://car.watch.impress.co.jp",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2026-02-10",
-          "evidence_summary": "Google News RSSで「F1新時代に躍進なるか？ ホンダPU擁するアストンマーティンが直面する課題とは - motorsport.com 日本版｜モータースポーツ情報サイト」を確認した。配信元はmotorsport.com 日本版｜モータースポーツ情報サイト、配信日は2026-02-10。"
+          "published_date": "2026-05-14",
+          "evidence_summary": "Google News RSSのsource属性から、Car Watchの媒体URLhttps://car.watch.impress.co.jpを確認した。"
         },
         {
-          "label": "Yahoo!ニュース 媒体ページ",
-          "url": "https://news.yahoo.co.jp",
+          "label": "BBC 媒体ページ",
+          "url": "https://www.bbc.com",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2026-05-13",
-          "evidence_summary": "Google News RSSのsource属性から、Yahoo!ニュースの媒体URLhttps://news.yahoo.co.jpを確認した。"
+          "published_date": "2026-05-15",
+          "evidence_summary": "Google News RSSのsource属性から、BBCの媒体URLhttps://www.bbc.comを確認した。"
         },
         {
-          "label": "motorsport.com 日本版｜モータースポーツ情報サイト 媒体ページ",
-          "url": "https://jp.motorsport.com",
+          "label": "日本経済新聞 媒体ページ",
+          "url": "https://www.nikkei.com",
           "source_role": "independent_media_or_data",
           "channel": "web",
           "published_date": "2026-05-08",
-          "evidence_summary": "Google News RSSのsource属性から、motorsport.com 日本版｜モータースポーツ情報サイトの媒体URLhttps://jp.motorsport.comを確認した。"
+          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
         },
         {
-          "label": "webスポルティーバ 媒体ページ",
-          "url": "https://sportiva.shueisha.co.jp",
+          "label": "時事通信ニュース 媒体ページ",
+          "url": "https://sp.m.jiji.com",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2026-03-27",
-          "evidence_summary": "Google News RSSのsource属性から、webスポルティーバの媒体URLhttps://sportiva.shueisha.co.jpを確認した。"
+          "published_date": "2026-03-12",
+          "evidence_summary": "Google News RSSのsource属性から、時事通信ニュースの媒体URLhttps://sp.m.jiji.comを確認した。"
         },
         {
-          "label": "Honda Global 媒体ページ",
-          "url": "https://global.honda",
+          "label": "Business Insider Japan 媒体ページ",
+          "url": "https://www.businessinsider.jp",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2025-11-05",
-          "evidence_summary": "Google News RSSのsource属性から、Honda Globalの媒体URLhttps://global.hondaを確認した。"
+          "published_date": "2026-03-25",
+          "evidence_summary": "Google News RSSのsource属性から、Business Insider Japanの媒体URLhttps://www.businessinsider.jpを確認した。"
         },
         {
-          "label": "Formula1-Data 媒体ページ",
-          "url": "https://formula1-data.com",
+          "label": "Reuters 媒体ページ",
+          "url": "https://jp.reuters.com",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2026-05-05",
-          "evidence_summary": "Google News RSSのsource属性から、Formula1-Dataの媒体URLhttps://formula1-data.comを確認した。"
+          "published_date": "2026-03-12",
+          "evidence_summary": "Google News RSSのsource属性から、Reutersの媒体URLhttps://jp.reuters.comを確認した。"
         },
         {
-          "label": "電通報 媒体ページ",
-          "url": "https://dentsu-ho.com",
+          "label": "ACN Newswire 媒体ページ",
+          "url": "https://www.acnnewswire.com",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2025-10-31",
-          "evidence_summary": "Google News RSSのsource属性から、電通報の媒体URLhttps://dentsu-ho.comを確認した。"
+          "published_date": "2026-03-05",
+          "evidence_summary": "Google News RSSのsource属性から、ACN Newswireの媒体URLhttps://www.acnnewswire.comを確認した。"
         },
         {
-          "label": "Fathom Journal 媒体ページ",
-          "url": "https://fathomjournal.org",
+          "label": "Yahoo!ファイナンス 媒体ページ",
+          "url": "https://finance.yahoo.co.jp",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2026-06-17",
-          "evidence_summary": "Google News RSSのsource属性から、Fathom Journalの媒体URLhttps://fathomjournal.orgを確認した。"
+          "published_date": "2026-05-14",
+          "evidence_summary": "Google News RSSのsource属性から、Yahoo!ファイナンスの媒体URLhttps://finance.yahoo.co.jpを確認した。"
         },
         {
-          "label": "タイランドハイパーリンクス 媒体ページ",
-          "url": "https://www.thaich.net",
+          "label": "ヤングマシン 媒体ページ",
+          "url": "https://young-machine.com",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2025-11-27",
-          "evidence_summary": "Google News RSSのsource属性から、タイランドハイパーリンクスの媒体URLhttps://www.thaich.netを確認した。"
+          "published_date": "2026-05-23",
+          "evidence_summary": "Google News RSSのsource属性から、ヤングマシンの媒体URLhttps://young-machine.comを確認した。"
         },
         {
-          "label": "Yahoo!ニュース 媒体ページ",
-          "url": "https://news.yahoo.co.jp",
+          "label": "ウェビック 媒体ページ",
+          "url": "https://www.webike.net",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2026-03-19",
-          "evidence_summary": "Google News RSSのsource属性から、Yahoo!ニュースの媒体URLhttps://news.yahoo.co.jpを確認した。"
-        },
-        {
-          "label": "motorsport.com 日本版｜モータースポーツ情報サイト 媒体ページ",
-          "url": "https://jp.motorsport.com",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-02-10",
-          "evidence_summary": "Google News RSSのsource属性から、motorsport.com 日本版｜モータースポーツ情報サイトの媒体URLhttps://jp.motorsport.comを確認した。"
+          "published_date": "2025-10-02",
+          "evidence_summary": "Google News RSSのsource属性から、ウェビックの媒体URLhttps://www.webike.netを確認した。"
         }
       ]
     },
     "OpenAI": {
       "items": [],
       "signals": [],
-      "no_change_summary": "2026年6月24日付近のOpenAI関連情報では、数学分野でのAIによる未解決問題の証明が最大の注目点である。その他、ChatGPTの資産管理機能追加やAPI料金プラン更新、公式SNSでの情報発信継続、財務損失流出報道などがあるが、いずれも新規の確定的な大規模変化は確認されていない。",
+      "no_change_summary": "今回の期間内にOpenAIの公式発表や信頼できる情報源からの新たな上場や資金調達に関する情報は確認できなかった。ChatGPTの新機能やAPI料金の更新は継続的に行われているが大幅な仕様変更は見られなかった。",
       "discovery_sources": [
         {
           "label": "OpenAI",
@@ -914,10 +766,177 @@
         }
       ]
     },
+    "F1": {
+      "items": [],
+      "signals": [],
+      "no_change_summary": "2026年6月24日を含む直近3日間の提供情報では、F1の公式レース結果やスケジュールの変更、ホンダ・アストンマーティンのパワーユニットに関する新たな確定的な技術変更や規制改定の発表は確認できなかった。過去の報道ではPU救済策の拡大や安全問題の可能性が指摘されているが、最新の具体的な変更情報はない。",
+      "discovery_sources": [
+        {
+          "label": "Yahoo!ニュース",
+          "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFByazlXYTFqcUljWHI2bHRQTGhYdy1RdmR4VEY2cW9URUM0YVAyT29KSVFURTYtOTRtanJIREUtTmJQNjVjUGxIMlU4OFJkN1VLLUdzZERra3UwTFNxRWtxVFJacmVlREJsVVFvUWpNZVVDQUZ5ZzhWOWxYM0MxZlE?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-05-13",
+          "evidence_summary": "Google News RSSで「FIAがPU救済策を拡大、ホンダとフェラーリに追い風か 13億円の追加予算認可へ（TopNews） - Yahoo!ニュース」を確認した。配信元はYahoo!ニュース、配信日は2026-05-13。"
+        },
+        {
+          "label": "motorsport.com 日本版｜モータースポーツ情報サイト",
+          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOTW9hU1NlbE94a2xyVUw5cWNjTEZOV0xibFJtQmIyZnJLa2Vja2c1cUVaUkphYm9nV1pNQldhRGt1VzlOc2U3cHg3Qkx4VkpuY3J2b0hTNGFBbWVuTGFucWpFU1FmWU9Ga002X2taRi1XRXFrRTVGRzJJS09mdWlZaHZCdEk5MndPTi1QMXhqdThzaDFHS0JpV3h2OUx4MHdjN0VrWTlfUm02SVFGWVVXVg?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-05-08",
+          "evidence_summary": "Google News RSSで「FIA、PUの追加開発を認めるADUOシステムを微調整。今シーズンに限った追加予算も盛り込む - motorsport.com 日本版｜モータースポーツ情報サイト」を確認した。配信元はmotorsport.com 日本版｜モータースポーツ情報サイト、配信日は2026-05-08。"
+        },
+        {
+          "label": "webスポルティーバ",
+          "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNQXhRdWVlNHhlT0VDTGRuMDFLaWtFTUFIRGV5MV8tc1hWaWNyQmFxVTlVN1hxZ3NDYlVFeVJmS2NZbTZncktYeEtVcG5IUHRVZFRkQVVSQUFfcHhPaFAxZV9VVUNBOXpyY2k3VzhVZDlqRVhRWklFR3l5dHNZaEZYeFZwWk0?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-03-27",
+          "evidence_summary": "Google News RSSで「【F1】日本GPの結果次第でホンダPUの「異常振動」問題が長期化する可能性......浅木泰昭が推察 - webスポルティーバ」を確認した。配信元はwebスポルティーバ、配信日は2026-03-27。"
+        },
+        {
+          "label": "Honda Global",
+          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTFAtdFVXaDVLYXVfeHJuNzlTOXEtNUtib01WZG8yOFIyTXhoY2NjcW5CaG9oczloa0xGZEttUmJfcjV5Ym0wM0dWSEJxUE5jTXZ1YTUtcjhlRFRPVkdBWUdHeXVxckRRUXNuWnVPSlgwVXp2MjlWdUdRTE1xUFVqQQ?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2025-11-05",
+          "evidence_summary": "Google News RSSで「Honda & Red Bull | Legacy in Motion: A Tribute to 8 Years of F1 Success｜Videos｜F1｜Honda - Honda Global」を確認した。配信元はHonda Global、配信日は2025-11-05。"
+        },
+        {
+          "label": "Formula1-Data",
+          "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQeF9KdWtTZ3hzMXdWb3JsOGtfWXNwTG44djduSTZjbDFFOE9jNUloeC1QdzczQzZReWJwZTh2LTE3UjNZNVBXVU1PbDJMOWNLWS1seUJoam93aTE0aG01WE5NbnRWRkhWekE2SU5VcXNSQ3VXRXV1aXRRVTRQYTFIcnBCOWZjRk0?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-05-05",
+          "evidence_summary": "Google News RSSで「2社がV8支持を表明、次世代F1エンジン議論が新段階へ。浮上した「1200馬力」構想 - Formula1-Data」を確認した。配信元はFormula1-Data、配信日は2026-05-05。"
+        },
+        {
+          "label": "電通報",
+          "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5sRjZhS1psVUlwcUxwN0VlaXkwYjhSaEdpR0VjMldRUy1XMzFBRjRscVJJQ2FGR21QMTlyQl8zVXhKU0hVZmx3cE1rZmdkRDg?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2025-10-31",
+          "evidence_summary": "Google News RSSで「The \"Lenovo All Players Challenge\" offered an authentic F1 experience in Shibuya. It fully took over 13 screens at the Scramble Crossing. - 電通報」を確認した。配信元は電通報、配信日は2025-10-31。"
+        },
+        {
+          "label": "Fathom Journal",
+          "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5JcDRjeGRNQXhHWUVYMWphaHY1bjVodGVranVjZmdOQWQwZFhzdmZJVWp1ckFyY1hyYUxjbWJ4UWp0Z0tYX2hteVdtV3FHNGlDSGk3T211bjh1UWtXLXRpQkl4MmM?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-17",
+          "evidence_summary": "Google News RSSで「⚡🏁 衝撃発表間近！F1『ADUO』制度でPUメーカー格差が完全可視化😱 Kirklees Local Elections 2026 Results (TJ7UTW507E) - Fathom Journal」を確認した。配信元はFathom Journal、配信日は2026-06-17。"
+        },
+        {
+          "label": "タイランドハイパーリンクス",
+          "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE1NcHc1emQ2WlZMSVUwRU9oNHFfWC1lOGRqRFBiN295dmxpV0xrTjFQR1pUbkZLaXZwV21qRTdhWWlhOXUtR1ZkRWE2NF92UkxXd0tSag?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2025-11-27",
+          "evidence_summary": "Google News RSSで「「F1 Thailand Grand Prix 2028」がバンコク・チャトチャックで開催案、市街地レースを検討 - タイランドハイパーリンクス」を確認した。配信元はタイランドハイパーリンクス、配信日は2025-11-27。"
+        },
+        {
+          "label": "Yahoo!ニュース",
+          "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE96UFBzZEx0d1V3WDAyVElXOWZUX1BWVWxnbzdvd0RzTzA3TWluZnVRTnM4aHZKak5NV2lWRjYtcmVOQ3RfREpPTWpYWHlRRklxdmJISXFZc3FpLURpOXlCZnh1V1BRLTRWa2x4dlVzUzVlc1JOSVNOV21adzdSVTA?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-03-19",
+          "evidence_summary": "Google News RSSで「GP2エンジンの悪夢が再び現実になるのか...F1アストン・ホンダ「ドライバーの安全に関わる問題」で日本GP出走停止、またはエンジン制限の可能性（THE DIGEST） - Yahoo!ニュース」を確認した。配信元はYahoo!ニュース、配信日は2026-03-19。"
+        },
+        {
+          "label": "motorsport.com 日本版｜モータースポーツ情報サイト",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNeFMyTURjYTBMbjFuSHdDT3h3YU5fQ0liNnhXWEdmM1RPY1pxS2YydnlYakpJRUdFemplZ3JkTW9vZkxDZmkwVjJsbW5oYUdxRU1yRThUakVuTGM1Tkt3NnlmQjlzZTZFd3dMTEdFYnJFMHExYTlUZnA5NDZxT3hYQnpHOE9SVENNRGNfR0s4aGlvQ3FLaVJUdDdqUGU5WFBF?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-02-10",
+          "evidence_summary": "Google News RSSで「F1新時代に躍進なるか？ ホンダPU擁するアストンマーティンが直面する課題とは - motorsport.com 日本版｜モータースポーツ情報サイト」を確認した。配信元はmotorsport.com 日本版｜モータースポーツ情報サイト、配信日は2026-02-10。"
+        },
+        {
+          "label": "Yahoo!ニュース 媒体ページ",
+          "url": "https://news.yahoo.co.jp",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-05-13",
+          "evidence_summary": "Google News RSSのsource属性から、Yahoo!ニュースの媒体URLhttps://news.yahoo.co.jpを確認した。"
+        },
+        {
+          "label": "motorsport.com 日本版｜モータースポーツ情報サイト 媒体ページ",
+          "url": "https://jp.motorsport.com",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-05-08",
+          "evidence_summary": "Google News RSSのsource属性から、motorsport.com 日本版｜モータースポーツ情報サイトの媒体URLhttps://jp.motorsport.comを確認した。"
+        },
+        {
+          "label": "webスポルティーバ 媒体ページ",
+          "url": "https://sportiva.shueisha.co.jp",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-03-27",
+          "evidence_summary": "Google News RSSのsource属性から、webスポルティーバの媒体URLhttps://sportiva.shueisha.co.jpを確認した。"
+        },
+        {
+          "label": "Honda Global 媒体ページ",
+          "url": "https://global.honda",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2025-11-05",
+          "evidence_summary": "Google News RSSのsource属性から、Honda Globalの媒体URLhttps://global.hondaを確認した。"
+        },
+        {
+          "label": "Formula1-Data 媒体ページ",
+          "url": "https://formula1-data.com",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-05-05",
+          "evidence_summary": "Google News RSSのsource属性から、Formula1-Dataの媒体URLhttps://formula1-data.comを確認した。"
+        },
+        {
+          "label": "電通報 媒体ページ",
+          "url": "https://dentsu-ho.com",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2025-10-31",
+          "evidence_summary": "Google News RSSのsource属性から、電通報の媒体URLhttps://dentsu-ho.comを確認した。"
+        },
+        {
+          "label": "Fathom Journal 媒体ページ",
+          "url": "https://fathomjournal.org",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-17",
+          "evidence_summary": "Google News RSSのsource属性から、Fathom Journalの媒体URLhttps://fathomjournal.orgを確認した。"
+        },
+        {
+          "label": "タイランドハイパーリンクス 媒体ページ",
+          "url": "https://www.thaich.net",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2025-11-27",
+          "evidence_summary": "Google News RSSのsource属性から、タイランドハイパーリンクスの媒体URLhttps://www.thaich.netを確認した。"
+        },
+        {
+          "label": "Yahoo!ニュース 媒体ページ",
+          "url": "https://news.yahoo.co.jp",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-03-19",
+          "evidence_summary": "Google News RSSのsource属性から、Yahoo!ニュースの媒体URLhttps://news.yahoo.co.jpを確認した。"
+        },
+        {
+          "label": "motorsport.com 日本版｜モータースポーツ情報サイト 媒体ページ",
+          "url": "https://jp.motorsport.com",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-02-10",
+          "evidence_summary": "Google News RSSのsource属性から、motorsport.com 日本版｜モータースポーツ情報サイトの媒体URLhttps://jp.motorsport.comを確認した。"
+        }
+      ]
+    },
     "YOASOBI / 幾田りら": {
       "items": [],
       "signals": [],
-      "no_change_summary": "2026年6月24日を含む直近3日間の幾田りらおよびYOASOBIに関する公式リリース、新曲発表、ライブスケジュール変更、スタッフSNS更新などの重要な新情報は確認できませんでした。過去のインタビューやライブ情報は存在しますが、今回の期間内の新規発表はありません。",
+      "no_change_summary": "2026年6月24日を含む3日間の期間内に、幾田りらやYOASOBIに関する公式リリース、新作EP、北米ツアーのキービジュアル公開、スタッフのSNS更新、ライブツアーの新スケジュールや結果、チャート動向などの新情報は確認できませんでした。過去の2026年初頭から春にかけてのアルバム『Laugh』関連のインタビューや韓国公演のゲスト出演情報、ソロツアーのグッズ通販開始などは期間外のため今回の報告対象外です。",
       "discovery_sources": [
         {
           "label": "オリコンニュース",
@@ -1082,19 +1101,62 @@
       ]
     },
     "SpaceX": {
-      "items": [],
+      "items": [
+        {
+          "watch_topic_id": "official_launch_manifest",
+          "title": "SpaceX、IPO直前のMSCI ESG評価で「ロシア並み」の最低ランク - finance.biggo.jp",
+          "summary": "SpaceX、IPO直前のMSCI ESG評価で「ロシア並み」の最低ランク - finance.biggo.jp。SpaceX、IPO直前のMSCI ESG評価で「ロシア並み」の最低ランク finance.biggo.jp。",
+          "source_published_date": "2026-06-22",
+          "topic_value_class": "operational_status_change",
+          "priority_class": "priority",
+          "slug": "auto-b8450cb160e0-2026-06-24",
+          "detail_summary": "SpaceX、IPO直前のMSCI ESG評価で「ロシア並み」の最低ランク - finance.biggo.jp。 確認できた点は、SpaceX、IPO直前のMSCI ESG評価で「ロシア並み」の最低ランク - finance.biggo.jp、SpaceX、IPO直前のMSCI ESG評価で「ロシア並み」の最低ランク finance.biggo.jp、finance.biggo.jpが2026-06-22付の情報として配信した。 SpaceX、IPO直前のMSCI ESG評価で「ロシア並み」の最低ランク - finance.biggo.jpは、SpaceXの直近3日内の具体的な変化として、事業、競争環境、予定、または市場評価に影響しうる材料になる。 詳細条件、正式な続報、数値の内訳は追加確認の対象となる。",
+          "what_changed": "SpaceX、IPO直前のMSCI ESG評価で「ロシア並み」の最低ランク - finance.biggo.jp。",
+          "why_it_matters": "SpaceX、IPO直前のMSCI ESG評価で「ロシア並み」の最低ランク - finance.biggo.jpは、SpaceXの直近3日内の具体的な変化として、事業、競争環境、予定、または市場評価に影響しうる材料になる。",
+          "confirmed_facts": [
+            "SpaceX、IPO直前のMSCI ESG評価で「ロシア並み」の最低ランク - finance.biggo.jp。",
+            "SpaceX、IPO直前のMSCI ESG評価で「ロシア並み」の最低ランク finance.biggo.jp。",
+            "finance.biggo.jpが2026-06-22付の情報として配信した。"
+          ],
+          "limits_or_unknowns": "詳細条件、正式な続報、数値の内訳は追加確認の対象となる。",
+          "sources": [
+            {
+              "label": "finance.biggo.jp",
+              "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9mRWd6RDB3T1dPYnpYc0U4R2VSWU14NUtOOW9oWUhkbEtNYzd6VmM4Q1FnR0RoOGl6eXVEenZRZ3dPajRKT0RSZUtCTkFFTkx1OElqZFpiYzZCOXpWaE9yREtsQlRFdUtYZS1PV3BWcDdobVU5?oc=5",
+              "source_role": "independent_media_or_data",
+              "channel": "web"
+            }
+          ],
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        }
+      ],
       "signals": [
         {
           "watch_topic_id": "business_contracts",
           "title": "SpaceXの巨大IPOでリスクマネーが流出、AI上場期待でさらなる下落も",
-          "summary": "2026年6月23日、SpaceXの大型IPOによりリスクマネーが流出し、AI関連上場期待でビットコイン価格がさらに下落する可能性が指摘されています。",
+          "summary": "2026年6月23日、SpaceXの大型IPOによりリスクマネーが流出し、ビットコインなどの低迷が続く可能性が指摘されています。",
           "source_published_date": "2026-06-23",
           "source_url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFBUVTlVMm9TQ3JkMVk3U1pEMGtPUjZZNjVweTZFbWlMQ1RVMjVBUjQ5azB6RkN0Z0pIcUd2dVdGMlJEM3I5czN1Q0FVbW1mdWZOQXZXdVZn?oc=5",
           "source_label": "JBpress",
           "change_class": "material_update",
           "rejection_reason_class": "insufficient_evidence",
-          "rejection_reason": "IPOの影響は示唆されているが具体的な数値や確定的な結果が不足しているため記事化には至らず。",
+          "rejection_reason": "IPOの影響は示唆されているが具体的な数値や結果が不足しているため記事化には至らず。",
           "topic_value_class": "market_or_financial_impact",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "business_contracts",
+          "title": "SpaceX、IPO直前のMSCI ESG評価で「ロシア並み」の最低ランク",
+          "summary": "2026年6月22日、SpaceXのIPO直前にMSCI ESG評価が非常に低く、環境・社会・ガバナンス面での課題が浮き彫りになりました。",
+          "source_published_date": "2026-06-22",
+          "source_url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9mRWd6RDB3T1dPYnpYc0U4R2VSWU14NUtOOW9oWUhkbEtNYzd6VmM4Q1FnR0RoOGl6eXVEenZRZ3dPajRKT0RSZUtCTkFFTkx1OElqZFpiYzZCOXpWaE9yREtsQlRFdUtYZS1PV3BWcDdobVU5?oc=5",
+          "source_label": "finance.biggo.jp",
+          "change_class": "material_update",
+          "rejection_reason_class": "insufficient_evidence",
+          "rejection_reason": "評価の低さは重要だが、具体的な影響や対応策の情報が不足しているため記事化には至らず。",
+          "topic_value_class": "risk_or_safety_signal",
           "observation_source_role": "independent_media_or_data",
           "observation_channel": "web"
         },
@@ -1107,13 +1169,13 @@
           "source_label": "finance.biggo.jp",
           "change_class": "new_event",
           "rejection_reason_class": "insufficient_evidence",
-          "rejection_reason": "詳細な運用状況や影響が不明であり、記事化には情報が不足しているため。",
+          "rejection_reason": "新技術の初打ち上げだが詳細な性能や市場影響の情報が不足しているため記事化には至らず。",
           "topic_value_class": "technical_or_product_shift",
           "observation_source_role": "independent_media_or_data",
           "observation_channel": "web"
         }
       ],
-      "no_change_summary": "2026年6月24日付近のSpaceX関連では、NASDAQ上場とそれに伴う大型IPOが最大の動きであり、上場初日のファルコン9によるスターリンク衛星打ち上げ成功が確認されました。その他の情報はIPO関連の市場影響や新技術試験の初期段階であり、具体的な新規運用やスケジュール変更の報告はありません。",
+      "no_change_summary": "2026年6月22日から24日の間にSpaceX関連でNASDAQ上場による大型IPOが実施され約12兆円を調達したことが最大の動きです。その他の報道はIPOの市場影響やESG評価の低さ、スターリンク衛星打ち上げ、極秘貨物カプセルの初打ち上げなどがありましたが、具体的な新規性や詳細な結果が不足しており記事化には至りませんでした。",
       "discovery_sources": [
         {
           "label": "JBpress",
@@ -1156,14 +1218,6 @@
           "evidence_summary": "Google News RSSで「SpaceX、NASDAQに上場――公開価格135ドル、初日終値は約19％高で約12兆円調達 - ITmedia」を確認した。配信元はITmedia、配信日は2026-06-13。"
         },
         {
-          "label": "テレ東BIZ",
-          "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5qaXBHMFFVTEoxWDlKNGlob2w2RGp5Q3Q3Ty0wZlNuMGNVbURMdF93alNMWjZwOGdZdF91WldjUmJkWHpCbTlnR1Y1Zm5ESXlYcnJpdVAtdGQ1TVVELS1yUmg3cGo?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-01",
-          "evidence_summary": "Google News RSSで「金利上昇でAI相場は終わるのか？注目の「SpaceX」IPOと次なる主役銘柄／西原里江氏【月曜マネーLIVE】 - テレ東BIZ」を確認した。配信元はテレ東BIZ、配信日は2026-06-01。"
-        },
-        {
           "label": "Investing.com - FX | 株式市場 | ファイナンス | 金融ニュース",
           "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBkYy1LSFF2Qzh2UkNEQldkdllSQmI2ZmV0MnRuNDVqc3IxenJpaVpxMkI2dWVoa0xfc1BhOVVCcHl6WXQ5NnBRNWhTX1BRb1RzbmxzUXEzVk84TVRJaUZXbEg1d2NxcUZRYXpkaHNEVDM?oc=5",
           "source_role": "independent_media_or_data",
@@ -1172,12 +1226,12 @@
           "evidence_summary": "Google News RSSで「SpaceXガイド：史上最大のIPOについて知っておくべきこと 執筆 - Investing.com - FX | 株式市場 | ファイナンス | 金融ニュース」を確認した。配信元はInvesting.com - FX | 株式市場 | ファイナンス | 金融ニュース、配信日は2026-06-12。"
         },
         {
-          "label": "Yahoo!ニュース",
-          "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5hWnl3eXdwSUkwRTBYWTlKalRLV1pPUGkzamhUMFA3TXBxejcyMDJ6ZXA1U2tmVldIbWtmQ1MxOHZ5dlV0MVdFalBKWnJadXlBWWZXZHpkRDNaRkpxeVg5N1JTUFRnc0lXWUpBakxxUmYxSUJvMi1aOVNtQU5JOW8?oc=5",
+          "label": "テレ東BIZ",
+          "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5qaXBHMFFVTEoxWDlKNGlob2w2RGp5Q3Q3Ty0wZlNuMGNVbURMdF93alNMWjZwOGdZdF91WldjUmJkWHpCbTlnR1Y1Zm5ESXlYcnJpdVAtdGQ1TVVELS1yUmg3cGo?oc=5",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2026-06-14",
-          "evidence_summary": "Google News RSSで「スペースX、ファルコン9でスターリンク衛星29機を打ち上げ 上場初日のミッションに成功（sorae 宇宙へのポータルサイト） - Yahoo!ニュース」を確認した。配信元はYahoo!ニュース、配信日は2026-06-14。"
+          "published_date": "2026-06-01",
+          "evidence_summary": "Google News RSSで「金利上昇でAI相場は終わるのか？注目の「SpaceX」IPOと次なる主役銘柄／西原里江氏【月曜マネーLIVE】 - テレ東BIZ」を確認した。配信元はテレ東BIZ、配信日は2026-06-01。"
         },
         {
           "label": "Impress Watch",
@@ -1194,6 +1248,14 @@
           "channel": "web",
           "published_date": "2026-06-11",
           "evidence_summary": "Google News RSSで「Investor says 'difficult to justify participating' in SpaceX IPO - Reuters」を確認した。配信元はReuters、配信日は2026-06-11。"
+        },
+        {
+          "label": "finance.biggo.jp",
+          "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9mRWd6RDB3T1dPYnpYc0U4R2VSWU14NUtOOW9oWUhkbEtNYzd6VmM4Q1FnR0RoOGl6eXVEenZRZ3dPajRKT0RSZUtCTkFFTkx1OElqZFpiYzZCOXpWaE9yREtsQlRFdUtYZS1PV3BWcDdobVU5?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-22",
+          "evidence_summary": "Google News RSSで「SpaceX、IPO直前のMSCI ESG評価で「ロシア並み」の最低ランク - finance.biggo.jp」を確認した。配信元はfinance.biggo.jp、配信日は2026-06-22。"
         },
         {
           "label": "JBpress 媒体ページ",
@@ -1236,14 +1298,6 @@
           "evidence_summary": "Google News RSSのsource属性から、ITmediaの媒体URLhttps://www.itmedia.co.jpを確認した。"
         },
         {
-          "label": "テレ東BIZ 媒体ページ",
-          "url": "https://txbiz.tv-tokyo.co.jp",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-01",
-          "evidence_summary": "Google News RSSのsource属性から、テレ東BIZの媒体URLhttps://txbiz.tv-tokyo.co.jpを確認した。"
-        },
-        {
           "label": "Investing.com - FX | 株式市場 | ファイナンス | 金融ニュース 媒体ページ",
           "url": "https://jp.investing.com",
           "source_role": "independent_media_or_data",
@@ -1252,12 +1306,12 @@
           "evidence_summary": "Google News RSSのsource属性から、Investing.com - FX | 株式市場 | ファイナンス | 金融ニュースの媒体URLhttps://jp.investing.comを確認した。"
         },
         {
-          "label": "Yahoo!ニュース 媒体ページ",
-          "url": "https://news.yahoo.co.jp",
+          "label": "テレ東BIZ 媒体ページ",
+          "url": "https://txbiz.tv-tokyo.co.jp",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2026-06-14",
-          "evidence_summary": "Google News RSSのsource属性から、Yahoo!ニュースの媒体URLhttps://news.yahoo.co.jpを確認した。"
+          "published_date": "2026-06-01",
+          "evidence_summary": "Google News RSSのsource属性から、テレ東BIZの媒体URLhttps://txbiz.tv-tokyo.co.jpを確認した。"
         },
         {
           "label": "Impress Watch 媒体ページ",
@@ -1274,188 +1328,14 @@
           "channel": "web",
           "published_date": "2026-06-11",
           "evidence_summary": "Google News RSSのsource属性から、Reutersの媒体URLhttps://jp.reuters.comを確認した。"
-        }
-      ]
-    },
-    "日本経済": {
-      "items": [],
-      "signals": [
-        {
-          "watch_topic_id": "employment_consumption",
-          "title": "重電大手の日本人社員2人、中国で拘束 レアアース規制関連か",
-          "summary": "重電大手の日本人社員2人が中国で拘束され、レアアース規制に関連した可能性が指摘されている。",
-          "source_published_date": "2026-06-24",
-          "source_url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBkM2pjb1RpY0tUNUVIanRTUkRKT3VfbThsOHdZT2taZkVvaW53SnpMMXZsa2dicnlXT1VoZUVhRDdwT181X0NMTjBCNXZGR1VHYmxZZHlJalpfcV8zZm5tTmQyRndkZE5hTjRQQg?oc=5",
-          "source_label": "日本経済新聞",
-          "change_class": "new_event",
-          "rejection_reason_class": "insufficient_evidence",
-          "rejection_reason": "拘束の詳細や影響が不明確で、経済への直接的影響は未確認。",
-          "topic_value_class": "risk_or_safety_signal",
-          "observation_source_role": "independent_media_or_data",
-          "observation_channel": "web"
-        }
-      ],
-      "no_change_summary": "2026年6月24日付近の日本経済関連では、日銀の金融政策や賃金動向に関する新たな発表は確認されなかった。雇用や消費の主要統計も特段の変化報告はなく、為替や株式市場の大幅変動も見られなかった。",
-      "discovery_sources": [
-        {
-          "label": "日本経済新聞",
-          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1adUctQ25pV2ppMURCZEVCSHVMekdnTFF1U213Zi1hNGFEUWtMVWdzbXdqeFFKTG5jdDVUcy1iSWlpeHpPbU1majBzeVFrSXJJMnpWMWZnbUZkcXBaVjE1WG44dWVRSVhYTGlCVQ?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSで「「名古屋ほど適した場所ない」 広沢市長、副首都法案提出めぐり - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。"
         },
         {
-          "label": "日本経済新聞",
-          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5fMGlRdHB2UmNCLUtyeXhfYVR5b2hXVjdvV0hFVTJOeElfd00wdGlocUtDc05laXp0cmNBcXdnOGYxdnUtcU84UG1QdUpmY3ZDYkpyYUpPanpUZTZzV0VsdzNPSjUteXF6blg4eA?oc=5",
+          "label": "finance.biggo.jp 媒体ページ",
+          "url": "https://finance.biggo.jp",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSで「ダイドー、缶コーヒーなど10〜15%値上げ 10月から83品目で - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。"
-        },
-        {
-          "label": "日本経済新聞",
-          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE8weFdmaktMRTlkczV3ajVROHM1U0o2RC01VkZjRUZ4SS00U1prcDl4dHJNUmVBRTd3UzdvUVBCbmhTdnRhX0JQNDVsN3hhRUQxY2x5cWtjRm80X2daSHdZMDNlM1BoSUNjR3FGMQ?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSで「2040年度の民間投資230兆円超に 戦略17分野で官民投資計画 - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。"
-        },
-        {
-          "label": "日本経済新聞",
-          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1pdHlOTjNxMmdtckN5LWVtMS1xd1BCLWNoclNEQUFRVTlFblQ5Wjl2UVkxeE50bXktcWY2VWFHUzcyc3B5U0cxdUFZaWVITUVZMGdRWklHT3ZMeEVjQ2lYM2IxZVhZbk5DNGFjLQ?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSで「KADOKAWA株主総会、夏野社長再任案を可決 - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。"
-        },
-        {
-          "label": "日本経済新聞",
-          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBjOVpuWEt4WnZpZzE3WGttZllxTjlFSTJZY2l6QjZfVF9HZTFVMVJhbGxkMmpWb2c3MGYzUlltX3N6YXdkbVMzUkt2TS1fSFZkcXJhRC1pcHBzc09GbWpVWVRMV0U4blJaRXBhSQ?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSで「JERA、石炭火力電力の販売再開を検討 中東情勢受け企業向けに安く - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。"
-        },
-        {
-          "label": "日本経済新聞",
-          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1IdnhKMHFkenFJU1lRZmVYSy1yQTNWZlYwZENNV1VBQlA3Vzl1UEc1bDVqRTBXYWI1LWtidmNVa1pUQlp5WWtBSDFobDFfaGJLRWZYcy1UZVlzMUhmRTdVOGFjbExTREVERUFpQw?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSで「スパコン世界ランキング、中国「霊晟」トップ 9年ぶり返り咲き - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。"
-        },
-        {
-          "label": "日本経済新聞",
-          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBkM2pjb1RpY0tUNUVIanRTUkRKT3VfbThsOHdZT2taZkVvaW53SnpMMXZsa2dicnlXT1VoZUVhRDdwT181X0NMTjBCNXZGR1VHYmxZZHlJalpfcV8zZm5tTmQyRndkZE5hTjRQQg?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSで「重電大手の日本人社員2人、中国で拘束 レアアース規制関連か - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。"
-        },
-        {
-          "label": "日本経済新聞",
-          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE96ODl2U1NKVWR5Rm1ZZUUtcFY4VzRzakVjWGw2NDBOUlkyODNaVklrOHBmcVZ0R3o4QzBmRUNJQUtZNmNwaGFfekJMY1ZsdTdEQksyM2FxcWYxUlk5cWVyQ3FheFJHMFJxNnpSNg?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSで「［社説］子供のデジタル力育む安全なSNSに - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。"
-        },
-        {
-          "label": "日本経済新聞",
-          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE50S1JkOHhRb29vcDJCZXl4Ulk3NDh2RmZSNlkzUFNob2o2bUlqZ0Yya3MtVWxTVGNaRFd5LXJDVUFxZjMyS0dHaGhvZjVRdkhPZzNEQUtXb09yVWlBTHRGYXY0Z2FYNDBiTzdYQQ?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSで「マクロン氏が提起した「経済不均衡」 日本も対岸の火事ではない - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。"
-        },
-        {
-          "label": "日本経済新聞",
-          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE8tcFY1RzFGZENRa3VqOXIzSWdYQ2I1V2FVRjJsZ1g4RS1aNklkb0t1Q0VZbFc5TjFiTmtTMmF3bVJ1UDBERGJBeW50UGR5R2l4dXVOQ1huX3lad3U3R0RHZko4SUZxYlhDR1lpUw?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSで「欧州の王室、目立つ王女の「継承1位」 男女問わぬ長子優先にシフト - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。"
-        },
-        {
-          "label": "日本経済新聞 媒体ページ",
-          "url": "https://www.nikkei.com",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
-        },
-        {
-          "label": "日本経済新聞 媒体ページ",
-          "url": "https://www.nikkei.com",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
-        },
-        {
-          "label": "日本経済新聞 媒体ページ",
-          "url": "https://www.nikkei.com",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
-        },
-        {
-          "label": "日本経済新聞 媒体ページ",
-          "url": "https://www.nikkei.com",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
-        },
-        {
-          "label": "日本経済新聞 媒体ページ",
-          "url": "https://www.nikkei.com",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
-        },
-        {
-          "label": "日本経済新聞 媒体ページ",
-          "url": "https://www.nikkei.com",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
-        },
-        {
-          "label": "日本経済新聞 媒体ページ",
-          "url": "https://www.nikkei.com",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
-        },
-        {
-          "label": "日本経済新聞 媒体ページ",
-          "url": "https://www.nikkei.com",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
-        },
-        {
-          "label": "日本経済新聞 媒体ページ",
-          "url": "https://www.nikkei.com",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
-        },
-        {
-          "label": "日本経済新聞 媒体ページ",
-          "url": "https://www.nikkei.com",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
+          "published_date": "2026-06-22",
+          "evidence_summary": "Google News RSSのsource属性から、finance.biggo.jpの媒体URLhttps://finance.biggo.jpを確認した。"
         }
       ]
     },
@@ -1464,34 +1344,48 @@
       "signals": [
         {
           "watch_topic_id": "vietnam_macro_investment",
-          "title": "ベトナムは乱世の映し鏡 米中「G2」下でアジア外交攻勢の思惑",
-          "summary": "ベトナムが米中の二大国体制下でアジア外交攻勢を強めているとの見方が示された。",
-          "source_published_date": "2026-06-23",
-          "source_url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBFLUtXTVFRTURvdVVEbEFuenRMeWRtcHN3Z0d2SXNHcFZ6cHVHVUlhZmxhS05tOWNhZUU0SWdjT3dEeVlTS1lMNVhLQ1hPUkdpTk5XV1ZHek9fWHplQlJISWRIbHdYSDJhTGVWcQ?oc=5",
-          "source_label": "日本経済新聞",
+          "title": "山東のＣＰＩ、５月は0.9％上昇",
+          "summary": "中国山東省の消費者物価指数（ＣＰＩ）が2026年5月に0.9％上昇し、インフレ圧力の一端を示した。",
+          "source_published_date": "2026-06-24",
+          "source_url": "https://news.google.com/rss/articles/CBMiRkFVX3lxTE1sekFfY0xVV2JvNTlLejcwWUhhUG42NXBaSTVjTko3UEJKWWJRUk1zcTRLMFlSUE5WWWZyOERqcnVxNlpBd0E?oc=5",
+          "source_label": "nna.jp",
           "change_class": "material_update",
           "rejection_reason_class": "insufficient_evidence",
-          "rejection_reason": "記事化に必要な確定情報が不足している。",
-          "topic_value_class": "risk_or_safety_signal",
+          "rejection_reason": "地域限定の物価上昇であり、アジア経済全体のマクロ経済指標としては限定的なため。",
+          "topic_value_class": "market_or_financial_impact",
           "observation_source_role": "independent_media_or_data",
           "observation_channel": "web"
         },
         {
           "watch_topic_id": "china_macro_policy",
           "title": "中国・香港株式市場・大引け＝下落、アジア市場に追随",
-          "summary": "2026年6月23日の中国・香港株式市場はアジア市場の動向に追随し下落した。",
+          "summary": "2026年6月23日、中国と香港の株式市場はアジア市場の動向に連動して下落した。",
           "source_published_date": "2026-06-23",
           "source_url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxPb012Sm9JNDg0dHl1QUJWblNQdHhEdzBhU3JEYy1nQnJzYk1WUXZ4Ml9IT0djYlhqTmtiM3VNdVVXWDJEbVFMMEstbVRvQW9JQ1NtSGdYby1tb3hUUXdBNkNXeENYdTZSVXpLbVJBdkpjTVRDZVZXeFhXdEc2RmF6VWlQQ3p2SzQ?oc=5",
           "source_label": "Yahoo!ファイナンス",
-          "change_class": "routine_recurring",
+          "change_class": "material_update",
           "rejection_reason_class": "insufficient_evidence",
-          "rejection_reason": "市場の通常の動きで特段の新情報なし",
+          "rejection_reason": "市場の一時的な動きであり、政策や構造変化の明確な証拠がないため。",
+          "topic_value_class": "market_or_financial_impact",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "india_vietnam_markets_supply_chain",
+          "title": "米イラン協議の見通しがアジア株を押し上げた。",
+          "summary": "2026年6月22日、米イラン協議の進展期待がアジア株式市場の上昇を促した。",
+          "source_published_date": "2026-06-22",
+          "source_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPUDZPUXFqU3oyc1Z0R0JuNlNnOHRaNjJNWF93bXhjWTd5aUpRdzFrMUtFcUlmWGpWU1V6cEhJSUhwSmpLRkFUclliRFVCT3JDOU5hTzJFbHVJZ2hOd29kMTRRdVkzQUNIeDJEcE1wSll1c3FfSXFFTVU3Z09MeUJQWm8zUjBueU9LdFdSLWFPZUEyVVc0NEE?oc=5",
+          "source_label": "Vietnam.vn",
+          "change_class": "material_update",
+          "rejection_reason_class": "insufficient_evidence",
+          "rejection_reason": "地政学的要因による一時的な市場反応であり、長期的な経済変化の証拠は不十分。",
           "topic_value_class": "market_or_financial_impact",
           "observation_source_role": "independent_media_or_data",
           "observation_channel": "web"
         }
       ],
-      "no_change_summary": "2026年6月24日付近のアジア経済関連では、インドの5月CPI上昇や中国山東省の物価上昇が確認された。ベトナムの外交動向や中国・香港株式市場の動きも注目されているが、特段の新規政策変更や大幅な経済指標の変動は見られなかった。",
+      "no_change_summary": "2026年6月22日から24日の間、インドのGDPや政策、ベトナムの投資や輸出拠点化に関する新たな確定的なマクロ経済データや政策変更は確認されなかった。中国の製造業PMIや新規受注に関する具体的な更新も見られなかった。",
       "discovery_sources": [
         {
           "label": "Yahoo!ファイナンス",
@@ -1558,20 +1452,20 @@
           "evidence_summary": "Google News RSSで「中国・香港株式市場・大引け＝下落、アジア市場に追随(ロイター) - Yahoo!ファイナンス」を確認した。配信元はYahoo!ファイナンス、配信日は2026-06-23。"
         },
         {
+          "label": "au Webポータル",
+          "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE1PbWJNRnFUM3NUM29mUEtiRXRyODRTbllpSHEtQUFFVUU2VnlsU3pCa2ZUaHh2NHBxRmlrcnpUTEhFM3p4X1JvXy1UbWhOZ1hNZjY0WUxkQU9CUnJlaUY2b1FSd3RrdnNRZ0RXb204OFQ3RTFEbVpVMGx4NA?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-23",
+          "evidence_summary": "Google News RSSで「交流模索へ 日本の経済団体視察 中国“サプライチェーン”博覧会 - au Webポータル」を確認した。配信元はau Webポータル、配信日は2026-06-23。"
+        },
+        {
           "label": "千葉テレビ放送株式会社",
           "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5OMmQwdDZpQUdxVWRBT1FXWDc0al84ZmE1ZTgwbzM4NHExcGFaSUF4SEVhM1BqLTRfOEc1NzdxdWFOd2Fka3dsLWFqeDUyZE9fWHA3ZjlVN0hCbS0tWDZwalUwWTDSAWRBVV95cUxOTjJkMHQ2aUFHcVVkQU9RV1g3NGpfOGZhNWU4MG8zODRxMXBhWklBeEhFYTNQai00XzhHNTc3cXVhTndhZGt3bC1hang1MmRPX1hwN2Y5VTdIQm0tLVg2cGpVMFkw?oc=5",
           "source_role": "independent_media_or_data",
           "channel": "web",
           "published_date": "2026-06-24",
           "evidence_summary": "Google News RSSで「【中国】外資誘致へ15措置、投資の利便性向上［経済］ | チバテレ＋プラス - 千葉テレビ放送株式会社」を確認した。配信元は千葉テレビ放送株式会社、配信日は2026-06-24。"
-        },
-        {
-          "label": "nna.jp",
-          "url": "https://news.google.com/rss/articles/CBMiRkFVX3lxTFBzcW1zWW9FMmZrQngtbWNjYXJmSmx6RXhjWmVRWFlMT29CSWRTRWRYSjU2S2EtdUU3MXh1VTJSZ1dfUS0zenc?oc=5",
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "published_date": "2026-06-22",
-          "evidence_summary": "Google News RSSで「５月ＣＰＩは2.0％上昇、伸び加速 - nna.jp」を確認した。配信元はnna.jp、配信日は2026-06-22。"
         },
         {
           "label": "Yahoo!ファイナンス 媒体ページ",
@@ -1638,27 +1532,238 @@
           "evidence_summary": "Google News RSSのsource属性から、Yahoo!ファイナンスの媒体URLhttps://finance.yahoo.co.jpを確認した。"
         },
         {
+          "label": "au Webポータル 媒体ページ",
+          "url": "https://article.auone.jp",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-23",
+          "evidence_summary": "Google News RSSのsource属性から、au Webポータルの媒体URLhttps://article.auone.jpを確認した。"
+        },
+        {
           "label": "千葉テレビ放送株式会社 媒体ページ",
           "url": "https://www.chiba-tv.com",
           "source_role": "independent_media_or_data",
           "channel": "web",
           "published_date": "2026-06-24",
           "evidence_summary": "Google News RSSのsource属性から、千葉テレビ放送株式会社の媒体URLhttps://www.chiba-tv.comを確認した。"
-        },
+        }
+      ]
+    },
+    "日本経済": {
+      "items": [
         {
-          "label": "nna.jp 媒体ページ",
-          "url": "https://www.nna.jp",
+          "watch_topic_id": "prices_wages_boj",
+          "title": "ダイドー、缶コーヒーなど10〜15%値上げ 10月から83品目で - 日本経済新聞",
+          "summary": "ダイドー、缶コーヒーなど10〜15%値上げ 10月から83品目で - 日本経済新聞。ダイドー、缶コーヒーなど10〜15%値上げ 10月から83品目で 日本経済新聞。",
+          "source_published_date": "2026-06-24",
+          "topic_value_class": "operational_status_change",
+          "priority_class": "priority",
+          "slug": "auto-32fda4647923-2026-06-24",
+          "detail_summary": "ダイドー、缶コーヒーなど10〜15%値上げ 10月から83品目で - 日本経済新聞。 確認できた点は、ダイドー、缶コーヒーなど10〜15%値上げ 10月から83品目で - 日本経済新聞、ダイドー、缶コーヒーなど10〜15%値上げ 10月から83品目で 日本経済新聞、日本経済新聞が2026-06-24付の情報として配信した。 ダイドー、缶コーヒーなど10〜15%値上げ 10月から83品目で - 日本経済新聞は、日本経済の直近3日内の具体的な変化として、事業、競争環境、予定、または市場評価に影響しうる材料になる。 詳細条件、正式な続報、数値の内訳は追加確認の対象となる。",
+          "what_changed": "ダイドー、缶コーヒーなど10〜15%値上げ 10月から83品目で - 日本経済新聞。",
+          "why_it_matters": "ダイドー、缶コーヒーなど10〜15%値上げ 10月から83品目で - 日本経済新聞は、日本経済の直近3日内の具体的な変化として、事業、競争環境、予定、または市場評価に影響しうる材料になる。",
+          "confirmed_facts": [
+            "ダイドー、缶コーヒーなど10〜15%値上げ 10月から83品目で - 日本経済新聞。",
+            "ダイドー、缶コーヒーなど10〜15%値上げ 10月から83品目で 日本経済新聞。",
+            "日本経済新聞が2026-06-24付の情報として配信した。"
+          ],
+          "limits_or_unknowns": "詳細条件、正式な続報、数値の内訳は追加確認の対象となる。",
+          "sources": [
+            {
+              "label": "日本経済新聞",
+              "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5fMGlRdHB2UmNCLUtyeXhfYVR5b2hXVjdvV0hFVTJOeElfd00wdGlocUtDc05laXp0cmNBcXdnOGYxdnUtcU84UG1QdUpmY3ZDYkpyYUpPanpUZTZzV0VsdzNPSjUteXF6blg4eA?oc=5",
+              "source_role": "independent_media_or_data",
+              "channel": "web"
+            }
+          ],
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        }
+      ],
+      "signals": [
+        {
+          "watch_topic_id": "prices_wages_boj",
+          "title": "重電大手の日本人社員2人、中国で拘束 レアアース規制関連か",
+          "summary": "重電大手の日本人社員2人が中国で拘束され、レアアース規制に関連した可能性が報じられているが詳細は不明。",
+          "source_published_date": "2026-06-24",
+          "source_url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBkM2pjb1RpY0tUNUVIanRTUkRKT3VfbThsOHdZT2taZkVvaW53SnpMMXZsa2dicnlXT1VoZUVhRDdwT181X0NMTjBCNXZGR1VHYmxZZHlJalpfcV8zZm5tTmQyRndkZE5hTjRQQg?oc=5",
+          "source_label": "日本経済新聞",
+          "change_class": "new_event",
+          "rejection_reason_class": "insufficient_evidence",
+          "rejection_reason": "経済政策とは直接関連しない安全保障リスクのため。",
+          "topic_value_class": "risk_or_safety_signal",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        }
+      ],
+      "no_change_summary": "2026年6月22日から24日までの期間において、日本の物価・賃金、雇用・消費、投資政策に関する大きな変化は限定的であった。日銀の政策や財務省の財政方針に新たな発表はなく、統計局の雇用・消費データにも目立った変動は見られなかった。",
+      "discovery_sources": [
+        {
+          "label": "日本経済新聞",
+          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1adUctQ25pV2ppMURCZEVCSHVMekdnTFF1U213Zi1hNGFEUWtMVWdzbXdqeFFKTG5jdDVUcy1iSWlpeHpPbU1majBzeVFrSXJJMnpWMWZnbUZkcXBaVjE1WG44dWVRSVhYTGlCVQ?oc=5",
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "published_date": "2026-06-22",
-          "evidence_summary": "Google News RSSのsource属性から、nna.jpの媒体URLhttps://www.nna.jpを確認した。"
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSで「「名古屋ほど適した場所ない」 広沢市長、副首都法案提出めぐり - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。"
+        },
+        {
+          "label": "日本経済新聞",
+          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5fMGlRdHB2UmNCLUtyeXhfYVR5b2hXVjdvV0hFVTJOeElfd00wdGlocUtDc05laXp0cmNBcXdnOGYxdnUtcU84UG1QdUpmY3ZDYkpyYUpPanpUZTZzV0VsdzNPSjUteXF6blg4eA?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSで「ダイドー、缶コーヒーなど10〜15%値上げ 10月から83品目で - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。"
+        },
+        {
+          "label": "日本経済新聞",
+          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1pdHlOTjNxMmdtckN5LWVtMS1xd1BCLWNoclNEQUFRVTlFblQ5Wjl2UVkxeE50bXktcWY2VWFHUzcyc3B5U0cxdUFZaWVITUVZMGdRWklHT3ZMeEVjQ2lYM2IxZVhZbk5DNGFjLQ?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSで「KADOKAWA株主総会、夏野社長再任案を可決 - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。"
+        },
+        {
+          "label": "日本経済新聞",
+          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBjOVpuWEt4WnZpZzE3WGttZllxTjlFSTJZY2l6QjZfVF9HZTFVMVJhbGxkMmpWb2c3MGYzUlltX3N6YXdkbVMzUkt2TS1fSFZkcXJhRC1pcHBzc09GbWpVWVRMV0U4blJaRXBhSQ?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSで「JERA、石炭火力電力の販売再開を検討 中東情勢受け企業向けに安く - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。"
+        },
+        {
+          "label": "日本経済新聞",
+          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE8weFdmaktMRTlkczV3ajVROHM1U0o2RC01VkZjRUZ4SS00U1prcDl4dHJNUmVBRTd3UzdvUVBCbmhTdnRhX0JQNDVsN3hhRUQxY2x5cWtjRm80X2daSHdZMDNlM1BoSUNjR3FGMQ?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSで「2040年度の民間投資230兆円超に 戦略17分野で官民投資計画 - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。"
+        },
+        {
+          "label": "日本経済新聞",
+          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBNMzBmZ1RJMXpVTXV5QmNQTFFSeUIwMDQwSjZKdVowVmJWLUdhRjZjaUs5eEhPU2pFOTkzYkNzZDNrWmRTOE5JeXlkZ0VLQ05ySkozdlZsM2x2am1sck5tbm1hczlXWkIteWRSRg?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSで「24日の高市首相の動静 - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。"
+        },
+        {
+          "label": "日本経済新聞",
+          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1IdnhKMHFkenFJU1lRZmVYSy1yQTNWZlYwZENNV1VBQlA3Vzl1UEc1bDVqRTBXYWI1LWtidmNVa1pUQlp5WWtBSDFobDFfaGJLRWZYcy1UZVlzMUhmRTdVOGFjbExTREVERUFpQw?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSで「スパコン世界ランキング、中国「霊晟」トップ 9年ぶり返り咲き - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。"
+        },
+        {
+          "label": "日本経済新聞",
+          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBkM2pjb1RpY0tUNUVIanRTUkRKT3VfbThsOHdZT2taZkVvaW53SnpMMXZsa2dicnlXT1VoZUVhRDdwT181X0NMTjBCNXZGR1VHYmxZZHlJalpfcV8zZm5tTmQyRndkZE5hTjRQQg?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSで「重電大手の日本人社員2人、中国で拘束 レアアース規制関連か - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。"
+        },
+        {
+          "label": "日本経済新聞",
+          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE96ODl2U1NKVWR5Rm1ZZUUtcFY4VzRzakVjWGw2NDBOUlkyODNaVklrOHBmcVZ0R3o4QzBmRUNJQUtZNmNwaGFfekJMY1ZsdTdEQksyM2FxcWYxUlk5cWVyQ3FheFJHMFJxNnpSNg?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSで「［社説］子供のデジタル力育む安全なSNSに - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。"
+        },
+        {
+          "label": "日本経済新聞",
+          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE50S1JkOHhRb29vcDJCZXl4Ulk3NDh2RmZSNlkzUFNob2o2bUlqZ0Yya3MtVWxTVGNaRFd5LXJDVUFxZjMyS0dHaGhvZjVRdkhPZzNEQUtXb09yVWlBTHRGYXY0Z2FYNDBiTzdYQQ?oc=5",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSで「マクロン氏が提起した「経済不均衡」 日本も対岸の火事ではない - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-24。"
+        },
+        {
+          "label": "日本経済新聞 媒体ページ",
+          "url": "https://www.nikkei.com",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
+        },
+        {
+          "label": "日本経済新聞 媒体ページ",
+          "url": "https://www.nikkei.com",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
+        },
+        {
+          "label": "日本経済新聞 媒体ページ",
+          "url": "https://www.nikkei.com",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
+        },
+        {
+          "label": "日本経済新聞 媒体ページ",
+          "url": "https://www.nikkei.com",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
+        },
+        {
+          "label": "日本経済新聞 媒体ページ",
+          "url": "https://www.nikkei.com",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
+        },
+        {
+          "label": "日本経済新聞 媒体ページ",
+          "url": "https://www.nikkei.com",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
+        },
+        {
+          "label": "日本経済新聞 媒体ページ",
+          "url": "https://www.nikkei.com",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
+        },
+        {
+          "label": "日本経済新聞 媒体ページ",
+          "url": "https://www.nikkei.com",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
+        },
+        {
+          "label": "日本経済新聞 媒体ページ",
+          "url": "https://www.nikkei.com",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
+        },
+        {
+          "label": "日本経済新聞 媒体ページ",
+          "url": "https://www.nikkei.com",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSのsource属性から、日本経済新聞の媒体URLhttps://www.nikkei.comを確認した。"
         }
       ]
     },
     "北米経済": {
       "items": [],
       "signals": [],
-      "no_change_summary": "2026年6月24日を含む3日間の期間において、北米経済関連の主要なマクロ経済指標や金融市場の動向に関する新たな確定的な発表は確認されませんでした。過去の報告では北米の電磁鋼板市場や掘削時計測市場の将来的成長予測が示されていますが、今回の期間内に具体的な政策変更や市場反応の新情報はありません。",
+      "no_change_summary": "2026年6月24日を含む直近3日間の提供証拠には、北米経済に関する新たなマクロ経済指標や金融市場の動向、政策決定の具体的な変更は確認できませんでした。過去の業界インサイトや市場予測の更新はありますが、直近の重要な変化は見られません。",
       "discovery_sources": [
         {
           "label": "mofa.go.jp",
@@ -1823,24 +1928,53 @@
       ]
     },
     "宇都宮ブレックス": {
-      "items": [],
+      "items": [
+        {
+          "watch_topic_id": "arena_regional_admin",
+          "title": "【宇都宮ブレックス】新アリーナ、2.8万㎡ 30年開業 - 建設通信新聞Digital",
+          "summary": "【宇都宮ブレックス】新アリーナ、2.8万㎡ 30年開業 - 建設通信新聞Digital。【宇都宮ブレックス】新アリーナ、2.8万㎡ 30年開業 建設通信新聞Digital。",
+          "source_published_date": "2026-06-23",
+          "topic_value_class": "operational_status_change",
+          "priority_class": "priority",
+          "slug": "auto-5f47d8e350ae-2026-06-24",
+          "detail_summary": "【宇都宮ブレックス】新アリーナ、2.8万㎡ 30年開業 - 建設通信新聞Digital。 確認できた点は、【宇都宮ブレックス】新アリーナ、2.8万㎡ 30年開業 - 建設通信新聞Digital、【宇都宮ブレックス】新アリーナ、2.8万㎡ 30年開業 建設通信新聞Digital、建設通信新聞Digitalが2026-06-23付の情報として配信した。 【宇都宮ブレックス】新アリーナ、2.8万㎡ 30年開業 - 建設通信新聞Digitalは、宇都宮ブレックスの直近3日内の具体的な変化として、事業、競争環境、予定、または市場評価に影響しうる材料になる。 詳細条件、正式な続報、数値の内訳は追加確認の対象となる。",
+          "what_changed": "【宇都宮ブレックス】新アリーナ、2.8万㎡ 30年開業 - 建設通信新聞Digital。",
+          "why_it_matters": "【宇都宮ブレックス】新アリーナ、2.8万㎡ 30年開業 - 建設通信新聞Digitalは、宇都宮ブレックスの直近3日内の具体的な変化として、事業、競争環境、予定、または市場評価に影響しうる材料になる。",
+          "confirmed_facts": [
+            "【宇都宮ブレックス】新アリーナ、2.8万㎡ 30年開業 - 建設通信新聞Digital。",
+            "【宇都宮ブレックス】新アリーナ、2.8万㎡ 30年開業 建設通信新聞Digital。",
+            "建設通信新聞Digitalが2026-06-23付の情報として配信した。"
+          ],
+          "limits_or_unknowns": "詳細条件、正式な続報、数値の内訳は追加確認の対象となる。",
+          "sources": [
+            {
+              "label": "建設通信新聞Digital",
+              "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE9CQjQwZmFQYWg0TjZtSUdSZ1VpV0pISWlmakFWMFZPMUVRNzNXQTlWQk9xMGk3M05CT2xVb1JlNl9fMm13MDRwa0ZhdEV1N0cwZENpU0Radw?oc=5",
+              "source_role": "independent_media_or_data",
+              "channel": "web"
+            }
+          ],
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        }
+      ],
       "signals": [
         {
           "watch_topic_id": "media_press_video",
           "title": "宇都宮ブレックス遠藤選手、6月30日にBS10出演予定",
-          "summary": "2026年6月30日に宇都宮ブレックスの遠藤選手がBS10でのメディア出演が予定されています。",
+          "summary": "2026年6月30日、宇都宮ブレックスの遠藤選手がBS10でのメディア出演を予定している。",
           "source_published_date": "2026-06-24",
           "source_url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFA0N2JPX3NHNVM4SjJpcC1oblJ4UHN0bnhKVFh6Q3VUNXpBcXdXbWp4NmNQM0w0ZkdsTUJsOUFMcUIxSzVBZVRFMXZaMlRCUFVnbllTVndyeUU5WTRSYnd0aQ?oc=5",
           "source_label": "宇都宮ブレックス",
           "change_class": "new_event",
           "rejection_reason_class": "insufficient_evidence",
-          "rejection_reason": "出演情報のみで詳細な内容や影響が不明。",
+          "rejection_reason": "メディア出演予定は定期的な広報活動の一環で大きな変化ではないため。",
           "topic_value_class": "cultural_or_audience_signal",
           "observation_source_role": "independent_media_or_data",
           "observation_channel": "web"
         }
       ],
-      "no_change_summary": "2026年6月24日付近の宇都宮ブレックス関連では、新アリーナの基本計画発表が最大の動きであり、選手契約や試合結果の新情報は確認できませんでした。過去の契約発表（6月9日）やメディア出演予定（6月30日）はありますが、最新の大きな変化は新アリーナ計画に集中しています。",
+      "no_change_summary": "2026年6月22日から24日までの間、宇都宮ブレックスの選手契約や試合結果に関する新たな公式発表は確認できなかった。過去の契約発表やBリーグの制度変更は既報であり、今回の期間内では新規の契約や退団情報は見当たらない。",
       "discovery_sources": [
         {
           "label": "宇都宮ブレックス",
