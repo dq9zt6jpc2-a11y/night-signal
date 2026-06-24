@@ -6595,6 +6595,13 @@
           "source_role": "independent_media_or_data",
           "channel": "web",
           "source_class": "major_media"
+        },
+        {
+          "label": "Trading Economics United States indicators",
+          "url": "https://tradingeconomics.com/united-states/indicators",
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "source_class": "specialist_media"
         }
       ],
       "search_queries": [
