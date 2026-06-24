@@ -173,6 +173,17 @@ def record_cluster_key(record: dict[str, Any]) -> str:
     return normalized_topic_key(record.get("title"))
 
 
+def cluster_seen(seen: set[str], key: str) -> bool:
+    if not key:
+        return False
+    return any(
+        key == value
+        or (len(key) >= 12 and value.startswith(key))
+        or (len(value) >= 12 and key.startswith(value))
+        for value in seen
+    )
+
+
 def cluster_priority(record: dict[str, Any], category: dict[str, Any]) -> tuple[int, str]:
     title = str(record.get("title", ""))
     excerpt = str(record.get("excerpt", ""))
@@ -1132,7 +1143,7 @@ def backfill_items_from_evidence(
         if not item:
             continue
         key = normalized_topic_key(item.get("title"))
-        if key in seen:
+        if cluster_seen(seen, key):
             continue
         seen.add(key)
         normalized["items"].append(item)
@@ -1261,7 +1272,7 @@ def normalize_result(
             or len(detail) < 220
             or len(facts) < 3
             or not sources
-            or item_cluster in seen_clusters
+            or cluster_seen(seen_clusters, item_cluster)
             or topic_value not in ALLOWED_TOPIC_VALUES
             or not valid_date(item.get("source_published_date"), issue_date)
         ):
@@ -1310,7 +1321,7 @@ def normalize_result(
             or not title
             or not reader_public_copy_ok(title, kind="title")
             or title in seen_titles
-            or signal_cluster in seen_clusters
+            or cluster_seen(seen_clusters, signal_cluster)
             or not record
             or not valid_date(signal.get("source_published_date"), issue_date)
         ):
@@ -1332,6 +1343,11 @@ def normalize_result(
                 record.get("excerpt") or record.get("evidence") or title,
                 1200,
             )
+        elif len(signal_summary) < 100:
+            signal_summary = unique_sentences(
+                f"{signal_summary} {record.get('excerpt') or record.get('evidence') or ''}",
+                1200,
+            )
         if not reader_public_copy_ok(signal_summary, kind="summary"):
             continue
         if not category_identity_ok(str(category.get("label", "")), title, signal_summary):
@@ -1341,7 +1357,7 @@ def normalize_result(
             change_class = "material_update"
         if material_signal and topic_value == "operational_status_change":
             topic_value = "market_or_financial_impact"
-        if material_signal and len(signal_summary) >= 120 and url:
+        if material_signal and len(signal_summary) >= 80 and url:
             seen_titles.add(title)
             seen_clusters.add(signal_cluster)
             items.append(

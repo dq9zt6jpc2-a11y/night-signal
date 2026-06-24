@@ -338,6 +338,19 @@ def card_cluster_key(card: str) -> str:
     return " ".join(tokens[:14])
 
 
+def seen_card_cluster(seen: dict[str, str], key: str) -> str | None:
+    if not key:
+        return None
+    for seen_key, title in seen.items():
+        if (
+            key == seen_key
+            or (len(key) >= 12 and seen_key.startswith(key))
+            or (len(seen_key) >= 12 and key.startswith(seen_key))
+        ):
+            return title
+    return None
+
+
 def card_detail_href(card: str) -> str | None:
     match = re.search(r'href="([^"]*details/([^"#?]+\.html))', card)
     if not match:
@@ -657,8 +670,9 @@ def validate_unique_display_clusters(context: str, html: str) -> None:
         title = card_title(card)
         if not key:
             continue
-        if key in seen:
-            duplicates.append(f"{seen[key]} / {title}")
+        duplicate_title = seen_card_cluster(seen, key)
+        if duplicate_title:
+            duplicates.append(f"{duplicate_title} / {title}")
         else:
             seen[key] = title
     if duplicates:

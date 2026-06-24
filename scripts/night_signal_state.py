@@ -1058,6 +1058,21 @@ def display_cluster_key(card: dict[str, Any]) -> tuple[str, str]:
     return (str(card.get("category", "")), " ".join(tokens[:14]))
 
 
+def display_cluster_seen(seen: set[tuple[str, str]], key: tuple[str, str]) -> bool:
+    category, text = key
+    if not text:
+        return False
+    return any(
+        category == seen_category
+        and (
+            text == seen_text
+            or (len(text) >= 12 and seen_text.startswith(text))
+            or (len(seen_text) >= 12 and text.startswith(seen_text))
+        )
+        for seen_category, seen_text in seen
+    )
+
+
 def rolling_display_cards(issue_path: Path, issue: dict[str, Any], current_cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
     issue_date = require_str(issue, "issue_date")
     allowed_source_dates = latest_three_dates(issue_date)
@@ -1071,7 +1086,7 @@ def rolling_display_cards(issue_path: Path, issue: dict[str, Any], current_cards
         if source_date not in allowed_source_dates:
             return
         key = display_cluster_key(card)
-        if key in seen:
+        if display_cluster_seen(seen, key):
             return
         seen.add(key)
         display_cards.append(
