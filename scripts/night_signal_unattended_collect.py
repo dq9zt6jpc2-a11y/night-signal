@@ -515,9 +515,9 @@ def parse_rss_date(value: str | None) -> str | None:
     return parsed.astimezone(JST).date().isoformat()
 
 
-def news_query(category: dict[str, Any], issue_date: str) -> str:
+def news_queries(category: dict[str, Any], issue_date: str) -> list[str]:
     label = str(category["label"])
-    terms: list[str] = []
+    configured_terms: list[str] = []
     material_terms = [
         "partnership",
         "security",
@@ -533,83 +533,98 @@ def news_query(category: dict[str, Any], issue_date: str) -> str:
     ]
     for axis in category.get("axes", [])[:3]:
         if isinstance(axis, dict):
-            terms.extend(str(term) for term in axis.get("terms", [])[:3])
+            configured_terms.extend(str(term) for term in axis.get("terms", [])[:3])
     for topic in category.get("watch_topics", [])[:6]:
         if not isinstance(topic, dict):
             continue
-        terms.extend(str(term) for term in topic.get("terms", [])[:3])
-        terms.extend(str(event) for event in topic.get("event_classes", [])[:2])
-    terms.extend(material_terms)
-    start = date.fromisoformat(issue_date) - timedelta(days=3)
-    scoped_terms = " OR ".join(dict.fromkeys(terms[:24]))
-    return f"({label}) ({scoped_terms}) after:{start.isoformat()}"
+        configured_terms.extend(str(term) for term in topic.get("terms", [])[:3])
+        configured_terms.extend(str(event) for event in topic.get("event_classes", [])[:2])
+    scoped = list(dict.fromkeys(configured_terms))
+    groups = [
+        scoped[:8],
+        material_terms[:6],
+        material_terms[6:],
+    ]
+    return [
+        f"({label}) ({' OR '.join(group)}) when:3d"
+        for group in groups
+        if group
+    ]
+
+
+def news_query(category: dict[str, Any], issue_date: str) -> str:
+    return news_queries(category, issue_date)[0]
 
 
 def fetch_news(category: dict[str, Any], issue_date: str) -> list[dict[str, Any]]:
-    query = news_query(category, issue_date)
-    rss_url = (
-        "https://news.google.com/rss/search?"
-        + urllib.parse.urlencode(
-            {
-                "q": query,
-                "hl": "ja",
-                "gl": "JP",
-                "ceid": "JP:ja",
-            }
-        )
-    )
-    try:
-        raw, _, _ = request_bytes(rss_url)
-        root = ET.fromstring(raw)
-    except (OSError, TimeoutError, urllib.error.URLError, ET.ParseError) as exc:
-        return [
-            {
-                "observed": False,
-                "url": rss_url,
-                "label": "Google News RSS",
-                "error": f"{type(exc).__name__}: {exc}",
-            }
-        ]
     records: list[dict[str, Any]] = []
-    for item in root.findall(".//item")[:10]:
-        title = compact_text(item.findtext("title") or "", 220)
-        link = compact_text(item.findtext("link") or "", 1000)
-        description = compact_text(item.findtext("description") or "", 700)
-        source = item.find("source")
-        source_label = (
-            compact_text(source.text or "", 120)
-            if source is not None
-            else "Google News"
+    failures: list[dict[str, Any]] = []
+    seen_urls: set[str] = set()
+    for query in news_queries(category, issue_date):
+        rss_url = (
+            "https://news.google.com/rss/search?"
+            + urllib.parse.urlencode(
+                {
+                    "q": query,
+                    "hl": "ja",
+                    "gl": "JP",
+                    "ceid": "JP:ja",
+                }
+            )
         )
-        publisher_url = (
-            compact_text(source.get("url") or "", 1000)
-            if source is not None
-            else ""
-        )
-        if not publisher_url.startswith(("http://", "https://")):
-            publisher_url = ""
-        if not title or not link.startswith(("http://", "https://")):
+        try:
+            raw, _, _ = request_bytes(rss_url)
+            root = ET.fromstring(raw)
+        except (OSError, TimeoutError, urllib.error.URLError, ET.ParseError) as exc:
+            failures.append(
+                {
+                    "observed": False,
+                    "url": rss_url,
+                    "label": "Google News RSS",
+                    "error": f"{type(exc).__name__}: {exc}",
+                }
+            )
             continue
-        records.append(
-            {
-                "label": source_label,
-                "url": link,
-                "source_role": "independent_media_or_data",
-                "channel": "web",
-                "source_class": "discovered_media",
-                "publisher_url": publisher_url,
-                "observed": True,
-                "published_date": parse_rss_date(item.findtext("pubDate")),
-                "title": title,
-                "excerpt": description or title,
-                "evidence": (
-                    f"Google News RSSで「{title}」を確認した。"
-                    f"配信元は{source_label}、配信日は"
-                    f"{parse_rss_date(item.findtext('pubDate')) or '日付不明'}。"
-                ),
-            }
-        )
-    return records
+        for item in root.findall(".//item")[:8]:
+            title = compact_text(item.findtext("title") or "", 220)
+            link = compact_text(item.findtext("link") or "", 1000)
+            if not title or not link.startswith(("http://", "https://")) or link in seen_urls:
+                continue
+            description = compact_text(item.findtext("description") or "", 700)
+            source = item.find("source")
+            source_label = (
+                compact_text(source.text or "", 120)
+                if source is not None
+                else "Google News"
+            )
+            publisher_url = (
+                compact_text(source.get("url") or "", 1000)
+                if source is not None
+                else ""
+            )
+            if not publisher_url.startswith(("http://", "https://")):
+                publisher_url = ""
+            seen_urls.add(link)
+            records.append(
+                {
+                    "label": source_label,
+                    "url": link,
+                    "source_role": "independent_media_or_data",
+                    "channel": "web",
+                    "source_class": "discovered_media",
+                    "publisher_url": publisher_url,
+                    "observed": True,
+                    "published_date": parse_rss_date(item.findtext("pubDate")),
+                    "title": title,
+                    "excerpt": description or title,
+                    "evidence": (
+                        f"Google News RSSで「{title}」を確認した。"
+                        f"配信元は{source_label}、配信日は"
+                        f"{parse_rss_date(item.findtext('pubDate')) or '日付不明'}。"
+                    ),
+                }
+            )
+    return records or failures
 
 
 def category_contracts() -> list[dict[str, Any]]:
