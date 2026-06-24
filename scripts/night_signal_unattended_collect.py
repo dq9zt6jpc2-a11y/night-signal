@@ -270,6 +270,7 @@ PUBLIC_TERM_REPLACEMENTS = {
 
 def reader_facing_text(value: Any, limit: int = 1600) -> str:
     text = compact_text(str(value), limit)
+    text = re.sub(r"<[^>]+>", " ", text)
     for pattern, replacement in PUBLIC_COPY_REPLACEMENTS:
         text = re.sub(pattern, replacement, text)
     for term in state_contract.PUBLIC_COPY_FORBIDDEN_TERMS:
