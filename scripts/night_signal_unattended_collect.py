@@ -1273,7 +1273,7 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
             for record in news_records
             if record.get("observed")
         ]
-    for category_index, category in enumerate(contracts):
+    def review_category(category: dict[str, Any]) -> tuple[str, dict[str, Any], dict[str, Any]]:
         label = str(category["label"])
         raw = model_request(
             token,
@@ -1329,7 +1329,6 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
             and record.get("source_class") == "discovered_media"
             and record.get("publisher_url")
         )
-        reviewed_categories[label] = normalized
         raw_items = [
             {
                 "title": item.get("title"),
@@ -1350,23 +1349,26 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
             for item in raw.get("items", [])
             if isinstance(item, dict)
         ]
-        print(
-            json.dumps(
-                {
-                    "category": label,
-                    "raw_items": raw_items,
-                    "raw_signals": len(raw.get("signals", []))
-                    if isinstance(raw.get("signals"), list)
-                    else 0,
-                    "normalized_items": len(normalized["items"]),
-                    "normalized_signals": len(normalized["signals"]),
-                },
-                ensure_ascii=False,
-            ),
-            flush=True,
-        )
-        if category_index < len(contracts) - 1:
-            time.sleep(10)
+        report = {
+            "category": label,
+            "raw_items": raw_items,
+            "raw_signals": len(raw.get("signals", []))
+            if isinstance(raw.get("signals"), list)
+            else 0,
+            "normalized_items": len(normalized["items"]),
+            "normalized_signals": len(normalized["signals"]),
+        }
+        return label, normalized, report
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+        futures = {
+            executor.submit(review_category, category): str(category["label"])
+            for category in contracts
+        }
+        for future in concurrent.futures.as_completed(futures):
+            label, normalized, report = future.result()
+            reviewed_categories[label] = normalized
+            print(json.dumps(report, ensure_ascii=False), flush=True)
     total_items = sum(
         len(entry["items"])
         for entry in reviewed_categories.values()
