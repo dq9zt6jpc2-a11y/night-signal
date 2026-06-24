@@ -11,6 +11,7 @@ from __future__ import annotations
 import subprocess
 import sys
 import re
+import os
 import urllib.request
 from datetime import datetime
 from pathlib import Path
@@ -35,6 +36,10 @@ def jst_today() -> str:
 
 def public_content_only() -> bool:
     return PUBLIC_CONTENT_ONLY_FLAG in sys.argv[1:]
+
+
+def allow_explicit_stale_issue() -> bool:
+    return os.getenv("NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE") == "1"
 
 
 def latest_available_issue_date() -> str | None:
@@ -148,7 +153,7 @@ def ensure_public_url(issue_date: str) -> None:
 def main() -> int:
     issue_date = issue_date_from_args()
     today = jst_today()
-    if issue_date != today:
+    if issue_date != today and not allow_explicit_stale_issue():
         fail(f"refusing stale publication audit: {issue_date} != JST today {today}")
     latest_issue = latest_available_issue_date()
     if latest_issue and issue_date != latest_issue:

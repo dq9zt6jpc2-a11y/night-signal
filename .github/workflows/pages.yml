@@ -20,6 +20,8 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    env:
+      NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE: ${{ inputs.issue_date != '' && '1' || '' }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

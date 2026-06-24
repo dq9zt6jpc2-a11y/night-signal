@@ -34,9 +34,13 @@ def jst_today() -> str:
     return datetime.now(ZoneInfo("Asia/Tokyo")).date().isoformat()
 
 
+def allow_explicit_stale_issue() -> bool:
+    return os.getenv("NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE") == "1"
+
+
 def require_jst_current_issue(issue_date: str) -> None:
     today = jst_today()
-    if issue_date != today:
+    if issue_date != today and not allow_explicit_stale_issue():
         fail(f"refusing to publish stale issue as latest: {issue_date} != JST today {today}")
 
 

@@ -46,6 +46,7 @@ jobs:
       NIGHT_SIGNAL_MODEL_TIMEOUT_SECONDS: 240
       NIGHT_SIGNAL_MODEL_RETRIES: 5
       NIGHT_SIGNAL_MODEL_MAX_TOKENS: 3000
+      NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE: ${{ inputs.issue_date != '' && '1' || '' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5
