@@ -766,7 +766,21 @@ def item_card(
     item: dict[str, Any],
     issue_date: str,
 ) -> dict[str, Any]:
-    facts = [str(fact) for fact in item["confirmed_facts"]]
+    facts = []
+    seen_facts: set[str] = set()
+    for fact in [
+        *[str(fact) for fact in item["confirmed_facts"]],
+        str(item.get("summary", "")),
+        str(item.get("what_changed", "")),
+        str(item.get("why_it_matters", "")),
+    ]:
+        text = compact_text(fact, 500)
+        if not text or text in seen_facts:
+            continue
+        seen_facts.add(text)
+        facts.append(text)
+        if len(facts) >= 4:
+            break
     source_urls = [str(source["url"]) for source in item["sources"]]
     slug = str(item["slug"])
     slug_stem = slug[:-5] if slug.endswith(".html") else slug
