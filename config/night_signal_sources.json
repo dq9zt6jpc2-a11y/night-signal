@@ -106,6 +106,7 @@
       {"label": "Investment Company Institute", "url": "https://www.ici.org/", "source_role": "primary_or_official", "channel": "web", "source_class": "official_dataset"},
       {"label": "Reuters US markets", "url": "https://www.reuters.com/markets/us/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
       {"label": "MarketWatch", "url": "https://www.marketwatch.com/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
+      {"label": "Trading Economics United States indicators", "url": "https://tradingeconomics.com/united-states/indicators", "source_role": "independent_media_or_data", "channel": "web", "source_class": "specialist_media"},
       {"label": "Federal Reserve X", "url": "https://x.com/federalreserve", "source_role": "social_or_video_signal", "channel": "sns_x", "source_class": "sns_x"},
       {"label": "Federal Reserve YouTube", "url": "https://www.youtube.com/federalreserve", "source_role": "social_or_video_signal", "channel": "youtube", "source_class": "youtube_video"}
     ],
