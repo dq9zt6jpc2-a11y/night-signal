@@ -1477,23 +1477,34 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
         ]
     def review_category(category: dict[str, Any]) -> tuple[str, dict[str, Any], dict[str, Any]]:
         label = str(category["label"])
-        raw = model_request(
-            token,
-            [
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {
-                    "role": "user",
-                    "content": json.dumps(
-                        category_prompt(
-                            category,
-                            issue_date,
-                            records_by_category[label],
+        try:
+            raw = model_request(
+                token,
+                [
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {
+                        "role": "user",
+                        "content": json.dumps(
+                            category_prompt(
+                                category,
+                                issue_date,
+                                records_by_category[label],
+                            ),
+                            ensure_ascii=False,
                         ),
-                        ensure_ascii=False,
-                    ),
-                },
-            ],
-        )
+                    },
+                ],
+            )
+        except SystemExit as exc:
+            raw = {
+                "items": [],
+                "signals": [],
+                "no_change_summary": (
+                    f"{label}はモデル抽出が一時失敗したため、"
+                    "取得済み証拠から重要クラスタを補完した。"
+                ),
+                "model_error": str(exc),
+            }
         normalized = normalize_result(
             raw,
             category,
@@ -1563,6 +1574,7 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
             "raw_signals": len(raw.get("signals", []))
             if isinstance(raw.get("signals"), list)
             else 0,
+            "model_fallback": bool(raw.get("model_error")),
             "normalized_items": len(normalized["items"]),
             "normalized_signals": len(normalized["signals"]),
         }
