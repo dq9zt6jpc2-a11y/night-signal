@@ -26,7 +26,7 @@ import xml.etree.ElementTree as ET
 from datetime import date, datetime, timedelta
 from html.parser import HTMLParser
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 from zoneinfo import ZoneInfo
 
 import night_signal_apply_source_review as source_review
@@ -677,11 +677,21 @@ def collection_checked_at(issue_date: str) -> str:
     return now.isoformat(timespec="seconds")
 
 
-def model_request(token: str, messages: list[dict[str, str]]) -> dict[str, Any]:
+def model_request(
+    token: str,
+    messages: list[dict[str, str]],
+    *,
+    retries_override: Optional[int] = None,
+    retry_wait_cap: int = 120,
+) -> dict[str, Any]:
     errors: list[str] = []
     attempt_messages = list(messages)
     timeout = int(os.getenv("NIGHT_SIGNAL_MODEL_TIMEOUT_SECONDS", DEFAULT_MODEL_TIMEOUT_SECONDS))
-    retries = int(os.getenv("NIGHT_SIGNAL_MODEL_RETRIES", DEFAULT_MODEL_RETRIES))
+    retries = (
+        retries_override
+        if retries_override is not None
+        else int(os.getenv("NIGHT_SIGNAL_MODEL_RETRIES", DEFAULT_MODEL_RETRIES))
+    )
     max_tokens = int(os.getenv("NIGHT_SIGNAL_MODEL_MAX_TOKENS", DEFAULT_MODEL_MAX_TOKENS))
     for attempt in range(retries):
         payload = {
@@ -744,7 +754,7 @@ def model_request(token: str, messages: list[dict[str, str]]) -> dict[str, Any]:
                 fail(f"GitHub Models request failed with HTTP {exc.code}")
             retry_after = exc.headers.get("Retry-After")
             try:
-                wait_seconds = max(10, min(120, int(retry_after or "65")))
+                wait_seconds = max(1, min(retry_wait_cap, int(retry_after or "65")))
             except ValueError:
                 wait_seconds = 65
             errors.append(
@@ -1564,6 +1574,8 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
                         ),
                     },
                 ],
+                retries_override=1,
+                retry_wait_cap=5,
             )
         except SystemExit as exc:
             raw = {
@@ -1726,6 +1738,8 @@ def canary(token: str) -> None:
                     "content": 'Return exactly this JSON object: {"ok":true}',
                 }
             ],
+            retries_override=1,
+            retry_wait_cap=5,
         )
     except SystemExit as exc:
         print(
