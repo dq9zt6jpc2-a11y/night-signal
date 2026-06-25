@@ -81,6 +81,11 @@ MATERIAL_SIGNAL_RE = re.compile(
     r")",
     re.I,
 )
+LOW_SIGNAL_VALUE_RE = re.compile(
+    r"噂|予想|予測|レンダリング|架空|ダイキャスト|ミニカー|プラモデル|"
+    r"完成品|1/24|おもちゃ|グッズ|セール|値引き|クーポン",
+    re.I,
+)
 HIGH_THROUGHPUT_CATEGORIES = {"OpenAI", "SpaceX", "SoftBank", "宇都宮ブレックス"}
 MAX_CATEGORY_EVIDENCE = 18
 MAX_CATEGORY_ITEMS = 3
@@ -318,6 +323,11 @@ def category_identity_ok(category_label: str, title: str, summary: str) -> bool:
 def contains_material_signal(*values: str) -> bool:
     text = " ".join(str(value or "") for value in values)
     return bool(MATERIAL_SIGNAL_RE.search(text))
+
+
+def low_signal_value(*values: str) -> bool:
+    text = " ".join(str(value or "") for value in values)
+    return bool(LOW_SIGNAL_VALUE_RE.search(text))
 
 
 def natural_detail_summary(
@@ -1073,6 +1083,7 @@ def fallback_item_from_record(
         or not reader_public_copy_ok(title, kind="title")
         or not category_identity_ok(category_label, title, excerpt)
         or not contains_material_signal(title, excerpt)
+        or low_signal_value(title, excerpt)
     ):
         return None
     summary = unique_sentences(f"{title}。{excerpt}", 1000)
@@ -1177,6 +1188,7 @@ def fallback_signal_from_record(
         or not reader_public_copy_ok(title, kind="title")
         or not reader_public_copy_ok(excerpt, kind="summary")
         or not category_identity_ok(category_label, title, excerpt)
+        or low_signal_value(title, excerpt)
     ):
         return None
     material = contains_material_signal(title, excerpt)
