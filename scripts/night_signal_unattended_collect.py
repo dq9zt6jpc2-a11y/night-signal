@@ -1424,6 +1424,20 @@ def normalize_result(
             change_class = "material_update"
         if material_signal and topic_value == "operational_status_change":
             topic_value = "market_or_financial_impact"
+        rejection_class = (
+            str(signal.get("rejection_reason_class"))
+            if signal.get("rejection_reason_class")
+            in {
+                "duplicate_covered",
+                "lower_importance",
+                "no_material_change",
+                "insufficient_evidence",
+                "insufficient_relevance",
+            }
+            else "insufficient_evidence"
+        )
+        if material_signal and rejection_class == "no_material_change":
+            rejection_class = "lower_importance"
         if material_signal and len(signal_summary) >= 80 and url:
             seen_titles.add(title)
             seen_clusters.add(signal_cluster)
@@ -1456,18 +1470,7 @@ def normalize_result(
                 "source_url": url,
                 "source_label": str(record.get("label", url)),
                 "change_class": change_class,
-                "rejection_reason_class": (
-                    str(signal.get("rejection_reason_class"))
-                    if signal.get("rejection_reason_class")
-                    in {
-                        "duplicate_covered",
-                        "lower_importance",
-                        "no_material_change",
-                        "insufficient_evidence",
-                        "insufficient_relevance",
-                    }
-                    else "insufficient_evidence"
-                ),
+                "rejection_reason_class": rejection_class,
                 "rejection_reason": rejection_reason,
                 "topic_value_class": topic_value,
                 "observation_source_role": str(
