@@ -1188,9 +1188,9 @@ def fallback_signal_from_record(
         "source_url": str(record.get("url")),
         "source_label": str(record.get("label") or record.get("url")),
         "change_class": "material_update" if material else "background_only",
-        "rejection_reason_class": "lower_importance" if material else "no_material_change",
+        "rejection_reason_class": "duplicate_covered" if material else "no_material_change",
         "rejection_reason": (
-            "確定情報は確認できたが、同カテゴリ内の上位カードより優先度が低いため候補として保持する。"
+            "確定情報は確認できたが、同カテゴリ内の上位カードまたは候補群と重なるため候補として保持する。"
             if material
             else "関連情報として確認したが、記事化に必要な具体的な変化は限定的なため候補として保持する。"
         ),
@@ -1446,8 +1446,8 @@ def normalize_result(
             }
             else "insufficient_evidence"
         )
-        if material_signal and rejection_class == "no_material_change":
-            rejection_class = "lower_importance"
+        if material_signal and rejection_class in {"no_material_change", "lower_importance"}:
+            rejection_class = "duplicate_covered"
         if material_signal and len(signal_summary) >= 80 and url:
             seen_titles.add(title)
             seen_clusters.add(signal_cluster)
