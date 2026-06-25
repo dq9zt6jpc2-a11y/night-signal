@@ -128,6 +128,10 @@ CANDIDATE_PLACEHOLDER_PATTERNS = [
     r"単独記事にする確定差分",
     r"公式・媒体・SNS系の証跡で確認した",
 ]
+PUBLISHER_SUFFIX_RE = re.compile(
+    r"\s[-–—]\s*(?:[A-Za-z0-9][A-Za-z0-9 .&|｜・]*|[Ａ-Ｚａ-ｚ０-９][^。、]{1,}|[ぁ-んァ-ヶ一-龯]+(?:新聞|ニュース|Digital|デジタル|通信|テレビ|メニュー)[^。、]*)$"
+)
+DOMAIN_RE = re.compile(r"\b[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+(?:/[^\s。、]*)?\b")
 
 SOURCE_OBSERVATION_SCHEMA: dict[str, Any] = {
     "type": "object",
@@ -776,10 +780,61 @@ def public_copy_violations(text: str, *, kind: str) -> list[str]:
     return violations
 
 
+def public_render_copy_violations(text: str, *, kind: str) -> list[str]:
+    stripped = text.strip()
+    violations = public_copy_violations(stripped, kind=kind)
+    japanese_chars = len(re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", stripped))
+    latin_chars = len(re.findall(r"[A-Za-z]", stripped))
+    if latin_chars >= 24 and japanese_chars < 6:
+        violations.append("untranslated English public copy")
+    if DOMAIN_RE.search(stripped):
+        violations.append("publisher/domain name leaked")
+    if kind == "title" and PUBLISHER_SUFFIX_RE.search(stripped):
+        violations.append("publisher suffix leaked")
+    return violations
+
+
 def reject_public_copy(label: str, text: str, *, kind: str) -> None:
     violations = public_copy_violations(text, kind=kind)
     if violations:
         fail(f"{label} is not reader-facing public copy: " + "; ".join(violations))
+
+
+def reject_public_render_copy(label: str, text: str, *, kind: str) -> None:
+    violations = public_render_copy_violations(text, kind=kind)
+    if violations:
+        fail(f"{label} is not reader-facing public copy: " + "; ".join(violations))
+
+
+def copy_signature(text: str) -> str:
+    stripped = PUBLISHER_SUFFIX_RE.sub("", str(text))
+    stripped = DOMAIN_RE.sub("", stripped)
+    return re.sub(r"[、。．.!！?？\s「」『』（）()【】\-–—|｜・]", "", stripped).lower()
+
+
+def title_repetition_score(title: str, text: str) -> float:
+    title_terms = content_terms(copy_signature(title))
+    text_terms = content_terms(copy_signature(text))
+    if not title_terms or not text_terms:
+        return 0.0
+    return len(title_terms & text_terms) / max(1, len(title_terms))
+
+
+def validate_reader_summary(label: str, title: str, summary: str) -> None:
+    title_key = copy_signature(title)
+    summary_key = copy_signature(summary)
+    sentences = [part.strip() for part in re.split(r"(?<=[。！？!?])", summary) if part.strip()]
+    if title_key and summary_key.count(title_key) >= 2:
+        fail(f"{label} repeats the title instead of summarizing")
+    if (
+        title_repetition_score(title, summary) >= 0.82
+        and len(content_terms(summary)) <= len(content_terms(title)) + 2
+        and (len(sentences) <= 1 or len(summary_key) < len(title_key) * 1.6)
+    ):
+        fail(f"{label} is too similar to its title")
+    unique = {copy_signature(sentence) for sentence in sentences if copy_signature(sentence)}
+    if len(sentences) >= 2 and len(unique) <= 1:
+        fail(f"{label} repeats the same sentence")
 
 
 def validate_detail_sources(detail: dict[str, Any], card_index: int) -> None:
@@ -823,6 +878,9 @@ def validate_summary_basis(detail: dict[str, Any], *, issue_date: str, source_da
             fact,
             kind="summary",
         )
+    unique_facts = {copy_signature(fact) for fact in facts if isinstance(fact, str) and copy_signature(fact)}
+    if len(unique_facts) < min_facts:
+        fail(f"cards[{card_index}].detail.summary_basis.confirmed_facts are repetitive")
 
     if effective_on_or_after(contract, "claim_source_linkage_effective_date", issue_date):
         fact_sources = basis.get("fact_sources")
@@ -923,9 +981,11 @@ def validate_public_card_copy(raw: dict[str, Any], detail: dict[str, Any], *, is
     source_date = require_str(raw, "source_published_date")
     detail_summary = require_str(detail, "summary")
 
-    reject_public_copy(f"cards[{card_index}].title", title, kind="title")
-    reject_public_copy(f"cards[{card_index}].summary", summary, kind="summary")
-    reject_public_copy(f"cards[{card_index}].detail.summary", detail_summary, kind="summary")
+    reject_public_render_copy(f"cards[{card_index}].title", title, kind="title")
+    reject_public_render_copy(f"cards[{card_index}].summary", summary, kind="summary")
+    reject_public_render_copy(f"cards[{card_index}].detail.summary", detail_summary, kind="summary")
+    validate_reader_summary(f"cards[{card_index}].summary", title, summary)
+    validate_reader_summary(f"cards[{card_index}].detail.summary", title, detail_summary)
 
     if any(term in title for term in SCHEDULE_ONLY_TERMS) and not any(term in title + summary for term in SCHEDULE_MATERIAL_TERMS):
         fail(f"cards[{card_index}] looks schedule-only; routine dates must stay out of published topics")
@@ -1121,7 +1181,14 @@ def rolling_display_cards(issue_path: Path, issue: dict[str, Any], current_cards
 
     for candidate_dt, candidate_path in sorted(issue_files, reverse=True):
         previous_issue = read_json(candidate_path)
-        for card in normalized_cards(previous_issue):
+        retained_raw_cards = [
+            card
+            for card in previous_issue.get("cards", [])
+            if isinstance(card, dict) and str(card.get("source_published_date", "")) in allowed_source_dates
+        ]
+        if not retained_raw_cards:
+            continue
+        for card in normalized_cards({**previous_issue, "cards": retained_raw_cards}):
             add_card(card, detail_issue_date=candidate_dt.isoformat(), retained_from_issue_date=candidate_dt.isoformat())
 
     return display_cards
@@ -2526,6 +2593,20 @@ def self_test() -> None:
         fail("coverage state must identify reusable low-change slots")
     if not public_copy_violations("品質ゲートで確認して作業する", kind="summary"):
         fail("public copy guard must reject process wording")
+    if not public_render_copy_violations("SpaceX corrected post-IPO as market highlights risks and liquidity - IDNFinancials.com", kind="title"):
+        fail("public copy guard must reject untranslated publisher-suffixed titles")
+    if not public_render_copy_violations("OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用 - ｄメニューニュース", kind="title"):
+        fail("public copy guard must reject publisher-suffixed Japanese titles")
+    try:
+        validate_reader_summary(
+            "self-test summary",
+            "SpaceX、IPO後調整でリスクと流動性が焦点に",
+            "SpaceX、IPO後調整でリスクと流動性が焦点に。SpaceX、IPO後調整でリスクと流動性が焦点に。",
+        )
+    except SystemExit:
+        pass
+    else:
+        fail("public copy guard must reject title-repetition summaries")
     clean_title_violations = public_copy_violations("OpenAI、Codexの共有機能を追加", kind="title")
     if clean_title_violations:
         fail("public copy guard rejected a reader-facing title: " + "; ".join(clean_title_violations))

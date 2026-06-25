@@ -87,6 +87,10 @@ TITLE_POLICY_LEAK_TERMS = [
     "品質ゲート",
     "最新採用",
 ]
+PUBLISHER_SUFFIX_RE = re.compile(
+    r"\s[-–—]\s*(?:[A-Za-z0-9][A-Za-z0-9 .&|｜・]*|[Ａ-Ｚａ-ｚ０-９][^。、]{1,}|[ぁ-んァ-ヶ一-龯]+(?:新聞|ニュース|Digital|デジタル|通信|テレビ|メニュー)[^。、]*)$"
+)
+DOMAIN_RE = re.compile(r"\b[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+(?:/[^\s。、]*)?\b")
 
 DETAIL_POLICY_LEAK_TERMS = TITLE_POLICY_LEAK_TERMS + [
     "今夜やること",
@@ -449,6 +453,12 @@ def validate_no_confirmation_layer(context: str, html: str) -> None:
 
 
 def validate_public_summary_language(context: str, text: str, issue_date: str) -> None:
+    japanese_chars = len(re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", text))
+    latin_chars = len(re.findall(r"[A-Za-z]", text))
+    if latin_chars >= 24 and japanese_chars < 6:
+        fail(f"{context} contains untranslated English public copy")
+    if DOMAIN_RE.search(text):
+        fail(f"{context} contains publisher/domain name")
     if re.search(r"[。．.]{2,}|[！？!?]{2,}", text):
         fail(f"{context} contains repeated punctuation")
     sentences = [part.strip() for part in re.split(r"(?<=[。！？!?])", text) if part.strip()]
@@ -469,6 +479,17 @@ def validate_public_summary_language(context: str, text: str, issue_date: str) -
         abstract_terms = [term for term in PUBLIC_ABSTRACT_FRAMING_TERMS if term in text]
         if abstract_terms:
             fail(f"{context} contains abstract/editorial framing wording: " + ", ".join(abstract_terms[:8]))
+
+
+def validate_public_title_language(context: str, text: str) -> None:
+    if PUBLISHER_SUFFIX_RE.search(text):
+        fail(f"{context} contains publisher suffix")
+    japanese_chars = len(re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", text))
+    latin_chars = len(re.findall(r"[A-Za-z]", text))
+    if latin_chars >= 24 and japanese_chars < 6:
+        fail(f"{context} contains untranslated English public copy")
+    if DOMAIN_RE.search(text):
+        fail(f"{context} contains publisher/domain name")
 
 
 def detail_summary_heading(issue_dt) -> str:
@@ -952,6 +973,7 @@ def validate(issue_date: str) -> None:
     validate_no_confirmation_layer("dated issue page", dated_html)
     for context, html in [("root page", root_html), ("dated issue page", dated_html)]:
         for card in card_blocks(html):
+            validate_public_title_language(f"{context} card title", card_title(card))
             for paragraph in re.findall(r"<p[^>]*>(.*?)</p>", card, flags=re.S):
                 validate_public_summary_language(f"{context} card summary", visible_text(paragraph), issue_date)
 

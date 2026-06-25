@@ -154,13 +154,13 @@
       ],
       "freshness_check": "2026-06-24 JSTの直近3日を基準に照合",
       "published_card_titles": [
-        "ソフトバンクG、OpenAI技術活用のサイバーセキュリティー対策ソリューション提供開始 - AIsmiley",
-        "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを「マシン速度」適用 - ｄメニューニュース"
+        "ソフトバンクG、OpenAI技術活用のサイバーセキュリティ対策を提供開始",
+        "OpenAI、サイバー防衛「Daybreak」の修正パッチ適用を高速化"
       ],
       "new_or_changed_items": [
         {
-          "title": "ソフトバンクG、OpenAI技術活用のサイバーセキュリティー対策ソリューション提供開始 - AIsmiley",
-          "summary": "ソフトバンクG、OpenAI技術活用のサイバーセキュリティー対策ソリューション提供開始 - AIsmiley。ソフトバンクG、OpenAI技術活用のサイバーセキュリティー対策ソリューション提供開始 AIsmiley。",
+          "title": "ソフトバンクG、OpenAI技術活用のサイバーセキュリティ対策を提供開始",
+          "summary": "ソフトバンクGは、OpenAI技術を活用したサイバーセキュリティ対策ソリューションの提供を始めた。生成AIの商用利用が防御領域にも広がる動きとして、企業向けAIサービスの展開を読む材料になる。",
           "sources": [
             "https://news.google.com/rss/articles/CBMib0FVX3lxTE5QUGRYU2NSN0NWSm1ZZTJFSml0Q3hrVnU2T1M5dVp4QU5YclBUVUFpSi0tenJsZ2tCbXQ3bEtUYmRjYkVrMUZVMV9wLURBRU9Hel96QUQ2VWItWU50SWUyTnZrcWd2MV95S3liYzBSVQ?oc=5"
           ],
@@ -173,8 +173,8 @@
           ]
         },
         {
-          "title": "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを「マシン速度」適用 - ｄメニューニュース",
-          "summary": "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを「マシン速度」適用 - ｄメニューニュース。OpenAI、サイバー防衛「Daybreak」強化 修正パッチを「マシン速度」適用 ｄメニューニュース。",
+          "title": "OpenAI、サイバー防衛「Daybreak」の修正パッチ適用を高速化",
+          "summary": "OpenAIは、サイバー防衛プロジェクト「Daybreak」で修正パッチ適用を高速化する取り組みを強化した。脆弱性対応の速度を上げる試みで、AIを使った防御自動化の実用性が焦点になる。",
           "sources": [
             "https://news.google.com/rss/articles/CBMifkFVX3lxTE1uNWdySTlGNkdnZFNzZVJBY2JPTU5neWJkZkVvUEE4eWJZbDY1ak5DTmF4aTRYTW43TzdCU05ZM3lMemQxbXBWZThXV0JSRC01QmlZZzZBRkVwREhEajUyWTZ0TjBQNzNYamtLb0Y0YUVTTlZvQ25NbEpKSU1hZ9IBgwFBVV95cUxQY1VucXkxVnplb3hhdGZJNjBSd3dDUldPSE1fQkFVc0VFWVBRMk9XbE54eGNwNjZKd0h3aEJZUFdtdmQ4OFItcGc4WkNWSTltUUpWYy1NN1E2YzNCeF9VMkYwOVhTYWhfcUNDYndKR2pvQ1FxQTRhemdKa3RiTjBwQktaYw?oc=5"
           ],
@@ -1227,12 +1227,12 @@
       ],
       "freshness_check": "2026-06-24 JSTの直近3日を基準に照合",
       "published_card_titles": [
-        "F1の規則変更が正式承認。パワーユニットの出力比は2年間で段階的に「エンジン60％：電動40％」に - motorsport.com 日本版｜モータースポーツ情報サイト"
+        "F1規則変更を正式承認、出力比は段階的にエンジン60％・電動40％へ"
       ],
       "new_or_changed_items": [
         {
-          "title": "F1の規則変更が正式承認。パワーユニットの出力比は2年間で段階的に「エンジン60％：電動40％」に - motorsport.com 日本版｜モータースポーツ情報サイト",
-          "summary": "F1の規則変更が正式承認。パワーユニットの出力比は2年間で段階的に「エンジン60％：電動40％」に - motorsport.com 日本版｜モータースポーツ情報サイト。パワーユニットの出力比は2年間で段階的に「エンジン60％：電動40％」に motorsport.com 日本版｜モータースポーツ情報サイト。",
+          "title": "F1規則変更を正式承認、出力比は段階的にエンジン60％・電動40％へ",
+          "summary": "F1の規則変更が正式承認され、パワーユニットの出力比は2年間で段階的にエンジン60％、電動40％へ移る。2026年以降の技術競争とチーム開発計画に影響する変更として重要だ。",
           "sources": [
             "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNSDI2RHVxUE5ONkZmbHVYYUp2QjNfV1d6YXhudlV3aGNEeHJORng0QUZSZ0ZnZ0ktR0tJUEJ2N0JSX3pYUHlUYjRnbGh2TF8waVM1NGdTbUZFM2hvUEI3T056aDg4dnFDTEkzWHRiSDRyRXV0VFhFTm9qR0E3cWxoUUVHRGQ0V19nRkg4?oc=5"
           ],
@@ -1499,14 +1499,14 @@
       ],
       "freshness_check": "2026-06-24 JSTの直近3日を基準に照合",
       "published_card_titles": [
-        "SpaceXは16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を見込む - TradingKey",
-        "SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました - CoinDesk",
-        "SpaceX corrected post-IPO as market highlights risks and liquidity - IDNFinancials.com"
+        "SpaceX株、急落後に反発 Oppenheimerは上昇余地を指摘",
+        "SpaceX急落、3日で6000億ドル規模の価値減少との試算",
+        "SpaceX、IPO後に調整 市場はリスクと流動性を注視"
       ],
       "new_or_changed_items": [
         {
-          "title": "SpaceXは16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を見込む - TradingKey",
-          "summary": "SpaceXは16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を見込む - TradingKey。オッペンハイマーは同社株に58%の上昇余地を見込む TradingKey。",
+          "title": "SpaceX株、急落後に反発 Oppenheimerは上昇余地を指摘",
+          "summary": "SpaceX株は16％急落後に反発し、Oppenheimerは同社株に58％の上昇余地があるとの見方を示した。市場評価が大きく振れており、IPO後の成長期待とリスクの見方が分かれている。",
           "sources": [
             "https://news.google.com/rss/articles/CBMiygFBVV95cUxOaXROQkwyc3U5eTc4aVNJQ29PX3BfQmNnVU02Ul9jb1haN09uY0VYUXVhSVNfX3lqSGlITkdiOXlpXy1sbE1heHhxcVNoVWhEWm5uZzUzLWFPZlRUT25DeVVmQnBmZjlIbHJ4WmF3UUxwQXJKSG4tNHZfVDNlM0tYa05jeDNqMkltcTl4ajZWZkpNLUxBLU4xV1l1QWFBdEtSWm93TmtBaHp3aS0yZmQ5YlQ2RS1BdlVnSmNwV1RsNkNtX2VHcXFfSDJ3?oc=5"
           ],
@@ -1519,8 +1519,8 @@
           ]
         },
         {
-          "title": "SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました - CoinDesk",
-          "summary": "SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました - CoinDesk。SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました CoinDesk。",
+          "title": "SpaceX急落、3日で6000億ドル規模の価値減少との試算",
+          "summary": "SpaceXの市場評価をめぐり、短期間で極めて大きな価値減少が起きたとの試算が報じられた。成長期待が強い企業でも、上場後の売買環境、資金調達条件、投資家心理が価格を大きく動かす局面に入っている。",
           "sources": [
             "https://news.google.com/rss/articles/CBMiyAFBVV95cUxNU1NaYVJ6dUJpdnRDWXlXLXo5M1BtOXNOUEZnN05VZHMtRVpKQW4yWUZVSlpzMUJacUx3VDQtd3hlNEFrYVBSeWJuTV83X0E0Nk9Qck50bmNjZk9zMkV1MjA5WlVXbkVLdFdyNnBOWms0RkRuR3poSUVQMlZ0VDRFaEdZOVNNYWdGUi0ydU1PYmdRenB6S29XQURDVnU2dENEdlE1dHlhcTJJcWFfX3VISDRYTDRfaHpoQzQzc2R2Z2gxYmw1X0xPMw?oc=5"
           ],
@@ -1533,8 +1533,8 @@
           ]
         },
         {
-          "title": "SpaceX corrected post-IPO as market highlights risks and liquidity - IDNFinancials.com",
-          "summary": "SpaceX corrected post-IPO as market highlights risks and liquidity - IDNFinancials.com。SpaceX corrected post-IPO as market highlights risks and liquidity IDNFinancials.com。",
+          "title": "SpaceX、IPO後に調整 市場はリスクと流動性を注視",
+          "summary": "SpaceXはIPO後に株価調整が入り、市場ではリスクと流動性が焦点になっている。成長期待だけでなく、上場後の売買環境や資金調達条件をどう評価するかが問われている。",
           "sources": [
             "https://news.google.com/rss/articles/CBMitwFBVV95cUxNSldCbERyQjhYdUZ1YVBORi1JNUYwOWxTZ0NmM0tpTEYxQU41Z05qZUVOdzBJRV9nV01xR0hlWVFkSnRWZ29fdTVNVXVZZnpTQlE1QnR4Smw4TjVhTEVHblhmVnpVaXBZcXoyRHFHRnNFNE93SWtheG5mTUsxYS1tRmNUbDVfZmVraDZNdjdWc0hoZ2ZiQWQzLU1qTFJtNVFLT2owcTZ1OTd3UEVDblRqRUZWWXRSOXM?oc=5"
           ],
@@ -2715,12 +2715,12 @@
       ],
       "freshness_check": "2026-06-24 JSTの直近3日を基準に照合",
       "published_card_titles": [
-        "【宇都宮ブレックス】新アリーナ、2.8万㎡ 30年開業 - 建設通信新聞Digital"
+        "宇都宮ブレックス新アリーナ、延べ2.8万㎡で2030年開業へ"
       ],
       "new_or_changed_items": [
         {
-          "title": "【宇都宮ブレックス】新アリーナ、2.8万㎡ 30年開業 - 建設通信新聞Digital",
-          "summary": "【宇都宮ブレックス】新アリーナ、2.8万㎡ 30年開業 - 建設通信新聞Digital。【宇都宮ブレックス】新アリーナ、2.8万㎡ 30年開業 建設通信新聞Digital。",
+          "title": "宇都宮ブレックス新アリーナ、延べ2.8万㎡で2030年開業へ",
+          "summary": "宇都宮ブレックスの新アリーナ計画について、延べ2.8万㎡規模で2030年開業を目指す内容が報じられた。クラブの興行基盤や地域開発に関わる長期計画として重要な材料になる。",
           "sources": [
             "https://news.google.com/rss/articles/CBMiV0FVX3lxTE9CQjQwZmFQYWg0TjZtSUdSZ1VpV0pISWlmakFWMFZPMUVRNzNXQTlWQk9xMGk3M05CT2xVb1JlNl9fMm13MDRwa0ZhdEV1N0cwZENpU0Radw?oc=5"
           ],
