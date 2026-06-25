@@ -183,7 +183,7 @@
           "url": "https://www.axios.com/technology/artificial-intelligence",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Axios AIをJina Reader mirrorで取得し、ページ「Title: Just a moment... URL Source: http://www.axios.com/technology/artificial-intelligence Warning: This page maybe requiring CAPTCHA, please make sure you are authorized to acces」の本文を確認した。抽出内容: Title: Just a moment... URL Source: http://www.axios.com/technology/artificial-intelligence Warning: This page maybe requiring CAPTCHA, please make sure you are authorized to access this page. Markdown Content: ![Image 1: Icon for www.axios.com](https://www.axios.com/favicon.ico) ## www.axios.com ## Performing security",
+          "evidence_summary": "Axios AIをJina Reader mirrorで取得し、ページ「Title: 404 | Page Not Found URL Source: http://www.axios.com/technology/artificial-intelligence Published Time: Wed, 10 Sep 2025 21:05:01 GMT Markdown Content: Manage your tracker 」の本文を確認した。抽出内容: Title: 404 | Page Not Found URL Source: http://www.axios.com/technology/artificial-intelligence Published Time: Wed, 10 Sep 2025 21:05:01 GMT Markdown Content: Manage your tracker preferences We use cookies and similar tracking technologies to remember preferences, analyze traffic, and deliver ads. Using some kinds of ",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -202,7 +202,7 @@
           "url": "https://apnews.com/hub/technology",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "AP Technologyをdirectで取得し、ページ「Technology: Latest Tech News Articles Today | AP News」の本文を確認した。抽出内容: Technology: Latest Tech News Articles Today | AP News Menu World SECTIONS Iran war Russia-Ukraine war Español China Asia Pacific Latin America Europe Africa TOP STORIES Back-to-back powerful earthquakes hit Venezuela, causing widespread damage Ukraine’s latest long-range strikes on Russia hit a major natural gas plant ",
+          "evidence_summary": "AP Technologyをdirectで取得し、ページ「Technology: Latest Tech News Articles Today | AP News」の本文を確認した。抽出内容: Technology: Latest Tech News Articles Today | AP News Menu World SECTIONS Iran war Russia-Ukraine war Español China Asia Pacific Latin America Europe Africa TOP STORIES Back-to-back powerful earthquakes hit Venezuela, causing widespread damage Twin earthquakes strike Venezuela, in photos A powerful 7.2 magnitude earthq",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -259,7 +259,7 @@
           "url": "https://x.com/OpenAI",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "OpenAI XをJina Reader mirrorで取得し、ページ「Title: OpenAI (@OpenAI) on X URL Source: http://x.com/OpenAI Markdown Content: [](http://x.com/) [](http://x.com/) [Log in](http://x.com/i/jf/onboarding/web?mode=login)[Sign up](ht」の本文を確認した。抽出内容: Title: OpenAI (@OpenAI) on X URL Source: http://x.com/OpenAI Markdown Content: [](http://x.com/) [](http://x.com/) [Log in](http://x.com/i/jf/onboarding/web?mode=login)[Sign up](http://x.com/i/jf/onboarding/web?mode=signup) OpenAI 1,935 posts [![Image 3](https://pbs.twimg.com/profile_banners/4398626122/1777662919)](htt",
+          "evidence_summary": "OpenAI Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/OpenAIに限定したBing RSS検索を確認した。検索語: site:x.com/OpenAI \"OpenAI X\"。検索結果: OpenAI | Research & Deployment / https://openai.com/ / We believe our research will eventually lead to artificial general intelligence, a system that can solve human-level problems. Building safe and beneficial AGI is our mission. ChatGPT / https://chatgpt.com/ / Chat with the most advanced AI to explore ideas, solve problems, and learn faster. OpenAI - Wikipedia / https://en.wikipedia.org/wiki/OpenAI / OpenAI is an American artificial intelligence (AI) research organization headquartered in San",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -278,7 +278,7 @@
           "url": "https://x.com/OpenAIDevs",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "OpenAI Developers XをJina Reader mirrorで取得し、ページ「Title: OpenAI Developers (@OpenAIDevs) on X URL Source: http://x.com/OpenAIDevs Markdown Content: [](http://x.com/) [](http://x.com/) [Log in](http://x.com/i/jf/onboarding/web?mode」の本文を確認した。抽出内容: Title: OpenAI Developers (@OpenAIDevs) on X URL Source: http://x.com/OpenAIDevs Markdown Content: [](http://x.com/) [](http://x.com/) [Log in](http://x.com/i/jf/onboarding/web?mode=login)[Sign up](http://x.com/i/jf/onboarding/web?mode=signup) OpenAI Developers [![Image 1: OpenAI](https://pbs.twimg.com/profile_images/18",
+          "evidence_summary": "OpenAI Developers Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/OpenAIDevsに限定したBing RSS検索を確認した。検索語: site:x.com/OpenAIDevs \"OpenAI Developers X\"。検索結果: OpenAI | Research & Deployment / https://openai.com/ / We believe our research will eventually lead to artificial general intelligence, a system that can solve human-level problems. Building safe and beneficial AGI is our mission. ChatGPT / https://chatgpt.com/ / Chat with the most advanced AI to explore ideas, solve problems, and learn faster. OpenAI - Wikipedia / https://en.wikipedia.org/wiki/OpenAI / OpenAI is an American artificial intelligence (AI) research organization headquartered in San",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -297,7 +297,7 @@
           "url": "https://www.instagram.com/openai/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "OpenAI Instagramの直取得とReader取得が利用できなかったため、登録ソースhttps://www.instagram.com/openai/に限定したBing RSS検索を確認した。検索語: site:www.instagram.com/openai \"OpenAI Instagram\"。検索結果: Conversation modes in Microsoft Copilot / https://support.microsoft.com/en-us/microsoft-copilot/conversation-modes-in-microsoft-copilot / Microsoft Copilot offers multiple conversation modes. Each mode is designed to help users get better responses to complex questions using different AI models. Welcome to Copilot in Word | Microsoft Support / https://support.microsoft.com/en-us/word/welcome-to-copilot-in-word / Copilot in Word ushers in a new era of writing, leveraging the power of AI. Check ou",
+          "evidence_summary": "OpenAI Instagramの直取得とReader取得が利用できなかったため、登録ソースhttps://www.instagram.com/openai/に限定したBing RSS検索を確認した。検索語: site:www.instagram.com/openai \"OpenAI Instagram\"。検索結果: OpenAI | Research & Deployment / https://openai.com/ / We believe our research will eventually lead to artificial general intelligence, a system that can solve human-level problems. Building safe and beneficial AGI is our mission. ChatGPT / https://chatgpt.com/ / Chat with the most advanced AI to explore ideas, solve problems, and learn faster. OpenAI - Wikipedia / https://en.wikipedia.org/wiki/OpenAI / OpenAI is an American artificial intelligence (AI) research organization headquartered in San",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -350,11 +350,11 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "株式会社エクサウィザーズ",
-          "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1RVHk5ekg5LU4xRWg3cmppeG4xZkNYZC03alBzUkZoS2Vab3ZrV3B4X2ZrdGg1OGxBbUxtQ203T3E5SlJZY0ZLTkVCWXV3Q3ppdWptQUQtR0Nqb1I1UzRjaElfM2lmb2N3?oc=5",
+          "label": "ビジネス+IT",
+          "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE51bG5md1A0U2NfcGRkVm5DLTNCMzZEdDl2MUY5SkdNa0JMQ0MySThrOGs2bGlrMlNBV1RuODg1aXRkX0tEdGNrbk42VzVqUmNhOTNz?oc=5",
           "slot_state": "observed_live",
           "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSで「OpenAIの自社チップで、AIと半導体の自己改善ループが始まった - 株式会社エクサウィザーズ」を確認した。配信元は株式会社エクサウィザーズ、配信日は2026-06-25。",
+          "evidence_summary": "Google News RSSで「OpenAIがサイバー防御特化AI「GPT-5.5-Cyber」を強化、一部防御性能がMythosを上回る - ビジネス+IT」を確認した。配信元はビジネス+IT、配信日は2026-06-25。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -369,11 +369,11 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "ビジネス+IT",
-          "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE51bG5md1A0U2NfcGRkVm5DLTNCMzZEdDl2MUY5SkdNa0JMQ0MySThrOGs2bGlrMlNBV1RuODg1aXRkX0tEdGNrbk42VzVqUmNhOTNz?oc=5",
+          "label": "株式会社エクサウィザーズ",
+          "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBsdUJOX2Z0WGdJTVA2YkxWcFpzQVNEdXZNUTFpYTZtSmNYdzdQZEFjYnVOVk0wQ09HTmZhRVhtSGtWTTZHZlhpeVMyWHl3MEZmYWlpVTZXYXI3OG5xMVItWmVvd1RGT00?oc=5",
           "slot_state": "observed_live",
           "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSで「OpenAIがサイバー防御特化AI「GPT-5.5-Cyber」を強化、一部防御性能がMythosを上回る - ビジネス+IT」を確認した。配信元はビジネス+IT、配信日は2026-06-25。",
+          "evidence_summary": "Google News RSSで「OpenAIの自社チップで、AIと半導体の自己改善ループが始まった - 株式会社エクサウィザーズ」を確認した。配信元は株式会社エクサウィザーズ、配信日は2026-06-25。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -407,25 +407,6 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "Yahoo!ニュース",
-          "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE85MzV2VVlFbWtsYnNncjNWTmhvSl9FNlZNU1h2aTkyVllsMk83bE5vbTdJc090WnVmbjQyU0hfTzdEMnUwMDRKRHc2UWpPeHRaM1BfMWJObkpDdmQ0UnNqU3VkOVJ3VHBGRWVnNVQ0Wi03SExTMkZ0TXJHeHg2Y00?oc=5",
-          "slot_state": "observed_live",
-          "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSで「OpenAI、「GPT-5.5 Instant」をアップデート 会話の文脈維持や箇条書き減など「読みやすさ」を改善（ITmedia NEWS） - Yahoo!ニュース」を確認した。配信元はYahoo!ニュース、配信日は2026-06-25。",
-          "checked_at_jst": "2026-06-24T23:59:59+09:00",
-          "verification_method": "reviewed_live_web"
-        },
-        {
-          "watch_topic_ids": [
-            "ipo_financing",
-            "math_research",
-            "product_release",
-            "enterprise_infrastructure",
-            "safety_security_regulation",
-            "strategic_talent_japan_gtm"
-          ],
-          "source_role": "independent_media_or_data",
-          "channel": "web",
           "label": "CNET Japan",
           "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFBJcnc4YmFzbWxSLTVENllxRzQ5dFlkOGlZeHVpa3REYktFT3hOei11UjJNT3l4WUh0eEFhenM4WlBrUUk3NnM0NTNoTkg4MmdTZnc?oc=5",
           "slot_state": "observed_live",
@@ -445,11 +426,30 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "ビジネスネットワーク",
-          "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTFA5Z3BMRkNlUk16amRpN2IxVjJvdFVJRkRiNlRPWFI2NU13SVNvckl3SC1yUVFuOVgya1ZwbTdENHJOWTZ0N1FsMG56SjJ4MnQ1dlhF?oc=5",
+          "label": "Yahoo!ニュース",
+          "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE85MzV2VVlFbWtsYnNncjNWTmhvSl9FNlZNU1h2aTkyVllsMk83bE5vbTdJc090WnVmbjQyU0hfTzdEMnUwMDRKRHc2UWpPeHRaM1BfMWJObkpDdmQ0UnNqU3VkOVJ3VHBGRWVnNVQ0Wi03SExTMkZ0TXJHeHg2Y00?oc=5",
           "slot_state": "observed_live",
           "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSで「AIエージェントを加速する「AWS×OpenAI」の3要素とは AWS Summit Japan 2026基調講演 - ビジネスネットワーク」を確認した。配信元はビジネスネットワーク、配信日は2026-06-25。",
+          "evidence_summary": "Google News RSSで「OpenAI、「GPT-5.5 Instant」をアップデート 会話の文脈維持や箇条書き減など「読みやすさ」を改善（ITmedia NEWS） - Yahoo!ニュース」を確認した。配信元はYahoo!ニュース、配信日は2026-06-25。",
+          "checked_at_jst": "2026-06-24T23:59:59+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation",
+            "strategic_talent_japan_gtm"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "IBM Japan Newsroom",
+          "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxNcmZDRXQ0NDdPOTNjLXVtWlJCeEhReUhMUnlRRHh5Wnl4cXpHOW5QUmtLa2w1MzZwYmRKS3cyZ0NJZGEyNlhiY0RHTm9KOFZMdWk4WE9sR1JGbGhPeGZOMGttUjV5Q2RtS1ZTa3RGVnRncGxwOGZocVUyZUsyd2FOcXREZTRaVUpaaHhUazZTWF8tWjdtWlFHdDBWam9aTm5oNWdEVGlfMzNzWVYwQVpaV2xsY0dnU0k2TUhkd1NZbndPSGdRSUs1SzBzWHkzamJvRmdwN1E4NGxlWlNCOVE?oc=5",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-25",
+          "evidence_summary": "Google News RSSで「IBMとOpenAI、最先端のフロンティアAIをサイバー防御に導入し、企業がマシン速度の脅威に対応できるよう支援 - IBM Japan Newsroom」を確認した。配信元はIBM Japan Newsroom、配信日は2026-06-25。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -502,11 +502,11 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "Darktrace",
-          "url": "https://news.google.com/rss/articles/CBMiigJBVV95cUxNbnF1QnFHNHZ3Nk5tbXNBS2xNWVdPTFZ4bFJTUXhBU2dFd2Y1dkUwRUtJVzNDbkRLRzU4WGRxUHJTMnpVT3kwSERwRDVCS0dtTUJGckM3NzBhMHpjN0Q5RHNybDN4enNJT2JhMVFFZlZNOUViVUxsQ3l4QkxSQ1pKRFRBeHcwSXpjOEl2bS1HUTZKVnNhWUUtQWpKLXRGR2laYkJvMzBMZEdCcnZKTERKQ0g4eGhKbG9UWXBYWmZOZWVoMVEwUjNzTWMwZjlIWldKUmhVelZDekU3QVk0eVNVWWJ4SlMzV0t1R3hka2hPYlNRRDRGZ0w2ZDVYaFVVOThKTnVfdjl1dmlSQQ?oc=5",
+          "label": "PlusWeb3",
+          "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFB5cmk0VXJ5Q0ZONHk5dFdaV3VwbDljQUFrTnZ1Q2RyeldORHVhVm1oVWg3YXd5d3hCRzhMU3lBZHQyRHhMVFJRa1BDZDMwRlp1VDB0TTVoMW5EWUhtb1E?oc=5",
           "slot_state": "observed_live",
-          "published_date": "2026-06-23",
-          "evidence_summary": "Google News RSSで「Darktrace Joins the OpenAI Daybreak Cyber Partner Program to Explore Defensive AI Integrations - Darktrace」を確認した。配信元はDarktrace、配信日は2026-06-23。",
+          "published_date": "2026-06-25",
+          "evidence_summary": "Google News RSSで「OpenAIがサイバー防衛「Daybreak」を強化 脆弱性修正を発見からパッチ適用まで高速化 - PlusWeb3」を確認した。配信元はPlusWeb3、配信日は2026-06-25。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -635,11 +635,11 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "株式会社エクサウィザーズ 媒体ページ",
-          "url": "https://exawizards.com",
+          "label": "ビジネス+IT 媒体ページ",
+          "url": "https://www.sbbit.jp",
           "slot_state": "observed_live",
           "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSのsource属性から、株式会社エクサウィザーズの媒体URLhttps://exawizards.comを確認した。",
+          "evidence_summary": "Google News RSSのsource属性から、ビジネス+ITの媒体URLhttps://www.sbbit.jpを確認した。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -654,11 +654,11 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "ビジネス+IT 媒体ページ",
-          "url": "https://www.sbbit.jp",
+          "label": "株式会社エクサウィザーズ 媒体ページ",
+          "url": "https://exawizards.com",
           "slot_state": "observed_live",
           "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSのsource属性から、ビジネス+ITの媒体URLhttps://www.sbbit.jpを確認した。",
+          "evidence_summary": "Google News RSSのsource属性から、株式会社エクサウィザーズの媒体URLhttps://exawizards.comを確認した。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -692,25 +692,6 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "Yahoo!ニュース 媒体ページ",
-          "url": "https://news.yahoo.co.jp",
-          "slot_state": "observed_live",
-          "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSのsource属性から、Yahoo!ニュースの媒体URLhttps://news.yahoo.co.jpを確認した。",
-          "checked_at_jst": "2026-06-24T23:59:59+09:00",
-          "verification_method": "reviewed_live_web"
-        },
-        {
-          "watch_topic_ids": [
-            "ipo_financing",
-            "math_research",
-            "product_release",
-            "enterprise_infrastructure",
-            "safety_security_regulation",
-            "strategic_talent_japan_gtm"
-          ],
-          "source_role": "independent_media_or_data",
-          "channel": "web",
           "label": "CNET Japan 媒体ページ",
           "url": "https://japan.cnet.com",
           "slot_state": "observed_live",
@@ -730,11 +711,30 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "ビジネスネットワーク 媒体ページ",
-          "url": "https://businessnetwork.jp",
+          "label": "Yahoo!ニュース 媒体ページ",
+          "url": "https://news.yahoo.co.jp",
           "slot_state": "observed_live",
           "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSのsource属性から、ビジネスネットワークの媒体URLhttps://businessnetwork.jpを確認した。",
+          "evidence_summary": "Google News RSSのsource属性から、Yahoo!ニュースの媒体URLhttps://news.yahoo.co.jpを確認した。",
+          "checked_at_jst": "2026-06-24T23:59:59+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "ipo_financing",
+            "math_research",
+            "product_release",
+            "enterprise_infrastructure",
+            "safety_security_regulation",
+            "strategic_talent_japan_gtm"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "IBM Japan Newsroom 媒体ページ",
+          "url": "https://jp.newsroom.ibm.com",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-25",
+          "evidence_summary": "Google News RSSのsource属性から、IBM Japan Newsroomの媒体URLhttps://jp.newsroom.ibm.comを確認した。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -787,11 +787,11 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "Darktrace 媒体ページ",
-          "url": "https://www.darktrace.com",
+          "label": "PlusWeb3 媒体ページ",
+          "url": "https://plus-web3.com",
           "slot_state": "observed_live",
-          "published_date": "2026-06-23",
-          "evidence_summary": "Google News RSSのsource属性から、Darktraceの媒体URLhttps://www.darktrace.comを確認した。",
+          "published_date": "2026-06-25",
+          "evidence_summary": "Google News RSSのsource属性から、PlusWeb3の媒体URLhttps://plus-web3.comを確認した。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -876,7 +876,78 @@
     },
     "SoftBank": {
       "items": [],
-      "signals": [],
+      "signals": [
+        {
+          "watch_topic_id": "ai_infrastructure",
+          "title": "ソフトバンク、2027年度より国産AIサーバーとバッテリー製造を開始予定",
+          "summary": "ソフトバンクは堺工場跡地で2027年度から国産AIサーバーとバッテリーの製造を開始する計画を発表した。ソフトバンク、27年度より国産AIサーバーとバッテリー製造、堺工場跡地で ビジネス+IT。",
+          "source_published_date": "2026-06-24",
+          "source_url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE8tZ3pHQ25sX2hpWjFjWDZtbVVFaFI3dF9XR3Npc2FYR1hRSTAwZ1ZOdlBwczctUFpfOFdnUGlFaVQxSGg2YWR4cXFrSlViS3RncUNV?oc=5",
+          "source_label": "ビジネス+IT",
+          "change_class": "new_event",
+          "rejection_reason_class": "insufficient_evidence",
+          "rejection_reason": "具体的な生産開始時期は示されているが、詳細な影響や規模が不明。",
+          "topic_value_class": "material_schedule_change",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "ai_infrastructure",
+          "title": "孫正義会長、AIで「世界一に」 ソフトバンクGが株主総会（朝日新聞） - Yahoo!ニュース",
+          "summary": "孫正義会長、AIで「世界一に」 ソフトバンクGが株主総会（朝日新聞） - Yahoo!ニュース。孫正義会長、AIで「世界一に」 ソフトバンクGが株主総会（朝日新聞） Yahoo!",
+          "source_published_date": "2026-06-24",
+          "source_url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBOYVA3Q3BRbjFEc0F5MWtpaTlTdTdQTGFPbWp6RHIxSzdzYk9aYkNnOGpuT2E5YkNtZzRyeDR0TTdQYkt0SnkwbnlrbDJKWXhYX3g3RVBRUF9naUkzVWVwQjNoSlBQSktvck5SM1AyRmtpUmE0Nkc5UHc3aXQ3TVU?oc=5",
+          "source_label": "Yahoo!ニュース",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "関連情報として確認したが、記事化に必要な具体的な変化は限定的なため候補として保持する。",
+          "topic_value_class": "operational_status_change",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "market_price_nav",
+          "title": "ソフトバンクＧ、フィジカルＡＩがロボット量産開始 東電出資に孫会長言及 - Reuters",
+          "summary": "ソフトバンクＧ、フィジカルＡＩがロボット量産開始 東電出資に孫会長言及 - Reuters。ソフトバンクＧ、フィジカルＡＩがロボット量産開始 東電出資に孫会長言及 Reuters。",
+          "source_published_date": "2026-06-24",
+          "source_url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPOHo0WTl6RWNRb182RmQtbEYwUl8wWndSY1Y3N085eWdZNFd3OXNfejdNX0tveDN6RXI1SnJDa1BHUlZUMno2MXFoNFdrd3NGZEtSbGViVFBCSFAyMWt4QVdqQVdZdlZ5R3NvM0FlZ2hXWVlJZnFJZ3EtdEJhN21tQ1FYdno2ckh4RnlPUQ?oc=5",
+          "source_label": "Reuters",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "関連情報として確認したが、記事化に必要な具体的な変化は限定的なため候補として保持する。",
+          "topic_value_class": "operational_status_change",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "ai_infrastructure",
+          "title": "ソフトバンク、27年度より国産AIサーバーとバッテリー製造、堺工場跡地で - ビジネス+IT",
+          "summary": "ソフトバンク、27年度より国産AIサーバーとバッテリー製造、堺工場跡地で - ビジネス+IT。ソフトバンク、27年度より国産AIサーバーとバッテリー製造、堺工場跡地で ビジネス+IT。",
+          "source_published_date": "2026-06-24",
+          "source_url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE8tZ3pHQ25sX2hpWjFjWDZtbVVFaFI3dF9XR3Npc2FYR1hRSTAwZ1ZOdlBwczctUFpfOFdnUGlFaVQxSGg2YWR4cXFrSlViS3RncUNV?oc=5",
+          "source_label": "ビジネス+IT",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "関連情報として確認したが、記事化に必要な具体的な変化は限定的なため候補として保持する。",
+          "topic_value_class": "operational_status_change",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "ai_infrastructure",
+          "title": "ソフトバンクG、3年ぶり取締役交代 AI･ロボ見据えコマツ前会長起用 - 日本経済新聞",
+          "summary": "ソフトバンクG、3年ぶり取締役交代 AI･ロボ見据えコマツ前会長起用 - 日本経済新聞。ソフトバンクG、3年ぶり取締役交代 AI･ロボ見据えコマツ前会長起用 日本経済新聞。",
+          "source_published_date": "2026-06-24",
+          "source_url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9UMmxBZk5iX2RlYzJjS082ekYwVUFfQWZlU09DWklvNkZBbzN6WkpmWEpQZ1VNMTFGaWRKWWZEb3JrZFI0ZXAyLTctS3VLbTBOTWRtN1VJVnFRbGpILUNQdWR4YXhVVGlWeDV3MA?oc=5",
+          "source_label": "日本経済新聞",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "関連情報として確認したが、記事化に必要な具体的な変化は限定的なため候補として保持する。",
+          "topic_value_class": "operational_status_change",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        }
+      ],
       "source_checks": [
         {
           "watch_topic_ids": [
@@ -964,7 +1035,7 @@
           "url": "https://www.nikkei.com/search?keyword=%E3%82%BD%E3%83%95%E3%83%88%E3%83%90%E3%83%B3%E3%82%AF%E3%82%B0%E3%83%AB%E3%83%BC%E3%83%97",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Nikkei SoftBank searchをJina Reader mirrorで取得し、ページ「Title: 検索 - 日本経済新聞 URL Source: http://www.nikkei.com/search?keyword=%E3%82%BD%E3%83%95%E3%83%88%E3%83%90%E3%83%B3%E3%82%AF%E3%82%B0%E3%83%AB%E3%83%BC%E3%83%97 Published Time: Tue, 」の本文を確認した。抽出内容: Title: 検索 - 日本経済新聞 URL Source: http://www.nikkei.com/search?keyword=%E3%82%BD%E3%83%95%E3%83%88%E3%83%90%E3%83%B3%E3%82%AF%E3%82%B0%E3%83%AB%E3%83%BC%E3%83%97 Published Time: Tue, 03 Mar 2026 03:34:38 GMT Markdown Content: 話題のトピック * [#イラン軍事衝突](https://www.nikkei.com/theme/?dw=19061400) * [#ナフサ高騰](https://www.nikkei.com",
+          "evidence_summary": "Nikkei SoftBank searchをJina Reader mirrorで取得し、ページ「Title: 検索 - 日本経済新聞 URL Source: http://www.nikkei.com/search?keyword=%E3%82%BD%E3%83%95%E3%83%88%E3%83%90%E3%83%B3%E3%82%AF%E3%82%B0%E3%83%AB%E3%83%BC%E3%83%97 Markdown Content: 話題の」の本文を確認した。抽出内容: Title: 検索 - 日本経済新聞 URL Source: http://www.nikkei.com/search?keyword=%E3%82%BD%E3%83%95%E3%83%88%E3%83%90%E3%83%B3%E3%82%AF%E3%82%B0%E3%83%AB%E3%83%BC%E3%83%97 Markdown Content: 話題のトピック * [#イラン軍事衝突](https://www.nikkei.com/theme/?dw=19061400) * [#ナフサ高騰](https://www.nikkei.com/theme/?dw=26040700) - [x] [トップ](https://www.n",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -982,7 +1053,7 @@
           "url": "https://x.com/SoftBank_Group",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "SoftBank Group XをJina Reader mirrorで取得し、ページ「Title: ソフトバンクグループ株式会社 | SoftBank Group Corp. (@SoftBank_Group) on X URL Source: http://x.com/SoftBank_Group Markdown Content: [](http://x.com/) [](http://x.com/) [Log in](http://x.」の本文を確認した。抽出内容: Title: ソフトバンクグループ株式会社 | SoftBank Group Corp. (@SoftBank_Group) on X URL Source: http://x.com/SoftBank_Group Markdown Content: [](http://x.com/) [](http://x.com/) [Log in](http://x.com/i/jf/onboarding/web?mode=login)[Sign up](http://x.com/i/jf/onboarding/web?mode=signup) ソフトバンクグループ株式会社 | SoftBank Group Corp. 6,439 posts",
+          "evidence_summary": "SoftBank Group Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/SoftBank_Groupに限定したBing RSS検索を確認した。検索語: site:x.com/SoftBank_Group \"SoftBank Group X\"。検索結果: SoftBank Group - Wikipedia / https://en.wikipedia.org/wiki/SoftBank_Group / SoftBank Corporation, its spun-out affiliate and former flagship business, is the third-largest wireless carrier in Japan, with 45.621 million subscribers as of March 2021. [24] SoftBank was ranked in the 2025 Forbes Global 2000 list as the 130th largest public company in the world. [25] SoftBank / https://www.softbank.jp/en/ / SoftBank's official homepage provides information on mobile (smartphone, mobile phone, tablet,",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -1000,7 +1071,7 @@
           "url": "https://www.facebook.com/SoftBankGroupCorp/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "SoftBank Group FacebookをJina Reader mirrorで取得し、ページ「Title: SoftBank Group Corp. | Minato-ku Tokyo URL Source: http://www.facebook.com/SoftBankGroupCorp/ Markdown Content: [Log In](https://www.facebook.com/login/device-based/regular/」の本文を確認した。抽出内容: Title: SoftBank Group Corp. | Minato-ku Tokyo URL Source: http://www.facebook.com/SoftBankGroupCorp/ Markdown Content: [Log In](https://www.facebook.com/login/device-based/regular/login/?login_attempt=1&next=https%3A%2F%2Fwww.facebook.com%2FSoftBankGroupCorp%2F) Log In [Forgot Account?](https://www.facebook.com/recover",
+          "evidence_summary": "SoftBank Group FacebookをJina Reader mirrorで取得し、ページ「Title: Facebook URL Source: http://www.facebook.com/SoftBankGroupCorp/ Markdown Content: Explore the things you love. Log into Facebook Email or mobile number Password - [x] Log in」の本文を確認した。抽出内容: Title: Facebook URL Source: http://www.facebook.com/SoftBankGroupCorp/ Markdown Content: Explore the things you love. Log into Facebook Email or mobile number Password - [x] Log in [Forgot password?](https://www.facebook.com/recover/initiate/?privacy_mutation_token=eyJ0eXBlIjo1LCJjcmVhdGlvbl90aW1lIjoxNzgyMzkzNTA0fQ%3D%",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -1018,7 +1089,7 @@
           "url": "https://www.youtube.com/user/SoftBankCorp",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "SoftBank Group YouTubeをJina Reader mirrorで取得し、ページ「Title: SoftBank Group URL Source: http://www.youtube.com/user/SoftBankCorp Warning: Target URL returned error 403: Forbidden Warning: This page contains iframe that are currently h」の本文を確認した。抽出内容: Title: SoftBank Group URL Source: http://www.youtube.com/user/SoftBankCorp Warning: Target URL returned error 403: Forbidden Warning: This page contains iframe that are currently hidden, consider enabling iframe processing. Warning: This page maybe requiring CAPTCHA, please make sure you are authorized to access this p",
+          "evidence_summary": "SoftBank Group YouTubeをJina Reader mirrorで取得し、ページ「Title: SoftBank Group URL Source: http://www.youtube.com/user/SoftBankCorp Warning: Target URL returned error 403: Forbidden Warning: This page maybe requiring CAPTCHA, please make」の本文を確認した。抽出内容: Title: SoftBank Group URL Source: http://www.youtube.com/user/SoftBankCorp Warning: Target URL returned error 403: Forbidden Warning: This page maybe requiring CAPTCHA, please make sure you are authorized to access this page. Markdown Content: Back [![Image 1](http://www.youtube.com/user/SoftBankCorp)](https://www.yout",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -1068,11 +1139,11 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "ソフトバンク",
-          "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE9vN2E0LS1iZTdNc0JDYnJHSEhqMUtLWXlCbnAtdWVqaVZUR09WcEJNVHJJeVFYS21Lc25EYmxmSEplRDZRbVIxMzRmQzNaa3lKcGxTd3hJcGpfbEJu?oc=5",
+          "label": "朝日新聞",
+          "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1ma3VUSk9RWUU0QjZtRDc0WDdGSk5FWHJ3Mk9mU2pGWlQ4aGVoYWxrSmdySExZU2tVRFMwN2xaMk5HNEpGZjIwbm8xR1R1NnE0R1JkRTVhVE5mQzd5azRGY1IzdTlrQnM?oc=5",
           "slot_state": "observed_live",
           "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSで「進化するAIとセキュリティ。専門家と語る、ソフトバンクhttps://f.hatena.ne.jp/my/のAIガバナンス #1 - ソフトバンク」を確認した。配信元はソフトバンク、配信日は2026-06-25。",
+          "evidence_summary": "Google News RSSで「ソフトバンクG孫正義氏、AIで「世界一に」「引退するヒマない」 - 朝日新聞」を確認した。配信元は朝日新聞、配信日は2026-06-25。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -1086,11 +1157,11 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "Yahoo!ファイナンス",
-          "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE9DZkVwWjE1QUxJT001ekM0SkZLSDQwRTZ3c2JJU1VocDJuQTFoU1Fsb25ySWJWRHpSbHc2a19vdEhnS3NtdkVfeGVTc3FxWVZqbDhENmRGZFB5X1puX24w?oc=5",
+          "label": "ソフトバンク",
+          "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE9vN2E0LS1iZTdNc0JDYnJHSEhqMUtLWXlCbnAtdWVqaVZUR09WcEJNVHJJeVFYS21Lc25EYmxmSEplRDZRbVIxMzRmQzNaa3lKcGxTd3hJcGpfbEJu?oc=5",
           "slot_state": "observed_live",
           "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSで「ソフトバンクグループ(株)【9984】：今の株価の理由は？値動きの背景をAIが解説 - Yahoo!ファイナンス」を確認した。配信元はYahoo!ファイナンス、配信日は2026-06-25。",
+          "evidence_summary": "Google News RSSで「進化するAIとセキュリティ。専門家と語る、ソフトバンクのAIガバナンス #1 - ソフトバンク」を確認した。配信元はソフトバンク、配信日は2026-06-25。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -1140,11 +1211,11 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "ビジネス+IT",
-          "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE8tZ3pHQ25sX2hpWjFjWDZtbVVFaFI3dF9XR3Npc2FYR1hRSTAwZ1ZOdlBwczctUFpfOFdnUGlFaVQxSGg2YWR4cXFrSlViS3RncUNV?oc=5",
+          "label": "Yahoo!ニュース",
+          "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBOYVA3Q3BRbjFEc0F5MWtpaTlTdTdQTGFPbWp6RHIxSzdzYk9aYkNnOGpuT2E5YkNtZzRyeDR0TTdQYkt0SnkwbnlrbDJKWXhYX3g3RVBRUF9naUkzVWVwQjNoSlBQSktvck5SM1AyRmtpUmE0Nkc5UHc3aXQ3TVU?oc=5",
           "slot_state": "observed_live",
           "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSで「ソフトバンク、27年度より国産AIサーバーとバッテリー製造、堺工場跡地で - ビジネス+IT」を確認した。配信元はビジネス+IT、配信日は2026-06-24。",
+          "evidence_summary": "Google News RSSで「孫正義会長、AIで「世界一に」 ソフトバンクGが株主総会（朝日新聞） - Yahoo!ニュース」を確認した。配信元はYahoo!ニュース、配信日は2026-06-24。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -1158,11 +1229,11 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "日テレNEWS NNN",
-          "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTFBPVHZZZDc1VGZZeW5VM29zN3BLUHhGclBkaVk5VjVENFpYLVIzR2w4bDJTcEw0RE1pT0toVnVnUW41UFZoZ3k5UVBwSVcweHltVjVtZDMwbUNNUDJOS1J5WlRqbm1vc1B3d1ZZcl8xeHRWQ2JsMmxSS2c0M3Y?oc=5",
+          "label": "ビジネス+IT",
+          "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE8tZ3pHQ25sX2hpWjFjWDZtbVVFaFI3dF9XR3Npc2FYR1hRSTAwZ1ZOdlBwczctUFpfOFdnUGlFaVQxSGg2YWR4cXFrSlViS3RncUNV?oc=5",
           "slot_state": "observed_live",
           "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSで「ソフトバンクG・孫正義氏 東電と提携し“日本にAIデータセンターを”（2026年6月24日掲載）｜日テレNEWS NNN - 日テレNEWS NNN」を確認した。配信元は日テレNEWS NNN、配信日は2026-06-24。",
+          "evidence_summary": "Google News RSSで「ソフトバンク、27年度より国産AIサーバーとバッテリー製造、堺工場跡地で - ビジネス+IT」を確認した。配信元はビジネス+IT、配信日は2026-06-24。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -1212,11 +1283,11 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "Yahoo!ファイナンス 媒体ページ",
-          "url": "https://finance.yahoo.co.jp",
+          "label": "朝日新聞 媒体ページ",
+          "url": "https://www.asahi.com",
           "slot_state": "observed_live",
           "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSのsource属性から、Yahoo!ファイナンスの媒体URLhttps://finance.yahoo.co.jpを確認した。",
+          "evidence_summary": "Google News RSSのsource属性から、朝日新聞の媒体URLhttps://www.asahi.comを確認した。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -1266,11 +1337,11 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "ビジネス+IT 媒体ページ",
-          "url": "https://www.sbbit.jp",
+          "label": "Yahoo!ニュース 媒体ページ",
+          "url": "https://news.yahoo.co.jp",
           "slot_state": "observed_live",
           "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSのsource属性から、ビジネス+ITの媒体URLhttps://www.sbbit.jpを確認した。",
+          "evidence_summary": "Google News RSSのsource属性から、Yahoo!ニュースの媒体URLhttps://news.yahoo.co.jpを確認した。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -1284,20 +1355,94 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "日テレNEWS NNN 媒体ページ",
-          "url": "https://news.ntv.co.jp",
+          "label": "ビジネス+IT 媒体ページ",
+          "url": "https://www.sbbit.jp",
           "slot_state": "observed_live",
           "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSのsource属性から、日テレNEWS NNNの媒体URLhttps://news.ntv.co.jpを確認した。",
+          "evidence_summary": "Google News RSSのsource属性から、ビジネス+ITの媒体URLhttps://www.sbbit.jpを確認した。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         }
       ],
-      "no_change_summary": "SoftBankはモデル抽出が一時失敗したため、取得済み証拠から重要クラスタを補完した。"
+      "no_change_summary": "2026年6月24日を中心にソフトバンクグループは第46回定時株主総会を開催し、取締役交代やストックオプション発行を決定した。過去の経営方針や株価動向に大きな変化は見られなかった。AI関連の新規製造計画やロボット量産開始の発表があったが、詳細な影響は今後の情報待ちである。"
     },
     "Honda": {
-      "items": [],
-      "signals": [],
+      "items": [
+        {
+          "watch_topic_id": "market_price_reaction",
+          "title": "ホンダ「バリバリ伝説」巨摩郡のCB750Fを1/24ダイキャスト完成品で再現",
+          "summary": "ホビージャパンが6月11日より予約受付開始。ファン向けの限定モデルで市場価格への影響は限定的。ホビージャパン、「バリバリ伝説」巨摩郡のHonda CB750Fを 1/24ダイキャスト完成品で再現、6/11予約受付開始（NOSWEB） Yahoo!ニュース。",
+          "source_published_date": "2026-06-24",
+          "topic_value_class": "cultural_or_audience_signal",
+          "priority_class": "priority",
+          "slug": "auto-6baccc914288-2026-06-24",
+          "detail_summary": "ホビージャパンが6月11日より予約受付開始。 確認できた点は、ホンダ「バリバリ伝説」巨摩郡のCB750Fを1/24ダイキャスト完成品で再現、ホビージャパンが6月11日より予約受付開始、ホビージャパンが6月11日より予約受付開始。ファン向けの限定モデルで市場価格への影響は限定的。ホビージャパン、「バリバリ伝説」巨摩郡のHonda CB750Fを 1/24ダイキャスト完成品で再現、6/11予約受付開始（NOSWEB） Yahoo!ニュース。 ファン向けの限定モデルで市場価格への影響は限定的。ホビージャパン、「バリバリ伝説」巨摩郡のHonda CB750Fを 1/24ダイキャスト完成品で再現、6/11予約受付開始（NOSWEB） Yahoo!ニュース。 追加の公式発表、条件、数値の内訳は今後の確認対象となる。",
+          "what_changed": "ホビージャパンが6月11日より予約受付開始。",
+          "why_it_matters": "ファン向けの限定モデルで市場価格への影響は限定的。ホビージャパン、「バリバリ伝説」巨摩郡のHonda CB750Fを 1/24ダイキャスト完成品で再現、6/11予約受付開始（NOSWEB） Yahoo!ニュース。",
+          "confirmed_facts": [
+            "ホンダ「バリバリ伝説」巨摩郡のCB750Fを1/24ダイキャスト完成品で再現。",
+            "ホビージャパンが6月11日より予約受付開始。",
+            "ホビージャパンが6月11日より予約受付開始。ファン向けの限定モデルで市場価格への影響は限定的。ホビージャパン、「バリバリ伝説」巨摩郡のHonda CB750Fを 1/24ダイキャスト完成品で再現、6/11予約受付開始（NOSWEB） Yahoo!ニュース。",
+            "Yahoo!ニュースが2026-06-24付の情報として配信した。"
+          ],
+          "limits_or_unknowns": "追加の公式発表、条件、数値の内訳は今後の確認対象となる。",
+          "sources": [
+            {
+              "label": "Yahoo!ニュース",
+              "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE1GTWxVWWpwMU1lYjNsb2Jfb2k4NDFxN1I4Vkp0QzdLTUZMVVBxZzBOU0ZzaUY5SHRUSS0wTF9qUF9ZZEhUVzVUcl81alJHVGFDZlVHb1Jjck51QWNxaVhDaWQ5X3U1SWUtcGlrMG9YNXdfRGJxYmFwNmFtbDlZMFE?oc=5",
+              "source_role": "independent_media_or_data",
+              "channel": "web"
+            }
+          ],
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "hybrid_ev_strategy",
+          "title": "2027 Honda S2000 キャンディーレッド復活！日本最強スポーツカー登場",
+          "summary": "2027年モデルのHonda S2000がキャンディーレッドで復活。スポーツカー市場で注目されるが詳細は不明。【速報】2027 Honda S2000 キャンディーレッド復活！日本最強スポーツカー登場！Pierluigi Collina (v1XUjUlUAi) Mshale。",
+          "source_published_date": "2026-06-24",
+          "topic_value_class": "technical_or_product_shift",
+          "priority_class": "priority",
+          "slug": "auto-05bc16095462-2026-06-24",
+          "detail_summary": "2027年モデルのHonda S2000がキャンディーレッドで復活。 確認できた点は、2027 Honda S2000 キャンディーレッド復活！日本最強スポーツカー登場、2027年モデルのHonda S2000がキャンディーレッドで復活、2027年モデルのHonda S2000がキャンディーレッドで復活。スポーツカー市場で注目されるが詳細は不明。【速報】2027 Honda S2000 キャンディーレッド復活！日本最強スポーツカー登場！Pierluigi Collina (v1XUjUlUAi) Mshale。 スポーツカー市場で注目されるが詳細は不明。【速報】2027 Honda S2000 キャンディーレッド復活！日本最強スポーツカー登場！Pierluigi Collina (v1XUjUlUAi) Mshale。 追加の公式発表、条件、数値の内訳は今後の確認対象となる。",
+          "what_changed": "2027年モデルのHonda S2000がキャンディーレッドで復活。",
+          "why_it_matters": "スポーツカー市場で注目されるが詳細は不明。【速報】2027 Honda S2000 キャンディーレッド復活！日本最強スポーツカー登場！Pierluigi Collina (v1XUjUlUAi) Mshale。",
+          "confirmed_facts": [
+            "2027 Honda S2000 キャンディーレッド復活！日本最強スポーツカー登場。",
+            "2027年モデルのHonda S2000がキャンディーレッドで復活。",
+            "2027年モデルのHonda S2000がキャンディーレッドで復活。スポーツカー市場で注目されるが詳細は不明。【速報】2027 Honda S2000 キャンディーレッド復活！日本最強スポーツカー登場！Pierluigi Collina (v1XUjUlUAi) Mshale。",
+            "Mshaleが2026-06-24付の情報として配信した。"
+          ],
+          "limits_or_unknowns": "追加の公式発表、条件、数値の内訳は今後の確認対象となる。",
+          "sources": [
+            {
+              "label": "Mshale",
+              "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE95dFdJSk02azhFVnJnbU94cDMyR0VBMExDc2R6Uy11eDNYTXFSUHhaOXdVRDdKRUQtUHZPZVp1OXVVdEVIME5LLUtnandLMEswNTBERnFrZTRuVWc?oc=5",
+              "source_role": "independent_media_or_data",
+              "channel": "web"
+            }
+          ],
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        }
+      ],
+      "signals": [
+        {
+          "watch_topic_id": "official_product_demand",
+          "title": "ホビージャパン、「バリバリ伝説」巨摩郡のHonda CB750Fを 1/24ダイキャスト完成品で再現、6/11予約受付開始（NOSWEB） - Yahoo!ニュース",
+          "summary": "ホビージャパン、「バリバリ伝説」巨摩郡のHonda CB750Fを 1/24ダイキャスト完成品で再現、6/11予約受付開始（NOSWEB） - Yahoo!ニュース。ホビージャパン、「バリバリ伝説」巨摩郡のHonda CB750Fを 1/24ダイキャスト完成品で再現、6/11予約受付開始（NOSWEB） Yahoo!",
+          "source_published_date": "2026-06-24",
+          "source_url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE1GTWxVWWpwMU1lYjNsb2Jfb2k4NDFxN1I4Vkp0QzdLTUZMVVBxZzBOU0ZzaUY5SHRUSS0wTF9qUF9ZZEhUVzVUcl81alJHVGFDZlVHb1Jjck51QWNxaVhDaWQ5X3U1SWUtcGlrMG9YNXdfRGJxYmFwNmFtbDlZMFE?oc=5",
+          "source_label": "Yahoo!ニュース",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "関連情報として確認したが、記事化に必要な具体的な変化は限定的なため候補として保持する。",
+          "topic_value_class": "operational_status_change",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        }
+      ],
       "source_checks": [
         {
           "watch_topic_ids": [
@@ -1390,7 +1535,7 @@
           "url": "https://apnews.com/article/honda-ev-investment-us-tariffs-685b44de9fae0f75717be663ae63a6a8",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "AP Honda EV strategyの直取得とReader取得が利用できなかったため、登録ソースhttps://apnews.com/article/honda-ev-investment-us-tariffs-685b44de9fae0f75717be663ae63a6a8に限定したBing RSS検索を確認した。検索語: site:apnews.com/article/honda-ev-investment-us-tariffs-685b44de9fae0f75717be663ae63a6a8 \"AP Honda EV strategy\"。検索結果: Associated Press News: Breaking News, Latest Headlines and Videos | AP News / https://apnews.com/ / Founded in 1846, AP today remains the most trusted source of fast, accurate, unbiased news in all formats and the essential provider of the technology and services vital to the news business. More than half the world’s population sees AP journalism every day. The Associated Press | Video, Photo, Text, Audio & Data News Agency / https://www.ap.org/ / The Associated Press next week will convene repo",
+          "evidence_summary": "AP Honda EV strategyをJina Reader mirrorで取得し、ページ「Title: Page unavailable URL Source: http://apnews.com/article/honda-ev-investment-us-tariffs-685b44de9fae0f75717be663ae63a6a8 Markdown Content: [Enable accessibility](http://apnews」の本文を確認した。抽出内容: Title: Page unavailable URL Source: http://apnews.com/article/honda-ev-investment-us-tariffs-685b44de9fae0f75717be663ae63a6a8 Markdown Content: [Enable accessibility](http://apnews.com/article/honda-ev-investment-us-tariffs-685b44de9fae0f75717be663ae63a6a8#) **0** [![Image 1: AP Logo](https://assets.apnews.com/19/66/bc",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -1428,7 +1573,7 @@
           "url": "https://x.com/Honda",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Honda XをJina Reader mirrorで取得し、ページ「Title: Honda (@Honda) on X URL Source: http://x.com/Honda Markdown Content: [](http://x.com/) [](http://x.com/) [Log in](http://x.com/i/jf/onboarding/web?mode=login)[Sign up](http:」の本文を確認した。抽出内容: Title: Honda (@Honda) on X URL Source: http://x.com/Honda Markdown Content: [](http://x.com/) [](http://x.com/) [Log in](http://x.com/i/jf/onboarding/web?mode=login)[Sign up](http://x.com/i/jf/onboarding/web?mode=signup) Honda 208.2K posts [![Image 3](https://pbs.twimg.com/profile_banners/43430484/1777411986)](http://x",
+          "evidence_summary": "Honda Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/Hondaに限定したBing RSS検索を確認した。検索語: site:x.com/Honda \"Honda X\"。検索結果: American Honda Motor Co., Inc. - Official Site / https://www.honda.com/ / Explore an innovative line of quality products from American Honda Motor Company. Find the latest news and information on Honda and Acura brand products. Honda & Used Car Dealer Ontario, CA - Penske Honda Ontario / https://www.penskehondaontario.com/ / Your next new 2023 or 2024 Honda model or used car could be close at hand, right here at Penske Honda Ontario in Ontario, CA and serving Chino Hills, West Covina, Corona and",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -1447,7 +1592,7 @@
           "url": "https://www.instagram.com/honda/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Honda Instagramの直取得とReader取得が利用できなかったため、登録ソースhttps://www.instagram.com/honda/に限定したBing RSS検索を確認した。検索語: site:www.instagram.com/honda \"Honda Instagram\"。検索結果: American Honda Motor Co., Inc. - Official Site / https://www.honda.com/ / Explore an innovative line of quality products from American Honda Motor Company. Find the latest news and information on Honda and Acura brand products. Honda Dealer in Ponca City, OK | Heather Cannon Honda / https://www.cannonhonda.com/ / Heather Cannon Honda is your source for new Hondas and used cars in Ponca City, OK. Browse our full inventory online and then come down for a test drive. Used Honda Vehicle Inventory - ",
+          "evidence_summary": "Honda Instagramの直取得とReader取得が利用できなかったため、登録ソースhttps://www.instagram.com/honda/に限定したBing RSS検索を確認した。検索語: site:www.instagram.com/honda \"Honda Instagram\"。検索結果: Car Games Play on CrazyGames / https://www.crazygames.com/t/car / Race cars at top speed around city streets, do stunts, or just drive! Browse the complete collection of free car games and see where you’ll be driving next. You can find the best and newest car games by using the filters. Choose your vehicle and play some of the best car games on the internet. Car Games - Play Online for Free! - Poki / https://poki.com/en/car / On Poki, you'll find 160+ free car games that let you drive anything f",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -1466,7 +1611,45 @@
           "url": "https://www.youtube.com/user/Honda",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Honda YouTubeをJina Reader mirrorで取得し、ページ「Title: Honda URL Source: http://www.youtube.com/user/Honda Warning: Target URL returned error 403: Forbidden Warning: This page contains iframe that are currently hidden, consider 」の本文を確認した。抽出内容: Title: Honda URL Source: http://www.youtube.com/user/Honda Warning: Target URL returned error 403: Forbidden Warning: This page contains iframe that are currently hidden, consider enabling iframe processing. Warning: This page maybe requiring CAPTCHA, please make sure you are authorized to access this page. Markdown Co",
+          "evidence_summary": "Honda YouTubeをJina Reader mirrorで取得し、ページ「Title: Honda URL Source: http://www.youtube.com/user/Honda Warning: Target URL returned error 403: Forbidden Markdown Content: Back [![Image 1](http://www.youtube.com/user/Honda)](」の本文を確認した。抽出内容: Title: Honda URL Source: http://www.youtube.com/user/Honda Warning: Target URL returned error 403: Forbidden Markdown Content: Back [![Image 1](http://www.youtube.com/user/Honda)](http://www.youtube.com/) Search [![Image 2](http://www.youtube.com/user/Honda)](http://www.youtube.com/ \"YouTube Home\") ![Image 3](http://ww",
+          "checked_at_jst": "2026-06-24T23:59:59+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Webオートバイ",
+          "url": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE51VkRvbF9QNWdzNWJOc2k0ZlZsa0t4RGZEQTlhdkVXeDFKdFVkMnZHYVJ2bENzcVhYSm5oeWxnWHFUOFNDc2JPeWFB?oc=5",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-25",
+          "evidence_summary": "Google News RSSで「『HAL'S MOTO』の最新刊、第7巻「Honda Part.2」・第8巻「Kawasaki Part.2」が2026年6月30日（火）に発売開始 - Webオートバイ」を確認した。配信元はWebオートバイ、配信日は2026-06-25。",
+          "checked_at_jst": "2026-06-24T23:59:59+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Motor Fan",
+          "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE9uVmNWYVVGRjlNbVU5ZDZpVzkyLTBRajQtWVIwV0pfTjF3dnI5ZFVNeUdWMTdjYldScUt0Y2hGRmZFWEItUGRVRWQ3TTRsTmJRcHhDTjdoOU9feVRKckdHMEg3RQ?oc=5",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-25",
+          "evidence_summary": "Google News RSSで「ホンダ「0」シリーズは終わらない…最小モデル「Honda 0 α（アルファ）」は2027年日本発売を予定。価格はどうなる!? - Motor Fan」を確認した。配信元はMotor Fan、配信日は2026-06-25。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -1538,44 +1721,6 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "Motor Fan",
-          "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE5MakxwZENFRUNtcWEtNVRFb3lwN0JNZm9Udk9LZFd2STgtRU9LWElENGV5dFlTLVd2ZmFUODdIUVBHSFNaS1NsOXc5eUNmY3hiWkVsOF9qelBGbjdBSE5tUWEyXzNEeUhsVXZadFNVc0tDcWRHbHRmS09B?oc=5",
-          "slot_state": "observed_live",
-          "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSで「HONDA_CIVIC RS eHEV_IMPRESSION_6 - Motor Fan」を確認した。配信元はMotor Fan、配信日は2026-06-25。",
-          "checked_at_jst": "2026-06-24T23:59:59+09:00",
-          "verification_method": "reviewed_live_web"
-        },
-        {
-          "watch_topic_ids": [
-            "market_price_reaction",
-            "earnings_guidance",
-            "china_sales",
-            "hybrid_ev_strategy",
-            "regional_production",
-            "official_product_demand"
-          ],
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "label": "西日本新聞me",
-          "url": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE14LVpEZ3dPTzBnZGNqM1VRdzg1SUZQTGdVMVYtWFpydWp0Ym9ZcFZ2U1pmVjF4TG9xRVB4VUxybkJaYm9uNHczQS1CVG0wRFk4X3ZxX0Vldw?oc=5",
-          "slot_state": "observed_live",
-          "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSで「E-COMEGROUPより、日本が世界に誇る「Honda」公式ライセンス商品が続々登場！NSXなど名車をデザインしたTシャツやキャップを発売。記事 - E-COMEGROUPより、日本が世界に誇る「Honda」公式ライセンス商品が続々登場！NSXなど名車をデザインしたTシャツやキャ - 西日本新聞me」を確認した。配信元は西日本新聞me、配信日は2026-06-25。",
-          "checked_at_jst": "2026-06-24T23:59:59+09:00",
-          "verification_method": "reviewed_live_web"
-        },
-        {
-          "watch_topic_ids": [
-            "market_price_reaction",
-            "earnings_guidance",
-            "china_sales",
-            "hybrid_ev_strategy",
-            "regional_production",
-            "official_product_demand"
-          ],
-          "source_role": "independent_media_or_data",
-          "channel": "web",
           "label": "イザ！",
           "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE5qckdFSmlMYm1WNFJGdG9GY200SDRjd2ctU3pRT2VDR29qaWQyNkJZcllRLVZqWVc5LXJzbXh0cUpLSldMajNVdlNfZzA0NWNlbzRVQW1oNG9nLWU0M1hjZ05pTkZqZ1hiT2VVaV85ZUZYczZZa3Jkcnp3?oc=5",
           "slot_state": "observed_live",
@@ -1595,11 +1740,11 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "VOI.id",
-          "url": "https://news.google.com/rss/articles/CBMiREFVX3lxTFBJYm9hS1l1OXM0dTV0R1JGS29teDlYeGwxbGxqYk0yX2RsYTZOLXBVTGd1MEJoMXRkbHpOeks1UGJUVUhE?oc=5",
+          "label": "Yahoo!ニュース",
+          "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE1GTWxVWWpwMU1lYjNsb2Jfb2k4NDFxN1I4Vkp0QzdLTUZMVVBxZzBOU0ZzaUY5SHRUSS0wTF9qUF9ZZEhUVzVUcl81alJHVGFDZlVHb1Jjck51QWNxaVhDaWQ5X3U1SWUtcGlrMG9YNXdfRGJxYmFwNmFtbDlZMFE?oc=5",
           "slot_state": "observed_live",
-          "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSで「これは、AHMがHonda Vario Evo 160をRoadSync 機能で装備していない理由です - VOI.id」を確認した。配信元はVOI.id、配信日は2026-06-25。",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSで「ホビージャパン、「バリバリ伝説」巨摩郡のHonda CB750Fを 1/24ダイキャスト完成品で再現、6/11予約受付開始（NOSWEB） - Yahoo!ニュース」を確認した。配信元はYahoo!ニュース、配信日は2026-06-24。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -1638,6 +1783,44 @@
           "slot_state": "observed_live",
           "published_date": "2026-06-24",
           "evidence_summary": "Google News RSSで「【速報】2027 Honda S2000 キャンディーレッド復活！日本最強スポーツカー登場！ Pierluigi Collina (v1XUjUlUAi) - Mshale」を確認した。配信元はMshale、配信日は2026-06-24。",
+          "checked_at_jst": "2026-06-24T23:59:59+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Webオートバイ 媒体ページ",
+          "url": "https://www.autoby.jp",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-25",
+          "evidence_summary": "Google News RSSのsource属性から、Webオートバイの媒体URLhttps://www.autoby.jpを確認した。",
+          "checked_at_jst": "2026-06-24T23:59:59+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "market_price_reaction",
+            "earnings_guidance",
+            "china_sales",
+            "hybrid_ev_strategy",
+            "regional_production",
+            "official_product_demand"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Motor Fan 媒体ページ",
+          "url": "https://motor-fan.jp",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-25",
+          "evidence_summary": "Google News RSSのsource属性から、Motor Fanの媒体URLhttps://motor-fan.jpを確認した。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -1709,44 +1892,6 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "Motor Fan 媒体ページ",
-          "url": "https://motor-fan.jp",
-          "slot_state": "observed_live",
-          "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSのsource属性から、Motor Fanの媒体URLhttps://motor-fan.jpを確認した。",
-          "checked_at_jst": "2026-06-24T23:59:59+09:00",
-          "verification_method": "reviewed_live_web"
-        },
-        {
-          "watch_topic_ids": [
-            "market_price_reaction",
-            "earnings_guidance",
-            "china_sales",
-            "hybrid_ev_strategy",
-            "regional_production",
-            "official_product_demand"
-          ],
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "label": "西日本新聞me 媒体ページ",
-          "url": "https://www.nishinippon.co.jp",
-          "slot_state": "observed_live",
-          "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSのsource属性から、西日本新聞meの媒体URLhttps://www.nishinippon.co.jpを確認した。",
-          "checked_at_jst": "2026-06-24T23:59:59+09:00",
-          "verification_method": "reviewed_live_web"
-        },
-        {
-          "watch_topic_ids": [
-            "market_price_reaction",
-            "earnings_guidance",
-            "china_sales",
-            "hybrid_ev_strategy",
-            "regional_production",
-            "official_product_demand"
-          ],
-          "source_role": "independent_media_or_data",
-          "channel": "web",
           "label": "イザ！ 媒体ページ",
           "url": "https://www.iza.ne.jp",
           "slot_state": "observed_live",
@@ -1766,11 +1911,11 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "VOI.id 媒体ページ",
-          "url": "https://voi.id",
+          "label": "Yahoo!ニュース 媒体ページ",
+          "url": "https://news.yahoo.co.jp",
           "slot_state": "observed_live",
-          "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSのsource属性から、VOI.idの媒体URLhttps://voi.idを確認した。",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSのsource属性から、Yahoo!ニュースの媒体URLhttps://news.yahoo.co.jpを確認した。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -1813,7 +1958,7 @@
           "verification_method": "reviewed_live_web"
         }
       ],
-      "no_change_summary": "Hondaはモデル抽出が一時失敗したため、取得済み証拠から重要クラスタを補完した。"
+      "no_change_summary": "今回の期間内にホンダの決算や中国販売、北米生産などの大きな変化は確認されませんでした。既存の電動化戦略や市場動向に大きな変動は見られず、主に新製品の発売予定や限定グッズの情報が中心でした。"
     },
     "F1": {
       "items": [
@@ -1846,7 +1991,36 @@
           "observation_channel": "web"
         }
       ],
-      "signals": [],
+      "signals": [
+        {
+          "watch_topic_id": "honda_aston_pu",
+          "title": "Hondaの自動車大学校が夏休み期間にF1特別展示を実施",
+          "summary": "ホンダ テクニカル カレッジ 関西が2026年8月1日と4日に夏の体験授業でF1を特別展示予定です。Hondaの自動車大学校「ホンダ テクニカル カレッジ 関西」が 夏休み期間である8月1日(土)、4日(火)に開催の 『夏の体験授業 2026』にてF1を特別展示！| 学校法人 ホンダ学園 ホンダ テクニカル カレッジ 関西 アットプレス。",
+          "source_published_date": "2026-06-23",
+          "source_url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE9jcmgwLWczb2ZZXzlFRWh2VzVkMTVJQU9SeTg3NjhtR2VqTWxOV055SE1wVlRrcm1vTi1KZy1hOVo0S2tPLUJTd1B2a2JhQQ?oc=5",
+          "source_label": "アットプレス",
+          "change_class": "new_event",
+          "rejection_reason_class": "insufficient_evidence",
+          "rejection_reason": "イベント告知であり、F1技術や規則の変更ではないため。",
+          "topic_value_class": "cultural_or_audience_signal",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "honda_aston_pu",
+          "title": "Hondaの自動車大学校「ホンダ テクニカル カレッジ 関西」が 夏休み期間である8月1日(土)、4日(火)に開催の 『夏の体験授業 2026』にてF1を特別展示！ | 学校法人 ホンダ学園 ホンダ テクニカル カレッジ 関西 - アットプレス",
+          "summary": "Hondaの自動車大学校「ホンダ テクニカル カレッジ 関西」が 夏休み期間である8月1日(土)、4日(火)に開催の 『夏の体験授業 2026』にてF1を特別展示！| 学校法人 ホンダ学園 ホンダ テクニカル カレッジ 関西 - アットプレス。| 学校法人 ホンダ学園 ホンダ テクニカル カレッジ 関西 アットプレス。",
+          "source_published_date": "2026-06-23",
+          "source_url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE9jcmgwLWczb2ZZXzlFRWh2VzVkMTVJQU9SeTg3NjhtR2VqTWxOV055SE1wVlRrcm1vTi1KZy1hOVo0S2tPLUJTd1B2a2JhQQ?oc=5",
+          "source_label": "アットプレス",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "関連情報として確認したが、記事化に必要な具体的な変化は限定的なため候補として保持する。",
+          "topic_value_class": "operational_status_change",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        }
+      ],
       "source_checks": [
         {
           "watch_topic_ids": [
@@ -1876,7 +2050,7 @@
           "url": "https://www.fia.com/events/fia-formula-one-world-championship/season-2026/fia-formula-one-world-championship",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "FIA Formula 1をJina Reader mirrorで取得し、ページ「Title: Federation Internationale de l'Automobile URL Source: http://www.fia.com/events/fia-formula-one-world-championship/season-2026/fia-formula-one-world-championship Markdown Co」の本文を確認した。抽出内容: Title: Federation Internationale de l'Automobile URL Source: http://www.fia.com/events/fia-formula-one-world-championship/season-2026/fia-formula-one-world-championship Markdown Content: ![Image 1: Revisit consent button](https://cdn-cookieyes.com/assets/images/revisit.svg) We value your privacy We use cookies to enhan",
+          "evidence_summary": "FIA Formula 1をJina Reader mirrorで取得し、ページ「Title: Federation Internationale de l'Automobile URL Source: http://www.fia.com/events/fia-formula-one-world-championship/season-2026/fia-formula-one-world-championship Published T」の本文を確認した。抽出内容: Title: Federation Internationale de l'Automobile URL Source: http://www.fia.com/events/fia-formula-one-world-championship/season-2026/fia-formula-one-world-championship Published Time: Wed, 06 May 2026 22:50:43 GMT Markdown Content: ![Image 1: Revisit consent button](https://cdn-cookieyes.com/assets/images/revisit.svg)",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -1892,7 +2066,7 @@
           "url": "https://www.astonmartinf1.com/en-GB/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Aston Martin F1をdirectで取得し、ページ「Homepage - Aston Martin F1 Team」の本文を確認した。抽出内容: Homepage - Aston Martin F1 Team Shop Now Access I / AM Back About About Us Heritage Partners Contact Aramco Careers I / AM Membership Racing 2026 Car 2026 Season Esports Lance Stroll Fernando Alonso Driver Squad Driver Academy News Partners Video Make A Mark Generation 3 007 Store Access I / AM ROUND 08 | AUSTRIA Ring ",
+          "evidence_summary": "Aston Martin F1をdirectで取得し、ページ「Homepage - Aston Martin F1 Team」の本文を確認した。抽出内容: Homepage - Aston Martin F1 Team Shop Now Access I / AM Back About About Us Heritage Partners Contact Aramco Careers I / AM Membership Racing 2026 Car 2026 Season Esports Lance Stroll Fernando Alonso Driver Squad Driver Academy News Partners Video Make A Mark Generation 3 007 Store Access I / AM High-speed innovation. S",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -1956,7 +2130,7 @@
           "url": "https://x.com/F1",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Formula 1 XをJina Reader mirrorで取得し、ページ「Title: Formula 1 (@F1) on X URL Source: http://x.com/F1 Markdown Content: [](http://x.com/) [](http://x.com/) [Log in](http://x.com/i/jf/onboarding/web?mode=login)[Sign up](http://」の本文を確認した。抽出内容: Title: Formula 1 (@F1) on X URL Source: http://x.com/F1 Markdown Content: [](http://x.com/) [](http://x.com/) [Log in](http://x.com/i/jf/onboarding/web?mode=login)[Sign up](http://x.com/i/jf/onboarding/web?mode=signup) Formula 1 108.1K posts [![Image 3](https://pbs.twimg.com/profile_banners/69008563/1771928230)](http:/",
+          "evidence_summary": "Formula 1 Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/F1に限定したBing RSS検索を確認した。検索語: site:x.com/F1 \"Formula 1 X\"。検索結果: F1 - The Official Home of Formula 1® Racing / https://www.formula1.com/ / Enter the world of Formula 1. Your go-to source for the latest F1 news, video highlights, GP results, live timing, in-depth analysis and expert commentary. F1 Schedule 2026 - Official Calendar of Grand Prix Races - Formula 1 / https://www.formula1.com/en/racing.html / Singapore FORMULA 1 SINGAPORE AIRLINES SINGAPORE GRAND PRIX 2026 09 - 11 Oct ROUND 17 Formula One - Wikipedia / https://en.wikipedia.org/wiki/Formula_One / T",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -1972,7 +2146,7 @@
           "url": "https://x.com/fia",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "FIA XをJina Reader mirrorで取得し、ページ「Title: FIA (@fia) on X URL Source: http://x.com/fia Markdown Content: [](http://x.com/) [](http://x.com/) [Log in](http://x.com/i/jf/onboarding/web?mode=login)[Sign up](http://x.co」の本文を確認した。抽出内容: Title: FIA (@fia) on X URL Source: http://x.com/fia Markdown Content: [](http://x.com/) [](http://x.com/) [Log in](http://x.com/i/jf/onboarding/web?mode=login)[Sign up](http://x.com/i/jf/onboarding/web?mode=signup) FIA 23.8K posts [![Image 1](https://pbs.twimg.com/profile_banners/432507102/1765983789)](http://x.com/fia",
+          "evidence_summary": "FIA Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/fiaに限定したBing RSS検索を確認した。検索語: site:x.com/fia \"FIA X\"。検索結果: Federation Internationale de l'Automobile / https://www.fia.com/ / The FIA is the governing body of motor sport and promotes safe, sustainable and accessible mobility for all road users across the world. Homepage | FIA / https://www.fia.org/ / FIA is the leading global trade organization for the futures, options and centrally cleared derivatives markets, with offices in Brussels, London, Singapore and Washington, DC. Fédération Internationale de l'Automobile - Wikipedia / https://en.wikipedia.or",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -1988,7 +2162,7 @@
           "url": "https://www.instagram.com/f1/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Formula 1 Instagramの直取得とReader取得が利用できなかったため、登録ソースhttps://www.instagram.com/f1/に限定したBing RSS検索を確認した。検索語: site:www.instagram.com/f1 \"Formula 1 Instagram\"。検索結果: F1 - The Official Home of Formula 1® Racing / https://www.formula1.com/ / Enter the world of Formula 1. Your go-to source for the latest F1 news, video highlights, GP results, live timing, in-depth analysis and expert commentary. F1 Schedule 2026 - Official Calendar of Grand Prix Races - Formula 1 / https://www.formula1.com/en/racing.html / Enter the world of Formula 1. Your go-to source for the latest F1 news, video highlights, GP results, live timing, in-depth analysis and expert commentary. F",
+          "evidence_summary": "Formula 1 Instagramの直取得とReader取得が利用できなかったため、登録ソースhttps://www.instagram.com/f1/に限定したBing RSS検索を確認した。検索語: site:www.instagram.com/f1 \"Formula 1 Instagram\"。検索結果: F1 - The Official Home of Formula 1® Racing / https://www.formula1.com/ / Enter the world of Formula 1. Your go-to source for the latest F1 news, video highlights, GP results, live timing, in-depth analysis and expert commentary. F1 Schedule 2026 - Official Calendar of Grand Prix Races - Formula 1 / https://www.formula1.com/en/racing.html / Singapore FORMULA 1 SINGAPORE AIRLINES SINGAPORE GRAND PRIX 2026 09 - 11 Oct ROUND 17 Formula One - Wikipedia / https://en.wikipedia.org/wiki/Formula_One / T",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -2004,7 +2178,7 @@
           "url": "https://www.facebook.com/Formula1/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Formula 1 FacebookをJina Reader mirrorで取得し、ページ「Title: F1 URL Source: http://www.facebook.com/Formula1/ Markdown Content: [Log In](https://www.facebook.com/login/device-based/regular/login/?login_attempt=1&next=https%3A%2F%2Fwww」の本文を確認した。抽出内容: Title: F1 URL Source: http://www.facebook.com/Formula1/ Markdown Content: [Log In](https://www.facebook.com/login/device-based/regular/login/?login_attempt=1&next=https%3A%2F%2Fwww.facebook.com%2FFormula1%2F) Log In [Forgot Account?](https://www.facebook.com/recover/initiate?ars=royal_blue_bar) ![Image 1](https://scont",
+          "evidence_summary": "Formula 1 FacebookをJina Reader mirrorで取得し、ページ「Title: Facebook URL Source: http://www.facebook.com/Formula1/ Markdown Content: Explore the things you love. Log into Facebook Email or mobile number Password - [x] Log in [Forgot 」の本文を確認した。抽出内容: Title: Facebook URL Source: http://www.facebook.com/Formula1/ Markdown Content: Explore the things you love. Log into Facebook Email or mobile number Password - [x] Log in [Forgot password?](https://www.facebook.com/recover/initiate/?privacy_mutation_token=eyJ0eXBlIjo1LCJjcmVhdGlvbl90aW1lIjoxNzgyMzkzNTA3fQ%3D%3D&ars=fa",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -2032,11 +2206,11 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "autosport web",
-          "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE4yQTB2a0tiV2VZekljUVpYbklsYW9kMjY1cG1SWjFCVzh2UmszMzBjcWpieUVEQW51MXlFNEhYN0FoV09mTkF3?oc=5",
+          "label": "Yahoo!ニュース",
+          "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE4zQldGNHlOalY3anZMbWhnWW5YWDBEOWNNR2xrcVBJNzRRMmk1QjZPU1ZJUTNoVm9rTURlb3p1YUxBRl94UEdHUmNXN1RwQV9lRENBSklvX3pBdEZja1dPejlmeDk1d0hEUmViUEppTEh4NjAxRFVtZUswWVRkeXc?oc=5",
           "slot_state": "observed_live",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSで「FIAがF1パワーユニット出力比率の段階的変更を正式承認。2027年カレンダー発表は中東情勢の影響で大幅に延期へ - autosport web」を確認した。配信元はautosport web、配信日は2026-06-24。",
+          "published_date": "2026-06-25",
+          "evidence_summary": "Google News RSSで「ヨーロッパを襲う猛暑、F1にも影響大！ 今週末のオーストリアGPにヒートハザードが宣言（motorsport.com 日本版） - Yahoo!ニュース」を確認した。配信元はYahoo!ニュース、配信日は2026-06-25。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -2048,11 +2222,27 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "Yahoo!ニュース",
-          "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE03dkdvcm1SZE1DalpNTnpHTU9QbHE1dkpNNlVSejdSa0E0aU1SVTdsUlpxSDJFcjk2ZTNqNDBiQVdHOFZGbHRKbEFxdElPdnFxbURQdi1GNXJuelFDd1JjSGpLZDNhVjdsZnJiOGVyVm5DdkpaZ0NPUngxRnhGNGM?oc=5",
+          "label": "topnews.jp",
+          "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9odm5mUmpNRW04WE5DSkVnZ3pUX3JHTTdma3k3MUMyOVVHSEdhbmFCY1dsam5lR3Z4Tk5IcFNzWkxPbkhpZWE4N2RJa0FqcXJqQlQ0LVFMSExzX2FtUWF5VWZqNXNtSkZHSldJRnVjaw?oc=5",
           "slot_state": "observed_live",
           "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSで「F1の12番目の参戦枠にBYDか、FIA会長が中国チーム歓迎「適切なチーム」（TopNews） - Yahoo!ニュース」を確認した。配信元はYahoo!ニュース、配信日は2026-06-25。",
+          "evidence_summary": "Google News RSSで「【F1】「大音量V8」の議論継続！FIAが2027年PU規則改定を承認 アレジ、F1の進化を拒む風潮に警鐘 - topnews.jp」を確認した。配信元はtopnews.jp、配信日は2026-06-25。",
+          "checked_at_jst": "2026-06-24T23:59:59+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "autosport web",
+          "url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE4yQTB2a0tiV2VZekljUVpYbklsYW9kMjY1cG1SWjFCVzh2UmszMzBjcWpieUVEQW51MXlFNEhYN0FoV09mTkF3?oc=5",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSで「FIAがF1パワーユニット出力比率の段階的変更を正式承認。2027年カレンダー発表は中東情勢の影響で大幅に延期へ - autosport web」を確認した。配信元はautosport web、配信日は2026-06-24。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -2112,22 +2302,6 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "Yahoo!ニュース",
-          "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNd1owU1lDUFljc2hXdUcwX0RoRFZDN2o1NExRTmVIOENZbGp6VTBvdXM5VXVPUEtJN01aZ0R5LVozSi0wWW1IelZMT2toaHdSMThqQ1lkeXpmY2xVVE5CUDJhRzZFYmszNGFTVGtGUVdVZk9SRl9aZ19PREhra0tJb1NtaXhrbW5Pbk5sa0lB?oc=5",
-          "slot_state": "observed_live",
-          "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSで「F1の12番目の参戦枠にBYDか、FIA会長が中国チーム歓迎「適切なチーム」 (TopNews) - Yahoo!ニュース」を確認した。配信元はYahoo!ニュース、配信日は2026-06-25。",
-          "checked_at_jst": "2026-06-24T23:59:59+09:00",
-          "verification_method": "reviewed_live_web"
-        },
-        {
-          "watch_topic_ids": [
-            "race_schedule_results",
-            "honda_aston_pu",
-            "fia_regulation_development"
-          ],
-          "source_role": "independent_media_or_data",
-          "channel": "web",
           "label": "autosport web",
           "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1EX0NiSDhONmwwdW1lYi1NdHNxSU8teVBqbnVEWmNtbkFocGFWWUUxZ2kwQkg4WVdZTFZPaUlhMTNGaDZGSURBSXBveV9hTk52R25leHlXUG0wT1pxQXNZdTl5YWdTSTBmRXQyWA?oc=5",
           "slot_state": "observed_live",
@@ -2144,11 +2318,11 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "motorsport.com 日本版｜モータースポーツ情報サイト",
-          "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxOeG5iOEtkSlNOdEo5OFNlZGotXzVwUmxQN3VVcGNOaEVJUGNOaVlhMG9ra0dkRW05UDVsb0duYXl0bVl1RG04elh4SXRJZVhSazBfeXVkbTBCcGQ4LVVpZ1dFTXptRnNmbGtMd01Ea0I0LUFwQUdrMlBSZlhOcjNpVllyb3VLLVFQMUJ1aUxYRnIySjVEZ2ttRjBMcU41eElYLW5FbA?oc=5",
+          "label": "Yahoo!ニュース",
+          "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE03dkdvcm1SZE1DalpNTnpHTU9QbHE1dkpNNlVSejdSa0E0aU1SVTdsUlpxSDJFcjk2ZTNqNDBiQVdHOFZGbHRKbEFxdElPdnFxbURQdi1GNXJuelFDd1JjSGpLZDNhVjdsZnJiOGVyVm5DdkpaZ0NPUngxRnhGNGM?oc=5",
           "slot_state": "observed_live",
-          "published_date": "2026-06-23",
-          "evidence_summary": "Google News RSSで「それでもニューウェイならなんとかしてくれる？ アストンマーティンF1、苦しい新時代の幕開けでも絶対的信頼感 - motorsport.com 日本版｜モータースポーツ情報サイト」を確認した。配信元はmotorsport.com 日本版｜モータースポーツ情報サイト、配信日は2026-06-23。",
+          "published_date": "2026-06-25",
+          "evidence_summary": "Google News RSSで「F1の12番目の参戦枠にBYDか、FIA会長が中国チーム歓迎「適切なチーム」（TopNews） - Yahoo!ニュース」を確認した。配信元はYahoo!ニュース、配信日は2026-06-25。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -2176,11 +2350,11 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "autosport web 媒体ページ",
-          "url": "https://www.as-web.jp",
+          "label": "Yahoo!ニュース 媒体ページ",
+          "url": "https://news.yahoo.co.jp",
           "slot_state": "observed_live",
-          "published_date": "2026-06-24",
-          "evidence_summary": "Google News RSSのsource属性から、autosport webの媒体URLhttps://www.as-web.jpを確認した。",
+          "published_date": "2026-06-25",
+          "evidence_summary": "Google News RSSのsource属性から、Yahoo!ニュースの媒体URLhttps://news.yahoo.co.jpを確認した。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -2192,11 +2366,27 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "Yahoo!ニュース 媒体ページ",
-          "url": "https://news.yahoo.co.jp",
+          "label": "topnews.jp 媒体ページ",
+          "url": "https://topnews.jp",
           "slot_state": "observed_live",
           "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSのsource属性から、Yahoo!ニュースの媒体URLhttps://news.yahoo.co.jpを確認した。",
+          "evidence_summary": "Google News RSSのsource属性から、topnews.jpの媒体URLhttps://topnews.jpを確認した。",
+          "checked_at_jst": "2026-06-24T23:59:59+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "race_schedule_results",
+            "honda_aston_pu",
+            "fia_regulation_development"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "autosport web 媒体ページ",
+          "url": "https://www.as-web.jp",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSのsource属性から、autosport webの媒体URLhttps://www.as-web.jpを確認した。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -2249,27 +2439,28 @@
           "verification_method": "reviewed_live_web"
         }
       ],
-      "no_change_summary": "F1はモデル抽出が一時失敗したため、取得済み証拠から重要クラスタを補完した。"
+      "no_change_summary": "今回の証拠からは、F1のレース結果やスプリントリザルトの新情報は確認できませんでした。HondaとAston Martinのパワーユニット関連の技術的変更や安全規則の更新も見当たりません。FIAの規則変更はパワーユニット出力比の段階的変更に限定されています。"
     },
     "SpaceX": {
       "items": [
         {
-          "watch_topic_id": "official_launch_manifest",
-          "title": "SpaceXは16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を見込む - TradingKey",
-          "summary": "SpaceXは16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を見込む - TradingKey。オッペンハイマーは同社株に58%の上昇余地を見込む TradingKey。",
+          "watch_topic_id": "business_contracts",
+          "title": "SpaceX株価が16%急落後に反発、オッペンハイマーは58%の上昇余地を見込む",
+          "summary": "2026年6月23日、SpaceX株は16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を評価しています。SpaceXは16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を見込む TradingKey。",
           "source_published_date": "2026-06-23",
-          "topic_value_class": "operational_status_change",
+          "topic_value_class": "market_or_financial_impact",
           "priority_class": "priority",
-          "slug": "auto-0cdd679953f9-2026-06-24",
-          "detail_summary": "SpaceXは16%急落後に反発。 確認できた点は、SpaceXは16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を見込む - TradingKey、SpaceXは16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を見込む TradingKey、TradingKeyが2026-06-23付の情報として配信した。 SpaceXは16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を見込む - TradingKeyは、SpaceXの直近3日内の具体的な変化として、事業、競争環境、予定、または市場評価に影響しうる材料になる。 詳細条件、正式な続報、数値の内訳は追加確認の対象となる。",
-          "what_changed": "SpaceXは16%急落後に反発。",
-          "why_it_matters": "SpaceXは16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を見込む - TradingKeyは、SpaceXの直近3日内の具体的な変化として、事業、競争環境、予定、または市場評価に影響しうる材料になる。",
+          "slug": "auto-e016d1e8b39c-2026-06-24",
+          "detail_summary": "2026年6月23日、SpaceX株は16%急落後に反発。 確認できた点は、SpaceX株価が16%急落後に反発、オッペンハイマーは58%の上昇余地を見込む、2026年6月23日、SpaceX株は16%急落後に反発、2026年6月23日、SpaceX株は16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を評価しています。SpaceXは16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を見込む TradingKey。 オッペンハイマーは同社株に58%の上昇余地を評価しています。SpaceXは16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を見込む TradingKey。 追加の公式発表、条件、数値の内訳は今後の確認対象となる。",
+          "what_changed": "2026年6月23日、SpaceX株は16%急落後に反発。",
+          "why_it_matters": "オッペンハイマーは同社株に58%の上昇余地を評価しています。SpaceXは16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を見込む TradingKey。",
           "confirmed_facts": [
-            "SpaceXは16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を見込む - TradingKey。",
-            "SpaceXは16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を見込む TradingKey。",
+            "SpaceX株価が16%急落後に反発、オッペンハイマーは58%の上昇余地を見込む。",
+            "2026年6月23日、SpaceX株は16%急落後に反発。",
+            "2026年6月23日、SpaceX株は16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を評価しています。SpaceXは16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を見込む TradingKey。",
             "TradingKeyが2026-06-23付の情報として配信した。"
           ],
-          "limits_or_unknowns": "詳細条件、正式な続報、数値の内訳は追加確認の対象となる。",
+          "limits_or_unknowns": "追加の公式発表、条件、数値の内訳は今後の確認対象となる。",
           "sources": [
             {
               "label": "TradingKey",
@@ -2282,22 +2473,23 @@
           "observation_channel": "web"
         },
         {
-          "watch_topic_id": "official_launch_manifest",
-          "title": "SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました - CoinDesk",
-          "summary": "SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました - CoinDesk。SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました CoinDesk。",
+          "watch_topic_id": "business_contracts",
+          "title": "SpaceXの6000億ドルの急落はビットコイン時価総額のほぼ半分に相当",
+          "summary": "2026年6月23日、SpaceXの時価総額が6000億ドル急落し、これはビットコイン時価総額の約半分に相当します。SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました CoinDesk。",
           "source_published_date": "2026-06-23",
-          "topic_value_class": "operational_status_change",
+          "topic_value_class": "market_or_financial_impact",
           "priority_class": "priority",
-          "slug": "auto-8ebed1044466-2026-06-24",
-          "detail_summary": "SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました - CoinDesk。 確認できた点は、SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました - CoinDesk、SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました CoinDesk、CoinDeskが2026-06-23付の情報として配信した。 SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました - CoinDeskは、SpaceXの直近3日内の具体的な変化として、事業、競争環境、予定、または市場評価に影響しうる材料になる。 詳細条件、正式な続報、数値の内訳は追加確認の対象となる。",
-          "what_changed": "SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました - CoinDesk。",
-          "why_it_matters": "SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました - CoinDeskは、SpaceXの直近3日内の具体的な変化として、事業、競争環境、予定、または市場評価に影響しうる材料になる。",
+          "slug": "auto-72aab92043d0-2026-06-24",
+          "detail_summary": "2026年6月23日、SpaceXの時価総額が6000億ドル急落し、これはビットコイン時価総額の約半分に相当します。 確認できた点は、SpaceXの6000億ドルの急落はビットコイン時価総額のほぼ半分に相当、2026年6月23日、SpaceXの時価総額が6000億ドル急落し、これはビットコイン時価総額の約半分に相当します、2026年6月23日、SpaceXの時価総額が6000億ドル急落し、これはビットコイン時価総額の約半分に相当します。SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました CoinDesk。 SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました CoinDesk。 追加の公式発表、条件、数値の内訳は今後の確認対象となる。",
+          "what_changed": "2026年6月23日、SpaceXの時価総額が6000億ドル急落し、これはビットコイン時価総額の約半分に相当します。",
+          "why_it_matters": "SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました CoinDesk。",
           "confirmed_facts": [
-            "SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました - CoinDesk。",
-            "SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました CoinDesk。",
+            "SpaceXの6000億ドルの急落はビットコイン時価総額のほぼ半分に相当。",
+            "2026年6月23日、SpaceXの時価総額が6000億ドル急落し、これはビットコイン時価総額の約半分に相当します。",
+            "2026年6月23日、SpaceXの時価総額が6000億ドル急落し、これはビットコイン時価総額の約半分に相当します。SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました CoinDesk。",
             "CoinDeskが2026-06-23付の情報として配信した。"
           ],
-          "limits_or_unknowns": "詳細条件、正式な続報、数値の内訳は追加確認の対象となる。",
+          "limits_or_unknowns": "追加の公式発表、条件、数値の内訳は今後の確認対象となる。",
           "sources": [
             {
               "label": "CoinDesk",
@@ -2310,26 +2502,27 @@
           "observation_channel": "web"
         },
         {
-          "watch_topic_id": "official_launch_manifest",
-          "title": "SpaceX、初のシニア無担保社債を発行 AI投資加速に向け資金調達を本格化 - ITmedia",
-          "summary": "SpaceX、初のシニア無担保社債を発行 AI投資加速に向け資金調達を本格化 - ITmedia。SpaceX、初のシニア無担保社債を発行 AI投資加速に向け資金調達を本格化 ITmedia。",
-          "source_published_date": "2026-06-23",
+          "watch_topic_id": "business_contracts",
+          "title": "SpaceX、IPO後の調整で市場はリスクと流動性を注視",
+          "summary": "2026年6月24日、SpaceXはIPO後の調整局面にあり、市場はリスクと流動性の問題を注視しています。SpaceX corrected post-IPO as market highlights risks and liquidity IDNFinancials.com。",
+          "source_published_date": "2026-06-24",
           "topic_value_class": "market_or_financial_impact",
           "priority_class": "priority",
-          "slug": "auto-8e7e08486146-2026-06-24",
-          "detail_summary": "SpaceX、初のシニア無担保社債を発行 AI投資加速に向け資金調達を本格化 - ITmedia。 確認できた点は、SpaceX、初のシニア無担保社債を発行 AI投資加速に向け資金調達を本格化 - ITmedia、SpaceX、初のシニア無担保社債を発行 AI投資加速に向け資金調達を本格化 ITmedia、ITmediaが2026-06-23付の情報として配信した。 SpaceX、初のシニア無担保社債を発行 AI投資加速に向け資金調達を本格化 - ITmediaは、SpaceXの直近3日内の具体的な変化として、事業、競争環境、予定、または市場評価に影響しうる材料になる。 詳細条件、正式な続報、数値の内訳は追加確認の対象となる。",
-          "what_changed": "SpaceX、初のシニア無担保社債を発行 AI投資加速に向け資金調達を本格化 - ITmedia。",
-          "why_it_matters": "SpaceX、初のシニア無担保社債を発行 AI投資加速に向け資金調達を本格化 - ITmediaは、SpaceXの直近3日内の具体的な変化として、事業、競争環境、予定、または市場評価に影響しうる材料になる。",
+          "slug": "auto-2bd24c5c444d-2026-06-24",
+          "detail_summary": "2026年6月24日、SpaceXはIPO後の調整局面にあり、市場はリスクと流動性の問題を注視しています。 確認できた点は、SpaceX、IPO後の調整で市場はリスクと流動性を注視、2026年6月24日、SpaceXはIPO後の調整局面にあり、市場はリスクと流動性の問題を注視しています、2026年6月24日、SpaceXはIPO後の調整局面にあり、市場はリスクと流動性の問題を注視しています。SpaceX corrected post-IPO as market highlights risks and liquidity IDNFinancials.com。 SpaceX corrected post-IPO as market highlights risks and liquidity IDNFinancials.com。 追加の公式発表、条件、数値の内訳は今後の確認対象となる。",
+          "what_changed": "2026年6月24日、SpaceXはIPO後の調整局面にあり、市場はリスクと流動性の問題を注視しています。",
+          "why_it_matters": "SpaceX corrected post-IPO as market highlights risks and liquidity IDNFinancials.com。",
           "confirmed_facts": [
-            "SpaceX、初のシニア無担保社債を発行 AI投資加速に向け資金調達を本格化 - ITmedia。",
-            "SpaceX、初のシニア無担保社債を発行 AI投資加速に向け資金調達を本格化 ITmedia。",
-            "ITmediaが2026-06-23付の情報として配信した。"
+            "SpaceX、IPO後の調整で市場はリスクと流動性を注視。",
+            "2026年6月24日、SpaceXはIPO後の調整局面にあり、市場はリスクと流動性の問題を注視しています。",
+            "2026年6月24日、SpaceXはIPO後の調整局面にあり、市場はリスクと流動性の問題を注視しています。SpaceX corrected post-IPO as market highlights risks and liquidity IDNFinancials.com。",
+            "IDNFinancials.comが2026-06-24付の情報として配信した。"
           ],
-          "limits_or_unknowns": "詳細条件、正式な続報、数値の内訳は追加確認の対象となる。",
+          "limits_or_unknowns": "追加の公式発表、条件、数値の内訳は今後の確認対象となる。",
           "sources": [
             {
-              "label": "ITmedia",
-              "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9tTmZ1eDlldkJBSnJxaUd0ay00ZDZVcmh3aFJIbGxtUkV1UGl0WTZpZEZyY3R4UndGNl9PNERtSzQwWGRWY3ZtZjlIRGMxSTV1UVBxX3Y4UmpOZVloS0lYQTlIYkEyRVM5YWtDbg?oc=5",
+              "label": "IDNFinancials.com",
+              "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNSldCbERyQjhYdUZ1YVBORi1JNUYwOWxTZ0NmM0tpTEYxQU41Z05qZUVOdzBJRV9nV01xR0hlWVFkSnRWZ29fdTVNVXVZZnpTQlE1QnR4Smw4TjVhTEVHblhmVnpVaXBZcXoyRHFHRnNFNE93SWtheG5mTUsxYS1tRmNUbDVfZmVraDZNdjdWc0hoZ2ZiQWQzLU1qTFJtNVFLT2owcTZ1OTd3UEVDblRqRUZWWXRSOXM?oc=5",
               "source_role": "independent_media_or_data",
               "channel": "web"
             }
@@ -2338,7 +2531,92 @@
           "observation_channel": "web"
         }
       ],
-      "signals": [],
+      "signals": [
+        {
+          "watch_topic_id": "official_launch_manifest",
+          "title": "SpaceXは16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を見込む - TradingKey",
+          "summary": "SpaceXは16%急落後に反発。オッペンハイマーは同社株に58%の上昇余地を見込む - TradingKey。オッペンハイマーは同社株に58%の上昇余地を見込む TradingKey。",
+          "source_published_date": "2026-06-23",
+          "source_url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxOaXROQkwyc3U5eTc4aVNJQ29PX3BfQmNnVU02Ul9jb1haN09uY0VYUXVhSVNfX3lqSGlITkdiOXlpXy1sbE1heHhxcVNoVWhEWm5uZzUzLWFPZlRUT25DeVVmQnBmZjlIbHJ4WmF3UUxwQXJKSG4tNHZfVDNlM0tYa05jeDNqMkltcTl4ajZWZkpNLUxBLU4xV1l1QWFBdEtSWm93TmtBaHp3aS0yZmQ5YlQ2RS1BdlVnSmNwV1RsNkNtX2VHcXFfSDJ3?oc=5",
+          "source_label": "TradingKey",
+          "change_class": "material_update",
+          "rejection_reason_class": "duplicate_covered",
+          "rejection_reason": "確定情報は確認できたが、同カテゴリ内の上位カードまたは候補群と重なるため候補として保持する。",
+          "topic_value_class": "operational_status_change",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "official_launch_manifest",
+          "title": "SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました - CoinDesk",
+          "summary": "SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました - CoinDesk。SpaceXの6000億ドルの急落は、わずか3日間でビットコイン時価総額のほぼ半分に相当する価値を消失させました CoinDesk。",
+          "source_published_date": "2026-06-23",
+          "source_url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxNU1NaYVJ6dUJpdnRDWXlXLXo5M1BtOXNOUEZnN05VZHMtRVpKQW4yWUZVSlpzMUJacUx3VDQtd3hlNEFrYVBSeWJuTV83X0E0Nk9Qck50bmNjZk9zMkV1MjA5WlVXbkVLdFdyNnBOWms0RkRuR3poSUVQMlZ0VDRFaEdZOVNNYWdGUi0ydU1PYmdRenB6S29XQURDVnU2dENEdlE1dHlhcTJJcWFfX3VISDRYTDRfaHpoQzQzc2R2Z2gxYmw1X0xPMw?oc=5",
+          "source_label": "CoinDesk",
+          "change_class": "material_update",
+          "rejection_reason_class": "duplicate_covered",
+          "rejection_reason": "確定情報は確認できたが、同カテゴリ内の上位カードまたは候補群と重なるため候補として保持する。",
+          "topic_value_class": "operational_status_change",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "official_launch_manifest",
+          "title": "SpaceX、初のシニア無担保社債を発行 AI投資加速に向け資金調達を本格化 - ITmedia",
+          "summary": "SpaceX、初のシニア無担保社債を発行 AI投資加速に向け資金調達を本格化 - ITmedia。SpaceX、初のシニア無担保社債を発行 AI投資加速に向け資金調達を本格化 ITmedia。",
+          "source_published_date": "2026-06-23",
+          "source_url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9tTmZ1eDlldkJBSnJxaUd0ay00ZDZVcmh3aFJIbGxtUkV1UGl0WTZpZEZyY3R4UndGNl9PNERtSzQwWGRWY3ZtZjlIRGMxSTV1UVBxX3Y4UmpOZVloS0lYQTlIYkEyRVM5YWtDbg?oc=5",
+          "source_label": "ITmedia",
+          "change_class": "material_update",
+          "rejection_reason_class": "duplicate_covered",
+          "rejection_reason": "確定情報は確認できたが、同カテゴリ内の上位カードまたは候補群と重なるため候補として保持する。",
+          "topic_value_class": "market_or_financial_impact",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "official_launch_manifest",
+          "title": "SpaceX corrected post-IPO as market highlights risks and liquidity - IDNFinancials.com",
+          "summary": "SpaceX corrected post-IPO as market highlights risks and liquidity - IDNFinancials.com。SpaceX corrected post-IPO as market highlights risks and liquidity IDNFinancials.com。",
+          "source_published_date": "2026-06-24",
+          "source_url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNSldCbERyQjhYdUZ1YVBORi1JNUYwOWxTZ0NmM0tpTEYxQU41Z05qZUVOdzBJRV9nV01xR0hlWVFkSnRWZ29fdTVNVXVZZnpTQlE1QnR4Smw4TjVhTEVHblhmVnpVaXBZcXoyRHFHRnNFNE93SWtheG5mTUsxYS1tRmNUbDVfZmVraDZNdjdWc0hoZ2ZiQWQzLU1qTFJtNVFLT2owcTZ1OTd3UEVDblRqRUZWWXRSOXM?oc=5",
+          "source_label": "IDNFinancials.com",
+          "change_class": "material_update",
+          "rejection_reason_class": "duplicate_covered",
+          "rejection_reason": "確定情報は確認できたが、同カテゴリ内の上位カードまたは候補群と重なるため候補として保持する。",
+          "topic_value_class": "operational_status_change",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "official_launch_manifest",
+          "title": "Cash hits IDR 1,801 trillion, SpaceX still seeks debt funding - IDNFinancials.com",
+          "summary": "Cash hits IDR 1,801 trillion, SpaceX still seeks debt funding - IDNFinancials.com。Cash hits IDR 1,801 trillion, SpaceX still seeks debt funding IDNFinancials.com。",
+          "source_published_date": "2026-06-23",
+          "source_url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPUkRiWE1wdy1YR0dDVThxeHpKeEJFR21RclJjVll3RlBDNkZnRFViMHZUQ01abXRsY3JsV183eTBjeG1yT0RVTExFcS1CaTNfRDNBaDJhTDZaSm1pTHpzUEhHbE5oNXMtWERJSWk5aUtLMFpKQUpZcHh4Y0NFckd1UlZ2dnVmOXVsMl9rYXhHTlMzdzFkaFc0VjdKNWt4N2ZDRGVLRWFsSnM1QUFU?oc=5",
+          "source_label": "IDNFinancials.com",
+          "change_class": "material_update",
+          "rejection_reason_class": "duplicate_covered",
+          "rejection_reason": "確定情報は確認できたが、同カテゴリ内の上位カードまたは候補群と重なるため候補として保持する。",
+          "topic_value_class": "market_or_financial_impact",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "business_contracts",
+          "title": "ユナイテッド航空、777にStarlink 双通路機でも高速Wi-Fi - Aviation Wire",
+          "summary": "ユナイテッド航空、777にStarlink 双通路機でも高速Wi-Fi - Aviation Wire。ユナイテッド航空、777にStarlink 双通路機でも高速Wi-Fi Aviation Wire。",
+          "source_published_date": "2026-06-23",
+          "source_url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE5wOHBveVJ5dkpnUzZid19uNS1iY2NaajhnN3BlSndfdDdwZTZtQVRON3pTcEc2dXBRb0xIRWZhSmNxeUVaVVBQT01YU1VOc2ZRM0pHR2xR?oc=5",
+          "source_label": "Aviation Wire",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "関連情報として確認したが、記事化に必要な具体的な変化は限定的なため候補として保持する。",
+          "topic_value_class": "operational_status_change",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        }
+      ],
       "source_checks": [
         {
           "watch_topic_ids": [
@@ -2354,7 +2632,7 @@
           "url": "https://www.spacex.com/launches/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "SpaceX launchesをJina Reader mirrorで取得し、ページ「Title: 520: Web server is returning an unknown error URL Source: http://www.spacex.com/launches/ Warning: Target URL returned error 520: Unknown Markdown Content: ## What can I do?」の本文を確認した。抽出内容: Title: 520: Web server is returning an unknown error URL Source: http://www.spacex.com/launches/ Warning: Target URL returned error 520: Unknown Markdown Content: ## What can I do? ### If you are a visitor of this website: Please try again in a few minutes. ### If you are the owner of this website: There is an issue be",
+          "evidence_summary": "SpaceX launchesをJina Reader mirrorで取得し、ページ「Title: 520: Web server is returning an unknown error URL Source: http://www.spacex.com/launches/ Warning: Target URL returned error 520: Unknown Warning: This is a cached snapshot 」の本文を確認した。抽出内容: Title: 520: Web server is returning an unknown error URL Source: http://www.spacex.com/launches/ Warning: Target URL returned error 520: Unknown Warning: This is a cached snapshot of the original page, consider retry with caching opt-out. Markdown Content: ## What can I do? ### If you are a visitor of this website: Ple",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -2372,7 +2650,7 @@
           "url": "https://www.spacex.com/updates/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "SpaceX updatesの直取得とReader取得が利用できなかったため、登録ソースhttps://www.spacex.com/updates/に限定したBing RSS検索を確認した。検索語: site:www.spacex.com/updates \"SpaceX updates\"。検索結果: SpaceX - Updates / https://www.spacex.com/updates / SpaceX is committed to safe spaceflight operations and public safety; it is at the core of SpaceX’s operations. After drawing new conclusions based on the data, we made two immediate changes while continuing to find a longer-term solution. SpaceX: Trending News, Latest Updates, Analysis - Bloomberg.com / https://www.bloomberg.com/latest/spacex / See the latest on SpaceX. From breaking news to in-depth reporting, Bloomberg tracks the full story ",
+          "evidence_summary": "SpaceX updatesをJina Reader mirrorで取得し、ページ「Title: 520: Web server is returning an unknown error URL Source: http://www.spacex.com/updates/ Warning: Target URL returned error 520: Unknown Warning: This is a cached snapshot o」の本文を確認した。抽出内容: Title: 520: Web server is returning an unknown error URL Source: http://www.spacex.com/updates/ Warning: Target URL returned error 520: Unknown Warning: This is a cached snapshot of the original page, consider retry with caching opt-out. Markdown Content: ## What can I do? ### If you are a visitor of this website: Plea",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -2426,7 +2704,7 @@
           "url": "https://www.reuters.com/site-search/?query=SpaceX",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Reuters SpaceX searchの直取得とReader取得が利用できなかったため、登録ソースhttps://www.reuters.com/site-search/?query=SpaceXに限定したBing RSS検索を確認した。検索語: site:www.reuters.com/site-search \"Reuters SpaceX search\"。検索結果: Reuters | Breaking International News & Views / https://www.reuters.com/ / Reuters provides business, financial, national and international news to professionals via desktop terminals, the world's media organizations, industry events and directly to consumers. World News | Latest Top Stories | Reuters / https://www.reuters.com/world/ / Follow the latest international and world news, breaking stories and global current events from your trusted online news source. Reuters - Wikipedia / https://en.",
+          "evidence_summary": "Reuters SpaceX searchをJina Reader mirrorで取得し、ページ「Title: reuters.com URL Source: http://www.reuters.com/site-search/?query=SpaceX Warning: This page maybe requiring CAPTCHA, please make sure you are authorized to access this page.」の本文を確認した。抽出内容: Title: reuters.com URL Source: http://www.reuters.com/site-search/?query=SpaceX Warning: This page maybe requiring CAPTCHA, please make sure you are authorized to access this page. Markdown Content:",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -2444,7 +2722,7 @@
           "url": "https://apnews.com/search?q=SpaceX",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "AP SpaceX searchをdirectで取得し、ページ「AP News Search | AP News」の本文を確認した。抽出内容: AP News Search | AP News Menu World SECTIONS Iran war Russia-Ukraine war Español China Asia Pacific Latin America Europe Africa TOP STORIES Back-to-back powerful earthquakes hit Venezuela, causing widespread damage Ukraine’s latest long-range strikes on Russia hit a major natural gas plant and satellite centers Twin ea",
+          "evidence_summary": "AP SpaceX searchをdirectで取得し、ページ「AP News Search | AP News」の本文を確認した。抽出内容: AP News Search | AP News Menu World SECTIONS Iran war Russia-Ukraine war Español China Asia Pacific Latin America Europe Africa TOP STORIES Back-to-back powerful earthquakes hit Venezuela, causing widespread damage Twin earthquakes strike Venezuela, in photos A powerful 7.2 magnitude earthquake strikes off northern Jap",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -2498,7 +2776,7 @@
           "url": "https://www.marketwatch.com/technology",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "MarketWatch Technologyの直取得とReader取得が利用できなかったため、登録ソースhttps://www.marketwatch.com/technologyに限定したBing RSS検索を確認した。検索語: site:www.marketwatch.com/technology \"MarketWatch Technology\"。検索結果: MarketWatch: Stock Market News - Financial News / https://www.marketwatch.com/ / MarketWatch provides the latest stock market, financial and business news. Get stock market quotes, personal finance advice, company news and more. U.S. Markets - MarketWatch / https://www.marketwatch.com/markets/us / U.S. markets news coverage from MarketWatch. Get Need to Know delivered to your inbox Need to Know guides investors to the most important, insightful items required to chart a course ahead of each ... ",
+          "evidence_summary": "MarketWatch TechnologyをJina Reader mirrorで取得し、ページ「Title: Page Not Found - MarketWatch URL Source: http://www.marketwatch.com/technology Markdown Content: [Skip to main content](http://www.marketwatch.com/technology#maincontent) Ma」の本文を確認した。抽出内容: Title: Page Not Found - MarketWatch URL Source: http://www.marketwatch.com/technology Markdown Content: [Skip to main content](http://www.marketwatch.com/technology#maincontent) Main Menu * [Latest News](https://www.marketwatch.com/latest-news?mod=side_nav) * [Watchlist](https://www.marketwatch.com/watchlist?mod=side_n",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -2552,7 +2830,7 @@
           "url": "https://x.com/SpaceX",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "SpaceX Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/SpaceXに限定したBing RSS検索を確認した。検索語: site:x.com/SpaceX \"SpaceX X\"。検索結果: SpaceX / https://www.spacex.com/ / SpaceX designs, manufactures and launches advanced rockets and spacecraft. The company was founded in 2002 to revolutionize space technology, with the ultimate goal of enabling people to live on other planets. SpaceX - Launches / https://www.spacex.com/launches / SpaceX designs, manufactures and launches advanced rockets and spacecraft. The company was founded in 2002 to revolutionize space technology, with the ultimate goal of enabling people to live on other ",
+          "evidence_summary": "SpaceX Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/SpaceXに限定したBing RSS検索を確認した。検索語: site:x.com/SpaceX \"SpaceX X\"。検索結果: SpaceX / https://www.spacex.com/ / SpaceX designs, manufactures and launches advanced rockets and spacecraft. The company was founded in 2002 to revolutionize space technology, with the ultimate goal of enabling people to live on other planets. SpaceX - Wikipedia / https://en.wikipedia.org/wiki/SpaceX / In 2020, SpaceX began to operate its Dragon 2 capsules for NASA and private entity crewed missions. Around this time, SpaceX began building test prototypes for Starship, the largest launch vehicl",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -2570,7 +2848,7 @@
           "url": "https://www.instagram.com/spacex/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "SpaceX Instagramの直取得とReader取得が利用できなかったため、登録ソースhttps://www.instagram.com/spacex/に限定したBing RSS検索を確認した。検索語: site:www.instagram.com/spacex \"SpaceX Instagram\"。検索結果: SpaceX / https://www.spacex.com/ / SpaceX designs, manufactures and launches advanced rockets and spacecraft. The company was founded in 2002 to revolutionize space technology, with the ultimate goal of enabling people to live on other planets. SpaceX - Launches / https://www.spacex.com/launches / SpaceX designs, manufactures and launches advanced rockets and spacecraft. The company was founded in 2002 to revolutionize space technology, with the ultimate goal of enabling people to live on other ",
+          "evidence_summary": "SpaceX Instagramの直取得とReader取得が利用できなかったため、登録ソースhttps://www.instagram.com/spacex/に限定したBing RSS検索を確認した。検索語: site:www.instagram.com/spacex \"SpaceX Instagram\"。検索結果: SpaceX / https://www.spacex.com/ / SpaceX designs, manufactures and launches advanced rockets and spacecraft. The company was founded in 2002 to revolutionize space technology, with the ultimate goal of enabling people to live on other planets. SpaceX - Wikipedia / https://en.wikipedia.org/wiki/SpaceX / In 2020, SpaceX began to operate its Dragon 2 capsules for NASA and private entity crewed missions. Around this time, SpaceX began building test prototypes for Starship, the largest launch vehicl",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -2588,7 +2866,7 @@
           "url": "https://www.youtube.com/@SpaceX",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "SpaceX YouTubeの直取得とReader取得が利用できなかったため、登録ソースhttps://www.youtube.com/@SpaceXに限定したBing RSS検索を確認した。検索語: site:www.youtube.com/@SpaceX \"SpaceX YouTube\"。検索結果: SpaceX - YouTube / https://www.youtube.com/spacex / SpaceX designs, manufactures and launches the world’s most advanced rockets and spacecraft. SpaceX - YouTube / https://www.youtube.com/@SpaceXCorporate / Featured Videos Play all SpaceX designs, manufactures and launches the world’s most advanced rockets and spacecraft 24:54 SpaceX - Launches / https://www.spacex.com/launches/?os=www.youtube.comwatchvep9IYJ93QII&ref=app / SpaceX designs, manufactures and launches advanced rockets and spacecraft",
+          "evidence_summary": "SpaceX YouTubeをJina Reader mirrorで取得し、ページ「Title: SpaceX URL Source: http://www.youtube.com/@SpaceX Warning: Target URL returned error 403: Forbidden Warning: This page contains iframe that are currently hidden, consider en」の本文を確認した。抽出内容: Title: SpaceX URL Source: http://www.youtube.com/@SpaceX Warning: Target URL returned error 403: Forbidden Warning: This page contains iframe that are currently hidden, consider enabling iframe processing. Warning: This page maybe requiring CAPTCHA, please make sure you are authorized to access this page. Markdown Cont",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3043,27 +3321,28 @@
           "verification_method": "reviewed_live_web"
         }
       ],
-      "no_change_summary": "SpaceXはモデル抽出が一時失敗したため、取得済み証拠から重要クラスタを補完した。"
+      "no_change_summary": "2026年6月22日から24日の間に、SpaceXの公式打ち上げスケジュールやドラゴンISS関連の公式更新は確認されませんでした。過去の情報として、SpaceXは宇宙技術の革新を続けており、StarshipやStarlink関連の開発が進行中です。"
     },
     "日本経済": {
       "items": [
         {
-          "watch_topic_id": "prices_wages_boj",
-          "title": "「日本のデータセンター向けGPU市場シェア分析、業界動向と統計、成長予測 2026-2031年」市場調査レポートの出版・販売開始のご案内 - ドリームニュース",
-          "summary": "「日本のデータセンター向けGPU市場シェア分析、業界動向と統計、成長予測 2026-2031年」市場調査レポートの出版・販売開始のご案内 - ドリームニュース。「日本のデータセンター向けGPU市場シェア分析、業界動向と統計、成長予測 2026-2031年」市場調査レポートの出版・販売開始のご案内 ドリームニュース。",
+          "watch_topic_id": "investment_policy_markets",
+          "title": "「日本のデータセンター向けGPU市場シェア分析、業界動向と統計、成長予測 2026-2031年」市場調査レポートの出版・販売開始",
+          "summary": "日本のデータセンター向けGPU市場のシェア分析と成長予測をまとめた市場調査レポートが2026年6月24日に出版・販売開始されました。「日本のデータセンター向けGPU市場シェア分析、業界動向と統計、成長予測 2026-2031年」市場調査レポートの出版・販売開始のご案内 ドリームニュース。",
           "source_published_date": "2026-06-24",
           "topic_value_class": "market_or_financial_impact",
           "priority_class": "priority",
-          "slug": "auto-54fb1fe4510f-2026-06-24",
-          "detail_summary": "「日本のデータセンター向けGPU市場シェア分析、業界動向と統計、成長予測 2026-2031年」市場調査レポートの出版・販売開始のご案内 - ドリームニュース。 確認できた点は、「日本のデータセンター向けGPU市場シェア分析、業界動向と統計、成長予測 2026-2031年」市場調査レポートの出版・販売開始のご案内 - ドリームニュース、「日本のデータセンター向けGPU市場シェア分析、業界動向と統計、成長予測 2026-2031年」市場調査レポートの出版・販売開始のご案内 ドリームニュース、ドリームニュースが2026-06-24付の情報として配信した。 「日本のデータセンター向けGPU市場シェア分析、業界動向と統計、成長予測 2026-2031年」市場調査レポートの出版・販売開始のご案内 - ドリームニュースは、日本経済の直近3日内の具体的な変化として、事業、競争環境、予定、または市場評価に影響しうる材料になる。 詳細条件、正式な続報、数値の内訳は追加確認の対象となる。",
-          "what_changed": "「日本のデータセンター向けGPU市場シェア分析、業界動向と統計、成長予測 2026-2031年」市場調査レポートの出版・販売開始のご案内 - ドリームニュース。",
-          "why_it_matters": "「日本のデータセンター向けGPU市場シェア分析、業界動向と統計、成長予測 2026-2031年」市場調査レポートの出版・販売開始のご案内 - ドリームニュースは、日本経済の直近3日内の具体的な変化として、事業、競争環境、予定、または市場評価に影響しうる材料になる。",
+          "slug": "auto-c47df7a9f87e-2026-06-24",
+          "detail_summary": "日本のデータセンター向けGPU市場のシェア分析と成長予測をまとめた市場調査レポートが2026年6月24日に出版・販売開始されました。 確認できた点は、「日本のデータセンター向けGPU市場シェア分析、業界動向と統計、成長予測 2026-2031年」市場調査レポートの出版・販売開始、日本のデータセンター向けGPU市場のシェア分析と成長予測をまとめた市場調査レポートが2026年6月24日に出版・販売開始されました、日本のデータセンター向けGPU市場のシェア分析と成長予測をまとめた市場調査レポートが2026年6月24日に出版・販売開始されました。「日本のデータセンター向けGPU市場シェア分析、業界動向と統計、成長予測 2026-2031年」市場調査レポートの出版・販売開始のご案内 ドリームニュース。 「日本のデータセンター向けGPU市場シェア分析、業界動向と統計、成長予測 2026-2031年」市場調査レポートの出版・販売開始のご案内 ドリームニュース。 追加の公式発表、条件、数値の内訳は今後の確認対象となる。",
+          "what_changed": "日本のデータセンター向けGPU市場のシェア分析と成長予測をまとめた市場調査レポートが2026年6月24日に出版・販売開始されました。",
+          "why_it_matters": "「日本のデータセンター向けGPU市場シェア分析、業界動向と統計、成長予測 2026-2031年」市場調査レポートの出版・販売開始のご案内 ドリームニュース。",
           "confirmed_facts": [
-            "「日本のデータセンター向けGPU市場シェア分析、業界動向と統計、成長予測 2026-2031年」市場調査レポートの出版・販売開始のご案内 - ドリームニュース。",
-            "「日本のデータセンター向けGPU市場シェア分析、業界動向と統計、成長予測 2026-2031年」市場調査レポートの出版・販売開始のご案内 ドリームニュース。",
+            "「日本のデータセンター向けGPU市場シェア分析、業界動向と統計、成長予測 2026-2031年」市場調査レポートの出版・販売開始。",
+            "日本のデータセンター向けGPU市場のシェア分析と成長予測をまとめた市場調査レポートが2026年6月24日に出版・販売開始されました。",
+            "日本のデータセンター向けGPU市場のシェア分析と成長予測をまとめた市場調査レポートが2026年6月24日に出版・販売開始されました。「日本のデータセンター向けGPU市場シェア分析、業界動向と統計、成長予測 2026-2031年」市場調査レポートの出版・販売開始のご案内 ドリームニュース。",
             "ドリームニュースが2026-06-24付の情報として配信した。"
           ],
-          "limits_or_unknowns": "詳細条件、正式な続報、数値の内訳は追加確認の対象となる。",
+          "limits_or_unknowns": "追加の公式発表、条件、数値の内訳は今後の確認対象となる。",
           "sources": [
             {
               "label": "ドリームニュース",
@@ -3138,7 +3417,7 @@
           "url": "https://www.reuters.com/markets/japan/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Reuters Japan marketsの直取得とReader取得が利用できなかったため、登録ソースhttps://www.reuters.com/markets/japan/に限定したBing RSS検索を確認した。検索語: site:www.reuters.com/markets/japan \"Reuters Japan markets\"。検索結果: Reuters | Breaking International News & Views / https://www.reuters.com/ / Reuters provides business, financial, national and international news to professionals via desktop terminals, the world's media organizations, industry events and directly to consumers. World News | Latest Top Stories | Reuters / https://www.reuters.com/world/ / Follow the latest international and world news, breaking stories and global current events from your trusted online news source. Reuters - Wikipedia / https://en.",
+          "evidence_summary": "Reuters Japan marketsの直取得とReader取得が利用できなかったため、登録ソースhttps://www.reuters.com/markets/japan/に限定したBing RSS検索を確認した。検索語: site:www.reuters.com/markets/japan \"Reuters Japan markets\"。検索結果: Reuters | Breaking International News & Views / https://www.reuters.com/ / Find latest news from every corner of the globe at Reuters.com, your online source for breaking international news coverage. Reuters - Wikipedia / https://en.wikipedia.org/wiki/Reuters / Reuters (/ ˈrɔɪtərz / ⓘ ROY-tərz) is a British news agency wholly owned by Thomson Reuters, a multinational information conglomerate. [4][5] It employs around 2,500 journalists and 600 photojournalists in 200 locations and 165 countries w",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3186,7 +3465,7 @@
           "url": "https://x.com/MOF_Japan",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Ministry of Finance Japan Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/MOF_Japanに限定したBing RSS検索を確認した。検索語: site:x.com/MOF_Japan \"Ministry of Finance Japan X\"。検索結果: Ministry (band) - Wikipedia / https://en.m.wikipedia.org/wiki/Ministry_(band) / Ministry is an American industrial metal band founded in Chicago, Illinois, in 1981 by producer, singer, and instrumentalist Al Jourgensen. Originally a synth-pop outfit, Ministry evolved into one of the pioneers of industrial rock and industrial metal in the late 1980s. Al Jourgensen | Ministry | The Official Website / https://ministryband.com/ / The Official Al Jourgensen / Ministry Site | Nuclear Blast Records. To",
+          "evidence_summary": "Ministry of Finance Japan Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/MOF_Japanに限定したBing RSS検索を確認した。検索語: site:x.com/MOF_Japan \"Ministry of Finance Japan X\"。検索結果: Ministry (band) - Wikipedia / https://en.wikipedia.org/wiki/Ministry_(band) / Ministry is an American industrial metal band founded in Chicago, Illinois, in 1981 by producer, singer, and instrumentalist Al Jourgensen. Originally a synth-pop outfit, Ministry evolved into one of the pioneers of industrial rock and industrial metal in the late 1980s. Al Jourgensen | Ministry | The Official Website / https://ministryband.com/ / The Official Al Jourgensen / Ministry Site | Nuclear Blast Records. Tour",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3202,7 +3481,7 @@
           "url": "https://www.youtube.com/user/BOJchannel/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Bank of Japan YouTubeの直取得とReader取得が利用できなかったため、登録ソースhttps://www.youtube.com/user/BOJchannel/に限定したBing RSS検索を確認した。検索語: site:www.youtube.com/user/BOJchannel \"Bank of Japan YouTube\"。検索結果: Yahoo Mail - Login - Sign in to Yahoo / https://mail.yahoo.com/ / Sign in to access the best in class Yahoo Mail, breaking local, national and global news, finance, sports, music, movies... You get more out of the web, you get more out of life. Login - Sign in to Yahoo / https://login.yahoo.com/ / Sign in to access the best in class Yahoo Mail, breaking local, national and global news, finance, sports, music, movies... You get more out of the web, you get more out of life. Yahoo Mail: Email & Pl",
+          "evidence_summary": "Bank of Japan YouTubeの直取得とReader取得が利用できなかったため、登録ソースhttps://www.youtube.com/user/BOJchannel/に限定したBing RSS検索を確認した。検索語: site:www.youtube.com/user/BOJchannel \"Bank of Japan YouTube\"。検索結果: Bank of America - Banking, Credit Cards, Loans and Merrill Investing / https://www.bankofamerica.com/ / What would you like the power to do? At Bank of America, our purpose is to help make financial lives better through the power of every connection. Bank of America - Online Banking Log In - User ID / https://secure.bankofamerica.com/login/sign-in/signOnV2Screen.go / Saving your User ID means you don't have to enter it every time you log in. Only save your User ID on your personal computer or mo",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3215,58 +3494,10 @@
           "source_role": "independent_media_or_data",
           "channel": "web",
           "label": "日本経済新聞",
-          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE04b1NUMElic1BvT0pGNDJCbDZBbkFsZmdYOXFjRTMtLV9LRE1KWXlFN1NxMEswYnRFRzhXYkxyeGFoRkxnSjAwTDJWVlhJU3Zra2pET2pSYzVUWmxpci1OLXNkdTRDeHlOclBzbw?oc=5",
+          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE96MmJpVzBRWHlpTWpHNU5XOEJLdmFNUTh3amZSQWlHRExNMU9pM1Nyb0xnVVdVWmV1SFE4Y2Z6dk53WVFFR0QzRlFOR2cwNjQzalN2SWpoVFh4M0k3X2s1ZVVPSi1vN29IUWxUZg?oc=5",
           "slot_state": "observed_live",
           "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSで「フジHD、SBIとメディア事業提携 独立路線転換しコンテンツ共同制作 - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-25。",
-          "checked_at_jst": "2026-06-24T23:59:59+09:00",
-          "verification_method": "reviewed_live_web"
-        },
-        {
-          "watch_topic_ids": [
-            "prices_wages_boj",
-            "employment_consumption",
-            "investment_policy_markets"
-          ],
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "label": "株式会社フロッグ",
-          "url": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE9XeTJMd1A1M2gwNnFyRzdsYTFjUVZmSnluN3hNZm8xVEV4Q1N4RHl1d0RFVXlyanhlTDY2N3pwOUYwYXRCN2MxT0d3?oc=5",
-          "slot_state": "observed_live",
-          "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSで「『日本経済新聞』にフロッグの求人データを取り上げていただきました - 株式会社フロッグ」を確認した。配信元は株式会社フロッグ、配信日は2026-06-25。",
-          "checked_at_jst": "2026-06-24T23:59:59+09:00",
-          "verification_method": "reviewed_live_web"
-        },
-        {
-          "watch_topic_ids": [
-            "prices_wages_boj",
-            "employment_consumption",
-            "investment_policy_markets"
-          ],
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "label": "みんかぶ FX/為替",
-          "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE1LTVp3RFJyc3NxbkhlOHc4QzE4WndMeXpWMy1XNFpRTFQ4ZEJWX2JpemY1TDJqRmlwcGh1QWlRT01aSld2TGg3bA?oc=5",
-          "slot_state": "observed_live",
-          "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSで「日本経済指標【景気動向指数（確報値）】 - みんかぶ FX/為替」を確認した。配信元はみんかぶ FX/為替、配信日は2026-06-25。",
-          "checked_at_jst": "2026-06-24T23:59:59+09:00",
-          "verification_method": "reviewed_live_web"
-        },
-        {
-          "watch_topic_ids": [
-            "prices_wages_boj",
-            "employment_consumption",
-            "investment_policy_markets"
-          ],
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "label": "日本経済新聞",
-          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE94M2l5TkxNeWE2dC1LcERPT3dOd3g0UXAzbG9kaFd2ZTFQQ1BBU2ZOczUzYkxVaVVsODYyc0lWZ1VybkhOQVpHRHEzcVZWZzM3TXZuQlBOMVN0NWpvRThaTHpmMDdkZWx1Mk0zRA?oc=5",
-          "slot_state": "observed_live",
-          "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSで「京都銀行、国連UNHCR協会と遺贈・寄付で協定 - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-25。",
+          "evidence_summary": "Google News RSSで「エネルギー多角化の新計画、首相指示へ 原油分散調達や原子力活用 - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-25。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3295,10 +3526,26 @@
           "source_role": "independent_media_or_data",
           "channel": "web",
           "label": "日本経済新聞",
-          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9URDNZdHd4dVBicTR0dDZ1emhlXzR4QV84Q2RtWFpzMFhma1FucjVSZkYtOUx3VVJ4dXgwNF9WYTlCZDg2cVZOVnhVODl1YjQwektqUl93clphS3lrU05mUDBuUkF4aENieTJLeg?oc=5",
+          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBXUDlZNlNZZmM3NW9HVTF1UkgwMjhvUHM1S0J2OW5PV2ZLUWZISXNMcGhVc0s4MkRTM3ZzMWd0YTZKLUhyRl9oVVF4T19fdGNhSHZOS3VpRnZKRTljYllXNldZYXZBQXNnOE16eQ?oc=5",
           "slot_state": "observed_live",
           "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSで「小さな喜び 歴史学者・本郷恵子 - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-25。",
+          "evidence_summary": "Google News RSSで「日本に投資すべきもう一つの理由 - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-25。",
+          "checked_at_jst": "2026-06-24T23:59:59+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "prices_wages_boj",
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "株式会社フロッグ",
+          "url": "https://news.google.com/rss/articles/CBMiSkFVX3lxTE9XeTJMd1A1M2gwNnFyRzdsYTFjUVZmSnluN3hNZm8xVEV4Q1N4RHl1d0RFVXlyanhlTDY2N3pwOUYwYXRCN2MxT0d3?oc=5",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-25",
+          "evidence_summary": "Google News RSSで「『日本経済新聞』にフロッグの求人データを取り上げていただきました - 株式会社フロッグ」を確認した。配信元は株式会社フロッグ、配信日は2026-06-25。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3311,10 +3558,26 @@
           "source_role": "independent_media_or_data",
           "channel": "web",
           "label": "日本経済新聞",
-          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5UX2V3VlZCWE9KQmY4WTVVZjJmbl8yU0lIb000Z2V5UWZnNXlMenVaMDhJYUpGRTNnMlhMS29FZm1iWjlyZTIybkY0SXZEQXFqd21MNFpkc3JoWkR2Z0hFZzd6eDJaWXhORFpuQQ?oc=5",
+          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5NbWVhbndaTDNjZTl1M3Q2TDVKcE1vUEh1THYwUGQ0M0t0TVN6cUFFM2lWc2t0TGdGdWk3dEZjenZiTVA0enhQVl9acGxLT3RCdlpWZWpXYnVWcG1UcTRSVlEzSVFvdm9uT2JBTg?oc=5",
           "slot_state": "observed_live",
           "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSで「新米3000円割れが見えてきた 「もう倉庫に入らない」、生産も過剰 - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-25。",
+          "evidence_summary": "Google News RSSで「ANA、上級会員扱いクレカ「SFC」特典の改定内容見直しへ - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-25。",
+          "checked_at_jst": "2026-06-24T23:59:59+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "prices_wages_boj",
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "日本経済新聞",
+          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5ZYURRRFV4Ym1YMEcxa0JzNmtPdW5RaTF1ZVAxYm9BXzhBenVoSHl3VjZ3bTE2S3Njb2w3NW1wa3lpdWxEMUl4dldoaEVkd3dZT1NVT0xzYmxBWlpUTTYzQ3pERXhmWVpvRkJLRw?oc=5",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-25",
+          "evidence_summary": "Google News RSSで「ナフサ価格がアジアで下落、衝突前下回る 代替調達で供給懸念が後退 - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-25。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3331,6 +3594,22 @@
           "slot_state": "observed_live",
           "published_date": "2026-06-25",
           "evidence_summary": "Google News RSSで「中国「波風立てれば必ず報い」 境界交渉入りの日本・フィリピンに警告 - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-25。",
+          "checked_at_jst": "2026-06-24T23:59:59+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "prices_wages_boj",
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "日本経済新聞",
+          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE04b1NUMElic1BvT0pGNDJCbDZBbkFsZmdYOXFjRTMtLV9LRE1KWXlFN1NxMEswYnRFRzhXYkxyeGFoRkxnSjAwTDJWVlhJU3Zra2pET2pSYzVUWmxpci1OLXNkdTRDeHlOclBzbw?oc=5",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-25",
+          "evidence_summary": "Google News RSSで「フジHD、SBIとメディア事業提携 独立路線転換しコンテンツ共同制作 - 日本経済新聞」を確認した。配信元は日本経済新聞、配信日は2026-06-25。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3422,22 +3701,6 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "みんかぶ FX/為替 媒体ページ",
-          "url": "https://fx.minkabu.jp",
-          "slot_state": "observed_live",
-          "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSのsource属性から、みんかぶ FX/為替の媒体URLhttps://fx.minkabu.jpを確認した。",
-          "checked_at_jst": "2026-06-24T23:59:59+09:00",
-          "verification_method": "reviewed_live_web"
-        },
-        {
-          "watch_topic_ids": [
-            "prices_wages_boj",
-            "employment_consumption",
-            "investment_policy_markets"
-          ],
-          "source_role": "independent_media_or_data",
-          "channel": "web",
           "label": "ドリームニュース 媒体ページ",
           "url": "https://www.dreamnews.jp",
           "slot_state": "observed_live",
@@ -3479,7 +3742,7 @@
           "verification_method": "reviewed_live_web"
         }
       ],
-      "no_change_summary": "日本経済はモデル抽出が一時失敗したため、取得済み証拠から重要クラスタを補完した。"
+      "no_change_summary": "2026年6月24日を含む直近3日間の証拠記録では、日本の物価や賃金に関する日銀の利上げや上振れリスク、雇用や消費の大幅な変動、設備投資や政府方針の重要な変更は確認できません。経済指標や政策関連の速報は存在しますが、具体的な新規発表や数値の変化は示されていません。"
     },
     "YOASOBI / 幾田りら": {
       "items": [],
@@ -3498,7 +3761,7 @@
           "url": "https://www.yoasobi-music.jp/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "YOASOBI officialの直取得とReader取得が利用できなかったため、登録ソースhttps://www.yoasobi-music.jp/に限定したBing RSS検索を確認した。検索語: site:www.yoasobi-music.jp \"YOASOBI official\"。検索結果: Yoasobi - Wikipedia / https://en.m.wikipedia.org/wiki/Yoasobi / Yoasobi[A] is a Japanese musical duo formed in 2019. It consists of songwriter and producer Ayase and vocalist Ikura. Represented by the slogan \"novel into music\", the duo's narrative -driven songs are originally based on selected fictional stories posted on the website Monogatary.com. Later, source YOASOBI オフィシャルサイト / https://www.yoasobi-music.jp/ / YOASOBIの公式サイト。最新情報、ライブ、楽曲、小説など、YOASOBIに関するすべてがここに集結。 YOASOBI - YouTube / https://ww",
+          "evidence_summary": "YOASOBI officialの直取得とReader取得が利用できなかったため、登録ソースhttps://www.yoasobi-music.jp/に限定したBing RSS検索を確認した。検索語: site:www.yoasobi-music.jp \"YOASOBI official\"。検索結果: Yoasobi - Wikipedia / https://en.wikipedia.org/wiki/Yoasobi / Yoasobi[A] is a Japanese musical duo formed in 2019. It consists of songwriter and producer Ayase and vocalist Ikura. Represented by the slogan \"novel into music\", the duo's narrative -driven songs are originally based on selected fictional stories posted on the website Monogatary.com. Later, source YOASOBI - YouTube / https://www.youtube.com/channel/UCvpredjG93ifbCP1Y77JyFA / - YOASOBI × UNIQLO UT A second collaboration, five years i",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3515,7 +3778,7 @@
           "url": "https://www.ikuralilas.com/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Ikuta Lilas officialの直取得とReader取得が利用できなかったため、登録ソースhttps://www.ikuralilas.com/に限定したBing RSS検索を確認した。検索語: site:www.ikuralilas.com \"Ikuta Lilas official\"。検索結果: Invest like an icon | Blockchain / https://www.blockchain.com/ / We power crypto access for everyone: from private people, to pros, to public companies. Here since the beginning of crypto. Blockchain.com - Wallet | Login / https://login.blockchain.com/ / The world's most trusted and popular crypto wallet. Sign up today to buy and sell Bitcoin, Ethereum and other top cryptocurrencies. Blockchain.com | The only crypto wallet you’ll ever need / https://www.blockchain.com/wallet / The only crypto wa",
+          "evidence_summary": "Ikuta Lilas officialの直取得とReader取得が利用できなかったため、登録ソースhttps://www.ikuralilas.com/に限定したBing RSS検索を確認した。検索語: site:www.ikuralilas.com \"Ikuta Lilas official\"。検索結果: Russia Map | Map of Russia | Collection of Russia Maps / https://www.mapsofworld.com/russia/ / Explore this Russia map to learn everything you want to know about this country. Google Maps / https://maps.google.com/ / Find local businesses, view maps and get driving directions in Google Maps. Google Maps / https://www.google.com/maps/search/Russia%3F / Live traffic Fast Slow Map data ©2026 Google Terms 10 km Nearby places Map details Satellite Map of Russia with cities and regions — Yandex Maps /",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3549,7 +3812,7 @@
           "url": "https://natalie.mu/music",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Natalie Musicをdirectで取得し、ページ「音楽ナタリー - 新曲リリース・ライブ情報などの音楽ニュースを毎日配信」の本文を確認した。抽出内容: 音楽ナタリー - 新曲リリース・ライブ情報などの音楽ニュースを毎日配信 ホーム 音楽 コミック お笑い 映画 ステージ ストア ライブ 送信 音楽ナタリー トップページ ニュース コラム 特集・インタビュー 注目の1曲 アクセスランキング 記事アクセスランキング 画像アクセスランキング 話題のアーティスト 話題の動画 ライブレポート リリース ライブ・ツアー情報 イベントレポート X YouTube ナタリー 音楽 イベントレポート / 写真いっぱい 中島健人×長濱ねる「ラブ≠コメディ」雨の豊洲でアルパカに遭遇、スイカは木っ端みじん 中島健人と長濱ねるが本日6月25日に東京・ららぽーと豊洲メインステージ シーサイドデッキ前で開催され",
+          "evidence_summary": "Natalie Musicをdirectで取得し、ページ「音楽ナタリー - 新曲リリース・ライブ情報などの音楽ニュースを毎日配信」の本文を確認した。抽出内容: 音楽ナタリー - 新曲リリース・ライブ情報などの音楽ニュースを毎日配信 ホーム 音楽 コミック お笑い 映画 ステージ ストア ライブ 送信 音楽ナタリー トップページ ニュース コラム 特集・インタビュー 注目の1曲 アクセスランキング 記事アクセスランキング 画像アクセスランキング 話題のアーティスト 話題の動画 ライブレポート リリース ライブ・ツアー情報 イベントレポート X YouTube ナタリー 音楽 ライブレポート / イベントレポート / 写真いっぱい Lienel念願のメジャーデビュー記念イベントで届けた感謝、先輩からのサプライズや占い企画に大盛り上がり Lienelのメジャーデビューシングル「メロ・コレクション",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3566,7 +3829,7 @@
           "url": "https://nypost.com/2026/04/21/ticket-sales/yoasobi-american-dream-tour-2026-where-to-buy-tickets-best-prices/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "New York Post YOASOBI coverageの直取得とReader取得が利用できなかったため、登録ソースhttps://nypost.com/2026/04/21/ticket-sales/yoasobi-american-dream-tour-2026-where-to-buy-tickets-best-prices/に限定したBing RSS検索を確認した。検索語: site:nypost.com/2026/04/21/ticket-sales/yoasobi-american-dream-tour-2026-where-to-buy-tickets-best-prices \"New York Post YOASOBI coverage\"。検索結果: The New York Times - Breaking News, US News, World News and ... / https://www.nytimes.com/ / Live news, investigations, opinion, photos and video by the journalists of The New York Times from more than 150 countries around the world. Google News / https://news.google.com/ / Comprehensive up-to-date news coverage, aggregated from sources all over the world by Google News. BBC News - Breaking news, video and the latest top stories ... / https://www.bbc.com/news / Visit BBC News for the latest news",
+          "evidence_summary": "New York Post YOASOBI coverageの直取得とReader取得が利用できなかったため、登録ソースhttps://nypost.com/2026/04/21/ticket-sales/yoasobi-american-dream-tour-2026-where-to-buy-tickets-best-prices/に限定したBing RSS検索を確認した。検索語: site:nypost.com/2026/04/21/ticket-sales/yoasobi-american-dream-tour-2026-where-to-buy-tickets-best-prices \"New York Post YOASOBI coverage\"。検索結果: How to reset Fire tablet - About Amazon / https://www.aboutamazon.com/news/devices/reset-fire-tablet / Here is a step-by-step guide on how to reset your Fire tablet: 1. First, you’ll want to understand what a factory reset will do to your device and check that there’s nothing you won’t want to lose. A factory reset of your device removes all downloaded content, including in-app purchases and returns Reset Fire Tablet, Fire TV, Kindle, and Echo - Amazon Customer Service / https://www.amazon.com/g",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3583,7 +3846,7 @@
           "url": "https://x.com/YOASOBI_staff",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "YOASOBI Staff Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/YOASOBI_staffに限定したBing RSS検索を確認した。検索語: site:x.com/YOASOBI_staff \"YOASOBI Staff X\"。検索結果: Yoasobi - Wikipedia / https://en.m.wikipedia.org/wiki/Yoasobi / Yoasobi[A] is a Japanese musical duo formed in 2019. It consists of songwriter and producer Ayase and vocalist Ikura. Represented by the slogan \"novel into music\", the duo's narrative -driven songs are originally based on selected fictional stories posted on the website Monogatary.com. Later, source YOASOBI オフィシャルサイト / https://www.yoasobi-music.jp/ / YOASOBIの公式サイト。最新情報、ライブ、楽曲、小説など、YOASOBIに関するすべてがここに集結。 YOASOBI - YouTube / https://ww",
+          "evidence_summary": "YOASOBI Staff Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/YOASOBI_staffに限定したBing RSS検索を確認した。検索語: site:x.com/YOASOBI_staff \"YOASOBI Staff X\"。検索結果: Yoasobi - Wikipedia / https://en.wikipedia.org/wiki/Yoasobi / Yoasobi[A] is a Japanese musical duo formed in 2019. It consists of songwriter and producer Ayase and vocalist Ikura. Represented by the slogan \"novel into music\", the duo's narrative -driven songs are originally based on selected fictional stories posted on the website Monogatary.com. Later, source YOASOBI - YouTube / https://www.youtube.com/channel/UCvpredjG93ifbCP1Y77JyFA / - YOASOBI × UNIQLO UT A second collaboration, five years i",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3600,7 +3863,7 @@
           "url": "https://x.com/ikutalilas",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Ikuta Lilas Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/ikutalilasに限定したBing RSS検索を確認した。検索語: site:x.com/ikutalilas \"Ikuta Lilas X\"。検索結果: List of Criminal Minds characters - Wikipedia / https://en.m.wikipedia.org/wiki/List_of_Criminal_Minds_characters / This is a list of characters in the television series Criminal Minds, an American police procedural drama which premiered September 22, 2005, on CBS and concluded its original run on February 19, 2020. Criminal Minds Characters - Fandom / https://criminalminds.fandom.com/wiki/Category:Criminal_Minds_Characters / List of all characters in Criminal Minds. Kategorie:Charakter | Crimin",
+          "evidence_summary": "Ikuta Lilas Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/ikutalilasに限定したBing RSS検索を確認した。検索語: site:x.com/ikutalilas \"Ikuta Lilas X\"。検索結果: LEXUS、松山 英樹選手の米ツアー通算10勝を記念し、特別 ... / https://global.toyota/jp/newsroom/lexus/42331330.html / LEXUSは、松山 英樹選手の米ツアー通算10勝を記念し、特別仕様車“HIDEKI MATSUYAMA EDITION”を「LX700h」に設定し、10台限定で5月に発売を予定しています。 LEXUS ‐ LX / https://lexus.jp/models/lx/ / 2つのモデルを選んで、価格やスペックを比較できます。 ※マンガンラスター〈1K2〉はメーカーオプション＜165,000円 (消費税抜き150,000円)＞となります。 「世界中のどんな道でも楽に、上質に」。 歴代LX初の電動化を実現したフラッグシップSUV「LEXUS LX」。 【購入で貴方のゴルフスコアも爆上がり？】レクサス「LX700h ... / https://www.autocar.jp/post/1120555 / レクサスは松山英樹選手の米ツアー通算10勝を記念し、特別仕様車を10台設定すると発表。 ツアーを共に闘って",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3617,7 +3880,7 @@
           "url": "https://www.instagram.com/yoasobi_staff_/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "YOASOBI Instagramの直取得とReader取得が利用できなかったため、登録ソースhttps://www.instagram.com/yoasobi_staff_/に限定したBing RSS検索を確認した。検索語: site:www.instagram.com/yoasobi_staff_ \"YOASOBI Instagram\"。検索結果: Yoasobi - Wikipedia / https://en.m.wikipedia.org/wiki/Yoasobi / Yoasobi[A] is a Japanese musical duo formed in 2019. It consists of songwriter and producer Ayase and vocalist Ikura. Represented by the slogan \"novel into music\", the duo's narrative -driven songs are originally based on selected fictional stories posted on the website Monogatary.com. Later, source YOASOBI オフィシャルサイト / https://www.yoasobi-music.jp/ / YOASOBIの公式サイト。最新情報、ライブ、楽曲、小説など、YOASOBIに関するすべてがここに集結。 YOASOBI - YouTube / https://ww",
+          "evidence_summary": "YOASOBI Instagramの直取得とReader取得が利用できなかったため、登録ソースhttps://www.instagram.com/yoasobi_staff_/に限定したBing RSS検索を確認した。検索語: site:www.instagram.com/yoasobi_staff_ \"YOASOBI Instagram\"。検索結果: Yoasobi - Wikipedia / https://en.wikipedia.org/wiki/Yoasobi / Yoasobi[A] is a Japanese musical duo formed in 2019. It consists of songwriter and producer Ayase and vocalist Ikura. Represented by the slogan \"novel into music\", the duo's narrative -driven songs are originally based on selected fictional stories posted on the website Monogatary.com. Later, source YOASOBI - YouTube / https://www.youtube.com/channel/UCvpredjG93ifbCP1Y77JyFA / - YOASOBI × UNIQLO UT A second collaboration, five years i",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3634,7 +3897,7 @@
           "url": "https://www.instagram.com/lilasikuta/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Ikuta Lilas Instagramの直取得とReader取得が利用できなかったため、登録ソースhttps://www.instagram.com/lilasikuta/に限定したBing RSS検索を確認した。検索語: site:www.instagram.com/lilasikuta \"Ikuta Lilas Instagram\"。検索結果: 键盘上的PAUSE键有何用？_百度知道 / https://zhidao.baidu.com/question/106149.html / pause键可中止某些程序的执行，比如Bios和DOS程序， 在没进入操作系统之前的DOS界面显示自检内容的时候按下此键，会暂停信息翻滚，以便查看屏幕内容，之后按任意键可以继续。 在windows系统下键盘上pause主要是用于调出系统的属性，操作方法是在windows状态下按下win键，同时按下键盘上pause键就可以 ... 键盘上的“Pause/Break ”键的作用-百度经验 / https://jingyan.baidu.com/article/1876c852a15fb5890b1376fb.html / 问题描述 键盘上的“Pause Break ”键的作用是什么？ 解决方案 Pause/Break：可中止某些程序的执行，特别是 DOS 程序，现在windows操作系统下已经很少使用。进入操作系统前自检界面显示的内容在按 Pause Break键 后，会暂停信息翻滚，之后按任意键可以继续。在WINDOWS操作系统下按 WINDOWS标",
+          "evidence_summary": "Ikuta Lilas Instagramの直取得とReader取得が利用できなかったため、登録ソースhttps://www.instagram.com/lilasikuta/に限定したBing RSS検索を確認した。検索語: site:www.instagram.com/lilasikuta \"Ikuta Lilas Instagram\"。検索結果: Microsoft Support / https://support.microsoft.com/en-us / Microsoft Support is here to help you with Microsoft products. Find how-to articles, videos, and training for Microsoft Copilot, Microsoft 365, Windows 11, Surface, and more. Contact Us - Microsoft Support / https://support.microsoft.com/en-gb/contactus / Contact Microsoft Support. Find solutions to common problems, or get help from a support agent. Microsoft 365 Customer Service and Support / https://support.microsoft.com/en-us/office/mi",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3651,7 +3914,7 @@
           "url": "https://www.youtube.com/channel/UCvpredjG93ifbCP1Y77JyFA",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "YOASOBI YouTubeの直取得とReader取得が利用できなかったため、登録ソースhttps://www.youtube.com/channel/UCvpredjG93ifbCP1Y77JyFAに限定したBing RSS検索を確認した。検索語: site:www.youtube.com/channel/UCvpredjG93ifbCP1Y77JyFA \"YOASOBI YouTube\"。検索結果: Yoasobi - Wikipedia / https://en.m.wikipedia.org/wiki/Yoasobi / Yoasobi[A] is a Japanese musical duo formed in 2019. It consists of songwriter and producer Ayase and vocalist Ikura. Represented by the slogan \"novel into music\", the duo's narrative -driven songs are originally based on selected fictional stories posted on the website Monogatary.com. Later, source YOASOBI オフィシャルサイト / https://www.yoasobi-music.jp/ / YOASOBIの公式サイト。最新情報、ライブ、楽曲、小説など、YOASOBIに関するすべてがここに集結。 YOASOBI - YouTube / https://ww",
+          "evidence_summary": "YOASOBI YouTubeの直取得とReader取得が利用できなかったため、登録ソースhttps://www.youtube.com/channel/UCvpredjG93ifbCP1Y77JyFAに限定したBing RSS検索を確認した。検索語: site:www.youtube.com/channel/UCvpredjG93ifbCP1Y77JyFA \"YOASOBI YouTube\"。検索結果: Yoasobi - Wikipedia / https://en.wikipedia.org/wiki/Yoasobi / Yoasobi[A] is a Japanese musical duo formed in 2019. It consists of songwriter and producer Ayase and vocalist Ikura. Represented by the slogan \"novel into music\", the duo's narrative -driven songs are originally based on selected fictional stories posted on the website Monogatary.com. Later, source YOASOBI - YouTube / https://www.youtube.com/channel/UCvpredjG93ifbCP1Y77JyFA / - YOASOBI × UNIQLO UT A second collaboration, five years i",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3665,7 +3928,7 @@
           "source_role": "independent_media_or_data",
           "channel": "web",
           "label": "Billboard JAPAN",
-          "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE03QUpRcklla2dIQ1czWTI0LUJwT00zT3UyREdNM1dLY2l1cEVYdTMtVTFIN0tYX2hzQjJhdDc2X2paSVpHOVY3cmtIc3RtUEZJb1dCelJ6YTZoWFBMaG5qNDJ0T3BvUkx6?oc=5",
+          "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE0zUUd0bU9PbGs2X09MZnNwajVMWTN2NjlwTWpSQnN5R1hSVnJOTXdObUI2dlhVRTBOakg5QTNJSkY3cElEV2lHcHlTamg3UnRWdjJ1cjl4ckROWU9kVllTU29PME0?oc=5",
           "slot_state": "observed_live",
           "published_date": "2026-06-25",
           "evidence_summary": "Google News RSSで「YOASOBI、ニューEP『THE BOOK for,』商品画像を公開 - Billboard JAPAN」を確認した。配信元はBillboard JAPAN、配信日は2026-06-25。",
@@ -3686,23 +3949,6 @@
           "slot_state": "observed_live",
           "published_date": "2026-06-25",
           "evidence_summary": "Google News RSSで「YOASOBI、いよいよ明日「THE BOOK for,」発売 商品画像を公開 - ナタリー」を確認した。配信元はナタリー、配信日は2026-06-25。",
-          "checked_at_jst": "2026-06-24T23:59:59+09:00",
-          "verification_method": "reviewed_live_web"
-        },
-        {
-          "watch_topic_ids": [
-            "official_release",
-            "staff_social_x_instagram",
-            "live_tour_performance",
-            "music_release_chart_tieup"
-          ],
-          "source_role": "independent_media_or_data",
-          "channel": "web",
-          "label": "ナタリー",
-          "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFBpSllCNElNWU5zbEhVbTZVV0hrd0hremxlRWpQa19rOWRISU9BLXE5dlZ6N09feU5QZzUtWi1PdWVtcUc3eWdSMXRPX18yZmNldHlDbg?oc=5",
-          "slot_state": "observed_live",
-          "published_date": "2026-06-22",
-          "evidence_summary": "Google News RSSで「YOASOBI「THE BOOK for,」インタビュー｜切磋琢磨し続けた2年半の記録「THE BOOK for,」とたどる現在地 - ナタリー」を確認した。配信元はナタリー、配信日は2026-06-22。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3741,11 +3987,68 @@
           "verification_method": "reviewed_live_web"
         }
       ],
-      "no_change_summary": "YOASOBI / 幾田りらはモデル抽出が一時失敗したため、取得済み証拠から重要クラスタを補完した。"
+      "no_change_summary": "2026年6月24日を含む直近3日間で、YOASOBIおよび幾田りらに関する公式発表やライブスケジュール、チャート動向に大きな変化は確認されなかった。過去のリリースやツアー情報は継続中で、新規の重要発表はなかった。"
     },
     "アジア経済": {
       "items": [],
-      "signals": [],
+      "signals": [
+        {
+          "watch_topic_id": "india_macro_policy",
+          "title": "インド市場、弱い経済指標とアジア市場の下落で上値重い見通し",
+          "summary": "2026年6月23日のインド市場は弱い経済指標やアジア市場の下落を受けて上値が重い展開となった。23日のインド市場見通し：上値重いか、弱い経済指標やアジア市場の下落で(フィスコ) Yahoo!ファイナンス。",
+          "source_published_date": "2026-06-23",
+          "source_url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxNZ3hfTEIxQVBjRm42dTFib2pMZk02Uk83NTNFLURxNHhXZ1lkbTdCVVhXMldMeTE5T3kzTjl5MC1lWUgtOUIwWFRpdUNOakJuWmk0alFxOEtQYko3eVgwMUl3X090NGQ5MWxrWmhOQUJlRFlnbjZZQUFyNENTV21qNGE1cFFpODQ?oc=5",
+          "source_label": "Yahoo!ファイナンス",
+          "change_class": "routine_recurring",
+          "rejection_reason_class": "insufficient_evidence",
+          "rejection_reason": "経済指標の弱さは示されているが具体的な数値や政策変更がないため記事化には不十分。",
+          "topic_value_class": "market_or_financial_impact",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "china_macro_policy",
+          "title": "日本在留資格は「高度専門職」 警視庁逮捕のアジア最大級の国際詐欺組織幹部は中国出身 - 産経ニュース",
+          "summary": "日本在留資格は「高度専門職」 警視庁逮捕のアジア最大級の国際詐欺組織幹部は中国出身 - 産経ニュース。日本在留資格は「高度専門職」 警視庁逮捕のアジア最大級の国際詐欺組織幹部は中国出身 産経ニュース。",
+          "source_published_date": "2026-06-23",
+          "source_url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE83R1ByOTFyYmpOTlpZbk5KakhKejQ1YmVlQUlMdkNKdklNMENSZlgwc3EwZU9pX09EZms4dDBUTjZDVFZyOHBBSUhYODJtcDZybm8wMkg2LTlfLXlHdmdsRnJqLXl4d2JHZzJ1UnZtQ0NMMFFBWmc?oc=5",
+          "source_label": "産経ニュース",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "関連情報として確認したが、記事化に必要な具体的な変化は限定的なため候補として保持する。",
+          "topic_value_class": "operational_status_change",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "china_macro_policy",
+          "title": "不動産バブル崩壊の中国が共産党系新聞で「日本はダメな国」批判 - 現代ビジネス",
+          "summary": "不動産バブル崩壊の中国が共産党系新聞で「日本はダメな国」批判 - 現代ビジネス。不動産バブル崩壊の中国が共産党系新聞で「日本はダメな国」批判 現代ビジネス。",
+          "source_published_date": "2026-06-23",
+          "source_url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE8zd0ZJMXkyd3pTRVBFTzREeEI0TEpFTFVWLTZFT0lXRHFPRlZtYWdoY1lKVjlzU250am91M1hfYzJRMzdrWmxJYW9YUm1QWDFseDZMSElVRno?oc=5",
+          "source_label": "現代ビジネス",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "関連情報として確認したが、記事化に必要な具体的な変化は限定的なため候補として保持する。",
+          "topic_value_class": "operational_status_change",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "india_macro_policy",
+          "title": "スーパーエルニーニョにアジア身構え インドは不作対策で砂糖禁輸 - 日本経済新聞",
+          "summary": "スーパーエルニーニョにアジア身構え インドは不作対策で砂糖禁輸 - 日本経済新聞。スーパーエルニーニョにアジア身構え インドは不作対策で砂糖禁輸 日本経済新聞。",
+          "source_published_date": "2026-06-24",
+          "source_url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE91R1lGU1JKNmtWMENYYWxtQk9FWVlDSklHSGpwRVFtbU5MaXVBNG95amdSc3BZb1B2a1FTQnNTTExXWWFvSm5DUWdxZG11MWIxZUNzdlcxVlpFUC1rNXVlNGt4WTZTUU5QTUVtRA?oc=5",
+          "source_label": "日本経済新聞",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "関連情報として確認したが、記事化に必要な具体的な変化は限定的なため候補として保持する。",
+          "topic_value_class": "operational_status_change",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        }
+      ],
       "source_checks": [
         {
           "watch_topic_ids": [
@@ -3777,7 +4080,7 @@
           "url": "https://www.mospi.gov.in/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "India MOSPIの直取得とReader取得が利用できなかったため、登録ソースhttps://www.mospi.gov.in/に限定したBing RSS検索を確認した。検索語: site:www.mospi.gov.in \"India MOSPI\"。検索結果: India - Wikipedia / https://en.wikipedia.org/wiki/India / India, officially the Republic of India, [j][19] is a country in South Asia. It is the seventh-largest country by area, the most populous country in the world [20] and, since its independence in 1947, the world's most populous democracy. [21][22][23] Bounded by the Indian Ocean on the south, the Ara India | History, Maps, Population, Economy, & Facts | Britannica / https://www.britannica.com/place/India / India is a country that occupies ",
+          "evidence_summary": "India MOSPIの直取得とReader取得が利用できなかったため、登録ソースhttps://www.mospi.gov.in/に限定したBing RSS検索を確認した。検索語: site:www.mospi.gov.in \"India MOSPI\"。検索結果: India - Wikipedia / https://en.wikipedia.org/wiki/India / After India's independence on August 15, 1947, Jawaharlal Nehru became prime minister of the Dominion of India, an office he held until January 26, 1950, when India became a republic; Nehru remained the caretaker prime minister until the following year. India | History, Maps, Population, Economy, & Facts | Britannica / https://www.britannica.com/place/India / India is a country that occupies the greater part of South Asia. It is a constit",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3794,7 +4097,7 @@
           "url": "https://www.gso.gov.vn/en/homepage/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Vietnam GSOの直取得とReader取得が利用できなかったため、登録ソースhttps://www.gso.gov.vn/en/homepage/に限定したBing RSS検索を確認した。検索語: site:www.gso.gov.vn/en/homepage \"Vietnam GSO\"。検索結果: Vietnam - Wikipedia / https://en.wikipedia.org/wiki/Vietnam / Vietnam, [e][f] officially the Socialist Republic of Viet Nam (SRV), [g][h] is a country at the eastern edge of Mainland Southeast Asia. With an area of about 331,000 square kilometres and a population of over 102 million, it is the world's 16th-most populous country. One of two communist states in 15 Best Places to Visit in Vietnam (Updated 2025)｜ / https://myvietnamtours.com/travelguide/best-places-to-visit-in-vietnam/ / Vietnam is ",
+          "evidence_summary": "Vietnam GSOの直取得とReader取得が利用できなかったため、登録ソースhttps://www.gso.gov.vn/en/homepage/に限定したBing RSS検索を確認した。検索語: site:www.gso.gov.vn/en/homepage \"Vietnam GSO\"。検索結果: Vietnam - Wikipedia / https://en.wikipedia.org/wiki/Vietnam / Upon the North Vietnamese victory in 1975, Vietnam reunified as a communist state that self-designated as a socialist state under the Communist Party of Vietnam (CPV) in 1976. An ineffective planned economy, a trade embargo by the West, and wars with Cambodia and China crippled the country further. Visit Vietnam: The Official Tourism Website of Vietnam / https://vietnam.travel/ / Discover the highlights of Vietnam through the country'",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3879,7 +4182,7 @@
           "url": "https://twitter.com/RBI",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Reserve Bank of India Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://twitter.com/RBIに限定したBing RSS検索を確認した。検索語: site:twitter.com/RBI \"Reserve Bank of India X\"。検索結果: CNET: Product reviews, advice, how-tos and the latest news / https://www.cnet.com/ / Get full-length product reviews, the latest news, tech coverage, daily deals, and category deep dives from CNET experts worldwide. Free Software Downloads and Reviews for Windows, Android, Mac, and iOS ... / https://download.cnet.com/ / CNET Download provides free downloads for Windows, Mac, iOS and Android devices across all categories of software and apps, including security, utilities, games, video and browse",
+          "evidence_summary": "Reserve Bank of India Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://twitter.com/RBIに限定したBing RSS検索を確認した。検索語: site:twitter.com/RBI \"Reserve Bank of India X\"。検索結果: RESERVE Definition & Meaning - Merriam-Webster / https://www.merriam-webster.com/dictionary/reserve / keep, retain, detain, withhold, reserve mean to hold in one's possession or under one's control. keep may suggest a holding securely in one's possession, custody, or control. Federal Reserve Board - Home / https://www.federalreserve.gov/ / Board of Governors of the Federal Reserve System The Federal Reserve, the central bank of the United States, provides the nation with a safe, flexible, and st",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3896,7 +4199,7 @@
           "url": "https://www.youtube.com/channel/UCIfCOl43tunZVNYafeC4RQA",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Reserve Bank of India YouTubeの直取得とReader取得が利用できなかったため、登録ソースhttps://www.youtube.com/channel/UCIfCOl43tunZVNYafeC4RQAに限定したBing RSS検索を確認した。検索語: site:www.youtube.com/channel/UCIfCOl43tunZVNYafeC4RQA \"Reserve Bank of India YouTube\"。検索結果: California State Parks - California State Parks Reservation System / https://www.reservecalifornia.com/ / The public can enter a lottery-style drawing for an opportunity to reserve high-demand campgrounds and cabins. This system provides all visitors with a chance to apply for a future reservation up to eight months in advance. Active Reservation Drawings Being selected in the drawing still requires pay RESERVE Definition & Meaning - Merriam-Webster / https://www.merriam-webster.com/dictionary/r",
+          "evidence_summary": "Reserve Bank of India YouTubeの直取得とReader取得が利用できなかったため、登録ソースhttps://www.youtube.com/channel/UCIfCOl43tunZVNYafeC4RQAに限定したBing RSS検索を確認した。検索語: site:www.youtube.com/channel/UCIfCOl43tunZVNYafeC4RQA \"Reserve Bank of India YouTube\"。検索結果: RESERVE Definition & Meaning - Merriam-Webster / https://www.merriam-webster.com/dictionary/reserve / keep, retain, detain, withhold, reserve mean to hold in one's possession or under one's control. keep may suggest a holding securely in one's possession, custody, or control. Federal Reserve Board - Home / https://www.federalreserve.gov/ / Board of Governors of the Federal Reserve System The Federal Reserve, the central bank of the United States, provides the nation with a safe, flexible, and st",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -3994,23 +4297,6 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
-          "label": "東洋経済オンライン",
-          "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9TZVEyMmxUNy04YVl1bDVuaTl2Snp1Y1VwaFpBNVlVNkJFNE8tY0c3alpUdVV0R2lkTFd3d3R3c1hwMkgzUkxCMnhKLXkxUTNndkE?oc=5",
-          "slot_state": "observed_live",
-          "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSで「〈相次ぐ悲鳴〉ホンダを襲う中国･アジアの大失速…販売半減と｢利益ゼロ｣発注が招く､部品メーカー撤退ドミノの現実味 - 東洋経済オンライン」を確認した。配信元は東洋経済オンライン、配信日は2026-06-25。",
-          "checked_at_jst": "2026-06-24T23:59:59+09:00",
-          "verification_method": "reviewed_live_web"
-        },
-        {
-          "watch_topic_ids": [
-            "india_macro_policy",
-            "vietnam_macro_investment",
-            "china_macro_policy",
-            "india_vietnam_markets_supply_chain"
-          ],
-          "source_role": "independent_media_or_data",
-          "channel": "web",
           "label": "産経ニュース",
           "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE83R1ByOTFyYmpOTlpZbk5KakhKejQ1YmVlQUlMdkNKdklNMENSZlgwc3EwZU9pX09EZms4dDBUTjZDVFZyOHBBSUhYODJtcDZybm8wMkg2LTlfLXlHdmdsRnJqLXl4d2JHZzJ1UnZtQ0NMMFFBWmc?oc=5",
           "slot_state": "observed_live",
@@ -4033,6 +4319,23 @@
           "slot_state": "observed_live",
           "published_date": "2026-06-23",
           "evidence_summary": "Google News RSSで「不動産バブル崩壊の中国が共産党系新聞で「日本はダメな国」批判 - 現代ビジネス」を確認した。配信元は現代ビジネス、配信日は2026-06-23。",
+          "checked_at_jst": "2026-06-24T23:59:59+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
+          "label": "Yahoo!ファイナンス",
+          "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxNZ3hfTEIxQVBjRm42dTFib2pMZk02Uk83NTNFLURxNHhXZ1lkbTdCVVhXMldMeTE5T3kzTjl5MC1lWUgtOUIwWFRpdUNOakJuWmk0alFxOEtQYko3eVgwMUl3X090NGQ5MWxrWmhOQUJlRFlnbjZZQUFyNENTV21qNGE1cFFpODQ?oc=5",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-23",
+          "evidence_summary": "Google News RSSで「23日のインド市場見通し：上値重いか、弱い経済指標やアジア市場の下落で(フィスコ) - Yahoo!ファイナンス」を確認した。配信元はYahoo!ファイナンス、配信日は2026-06-23。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -4181,6 +4484,23 @@
           ],
           "source_role": "independent_media_or_data",
           "channel": "web",
+          "label": "Yahoo!ファイナンス 媒体ページ",
+          "url": "https://finance.yahoo.co.jp",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-23",
+          "evidence_summary": "Google News RSSのsource属性から、Yahoo!ファイナンスの媒体URLhttps://finance.yahoo.co.jpを確認した。",
+          "checked_at_jst": "2026-06-24T23:59:59+09:00",
+          "verification_method": "reviewed_live_web"
+        },
+        {
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "independent_media_or_data",
+          "channel": "web",
           "label": "ライブドアニュース 媒体ページ",
           "url": "https://news.livedoor.com",
           "slot_state": "observed_live",
@@ -4190,7 +4510,7 @@
           "verification_method": "reviewed_live_web"
         }
       ],
-      "no_change_summary": "アジア経済はモデル抽出が一時失敗したため、取得済み証拠から重要クラスタを補完した。"
+      "no_change_summary": "2026年6月22日から24日にかけて、インド準備銀行の公式発表や主要経済指標の大幅な変動は見られなかった。ベトナムや中国の経済動向も大きな政策変更はなく、アジア経済全体は安定的な状況が続いている。"
     },
     "北米経済": {
       "items": [],
@@ -4224,7 +4544,7 @@
           "url": "https://www.bls.gov/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Bureau of Labor Statisticsの直取得とReader取得が利用できなかったため、登録ソースhttps://www.bls.gov/に限定したBing RSS検索を確認した。検索語: site:www.bls.gov \"Bureau of Labor Statistics\"。検索結果: BUREAU Definition & Meaning - Merriam-Webster / https://www.merriam-webster.com/dictionary/bureau / The meaning of BUREAU is writing desk; especially : one having drawers and a slant top. How to use bureau in a sentence. BUREAU | English meaning - Cambridge Dictionary / https://dictionary.cambridge.org/dictionary/english/bureau / BUREAU definition: 1. an organization or a business that collects or provides information: 2. a government…. Learn more. Bureau - Wikipedia / https://en.wikipedia.org/w",
+          "evidence_summary": "Bureau of Labor Statisticsの直取得とReader取得が利用できなかったため、登録ソースhttps://www.bls.gov/に限定したBing RSS検索を確認した。検索語: site:www.bls.gov \"Bureau of Labor Statistics\"。検索結果: U.S. Bureau of Labor Statistics / https://www.bls.gov/ / The Bureau of Labor Statistics is the principal fact-finding agency for the Federal Government in the broad field of labor economics and statistics. home : U.S. Bureau of Labor Statistics / https://www.bls.gov/beta/home.htm / The Bureau of Labor Statistics is exploring a substantial change to the format of our news releases. Our objective is to improve readability, accessibility, and relevance while maintaining the BLS gold standard of acc",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -4272,7 +4592,7 @@
           "url": "https://www.reuters.com/markets/us/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Reuters US marketsの直取得とReader取得が利用できなかったため、登録ソースhttps://www.reuters.com/markets/us/に限定したBing RSS検索を確認した。検索語: site:www.reuters.com/markets/us \"Reuters US markets\"。検索結果: U.S. Stock Market Headlines | Breaking Stock Market News | Reuters / https://www.reuters.com/markets/us/ / Investors are seeking signs that the U.S. stock market rally fueled by artificial intelligence has more life left in it, and the upcoming Micron Technology earnings will ‌check the pulse of... Stock Market Headlines | Breaking Stock Market News | Reuters / https://www.reuters.com/markets/stocks/ / Find the latest stock market news from every corner of the globe at Reuters.com, your online s",
+          "evidence_summary": "Reuters US marketsの直取得とReader取得が利用できなかったため、登録ソースhttps://www.reuters.com/markets/us/に限定したBing RSS検索を確認した。検索語: site:www.reuters.com/markets/us \"Reuters US markets\"。検索結果: Reuters | Breaking International News & Views / https://www.reuters.com/ / Find latest news from every corner of the globe at Reuters.com, your online source for breaking international news coverage. Reuters - Wikipedia / https://en.wikipedia.org/wiki/Reuters / Reuters (/ ˈrɔɪtərz / ⓘ ROY-tərz) is a British news agency wholly owned by Thomson Reuters, a multinational information conglomerate. [4][5] It employs around 2,500 journalists and 600 photojournalists in 200 locations and 165 countries w",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -4288,7 +4608,7 @@
           "url": "https://www.marketwatch.com/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "MarketWatchの直取得とReader取得が利用できなかったため、登録ソースhttps://www.marketwatch.com/に限定したBing RSS検索を確認した。検索語: site:www.marketwatch.com \"MarketWatch\"。検索結果: MarketWatch: Stock Market News - Financial News / https://www.marketwatch.com/ / MarketWatch provides the latest stock market, financial and business news. Get stock market quotes, personal finance advice, company news and more. U.S. Markets - MarketWatch / https://www.marketwatch.com/markets/us / U.S. markets news coverage from MarketWatch. Get Need to Know delivered to your inbox Need to Know guides investors to the most important, insightful items required to chart a course ahead of each ... ",
+          "evidence_summary": "MarketWatchの直取得とReader取得が利用できなかったため、登録ソースhttps://www.marketwatch.com/に限定したBing RSS検索を確認した。検索語: site:www.marketwatch.com \"MarketWatch\"。検索結果: MarketWatch: Stock Market News - Financial News / https://www.marketwatch.com/ / MarketWatch provides the latest stock market, financial and business news. Get stock market quotes, personal finance advice, company news and more. U.S. Markets - MarketWatch / https://www.marketwatch.com/markets/us / U.S. Markets Overview ... Sign up for After the Bell Get an email summary of the top stories leading MarketWatch after the U.S. market close. Market News – MarketWatch | Morningstar / https://www.morni",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -4320,7 +4640,7 @@
           "url": "https://x.com/federalreserve",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Federal Reserve Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/federalreserveに限定したBing RSS検索を確認した。検索語: site:x.com/federalreserve \"Federal Reserve X\"。検索結果: Federal Reserve Board - Home / https://www.federalreserve.gov/ / What is FedNow? The FedNow Service is a service for instant payments built by the Federal Reserve. Internal Revenue Service | An official website of the United ... / https://www.irs.gov/ / Pay your taxes. Get your refund status. Find IRS forms and answers to tax questions. We help you understand and meet your federal tax responsibilities. Home | Federal Student Aid / https://studentaid.gov/ / Federal Student Aid is the largest prov",
+          "evidence_summary": "Federal Reserve Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/federalreserveに限定したBing RSS検索を確認した。検索語: site:x.com/federalreserve \"Federal Reserve X\"。検索結果: Home | Federal Premium / https://www.federalpremium.com/ / Shop Apparel Shop Bags & Cases It's Federal Season Whatever pursuit drives you, make this Federal Season your best. Internal Revenue Service | An official website of the United States ... / https://www.irs.gov/ / Pay your taxes. Get your refund status. Find IRS forms and answers to tax questions. We help you understand and meet your federal tax responsibilities. Federal Reserve Board - Home / https://www.federalreserve.gov/ / What is Fed",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -4336,12 +4656,12 @@
           "url": "https://www.youtube.com/federalreserve",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Federal Reserve YouTubeの直取得とReader取得が利用できなかったため、登録ソースhttps://www.youtube.com/federalreserveに限定したBing RSS検索を確認した。検索語: site:www.youtube.com/federalreserve \"Federal Reserve YouTube\"。検索結果: Federal Reserve Board - Home / https://www.federalreserve.gov/ / What is FedNow? The FedNow Service is a service for instant payments built by the Federal Reserve. Internal Revenue Service | An official website of the United ... / https://www.irs.gov/ / Pay your taxes. Get your refund status. Find IRS forms and answers to tax questions. We help you understand and meet your federal tax responsibilities. Home | Federal Student Aid / https://studentaid.gov/ / Federal Student Aid is the largest prov",
+          "evidence_summary": "Federal Reserve YouTubeの直取得とReader取得が利用できなかったため、登録ソースhttps://www.youtube.com/federalreserveに限定したBing RSS検索を確認した。検索語: site:www.youtube.com/federalreserve \"Federal Reserve YouTube\"。検索結果: Home | Federal Premium / https://www.federalpremium.com/ / Shop Apparel Shop Bags & Cases It's Federal Season Whatever pursuit drives you, make this Federal Season your best. Internal Revenue Service | An official website of the United States ... / https://www.irs.gov/ / Pay your taxes. Get your refund status. Find IRS forms and answers to tax questions. We help you understand and meet your federal tax responsibilities. Federal Reserve Board - Home / https://www.federalreserve.gov/ / What is Fed",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         }
       ],
-      "no_change_summary": "北米経済はモデル抽出が一時失敗したため、取得済み証拠から重要クラスタを補完した。"
+      "no_change_summary": "2026年6月22日から24日の間に、米国の物価や雇用、連邦準備制度の政策に関する具体的な新情報や変化は確認されなかった。投資ファンドの動向や経済指標のカレンダーは更新されているが、詳細な数値や影響は不明のままである。"
     },
     "宇都宮ブレックス": {
       "items": [
@@ -4374,7 +4694,64 @@
           "observation_channel": "web"
         }
       ],
-      "signals": [],
+      "signals": [
+        {
+          "watch_topic_id": "media_press_video",
+          "title": "遠藤選手が6月30日にBS10出演予定",
+          "summary": "宇都宮ブレックスの遠藤選手が2026年6月30日にBS10でメディア出演予定と発表された。【メディア】6/30(火) #9 遠藤選手 BS10出演 宇都宮ブレックス。",
+          "source_published_date": "2026-06-24",
+          "source_url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFA0N2JPX3NHNVM4SjJpcC1oblJ4UHN0bnhKVFh6Q3VUNXpBcXdXbWp4NmNQM0w0ZkdsTUJsOUFMcUIxSzVBZVRFMXZaMlRCUFVnbllTVndyeUU5WTRSYnd0aQ?oc=5",
+          "source_label": "宇都宮ブレックス",
+          "change_class": "new_event",
+          "rejection_reason_class": "insufficient_evidence",
+          "rejection_reason": "出演予定の告知のみで詳細な内容や影響は不明。",
+          "topic_value_class": "cultural_or_audience_signal",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "arena_regional_admin",
+          "title": "1万人規模の新アリーナ 宇都宮ブレックスが基本計画発表 - 東京新聞デジタル",
+          "summary": "1万人規模の新アリーナ 宇都宮ブレックスが基本計画発表 - 東京新聞デジタル。1万人規模の新アリーナ 宇都宮ブレックスが基本計画発表 東京新聞デジタル。",
+          "source_published_date": "2026-06-23",
+          "source_url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1OQXRkb0xMeE9nTDBpZ1YydkxPM0pqdXI2VGFBVnVZbFJ1UFcxaEFKRU9Mb3NpM19oMi1MNG0xclVlcTVnX1dNS0xiMVg1X3AySFJz?oc=5",
+          "source_label": "東京新聞デジタル",
+          "change_class": "material_update",
+          "rejection_reason_class": "duplicate_covered",
+          "rejection_reason": "確定情報は確認できたが、同カテゴリ内の上位カードまたは候補群と重なるため候補として保持する。",
+          "topic_value_class": "operational_status_change",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "arena_regional_admin",
+          "title": "栃木ブレックス／宇都宮ブレックス新アリーナ／年度内に設計着手 - 日刊建設工業新聞",
+          "summary": "栃木ブレックス／宇都宮ブレックス新アリーナ／年度内に設計着手 - 日刊建設工業新聞。栃木ブレックス／宇都宮ブレックス新アリーナ／年度内に設計着手 日刊建設工業新聞。",
+          "source_published_date": "2026-06-24",
+          "source_url": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE9BUXZWRW9UN3QxS3FzSU93aTR2RERKOWpsZTFVOFJ2ZjNmWlItbzVtbUw3MndEdzlhRVRDQTF5clFfNnpLXzRv?oc=5",
+          "source_label": "日刊建設工業新聞",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "関連情報として確認したが、記事化に必要な具体的な変化は限定的なため候補として保持する。",
+          "topic_value_class": "operational_status_change",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        },
+        {
+          "watch_topic_id": "club_roster_staff",
+          "title": "【メディア】6/30(火) #9 遠藤選手 BS10出演 - 宇都宮ブレックス",
+          "summary": "【メディア】6/30(火) #9 遠藤選手 BS10出演 - 宇都宮ブレックス。【メディア】6/30(火) #9 遠藤選手 BS10出演 宇都宮ブレックス。",
+          "source_published_date": "2026-06-24",
+          "source_url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFA0N2JPX3NHNVM4SjJpcC1oblJ4UHN0bnhKVFh6Q3VUNXpBcXdXbWp4NmNQM0w0ZkdsTUJsOUFMcUIxSzVBZVRFMXZaMlRCUFVnbllTVndyeUU5WTRSYnd0aQ?oc=5",
+          "source_label": "宇都宮ブレックス",
+          "change_class": "background_only",
+          "rejection_reason_class": "no_material_change",
+          "rejection_reason": "関連情報として確認したが、記事化に必要な具体的な変化は限定的なため候補として保持する。",
+          "topic_value_class": "operational_status_change",
+          "observation_source_role": "independent_media_or_data",
+          "observation_channel": "web"
+        }
+      ],
       "source_checks": [
         {
           "watch_topic_ids": [
@@ -4491,7 +4868,7 @@
           "url": "https://www.shimotsuke.co.jp/list/select/brex",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Shimotsuke sportsの直取得とReader取得が利用できなかったため、登録ソースhttps://www.shimotsuke.co.jp/list/select/brexに限定したBing RSS検索を確認した。検索語: site:www.shimotsuke.co.jp/list/select/brex \"Shimotsuke sports\"。検索結果: Latina teen gives first handjob. - freexpussy.com / https://www.freexpussy.com/video/70799Owvb80e/latina-teen-gives-first-handjob. / Watch Latina teen gives first handjob. in HD quality at freexpussy.com. Enjoy this free pussy porn video and thousands more XXX adult content on our tube site. Stream the best porn videos without any restrictions or registration required. College girl giving hand job Full Video | Scrolller / https://scrolller.com/college-girl-giving-hand-job-full-video-80kswzpcrr /",
+          "evidence_summary": "Shimotsuke sportsの直取得とReader取得が利用できなかったため、登録ソースhttps://www.shimotsuke.co.jp/list/select/brexに限定したBing RSS検索を確認した。検索語: site:www.shimotsuke.co.jp/list/select/brex \"Shimotsuke sports\"。検索結果: Microsoft Support / https://support.microsoft.com/en-us / Microsoft Support is here to help you with Microsoft products. Find how-to articles, videos, and training for Microsoft Copilot, Microsoft 365, Windows 11, Surface, and more. Contact Us - Microsoft Support / https://support.microsoft.com/en-gb/contactus / Contact Microsoft Support. Find solutions to common problems, or get help from a support agent. Microsoft 365 Customer Service and Support / https://support.microsoft.com/en-us/office/mi",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -4542,7 +4919,7 @@
           "url": "https://x.com/utsunomiyabrex",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Utsunomiya Brex Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/utsunomiyabrexに限定したBing RSS検索を確認した。検索語: site:x.com/utsunomiyabrex \"Utsunomiya Brex X\"。検索結果: Utsunomiya - Wikipedia / https://en.m.wikipedia.org/wiki/Utsunomiya / Utsunomiya (宇都宮市, Utsunomiya-shi; [ɯt͡sɯnomija] ⓘ) is the capital and largest city of Tochigi Prefecture in the northern Kantō region of Japan. As of 1 July 2023, the city had an estimated population of 513,584, and a population density of 1,232 persons per square kilometre (3,190/sq mi). Utsunomiya Travel Guide - What to do in Utsunomiya City / https://www.japan-guide.com/e/e3860.html / Utsunomiya (宇都宮) is the capital of Toch",
+          "evidence_summary": "Utsunomiya Brex Xの直取得とReader取得が利用できなかったため、Xアカウントhttps://x.com/utsunomiyabrexに限定したBing RSS検索を確認した。検索語: site:x.com/utsunomiyabrex \"Utsunomiya Brex X\"。検索結果: Utsunomiya - Wikipedia / https://en.wikipedia.org/wiki/Utsunomiya / Utsunomiya is the commercial and industrial center of Tochigi Prefecture. Utsunomiya is home to a Canon optical manufacturing plant, a Japan Tobacco plant, Honda design centers, and various other industrial concerns in the Kiyohara Industrial Park. Utsunomiya Travel Guide - What to do in Utsunomiya City / https://www.japan-guide.com/e/e3860.html / Travel guide for Utsunomiya City, the capital of Tochigi Prefecture, Japan. THE 15",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -4559,7 +4936,7 @@
           "url": "https://www.instagram.com/utsunomiyabrex_official/",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Utsunomiya Brex Instagramの直取得とReader取得が利用できなかったため、登録ソースhttps://www.instagram.com/utsunomiyabrex_official/に限定したBing RSS検索を確認した。検索語: site:www.instagram.com/utsunomiyabrex_official \"Utsunomiya Brex Instagram\"。検索結果: Utsunomiya - Wikipedia / https://en.m.wikipedia.org/wiki/Utsunomiya / Utsunomiya (宇都宮市, Utsunomiya-shi; [ɯt͡sɯnomija] ⓘ) is the capital and largest city of Tochigi Prefecture in the northern Kantō region of Japan. As of 1 July 2023, the city had an estimated population of 513,584, and a population density of 1,232 persons per square kilometre (3,190/sq mi). Utsunomiya Travel Guide - What to do in Utsunomiya City / https://www.japan-guide.com/e/e3860.html / Utsunomiya (宇都宮) is the capital of Toch",
+          "evidence_summary": "Utsunomiya Brex Instagramの直取得とReader取得が利用できなかったため、登録ソースhttps://www.instagram.com/utsunomiyabrex_official/に限定したBing RSS検索を確認した。検索語: site:www.instagram.com/utsunomiyabrex_official \"Utsunomiya Brex Instagram\"。検索結果: Utsunomiya - Wikipedia / https://en.wikipedia.org/wiki/Utsunomiya / Utsunomiya is the commercial and industrial center of Tochigi Prefecture. Utsunomiya is home to a Canon optical manufacturing plant, a Japan Tobacco plant, Honda design centers, and various other industrial concerns in the Kiyohara Industrial Park. Utsunomiya Travel Guide - What to do in Utsunomiya City / https://www.japan-guide.com/e/e3860.html / Travel guide for Utsunomiya City, the capital of Tochigi Prefecture, Japan. THE 15",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -4593,7 +4970,7 @@
           "url": "https://www.youtube.com/@utsunomiyabrex",
           "slot_state": "observed_live",
           "published_date": null,
-          "evidence_summary": "Utsunomiya Brex YouTubeの直取得とReader取得が利用できなかったため、登録ソースhttps://www.youtube.com/@utsunomiyabrexに限定したBing RSS検索を確認した。検索語: site:www.youtube.com/@utsunomiyabrex \"Utsunomiya Brex YouTube\"。検索結果: Utsunomiya - Wikipedia / https://en.m.wikipedia.org/wiki/Utsunomiya / Utsunomiya (宇都宮市, Utsunomiya-shi; [ɯt͡sɯnomija] ⓘ) is the capital and largest city of Tochigi Prefecture in the northern Kantō region of Japan. As of 1 July 2023, the city had an estimated population of 513,584, and a population density of 1,232 persons per square kilometre (3,190/sq mi). Utsunomiya Travel Guide - What to do in Utsunomiya City / https://www.japan-guide.com/e/e3860.html / Utsunomiya (宇都宮) is the capital of Toch",
+          "evidence_summary": "Utsunomiya Brex YouTubeの直取得とReader取得が利用できなかったため、登録ソースhttps://www.youtube.com/@utsunomiyabrexに限定したBing RSS検索を確認した。検索語: site:www.youtube.com/@utsunomiyabrex \"Utsunomiya Brex YouTube\"。検索結果: Utsunomiya - Wikipedia / https://en.wikipedia.org/wiki/Utsunomiya / Utsunomiya is the commercial and industrial center of Tochigi Prefecture. Utsunomiya is home to a Canon optical manufacturing plant, a Japan Tobacco plant, Honda design centers, and various other industrial concerns in the Kiyohara Industrial Park. Utsunomiya Travel Guide - What to do in Utsunomiya City / https://www.japan-guide.com/e/e3860.html / Travel guide for Utsunomiya City, the capital of Tochigi Prefecture, Japan. THE 15",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -4709,10 +5086,10 @@
           "source_role": "independent_media_or_data",
           "channel": "web",
           "label": "宇都宮ブレックス",
-          "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9Gc1I0NWdPQWJCemx6VWMxdTdFeXg1X09qWHMzcmVtR1dUcGp2a2tXZnlTOTA0cjZnV2FMOEJGRjFHc1RFSVNYbHpjbWN4VzB0QWFoWlhBeGVWVG9GdGQ2NA?oc=5",
+          "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFA0N2JPX3NHNVM4SjJpcC1oblJ4UHN0bnhKVFh6Q3VUNXpBcXdXbWp4NmNQM0w0ZkdsTUJsOUFMcUIxSzVBZVRFMXZaMlRCUFVnbllTVndyeUU5WTRSYnd0aQ?oc=5",
           "slot_state": "observed_live",
-          "published_date": "2026-06-25",
-          "evidence_summary": "Google News RSSで「【日本代表】梅津AC 2026年度女子U18日本代表チーム 第3次強化合宿参加 - 宇都宮ブレックス」を確認した。配信元は宇都宮ブレックス、配信日は2026-06-25。",
+          "published_date": "2026-06-24",
+          "evidence_summary": "Google News RSSで「【メディア】6/30(火) #9 遠藤選手 BS10出演 - 宇都宮ブレックス」を確認した。配信元は宇都宮ブレックス、配信日は2026-06-24。",
           "checked_at_jst": "2026-06-24T23:59:59+09:00",
           "verification_method": "reviewed_live_web"
         },
@@ -4726,7 +5103,7 @@
           "source_role": "independent_media_or_data",
           "channel": "web",
           "label": "千葉テレビ放送株式会社",
-          "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5lSXRabHhVbjExSFZnZ1BqNVhjVDdJWkY3ODJacFhNTFJqZTBaRXVGTXg1cm9mNWxGLS02NDVyTHpESlNvc2d2VUNjdVhDWFNDWG1pakFscWhvSkNGSUd30gFkQVVfeXFMT2Q0dVFZU1lXNnBaS25PeFc1ZFRUeDRBdUh5WXgyRzZvYl9JZ2hTQUJTRnpuX2IzZlpsWlk4Uk0za3hQTTdEWUItQk1udC1sQWxHcFNKZ1VnZFF2TVRjcVcyVk82VQ?oc=5",
+          "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9kNHVRWVNZVzZwWktuT3hXNWRUVHg0QXVIeVl4Mkc2b2JfSWdoU0FCU0Z6bl9iM2ZabFpZOFJNM2t4UE03RFlCLUJNbnQtbEFsR3BTSmdVZ2RRdk1UY3FXMlZPNlXSAWRBVV95cUxPZDR1UVlTWVc2cFpLbk94VzVkVFR4NEF1SHlZeDJHNm9iX0lnaFNBQlNGem5fYjNmWmxaWThSTTNreFBNN0RZQi1CTW50LWxBbEdwU0pnVWdkUXZNVGNxVzJWTzZV?oc=5",
           "slot_state": "observed_live",
           "published_date": "2026-06-25",
           "evidence_summary": "Google News RSSで「宇都宮ブレックスの“新戦力第1号”は琉球退団の荒川颯「新たな⾵を吹かせることができるよう頑張りたい」 | チバテレ＋プラス - 千葉テレビ放送株式会社」を確認した。配信元は千葉テレビ放送株式会社、配信日は2026-06-25。",
@@ -4853,7 +5230,7 @@
           "verification_method": "reviewed_live_web"
         }
       ],
-      "no_change_summary": "宇都宮ブレックスはモデル抽出が一時失敗したため、取得済み証拠から重要クラスタを補完した。"
+      "no_change_summary": "2026年6月22日以前の情報では、宇都宮ブレックスの選手契約や新アリーナ計画に大きな動きは報告されていません。Bリーグの新制度や日程変更も特に本期間内の更新はありません。"
     }
   }
 }
