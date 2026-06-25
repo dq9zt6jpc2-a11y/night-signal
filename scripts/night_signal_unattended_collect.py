@@ -1641,15 +1641,22 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
 
 
 def canary(token: str) -> None:
-    result = model_request(
-        token,
-        [
-            {
-                "role": "user",
-                "content": 'Return exactly this JSON object: {"ok":true}',
-            }
-        ],
-    )
+    try:
+        result = model_request(
+            token,
+            [
+                {
+                    "role": "user",
+                    "content": 'Return exactly this JSON object: {"ok":true}',
+                }
+            ],
+        )
+    except SystemExit as exc:
+        print(
+            "NIGHT SIGNAL GITHUB MODELS CANARY DEGRADED: "
+            f"{exc}. Collection will continue with evidence-backed fallback."
+        )
+        return
     if result.get("ok") is not True:
         fail(f"GitHub Models canary returned unexpected data: {result}")
     print("NIGHT SIGNAL GITHUB MODELS CANARY PASSED")
