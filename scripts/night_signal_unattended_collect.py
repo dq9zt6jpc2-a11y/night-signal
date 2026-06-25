@@ -1149,6 +1149,73 @@ def backfill_items_from_evidence(
         normalized["items"].append(item)
 
 
+def fallback_signal_from_record(
+    category: dict[str, Any],
+    issue_date: str,
+    record: dict[str, Any],
+) -> dict[str, Any] | None:
+    source_date = str(record.get("published_date") or "")
+    title = reader_facing_text(record.get("title", ""), 180)
+    excerpt = reader_facing_text(record.get("excerpt") or record.get("evidence") or "", 1200)
+    category_label = str(category.get("label", ""))
+    topic = best_topic_for_record(category, record)
+    if (
+        not topic
+        or not title
+        or not excerpt
+        or not valid_date(source_date, issue_date)
+        or not reader_public_copy_ok(title, kind="title")
+        or not reader_public_copy_ok(excerpt, kind="summary")
+        or not category_identity_ok(category_label, title, excerpt)
+    ):
+        return None
+    material = contains_material_signal(title, excerpt)
+    return {
+        "watch_topic_id": topic,
+        "title": title,
+        "summary": unique_sentences(f"{title}。{excerpt}", 1200),
+        "source_published_date": source_date,
+        "source_url": str(record.get("url")),
+        "source_label": str(record.get("label") or record.get("url")),
+        "change_class": "material_update" if material else "background_only",
+        "rejection_reason_class": "lower_importance" if material else "no_material_change",
+        "rejection_reason": (
+            "確定情報は確認できたが、同カテゴリ内の上位カードより優先度が低いため候補として保持する。"
+            if material
+            else "関連情報として確認したが、記事化に必要な具体的な変化は限定的なため候補として保持する。"
+        ),
+        "topic_value_class": topic_value_from_record(record),
+        "observation_source_role": str(record.get("source_role", "independent_media_or_data")),
+        "observation_channel": str(record.get("channel", "web")),
+    }
+
+
+def backfill_signals_from_evidence(
+    normalized: dict[str, Any],
+    category: dict[str, Any],
+    issue_date: str,
+    records: list[dict[str, Any]],
+) -> None:
+    target = MAX_CATEGORY_SIGNALS if category.get("label") in HIGH_THROUGHPUT_CATEGORIES else 4
+    seen = {
+        normalized_topic_key(entry.get("title"))
+        for collection in (normalized.get("items", []), normalized.get("signals", []))
+        for entry in collection
+        if isinstance(entry, dict)
+    }
+    for record in select_clustered_evidence(category, records):
+        if len(normalized["signals"]) >= target:
+            break
+        signal = fallback_signal_from_record(category, issue_date, record)
+        if not signal:
+            continue
+        key = normalized_topic_key(signal.get("title"))
+        if cluster_seen(seen, key):
+            continue
+        seen.add(key)
+        normalized["signals"].append(signal)
+
+
 def normalize_result(
     raw: dict[str, Any],
     category: dict[str, Any],
@@ -1512,6 +1579,12 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
             records_by_category[label],
         )
         backfill_items_from_evidence(
+            normalized,
+            category,
+            issue_date,
+            records_by_category[label],
+        )
+        backfill_signals_from_evidence(
             normalized,
             category,
             issue_date,
