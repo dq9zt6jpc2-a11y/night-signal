@@ -715,6 +715,13 @@ def compact_text(text: str) -> str:
     return re.sub(r"\s+", "", text)
 
 
+def display_text(value: Any, limit: int) -> str:
+    text = re.sub(r"\s+", " ", str(value or "")).strip()
+    if len(text) <= limit:
+        return text
+    return text[: max(0, limit - 1)].rstrip() + "…"
+
+
 def effective_on_or_after(contract: dict[str, Any], key: str, issue_date: str) -> bool:
     value = contract.get(key)
     if not isinstance(value, str):
@@ -999,8 +1006,8 @@ def normalized_cards(issue: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def render_card(card: dict[str, Any], *, root: bool) -> str:
-    title = html.escape(str(card["title"]))
-    summary = html.escape(str(card["summary"]))
+    title = html.escape(display_text(card["title"], 92))
+    summary = html.escape(display_text(card["summary"], 220))
     section_id = html.escape(str(card["section_id"]), quote=True)
     source_date = html.escape(str(card["source_published_date"]))
     label = str(card.get("freshness_label") or "")
@@ -1025,8 +1032,8 @@ def render_card(card: dict[str, Any], *, root: bool) -> str:
 
 
 def render_priority_card(index: int, card: dict[str, Any]) -> str:
-    title = html.escape(str(card["title"]))
-    summary = html.escape(str(card["summary"]))
+    title = html.escape(display_text(card["title"], 110))
+    summary = html.escape(display_text(card["summary"], 180))
     section_id = html.escape(str(card["section_id"]), quote=True)
     priority_class = html.escape(str(card.get("priority_class", "signal")))
     return f"""        <article class="priority-card {priority_class}"><span class="rank">{index}</span><h3>{title}</h3><p>{summary}</p><a class="tag" href="#{section_id}">詳細へ</a></article>"""
@@ -1203,11 +1210,11 @@ def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, roo
     .hero p {{ max-width:760px; color:#dce5ef; font-size:15px; }} .hero-meta {{ display:flex; flex-wrap:wrap; gap:9px; margin-top:26px; }}
     .hero-chip, .pill {{ border:1px solid var(--line); border-radius:5px; padding:7px 10px; font-size:11px; font-weight:900; }}
     .hero-chip {{ border-color:rgba(255,255,255,.18); color:#dce5ef; }} .section {{ margin-top:32px; }} .section-head {{ margin-bottom:12px; padding-top:14px; border-top:1px solid #9aa7b8; }}
-    h2 {{ margin:0; font-size:23px; }} .priority, .cards {{ display:grid; gap:14px; }} .priority {{ grid-template-columns:repeat(2,minmax(0,1fr)); }} .cards {{ grid-template-columns:repeat(3,minmax(0,1fr)); }}
-    .priority-card, .card {{ background:var(--panel); border:1px solid var(--line); border-top:4px solid var(--blue); border-radius:10px; padding:18px; }}
+    h2 {{ margin:0; font-size:23px; }} .priority, .cards {{ display:grid; gap:16px; align-items:stretch; }} .priority {{ grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); }} .cards {{ grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); }}
+    .priority-card, .card {{ min-width:0; background:var(--panel); border:1px solid var(--line); border-top:4px solid var(--blue); border-radius:10px; padding:18px; display:flex; flex-direction:column; overflow:hidden; }}
     .priority-card.hot, .card.hot {{ border-top-color:var(--red); }} .priority-card.signal, .card.signal {{ border-top-color:var(--teal); }} .priority-card.macro, .card.macro {{ border-top-color:var(--amber); }}
     .rank {{ display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; margin-bottom:10px; border-radius:6px; background:var(--night); color:white; font-size:12px; font-weight:900; }}
-    h3 {{ margin:0 0 8px; font-size:18px; line-height:1.32; }} p {{ margin:0 0 12px; }} .meta {{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; color:var(--muted); }}
+    h3 {{ margin:0 0 8px; font-size:18px; line-height:1.36; overflow-wrap:anywhere; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }} p {{ margin:0 0 14px; overflow-wrap:anywhere; display:-webkit-box; -webkit-line-clamp:5; -webkit-box-orient:vertical; overflow:hidden; }} .meta {{ display:flex; flex-wrap:wrap; align-items:flex-start; gap:6px; margin-bottom:10px; color:var(--muted); }} .pill {{ display:inline-flex; align-items:center; max-width:100%; min-height:30px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }} .link, .tag {{ margin-top:auto; align-self:flex-start; }}
     @media (max-width:860px) {{ .priority, .cards {{ grid-template-columns:1fr; }} .bar {{ align-items:flex-start; flex-direction:column; }} }}
   </style>
 </head>
@@ -2816,6 +2823,8 @@ def self_test() -> None:
         fail("issue renderer must not expose a separate candidate-topic section")
     if "重要更新 1件" not in render_html:
         fail("issue renderer must keep the traditional important-updates section format")
+    if "repeat(auto-fit,minmax(300px,1fr))" not in render_html or "-webkit-line-clamp:5" not in render_html:
+        fail("issue renderer must keep responsive card layout guards")
     print("NIGHT SIGNAL STATE PASSED")
 
 
