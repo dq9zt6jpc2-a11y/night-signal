@@ -1569,6 +1569,17 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
         ]
     def review_category(category: dict[str, Any]) -> tuple[str, dict[str, Any], dict[str, Any]]:
         label = str(category["label"])
+        print(
+            json.dumps(
+                {
+                    "phase": "category_review_start",
+                    "category": label,
+                    "records": len(records_by_category[label]),
+                },
+                ensure_ascii=False,
+            ),
+            flush=True,
+        )
         try:
             raw = model_request(
                 token,
@@ -1589,6 +1600,17 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
                 retry_wait_cap=90,
             )
         except SystemExit as exc:
+            print(
+                json.dumps(
+                    {
+                        "phase": "category_model_fallback",
+                        "category": label,
+                        "error": str(exc),
+                    },
+                    ensure_ascii=False,
+                ),
+                flush=True,
+            )
             raw = {
                 "items": [],
                 "signals": [],
@@ -1668,6 +1690,7 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
             if isinstance(item, dict)
         ]
         report = {
+            "phase": "category_review_complete",
             "category": label,
             "raw_items": raw_items,
             "raw_signals": len(raw.get("signals", []))
@@ -1680,6 +1703,17 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
         return label, normalized, report
 
     model_workers = max(1, int(os.getenv("NIGHT_SIGNAL_MODEL_CONCURRENCY", "1")))
+    print(
+        json.dumps(
+            {
+                "phase": "category_review_pool",
+                "categories": len(contracts),
+                "model_workers": model_workers,
+            },
+            ensure_ascii=False,
+        ),
+        flush=True,
+    )
     with concurrent.futures.ThreadPoolExecutor(max_workers=model_workers) as executor:
         futures = {
             executor.submit(review_category, category): str(category["label"])

@@ -41,11 +41,10 @@ concurrency:
 jobs:
   collect:
     runs-on: ubuntu-latest
+    timeout-minutes: 105
     env:
       GITHUB_TOKEN: ${{ github.token }}
-      NIGHT_SIGNAL_MODEL_TIMEOUT_SECONDS: 240
-      NIGHT_SIGNAL_MODEL_RETRIES: 5
-      NIGHT_SIGNAL_MODEL_MAX_TOKENS: 3000
+      NIGHT_SIGNAL_MODEL_CONCURRENCY: 2
       NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE: ${{ inputs.issue_date != '' && '1' || '' }}
     steps:
       - name: Checkout
@@ -72,6 +71,7 @@ jobs:
 
       - name: Collect all categories
         if: ${{ inputs.canary_only != true }}
+        timeout-minutes: 70
         env:
           FORCE_COLLECTION: ${{ inputs.force || false }}
         run: |
@@ -83,6 +83,7 @@ jobs:
 
       - name: Build and audit issue
         if: ${{ inputs.canary_only != true }}
+        timeout-minutes: 20
         run: |
           python3 scripts/night_signal_import_research.py "$ISSUE_DATE"
           python3 scripts/night_signal_runtime_audit.py "$ISSUE_DATE"
@@ -118,6 +119,7 @@ jobs:
 
       - name: Wait for Pages publication
         if: ${{ inputs.canary_only != true && inputs.dry_run != true }}
+        timeout-minutes: 20
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

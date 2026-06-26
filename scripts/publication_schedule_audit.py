@@ -62,6 +62,12 @@ def main() -> int:
         fail("unattended workflow must own the single background concurrency group")
     if "cancel-in-progress: false" not in unattended:
         fail("unattended workflow must not cancel an in-flight publication attempt")
+    if "timeout-minutes: 105" not in unattended or "timeout-minutes: 70" not in unattended:
+        fail("unattended workflow must cap collection and job runtime")
+    if "NIGHT_SIGNAL_MODEL_TIMEOUT_SECONDS: 240" in unattended or "NIGHT_SIGNAL_MODEL_RETRIES: 5" in unattended:
+        fail("unattended workflow must not override model calls into long retry loops")
+    if "NIGHT_SIGNAL_MODEL_CONCURRENCY: 2" not in unattended:
+        fail("unattended workflow must parallelize category extraction without broadening calls")
     if "models: read" not in unattended or "night_signal_unattended_collect.py" not in unattended:
         fail("unattended workflow must use GitHub Models without an external API secret")
     if "--event-name workflow_dispatch" in unattended:
