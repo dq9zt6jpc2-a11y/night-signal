@@ -31,6 +31,7 @@ SUMMARY_LABEL_RE = re.compile(r"(?:変更点|重要性|確認事実|未確定点
 GENERIC_IMPORTANCE_RE = re.compile(
     r"重要更新として一覧に残す|変化を広めに把握|関連テーマは|出典日付は"
 )
+TRAILING_DOMAIN_RE = re.compile(r"\s*[-–—|｜]\s*[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+(?:/[^\s。、]*)?\s*$")
 
 
 def fail(message: str) -> None:
@@ -61,6 +62,25 @@ def useful_fact(fact: Any, category: str) -> bool:
 def useful_importance(value: Any) -> bool:
     text = compact_text(value, 700)
     return bool(text) and not GENERIC_IMPORTANCE_RE.search(text)
+
+
+def public_card_title(item: dict[str, Any]) -> str:
+    title = compact_text(item.get("title", ""), 180)
+    for _ in range(3):
+        cleaned = state.PUBLISHER_SUFFIX_RE.sub("", title)
+        cleaned = TRAILING_DOMAIN_RE.sub("", cleaned)
+        cleaned = cleaned.strip(" -–—|｜")
+        if cleaned == title:
+            break
+        title = cleaned
+    if not title or state.public_render_copy_violations(title, kind="title"):
+        summary = compact_text(item.get("summary", ""), 180)
+        fallback = re.split(r"(?<=[。！？!?])", summary)[0].strip()
+        fallback = state.PUBLISHER_SUFFIX_RE.sub("", fallback)
+        fallback = TRAILING_DOMAIN_RE.sub("", fallback).strip(" -–—|｜")
+        if fallback and not state.public_render_copy_violations(fallback, kind="title"):
+            return fallback
+    return title
 
 
 def canonical_detail_summary(category: str, item: dict[str, Any]) -> str:
@@ -787,9 +807,10 @@ def item_card(
     if not slug_stem.endswith(f"-{issue_date}"):
         slug_stem = f"{slug_stem}-{issue_date}"
     slug = f"{slug_stem}.html"
+    card_title = public_card_title(item)
     return {
         "candidate_title": str(item["title"]),
-        "title": str(item["title"]),
+        "title": card_title,
         "summary": str(item["summary"]),
         "section_id": section_id,
         "category": category,
@@ -976,6 +997,14 @@ def self_test() -> None:
         fail("canonical detail summary kept label-heavy or internal copy")
     if no_change_candidate("OpenAI", "product_release", "2099-01-01", "https://openai.com/")["change_class"] != "background_only":
         fail("no-change candidate generation failed")
+    cleaned_title = public_card_title(
+        {
+            "title": "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用 - ｄメニューニュース",
+            "summary": "OpenAIがサイバー防衛の更新を公表した。",
+        }
+    )
+    if cleaned_title != "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用":
+        fail("reviewed import must strip publisher suffixes from public card titles")
     if not no_change_placeholder_signal(
         {
             "title": "OpenAI、product_releaseの直近確認",
