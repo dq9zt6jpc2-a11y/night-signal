@@ -880,9 +880,10 @@ def item_candidate(category: str, item: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def item_decision(item: dict[str, Any]) -> dict[str, Any]:
+def item_decision(category: str, item: dict[str, Any]) -> dict[str, Any]:
+    title, _ = public_item_copy(category, item)
     return {
-        "candidate_title": str(item["title"]),
+        "candidate_title": title,
         "adoption_decision": "adopt",
         "topic_value_class": topic_value_class(item["topic_value_class"]),
         "reader_delta": scrub_public_summary(item["why_it_matters"]),
@@ -1068,17 +1069,9 @@ def import_bundle(issue_date: str, bundle_path: Path, state_root: Path) -> dict[
         ]
         candidates = [item_candidate(category, item) for item in items]
         candidates.extend(signal_candidate(category, signal) for signal in candidate_signals)
-        item_titles = {str(item["title"]) for item in items}
-        signal_titles = {str(signal["title"]) for signal in candidate_signals}
         decisions = [
-            item_decision(next(item for item in items if item["title"] == candidate["title"]))
-            if candidate["title"] in item_titles
-            else signal_decision(
-                next(signal for signal in candidate_signals if signal["title"] == candidate["title"])
-            )
-            if candidate["title"] in signal_titles
-            else rejected_decision(candidate)
-            for candidate in candidates
+            *[item_decision(category, item) for item in items],
+            *[signal_decision(signal) for signal in candidate_signals],
         ]
         cards = [
             item_card(
