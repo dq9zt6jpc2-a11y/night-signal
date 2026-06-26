@@ -32,6 +32,8 @@ GENERIC_IMPORTANCE_RE = re.compile(
     r"重要更新として一覧に残す|変化を広めに把握|関連テーマは|出典日付は"
 )
 TRAILING_DOMAIN_RE = re.compile(r"\s*[-–—|｜]\s*[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+(?:/[^\s。、]*)?\s*$")
+EMPTY_JA_QUOTE_RE = re.compile(r"[「『]\s*[」』]")
+DEFAULT_LIMITS_SENTENCE = "影響範囲、対象範囲、追加条件、続報の有無は引き続き確認が必要。"
 
 
 def fail(message: str) -> None:
@@ -68,14 +70,16 @@ def scrub_public_title(value: Any) -> str:
     title = compact_text(value, 180)
     title = re.sub(r"https?://\S+", "", title)
     title = state.DOMAIN_RE.sub("", title)
+    title = EMPTY_JA_QUOTE_RE.sub("", title)
     for _ in range(3):
         cleaned = state.PUBLISHER_SUFFIX_RE.sub("", title)
         cleaned = TRAILING_DOMAIN_RE.sub("", cleaned)
+        cleaned = EMPTY_JA_QUOTE_RE.sub("", cleaned)
         cleaned = cleaned.strip(" -–—|｜")
         if cleaned == title:
             break
         title = cleaned
-    return title.strip()
+    return compact_text(title.strip())
 
 
 def scrub_public_summary(value: Any) -> str:
@@ -123,6 +127,88 @@ def summary_is_reader_facing(title: str, summary: str) -> bool:
     return True
 
 
+def public_focus_phrase(title: str, category: str) -> str:
+    focus = scrub_public_title(title)
+    if category:
+        focus = re.sub(rf"^{re.escape(category)}[、,:：\s]+", "", focus).strip()
+    return focus.strip("、。 ") or category or "この更新"
+
+
+def sentence_from(value: Any, limit: int = 520) -> str:
+    text = compact_text(scrub_public_summary(value), limit).rstrip("。")
+    if not text:
+        return ""
+    return f"{text}。"
+
+
+def reader_summary_from_parts(title: str, parts: list[Any], *, limit: int = 900) -> str:
+    seen: set[str] = set()
+    kept: list[str] = []
+    for part in parts:
+        sentence = sentence_from(part)
+        if not sentence:
+            continue
+        key = state.copy_signature(sentence)
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        kept.append(sentence)
+        candidate = compact_text(" ".join(kept), limit)
+        if len(kept) >= 2 and summary_is_reader_facing(title, candidate):
+            return candidate
+    candidate = compact_text(" ".join(kept), limit)
+    if candidate and summary_is_reader_facing(title, candidate):
+        return candidate
+    return ""
+
+
+def title_bound_summary(
+    item: dict[str, Any],
+    title: str,
+    category: str,
+    *,
+    lead: Any | None = None,
+    limit: int = 900,
+) -> str:
+    facts = [
+        compact_text(scrub_public_summary(fact), 360)
+        for fact in item.get("confirmed_facts", [])
+        if useful_fact(fact, category)
+    ][:2]
+    importance = (
+        scrub_public_summary(item.get("why_it_matters", ""))
+        if useful_importance(item.get("why_it_matters", ""))
+        else f"{category}の事業・技術・市場動向を読む上で確認対象になる。"
+    )
+    limits = scrub_public_summary(item.get("limits_or_unknowns", "")) or DEFAULT_LIMITS_SENTENCE
+    parts = [
+        lead if lead is not None else public_focus_phrase(title, category),
+        importance,
+        *facts,
+        item.get("what_changed", ""),
+        limits,
+    ]
+    summary = reader_summary_from_parts(title, parts, limit=limit)
+    if summary:
+        return summary
+    focus = sentence_from(lead if lead is not None else public_focus_phrase(title, category))
+    fallback = compact_text(
+        " ".join(
+            part
+            for part in (
+                focus,
+                sentence_from(importance),
+                sentence_from(limits),
+            )
+            if part
+        ),
+        limit,
+    )
+    if fallback and not state.public_render_copy_violations(fallback, kind="summary"):
+        return fallback
+    return compact_text(f"{category}の事業・技術・市場動向を確認する更新。{DEFAULT_LIMITS_SENTENCE}", limit)
+
+
 def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
     original = compact_text(scrub_public_summary(item.get("summary", "")), 900)
     if original and summary_is_reader_facing(title, original):
@@ -163,7 +249,7 @@ def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
         )
         if summary_is_reader_facing(title, fallback):
             return fallback
-    return original
+    return title_bound_summary(item, title, category)
 
 
 def item_basis_text(item: dict[str, Any], category: str) -> str:
@@ -307,13 +393,14 @@ def canonical_detail_summary(
         limits_sentence or "影響範囲、追加条件、続報の有無は引き続き確認が必要。",
     ]
     generic = scrub_public_summary(" ".join(generic_parts))
-    if generic and summary_is_reader_facing(title, generic):
+    if generic and summary_is_reader_facing(title, generic) and state.text_overlap(card_summary, generic) >= 2:
         return generic
 
-    return (
-        f"この更新は{category}の確認対象に新しい材料を加える。"
-        "影響範囲、追加条件、続報の有無は引き続き確認が必要。"
-    )
+    rebound = title_bound_summary(item, title, category, lead=card_summary, limit=1600)
+    if rebound and summary_is_reader_facing(title, rebound) and state.text_overlap(card_summary, rebound) >= 2:
+        return rebound
+
+    return title_bound_summary(item, title, category, lead=card_summary or title, limit=1600)
 
 
 def public_item_copy(category: str, item: dict[str, Any]) -> tuple[str, str]:
@@ -1297,6 +1384,37 @@ def self_test() -> None:
     }
     if item_card("OpenAI", "openai", aligned_item, "2099-01-01")["candidate_title"] != item_decision("OpenAI", aligned_item)["candidate_title"]:
         fail("reviewed import card candidate titles must match adopted decisions")
+    malformed_item = {
+        "title": "OpenAIがClaude Mythos 5超えのセキュリティー特化AI「」のアップデートを発表＆セキュリティー特化Codexプラグイン「Codex Security」もアップデート",
+        "watch_topic_id": "openai_security",
+        "source_published_date": "2099-01-01",
+        "sources": [
+            {"label": "OpenAI", "url": "https://openai.com/example"}
+        ],
+        "change_class": "material_update",
+        "summary": "OpenAIがClaude Mythos 5超えのセキュリティー特化AI「」のアップデートを発表＆セキュリティー特化Codexプラグイン「Codex Security」もアップデート",
+        "confirmed_facts": [
+            "Codex Securityの更新が確認された。",
+            "セキュリティー特化AIの更新が確認対象になった。",
+            "対象範囲や追加条件は引き続き確認が必要になる。",
+        ],
+        "topic_value_class": "technical_or_product_shift",
+        "what_changed": "OpenAIがセキュリティー特化AIとCodex Securityの更新を公表した。",
+        "why_it_matters": "企業向けAI利用で安全対策と運用改善を読む材料になる。",
+        "limits_or_unknowns": "提供範囲、性能条件、追加条件は引き続き確認が必要。",
+        "priority_class": "important",
+        "slug": "openai-security-codex.html",
+    }
+    malformed_card = item_card("OpenAI", "openai", malformed_item, "2099-01-01")
+    if "「」" in malformed_card["title"]:
+        fail("reviewed import must remove empty Japanese quotes from public titles")
+    if not summary_is_reader_facing(malformed_card["title"], malformed_card["summary"]):
+        fail("reviewed import must not emit title-only card summaries")
+    state.validate_decisions_and_cards(
+        {"decisions": [item_decision("OpenAI", malformed_item)]},
+        [item_candidate("OpenAI", malformed_item)],
+        [malformed_card],
+    )
     domain_cleaned_title = public_card_title(
         {
             "title": "OpenAI example.com、Daybreak更新",
