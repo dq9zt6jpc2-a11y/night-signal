@@ -281,6 +281,12 @@ def canonical_detail_summary(
     )
 
 
+def public_item_copy(category: str, item: dict[str, Any]) -> tuple[str, str]:
+    title = public_card_title(item)
+    summary = public_card_summary(item, title, category)
+    return title, summary
+
+
 def read_bundle(path: Path) -> dict[str, Any]:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
@@ -853,16 +859,22 @@ def no_change_candidate(
 
 
 def item_candidate(category: str, item: dict[str, Any]) -> dict[str, Any]:
+    title, summary = public_item_copy(category, item)
     return {
         "category": category,
         "watch_topic_id": str(item["watch_topic_id"]),
-        "title": str(item["title"]),
+        "title": title,
         "source_published_date": str(item["source_published_date"]),
         "source_urls": [str(source["url"]) for source in item["sources"]],
         "change_class": str(item.get("change_class", "new_event")),
-        "summary": scrub_public_summary(item["summary"]),
+        "summary": summary,
         "material_facts": [
-            scrub_public_summary(fact) for fact in item["confirmed_facts"]
+            fact
+            for fact in (
+                scrub_public_summary(raw_fact)
+                for raw_fact in item["confirmed_facts"]
+            )
+            if fact and not state.public_render_copy_violations(fact, kind="summary")
         ],
         "counter_evidence_checked": True,
     }
@@ -951,7 +963,11 @@ def item_card(
         str(item.get("why_it_matters", "")),
     ]:
         text = compact_text(scrub_public_summary(fact), 500)
-        if not text or text in seen_facts:
+        if (
+            not text
+            or text in seen_facts
+            or state.public_render_copy_violations(text, kind="summary")
+        ):
             continue
         seen_facts.add(text)
         facts.append(text)
@@ -963,8 +979,7 @@ def item_card(
     if not slug_stem.endswith(f"-{issue_date}"):
         slug_stem = f"{slug_stem}-{issue_date}"
     slug = f"{slug_stem}.html"
-    card_title = public_card_title(item)
-    card_summary = public_card_summary(item, card_title, category)
+    card_title, card_summary = public_item_copy(category, item)
     return {
         "candidate_title": str(item["title"]),
         "title": card_title,
