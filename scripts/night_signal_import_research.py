@@ -246,7 +246,25 @@ def canonical_detail_summary(
     fallback = scrub_public_summary(" ".join(fallback_parts))
     if fallback and summary_is_reader_facing(title, fallback):
         return fallback
-    return composed or existing
+
+    non_title_facts = [
+        fact
+        for fact in facts
+        if state.title_repetition_score(title, fact) < 0.82
+    ][:2]
+    generic_parts = [
+        f"この更新は{category}の事業・市場動向を確認する材料になる。",
+        *non_title_facts,
+        limits_sentence or "影響範囲、追加条件、続報の有無は引き続き確認が必要。",
+    ]
+    generic = scrub_public_summary(" ".join(generic_parts))
+    if generic and summary_is_reader_facing(title, generic):
+        return generic
+
+    return (
+        f"この更新は{category}の確認対象に新しい材料を加える。"
+        "影響範囲、追加条件、続報の有無は引き続き確認が必要。"
+    )
 
 
 def read_bundle(path: Path) -> dict[str, Any]:
@@ -1181,6 +1199,28 @@ def self_test() -> None:
         detail_summary,
     ):
         fail("reviewed import must rewrite title-repetition detail summaries")
+    generic_detail_summary = canonical_detail_summary(
+        "OpenAI",
+        {
+            "summary": "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用。OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用。",
+            "detail_summary": "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用。OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用。",
+            "what_changed": "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用",
+            "why_it_matters": "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用",
+            "confirmed_facts": [
+                "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用",
+                "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用",
+                "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用",
+            ],
+            "limits_or_unknowns": "影響範囲、追加条件、続報の有無は引き続き確認が必要。",
+        },
+        "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用",
+        "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用。",
+    )
+    if not summary_is_reader_facing(
+        "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用",
+        generic_detail_summary,
+    ):
+        fail("reviewed import must fall back from unrecoverable repeated detail summaries")
     if not no_change_placeholder_signal(
         {
             "title": "OpenAI、product_releaseの直近確認",
