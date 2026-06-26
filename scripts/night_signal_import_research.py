@@ -252,6 +252,20 @@ def canonical_detail_summary(
         for fact in facts
         if state.title_repetition_score(title, fact) < 0.82
     ][:2]
+    bound_generic = scrub_public_summary(
+        " ".join(
+            part
+            for part in (
+                card_summary,
+                *non_title_facts,
+                limits_sentence or "影響範囲、追加条件、続報の有無は引き続き確認が必要。",
+            )
+            if part
+        )
+    )
+    if bound_generic and summary_is_reader_facing(title, bound_generic):
+        return bound_generic
+
     generic_parts = [
         f"この更新は{category}の事業・市場動向を確認する材料になる。",
         *non_title_facts,
