@@ -166,6 +166,34 @@ def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
     return original
 
 
+def item_basis_text(item: dict[str, Any], category: str) -> str:
+    facts = [
+        compact_text(fact, 500)
+        for fact in item.get("confirmed_facts", [])
+        if useful_fact(fact, category)
+    ][:4]
+    return scrub_public_summary(
+        " ".join(
+            str(part)
+            for part in (
+                item.get("what_changed", ""),
+                item.get("why_it_matters", ""),
+                *facts,
+                item.get("limits_or_unknowns", ""),
+            )
+            if part
+        )
+    )
+
+
+def public_copy_bound(card_summary: str, detail_summary: str, item: dict[str, Any], category: str) -> bool:
+    basis = item_basis_text(item, category)
+    return (
+        state.text_overlap(card_summary, detail_summary) >= 2
+        or state.text_overlap(card_summary, basis) >= 2
+    )
+
+
 def canonical_detail_summary(
     category: str,
     item: dict[str, Any],
@@ -178,12 +206,13 @@ def canonical_detail_summary(
         and not SUMMARY_LABEL_RE.search(existing)
         and not state.public_render_copy_violations(existing, kind="summary")
         and summary_is_reader_facing(title, existing)
+        and public_copy_bound(card_summary, existing, item, category)
     ):
         return existing
 
     lead_candidates = [
-        item.get("what_changed"),
         card_summary,
+        item.get("what_changed"),
         item.get("summary"),
         existing,
     ]
@@ -1328,6 +1357,34 @@ def self_test() -> None:
         detail_summary,
     ):
         fail("reviewed import must rewrite title-repetition detail summaries")
+    bound_card_summary = (
+        "Codex Securityの更新は、サイバー防衛の実運用で修正と検証まで進んだ点を示す。"
+        "企業向けAI利用の安全対策を読む材料になる。"
+    )
+    rebound_detail_summary = canonical_detail_summary(
+        "OpenAI",
+        {
+            "summary": bound_card_summary,
+            "detail_summary": (
+                "OpenAIはAPI料金体系と開発者向け利用条件の整理を進めている。"
+                "導入企業のコスト管理や契約条件の見直しに関係する可能性がある。"
+                "一方で、セキュリティー更新とは別の論点であり、今回のカード本文としては焦点がずれている。"
+                "詳細条件、対象範囲、続報の有無は引き続き確認が必要になる。"
+            ),
+            "what_changed": "OpenAIがCodex Securityの更新を公表し、サイバー防衛の修正状況を確認できるようにした。",
+            "why_it_matters": "企業向けAI利用で安全対策と運用改善を読む材料になる。",
+            "confirmed_facts": [
+                "Codex Securityの更新が確認された。",
+                "サイバー防衛の実運用で修正状況が確認対象になる。",
+                "対象範囲や追加条件は引き続き確認が必要になる。",
+            ],
+            "limits_or_unknowns": "対象範囲や追加条件は引き続き確認が必要。",
+        },
+        "OpenAI、Codex Securityを更新",
+        bound_card_summary,
+    )
+    if state.text_overlap(bound_card_summary, rebound_detail_summary) < 2:
+        fail("reviewed import detail summaries must stay bound to card summaries")
     generic_detail_summary = canonical_detail_summary(
         "OpenAI",
         {
