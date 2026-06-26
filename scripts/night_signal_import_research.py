@@ -86,16 +86,9 @@ def public_card_title(item: dict[str, Any]) -> str:
 def summary_is_reader_facing(title: str, summary: str) -> bool:
     if state.public_render_copy_violations(summary, kind="summary"):
         return False
-    title_key = state.copy_signature(title)
-    summary_key = state.copy_signature(summary)
-    if title_key and summary_key.count(title_key) >= 2:
-        return False
-    sentences = [part.strip() for part in re.split(r"(?<=[。！？!?])", summary) if part.strip()]
-    if (
-        state.title_repetition_score(title, summary) >= 0.82
-        and len(state.content_terms(summary)) <= len(state.content_terms(title)) + 2
-        and (len(sentences) <= 1 or len(summary_key) < len(title_key) * 1.6)
-    ):
+    try:
+        state.validate_reader_summary("reviewed import card summary", title, summary)
+    except SystemExit:
         return False
     return True
 
@@ -111,15 +104,18 @@ def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
         if useful_fact(fact, category)
     ][:2]
     parts = [
-        compact_text(item.get("what_changed", ""), 500),
         compact_text(item.get("why_it_matters", ""), 500),
         *facts,
+        compact_text(item.get("what_changed", ""), 500),
+        compact_text(item.get("limits_or_unknowns", ""), 500),
     ]
     seen: set[str] = set()
     kept: list[str] = []
     for part in parts:
         sentence = part.rstrip("。")
         if not sentence:
+            continue
+        if not kept and state.title_repetition_score(title, sentence) >= 0.82:
             continue
         key = state.copy_signature(sentence)
         if not key or key in seen:
@@ -129,6 +125,14 @@ def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
         candidate = compact_text(" ".join(kept), 900)
         if summary_is_reader_facing(title, candidate):
             return candidate
+    fallback_parts = [part for part in parts if part]
+    if fallback_parts:
+        fallback = compact_text(
+            " ".join(f"{part.rstrip('。')}。" for part in fallback_parts[:3]),
+            900,
+        )
+        if summary_is_reader_facing(title, fallback):
+            return fallback
     return original
 
 
