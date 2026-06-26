@@ -206,7 +206,7 @@ def canonical_detail_summary(
         and not SUMMARY_LABEL_RE.search(existing)
         and not state.public_render_copy_violations(existing, kind="summary")
         and summary_is_reader_facing(title, existing)
-        and public_copy_bound(card_summary, existing, item, category)
+        and state.text_overlap(card_summary, existing) >= 2
     ):
         return existing
 
@@ -217,11 +217,11 @@ def canonical_detail_summary(
         existing,
     ]
     lead = ""
-    for candidate in lead_candidates:
+    for index, candidate in enumerate(lead_candidates):
         candidate_text = scrub_public_summary(candidate)
         if not candidate_text:
             continue
-        if state.title_repetition_score(title, candidate_text) >= 0.82:
+        if index != 0 and state.title_repetition_score(title, candidate_text) >= 0.82:
             continue
         lead = compact_text(candidate_text, 700)
         break
@@ -259,7 +259,7 @@ def canonical_detail_summary(
             if part
         )
     )
-    if composed and summary_is_reader_facing(title, composed):
+    if composed and summary_is_reader_facing(title, composed) and public_copy_bound(card_summary, composed, item, category):
         return composed
 
     fallback_parts = [
@@ -273,7 +273,7 @@ def canonical_detail_summary(
         if part
     ]
     fallback = scrub_public_summary(" ".join(fallback_parts))
-    if fallback and summary_is_reader_facing(title, fallback):
+    if fallback and summary_is_reader_facing(title, fallback) and public_copy_bound(card_summary, fallback, item, category):
         return fallback
 
     non_title_facts = [
@@ -292,8 +292,14 @@ def canonical_detail_summary(
             if part
         )
     )
-    if bound_generic and summary_is_reader_facing(title, bound_generic):
+    if bound_generic and summary_is_reader_facing(title, bound_generic) and state.text_overlap(card_summary, bound_generic) >= 2:
         return bound_generic
+
+    minimal_bound = scrub_public_summary(
+        f"{card_summary.rstrip('。')}。影響範囲、追加条件、続報の有無は引き続き確認が必要。"
+    )
+    if minimal_bound and summary_is_reader_facing(title, minimal_bound):
+        return minimal_bound
 
     generic_parts = [
         f"この更新は{category}の事業・市場動向を確認する材料になる。",
