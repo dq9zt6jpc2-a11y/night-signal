@@ -935,6 +935,12 @@ def no_change_placeholder_signal(signal: dict[str, Any]) -> bool:
 
 
 def signal_decision(signal: dict[str, Any]) -> dict[str, Any]:
+    rejection_class = str(signal["rejection_reason_class"])
+    if (
+        rejection_class in {"no_material_change", "lower_importance"}
+        and str(signal.get("change_class")) in {"new_event", "material_update"}
+    ):
+        rejection_class = "duplicate_covered"
     return {
         "candidate_title": str(signal["title"]),
         "adoption_decision": "reject",
@@ -943,7 +949,7 @@ def signal_decision(signal: dict[str, Any]) -> dict[str, Any]:
         ),
         "reader_delta": str(signal["summary"]),
         "materiality_basis": str(signal["rejection_reason"]),
-        "reject_reason_class": str(signal["rejection_reason_class"]),
+        "reject_reason_class": rejection_class,
         "reject_reason": str(signal["rejection_reason"]),
     }
 
@@ -1171,6 +1177,18 @@ def self_test() -> None:
         fail("canonical detail summary kept label-heavy or internal copy")
     if no_change_candidate("OpenAI", "product_release", "2099-01-01", "https://openai.com/")["change_class"] != "background_only":
         fail("no-change candidate generation failed")
+    material_reject = signal_decision(
+        {
+            "title": "OpenAIがCodex Securityのアップデートを発表",
+            "summary": "Codex Securityの更新が確認された。",
+            "change_class": "material_update",
+            "rejection_reason_class": "no_material_change",
+            "rejection_reason": "上位カードと重なるため一覧候補に留める。",
+            "topic_value_class": "operational_status_change",
+        }
+    )
+    if material_reject["reject_reason_class"] == "no_material_change":
+        fail("reviewed import must not reject material signals as no-change")
     cleaned_title = public_card_title(
         {
             "title": "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用 - ｄメニューニュース",
