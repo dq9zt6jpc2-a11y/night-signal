@@ -934,6 +934,18 @@ def no_change_placeholder_signal(signal: dict[str, Any]) -> bool:
     return any(pattern in text for pattern in NO_CHANGE_PLACEHOLDER_PATTERNS)
 
 
+def supporting_signal(signal: dict[str, Any]) -> bool:
+    if no_change_placeholder_signal(signal):
+        return False
+    text = " ".join(
+        str(signal.get(key, ""))
+        for key in ("title", "summary", "change_class")
+    )
+    if str(signal.get("change_class")) in {"new_event", "material_update"}:
+        return False
+    return not bool(state.MATERIAL_SIGNAL_RE.search(text))
+
+
 def signal_decision(signal: dict[str, Any]) -> dict[str, Any]:
     rejection_class = str(signal["rejection_reason_class"])
     signal_text = " ".join(
@@ -1052,7 +1064,7 @@ def import_bundle(issue_date: str, bundle_path: Path, state_root: Path) -> dict[
         candidate_signals = [
             signal
             for signal in signals
-            if not no_change_placeholder_signal(signal)
+            if supporting_signal(signal)
         ]
         candidates = [item_candidate(category, item) for item in items]
         candidates.extend(signal_candidate(category, signal) for signal in candidate_signals)
@@ -1184,6 +1196,24 @@ def self_test() -> None:
         fail("canonical detail summary kept label-heavy or internal copy")
     if no_change_candidate("OpenAI", "product_release", "2099-01-01", "https://openai.com/")["change_class"] != "background_only":
         fail("no-change candidate generation failed")
+    if supporting_signal(
+        {
+            "title": "OpenAIがCodex Securityのアップデートを発表",
+            "summary": "Codex Securityの更新が確認された。",
+            "change_class": "material_update",
+            "rejection_reason": "上位カードと重なるため一覧候補に留める。",
+        }
+    ):
+        fail("reviewed import must not keep rejected material signals as candidates")
+    if not supporting_signal(
+        {
+            "title": "OpenAI APIの確認",
+            "summary": "直近の補助情報として確認した。",
+            "change_class": "duplicate_followup",
+            "rejection_reason": "上位カードと重なるため一覧候補に留める。",
+        }
+    ):
+        fail("reviewed import must keep non-material supporting signals as candidates")
     material_reject = signal_decision(
         {
             "title": "OpenAIがCodex Securityのアップデートを発表",
