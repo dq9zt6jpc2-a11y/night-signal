@@ -936,9 +936,16 @@ def no_change_placeholder_signal(signal: dict[str, Any]) -> bool:
 
 def signal_decision(signal: dict[str, Any]) -> dict[str, Any]:
     rejection_class = str(signal["rejection_reason_class"])
+    signal_text = " ".join(
+        str(signal.get(key, ""))
+        for key in ("title", "summary", "change_class")
+    )
     if (
         rejection_class in {"no_material_change", "lower_importance"}
-        and str(signal.get("change_class")) in {"new_event", "material_update"}
+        and (
+            str(signal.get("change_class")) in {"new_event", "material_update"}
+            or bool(state.MATERIAL_SIGNAL_RE.search(signal_text))
+        )
     ):
         rejection_class = "duplicate_covered"
     return {
@@ -1189,6 +1196,18 @@ def self_test() -> None:
     )
     if material_reject["reject_reason_class"] == "no_material_change":
         fail("reviewed import must not reject material signals as no-change")
+    numeric_material_reject = signal_decision(
+        {
+            "title": "VWが経営不振で最大10万人削減、4工場閉鎖も視野",
+            "summary": "人員削減と工場閉鎖の可能性が報じられた。",
+            "change_class": "operational_status_change",
+            "rejection_reason_class": "no_material_change",
+            "rejection_reason": "上位カードと重なるため一覧候補に留める。",
+            "topic_value_class": "operational_status_change",
+        }
+    )
+    if numeric_material_reject["reject_reason_class"] == "no_material_change":
+        fail("reviewed import must not reject numeric material signals as no-change")
     cleaned_title = public_card_title(
         {
             "title": "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用 - ｄメニューニュース",
