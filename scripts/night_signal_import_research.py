@@ -83,6 +83,55 @@ def public_card_title(item: dict[str, Any]) -> str:
     return title
 
 
+def summary_is_reader_facing(title: str, summary: str) -> bool:
+    if state.public_render_copy_violations(summary, kind="summary"):
+        return False
+    title_key = state.copy_signature(title)
+    summary_key = state.copy_signature(summary)
+    if title_key and summary_key.count(title_key) >= 2:
+        return False
+    sentences = [part.strip() for part in re.split(r"(?<=[。！？!?])", summary) if part.strip()]
+    if (
+        state.title_repetition_score(title, summary) >= 0.82
+        and len(state.content_terms(summary)) <= len(state.content_terms(title)) + 2
+        and (len(sentences) <= 1 or len(summary_key) < len(title_key) * 1.6)
+    ):
+        return False
+    return True
+
+
+def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
+    original = compact_text(item.get("summary", ""), 900)
+    if original and summary_is_reader_facing(title, original):
+        return original
+
+    facts = [
+        compact_text(fact, 320)
+        for fact in item.get("confirmed_facts", [])
+        if useful_fact(fact, category)
+    ][:2]
+    parts = [
+        compact_text(item.get("what_changed", ""), 500),
+        compact_text(item.get("why_it_matters", ""), 500),
+        *facts,
+    ]
+    seen: set[str] = set()
+    kept: list[str] = []
+    for part in parts:
+        sentence = part.rstrip("。")
+        if not sentence:
+            continue
+        key = state.copy_signature(sentence)
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        kept.append(f"{sentence}。")
+        candidate = compact_text(" ".join(kept), 900)
+        if summary_is_reader_facing(title, candidate):
+            return candidate
+    return original
+
+
 def canonical_detail_summary(category: str, item: dict[str, Any]) -> str:
     existing = compact_text(item.get("detail_summary", ""), 2600)
     if len(existing) >= 280 and not SUMMARY_LABEL_RE.search(existing):
@@ -808,10 +857,11 @@ def item_card(
         slug_stem = f"{slug_stem}-{issue_date}"
     slug = f"{slug_stem}.html"
     card_title = public_card_title(item)
+    card_summary = public_card_summary(item, card_title, category)
     return {
         "candidate_title": str(item["title"]),
         "title": card_title,
-        "summary": str(item["summary"]),
+        "summary": card_summary,
         "section_id": section_id,
         "category": category,
         "source_published_date": str(item["source_published_date"]),
@@ -1005,6 +1055,24 @@ def self_test() -> None:
     )
     if cleaned_title != "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用":
         fail("reviewed import must strip publisher suffixes from public card titles")
+    cleaned_summary = public_card_summary(
+        {
+            "summary": "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用。OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用。",
+            "what_changed": "OpenAIがDaybreakの防御機能を更新し、修正パッチの適用状況を公表した。",
+            "why_it_matters": "サイバー防衛の実運用で、検知だけでなく修正まで進んだ点を確認できる。",
+            "confirmed_facts": [
+                "OpenAIはDaybreakの防御機能更新と修正パッチ適用を公表した。",
+                "対象範囲や残る制約は追加確認が必要とされる。",
+            ],
+        },
+        "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用",
+        "OpenAI",
+    )
+    if not summary_is_reader_facing(
+        "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用",
+        cleaned_summary,
+    ):
+        fail("reviewed import must rewrite title-repetition card summaries")
     if not no_change_placeholder_signal(
         {
             "title": "OpenAI、product_releaseの直近確認",
