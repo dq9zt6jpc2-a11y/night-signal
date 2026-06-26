@@ -1007,7 +1007,7 @@ def item_card(
     slug = f"{slug_stem}.html"
     card_title, card_summary = public_item_copy(category, item)
     return {
-        "candidate_title": str(item["title"]),
+        "candidate_title": card_title,
         "title": card_title,
         "summary": card_summary,
         "section_id": section_id,
@@ -1239,6 +1239,29 @@ def self_test() -> None:
     )
     if cleaned_title != "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用":
         fail("reviewed import must strip publisher suffixes from public card titles")
+    aligned_item = {
+        "title": "ソフトバンクG株が約2年ぶり大幅安、米OpenAIのIPO先送りと報道 - Bloomberg.com",
+        "watch_topic_id": "openai_financing",
+        "source_published_date": "2099-01-01",
+        "sources": [
+            {"label": "Bloomberg", "url": "https://www.bloomberg.com/example"}
+        ],
+        "change_class": "material_update",
+        "summary": "IPO延期報道を受け、ソフトバンクG株の下落が確認された。",
+        "confirmed_facts": [
+            "IPO延期報道を受け、ソフトバンクG株の下落が確認された。",
+            "AI関連投資の評価に対する市場反応が確認された。",
+            "追加条件や会社側の正式確認は引き続き確認対象になる。",
+        ],
+        "topic_value_class": "market_or_financial_impact",
+        "what_changed": "IPO延期報道を受け、ソフトバンクG株の下落が確認された。",
+        "why_it_matters": "AI関連投資の評価に対する市場反応を確認する材料になる。",
+        "limits_or_unknowns": "会社側の正式確認や追加条件は引き続き確認対象になる。",
+        "priority_class": "important",
+        "slug": "softbank-openai-ipo.html",
+    }
+    if item_card("OpenAI", "openai", aligned_item, "2099-01-01")["candidate_title"] != item_decision("OpenAI", aligned_item)["candidate_title"]:
+        fail("reviewed import card candidate titles must match adopted decisions")
     domain_cleaned_title = public_card_title(
         {
             "title": "OpenAI example.com、Daybreak更新",
