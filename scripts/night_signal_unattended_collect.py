@@ -1586,8 +1586,7 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
                         ),
                     },
                 ],
-                retries_override=1,
-                retry_wait_cap=5,
+                retry_wait_cap=90,
             )
         except SystemExit as exc:
             raw = {
@@ -1680,7 +1679,8 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
         }
         return label, normalized, report
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+    model_workers = max(1, int(os.getenv("NIGHT_SIGNAL_MODEL_CONCURRENCY", "1")))
+    with concurrent.futures.ThreadPoolExecutor(max_workers=model_workers) as executor:
         futures = {
             executor.submit(review_category, category): str(category["label"])
             for category in contracts
