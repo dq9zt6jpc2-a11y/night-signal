@@ -166,16 +166,36 @@ def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
     return original
 
 
-def canonical_detail_summary(category: str, item: dict[str, Any]) -> str:
+def canonical_detail_summary(
+    category: str,
+    item: dict[str, Any],
+    title: str,
+    card_summary: str,
+) -> str:
     existing = scrub_public_summary(item.get("detail_summary", ""))
     if (
         len(existing) >= 280
         and not SUMMARY_LABEL_RE.search(existing)
         and not state.public_render_copy_violations(existing, kind="summary")
+        and summary_is_reader_facing(title, existing)
     ):
         return existing
 
-    lead = compact_text(item.get("what_changed") or item.get("summary") or existing, 700)
+    lead_candidates = [
+        item.get("what_changed"),
+        card_summary,
+        item.get("summary"),
+        existing,
+    ]
+    lead = ""
+    for candidate in lead_candidates:
+        candidate_text = scrub_public_summary(candidate)
+        if not candidate_text:
+            continue
+        if state.title_repetition_score(title, candidate_text) >= 0.82:
+            continue
+        lead = compact_text(candidate_text, 700)
+        break
     if lead and not lead.endswith("。"):
         lead = f"{lead}。"
 
@@ -210,6 +230,22 @@ def canonical_detail_summary(category: str, item: dict[str, Any]) -> str:
             if part
         )
     )
+    if composed and summary_is_reader_facing(title, composed):
+        return composed
+
+    fallback_parts = [
+        scrub_public_summary(part)
+        for part in (
+            card_summary,
+            importance_sentence,
+            fact_sentence,
+            limits_sentence,
+        )
+        if part
+    ]
+    fallback = scrub_public_summary(" ".join(fallback_parts))
+    if fallback and summary_is_reader_facing(title, fallback):
+        return fallback
     return composed or existing
 
 
@@ -913,7 +949,7 @@ def item_card(
                 }
                 for source in item["sources"]
             ],
-            "summary": canonical_detail_summary(category, item),
+            "summary": canonical_detail_summary(category, item, card_title, card_summary),
             "summary_basis": {
                 "what_changed": str(item["what_changed"]),
                 "why_it_matters": str(item["why_it_matters"]),
@@ -1079,6 +1115,8 @@ def self_test() -> None:
             ],
             "limits_or_unknowns": "追加条件、影響範囲、続報の有無は今後の確認対象。",
         },
+        "Honda、QuantumScapeと全固体電池の共同開発で合意",
+        "EV戦略の見直しが続く中で、次世代電池の技術選択と量産可能性を確認する材料になる。",
     )
     if SUMMARY_LABEL_RE.search(summary) or GENERIC_IMPORTANCE_RE.search(summary):
         fail("canonical detail summary kept label-heavy or internal copy")
@@ -1121,6 +1159,28 @@ def self_test() -> None:
         cleaned_summary,
     ):
         fail("reviewed import must rewrite title-repetition card summaries")
+    detail_summary = canonical_detail_summary(
+        "OpenAI",
+        {
+            "summary": "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用。OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用。",
+            "detail_summary": "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用。OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用。",
+            "what_changed": "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用",
+            "why_it_matters": "サイバー防衛の実運用で、検知だけでなく修正まで進んだ点を確認できる。",
+            "confirmed_facts": [
+                "OpenAIはDaybreakの防御機能更新と修正パッチ適用を公表した。",
+                "対象範囲や残る制約は追加確認が必要とされる。",
+                "防御機能の更新は運用面の確認材料になる。",
+            ],
+            "limits_or_unknowns": "対象範囲や残る制約は追加確認が必要。",
+        },
+        "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用",
+        cleaned_summary,
+    )
+    if not summary_is_reader_facing(
+        "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用",
+        detail_summary,
+    ):
+        fail("reviewed import must rewrite title-repetition detail summaries")
     if not no_change_placeholder_signal(
         {
             "title": "OpenAI、product_releaseの直近確認",
