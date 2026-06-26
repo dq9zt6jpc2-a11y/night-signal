@@ -124,20 +124,20 @@ def summary_is_reader_facing(title: str, summary: str) -> bool:
 
 
 def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
-    original = compact_text(item.get("summary", ""), 900)
+    original = compact_text(scrub_public_summary(item.get("summary", "")), 900)
     if original and summary_is_reader_facing(title, original):
         return original
 
     facts = [
-        compact_text(fact, 320)
+        compact_text(scrub_public_summary(fact), 320)
         for fact in item.get("confirmed_facts", [])
         if useful_fact(fact, category)
     ][:2]
     parts = [
-        compact_text(item.get("why_it_matters", ""), 500),
+        compact_text(scrub_public_summary(item.get("why_it_matters", "")), 500),
         *facts,
-        compact_text(item.get("what_changed", ""), 500),
-        compact_text(item.get("limits_or_unknowns", ""), 500),
+        compact_text(scrub_public_summary(item.get("what_changed", "")), 500),
+        compact_text(scrub_public_summary(item.get("limits_or_unknowns", "")), 500),
     ]
     seen: set[str] = set()
     kept: list[str] = []
@@ -1177,6 +1177,21 @@ def self_test() -> None:
         cleaned_summary,
     ):
         fail("reviewed import must rewrite title-repetition card summaries")
+    domain_cleaned_summary = public_card_summary(
+        {
+            "summary": "OpenAI example.comがDaybreakの防御機能を更新し、修正パッチの適用状況を公表した。",
+            "what_changed": "OpenAI example.comがDaybreakの防御機能更新を公表した。",
+            "why_it_matters": "サイバー防衛の実運用で、検知だけでなく修正まで進んだ点を確認できる。",
+            "confirmed_facts": [
+                "OpenAI example.comはDaybreakの防御機能更新と修正パッチ適用を公表した。",
+                "対象範囲や残る制約は追加確認が必要とされる。",
+            ],
+        },
+        "OpenAI、Daybreak更新",
+        "OpenAI",
+    )
+    if state.public_render_copy_violations(domain_cleaned_summary, kind="summary"):
+        fail("reviewed import must strip domain leaks from public card summaries")
     detail_summary = canonical_detail_summary(
         "OpenAI",
         {
