@@ -78,6 +78,19 @@ def scrub_public_title(value: Any) -> str:
     return title.strip()
 
 
+def scrub_public_summary(value: Any) -> str:
+    text = compact_text(value, 2600)
+    text = re.sub(r"https?://\S+", "", text)
+    text = state.DOMAIN_RE.sub("", text)
+    sentences = []
+    for sentence in re.split(r"(?<=[。！？!?])", text):
+        cleaned = state.PUBLISHER_SUFFIX_RE.sub("", sentence)
+        cleaned = TRAILING_DOMAIN_RE.sub("", cleaned).strip(" -–—|｜")
+        if cleaned:
+            sentences.append(cleaned)
+    return compact_text(" ".join(sentences), 2600)
+
+
 def public_card_title(item: dict[str, Any]) -> str:
     candidates = [
         item.get("title", ""),
@@ -154,8 +167,12 @@ def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
 
 
 def canonical_detail_summary(category: str, item: dict[str, Any]) -> str:
-    existing = compact_text(item.get("detail_summary", ""), 2600)
-    if len(existing) >= 280 and not SUMMARY_LABEL_RE.search(existing):
+    existing = scrub_public_summary(item.get("detail_summary", ""))
+    if (
+        len(existing) >= 280
+        and not SUMMARY_LABEL_RE.search(existing)
+        and not state.public_render_copy_violations(existing, kind="summary")
+    ):
         return existing
 
     lead = compact_text(item.get("what_changed") or item.get("summary") or existing, 700)
@@ -181,7 +198,7 @@ def canonical_detail_summary(category: str, item: dict[str, Any]) -> str:
     limits = compact_text(item.get("limits_or_unknowns", ""), 700)
     limits_sentence = limits if not limits or limits.endswith("。") else f"{limits}。"
 
-    composed = compact_text(
+    composed = scrub_public_summary(
         " ".join(
             part
             for part in (
@@ -191,8 +208,7 @@ def canonical_detail_summary(category: str, item: dict[str, Any]) -> str:
                 limits_sentence,
             )
             if part
-        ),
-        2600,
+        )
     )
     return composed or existing
 
