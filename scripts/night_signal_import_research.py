@@ -64,8 +64,10 @@ def useful_importance(value: Any) -> bool:
     return bool(text) and not GENERIC_IMPORTANCE_RE.search(text)
 
 
-def public_card_title(item: dict[str, Any]) -> str:
-    title = compact_text(item.get("title", ""), 180)
+def scrub_public_title(value: Any) -> str:
+    title = compact_text(value, 180)
+    title = re.sub(r"https?://\S+", "", title)
+    title = state.DOMAIN_RE.sub("", title)
     for _ in range(3):
         cleaned = state.PUBLISHER_SUFFIX_RE.sub("", title)
         cleaned = TRAILING_DOMAIN_RE.sub("", cleaned)
@@ -73,14 +75,29 @@ def public_card_title(item: dict[str, Any]) -> str:
         if cleaned == title:
             break
         title = cleaned
-    if not title or state.public_render_copy_violations(title, kind="title"):
-        summary = compact_text(item.get("summary", ""), 180)
-        fallback = re.split(r"(?<=[。！？!?])", summary)[0].strip()
-        fallback = state.PUBLISHER_SUFFIX_RE.sub("", fallback)
-        fallback = TRAILING_DOMAIN_RE.sub("", fallback).strip(" -–—|｜")
-        if fallback and not state.public_render_copy_violations(fallback, kind="title"):
-            return fallback
-    return title
+    return title.strip()
+
+
+def public_card_title(item: dict[str, Any]) -> str:
+    candidates = [
+        item.get("title", ""),
+        re.split(r"(?<=[。！？!?])", compact_text(item.get("summary", ""), 180))[0],
+        item.get("what_changed", ""),
+        item.get("why_it_matters", ""),
+        *[
+            fact
+            for fact in item.get("confirmed_facts", [])
+            if useful_fact(fact, str(item.get("category", "")))
+        ],
+    ]
+    first_cleaned = ""
+    for candidate in candidates:
+        cleaned = scrub_public_title(candidate)
+        if cleaned and not first_cleaned:
+            first_cleaned = cleaned
+        if cleaned and not state.public_render_copy_violations(cleaned, kind="title"):
+            return cleaned
+    return first_cleaned
 
 
 def summary_is_reader_facing(title: str, summary: str) -> bool:
@@ -1059,6 +1076,17 @@ def self_test() -> None:
     )
     if cleaned_title != "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用":
         fail("reviewed import must strip publisher suffixes from public card titles")
+    domain_cleaned_title = public_card_title(
+        {
+            "title": "OpenAI example.com、Daybreak更新",
+            "summary": "OpenAIがDaybreakの防御機能を更新し、修正パッチの適用状況を公表した。",
+            "what_changed": "OpenAIがDaybreakの防御機能更新と修正パッチ適用を公表した。",
+            "why_it_matters": "サイバー防衛の実運用で修正まで進んだ点を確認できる。",
+            "confirmed_facts": [],
+        }
+    )
+    if state.public_render_copy_violations(domain_cleaned_title, kind="title"):
+        fail("reviewed import must strip domain leaks from public card titles")
     cleaned_summary = public_card_summary(
         {
             "summary": "OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用。OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用。",
