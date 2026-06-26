@@ -846,8 +846,10 @@ def item_candidate(category: str, item: dict[str, Any]) -> dict[str, Any]:
         "source_published_date": str(item["source_published_date"]),
         "source_urls": [str(source["url"]) for source in item["sources"]],
         "change_class": str(item.get("change_class", "new_event")),
-        "summary": str(item["summary"]),
-        "material_facts": [str(fact) for fact in item["confirmed_facts"]],
+        "summary": scrub_public_summary(item["summary"]),
+        "material_facts": [
+            scrub_public_summary(fact) for fact in item["confirmed_facts"]
+        ],
         "counter_evidence_checked": True,
     }
 
@@ -857,8 +859,8 @@ def item_decision(item: dict[str, Any]) -> dict[str, Any]:
         "candidate_title": str(item["title"]),
         "adoption_decision": "adopt",
         "topic_value_class": topic_value_class(item["topic_value_class"]),
-        "reader_delta": str(item["why_it_matters"]),
-        "materiality_basis": str(item["what_changed"]),
+        "reader_delta": scrub_public_summary(item["why_it_matters"]),
+        "materiality_basis": scrub_public_summary(item["what_changed"]),
         "reject_reason_class": None,
         "reject_reason": None,
     }
@@ -934,7 +936,7 @@ def item_card(
         str(item.get("what_changed", "")),
         str(item.get("why_it_matters", "")),
     ]:
-        text = compact_text(fact, 500)
+        text = compact_text(scrub_public_summary(fact), 500)
         if not text or text in seen_facts:
             continue
         seen_facts.add(text)
@@ -969,14 +971,14 @@ def item_card(
             ],
             "summary": canonical_detail_summary(category, item, card_title, card_summary),
             "summary_basis": {
-                "what_changed": str(item["what_changed"]),
-                "why_it_matters": str(item["why_it_matters"]),
+                "what_changed": scrub_public_summary(item["what_changed"]),
+                "why_it_matters": scrub_public_summary(item["why_it_matters"]),
                 "confirmed_facts": facts,
                 "fact_sources": [
                     {"fact": fact, "source_urls": source_urls}
                     for fact in facts
                 ],
-                "limits_or_unknowns": str(item["limits_or_unknowns"]),
+                "limits_or_unknowns": scrub_public_summary(item["limits_or_unknowns"]),
                 "source_dates": [str(item["source_published_date"])],
             },
         },
