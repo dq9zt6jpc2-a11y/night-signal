@@ -113,6 +113,14 @@ Mission:
 - A newly published explainer, opinion, or video commentary is not itself a new
   event merely because its title has a large number. Use the underlying event
   date and evidence when deciding freshness.
+- An explainer or analytical video may become a card only when its source body
+  supports at least three concrete facts and a clear conclusion. In that case,
+  summary_basis.what_changed must explain what is being examined,
+  summary_basis.why_it_matters must state the conclusion, and the public
+  summary must include the question, evidence, and resulting analysis. If any
+  part is missing, reject it as insufficient_evidence. Keep 分析, 検証, or
+  解説 in the title so readers do not mistake the underlying old event for a
+  new announcement.
 - Treat discovery_findings as the horizon scan for important changes outside
   the configured topic wording. Map each finding to its closest watch_topic_id,
   retain it as a candidate, and reject it only with a concrete allowed reason.
@@ -379,8 +387,13 @@ def normalize_category_content(result: dict[str, Any]) -> dict[str, Any]:
         detail = card.get("detail")
         basis = detail.get("summary_basis") if isinstance(detail, dict) else None
         raw_facts = basis.get("confirmed_facts") if isinstance(basis, dict) else None
+        title = str(card.get("title", ""))
         facts = (
-            state.normalize_material_facts(str(card.get("title", "")), raw_facts, limit=8)
+            (
+                state.normalize_analysis_facts(title, raw_facts, limit=8)
+                if state.analysis_headline(title)
+                else state.normalize_material_facts(title, raw_facts, limit=8)
+            )
             if isinstance(raw_facts, list)
             else []
         )
@@ -413,7 +426,15 @@ def normalize_category_content(result: dict[str, Any]) -> dict[str, Any]:
                     {"fact": fact, "source_urls": sorted(set(source_urls))}
                 )
 
-        if len(facts) < 3 or len(normalized_mappings) != len(facts):
+        is_analysis = state.analysis_headline(title)
+        conclusion = state.analysis_conclusion(
+            [basis.get("why_it_matters", "") if isinstance(basis, dict) else "", *facts]
+        ) if is_analysis else ""
+        if (
+            len(facts) < 3
+            or len(normalized_mappings) != len(facts)
+            or (is_analysis and not conclusion)
+        ):
             decision = decisions_by_title.get(candidate_title)
             if isinstance(decision, dict):
                 decision.update(
@@ -434,6 +455,23 @@ def normalize_category_content(result: dict[str, Any]) -> dict[str, Any]:
         candidate = candidates_by_title.get(candidate_title)
         if isinstance(candidate, dict):
             candidate["material_facts"] = facts
+
+        if is_analysis:
+            scope = state.analysis_scope_sentence(title)
+            basis["what_changed"] = scope
+            basis["why_it_matters"] = conclusion
+            analysis_parts = [scope, *facts[:4]]
+            if not any(state.materially_same_fact(conclusion, part) for part in facts):
+                analysis_parts.append(conclusion)
+            analysis_summary = " ".join(analysis_parts).strip()
+            card["summary"] = analysis_summary
+            detail["summary"] = " ".join(
+                [analysis_summary, str(basis.get("limits_or_unknowns", ""))]
+            ).strip()
+            if isinstance(candidate, dict):
+                candidate["summary"] = analysis_summary
+            kept_cards.append(card)
+            continue
 
         summary = str(card.get("summary", ""))
         if state.GENERIC_CONTEXT_RE.search(summary) or state.reader_summary_violations(
@@ -1164,6 +1202,59 @@ def self_test() -> None:
     )
     if padded_result["cards"] or padded_result["decisions"][0]["adoption_decision"] != "reject":
         fail("synthesis normalization must demote padded headline-only cards")
+    analysis_facts = [
+        "ソフトバンクグループの2026年3月期純利益は5兆22億円だった。",
+        "OpenAIへの出資に係る投資利益は6兆7,304億円で、純利益を上回った。",
+        "投資利益は保有株式の公正価値上昇による未実現評価益が中心だった。",
+        "動画は、利益が現金収支を直接増やす構造ではなく、OpenAI評価額への依存度が高いと分析している。",
+    ]
+    analysis_result = normalize_category_content(
+        {
+            "candidates": [{"title": padded_title, "material_facts": analysis_facts}],
+            "decisions": [
+                {
+                    "candidate_title": padded_title,
+                    "adoption_decision": "adopt",
+                    "reject_reason_class": None,
+                    "reject_reason": None,
+                }
+            ],
+            "cards": [
+                {
+                    "candidate_title": padded_title,
+                    "title": padded_title,
+                    "summary": padded_title,
+                    "detail": {
+                        "sources": [{"label": "Analysis", "url": "https://example.com/analysis"}],
+                        "summary": padded_title,
+                        "summary_basis": {
+                            "what_changed": padded_title,
+                            "why_it_matters": analysis_facts[-1],
+                            "confirmed_facts": analysis_facts,
+                            "fact_sources": [
+                                {"fact": fact, "source_urls": ["https://example.com/analysis"]}
+                                for fact in analysis_facts
+                            ],
+                            "limits_or_unknowns": "評価条件が変わった場合の影響額は確定していない。",
+                        },
+                    },
+                }
+            ],
+        }
+    )
+    if len(analysis_result["cards"]) != 1:
+        fail("synthesis normalization dropped a supported analysis item")
+    normalized_analysis = analysis_result["cards"][0]
+    analysis_copy = " ".join(
+        [
+            normalized_analysis["summary"],
+            normalized_analysis["detail"]["summary"],
+            normalized_analysis["detail"]["summary_basis"]["what_changed"],
+            normalized_analysis["detail"]["summary_basis"]["why_it_matters"],
+        ]
+    )
+    if not all(term in analysis_copy for term in ("今回の検証", "未実現評価益", "現金収支", "依存度")):
+        fail("synthesis normalization lost analysis scope, evidence, or conclusion")
     signature = category_signature(
         "2099-01-01",
         "OpenAI",

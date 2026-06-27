@@ -154,6 +154,8 @@ def summary_is_reader_facing(title: str, summary: str) -> bool:
         return False
     if state.GENERIC_CONTEXT_RE.search(summary):
         return False
+    if not state.analysis_summary_complete(title, summary):
+        return False
     return not state.reader_summary_violations(title, summary)
 
 
@@ -213,14 +215,25 @@ def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
     if original and summary_is_reader_facing(title, original):
         return original
 
-    facts = [
-        compact_text(scrub_item_source_labels(item, fact), 320)
-        for fact in item.get("confirmed_facts", [])
-        if useful_fact(fact, category)
-    ][:3]
+    facts = state.normalize_material_facts(
+        title,
+        [
+            compact_text(scrub_item_source_labels(item, fact), 320)
+            for fact in item.get("confirmed_facts", [])
+            if useful_fact(fact, category)
+        ],
+        limit=4,
+    )
     what_changed = compact_text(scrub_item_source_labels(item, item.get("what_changed", "")), 500)
     limits = compact_text(scrub_item_source_labels(item, item.get("limits_or_unknowns", "")), 500)
     importance = item_importance(item, category, title)
+    if state.analysis_headline(title):
+        what_changed = state.analysis_scope_sentence(title)
+        importance = state.analysis_conclusion(
+            [item.get("why_it_matters", ""), *facts]
+        )
+        if not importance:
+            fail(f"analysis item lacks an evidence-backed conclusion: {title}")
     event_parts = [part for part in (what_changed, *facts, original) if part]
     lead = event_parts[0] if event_parts else public_focus_phrase(title, category)
     summary = reader_summary_from_parts(
@@ -468,10 +481,18 @@ def validate_bundle(bundle: dict[str, Any], issue_date: str) -> dict[str, list[d
             facts = item.get("confirmed_facts")
             sources = item.get("sources")
             normalized_facts = (
-                state.normalize_material_facts(
-                    str(item["title"]),
-                    [scrub_item_source_labels(item, fact) for fact in facts],
-                    limit=8,
+                (
+                    state.normalize_analysis_facts(
+                        str(item["title"]),
+                        [scrub_item_source_labels(item, fact) for fact in facts],
+                        limit=8,
+                    )
+                    if state.analysis_headline(str(item["title"]))
+                    else state.normalize_material_facts(
+                        str(item["title"]),
+                        [scrub_item_source_labels(item, fact) for fact in facts],
+                        limit=8,
+                    )
                 )
                 if isinstance(facts, list)
                 else []
@@ -479,6 +500,14 @@ def validate_bundle(bundle: dict[str, Any], issue_date: str) -> dict[str, list[d
             if len(normalized_facts) < 3:
                 fail(f"{label} items[{index}] needs at least three confirmed facts")
             item["confirmed_facts"] = normalized_facts
+            if state.analysis_headline(str(item["title"])):
+                conclusion = state.analysis_conclusion(
+                    [item.get("why_it_matters", ""), *normalized_facts]
+                )
+                if not conclusion:
+                    fail(f"{label} items[{index}] analysis lacks a supported conclusion")
+                item["what_changed"] = state.analysis_scope_sentence(str(item["title"]))
+                item["why_it_matters"] = conclusion
             if not isinstance(sources, list) or not sources or len(sources) > 3:
                 fail(f"{label} items[{index}] needs one to three sources")
             for source in sources:

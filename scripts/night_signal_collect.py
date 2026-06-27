@@ -114,6 +114,10 @@ Rules:
 - When only a headline or search snippet can be verified, keep the finding
   broad but say that the body is unavailable. Do not infer missing detail or
   manufacture additional claim atoms from publication metadata.
+- For an explainer, verification article, or analytical video, capture what it
+  examines, the concrete evidence it uses, and the conclusion it reaches.
+  Treat it as potentially material only when the body supports all three;
+  otherwise retain it as background rather than a fresh update.
 - Inspect every seed source target exactly once during the sweep. Copy its
   closure result into every returned observation so downstream slot validation
   remains deterministic.

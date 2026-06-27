@@ -169,6 +169,17 @@ GENERIC_CONTEXT_RE = re.compile(
     r"対象範囲、実施時期と継続性"
     r").{0,120}判断する材料になる"
 )
+ANALYSIS_HEADLINE_RE = re.compile(
+    r"(^|[【\[])(?:解説|分析|検証|日経平均の正体)|"
+    r"(?:正体|裏側|バブルの危険|なぜ|どう見る|読み解く|徹底解説)",
+    re.I,
+)
+ANALYSIS_REASONING_RE = re.compile(
+    r"要因|背景|理由|構造|比較|差がある|一方|ただし|"
+    r"依存|集中|未実現|評価益|現金収支|キャッシュフロー|"
+    r"リスク|割高|割安|持続性|感応度|分析(?:した|している|すると)",
+    re.I,
+)
 TOPIC_CONTEXT_SENTENCES = {
     "technical_or_product_shift": "性能、提供範囲、既存製品との関係は、{category}の技術選択と競争力を判断する材料になる。",
     "market_or_financial_impact": "規模、条件、資金使途と市場反応は、{category}の投資余力と評価を判断する材料になる。",
@@ -910,6 +921,45 @@ def material_fact_violations(text: str) -> list[str]:
     return violations
 
 
+def analysis_headline(text: str) -> bool:
+    return bool(ANALYSIS_HEADLINE_RE.search(str(text)))
+
+
+def analysis_scope_sentence(title: str) -> str:
+    focus = re.sub(r"^(?:【[^】]{1,40}】|\[[^\]]{1,40}\])\s*", "", str(title)).strip()
+    focus = focus.rstrip("。.!！?？")
+    return f"今回の検証は、{focus}を論点としている。" if focus else ""
+
+
+def analysis_conclusion(values: list[Any]) -> str:
+    candidates: list[tuple[int, str]] = []
+    for raw in values:
+        for sentence in re.split(r"(?<=[。！？!?])\s*", str(raw)):
+            text = sentence.strip()
+            if (
+                len(text) >= 24
+                and ANALYSIS_REASONING_RE.search(text)
+                and not material_fact_violations(text)
+            ):
+                score = 1
+                if re.search(r"分析(?:した|している|すると)|結論|示唆|とみる", text):
+                    score += 3
+                if re.search(r"依存|集中|構造|未実現|現金収支|キャッシュフロー|リスク|持続性", text):
+                    score += 2
+                normalized = text if text.endswith(("。", "！", "？", "!", "?")) else f"{text}。"
+                candidates.append((score, normalized))
+    if not candidates:
+        return ""
+    score, conclusion = max(candidates, key=lambda item: item[0])
+    return conclusion if score >= 3 else ""
+
+
+def analysis_summary_complete(title: str, summary: str) -> bool:
+    if not analysis_headline(title):
+        return True
+    return "今回の検証" in str(summary) and bool(ANALYSIS_REASONING_RE.search(str(summary)))
+
+
 def materially_same_fact(left: str, right: str) -> bool:
     left_signature = copy_signature(left)
     right_signature = copy_signature(right)
@@ -970,6 +1020,11 @@ def normalize_material_facts(title: str, values: list[Any], limit: int = 8) -> l
             if len(facts) >= limit:
                 return facts
     return facts
+
+
+def normalize_analysis_facts(title: str, values: list[Any], limit: int = 8) -> list[str]:
+    facts = normalize_material_facts(title, values, limit=max(limit * 2, 8))
+    return [fact for fact in facts if not materially_same_fact(title, fact)][:limit]
 
 
 def validate_reader_summary(label: str, title: str, summary: str) -> None:
@@ -1134,6 +1189,40 @@ def validate_public_card_copy(raw: dict[str, Any], detail: dict[str, Any], *, is
     reject_public_render_copy(f"cards[{card_index}].detail.summary", detail_summary, kind="summary")
     validate_reader_summary(f"cards[{card_index}].summary", title, summary)
     validate_reader_summary(f"cards[{card_index}].detail.summary", title, detail_summary)
+
+    contract = read_json(CONFIG_PATH)
+    if (
+        effective_on_or_after(contract, "material_fact_semantics_effective_date", issue_date)
+        and analysis_headline(title)
+    ):
+        basis = detail.get("summary_basis")
+        what_changed = str(basis.get("what_changed", "")) if isinstance(basis, dict) else ""
+        why_it_matters = str(basis.get("why_it_matters", "")) if isinstance(basis, dict) else ""
+        analysis_facts = basis.get("confirmed_facts", []) if isinstance(basis, dict) else []
+        summary_key = copy_signature(summary)
+        detail_key = copy_signature(detail_summary)
+        summary_fact_count = sum(
+            bool(copy_signature(fact)) and copy_signature(fact) in summary_key
+            for fact in analysis_facts
+            if isinstance(fact, str)
+        )
+        detail_fact_count = sum(
+            bool(copy_signature(fact)) and copy_signature(fact) in detail_key
+            for fact in analysis_facts
+            if isinstance(fact, str)
+        )
+        if (
+            not analysis_summary_complete(title, summary)
+            or not analysis_summary_complete(title, detail_summary)
+            or "今回の検証" not in what_changed
+            or not ANALYSIS_REASONING_RE.search(why_it_matters)
+            or summary_fact_count < 2
+            or detail_fact_count < 2
+        ):
+            fail(
+                f"cards[{card_index}] analysis summary must explain the question, "
+                "supporting evidence, and conclusion"
+            )
 
     if any(term in title for term in SCHEDULE_ONLY_TERMS) and not any(term in title + summary for term in SCHEDULE_MATERIAL_TERMS):
         fail(f"cards[{card_index}] looks schedule-only; routine dates must stay out of published topics")

@@ -102,11 +102,6 @@ PUBLICATION_EVENT_RE = re.compile(
     r"rose|fell|increase|decrease)",
     re.I,
 )
-ANALYSIS_ONLY_HEADLINE_RE = re.compile(
-    r"(^|[【\[])(?:解説|分析|検証|日経平均の正体)|"
-    r"(?:正体|裏側|危険|バブル|なぜ|どう見る|読み解く|徹底解説)",
-    re.I,
-)
 HIGH_THROUGHPUT_CATEGORIES = {"OpenAI", "SpaceX", "SoftBank", "宇都宮ブレックス"}
 MAX_CATEGORY_EVIDENCE = 18
 MAX_CATEGORY_ITEMS = 3
@@ -434,17 +429,32 @@ def low_signal_value(*values: str) -> bool:
     return bool(LOW_SIGNAL_VALUE_RE.search(text))
 
 
-def publication_event_supported(title: str, *evidence_values: str) -> bool:
+def publication_item_supported(title: str, *evidence_values: str) -> bool:
     evidence = " ".join(str(value or "") for value in evidence_values)
-    if ANALYSIS_ONLY_HEADLINE_RE.search(title):
-        supporting = " ".join(
+    if state_contract.analysis_headline(title):
+        supporting_sentences = [
             sentence
             for sentence in sentence_parts(evidence)
             if state_contract.title_repetition_score(title, sentence) < 0.82
+        ]
+        facts = state_contract.normalize_material_facts(
+            title,
+            supporting_sentences,
+            limit=8,
         )
-        if not PUBLICATION_EVENT_RE.search(supporting):
-            return False
+        return len(facts) >= 3 and bool(state_contract.analysis_conclusion(facts))
     return bool(PUBLICATION_EVENT_RE.search(f"{title} {evidence}"))
+
+
+def analysis_narrative(title: str, facts: list[str]) -> tuple[str, str, str] | None:
+    if not state_contract.analysis_headline(title):
+        return None
+    scope = state_contract.analysis_scope_sentence(title)
+    conclusion = state_contract.analysis_conclusion(facts)
+    if not scope or not conclusion or len(facts) < 3:
+        return None
+    summary = unique_sentences(" ".join([scope, *facts[:4], conclusion]), 1200)
+    return scope, conclusion, summary
 
 
 def natural_detail_summary(
@@ -462,6 +472,7 @@ def natural_detail_summary(
         len(existing) >= 280
         and not SUMMARY_LABEL_RE.search(existing)
         and not state_contract.GENERIC_CONTEXT_RE.search(existing)
+        and ("今回の検証" not in what_changed or "今回の検証" in existing)
     ):
         return existing
 
@@ -948,6 +959,13 @@ amounts, decisions, results, or conditions. If the evidence does not support
 three distinct facts, return the finding as a signal and never pad an item.
 An analysis, explainer, opinion, or video commentary is not a new event merely
 because its publication date is recent or its title contains a large number.
+It may become an item only when the supplied body provides at least three
+concrete supporting facts and a clear analytical conclusion. For such an item,
+what_changed must state what the article or video examines, why_it_matters must
+state the conclusion reached, and summary/detail_summary must contain both the
+question examined and the evidence-backed analysis. Otherwise keep it as a
+signal. Keep 分析, 検証, or 解説 in the public title so it cannot be mistaken
+for a newly announced underlying event.
 
 signals are relevant recent findings that should remain visible but are not
 strong enough for an article. Each signal must contain watch_topic_id, title,
@@ -1120,15 +1138,20 @@ def promoted_signal_item(
         ),
         700,
     )
-    facts = state_contract.normalize_material_facts(
-        title,
-        [title, excerpt, signal_summary],
-        limit=4,
+    fact_values = [title, excerpt, signal_summary]
+    facts = (
+        state_contract.normalize_analysis_facts(title, fact_values, limit=6)
+        if state_contract.analysis_headline(title)
+        else state_contract.normalize_material_facts(title, fact_values, limit=4)
     )
     if len(facts) < 3:
         return None
-    summary = unique_sentences(" ".join([*facts, why_it_matters]), 900)
-    what_changed = facts[0]
+    analysis = analysis_narrative(title, facts)
+    if analysis is not None:
+        what_changed, why_it_matters, summary = analysis
+    else:
+        summary = unique_sentences(" ".join([*facts, why_it_matters]), 900)
+        what_changed = facts[0]
     limits = event_limits_sentence(title, excerpt)
     detail = natural_detail_summary(
         summary=summary,
@@ -1310,7 +1333,7 @@ def topic_value_from_record(record: dict[str, Any]) -> str:
     text = f"{record.get('title', '')} {record.get('excerpt', '')}".lower()
     if re.search(r"security|cyber|サイバー|安全|脆弱性|regulation|規制", text):
         return "risk_or_safety_signal"
-    if re.search(r"社債|債券|debt|rating|格付|market share|シェア|株価|price target|funding|資金調達|ipo|上場|資金流入|金利|物価|gdp", text):
+    if re.search(r"社債|債券|debt|rating|格付|market share|シェア|株価|price target|funding|資金調達|ipo|上場|資金流入|金利|物価|gdp|利益|売上|評価益|決算|cash flow|キャッシュフロー", text):
         return "market_or_financial_impact"
     if re.search(r"yoasobi|幾田りら|発売|ep|アルバム|展覧会|トレーラー|楽曲|ツアー", text):
         return "cultural_or_audience_signal"
@@ -1357,23 +1380,28 @@ def fallback_item_from_record(
         or not reader_public_copy_ok(summary, kind="summary")
     ):
         return None
-    facts = state_contract.normalize_material_facts(
-        title,
-        [what_changed, *supporting, excerpt],
-        limit=4,
+    fact_values = [what_changed, *supporting, excerpt]
+    facts = (
+        state_contract.normalize_analysis_facts(title, fact_values, limit=6)
+        if state_contract.analysis_headline(title)
+        else state_contract.normalize_material_facts(title, fact_values, limit=4)
     )
     if len(facts) < 3:
         return None
-    summary = unique_sentences(
-        " ".join(
-            [
-                *facts,
-                *([] if state_contract.GENERIC_CONTEXT_RE.search(why_it_matters) else [why_it_matters]),
-            ]
-        ),
-        1000,
-    )
-    what_changed = facts[0]
+    analysis = analysis_narrative(title, facts)
+    if analysis is not None:
+        what_changed, why_it_matters, summary = analysis
+    else:
+        summary = unique_sentences(
+            " ".join(
+                [
+                    *facts,
+                    *([] if state_contract.GENERIC_CONTEXT_RE.search(why_it_matters) else [why_it_matters]),
+                ]
+            ),
+            1000,
+        )
+        what_changed = facts[0]
     limits = event_limits_sentence(title, excerpt)
     detail = natural_detail_summary(
         summary=summary,
@@ -1460,7 +1488,7 @@ def fallback_signal_from_record(
         or low_signal_value(title, excerpt)
     ):
         return None
-    material = publication_event_supported(title, excerpt)
+    material = publication_item_supported(title, excerpt)
     topic_value = topic_value_from_record(record)
     _, _, summary, _ = evidence_narrative(
         category_label=category_label,
@@ -1596,13 +1624,22 @@ def normalize_result(
         summary = unique_sentences(summary, 1000)
         what_changed = unique_sentences(what_changed, 700)
         why_it_matters = unique_sentences(why_it_matters, 700)
-        facts = state_contract.normalize_material_facts(title, facts, limit=8)
+        facts = (
+            state_contract.normalize_analysis_facts(title, facts, limit=8)
+            if state_contract.analysis_headline(title)
+            else state_contract.normalize_material_facts(title, facts, limit=8)
+        )
+        analysis = analysis_narrative(title, facts)
+        analysis_ready = not state_contract.analysis_headline(title) or analysis is not None
+        if analysis is not None:
+            what_changed, why_it_matters, summary = analysis
         if state_contract.GENERIC_CONTEXT_RE.search(summary) and len(facts) >= 3:
             summary = unique_sentences(" ".join(facts[:4]), 1000)
         if (
             len(detail) < 280
             or SUMMARY_LABEL_RE.search(detail)
             or state_contract.GENERIC_CONTEXT_RE.search(detail)
+            or not state_contract.analysis_summary_complete(title, detail)
         ):
             detail = natural_detail_summary(
                 summary=summary,
@@ -1634,6 +1671,7 @@ def normalize_result(
             len(detail) < 280
             or SUMMARY_LABEL_RE.search(detail)
             or state_contract.GENERIC_CONTEXT_RE.search(detail)
+            or not state_contract.analysis_summary_complete(title, detail)
         ):
             detail = natural_detail_summary(
                 summary=summary,
@@ -1661,6 +1699,7 @@ def normalize_result(
             or len(summary) < 80
             or len(detail) < 220
             or len(facts) < 3
+            or not analysis_ready
             or not sources
             or cluster_seen(seen_clusters, item_cluster)
             or topic_value not in ALLOWED_TOPIC_VALUES
@@ -1742,7 +1781,7 @@ def normalize_result(
             continue
         if not category_identity_ok(str(category.get("label", "")), title, signal_summary):
             continue
-        material_signal = publication_event_supported(
+        material_signal = publication_item_supported(
             title,
             signal_summary,
             str(record.get("excerpt", "")),
@@ -2431,6 +2470,56 @@ def self_test() -> None:
     )
     if analysis_only["items"] or len(analysis_only["signals"]) != 1:
         fail("fresh commentary must not be promoted as a new event")
+    analysis_item = fallback_item_from_record(
+        {
+            "label": "SoftBank",
+            "watch_topics": [
+                {
+                    "id": "ai_infrastructure",
+                    "terms": ["SoftBank", "OpenAI", "AI", "評価益"],
+                    "event_classes": ["market_or_financial_impact"],
+                }
+            ],
+        },
+        "2099-01-03",
+        {
+            "label": "Financial Analysis Video",
+            "url": "https://example.com/softbank-analysis-full",
+            "source_role": "social_or_video_signal",
+            "channel": "youtube",
+            "source_class": "discovered_media",
+            "observed": True,
+            "published_date": "2099-01-02",
+            "title": (
+                "【日経平均の正体】ソフトバンクG利益5兆円の裏側、"
+                "OpenAI評価益7兆円が映すAIバブルの危険"
+            ),
+            "excerpt": (
+                "ソフトバンクグループの2026年3月期純利益は5兆22億円だった。"
+                "OpenAIへの出資に係る投資利益は6兆7,304億円で、純利益を上回った。"
+                "投資利益は保有株式の公正価値上昇による未実現評価益が中心だった。"
+                "動画は、利益が現金収支を直接増やす構造ではなく、"
+                "OpenAI評価額への依存度が高いと分析している。"
+            ),
+        },
+    )
+    if analysis_item is None:
+        fail("body-rich analysis did not become an evidence-backed item")
+    if not publication_item_supported(
+        analysis_item["title"],
+        *analysis_item["confirmed_facts"],
+    ):
+        fail("body-rich analysis did not pass publication support checks")
+    analysis_copy = " ".join(
+        [
+            analysis_item["summary"],
+            analysis_item["detail_summary"],
+            analysis_item["what_changed"],
+            analysis_item["why_it_matters"],
+        ]
+    )
+    if not all(term in analysis_copy for term in ("今回の検証", "未実現評価益", "現金収支", "依存度")):
+        fail("analysis summary lost its question, evidence, or conclusion")
     japan_item = fallback_item_from_record(
         {
             "label": "日本経済",
