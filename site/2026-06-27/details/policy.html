@@ -169,7 +169,7 @@
       <ul>
         <li>利用枠・トークン不足を、Codex残高不足とmodel context/output token上限に分ける。さらにAPI quota、rate limit、実行時間切れ、認証不足、ネットワーク/DNS、GitHub障害、途中停止、dirty worktreeを別の故障モードとして扱い、単一の再試行でまとめない。</li>
         <li>Codex background automationが利用枠不足で開始できず、<code>OPENAI_API_KEY</code>が利用できる場合はResponses APIへ切り替える。利用できない場合は、GitHub Modelsと公開Web/RSSを使う無人収集を18:05、18:35、19:05、19:35、19:50 JSTに実行する。当日確認済みreviewed bundleまたは18:00 JST以降のfresh issueがある場合だけ、その状態から再開できる。</li>
-        <li>Codex、Responses API、GitHub Models、確認済みbundleのいずれも利用できない場合は、古い号を当日版として出さない。独立watchdogを失敗させ、公開不能を明示する。</li>
+        <li>Codex、Responses API、GitHub Models、確認済みbundleのいずれも利用できない場合は、古い号を当日版として出さない。単一ownerであるGitHub Actionsの無人収集経路を失敗させ、公開不能を明示する。</li>
         <li>各段階は <code>state/YYYY-MM-DD/runtime_checkpoint.json</code> に記録する。収集はslot単位、合成はカテゴリ単位でも原子的に保存し、入力hashが一致する完了部分だけを再利用する。途中停止後に全カテゴリを最初からやり直さず、DBの <code>IN_PROGRESS</code> 表示だけを稼働証拠にしない。</li>
         <li>公開対象日はJSTの今日号だけを使う。GitHub Actionsの無人経路は各URLの取得結果とGitHub Modelsの構造化抽出を保存し、生成時点のcoverage/quality境界を通した場合だけcommit/pushする。Pagesは監査済みコミットをdispatchされた場合だけ配布し、過去号へのフォールバックは禁止する。</li>
         <li>当日版がない、古いページが表示される、公開URLが当日版でない、GitHub Pagesだけ成功して当日ページ生成がない場合は失敗。</li>

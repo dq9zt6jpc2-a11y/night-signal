@@ -1,0 +1,35 @@
+{
+  "issue_date": "2026-06-27",
+  "history": [
+    {
+      "stage": "startup",
+      "status": "started",
+      "detail": "publication driver started",
+      "recorded_at_jst": "2026-06-27T20:46:52+09:00"
+    },
+    {
+      "stage": "runtime_checked",
+      "status": "completed",
+      "detail": "deploy verification passed",
+      "recorded_at_jst": "2026-06-27T20:46:53+09:00"
+    },
+    {
+      "stage": "render_complete",
+      "status": "completed",
+      "detail": "issue and detail pages rendered",
+      "recorded_at_jst": "2026-06-27T20:46:53+09:00"
+    },
+    {
+      "stage": "local_gates_complete",
+      "status": "completed",
+      "detail": "all local publication gates passed",
+      "recorded_at_jst": "2026-06-27T20:46:54+09:00"
+    }
+  ],
+  "last_event": {
+    "stage": "local_gates_complete",
+    "status": "completed",
+    "detail": "all local publication gates passed",
+    "recorded_at_jst": "2026-06-27T20:46:54+09:00"
+  }
+}
