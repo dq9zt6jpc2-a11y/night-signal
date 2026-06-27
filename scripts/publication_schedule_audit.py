@@ -70,6 +70,29 @@ def main() -> int:
         fail("unattended workflow must not override model calls into long retry loops")
     if "NIGHT_SIGNAL_MODEL_CONCURRENCY: 2" not in unattended:
         fail("unattended workflow must parallelize category extraction without broadening calls")
+    if (
+        "Sync delayed schedule to latest main" not in unattended
+        or "github.event_name == 'schedule'" not in unattended
+        or "git checkout --detach origin/main" not in unattended
+    ):
+        fail("a delayed scheduled run must execute the latest main scripts")
+    if (
+        "Detect an already verified publication" not in unattended
+        or "steps.current_publication.outputs.published != 'true'" not in unattended
+    ):
+        fail("published issues must short-circuit later delayed collection runs")
+    if (
+        "actions/upload-artifact@v7.0.1" not in unattended
+        or "actions/download-artifact@v8.0.1" not in unattended
+        or "night-signal-state-${{ env.ISSUE_DATE }}" not in unattended
+        or "retention-days: 2" not in unattended
+    ):
+        fail("reviewed collection state must survive a later build or audit failure")
+    restore_index = unattended.find("Restore reviewed state checkpoint")
+    collect_index = unattended.find("Collect all categories")
+    build_index = unattended.find("Build and audit issue")
+    if not (0 <= restore_index < collect_index < build_index):
+        fail("reviewed state must be restored before collection and build")
     if "NIGHT_SIGNAL_SKIP_MODEL" in collector:
         fail("a one-shot canary must not disable all category model extraction")
     if "shared_rate_limit_circuit_open" not in collector:
