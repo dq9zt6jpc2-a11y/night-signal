@@ -1132,99 +1132,19 @@ def render_priority_card(index: int, card: dict[str, Any]) -> str:
     return f"""        <article class="priority-card {priority_class}"><span class="rank">{index}</span><h3>{title}</h3><p>{summary}</p><a class="tag" href="#{section_id}">詳細へ</a></article>"""
 
 
-def latest_three_dates(issue_date: str) -> set[str]:
-    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
-    return {
-        issue_dt.isoformat(),
-        issue_dt.fromordinal(issue_dt.toordinal() - 1).isoformat(),
-        issue_dt.fromordinal(issue_dt.toordinal() - 2).isoformat(),
-    }
-
-
-def display_cluster_key(card: dict[str, Any]) -> tuple[str, str]:
-    text = str(card.get("title") or card.get("candidate_title") or "")
-    text = re.sub(r"\s+執筆(?:\s+[-–—].*)?$", " ", text)
-    text = re.sub(r"\s+[-–—]\s+[^。]{1,120}$", " ", text)
-    text = re.sub(r"https?://\S+", " ", text)
-    text = re.sub(r"\b20\d{2}[-/.]\d{1,2}[-/.]\d{1,2}\b", " ", text)
-    text = re.sub(r"[^\w一-龥ぁ-んァ-ンー%％$]+", " ", text.lower())
-    tokens = [
-        token
-        for token in text.split()
-        if token
-        and token
-        not in {"news", "latest", "update", "updates", "発表", "速報", "ニュース", "最新", "確認"}
+def current_display_cards(issue_date: str, cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return [
+        {
+            **card,
+            "issue_date": issue_date,
+            "detail_issue_date": issue_date,
+            "freshness_label": relative_day_label(
+                issue_date,
+                str(card.get("source_published_date", "")),
+            ),
+        }
+        for card in cards
     ]
-    return (str(card.get("category", "")), " ".join(tokens[:14]))
-
-
-def display_cluster_seen(seen: set[tuple[str, str]], key: tuple[str, str]) -> bool:
-    category, text = key
-    if not text:
-        return False
-    return any(
-        category == seen_category
-        and (
-            text == seen_text
-            or (len(text) >= 12 and seen_text.startswith(text))
-            or (len(seen_text) >= 12 and text.startswith(seen_text))
-        )
-        for seen_category, seen_text in seen
-    )
-
-
-def rolling_display_cards(issue_path: Path, issue: dict[str, Any], current_cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    issue_date = require_str(issue, "issue_date")
-    allowed_source_dates = latest_three_dates(issue_date)
-    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
-    state_root = issue_path.parent.parent if issue_path.parent.parent.exists() else DEFAULT_STATE_ROOT
-    display_cards: list[dict[str, Any]] = []
-    seen: set[tuple[str, str]] = set()
-
-    def add_card(card: dict[str, Any], *, detail_issue_date: str, retained_from_issue_date: str | None = None) -> None:
-        source_date = str(card.get("source_published_date", ""))
-        if source_date not in allowed_source_dates:
-            return
-        key = display_cluster_key(card)
-        if display_cluster_seen(seen, key):
-            return
-        seen.add(key)
-        display_cards.append(
-            {
-                **card,
-                "issue_date": issue_date,
-                "detail_issue_date": detail_issue_date,
-                "freshness_label": relative_day_label(issue_date, source_date),
-                **({"retained_from_issue_date": retained_from_issue_date} if retained_from_issue_date else {}),
-            }
-        )
-
-    for card in current_cards:
-        add_card(card, detail_issue_date=issue_date)
-
-    issue_files: list[tuple[datetime.date, Path]] = []
-    for candidate in state_root.glob("20??-??-??/issue.json"):
-        try:
-            candidate_dt = datetime.strptime(candidate.parent.name, "%Y-%m-%d").date()
-        except ValueError:
-            continue
-        if candidate_dt >= issue_dt or (issue_dt - candidate_dt).days > 7:
-            continue
-        issue_files.append((candidate_dt, candidate))
-
-    for candidate_dt, candidate_path in sorted(issue_files, reverse=True):
-        previous_issue = read_json(candidate_path)
-        retained_raw_cards = [
-            card
-            for card in previous_issue.get("cards", [])
-            if isinstance(card, dict) and str(card.get("source_published_date", "")) in allowed_source_dates
-        ]
-        if not retained_raw_cards:
-            continue
-        for card in normalized_cards({**previous_issue, "cards": retained_raw_cards}):
-            add_card(card, detail_issue_date=candidate_dt.isoformat(), retained_from_issue_date=candidate_dt.isoformat())
-
-    return display_cards
 
 
 def observed_evidence_urls(observations: list[dict[str, Any]]) -> set[str]:
@@ -1813,7 +1733,7 @@ def generate_issue(issue_path: Path, output_root: Path, *, write_marker: bool) -
     validate_issue_state(issue, issue_path)
     issue_date = require_str(issue, "issue_date")
     cards = normalized_cards(issue)
-    display_cards = rolling_display_cards(issue_path, issue, cards)
+    display_cards = current_display_cards(issue_date, cards)
     details_dir = output_root / "details"
     details_dir.mkdir(parents=True, exist_ok=True)
 
@@ -2939,6 +2859,11 @@ def self_test() -> None:
         fail("issue renderer must keep the traditional important-updates section format")
     if "repeat(auto-fit,minmax(300px,1fr))" not in render_html or "-webkit-line-clamp:5" not in render_html:
         fail("issue renderer must keep responsive card layout guards")
+    display_cards = current_display_cards("2099-01-02", render_cards)
+    if len(display_cards) != len(render_cards):
+        fail("issue renderer must not add cards outside canonical issue state")
+    if any(card.get("retained_from_issue_date") for card in display_cards):
+        fail("issue renderer must not rehydrate cards from an older issue")
     print("NIGHT SIGNAL STATE PASSED")
 
 
