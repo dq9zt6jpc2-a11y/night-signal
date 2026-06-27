@@ -1160,7 +1160,7 @@ def event_context_sentence(
         )
     if any(term in text for term in ("獲得", "移籍", "退団", "新規契約")):
         return (
-            f"選手の役割、契約条件と編成上の位置づけは、{category_label}の"
+            f"選手の役割、契約条件と編成で担う役割は、{category_label}の"
             "戦力構成と次シーズンの起用方針を判断する材料になる。"
         )
     return state_contract.topic_context_sentence(topic_value, category_label)
@@ -1186,11 +1186,14 @@ def evidence_narrative(
         supporting.append(sentence)
         if len(supporting) == 2:
             break
-    importance = event_context_sentence(
-        category_label,
-        title,
-        excerpt,
-        topic_value,
+    importance = reader_facing_text(
+        event_context_sentence(
+            category_label,
+            title,
+            excerpt,
+            topic_value,
+        ),
+        700,
     )
     summary = unique_sentences(" ".join([event, *supporting, importance]), 1000)
     if state_contract.reader_summary_violations(title, summary):
@@ -2267,6 +2270,16 @@ def self_test() -> None:
         "ソフトバンクがフィジカルAIロボットの量産を開始",
     ):
         fail("semantic clustering merged distinct material events")
+    roster_context = reader_facing_text(
+        event_context_sentence(
+            "宇都宮ブレックス",
+            "宇都宮ブレックスが荒川颯を獲得",
+            "新規契約を発表した。",
+            "decision_or_policy",
+        )
+    )
+    if state_contract.public_render_copy_violations(roster_context, kind="summary"):
+        fail("event-specific context bypassed public-copy normalization")
     promoted_fallback: dict[str, Any] = {"items": [], "signals": []}
     duplicate_record = {
         "label": "Technology News",
