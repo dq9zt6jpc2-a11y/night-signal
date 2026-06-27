@@ -88,7 +88,7 @@ MATERIAL_SIGNAL_RE = re.compile(
 LOW_SIGNAL_VALUE_RE = re.compile(
     r"噂|予想|予測|レンダリング|架空|ダイキャスト|ミニカー|プラモデル|"
     r"完成品|1/24|おもちゃ|グッズ|セール|値引き|クーポン|"
-    r"Derivatives|価格・チャート・時価総額",
+    r"Derivatives|価格・チャート・時価総額|体験授業|特別展示|夏休み",
     re.I,
 )
 HIGH_THROUGHPUT_CATEGORIES = {"OpenAI", "SpaceX", "SoftBank", "宇都宮ブレックス"}
@@ -988,7 +988,11 @@ def sentence_parts(value: str) -> list[str]:
     parts: list[str] = []
     for part in re.split(r"(?<=[。！？!?])", reader_facing_text(value, 2400)):
         text = part.strip()
-        if text:
+        if text and not re.fullmatch(
+            r"(?:ニュース|ファイナンス|MSN|web|オンライン)[。．.!！?？]*",
+            text,
+            flags=re.I,
+        ):
             parts.append(text if text.endswith(("。", "！", "？", "!", "?")) else f"{text}。")
     if not parts and value:
         text = reader_facing_text(value, 700).strip()
@@ -2280,6 +2284,8 @@ def self_test() -> None:
     )
     if state_contract.public_render_copy_violations(roster_context, kind="summary"):
         fail("event-specific context bypassed public-copy normalization")
+    if not low_signal_value("Hondaの夏休み体験授業でF1を特別展示"):
+        fail("routine promotional events must not become important updates")
     promoted_fallback: dict[str, Any] = {"items": [], "signals": []}
     duplicate_record = {
         "label": "Technology News",

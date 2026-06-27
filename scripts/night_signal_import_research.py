@@ -44,6 +44,10 @@ TRAILING_MEDIA_CREDIT_RE = re.compile(
     r"\s*[（(](?:フィスコ|音楽ナタリー|BASKET COUNT|共同通信|時事通信|Reuters|ロイター)[）)]$",
     re.I,
 )
+ORPHAN_SOURCE_SENTENCE_RE = re.compile(
+    r"^(?:ニュース|ファイナンス|MSN|web|オンライン)[。．.!！?？]*$",
+    re.I,
+)
 DEFAULT_LIMITS_SENTENCE = "影響範囲、対象範囲、追加条件、続報の有無は引き続き確認が必要。"
 
 
@@ -103,7 +107,7 @@ def scrub_public_summary(value: Any) -> str:
         cleaned = state.DOMAIN_RE.sub("", cleaned)
         cleaned = EMPTY_JA_QUOTE_RE.sub("", cleaned)
         cleaned = TRAILING_DOMAIN_RE.sub("", cleaned).strip(" -–—|｜")
-        if cleaned:
+        if cleaned and not ORPHAN_SOURCE_SENTENCE_RE.fullmatch(cleaned):
             sentences.append(cleaned)
     return compact_text(" ".join(sentences), 2600)
 
@@ -1369,6 +1373,8 @@ def self_test() -> None:
     )
     if state.public_render_copy_violations(domain_cleaned_summary, kind="summary"):
         fail("reviewed import must strip domain leaks from public card summaries")
+    if "ニュース。" in scrub_public_summary("重要更新を発表。ニュース。影響を説明した。"):
+        fail("reviewed import must remove orphan publisher fragments")
     detail_summary = canonical_detail_summary(
         "OpenAI",
         {
