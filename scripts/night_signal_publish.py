@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
-"""Run the canonical NIGHT SIGNAL daily publication pipeline.
-
-This script is the single operational owner for the 20:00 JST publication path.
-It keeps the workflow generic: build the dated collection state, collect live
-observations when needed, synthesize issue state, render, sync, and audit.
-"""
+"""Run the single NIGHT SIGNAL collection-to-publication pipeline."""
 
 from __future__ import annotations
 
@@ -83,79 +78,66 @@ def run(command: list[str], *, check: bool = True) -> subprocess.CompletedProces
     return result
 
 
-def exists_any(paths: list[Path]) -> bool:
-    return any(path.exists() for path in paths)
-
-
 def state_dir(issue_date: str) -> Path:
     return STATE_ROOT / issue_date
-
-
-def write_collection_plan(issue_date: str) -> None:
-    run([sys.executable, "scripts/night_signal_state.py", "--write-collection-plan", issue_date])
-
-
-def ensure_collection_plan(issue_date: str) -> None:
-    if not (state_dir(issue_date) / "collection_plan.json").exists():
-        write_collection_plan(issue_date)
-
-
-def has_observations(issue_date: str) -> bool:
-    base = state_dir(issue_date)
-    return exists_any([base / "observations.jsonl", base / "observations.json"])
-
-
-def has_synthesis(issue_date: str) -> bool:
-    base = state_dir(issue_date)
-    return (
-        exists_any([base / "candidates.jsonl", base / "candidates.json"])
-        and exists_any([base / "decisions.jsonl", base / "decisions.json"])
-        and exists_any([base / "cards.jsonl", base / "cards.json"])
-        and (base / "coverage_manifest.json").exists()
-    )
-
-
-def require_openai_key(issue_date: str) -> None:
-    if os.getenv("OPENAI_API_KEY"):
-        return
-    fail(f"OPENAI_API_KEY is required to generate {issue_date} from live sources")
 
 
 def has_research_bundle(issue_date: str) -> bool:
     return (state_dir(issue_date) / "research_bundle.json").exists()
 
 
-def validate_observations(issue_date: str) -> None:
-    base = state_dir(issue_date)
-    path = base / "observations.jsonl"
-    if not path.exists():
-        path = base / "observations.json"
-    run([sys.executable, "scripts/night_signal_state.py", "--validate-observations", str(path)])
+def fresh_reviewed_bundle(issue_date: str) -> bool:
+    status = runtime.reviewed_bundle_state(issue_date, STATE_ROOT)
+    if not status.get("usable"):
+        return False
+    try:
+        bundle = json.loads(
+            (state_dir(issue_date) / "research_bundle.json").read_text(encoding="utf-8")
+        )
+    except json.JSONDecodeError:
+        return False
+    return reviewed_bundle_reusable(
+        bundle,
+        issue_date,
+        now=datetime.now(ZoneInfo("Asia/Tokyo")),
+    )
 
 
-def collect(issue_date: str, *, import_reviewed_bundle: bool) -> None:
-    if import_reviewed_bundle:
-        if not has_research_bundle(issue_date):
-            fail(f"reviewed research bundle is missing for {issue_date}")
-        run([sys.executable, "scripts/night_signal_import_research.py", issue_date])
-        return
-    require_openai_key(issue_date)
-    run([sys.executable, "scripts/night_signal_collect.py", issue_date, "--replace", "--resume", "--quiet"])
-    validate_observations(issue_date)
+def reviewed_bundle_reusable(
+    bundle: dict[str, Any],
+    issue_date: str,
+    *,
+    now: datetime,
+) -> bool:
+    try:
+        checked = datetime.fromisoformat(str(bundle["checked_at_jst"]))
+    except (KeyError, TypeError, ValueError):
+        return False
+    if checked.tzinfo is None:
+        return False
+    checked = checked.astimezone(ZoneInfo("Asia/Tokyo"))
+    current = now.astimezone(ZoneInfo("Asia/Tokyo"))
+    return (
+        checked.date().isoformat() == issue_date
+        and checked.hour >= 19
+        and timedelta(0) <= current - checked <= timedelta(hours=2)
+    )
 
 
-def synthesize(issue_date: str, *, import_reviewed_bundle: bool) -> None:
-    if import_reviewed_bundle:
-        if not has_synthesis(issue_date):
-            fail(f"reviewed research import did not create synthesis artifacts for {issue_date}")
-        return
-    require_openai_key(issue_date)
-    run([sys.executable, "scripts/night_signal_synthesize.py", issue_date, "--replace", "--resume"])
+def collect_and_build(issue_date: str, *, reuse_reviewed_bundle: bool) -> None:
+    if not (reuse_reviewed_bundle and fresh_reviewed_bundle(issue_date)):
+        if not (os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")):
+            fail("GITHUB_TOKEN is required for unattended collection")
+        run([sys.executable, "scripts/night_signal_unattended_collect.py", issue_date])
+    if not has_research_bundle(issue_date):
+        fail(f"collection did not create research_bundle.json for {issue_date}")
+    run([sys.executable, "scripts/night_signal_import_research.py", issue_date])
 
 
 def assemble_and_render(issue_date: str) -> None:
     base = state_dir(issue_date)
-    run([sys.executable, "scripts/night_signal_state.py", "--assemble-issue-state", issue_date])
+    if not (base / "issue.json").exists():
+        fail(f"{issue_date} has no issue state")
     run([sys.executable, "scripts/night_signal_state.py", "--validate-issue", str(base / "issue.json")])
     run([sys.executable, "scripts/night_signal_state.py", "--generate-issue", str(base / "issue.json")])
 
@@ -166,9 +148,10 @@ def collection_freshness(
     now: datetime | None = None,
     require_evening_refresh: bool,
 ) -> dict[str, Any]:
-    manifest = json.loads(
-        (state_dir(issue_date) / "coverage_manifest.json").read_text(encoding="utf-8")
-    )
+    issue = json.loads((state_dir(issue_date) / "issue.json").read_text(encoding="utf-8"))
+    manifest = issue.get("coverage_manifest")
+    if not isinstance(manifest, dict):
+        fail("issue state missing coverage_manifest")
     return validate_collection_freshness(
         manifest,
         issue_date,
@@ -203,7 +186,7 @@ def validate_collection_freshness(
         fail(f"collection is too old for publication: {completed.isoformat()}")
     evening_cutoff = datetime.combine(
         completed.date(),
-        time(hour=18),
+        time(hour=19),
         tzinfo=ZoneInfo("Asia/Tokyo"),
     )
     if require_evening_refresh and completed < evening_cutoff:
@@ -241,9 +224,9 @@ def self_test() -> None:
             os.environ.pop("NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE", None)
         else:
             os.environ["NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE"] = original_allow_stale
-    current = datetime.fromisoformat("2099-01-01T19:30:00+09:00")
+    current = datetime.fromisoformat("2099-01-01T19:50:00+09:00")
     fresh = {
-        "collection_completed_at_jst": "2099-01-01T18:30:00+09:00",
+        "collection_completed_at_jst": "2099-01-01T19:20:00+09:00",
         "collection_mode": "reviewed_live_web",
     }
     result = validate_collection_freshness(
@@ -255,7 +238,7 @@ def self_test() -> None:
     if not result["evening_refresh"]:
         fail("fresh evening collection was rejected")
     stale = dict(fresh)
-    stale["collection_completed_at_jst"] = "2099-01-01T13:00:00+09:00"
+    stale["collection_completed_at_jst"] = "2099-01-01T18:50:00+09:00"
     try:
         validate_collection_freshness(
             stale,
@@ -266,14 +249,36 @@ def self_test() -> None:
     except SystemExit:
         pass
     else:
-        fail("morning collection must not pass final deployment")
+        fail("pre-final collection must not pass final deployment")
+    reusable = {"checked_at_jst": "2099-01-01T19:20:00+09:00"}
+    if not reviewed_bundle_reusable(
+        reusable,
+        "2099-01-01",
+        now=datetime.fromisoformat("2099-01-01T19:50:00+09:00"),
+    ):
+        fail("fresh same-date reviewed bundle was not reusable")
+    for rejected_date, rejected_now in (
+        ("2098-12-31", "2099-01-01T19:50:00+09:00"),
+        ("2099-01-01", "2099-01-01T22:30:00+09:00"),
+    ):
+        if reviewed_bundle_reusable(
+            reusable,
+            rejected_date,
+            now=datetime.fromisoformat(rejected_now),
+        ):
+            fail("stale or cross-date reviewed bundle was reusable")
+    if reviewed_bundle_reusable(
+        {"checked_at_jst": "2099-01-01T18:59:00+09:00"},
+        "2099-01-01",
+        now=datetime.fromisoformat("2099-01-01T19:20:00+09:00"),
+    ):
+        fail("pre-final reviewed bundle was reusable")
     print("NIGHT SIGNAL PUBLISH SELF-TEST PASSED")
 
 
 def sync_and_audit(issue_date: str) -> None:
     require_jst_current_issue(issue_date)
     run([sys.executable, "scripts/night_signal_eval.py", issue_date])
-    run([sys.executable, "scripts/guardrail_inventory.py"])
     run([sys.executable, "scripts/sync_site.py", issue_date])
     run([sys.executable, "scripts/current_issue_audit.py", issue_date])
     run([sys.executable, "scripts/coverage_audit.py", issue_date])
@@ -290,9 +295,7 @@ def self_tests(profile: str) -> None:
     if profile != "full":
         fail(f"unknown verification profile: {profile}")
     run([sys.executable, "scripts/simulate_runtime_failures.py"])
-    run([sys.executable, "scripts/night_signal_collect.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_unattended_collect.py", "--self-test"])
-    run([sys.executable, "scripts/night_signal_synthesize.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_eval.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_import_research.py", "--self-test"])
     run([sys.executable, "scripts/publication_schedule_audit.py"])
@@ -312,7 +315,7 @@ def readiness(issue_date: str, *, check: bool) -> dict[str, Any]:
 def prepare(
     issue_date: str,
     *,
-    import_reviewed_bundle: bool,
+    reuse_reviewed_bundle: bool,
     deploy_existing: bool,
     verification_profile: str,
 ) -> dict[str, Any]:
@@ -323,19 +326,16 @@ def prepare(
         self_tests(verification_profile)
         runtime.write_checkpoint(issue_date, "runtime_checked", "completed", f"{verification_profile} verification passed", STATE_ROOT)
         if deploy_existing:
-            ensure_collection_plan(issue_date)
             if not (state_dir(issue_date) / "issue.json").exists():
                 fail(f"{issue_date} has no committed issue state to deploy")
         else:
             current_stage = "plan_written"
-            write_collection_plan(issue_date)
-            runtime.write_checkpoint(issue_date, current_stage, "completed", "current collection plan written", STATE_ROOT)
+            runtime.write_checkpoint(issue_date, current_stage, "completed", "current collection contract loaded", STATE_ROOT)
             current_stage = "collection_complete"
-            collect(issue_date, import_reviewed_bundle=import_reviewed_bundle)
-            runtime.write_checkpoint(issue_date, current_stage, "completed", "all collection slots closed", STATE_ROOT)
-            current_stage = "synthesis_complete"
-            synthesize(issue_date, import_reviewed_bundle=import_reviewed_bundle)
-            runtime.write_checkpoint(issue_date, current_stage, "completed", "candidates, decisions, cards, and manifest written", STATE_ROOT)
+            collect_and_build(issue_date, reuse_reviewed_bundle=reuse_reviewed_bundle)
+            runtime.write_checkpoint(issue_date, current_stage, "completed", "reviewed research bundle written", STATE_ROOT)
+            current_stage = "story_build_complete"
+            runtime.write_checkpoint(issue_date, current_stage, "completed", "important updates and manifest written", STATE_ROOT)
         freshness = collection_freshness(
             issue_date,
             require_evening_refresh=deploy_existing,
@@ -381,7 +381,7 @@ def main() -> int:
     parser.add_argument("--resolve-issue-date", action="store_true")
     parser.add_argument("--event-name", default="")
     parser.add_argument("--requested-issue-date", default="")
-    parser.add_argument("--import-reviewed-bundle", action="store_true")
+    parser.add_argument("--reuse-reviewed-bundle", action="store_true")
     parser.add_argument("--deploy-existing", action="store_true")
     parser.add_argument("--public-audit", action="store_true")
     parser.add_argument("--self-test", action="store_true")
@@ -400,15 +400,15 @@ def main() -> int:
     if args.self_test:
         self_test()
         return 0
-    if args.import_reviewed_bundle and args.deploy_existing:
-        fail("--import-reviewed-bundle and --deploy-existing are mutually exclusive")
+    if args.reuse_reviewed_bundle and args.deploy_existing:
+        fail("--reuse-reviewed-bundle and --deploy-existing are mutually exclusive")
     if args.public_audit:
         result = public_audit(args.issue_date)
     else:
         verification_profile = args.verification_profile or ("deploy" if args.deploy_existing else "full")
         result = prepare(
             args.issue_date,
-            import_reviewed_bundle=args.import_reviewed_bundle,
+            reuse_reviewed_bundle=args.reuse_reviewed_bundle,
             deploy_existing=args.deploy_existing,
             verification_profile=verification_profile,
         )

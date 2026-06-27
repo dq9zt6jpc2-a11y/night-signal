@@ -1,38 +1,9 @@
 {
-  "routes": {
-    "small_structured_extractor": {
-      "default_model": "gpt-5.4-mini",
-      "env": "NIGHT_SIGNAL_MODEL_SMALL_STRUCTURED_EXTRACTOR",
-      "reasoning_effort": "low"
-    },
-    "small_structured_extractor_then_frontier_reasoning_if_ambiguous": {
-      "default_model": "gpt-5.4-mini",
-      "env": "NIGHT_SIGNAL_MODEL_SMALL_THEN_FRONTIER",
-      "reasoning_effort": "low"
-    },
-    "frontier_reasoning_model": {
-      "default_model": "gpt-5.5",
-      "env": "NIGHT_SIGNAL_MODEL_FRONTIER_REASONING",
-      "reasoning_effort": "medium"
-    },
-    "extended_research": {
-      "default_model": "gpt-5.5",
-      "env": "NIGHT_SIGNAL_EXTENDED_RESEARCH_MODEL",
-      "reasoning_effort": "high"
-    },
-    "synthesis": {
-      "default_model": "gpt-5.5",
-      "env": "NIGHT_SIGNAL_SYNTHESIS_MODEL",
-      "reasoning_effort": "medium"
-    },
-    "github_unattended": {
-      "default_model": "openai/gpt-4.1-mini",
-      "fallback_models": [
-        "openai/gpt-4o-mini",
-        "openai/gpt-4.1-nano"
-      ],
-      "env": "NIGHT_SIGNAL_GITHUB_MODEL"
-    }
-  },
-  "global_env": "NIGHT_SIGNAL_MODEL"
+  "extraction": {
+    "model": "openai/gpt-4.1",
+    "fallback_models": [
+      "openai/gpt-4.1-mini",
+      "openai/gpt-4o-mini"
+    ]
+  }
 }

@@ -27,10 +27,10 @@ import xml.etree.ElementTree as ET
 from datetime import date, datetime, timedelta
 from html.parser import HTMLParser
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 from zoneinfo import ZoneInfo
 
-import night_signal_apply_source_review as source_review
+import night_signal_evidence as evidence_contract
 import night_signal_models as models
 import night_signal_state as state_contract
 
@@ -43,7 +43,7 @@ JST = ZoneInfo("Asia/Tokyo")
 MODELS_URL = "https://models.github.ai/inference/chat/completions"
 DEFAULT_MODEL_TIMEOUT_SECONDS = 90
 DEFAULT_MODEL_RETRIES = 3
-DEFAULT_MODEL_MAX_TOKENS = 4000
+DEFAULT_MODEL_MAX_TOKENS = 8000
 USER_AGENT = (
     "Mozilla/5.0 (compatible; NightSignalBot/1.0; "
     "+https://dq9zt6jpc2-a11y.github.io/night-signal/)"
@@ -103,10 +103,9 @@ PUBLICATION_EVENT_RE = re.compile(
     r"rose|fell|increase|decrease)",
     re.I,
 )
-HIGH_THROUGHPUT_CATEGORIES = {"OpenAI", "SpaceX", "SoftBank", "宇都宮ブレックス"}
 MAX_CATEGORY_EVIDENCE = 18
-MAX_CATEGORY_ITEMS = 3
-MAX_CATEGORY_SIGNALS = 8
+MAX_CATEGORY_ITEMS = 12
+MAX_CATEGORY_SIGNALS = 12
 CATEGORY_IDENTITY_TERMS = {
     "OpenAI": ["OpenAI", "ChatGPT", "Codex", "Azure OpenAI", "生成AI", "AIモデル"],
     "SoftBank": ["SoftBank", "ソフトバンク", "SBG", "Arm"],
@@ -327,8 +326,7 @@ def select_clustered_evidence(
         seen_routes.add(route)
         selected.append(record)
     selected.extend(discovered)
-    limit = MAX_CATEGORY_EVIDENCE if category.get("label") in HIGH_THROUGHPUT_CATEGORIES else 12
-    return selected[:limit]
+    return selected[:MAX_CATEGORY_EVIDENCE]
 
 
 PUBLIC_COPY_REPLACEMENTS = [
@@ -714,20 +712,17 @@ def news_queries(category: dict[str, Any], issue_date: str) -> list[str]:
         "Japan company",
         "official",
     ]
-    for axis in category.get("axes", [])[:3]:
+    for axis in category.get("axes", []):
         if isinstance(axis, dict):
-            configured_terms.extend(str(term) for term in axis.get("terms", [])[:3])
-    for topic in category.get("watch_topics", [])[:6]:
+            configured_terms.extend(str(term) for term in axis.get("terms", []))
+    for topic in category.get("watch_topics", []):
         if not isinstance(topic, dict):
             continue
-        configured_terms.extend(str(term) for term in topic.get("terms", [])[:3])
-        configured_terms.extend(str(event) for event in topic.get("event_classes", [])[:2])
+        configured_terms.extend(str(term) for term in topic.get("terms", []))
+        configured_terms.extend(str(event) for event in topic.get("event_classes", []))
     scoped = list(dict.fromkeys(configured_terms))
-    groups = [
-        scoped[:8],
-        material_terms[:6],
-        material_terms[6:],
-    ]
+    groups = [scoped[index : index + 8] for index in range(0, len(scoped), 8)][:4]
+    groups.extend([material_terms[:6], material_terms[6:]])
     return [
         f"({label}) ({' OR '.join(group)}) when:3d"
         for group in groups
@@ -819,7 +814,7 @@ def enrich_discovered_records(
     category: dict[str, Any],
     records: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
-    limit = 4 if category.get("label") in HIGH_THROUGHPUT_CATEGORIES else 3
+    limit = 6
     ranked = sorted(
         records,
         key=lambda record: cluster_priority(record, category),
@@ -928,25 +923,6 @@ def category_contracts() -> list[dict[str, Any]]:
     ]
 
 
-def current_fresh_issue(issue_date: str) -> bool:
-    path = STATE_ROOT / issue_date / "coverage_manifest.json"
-    if not path.exists():
-        return False
-    try:
-        manifest = load_object(path)
-        completed = datetime.fromisoformat(
-            str(manifest["collection_completed_at_jst"])
-        ).astimezone(JST)
-    except (KeyError, TypeError, ValueError):
-        return False
-    now = datetime.now(JST)
-    return (
-        completed.date().isoformat() == issue_date
-        and completed.hour >= 18
-        and now - completed <= timedelta(hours=4)
-    )
-
-
 def collection_checked_at(issue_date: str) -> str:
     issue_day = date.fromisoformat(issue_date)
     now = datetime.now(JST)
@@ -966,22 +942,17 @@ def model_request(
     messages: list[dict[str, str]],
     *,
     model_name: str | None = None,
-    retries_override: Optional[int] = None,
     retry_wait_cap: int = 120,
 ) -> dict[str, Any]:
     errors: list[str] = []
     rate_limit_waits: list[int] = []
     attempt_messages = list(messages)
     timeout = int(os.getenv("NIGHT_SIGNAL_MODEL_TIMEOUT_SECONDS", DEFAULT_MODEL_TIMEOUT_SECONDS))
-    retries = (
-        retries_override
-        if retries_override is not None
-        else int(os.getenv("NIGHT_SIGNAL_MODEL_RETRIES", DEFAULT_MODEL_RETRIES))
-    )
+    retries = int(os.getenv("NIGHT_SIGNAL_MODEL_RETRIES", DEFAULT_MODEL_RETRIES))
     max_tokens = int(os.getenv("NIGHT_SIGNAL_MODEL_MAX_TOKENS", DEFAULT_MODEL_MAX_TOKENS))
     for attempt in range(retries):
         payload = {
-            "model": model_name or models.model_for_route("github_unattended"),
+            "model": model_name or models.extraction_model(),
             "messages": attempt_messages,
             "temperature": 0.1,
             "max_tokens": max_tokens,
@@ -1002,6 +973,21 @@ def model_request(
         try:
             with urllib.request.urlopen(request, timeout=timeout) as response:
                 value = json.loads(response.read().decode("utf-8"))
+            usage = value.get("usage", {})
+            if isinstance(usage, dict):
+                print(
+                    json.dumps(
+                        {
+                            "phase": "model_usage",
+                            "model": payload["model"],
+                            "prompt_tokens": usage.get("prompt_tokens"),
+                            "completion_tokens": usage.get("completion_tokens"),
+                            "total_tokens": usage.get("total_tokens"),
+                        },
+                        ensure_ascii=False,
+                    ),
+                    flush=True,
+                )
             choice = value["choices"][0]
             content = choice["message"]["content"]
             if not isinstance(content, str):
@@ -1023,9 +1009,10 @@ def model_request(
                                 "role": "user",
                                 "content": (
                                     "The previous response exceeded the output "
-                                    "budget. Return smaller valid JSON: at most "
-                                    "1 item and 2 signals, with all supplied "
-                                    "dates and URLs preserved exactly."
+                                    "budget. Return compact valid JSON while "
+                                    "retaining every distinct item, date, fact, "
+                                    "and URL. Shorten prose and omit lower-value "
+                                    "signals; do not reduce the item count."
                                 ),
                             },
                         ]
@@ -1082,21 +1069,23 @@ SYSTEM_PROMPT = """You are the unattended NIGHT SIGNAL evidence extractor.
 Return one JSON object with keys items, signals, no_change_summary.
 Use only the supplied evidence records and exact URLs. Do not use memory.
 The issue window is the issue date and preceding two calendar days.
-Return up to 3 items and up to 8 signals when distinct material clusters are
-present. Do not force one item per category. Retain other relevant candidates
-as signals instead of dropping them. Keep no_change_summary under 300 Japanese
-characters.
+Return every distinct evidence-backed material cluster as an item, up to the
+technical safety limit of 12. This is not a target or editorial quota: do not
+drop a supported important update to make the list shorter. Use signals only
+for relevant records that lack enough evidence for an item. Keep
+no_change_summary under 300 Japanese characters.
 
 items are publication-worthy confirmed changes. Retain names, exact dates,
 numbers, results, uncertainty, and context. Each item must contain:
 watch_topic_id, title, summary, source_published_date, topic_value_class,
 priority_class, slug, detail_summary, what_changed, why_it_matters,
-confirmed_facts (at least 3), limits_or_unknowns, sources (1-3).
+confirmed_facts (3-6), limits_or_unknowns, sources (1-3).
 Each source needs label and an exact supplied URL. summary should be clear
-Japanese with 100-180 characters; detail_summary 280-420 characters.
-what_changed and why_it_matters must each be 80-160 characters.
-Use exactly 3 confirmed_facts of 40-120 characters, limits_or_unknowns up to
-160 characters, and at most 2 sources.
+Japanese with 120-300 characters; detail_summary 300-900 characters.
+what_changed and why_it_matters must each be 80-260 characters.
+Use 3-6 confirmed_facts of 40-180 characters, limits_or_unknowns up to
+240 characters, and at most 3 sources. Use available source substance; never
+pad a thin source with generic prose.
 
 Every confirmed_fact must be a distinct event fact stated in the supplied
 title or body excerpt. Publisher names, publication dates, source metadata,
@@ -1595,14 +1584,13 @@ def backfill_items_from_evidence(
     issue_date: str,
     records: list[dict[str, Any]],
 ) -> None:
-    target = 3 if category.get("label") in HIGH_THROUGHPUT_CATEGORIES else 1
     seen = {
         normalized_topic_key(item.get("title"))
         for item in normalized.get("items", [])
         if isinstance(item, dict)
     }
     for record in select_clustered_evidence(category, records):
-        if len(normalized["items"]) >= min(MAX_CATEGORY_ITEMS, target):
+        if len(normalized["items"]) >= MAX_CATEGORY_ITEMS:
             break
         item = fallback_item_from_record(category, issue_date, record)
         if not item:
@@ -1671,7 +1659,6 @@ def backfill_signals_from_evidence(
     issue_date: str,
     records: list[dict[str, Any]],
 ) -> None:
-    target = MAX_CATEGORY_SIGNALS if category.get("label") in HIGH_THROUGHPUT_CATEGORIES else 4
     seen = {
         normalized_topic_key(entry.get("title"))
         for collection in (normalized.get("items", []), normalized.get("signals", []))
@@ -1679,7 +1666,7 @@ def backfill_signals_from_evidence(
         if isinstance(entry, dict)
     }
     for record in select_clustered_evidence(category, records):
-        if len(normalized["signals"]) >= target:
+        if len(normalized["signals"]) >= MAX_CATEGORY_SIGNALS:
             break
         signal = fallback_signal_from_record(category, issue_date, record)
         if not signal:
@@ -2027,7 +2014,7 @@ def normalize_result(
         no_change = (
             f"{issue_date}に{category['label']}の公式、独立媒体、SNS、"
             f"YouTubeを含む{observed_count}件の証跡を確認した。"
-            "直近3日の確定差分は掲載記事または候補台帳に記録した。"
+            "直近3日の確定差分は重要更新または確認結果に記録した。"
         )
     return {
         "items": items,
@@ -2086,7 +2073,7 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
             if record.get("observed")
         ]
     model_rate_limited = threading.Event()
-    model_chain = models.models_for_route("github_unattended")
+    model_chain = models.extraction_models()
 
     def review_category(category: dict[str, Any]) -> tuple[str, dict[str, Any], dict[str, Any]]:
         label = str(category["label"])
@@ -2286,74 +2273,44 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
     state_dir = STATE_ROOT / issue_date
     state_dir.mkdir(parents=True, exist_ok=True)
     bundle_path = state_dir / "research_bundle.json"
-    review_path = state_dir / "source_review.json"
-    bundle_path.write_text(
-        json.dumps(
-            {
-                "issue_date": issue_date,
-                "checked_at_jst": checked_at,
-                "collection_mode": "github_models_unattended",
-                "categories": {},
-            },
-            ensure_ascii=False,
-            indent=2,
-        )
-        + "\n",
-        encoding="utf-8",
-    )
-    review_path.write_text(
-        json.dumps(
-            {
-                "issue_date": issue_date,
-                "checked_at_jst": checked_at,
-                "unavailable_urls": unavailable,
-                "evidence_by_url": evidence,
-                "categories": reviewed_categories,
-            },
-            ensure_ascii=False,
-            indent=2,
-        )
-        + "\n",
-        encoding="utf-8",
-    )
-    applied = source_review.apply_review(
+    bundle = evidence_contract.build_bundle(
         issue_date,
-        bundle_path,
-        review_path,
+        checked_at,
+        reviewed_categories,
+        unavailable,
+        evidence,
+        collection_mode="github_models_unattended",
     )
+    evidence_contract.write_bundle(bundle_path, bundle)
     return {
-        **applied,
+        "issue_date": issue_date,
+        "checked_at_jst": checked_at,
+        "categories": len(reviewed_categories),
+        "source_checks": sum(
+            len(entry["source_checks"])
+            for entry in bundle["categories"].values()
+        ),
+        "items": total_items,
+        "signals": sum(len(entry["signals"]) for entry in reviewed_categories.values()),
+        "bundle": str(bundle_path),
         "collection_mode": "github_models_unattended",
         "unavailable_sources": len(unavailable),
     }
 
 
-def canary(token: str) -> bool:
-    try:
-        result = model_request(
-            token,
-            [
-                {
-                    "role": "user",
-                    "content": 'Return exactly this JSON object: {"ok":true}',
-                }
-            ],
-            retries_override=1,
-            retry_wait_cap=5,
-        )
-    except ModelRequestError as exc:
-        print(
-            "NIGHT SIGNAL GITHUB MODELS CANARY DEGRADED: "
-            f"{exc}. Collection will use evidence-backed fallback without further model calls."
-        )
-        return False
-    if result.get("ok") is not True:
-        fail(f"GitHub Models canary returned unexpected data: {result}")
-    print("NIGHT SIGNAL GITHUB MODELS CANARY PASSED")
-    return True
-
-
 def self_test() -> None:
+    wide_category = {
+        "label": "CoverageTest",
+        "axes": [],
+        "watch_topics": [
+            {"id": f"topic-{index}", "terms": [f"term-{index}"], "event_classes": []}
+            for index in range(9)
+        ],
+    }
+    if "term-8" not in " ".join(news_queries(wide_category, "2099-01-01")):
+        fail("discovery queries dropped later watch topics")
+    if MAX_CATEGORY_ITEMS < 8:
+        fail("publication item safety limit is acting as a sparse editorial quota")
     if not article_result_matches(
         "OpenAI GPT-5.6シリーズを発表",
         "OpenAIのGPT-5.6シリーズを解説",
@@ -2798,8 +2755,6 @@ def main() -> int:
         nargs="?",
         default=datetime.now(JST).date().isoformat(),
     )
-    parser.add_argument("--skip-if-fresh", action="store_true")
-    parser.add_argument("--canary", action="store_true")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
     if args.self_test:
@@ -2808,12 +2763,6 @@ def main() -> int:
     token = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")
     if not token:
         fail("GITHUB_TOKEN or GH_TOKEN is required")
-    if args.canary:
-        canary(token)
-        return 0
-    if args.skip_if_fresh and current_fresh_issue(args.issue_date):
-        print(f"NIGHT SIGNAL UNATTENDED COLLECT SKIPPED: fresh issue {args.issue_date}")
-        return 0
     print(json.dumps(collect(args.issue_date, token), ensure_ascii=False, indent=2))
     return 0
 

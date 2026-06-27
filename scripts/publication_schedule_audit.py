@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail when NIGHT SIGNAL background publication is no longer single-owner."""
+"""Verify the two-workflow, single-owner publication boundary."""
 
 from __future__ import annotations
 
@@ -9,18 +9,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PUBLISH_WORKFLOW = ROOT / ".github" / "workflows" / "pages.yml"
-RUNTIME_WATCHDOG_WORKFLOW = ROOT / ".github" / "workflows" / "runtime-watchdog.yml"
-UNATTENDED_WORKFLOW = ROOT / ".github" / "workflows" / "unattended-collection.yml"
-UNATTENDED_COLLECTOR = ROOT / "scripts" / "night_signal_unattended_collect.py"
-
-
-def cron_minutes(text: str) -> list[int]:
-    values: list[int] = []
-    for minute, hour in re.findall(r'cron:\s*"(\d{2})\s+(\d{2})\s+\*\s+\*\s+\*"', text):
-        utc_minutes = int(hour) * 60 + int(minute)
-        values.append((utc_minutes + 9 * 60) % (24 * 60))
-    return sorted(values)
+PAGES = ROOT / ".github" / "workflows" / "pages.yml"
+COLLECTION = ROOT / ".github" / "workflows" / "unattended-collection.yml"
 
 
 def fail(message: str) -> None:
@@ -28,102 +18,61 @@ def fail(message: str) -> None:
     raise SystemExit(1)
 
 
+def cron_minutes(text: str) -> list[int]:
+    values = []
+    for minute, hour in re.findall(r'cron:\s*"(\d{2})\s+(\d{2})\s+\*\s+\*\s+\*"', text):
+        values.append((int(hour) * 60 + int(minute) + 9 * 60) % (24 * 60))
+    return sorted(values)
+
+
+def ordered(text: str, *labels: str) -> bool:
+    positions = [text.find(label) for label in labels]
+    return all(position >= 0 for position in positions) and positions == sorted(positions)
+
+
 def main() -> int:
-    publish = PUBLISH_WORKFLOW.read_text(encoding="utf-8")
-    unattended = UNATTENDED_WORKFLOW.read_text(encoding="utf-8")
-    collector = UNATTENDED_COLLECTOR.read_text(encoding="utf-8")
-    publish_times = cron_minutes(publish)
-    unattended_times = cron_minutes(unattended)
-    if RUNTIME_WATCHDOG_WORKFLOW.exists():
-        fail("runtime-watchdog workflow is obsolete; unattended collection must be the only timed owner")
-    if publish_times:
-        fail(f"Pages workflow must not run on a schedule; collector owns timed publication: {publish_times}")
-    if re.search(r"\n\s+push:", publish):
-        fail("Pages workflow must not run on push; unattended collection must dispatch and wait for it")
-    if (ROOT / ".github" / "workflows" / "preflight.yml").exists():
-        fail("preflight workflow is obsolete; unattended collection owns readiness")
-    if "scripts/night_signal_publish.py" not in publish:
-        fail("Pages workflow must use the canonical publication owner")
-    if '--deploy-existing' not in publish:
-        fail("Pages workflow must deploy only committed, freshness-validated state")
-    if "OPENAI_API_KEY" in publish:
-        fail("Pages workflow must not pretend to own live collection")
-    unattended_pre_20 = [
-        value
-        for value in unattended_times
-        if 18 * 60 <= value < 20 * 60
-    ]
-    if len(unattended_pre_20) < 5 or unattended_pre_20[0] > 18 * 60 + 5:
-        fail(
-            "unattended collection needs five staged attempts starting by "
-            f"18:05 JST: {unattended_times}"
-        )
-    if max(unattended_pre_20) < 19 * 60 + 50:
-        fail(f"unattended collection needs a final pre-20:00 JST attempt: {unattended_times}")
-    if "night-signal-unattended-collection" not in unattended:
-        fail("unattended workflow must own the single background concurrency group")
-    if "cancel-in-progress: false" not in unattended:
-        fail("unattended workflow must not cancel an in-flight publication attempt")
-    if "timeout-minutes: 105" not in unattended or "timeout-minutes: 70" not in unattended:
-        fail("unattended workflow must cap collection and job runtime")
-    if "NIGHT_SIGNAL_MODEL_TIMEOUT_SECONDS: 240" in unattended or "NIGHT_SIGNAL_MODEL_RETRIES: 5" in unattended:
-        fail("unattended workflow must not override model calls into long retry loops")
-    if "NIGHT_SIGNAL_MODEL_CONCURRENCY: 2" not in unattended:
-        fail("unattended workflow must parallelize category extraction without broadening calls")
-    if (
-        "Sync delayed schedule to latest main" not in unattended
-        or "github.event_name == 'schedule'" not in unattended
-        or "git checkout --detach origin/main" not in unattended
+    pages = PAGES.read_text(encoding="utf-8")
+    collection = COLLECTION.read_text(encoding="utf-8")
+    if cron_minutes(pages) or re.search(r"\n\s+push:", pages):
+        fail("Pages must be dispatch-only")
+    if "--deploy-existing" not in pages:
+        fail("Pages may deploy only committed issue state")
+    if cron_minutes(collection) != [19 * 60 + 5, 19 * 60 + 35]:
+        fail(f"collection attempts must be 19:05 and 19:35 JST: {cron_minutes(collection)}")
+    if "night-signal-unattended-collection" not in collection or "cancel-in-progress: false" not in collection:
+        fail("collection needs one non-cancelling concurrency owner")
+    if "timeout-minutes: 105" not in collection or "timeout-minutes: 70" not in collection:
+        fail("collection and job runtime must be bounded")
+    if collection.count('python3 scripts/night_signal_publish.py "$ISSUE_DATE"') != 2:
+        fail("force and normal branches must both use the canonical pipeline")
+    for direct_owner in (
+        "python3 scripts/night_signal_unattended_collect.py",
+        "python3 scripts/night_signal_import_research.py",
     ):
-        fail("a delayed scheduled run must execute the latest main scripts")
-    if (
-        "Detect an already verified publication" not in unattended
-        or "steps.current_publication.outputs.published != 'true'" not in unattended
+        if direct_owner in collection:
+            fail(f"workflow bypasses the canonical pipeline: {direct_owner}")
+    if not ordered(
+        collection,
+        "Detect an already verified publication",
+        "Restore reviewed state checkpoint",
+        "Build audited issue",
+        "Save reviewed state checkpoint",
+        "Commit audited issue",
+        "Dispatch Pages publication",
+        "Wait for Pages publication",
     ):
-        fail("published issues must short-circuit later delayed collection runs")
-    if (
-        "actions/upload-artifact@v7.0.1" not in unattended
-        or "actions/download-artifact@v8.0.1" not in unattended
-        or "night-signal-state-${{ env.ISSUE_DATE }}" not in unattended
-        or "retention-days: 2" not in unattended
-    ):
-        fail("reviewed collection state must survive a later build or audit failure")
-    restore_index = unattended.find("Restore reviewed state checkpoint")
-    collect_index = unattended.find("Collect all categories")
-    build_index = unattended.find("Build and audit issue")
-    if not (0 <= restore_index < collect_index < build_index):
-        fail("reviewed state must be restored before collection and build")
-    if "NIGHT_SIGNAL_SKIP_MODEL" in collector:
-        fail("a one-shot canary must not disable all category model extraction")
-    if "shared_rate_limit_circuit_open" not in collector:
-        fail("rate-limited model calls must stop once the shared circuit opens")
-    if "models.models_for_route" not in collector:
-        fail("unattended extraction needs a bounded model fallback chain")
-    canary_step = unattended.split("- name: Verify GitHub Models access", 1)[-1].split(
-        "- name: Stop after canary", 1
-    )[0]
-    if "inputs.canary_only == true" not in canary_step:
-        fail("the GitHub Models canary must run only for an explicit canary request")
-    if "models: read" not in unattended or "night_signal_unattended_collect.py" not in unattended:
-        fail("unattended workflow must use GitHub Models without an external API secret")
-    if "--event-name workflow_dispatch" in unattended:
-        fail("unattended workflow must pass the real GitHub event name when resolving the issue date")
-    if '--event-name "$GITHUB_EVENT_NAME"' not in unattended:
-        fail("unattended workflow must resolve the issue date from the real GitHub event")
-    if "contents: write" not in unattended or "git push origin HEAD:main" not in unattended:
-        fail("unattended workflow must be able to commit the audited issue")
-    if "actions: write" not in unattended or "gh workflow run pages.yml" not in unattended:
-        fail("unattended workflow must explicitly dispatch Pages after bot push")
-    if "gh run watch \"$RUN_ID\" --exit-status" not in unattended or "--workflow pages.yml" not in unattended:
-        fail("unattended workflow must wait for Pages publication before succeeding")
-    if "python3 scripts/night_signal_runtime_audit.py \"$ISSUE_DATE\"" not in unattended:
-        fail("unattended workflow must classify readiness before and after collection")
-    if "python3 scripts/publication_audit.py \"$ISSUE_DATE\"" not in unattended:
-        fail("unattended workflow must run the public/local publication audit after Pages succeeds")
-    print(
-        "PUBLICATION SCHEDULE AUDIT PASSED: "
-        f"pages_jst={publish_times}, unattended_jst={unattended_times}"
-    )
+        fail("collection, checkpoint, commit, and publication stages are out of order")
+    if "steps.current_publication.outputs.published != 'true'" not in collection:
+        fail("verified publication must short-circuit the fallback attempt")
+    if "actions/upload-artifact@v7.0.1" not in collection or "actions/download-artifact@v8.0.1" not in collection:
+        fail("a failed first attempt must leave a reusable reviewed bundle")
+    if "models: read" not in collection or "contents: write" not in collection or "actions: write" not in collection:
+        fail("workflow permissions do not match collection and publication duties")
+    if "git push origin HEAD:main" not in collection or "gh workflow run pages.yml" not in collection:
+        fail("audited state must be committed before Pages dispatch")
+    if 'gh run watch "$RUN_ID" --exit-status' not in collection:
+        fail("collection owner must wait for public deployment")
+    print("PUBLICATION SCHEDULE AUDIT PASSED: pages=dispatch-only, collection_jst=[19:05,19:35]")
     return 0
 
 

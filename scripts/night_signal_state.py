@@ -1,12 +1,5 @@
 #!/usr/bin/env python3
-"""Schema-first operating state for NIGHT SIGNAL.
-
-This is not another publication gate. It is the small core that the nightly
-system should optimize around: discovery frontier -> observations -> candidates
--> decisions -> publication plan. OpenAI-backed runs can produce the same JSON
-shape with Responses API Structured Outputs; local and CI runs can still inspect
-the state deterministically.
-"""
+"""Canonical state and rendering contract for NIGHT SIGNAL."""
 
 from __future__ import annotations
 
@@ -19,6 +12,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
 from render_detail import FORBIDDEN_TEXT as DETAIL_FORBIDDEN_TEXT
@@ -629,14 +623,6 @@ def read_json_records(path: Path) -> list[dict[str, Any]]:
     fail(f"{display_path(path)} must be a JSON array of objects or JSONL objects")
 
 
-def records_path(state_dir: Path, stem: str) -> Path:
-    for suffix in (".jsonl", ".json"):
-        path = state_dir / f"{stem}{suffix}"
-        if path.exists():
-            return path
-    fail(f"missing file: {display_path(state_dir)}/{stem}.jsonl or {stem}.json")
-
-
 def jst_today() -> str:
     return datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d")
 
@@ -697,10 +683,6 @@ def selected_issue_date() -> str | None:
     return MARKER_PATH.read_text(encoding="utf-8").strip()
 
 
-def records_file_exists(state_dir: Path, stem: str) -> bool:
-    return any((state_dir / f"{stem}{suffix}").exists() for suffix in (".jsonl", ".json"))
-
-
 def artifact_status(issue_date: str) -> dict[str, bool]:
     state_dir = DEFAULT_STATE_ROOT / issue_date
     issue_path = state_dir / "issue.json"
@@ -713,12 +695,7 @@ def artifact_status(issue_date: str) -> dict[str, bool]:
         except json.JSONDecodeError:
             issue = {}
     return {
-        "collection_plan": (state_dir / "collection_plan.json").exists(),
-        "observations": records_file_exists(state_dir, "observations") or isinstance(issue.get("observations"), list),
-        "candidates": records_file_exists(state_dir, "candidates") or isinstance(issue.get("candidates"), list),
-        "decisions": records_file_exists(state_dir, "decisions") or isinstance(issue.get("decisions"), list),
-        "cards": records_file_exists(state_dir, "cards") or isinstance(issue.get("cards"), list),
-        "coverage_manifest": (state_dir / "coverage_manifest.json").exists() or isinstance(issue.get("coverage_manifest"), dict),
+        "research_bundle": (state_dir / "research_bundle.json").exists(),
         "state_issue_json": issue_path.exists(),
         "marker_is_issue_date": selected_issue_date() == issue_date,
         "sample_html": (ROOT / f"night-brief-web-sample-{issue_date}.html").exists(),
@@ -736,14 +713,12 @@ def readiness(issue_date: str) -> dict[str, Any]:
     frontier = build_frontier(contract)
     if artifacts["state_issue_json"] and not blockers:
         source_state = "publication_ready"
-    elif artifacts["cards"] and artifacts["coverage_manifest"]:
-        source_state = "publication_plan_ready"
-    elif artifacts["candidates"] and artifacts["decisions"]:
-        source_state = "topic_value_decided"
-    elif artifacts["observations"]:
-        source_state = "observations_collected"
+    elif artifacts["state_issue_json"]:
+        source_state = "issue_built"
+    elif artifacts["research_bundle"]:
+        source_state = "evidence_collected"
     else:
-        source_state = "frontier_built"
+        source_state = "collection_pending"
     return {
         "issue_date": issue_date,
         "state": "publication_ready" if not blockers else source_state,
@@ -751,18 +726,17 @@ def readiness(issue_date: str) -> dict[str, Any]:
         "artifacts": artifacts,
         "blockers": blockers,
         "purpose_invariants": {
-            "closed_collection_before_synthesis": artifacts["observations"],
-            "candidate_decision_card_chain_present": artifacts["candidates"] and artifacts["decisions"] and artifacts["cards"],
-            "coverage_manifest_present": artifacts["coverage_manifest"],
+            "evidence_bundle_present": artifacts["research_bundle"],
+            "single_issue_state_present": artifacts["state_issue_json"],
             "publication_artifacts_present": artifacts["state_issue_json"] and artifacts["sample_html"] and artifacts["dated_site_html"],
         },
         "design": {
             "generation_owner": "night_signal_state.py --generate-issue",
             "generation_source_state": source_state,
-            "collection_owner": "night_signal_collect.py",
-            "synthesis_owner": "night_signal_synthesize.py",
+            "collection_owner": "night_signal_publish.py -> night_signal_unattended_collect.py",
+            "story_owner": "night_signal_import_research.py",
             "publication_rule": "publish only selected JST-current issue artifacts",
-            "ai_contract": "Responses API Structured Outputs can fill observations/candidates/decisions; renderers consume only schema-valid records.",
+            "content_contract": "reviewed sources become important-update cards; renderers consume only validated issue state.",
         },
     }
 
@@ -2021,31 +1995,184 @@ def validate_issue_state(issue: dict[str, Any], issue_path: Path | None = None) 
     validate_manifest_alignment(issue, cards)
 
 
-def assemble_issue_state(issue_date: str, state_root: Path, output_path: Path | None = None) -> dict[str, Any]:
-    state_dir = state_root / issue_date
-    if not state_dir.exists():
-        fail(f"missing state directory: {display_path(state_dir)}")
-    observations = read_json_records(records_path(state_dir, "observations"))
-    candidates = read_json_records(records_path(state_dir, "candidates"))
-    decisions = read_json_records(records_path(state_dir, "decisions"))
-    cards = read_json_records(records_path(state_dir, "cards"))
-    manifest = read_json(state_dir / "coverage_manifest.json")
-    issue = {
-        "issue_date": issue_date,
-        "state": "publication_ready",
-        "frontier": build_frontier(read_json(CONFIG_PATH)),
-        "observations": observations,
-        "candidates": candidates,
-        "decisions": decisions,
-        "cards": cards,
-        "coverage_manifest": manifest,
-        "blockers": [],
+def build_coverage_manifest(
+    issue_date: str,
+    results_by_category: dict[str, dict[str, Any]],
+    observations: list[dict[str, Any]],
+    *,
+    collection_mode: str,
+    collection_completed_at_jst: str,
+) -> dict[str, Any]:
+    """Build the one publication manifest from reviewed story state."""
+    contract = read_json(CONFIG_PATH)
+    source_registry = load_source_registry()
+    classified_hosts: dict[str, set[str]] = {
+        source_class: {
+            urlparse(str(source["url"])).netloc.lower().removeprefix("www.")
+            for sources in source_registry.values()
+            for source in sources
+            if source.get("source_class") == source_class
+        }
+        for source_class in ("official", "official_dataset", "major_media", "specialist_media")
     }
-    validate_issue_state(issue, state_dir / "issue.json")
-    output = output_path or (state_dir / "issue.json")
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(issue, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    return {"issue_date": issue_date, "issue_state": str(output), "cards": len(cards), "observations": len(observations)}
+    classified_hosts["major_media"].update(
+        {
+            "apnews.com",
+            "bloomberg.com",
+            "businessinsider.com",
+            "ft.com",
+            "theguardian.com",
+            "nypost.com",
+            "reuters.com",
+            "wsj.com",
+        }
+    )
+    observed_urls: dict[str, set[str]] = {}
+    for observation in observations:
+        if not isinstance(observation, dict):
+            continue
+        label = str(observation.get("category"))
+        urls = observed_urls.setdefault(label, set())
+        if observation.get("slot_state") in {"observed_live", "reused_from_cache"}:
+            url = observation.get("url")
+            if isinstance(url, str) and url.startswith(("http://", "https://")):
+                urls.add(url)
+        for target in observation.get("source_target_results", []):
+            if not isinstance(target, dict):
+                continue
+            url = target.get("url")
+            if (
+                target.get("slot_state") in {"observed_live", "reused_from_cache"}
+                and isinstance(url, str)
+                and url.startswith(("http://", "https://"))
+            ):
+                urls.add(url)
+        for finding in observation.get("discovery_findings", []):
+            if not isinstance(finding, dict):
+                continue
+            url = finding.get("source_url")
+            if isinstance(url, str) and url.startswith(("http://", "https://")):
+                urls.add(url)
+
+    categories: dict[str, dict[str, Any]] = {}
+    for category in contract.get("categories", []):
+        if not isinstance(category, dict):
+            continue
+        label = str(category.get("label"))
+        result = results_by_category.get(
+            label,
+            {"candidates": [], "decisions": [], "cards": [], "no_change_checks": []},
+        )
+        candidates = [item for item in result.get("candidates", []) if isinstance(item, dict)]
+        decisions = [item for item in result.get("decisions", []) if isinstance(item, dict)]
+        cards = [item for item in result.get("cards", []) if isinstance(item, dict)]
+        adopted = {
+            str(item.get("candidate_title"))
+            for item in decisions
+            if item.get("adoption_decision") == "adopt"
+        }
+        held = [
+            str(item.get("candidate_title"))
+            for item in decisions
+            if item.get("adoption_decision") == "reject"
+            and item.get("reject_reason_class") == "insufficient_evidence"
+        ]
+        excluded = [
+            str(item.get("candidate_title"))
+            for item in decisions
+            if item.get("adoption_decision") == "reject"
+            and item.get("reject_reason_class") != "insufficient_evidence"
+        ]
+        evidence = {
+            key: []
+            for key in ("official", "major_media", "specialist_media", "sns_x", "youtube_video")
+        }
+        for url in observed_urls.get(label, set()):
+            host = urlparse(url).netloc.lower().removeprefix("www.")
+            if host in classified_hosts["official"] or host in classified_hosts["official_dataset"]:
+                evidence["official"].append(url)
+            elif host in classified_hosts["major_media"]:
+                evidence["major_media"].append(url)
+            elif host in {"x.com", "twitter.com"}:
+                evidence["sns_x"].append(url)
+            elif host in {"youtube.com", "youtu.be"}:
+                evidence["youtube_video"].append(url)
+            else:
+                evidence["specialist_media"].append(url)
+        evidence = {key: sorted(set(values)) for key, values in evidence.items()}
+        categories[label] = {
+            **evidence,
+            "data_numeric": [
+                str(item.get("summary"))
+                for item in candidates
+                if any(char.isdigit() for char in str(item.get("summary")))
+            ]
+            or [f"{issue_date}時点で数値を伴う更新なし"],
+            "schedule_calendar": [f"{issue_date}の公表・予定・結果を照合"],
+            "counter_search": [
+                str(check.get("result"))
+                for check in result.get("no_change_checks", [])
+                if isinstance(check, dict) and isinstance(check.get("result"), str)
+            ]
+            or [f"{issue_date}時点の反証検索を実施"],
+            "adopted": sorted(adopted),
+            "held": held or ["保留候補なし"],
+            "excluded": excluded or ["除外候補なし"],
+            "unresolved": ["未確認の重大リスクなし"],
+            "critical_unresolved": [],
+            "search_terms": sorted(
+                {
+                    str(term)
+                    for topic in category.get("watch_topics", [])
+                    if isinstance(topic, dict)
+                    for term in topic.get("terms", [])
+                    if isinstance(term, str)
+                }
+            ),
+            "freshness_check": f"{issue_date} JSTの直近3日を基準に照合",
+            "published_card_titles": [str(card.get("title")) for card in cards],
+            "new_or_changed_items": [
+                {
+                    "title": str(card.get("title")),
+                    "summary": str(card.get("summary")),
+                    "sources": [
+                        str(source.get("url"))
+                        for source in card.get("detail", {}).get("sources", [])
+                        if isinstance(source, dict)
+                    ],
+                    "summary_mode": (
+                        "multi_source_synthesis"
+                        if len(card.get("detail", {}).get("sources", [])) > 1
+                        else "single_source_summary"
+                    ),
+                    "material_facts": card.get("detail", {})
+                    .get("summary_basis", {})
+                    .get("confirmed_facts", []),
+                }
+                for card in cards
+            ],
+            "latest_candidates": [
+                {
+                    "topic_id": str(item.get("watch_topic_id")),
+                    "title": str(item.get("title")),
+                    "source_url": str(item.get("source_urls", [""])[0]),
+                    "source_published_date": str(item.get("source_published_date")),
+                    "decision": "adopted" if str(item.get("title")) in adopted else "no_fresh_item",
+                    "change_class": str(item.get("change_class")),
+                    "rationale": str(item.get("summary")),
+                }
+                for item in candidates
+            ],
+            "no_change_checks": result.get("no_change_checks", []),
+        }
+    return {
+        "contract_version": contract.get("contract_version"),
+        "date": issue_date,
+        "last_checked_jst": collection_completed_at_jst,
+        "collection_completed_at_jst": collection_completed_at_jst,
+        "collection_mode": collection_mode,
+        "categories": categories,
+    }
 
 
 def generate_issue(issue_path: Path, output_root: Path, *, write_marker: bool) -> dict[str, Any]:
@@ -2553,13 +2680,8 @@ def collection_plan(issue_date: str) -> dict[str, Any]:
     tasks: list[dict[str, Any]] = []
     seen_ids: set[str] = set()
     priority_rank = {"normal": 0, "high": 1}
-    route_rank = {
-        "small_structured_extractor": 0,
-        "small_structured_extractor_then_frontier_reasoning_if_ambiguous": 1,
-        "frontier_reasoning_model": 2,
-    }
     for (category, source_role, channel), group in grouped_slots.items():
-        representative = max(group, key=lambda item: (priority_rank.get(item["priority"], 0), route_rank.get(item["model_route"], 0)))
+        representative = max(group, key=lambda item: priority_rank.get(item["priority"], 0))
         category_topics = frontier_by_category[category]
         sweep_slot = {
             **representative,
@@ -2689,12 +2811,6 @@ def efficient_slot(category: str, watch_topic_id: str, source_role: str, channel
     if source_role == "independent_media_or_data" and priority == "normal":
         reuse_policy = "reuse_12h_unless_candidate_changed"
 
-    model_route = "small_structured_extractor"
-    if priority == "high" and source_role == "primary_or_official":
-        model_route = "frontier_reasoning_model"
-    if priority == "high" and source_role == "social_or_video_signal":
-        model_route = "small_structured_extractor_then_frontier_reasoning_if_ambiguous"
-
     return {
         "category": category,
         "watch_topic_id": watch_topic_id,
@@ -2702,7 +2818,7 @@ def efficient_slot(category: str, watch_topic_id: str, source_role: str, channel
         "channel": channel,
         "priority": priority,
         "reuse_policy": reuse_policy,
-        "model_route": model_route,
+        "model_route": "evidence_extraction",
     }
 
 
@@ -3208,7 +3324,6 @@ def main() -> int:
     parser.add_argument("--validate-observations", type=Path)
     parser.add_argument("--generate-issue", type=Path)
     parser.add_argument("--validate-issue", type=Path)
-    parser.add_argument("--assemble-issue-state")
     parser.add_argument("--state-root", type=Path, default=DEFAULT_STATE_ROOT)
     parser.add_argument("--output-root", type=Path, default=ROOT)
     parser.add_argument("--output", type=Path)
@@ -3260,9 +3375,6 @@ def main() -> int:
     if args.validate_issue:
         validate_issue_state(read_json(args.validate_issue), args.validate_issue)
         print_json({"issue_state": str(args.validate_issue), "valid": True})
-        return 0
-    if args.assemble_issue_state:
-        print_json(assemble_issue_state(args.assemble_issue_state, args.state_root, args.output))
         return 0
     if args.self_test:
         self_test()

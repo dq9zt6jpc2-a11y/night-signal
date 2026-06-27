@@ -16,7 +16,6 @@ from pathlib import Path
 from typing import Any
 
 import night_signal_state as state
-import night_signal_synthesize as synthesize
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -327,13 +326,6 @@ def read_bundle(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         fail("research bundle must be an object")
     return value
-
-
-def write_jsonl(path: Path, records: list[dict[str, Any]]) -> None:
-    path.write_text(
-        "".join(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n" for record in records),
-        encoding="utf-8",
-    )
 
 
 def category_config() -> dict[str, dict[str, Any]]:
@@ -811,89 +803,6 @@ def build_observations(
     return observations
 
 
-def build_findings(
-    bundle: dict[str, Any],
-    observations: list[dict[str, Any]],
-) -> list[dict[str, Any]]:
-    issue_date = str(bundle["issue_date"])
-    checked_at = str(bundle["checked_at_jst"])
-    reviewable: dict[tuple[str, str, str], dict[str, Any]] = {}
-    for category, entry in bundle["categories"].items():
-        for item in entry["items"]:
-            for source in item["sources"]:
-                key = (str(category), str(item["watch_topic_id"]), str(source["url"]))
-                reviewable[key] = {
-                    "title": str(item["title"]),
-                    "url": str(source["url"]),
-                    "published_date": str(item["source_published_date"]),
-                    "summary": str(item["summary"]),
-                    "watch_topic_ids": [str(item["watch_topic_id"])],
-                    "finding_state": "fresh_update",
-                }
-        for signal in entry["signals"]:
-            key = (
-                str(category),
-                str(signal["watch_topic_id"]),
-                str(signal["source_url"]),
-            )
-            reviewable[key] = {
-                "title": str(signal["title"]),
-                "url": str(signal["source_url"]),
-                "published_date": str(signal["source_published_date"]),
-                "summary": str(signal["summary"]),
-                "watch_topic_ids": [str(signal["watch_topic_id"])],
-                "finding_state": "near_miss",
-            }
-
-    findings: dict[tuple[str, str, str], dict[str, Any]] = {}
-    for observation in observations:
-        category = str(observation["category"])
-        topic_id = str(observation["watch_topic_id"])
-        source_role = str(observation["source_role"])
-        channel = str(observation["channel"])
-        for result in observation["source_target_results"]:
-            if result["slot_state"] not in {"observed_live", "reused_from_cache"}:
-                continue
-            url = str(result["url"])
-            key = (category, topic_id, url)
-            base = reviewable.get(key)
-            findings[key] = {
-                **(
-                    base
-                    or {
-                        "title": f"{result['label']}の公表内容",
-                        "url": url,
-                        "published_date": result.get("published_date"),
-                        "summary": str(result["evidence_summary"]),
-                        "watch_topic_ids": [topic_id],
-                        "finding_state": "background",
-                    }
-                ),
-                "issue_date": issue_date,
-                "slot_id": (
-                    f"reviewed-import-{category}-{source_role}-{channel}"
-                ),
-                "category": category,
-                "source_role": source_role,
-                "channel": channel,
-                "observed_at_jst": checked_at,
-            }
-    for key, base in reviewable.items():
-        if key in findings:
-            continue
-        category, topic_id, _ = key
-        findings[key] = {
-            **base,
-            "issue_date": issue_date,
-            "slot_id": f"reviewed-import-{category}-additional",
-            "category": category,
-            "source_role": "independent_media_or_data",
-            "channel": "web",
-            "observed_at_jst": checked_at,
-        }
-    return list(findings.values())
-
-
 def no_change_candidate(
     category: str,
     topic_id: str,
@@ -1093,11 +1002,8 @@ def import_bundle(issue_date: str, bundle_path: Path, state_root: Path) -> dict[
     items_by_category = validate_bundle(bundle, issue_date)
     base = state_root / issue_date
     base.mkdir(parents=True, exist_ok=True)
-    plan_path = base / "collection_plan.json"
-    state.write_collection_plan(issue_date, state_root)
-    plan = state.read_json(plan_path)
+    plan = state.collection_plan(issue_date)
     observations = build_observations(bundle, items_by_category, plan)
-    findings = build_findings(bundle, observations)
     frontier = state.build_frontier(state.read_json(state.CONFIG_PATH))
     state.validate_observation_records(observations, frontier)
 
@@ -1183,10 +1089,10 @@ def import_bundle(issue_date: str, bundle_path: Path, state_root: Path) -> dict[
         for result in results_by_category.values()
         for item in result["cards"]
     ]
-    manifest = synthesize.minimal_manifest(
+    manifest = state.build_coverage_manifest(
         issue_date,
         results_by_category,
-        observations=observations,
+        observations,
         collection_mode=str(
             bundle.get("collection_mode", "reviewed_live_web")
         ),
@@ -1195,16 +1101,28 @@ def import_bundle(issue_date: str, bundle_path: Path, state_root: Path) -> dict[
     manifest["last_checked_jst"] = str(bundle["checked_at_jst"])
     manifest["note"] = "Explicit reviewed live-Web checks imported through the canonical state contract."
 
-    write_jsonl(base / "observations.jsonl", observations)
-    write_jsonl(base / "findings.jsonl", findings)
-    write_jsonl(base / "candidates.jsonl", candidates)
-    write_jsonl(base / "decisions.jsonl", decisions)
-    write_jsonl(base / "cards.jsonl", cards)
-    (base / "coverage_manifest.json").write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    result = state.assemble_issue_state(issue_date, state_root)
+    issue = {
+        "issue_date": issue_date,
+        "state": "publication_ready",
+        "frontier": frontier,
+        "observations": observations,
+        "candidates": candidates,
+        "decisions": decisions,
+        "cards": cards,
+        "coverage_manifest": manifest,
+        "blockers": [],
+    }
+    issue_path = base / "issue.json"
+    state.validate_issue_state(issue, issue_path)
+    temp = issue_path.with_suffix(".json.tmp")
+    temp.write_text(json.dumps(issue, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    temp.replace(issue_path)
+    result = {
+        "issue_date": issue_date,
+        "issue_state": str(issue_path),
+        "cards": len(cards),
+        "observations": len(observations),
+    }
     return {
         **result,
         "research_bundle": str(bundle_path),

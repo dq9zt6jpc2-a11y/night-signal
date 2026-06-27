@@ -18,7 +18,6 @@ import night_signal_state as state
 ROOT = Path(__file__).resolve().parents[1]
 STATE_ROOT = ROOT / "state"
 MIN_CANDIDATE_TOPIC_RECALL = 0.30
-MIN_REVIEWABLE_FINDING_TOPIC_RECALL = 0.30
 
 CATEGORY_IDENTITY_TERMS = {
     "OpenAI": ["OpenAI", "ChatGPT", "Codex"],
@@ -54,22 +53,6 @@ def fail(message: str) -> None:
     raise SystemExit(1)
 
 
-def read_jsonl(path: Path) -> list[dict[str, Any]]:
-    if not path.exists():
-        return []
-    records: list[dict[str, Any]] = []
-    for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
-        if not line.strip():
-            continue
-        try:
-            value = json.loads(line)
-        except json.JSONDecodeError as exc:
-            fail(f"invalid JSONL at {path}:{line_number}: {exc}")
-        if isinstance(value, dict):
-            records.append(value)
-    return records
-
-
 def normalized_host(url: str) -> str:
     return urlparse(url).netloc.lower().removeprefix("www.")
 
@@ -90,14 +73,12 @@ def category_identity_failures(candidates: list[dict[str, Any]]) -> list[str]:
 
 def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
     base = state_root / issue_date
-    plan = state.read_json(base / "collection_plan.json")
+    plan = state.collection_plan(issue_date)
     issue = state.read_json(base / "issue.json")
     tasks = [task for task in plan.get("tasks", []) if isinstance(task, dict)]
     observations = [item for item in issue.get("observations", []) if isinstance(item, dict)]
     candidates = [item for item in issue.get("candidates", []) if isinstance(item, dict)]
     cards = [item for item in issue.get("cards", []) if isinstance(item, dict)]
-    traces = read_jsonl(base / "source_traces.jsonl")
-    findings = read_jsonl(base / "findings.jsonl")
 
     frontier = state.build_frontier(state.read_json(state.CONFIG_PATH))
     coverage = state.coverage_state(observations)
@@ -209,73 +190,15 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
             else:
                 uncited_facts.append(fact)
 
-    extended_traces = [
-        trace for trace in traces if trace.get("stage") == "extended_research"
-    ]
-    findings_by_topic = {
-        key: len(
-            {
-                str(finding.get("url"))
-                for finding in findings
-                if finding.get("category") == key[0]
-            and key[1] in finding.get("watch_topic_ids", [])
-            }
-        )
-        for key in expected_topics
-    }
-    finding_source_classes = {
-        key: {
-            (str(finding.get("source_role")), str(finding.get("channel")))
-            for finding in findings
-            if finding.get("category") == key[0]
-            and key[1] in finding.get("watch_topic_ids", [])
-        }
-        for key in expected_topics
-    }
-    candidate_urls = {
-        str(url)
-        for candidate in candidates
-        for url in candidate.get("source_urls", [])
-        if isinstance(url, str)
-    }
-    reviewable_finding_urls = {
-        str(finding.get("url"))
-        for finding in findings
-        if finding.get("finding_state") in {"fresh_update", "near_miss"}
-        and isinstance(finding.get("url"), str)
-    }
-    reviewable_finding_topics = {
-        (str(finding.get("category")), str(topic_id))
-        for finding in findings
-        if finding.get("finding_state") in {"fresh_update", "near_miss"}
-        for topic_id in finding.get("watch_topic_ids", [])
-    }
-    collection_mode = manifest.get(
-        "collection_mode",
-        "responses_web_search" if traces else "unknown",
-    )
-    findings_gate_applies = collection_mode != "github_models_unattended" or bool(traces)
+    collection_mode = manifest.get("collection_mode", "unknown")
     checks = {
         "all_observation_slots_closed": not coverage["missing_slots"],
         "topic_review_complete": reviewed_topics >= expected_topics,
         "fact_source_mapping_complete": confirmed_facts > 0 and mapped_facts == confirmed_facts,
         "collection_calls_reduced": len(tasks) < expected_slots,
-        "extended_research_bounded": len(extended_traces) <= 3,
         "direct_source_evidence_present": bool(evidence_urls),
         "source_verification_provenance_complete": bool(verified_results)
         and provenance_complete,
-        "raw_finding_depth_complete": (
-            not findings_gate_applies
-            or all(count >= 3 for count in findings_by_topic.values())
-        ),
-        "raw_finding_source_diversity_complete": (
-            not findings_gate_applies
-            or all(len(classes) >= 2 for classes in finding_source_classes.values())
-        ),
-        "finding_candidate_retention_complete": (
-            not findings_gate_applies
-            or reviewable_finding_urls <= candidate_urls
-        ),
     }
     metrics = {
         "collection_tasks": len(tasks),
@@ -305,28 +228,9 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
         "source_mapping_recall": round(mapped_facts / confirmed_facts, 4)
         if confirmed_facts
         else 0,
-        "response_traces": len(traces),
-        "extended_research_runs": len(extended_traces),
-        "raw_findings": len(findings),
-        "minimum_findings_per_topic": min(findings_by_topic.values())
-        if findings_by_topic
-        else 0,
-        "reviewable_finding_urls": len(reviewable_finding_urls),
-        "reviewable_finding_topics": len(
-            reviewable_finding_topics & expected_topics
-        ),
-        "reviewable_findings_retained": len(
-            reviewable_finding_urls & candidate_urls
-        ),
         "collection_mode": collection_mode,
-        "findings_gate_applies": findings_gate_applies,
     }
     topic_recall = metrics["candidate_topic_recall"]
-    reviewable_topic_recall = (
-        len(reviewable_finding_topics & expected_topics) / len(expected_topics)
-        if expected_topics
-        else 0
-    )
     reviewed_topic_complete = reviewed_topics >= expected_topics
     identity_failures = category_identity_failures(candidates)
     empty_categories = sorted(
@@ -345,16 +249,12 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
         {
             "candidate_topic_recall_complete": (
                 topic_recall >= MIN_CANDIDATE_TOPIC_RECALL
-                or (not findings_gate_applies and reviewed_topic_complete)
-            ),
-            "reviewable_finding_topic_recall_complete": (
-                reviewable_topic_recall >= MIN_REVIEWABLE_FINDING_TOPIC_RECALL
-                or (not findings_gate_applies and reviewed_topic_complete)
+                or reviewed_topic_complete
             ),
             "discovery_horizon_scan_present": (
                 len(discovery_findings) > 0
                 or topic_recall >= MIN_CANDIDATE_TOPIC_RECALL
-                or (not findings_gate_applies and reviewed_topic_complete)
+                or reviewed_topic_complete
             ),
             "category_identity_complete": not identity_failures,
             "no_empty_reader_categories": not empty_categories,
@@ -363,8 +263,6 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
     metrics.update(
         {
             "minimum_candidate_topic_recall": MIN_CANDIDATE_TOPIC_RECALL,
-            "reviewable_finding_topic_recall": round(reviewable_topic_recall, 4),
-            "minimum_reviewable_finding_topic_recall": MIN_REVIEWABLE_FINDING_TOPIC_RECALL,
             "minimum_discovery_findings": 1,
             "category_identity_failures": identity_failures,
             "empty_reader_categories": empty_categories,

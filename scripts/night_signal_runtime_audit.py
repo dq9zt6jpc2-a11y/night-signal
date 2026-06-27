@@ -16,7 +16,6 @@ from zoneinfo import ZoneInfo
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CONFIG_PATH = ROOT / "config" / "night_signal_resilience.json"
 STATE_ROOT = ROOT / "state"
 JST = ZoneInfo("Asia/Tokyo")
 STAGES = [
@@ -24,7 +23,7 @@ STAGES = [
     "runtime_checked",
     "plan_written",
     "collection_complete",
-    "synthesis_complete",
+    "story_build_complete",
     "render_complete",
     "local_gates_complete",
     "committed",
@@ -38,13 +37,6 @@ def fail(message: str) -> None:
     raise SystemExit(1)
 
 
-def load_config() -> dict[str, Any]:
-    value = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
-    if not isinstance(value, dict):
-        fail("resilience config must be an object")
-    return value
-
-
 def classify_failure(text: str) -> str:
     lower = text.lower()
     if (
@@ -52,15 +44,13 @@ def classify_failure(text: str) -> str:
         or "usage limit" in lower
     ):
         return "codex_credit_exhausted"
-    if any(term in lower for term in ("insufficient_quota", "billing_hard_limit_reached", "exceeded your current quota")):
-        return "openai_quota_exhausted"
     if any(term in lower for term in ("context_length_exceeded", "maximum context length", "max_output_tokens")):
         return "model_token_budget_exhausted"
     if "http 429" in lower or "rate_limit" in lower:
         return "rate_limited"
     if any(term in lower for term in ("background responses request timed out", "deadline exceeded", "command timed out")):
         return "execution_timeout"
-    if any(term in lower for term in ("openai_api_key is required", "http 401", "invalid_api_key")):
+    if any(term in lower for term in ("github_token is required", "http 401", "bad credentials")):
         return "authentication_unavailable"
     if any(
         term in lower
@@ -86,7 +76,7 @@ def classify_failure(text: str) -> str:
 
 
 def manifest_state(issue_date: str, state_root: Path, now: datetime) -> dict[str, Any]:
-    path = state_root / issue_date / "coverage_manifest.json"
+    path = state_root / issue_date / "issue.json"
     result: dict[str, Any] = {
         "path": str(path),
         "exists": path.exists(),
@@ -95,7 +85,10 @@ def manifest_state(issue_date: str, state_root: Path, now: datetime) -> dict[str
     if not path.exists():
         return result
     try:
-        manifest = json.loads(path.read_text(encoding="utf-8"))
+        issue = json.loads(path.read_text(encoding="utf-8"))
+        manifest = issue.get("coverage_manifest", {})
+        if not isinstance(manifest, dict):
+            return {**result, "error": "issue coverage_manifest is missing"}
         completed_value = manifest.get("collection_completed_at_jst")
         if not isinstance(completed_value, str) or not completed_value.strip():
             return {**result, "error": "collection_completed_at_jst is missing"}
@@ -110,7 +103,7 @@ def manifest_state(issue_date: str, state_root: Path, now: datetime) -> dict[str
                 "collection_completed_at_jst": completed.isoformat(),
                 "fresh_evening_issue": (
                     completed.date().isoformat() == issue_date
-                    and completed.hour >= 18
+                    and completed.hour >= 19
                     and current - completed <= timedelta(hours=4)
                     and completed <= current + timedelta(minutes=5)
                     and manifest.get("collection_mode")
@@ -189,15 +182,12 @@ def decide_recovery(
     *,
     fresh_evening_issue: bool,
     reviewed_bundle_usable: bool,
-    openai_api_key: bool,
     github_models_token: bool = False,
 ) -> str:
     if fresh_evening_issue:
         return "fresh_evening_issue"
     if reviewed_bundle_usable:
         return "reviewed_bundle"
-    if openai_api_key:
-        return "responses_api"
     if github_models_token:
         return "github_models_unattended"
     return "blocked_no_honest_collector"
@@ -305,14 +295,12 @@ def evaluate(
     current = now or datetime.now(JST)
     manifest = manifest_state(issue_date, state_root, current)
     bundle = reviewed_bundle_state(issue_date, state_root)
-    api_available = bool(os.getenv("OPENAI_API_KEY"))
     github_models_available = bool(
         os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")
     )
     recovery = decide_recovery(
         fresh_evening_issue=bool(manifest["fresh_evening_issue"]),
         reviewed_bundle_usable=bool(bundle["usable"]),
-        openai_api_key=api_available,
         github_models_token=github_models_available,
     )
     result = {
@@ -320,7 +308,6 @@ def evaluate(
         "checked_at_jst": current.astimezone(JST).isoformat(timespec="seconds"),
         "manifest": manifest,
         "reviewed_bundle": bundle,
-        "openai_api_key_available": api_available,
         "github_models_token_available": github_models_available,
         "git": git_state(),
         "recovery_path": recovery,
@@ -336,11 +323,10 @@ def self_test() -> None:
     cases = {
         '{"has_credits":false,"balance":"0"}': "codex_credit_exhausted",
         "HTTP 429 rate_limit": "rate_limited",
-        "insufficient_quota": "openai_quota_exhausted",
         "context_length_exceeded": "model_token_budget_exhausted",
-        "OPENAI_API_KEY is required": "authentication_unavailable",
-        "background Responses request timed out": "execution_timeout",
-        "Could not resolve host: api.openai.com": "network_unavailable",
+        "GITHUB_TOKEN is required": "authentication_unavailable",
+        "command timed out": "execution_timeout",
+        "Could not resolve host: example.com": "network_unavailable",
         "Could not resolve host: github.com": "github_unavailable",
         "working tree has uncommitted changes": "dirty_worktree",
         '{"last_agent_message":null}': "partial_execution",
@@ -352,25 +338,16 @@ def self_test() -> None:
     if decide_recovery(
         fresh_evening_issue=False,
         reviewed_bundle_usable=False,
-        openai_api_key=False,
     ) != "blocked_no_honest_collector":
         fail("no-collector state must block publication")
     if decide_recovery(
-        fresh_evening_issue=False,
-        reviewed_bundle_usable=False,
-        openai_api_key=True,
-    ) != "responses_api":
-        fail("API key must select Responses fallback")
-    if decide_recovery(
         fresh_evening_issue=True,
         reviewed_bundle_usable=False,
-        openai_api_key=False,
     ) != "fresh_evening_issue":
         fail("fresh issue must select deploy-existing recovery")
     if decide_recovery(
         fresh_evening_issue=False,
         reviewed_bundle_usable=False,
-        openai_api_key=False,
         github_models_token=True,
     ) != "github_models_unattended":
         fail("GitHub token must select unattended collection fallback")

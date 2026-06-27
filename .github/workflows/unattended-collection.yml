@@ -7,11 +7,6 @@ on:
         description: "JST issue date. Empty uses today's JST date."
         required: false
         type: string
-      canary_only:
-        description: "Verify GitHub Models access without collecting."
-        required: false
-        default: false
-        type: boolean
       force:
         description: "Recollect even when an evening-fresh issue exists."
         required: false
@@ -23,11 +18,8 @@ on:
         default: false
         type: boolean
   schedule:
-    - cron: "05 09 * * *"
-    - cron: "35 09 * * *"
     - cron: "05 10 * * *"
     - cron: "35 10 * * *"
-    - cron: "50 10 * * *"
 
 permissions:
   contents: write
@@ -67,7 +59,6 @@ jobs:
 
       - name: Detect an already verified publication
         id: current_publication
-        if: ${{ inputs.canary_only != true }}
         run: |
           if python3 scripts/publication_audit.py "$ISSUE_DATE"; then
             echo "published=true" >> "$GITHUB_OUTPUT"
@@ -77,7 +68,7 @@ jobs:
 
       - name: Locate latest reviewed state checkpoint
         id: checkpoint
-        if: ${{ inputs.canary_only != true && steps.current_publication.outputs.published != 'true' }}
+        if: ${{ steps.current_publication.outputs.published != 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
           ARTIFACT_NAME: night-signal-state-${{ env.ISSUE_DATE }}
@@ -101,52 +92,32 @@ jobs:
           repository: ${{ github.repository }}
           run-id: ${{ steps.checkpoint.outputs.run_id }}
 
-      - name: Classify startup readiness
+      - name: Build audited issue
         if: ${{ steps.current_publication.outputs.published != 'true' }}
-        run: python3 scripts/night_signal_runtime_audit.py "$ISSUE_DATE"
-
-      - name: Verify GitHub Models access
-        if: ${{ inputs.canary_only == true }}
-        run: python3 scripts/night_signal_unattended_collect.py --canary
-
-      - name: Stop after canary
-        if: ${{ inputs.canary_only == true }}
-        run: echo "GitHub Models canary completed."
-
-      - name: Collect all categories
-        if: ${{ inputs.canary_only != true && steps.current_publication.outputs.published != 'true' }}
         timeout-minutes: 70
         env:
           FORCE_COLLECTION: ${{ inputs.force || false }}
         run: |
           if [[ "$FORCE_COLLECTION" == "true" ]]; then
-            python3 scripts/night_signal_unattended_collect.py "$ISSUE_DATE"
+            python3 scripts/night_signal_publish.py "$ISSUE_DATE" --verification-profile deploy
           else
-            python3 scripts/night_signal_unattended_collect.py "$ISSUE_DATE" --skip-if-fresh
+            python3 scripts/night_signal_publish.py "$ISSUE_DATE" --reuse-reviewed-bundle --verification-profile deploy
           fi
+          PYTHONPYCACHEPREFIX=tmp/pycache python3 -m py_compile scripts/*.py
+          git diff --check
 
       - name: Save reviewed state checkpoint
-        if: ${{ inputs.canary_only != true && steps.current_publication.outputs.published != 'true' && (steps.checkpoint.outputs.run_id == '' || inputs.force == true) }}
+        if: ${{ always() && steps.current_publication.outputs.published != 'true' }}
         uses: actions/upload-artifact@v7.0.1
         with:
           name: night-signal-state-${{ env.ISSUE_DATE }}
           path: state/${{ env.ISSUE_DATE }}/
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 2
           compression-level: 6
 
-      - name: Build and audit issue
-        if: ${{ inputs.canary_only != true && steps.current_publication.outputs.published != 'true' }}
-        timeout-minutes: 20
-        run: |
-          python3 scripts/night_signal_import_research.py "$ISSUE_DATE"
-          python3 scripts/night_signal_runtime_audit.py "$ISSUE_DATE"
-          python3 scripts/night_signal_publish.py "$ISSUE_DATE" --deploy-existing --verification-profile deploy
-          PYTHONPYCACHEPREFIX=tmp/pycache python3 -m py_compile scripts/*.py
-          git diff --check
-
       - name: Commit audited issue
-        if: ${{ inputs.canary_only != true && inputs.dry_run != true && steps.current_publication.outputs.published != 'true' }}
+        if: ${{ inputs.dry_run != true && steps.current_publication.outputs.published != 'true' }}
         run: |
           git config user.name "night-signal-bot"
           git config user.email "night-signal-bot@users.noreply.github.com"
@@ -162,7 +133,7 @@ jobs:
           git push origin HEAD:main
 
       - name: Dispatch Pages publication
-        if: ${{ inputs.canary_only != true && inputs.dry_run != true && steps.current_publication.outputs.published != 'true' }}
+        if: ${{ inputs.dry_run != true && steps.current_publication.outputs.published != 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -172,7 +143,7 @@ jobs:
             -f issue_date="$ISSUE_DATE"
 
       - name: Wait for Pages publication
-        if: ${{ inputs.canary_only != true && inputs.dry_run != true && steps.current_publication.outputs.published != 'true' }}
+        if: ${{ inputs.dry_run != true && steps.current_publication.outputs.published != 'true' }}
         timeout-minutes: 20
         env:
           GH_TOKEN: ${{ github.token }}
@@ -199,7 +170,7 @@ jobs:
           python3 scripts/publication_audit.py "$ISSUE_DATE"
 
       - name: Report dry run
-        if: ${{ inputs.canary_only != true && inputs.dry_run == true && steps.current_publication.outputs.published != 'true' }}
+        if: ${{ inputs.dry_run == true && steps.current_publication.outputs.published != 'true' }}
         run: |
           echo "Full unattended collection and all audits passed."
           git status --short
