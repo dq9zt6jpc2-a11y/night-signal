@@ -1336,21 +1336,6 @@ def render_priority_card(index: int, card: dict[str, Any]) -> str:
     return f"""        <article class="priority-card {priority_class}"><span class="rank">{index}</span><h3>{title}</h3><p>{summary}</p><a class="tag" href="#{section_id}">詳細へ</a></article>"""
 
 
-def current_display_cards(issue_date: str, cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    return [
-        {
-            **card,
-            "issue_date": issue_date,
-            "detail_issue_date": issue_date,
-            "freshness_label": relative_day_label(
-                issue_date,
-                str(card.get("source_published_date", "")),
-            ),
-        }
-        for card in cards
-    ]
-
-
 def latest_three_dates(issue_date: str) -> set[str]:
     issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
     return {
@@ -3194,15 +3179,10 @@ def self_test() -> None:
         fail("issue renderer must keep the traditional important-updates section format")
     if "repeat(auto-fit,minmax(300px,1fr))" not in render_html or "-webkit-line-clamp:5" not in render_html:
         fail("issue renderer must keep responsive card layout guards")
-    display_cards = current_display_cards("2099-01-02", render_cards)
-    if len(display_cards) != len(render_cards):
-        fail("issue renderer must not add cards outside canonical issue state")
-    if any(card.get("retained_from_issue_date") for card in display_cards):
-        fail("issue renderer must not rehydrate cards from an older issue")
     long_title = "OpenAIが長い製品名を含む重要更新を発表し、提供範囲と利用条件を詳しく公表した" * 3
     long_card_html = render_card(
         {
-            **display_cards[0],
+            **render_cards[0],
             "title": long_title,
         },
         root=False,
