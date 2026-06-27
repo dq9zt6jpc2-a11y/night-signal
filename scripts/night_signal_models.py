@@ -48,6 +48,18 @@ def model_for_route(route: str) -> str:
     return model
 
 
+def models_for_route(route: str) -> list[str]:
+    primary = model_for_route(route)
+    route_value = route_config(route)
+    configured = route_value.get("fallback_models", [])
+    fallbacks = (
+        [str(value) for value in configured if isinstance(value, str) and value]
+        if isinstance(configured, list)
+        else []
+    )
+    return list(dict.fromkeys([primary, *fallbacks]))
+
+
 def reasoning_for_route(route: str) -> dict[str, str]:
     effort = os.getenv("NIGHT_SIGNAL_REASONING_EFFORT")
     if not effort:
@@ -62,6 +74,8 @@ def self_test() -> None:
         raise SystemExit("small route model missing")
     if not model_for_route("frontier_reasoning_model"):
         raise SystemExit("frontier route model missing")
+    if not models_for_route("github_unattended"):
+        raise SystemExit("GitHub unattended model chain missing")
     if reasoning_for_route("frontier_reasoning_model").get("effort") not in {"low", "medium", "high"}:
         raise SystemExit("frontier reasoning effort invalid")
     print("NIGHT SIGNAL MODELS PASSED")

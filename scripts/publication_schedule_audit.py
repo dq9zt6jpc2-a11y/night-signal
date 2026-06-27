@@ -74,6 +74,8 @@ def main() -> int:
         fail("a one-shot canary must not disable all category model extraction")
     if "shared_rate_limit_circuit_open" not in collector:
         fail("rate-limited model calls must stop once the shared circuit opens")
+    if "models.models_for_route" not in collector:
+        fail("unattended extraction needs a bounded model fallback chain")
     canary_step = unattended.split("- name: Verify GitHub Models access", 1)[-1].split(
         "- name: Stop after canary", 1
     )[0]

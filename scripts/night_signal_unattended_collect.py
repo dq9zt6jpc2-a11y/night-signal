@@ -952,6 +952,7 @@ def model_request(
     token: str,
     messages: list[dict[str, str]],
     *,
+    model_name: str | None = None,
     retries_override: Optional[int] = None,
     retry_wait_cap: int = 120,
 ) -> dict[str, Any]:
@@ -967,7 +968,7 @@ def model_request(
     max_tokens = int(os.getenv("NIGHT_SIGNAL_MODEL_MAX_TOKENS", DEFAULT_MODEL_MAX_TOKENS))
     for attempt in range(retries):
         payload = {
-            "model": models.model_for_route("github_unattended"),
+            "model": model_name or models.model_for_route("github_unattended"),
             "messages": attempt_messages,
             "temperature": 0.1,
             "max_tokens": max_tokens,
@@ -2045,6 +2046,7 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
             if record.get("observed")
         ]
     model_rate_limited = threading.Event()
+    model_chain = models.models_for_route("github_unattended")
 
     def review_category(category: dict[str, Any]) -> tuple[str, dict[str, Any], dict[str, Any]]:
         label = str(category["label"])
@@ -2060,31 +2062,55 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
             flush=True,
         )
         model_error = ""
+        raw: dict[str, Any] | None = None
         if model_rate_limited.is_set():
             model_error = "shared_rate_limit_circuit_open"
         else:
-            try:
-                raw = model_request(
-                    token,
-                    [
-                        {"role": "system", "content": SYSTEM_PROMPT},
-                        {
-                            "role": "user",
-                            "content": json.dumps(
-                                category_prompt(
-                                    category,
-                                    issue_date,
-                                    records_by_category[label],
-                                ),
+            messages = [
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {
+                    "role": "user",
+                    "content": json.dumps(
+                        category_prompt(
+                            category,
+                            issue_date,
+                            records_by_category[label],
+                        ),
+                        ensure_ascii=False,
+                    ),
+                },
+            ]
+            model_errors: list[str] = []
+            rate_limited_models = 0
+            for model_name in model_chain:
+                try:
+                    raw = model_request(
+                        token,
+                        messages,
+                        model_name=model_name,
+                        retry_wait_cap=90,
+                    )
+                    if model_name != model_chain[0]:
+                        print(
+                            json.dumps(
+                                {
+                                    "phase": "category_model_route_fallback",
+                                    "category": label,
+                                    "model": model_name,
+                                },
                                 ensure_ascii=False,
                             ),
-                        },
-                    ],
-                    retry_wait_cap=90,
-                )
-            except ModelRequestError as exc:
-                model_error = str(exc)
-                if exc.rate_limited:
+                            flush=True,
+                        )
+                    break
+                except ModelRequestError as exc:
+                    model_errors.append(f"{model_name}: {exc}")
+                    if not exc.rate_limited:
+                        break
+                    rate_limited_models += 1
+            if raw is None:
+                model_error = " | ".join(model_errors)
+                if rate_limited_models == len(model_chain):
                     model_rate_limited.set()
         if model_error:
             print(
@@ -2107,6 +2133,7 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
                 ),
                 "model_error": model_error,
             }
+        assert raw is not None
         normalized = normalize_result(
             raw,
             category,

@@ -27,6 +27,9 @@
     },
     "github_unattended": {
       "default_model": "openai/gpt-4.1-mini",
+      "fallback_models": [
+        "openai/gpt-4o-mini"
+      ],
       "env": "NIGHT_SIGNAL_GITHUB_MODEL"
     }
   },
