@@ -13,6 +13,7 @@ from datetime import datetime
 from pathlib import Path
 
 from coverage_audit import effective_on_or_after, load_contract, max_adopted_source_age_days, validate_coverage_contract
+import night_signal_state as state_contract
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -87,10 +88,8 @@ TITLE_POLICY_LEAK_TERMS = [
     "品質ゲート",
     "最新採用",
 ]
-PUBLISHER_SUFFIX_RE = re.compile(
-    r"\s[-–—]\s*(?:[A-Za-z0-9][A-Za-z0-9 .&|｜・]*|[Ａ-Ｚａ-ｚ０-９][^。、]{1,}|[ぁ-んァ-ヶ一-龯]+(?:新聞|ニュース|Digital|デジタル|通信|テレビ|メニュー)[^。、]*)$"
-)
-DOMAIN_RE = re.compile(r"\b[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+(?:/[^\s。、]*)?\b")
+PUBLISHER_SUFFIX_RE = state_contract.PUBLISHER_SUFFIX_RE
+DOMAIN_RE = state_contract.DOMAIN_RE
 
 DETAIL_POLICY_LEAK_TERMS = TITLE_POLICY_LEAK_TERMS + [
     "今夜やること",
