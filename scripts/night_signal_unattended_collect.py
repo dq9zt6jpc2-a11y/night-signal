@@ -75,7 +75,11 @@ MATERIAL_SIGNAL_RE = re.compile(
     r"IPO|上場|Nasdaq|時価総額|valuation|"
     r"merger|合併|統合|tie-up|acquisition|買収|M&A|"
     r"hire|hiring|joins|leaves|departing|移籍|獲得|退社|人材|"
-    r"契約|受注|提携|partnership|contract|"
+    r"契約|受注|提携|合意|協議|共同開発|標準化|partnership|contract|"
+    r"発売|リリース|提供開始|開始|公開|開催|参入|撤退|建設|計画|plans?|"
+    r"生産|量産|出資|損失|再任|loss|reappoint|"
+    r"視察団|訪中|訪米|経済界|"
+    r"アップグレード|資金流入|景気|物価|賃金|雇用|輸出|輸入|GDP|金利|"
     r"launch result|打ち上げ結果|docking|ドッキング|"
     r"policy|regulation|規制|安全|recall|リコール"
     r")",
@@ -83,7 +87,8 @@ MATERIAL_SIGNAL_RE = re.compile(
 )
 LOW_SIGNAL_VALUE_RE = re.compile(
     r"噂|予想|予測|レンダリング|架空|ダイキャスト|ミニカー|プラモデル|"
-    r"完成品|1/24|おもちゃ|グッズ|セール|値引き|クーポン",
+    r"完成品|1/24|おもちゃ|グッズ|セール|値引き|クーポン|"
+    r"Derivatives|価格・チャート・時価総額",
     re.I,
 )
 HIGH_THROUGHPUT_CATEGORIES = {"OpenAI", "SpaceX", "SoftBank", "宇都宮ブレックス"}
@@ -193,6 +198,50 @@ def cluster_seen(seen: set[str], key: str) -> bool:
     )
 
 
+EVENT_ENTITY_PATTERNS = {
+    "openai": r"openai|オープンai",
+    "softbank": r"softbank|ソフトバンク|sbg",
+    "honda": r"honda|ホンダ",
+    "f1": r"\bf1\b|fia|formula\s*1",
+    "spacex": r"spacex|starship|starlink",
+    "yoasobi": r"yoasobi|幾田りら",
+    "brex": r"宇都宮ブレックス|\bbrex\b",
+}
+EVENT_ACTION_PATTERNS = {
+    "ipo": r"\bipo\b|上場",
+    "delay": r"延期|先送り|delay|postpone",
+    "price_drop": r"急落|反落|下落|大幅安|falls?",
+    "security": r"security|セキュリティ|サイバー|脆弱性",
+    "term_limit": r"任期|term limit",
+    "abolish": r"撤廃|abolish|remove",
+    "release": r"発売|リリース|公開|release",
+    "partnership": r"提携|契約|協業|partnership|contract",
+    "construction": r"建設|パイプライン|construction|pipeline",
+    "mobile": r"携帯|モバイル|mobile|carrier",
+}
+
+
+def event_markers(value: Any) -> tuple[set[str], set[str]]:
+    text = str(value or "").lower()
+    entities = {
+        marker
+        for marker, pattern in EVENT_ENTITY_PATTERNS.items()
+        if re.search(pattern, text, flags=re.I)
+    }
+    actions = {
+        marker
+        for marker, pattern in EVENT_ACTION_PATTERNS.items()
+        if re.search(pattern, text, flags=re.I)
+    }
+    return entities, actions
+
+
+def same_material_event(left: Any, right: Any) -> bool:
+    left_entities, left_actions = event_markers(left)
+    right_entities, right_actions = event_markers(right)
+    return bool(left_entities & right_entities) and len(left_actions & right_actions) >= 2
+
+
 def cluster_priority(record: dict[str, Any], category: dict[str, Any]) -> tuple[int, str]:
     title = str(record.get("title", ""))
     excerpt = str(record.get("excerpt", ""))
@@ -288,12 +337,39 @@ PUBLIC_TERM_REPLACEMENTS = {
 def reader_facing_text(value: Any, limit: int = 1600) -> str:
     text = compact_text(str(value), limit)
     text = re.sub(r"<[^>]+>", " ", text)
+    text = state_contract.PUBLISHER_SUFFIX_RE.sub("", text)
+    text = state_contract.DOMAIN_RE.sub("", text)
+    text = re.sub(r"[「『]\s*[」』]", "", text)
+    text = text.strip(" -–—|｜")
     for pattern, replacement in PUBLIC_COPY_REPLACEMENTS:
         text = re.sub(pattern, replacement, text)
     for term in state_contract.PUBLIC_COPY_FORBIDDEN_TERMS:
         if term in text:
             text = text.replace(term, PUBLIC_TERM_REPLACEMENTS.get(term, ""))
     return compact_text(text, limit)
+
+
+TRAILING_MEDIA_CREDIT_RE = re.compile(
+    r"\s*[（(](?:フィスコ|音楽ナタリー|BASKET COUNT|共同通信|時事通信|Reuters|ロイター)[）)]$",
+    re.I,
+)
+
+
+def record_public_title(record: dict[str, Any]) -> str:
+    raw = compact_text(str(record.get("title", "")), 500)
+    label = compact_text(str(record.get("label", "")), 120)
+    if label:
+        raw = re.sub(
+            rf"\s[-–—]\s*{re.escape(label)}(?:\s[-–—].*)?$",
+            "",
+            raw,
+            flags=re.I,
+        )
+    raw = re.sub(r"\s+執筆$", "", raw)
+    raw = re.sub(r"\s[-–—]\s*エキスパート$", "", raw)
+    raw = re.sub(r"(?:\s*[|｜]\s*)?ニュースリリース$", "", raw)
+    raw = TRAILING_MEDIA_CREDIT_RE.sub("", raw)
+    return reader_facing_text(raw, 180)
 
 
 def useful_fact(fact: str, category_label: str) -> bool:
@@ -313,7 +389,7 @@ def useful_importance(value: str) -> bool:
 
 
 def reader_public_copy_ok(text: str, *, kind: str) -> bool:
-    return not state_contract.public_copy_violations(text, kind=kind)
+    return not state_contract.public_render_copy_violations(text, kind=kind)
 
 
 def category_identity_ok(category_label: str, title: str, summary: str) -> bool:
@@ -905,7 +981,7 @@ def clean_sources(
 
 
 def sentence_key(value: str) -> str:
-    return re.sub(r"[、。．.!！?？\s「」『』（）()]", "", value).lower()
+    return state_contract.copy_signature(reader_facing_text(value, 1200))
 
 
 def sentence_parts(value: str) -> list[str]:
@@ -1028,14 +1104,66 @@ def category_hint_from_title(title: str) -> str:
     return "当該テーマ"
 
 
-TOPIC_CONTEXT_SENTENCES = {
-    "technical_or_product_shift": "性能、提供範囲、既存製品との関係は、{category}の技術選択と競争力を判断する材料になる。",
-    "market_or_financial_impact": "規模、条件、資金使途と市場反応は、{category}の投資余力と評価を判断する材料になる。",
-    "risk_or_safety_signal": "対象範囲、対策の実効性と残る制約は、{category}の安全性と運用継続性を判断する材料になる。",
-    "decision_or_policy": "対象範囲、実施時期と関係者の役割は、{category}の事業計画への影響を判断する材料になる。",
-    "event_result_or_outcome": "今回の結果と次工程への影響は、{category}の計画進捗と今後の見通しを判断する材料になる。",
-    "operational_status_change": "対象範囲、実施時期と継続性は、{category}の運営状況への影響を判断する材料になる。",
-}
+def event_context_sentence(
+    category_label: str,
+    title: str,
+    excerpt: str,
+    topic_value: str,
+) -> str:
+    text = f"{title} {excerpt}".lower()
+    if ("ipo" in text or "上場" in text) and any(
+        term in text for term in ("延期", "先送り", "delay", "postpone")
+    ):
+        return (
+            f"上場時期の後ずれは、{category_label}の資金調達計画、保有価値と"
+            "投資家の評価が変わる時期を見極める材料になる。"
+        )
+    if any(term in text for term in ("急落", "反落", "下落", "大幅安")):
+        return (
+            f"株価反応の大きさは、{category_label}への成長期待とリスク評価が"
+            "市場でどの程度変化したかを判断する材料になる。"
+        )
+    if any(term in text for term in ("security", "セキュリティ", "サイバー", "脆弱性")):
+        return (
+            f"診断対象、修復支援の範囲と導入条件は、{category_label}の技術が"
+            "実運用の安全対策まで担えるかを判断する材料になる。"
+        )
+    if any(term in text for term in ("ecu", "標準化", "共同開発")):
+        return (
+            "ECU仕様の共通化範囲と参加企業の役割は、開発費、調達網と"
+            f"次世代車の投入速度に対する{category_label}の影響を判断する材料になる。"
+        )
+    if "pu" in text and any(term in text for term in ("アップグレード", "upgrade", "aduo")):
+        return (
+            "投入時期と残りの更新権は、マシンの性能向上、信頼性と"
+            f"シーズン後半の{category_label}の競争力を判断する材料になる。"
+        )
+    if "starlink" in text and any(term in text for term in ("モバイル", "携帯", "mobile")):
+        return (
+            "提供地域、料金と既存通信会社との接続条件は、Starlinkが"
+            "地上の携帯市場へ与える競争圧力を判断する材料になる。"
+        )
+    if any(term in text for term in ("パイプライン", "pipeline", "天然ガス")):
+        return (
+            "建設時期、供給能力と許認可は、Starshipの燃料確保と"
+            "打ち上げ頻度を支える地上設備の実現性を判断する材料になる。"
+        )
+    if any(term in text for term in ("発売", "ep", "アルバム", "展覧会", "トレーラー")):
+        return (
+            f"収録内容、発売後の反応と関連企画の展開は、{category_label}の"
+            "作品到達度と次の活動への広がりを判断する材料になる。"
+        )
+    if any(term in text for term in ("資金流入", "債券", "金利", "物価", "gdp")):
+        return (
+            f"資金の流入先、規模と継続性は、{category_label}の市場選好と"
+            "金融環境の変化を判断する材料になる。"
+        )
+    if any(term in text for term in ("獲得", "移籍", "退団", "新規契約")):
+        return (
+            f"選手の役割、契約条件と編成上の位置づけは、{category_label}の"
+            "戦力構成と次シーズンの起用方針を判断する材料になる。"
+        )
+    return state_contract.topic_context_sentence(topic_value, category_label)
 
 
 def evidence_narrative(
@@ -1058,11 +1186,12 @@ def evidence_narrative(
         supporting.append(sentence)
         if len(supporting) == 2:
             break
-    template = TOPIC_CONTEXT_SENTENCES.get(
+    importance = event_context_sentence(
+        category_label,
+        title,
+        excerpt,
         topic_value,
-        TOPIC_CONTEXT_SENTENCES["operational_status_change"],
     )
-    importance = template.format(category=category_label or "対象分野")
     summary = unique_sentences(" ".join([event, *supporting, importance]), 1000)
     if state_contract.reader_summary_violations(title, summary):
         summary = unique_sentences(
@@ -1106,11 +1235,13 @@ def topic_value_from_record(record: dict[str, Any]) -> str:
     text = f"{record.get('title', '')} {record.get('excerpt', '')}".lower()
     if re.search(r"security|cyber|サイバー|安全|脆弱性|regulation|規制", text):
         return "risk_or_safety_signal"
-    if re.search(r"社債|debt|rating|格付|market share|シェア|株価|price target|funding|資金調達", text):
+    if re.search(r"社債|債券|debt|rating|格付|market share|シェア|株価|price target|funding|資金調達|ipo|上場|資金流入|金利|物価|gdp", text):
         return "market_or_financial_impact"
-    if re.search(r"model|モデル|api|release|launch|製品|技術|benchmark|ベンチマーク", text):
+    if re.search(r"yoasobi|幾田りら|発売|ep|アルバム|展覧会|トレーラー|楽曲|ツアー", text):
+        return "cultural_or_audience_signal"
+    if re.search(r"model|モデル|api|release|launch|製品|技術|benchmark|ベンチマーク|ecu|標準化|アップグレード|pipeline|パイプライン", text):
         return "technical_or_product_shift"
-    if re.search(r"契約|提携|partnership|contract|採用|移籍|退団|hiring|joins|leaves", text):
+    if re.search(r"契約|提携|合意|協議|partnership|contract|採用|移籍|退団|獲得|hiring|joins|leaves", text):
         return "decision_or_policy"
     if re.search(r"result|結果|score|勝|敗|打ち上げ|docking|ドッキング", text):
         return "event_result_or_outcome"
@@ -1123,7 +1254,7 @@ def fallback_item_from_record(
     record: dict[str, Any],
 ) -> dict[str, Any] | None:
     source_date = str(record.get("published_date") or "")
-    title = reader_facing_text(record.get("title", ""), 180)
+    title = record_public_title(record)
     excerpt = reader_facing_text(record.get("excerpt") or record.get("evidence") or "", 1200)
     category_label = str(category.get("label", ""))
     topic = best_topic_for_record(category, record)
@@ -1232,7 +1363,7 @@ def fallback_signal_from_record(
     record: dict[str, Any],
 ) -> dict[str, Any] | None:
     source_date = str(record.get("published_date") or "")
-    title = reader_facing_text(record.get("title", ""), 180)
+    title = record_public_title(record)
     excerpt = reader_facing_text(record.get("excerpt") or record.get("evidence") or "", 1200)
     category_label = str(category.get("label", ""))
     topic = best_topic_for_record(category, record)
@@ -1300,6 +1431,29 @@ def backfill_signals_from_evidence(
         if cluster_seen(seen, key):
             continue
         seen.add(key)
+        if (
+            signal["change_class"] == "material_update"
+            and len(normalized["items"]) < MAX_CATEGORY_ITEMS
+        ):
+            if any(
+                same_material_event(signal["title"], item.get("title", ""))
+                for item in normalized["items"]
+                if isinstance(item, dict)
+            ):
+                normalized["signals"].append(signal)
+                continue
+            normalized["items"].append(
+                promoted_signal_item(
+                    topic=str(signal["watch_topic_id"]),
+                    title=str(signal["title"]),
+                    signal=signal,
+                    signal_summary=str(signal["summary"]),
+                    topic_value=str(signal["topic_value_class"]),
+                    issue_date=issue_date,
+                    record=record,
+                )
+            )
+            continue
         normalized["signals"].append(signal)
 
 
@@ -1898,23 +2052,35 @@ def self_test() -> None:
         "items": [
             {
                 "watch_topic_id": "topic",
-                "title": "Concrete update",
-                "summary": "A short model summary.",
+                "title": "OpenAIが開発者向け機能を更新",
+                "summary": (
+                    "OpenAIが開発者向け機能を更新し、対象となる機能と提供条件を公表した。"
+                    "既存サービスとの関係や利用企業への影響を判断する具体的な材料になる。"
+                ),
                 "source_published_date": "2099-01-02",
                 "topic_value_class": "decision_or_policy",
                 "priority_class": "priority",
-                "detail_summary": "A short model detail.",
-                "what_changed": "The confirmed operating condition changed.",
+                "detail_summary": (
+                    "OpenAIが開発者向け機能を更新し、対象機能と提供条件を公表した。"
+                    "公式資料では利用開始日、利用できる開発者、既存サービスとの関係が説明されている。"
+                    "今回の変更により、導入企業は開発工程と運用手順の見直しを検討できる。"
+                    "対象機能の性能、提供地域、料金への影響はサービス選択を判断する材料になる。"
+                    "一方、長期的な運用実績、追加地域への展開時期、契約条件の細部はまだ確定していない。"
+                    "今後の公式発表では、導入事例と利用条件の更新内容が焦点になる。"
+                    "利用企業は、既存システムとの互換性、移行に必要な工数、運用担当者への影響も比較する必要がある。"
+                    "正式な仕様と料金が示されれば、導入時期と対象業務をより具体的に判断できる。"
+                ),
+                "what_changed": "OpenAIが開発者向け機能を更新し、対象機能と提供条件を公表した。",
                 "why_it_matters": (
-                    "The change affects a monitored decision and its timing."
+                    "既存サービスとの関係や利用企業への影響を判断する具体的な材料になる。"
                 ),
                 "confirmed_facts": [
-                    "The official source published the update.",
-                    "The update falls inside the issue window.",
-                    "The named subject and result are explicit.",
+                    "公式資料で開発者向け機能の更新が公表された。",
+                    "対象となる機能と提供条件が明示された。",
+                    "更新日は当日の発行対象期間に含まれている。",
                 ],
                 "limits_or_unknowns": (
-                    "Later effects remain unconfirmed and are stated separately."
+                    "利用企業への長期的な影響と追加条件は今後の確認対象となる。"
                 ),
                 "sources": [{"url": "https://example.com/item"}],
             }
@@ -2073,6 +2239,63 @@ def self_test() -> None:
         fail("evidence fallback card and detail lost their shared factual core")
     if "確認できた点は" in fallback_item["detail_summary"]:
         fail("evidence fallback created label-heavy detail copy")
+    if "実運用の安全対策" not in fallback_item["summary"]:
+        fail("evidence fallback used a generic importance sentence")
+    cleaned_model_title = reader_facing_text(
+        "OpenAIがGPT-5.5-Cyberを更新 - MSN"
+    )
+    if "GPT-5.5-Cyber" not in cleaned_model_title or "MSN" in cleaned_model_title:
+        fail("public cleanup confused a model version with a publisher domain")
+    cleaned_yahoo_title = record_public_title(
+        {
+            "title": (
+                "YOASOBIが『THE BOOK for,』を発売（音楽ナタリー）"
+                " - Yahoo!ニュース"
+            ),
+            "label": "Yahoo!ニュース",
+        }
+    )
+    if "Yahoo" in cleaned_yahoo_title or "音楽ナタリー" in cleaned_yahoo_title:
+        fail("record title cleanup kept publisher credits")
+    if not same_material_event(
+        "ソフトバンクG株がOpenAIのIPO延期報道で急落",
+        "OpenAIがIPOを延期、ソフトバンク株は反落",
+    ):
+        fail("semantic clustering missed a duplicate material event")
+    if same_material_event(
+        "ソフトバンクG株がOpenAIのIPO延期報道で急落",
+        "ソフトバンクがフィジカルAIロボットの量産を開始",
+    ):
+        fail("semantic clustering merged distinct material events")
+    promoted_fallback: dict[str, Any] = {"items": [], "signals": []}
+    duplicate_record = {
+        "label": "Technology News",
+        "url": "https://example.com/openai-codex",
+        "source_role": "independent_media_or_data",
+        "channel": "web",
+        "source_class": "discovered_media",
+        "observed": True,
+        "published_date": "2099-01-02",
+        "title": "OpenAIがCodex Securityのアップグレードを公開",
+        "excerpt": "OpenAIがCodex Securityのアップグレードを公開。",
+    }
+    backfill_signals_from_evidence(
+        promoted_fallback,
+        {
+            "label": "OpenAI",
+            "watch_topics": [
+                {
+                    "id": "openai_security",
+                    "terms": ["OpenAI", "Codex", "security"],
+                    "event_classes": ["technical_or_product_shift"],
+                }
+            ],
+        },
+        "2099-01-03",
+        [duplicate_record],
+    )
+    if len(promoted_fallback["items"]) != 1 or promoted_fallback["signals"]:
+        fail("material fallback signals must become public items")
     print("NIGHT SIGNAL UNATTENDED COLLECT SELF-TEST PASSED")
 
 

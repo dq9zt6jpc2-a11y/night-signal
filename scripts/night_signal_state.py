@@ -129,9 +129,34 @@ CANDIDATE_PLACEHOLDER_PATTERNS = [
     r"公式・媒体・SNS系の証跡で確認した",
 ]
 PUBLISHER_SUFFIX_RE = re.compile(
-    r"\s[-–—]\s*(?:[A-Za-z0-9][A-Za-z0-9 .&|｜・]*|[Ａ-Ｚａ-ｚ０-９][^。、]{1,}|[ぁ-んァ-ヶ一-龯]+(?:新聞|ニュース|Digital|デジタル|通信|テレビ|メニュー)[^。、]*)$"
+    r"\s[-–—]\s*(?:"
+    r"[A-Za-z0-9][A-Za-z0-9 .&!|｜・-]*|"
+    r"(?:Yahoo!|MSN|Google|LINE)[^。、]{0,40}|"
+    r"[Ａ-Ｚａ-ｚ０-９][^。、]{1,}|"
+    r"[ぁ-んァ-ヶ一-龯]+(?:新聞|ニュース|ファイナンス|Digital|デジタル|通信|テレビ|メニュー)[^。、]*"
+    r")$"
 )
-DOMAIN_RE = re.compile(r"\b[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+(?:/[^\s。、]*)?\b")
+DOMAIN_RE = re.compile(
+    r"\b(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}(?:/[^\s。、]*)?"
+)
+TOPIC_CONTEXT_SENTENCES = {
+    "technical_or_product_shift": "性能、提供範囲、既存製品との関係は、{category}の技術選択と競争力を判断する材料になる。",
+    "market_or_financial_impact": "規模、条件、資金使途と市場反応は、{category}の投資余力と評価を判断する材料になる。",
+    "risk_or_safety_signal": "対象範囲、対策の実効性と残る制約は、{category}の安全性と運用継続性を判断する材料になる。",
+    "decision_or_policy": "対象範囲、実施時期と関係者の役割は、{category}の事業計画への影響を判断する材料になる。",
+    "event_result_or_outcome": "今回の結果と次工程への影響は、{category}の計画進捗と今後の見通しを判断する材料になる。",
+    "material_schedule_change": "変更された時期と前後工程への影響は、{category}の計画実現性を判断する材料になる。",
+    "cultural_or_audience_signal": "作品内容、展開時期と反応は、{category}の次の活動と支持の広がりを判断する材料になる。",
+    "operational_status_change": "対象範囲、実施時期と継続性は、{category}の運営状況への影響を判断する材料になる。",
+}
+
+
+def topic_context_sentence(value_class: str, category: str) -> str:
+    template = TOPIC_CONTEXT_SENTENCES.get(
+        value_class,
+        TOPIC_CONTEXT_SENTENCES["operational_status_change"],
+    )
+    return template.format(category=category or "対象分野")
 
 SOURCE_OBSERVATION_SCHEMA: dict[str, Any] = {
     "type": "object",

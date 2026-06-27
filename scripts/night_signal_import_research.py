@@ -33,15 +33,18 @@ GENERIC_IMPORTANCE_RE = re.compile(
 )
 TRAILING_DOMAIN_RE = re.compile(r"\s*[-–—|｜]\s*[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+(?:/[^\s。、]*)?\s*$")
 EMPTY_JA_QUOTE_RE = re.compile(r"[「『]\s*[」』]")
+INLINE_PUBLISHER_RE = re.compile(
+    r"\s[-–—]\s*(?:"
+    r"Yahoo![^。！？]{0,40}|MSN|"
+    r"[A-Za-z0-9][A-Za-z0-9 .&!|｜・-]*(?:\.[A-Za-z]{2,})?|"
+    r"[ぁ-んァ-ヶ一-龯]+(?:新聞|ニュース|ファイナンス|通信|テレビ)[^。！？]{0,30}"
+    r")(?=[。！？]|$)"
+)
+TRAILING_MEDIA_CREDIT_RE = re.compile(
+    r"\s*[（(](?:フィスコ|音楽ナタリー|BASKET COUNT|共同通信|時事通信|Reuters|ロイター)[）)]$",
+    re.I,
+)
 DEFAULT_LIMITS_SENTENCE = "影響範囲、対象範囲、追加条件、続報の有無は引き続き確認が必要。"
-TOPIC_CONTEXT_SENTENCES = {
-    "technical_or_product_shift": "性能、提供範囲、既存製品との関係は、{category}の技術選択と競争力を判断する材料になる。",
-    "market_or_financial_impact": "規模、条件、資金使途と市場反応は、{category}の投資余力と評価を判断する材料になる。",
-    "risk_or_safety_signal": "対象範囲、対策の実効性と残る制約は、{category}の安全性と運用継続性を判断する材料になる。",
-    "decision_or_policy": "対象範囲、実施時期と関係者の役割は、{category}の事業計画への影響を判断する材料になる。",
-    "event_result_or_outcome": "今回の結果と次工程への影響は、{category}の計画進捗と今後の見通しを判断する材料になる。",
-    "operational_status_change": "対象範囲、実施時期と継続性は、{category}の運営状況への影響を判断する材料になる。",
-}
 
 
 def fail(message: str) -> None:
@@ -93,14 +96,33 @@ def scrub_public_title(value: Any) -> str:
 def scrub_public_summary(value: Any) -> str:
     text = compact_text(value, 2600)
     text = re.sub(r"https?://\S+", "", text)
-    text = state.DOMAIN_RE.sub("", text)
+    text = INLINE_PUBLISHER_RE.sub("", text)
     sentences = []
     for sentence in re.split(r"(?<=[。！？!?])", text):
         cleaned = state.PUBLISHER_SUFFIX_RE.sub("", sentence)
+        cleaned = state.DOMAIN_RE.sub("", cleaned)
+        cleaned = EMPTY_JA_QUOTE_RE.sub("", cleaned)
         cleaned = TRAILING_DOMAIN_RE.sub("", cleaned).strip(" -–—|｜")
         if cleaned:
             sentences.append(cleaned)
     return compact_text(" ".join(sentences), 2600)
+
+
+def scrub_item_source_labels(item: dict[str, Any], value: Any) -> str:
+    text = scrub_public_summary(value)
+    for source in item.get("sources", []):
+        if not isinstance(source, dict):
+            continue
+        label = compact_text(source.get("label", ""), 120)
+        if len(label) < 3:
+            continue
+        text = re.sub(
+            rf"\s*(?:[-–—]\s*)?{re.escape(label)}(?=[。！？!?]|$)",
+            "",
+            text,
+            flags=re.I,
+        )
+    return compact_text(text, 2600)
 
 
 def public_card_title(item: dict[str, Any]) -> str:
@@ -108,7 +130,6 @@ def public_card_title(item: dict[str, Any]) -> str:
         item.get("title", ""),
         re.split(r"(?<=[。！？!?])", compact_text(item.get("summary", ""), 180))[0],
         item.get("what_changed", ""),
-        item.get("why_it_matters", ""),
         *[
             fact
             for fact in item.get("confirmed_facts", [])
@@ -117,7 +138,8 @@ def public_card_title(item: dict[str, Any]) -> str:
     ]
     first_cleaned = ""
     for candidate in candidates:
-        cleaned = scrub_public_title(candidate)
+        cleaned = scrub_public_title(scrub_item_source_labels(item, candidate))
+        cleaned = TRAILING_MEDIA_CREDIT_RE.sub("", cleaned).strip()
         if cleaned and not first_cleaned:
             first_cleaned = cleaned
         if cleaned and not state.public_render_copy_violations(cleaned, kind="title"):
@@ -166,34 +188,35 @@ def reader_summary_from_parts(title: str, parts: list[Any], *, limit: int = 900)
     return ""
 
 
-def item_importance(item: dict[str, Any], category: str) -> str:
+def item_importance(
+    item: dict[str, Any],
+    category: str,
+    title: str = "",
+) -> str:
     importance = scrub_public_summary(item.get("why_it_matters", ""))
     if (
         useful_importance(importance)
         and not state.public_render_copy_violations(importance, kind="summary")
+        and (not title or state.title_repetition_score(title, importance) < 0.82)
     ):
         return importance
     value_class = topic_value_class(item.get("topic_value_class", "operational_status_change"))
-    template = TOPIC_CONTEXT_SENTENCES.get(
-        value_class,
-        TOPIC_CONTEXT_SENTENCES["operational_status_change"],
-    )
-    return template.format(category=category or "対象分野")
+    return state.topic_context_sentence(value_class, category)
 
 
 def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
-    original = compact_text(scrub_public_summary(item.get("summary", "")), 900)
+    original = compact_text(scrub_item_source_labels(item, item.get("summary", "")), 900)
     if original and summary_is_reader_facing(title, original):
         return original
 
     facts = [
-        compact_text(scrub_public_summary(fact), 320)
+        compact_text(scrub_item_source_labels(item, fact), 320)
         for fact in item.get("confirmed_facts", [])
         if useful_fact(fact, category)
     ][:3]
-    what_changed = compact_text(scrub_public_summary(item.get("what_changed", "")), 500)
-    limits = compact_text(scrub_public_summary(item.get("limits_or_unknowns", "")), 500)
-    importance = item_importance(item, category)
+    what_changed = compact_text(scrub_item_source_labels(item, item.get("what_changed", "")), 500)
+    limits = compact_text(scrub_item_source_labels(item, item.get("limits_or_unknowns", "")), 500)
+    importance = item_importance(item, category, title)
     event_parts = [part for part in (what_changed, *facts, original) if part]
     lead = event_parts[0] if event_parts else public_focus_phrase(title, category)
     summary = reader_summary_from_parts(
@@ -220,7 +243,7 @@ def canonical_detail_summary(
     title: str,
     card_summary: str,
 ) -> str:
-    existing = scrub_public_summary(item.get("detail_summary", ""))
+    existing = scrub_item_source_labels(item, item.get("detail_summary", ""))
     if (
         len(existing) >= 280
         and not SUMMARY_LABEL_RE.search(existing)
@@ -236,14 +259,14 @@ def canonical_detail_summary(
         if useful_fact(fact, category)
         and state.title_repetition_score(title, scrub_public_summary(fact)) < 0.82
     ]
-    optional_parts.append(item_importance(item, category))
+    optional_parts.append(item_importance(item, category, title))
     optional_parts.append(scrub_public_summary(item.get("limits_or_unknowns", "")))
     optional_parts.append(DEFAULT_LIMITS_SENTENCE)
 
     seen: set[str] = set()
     sentences: list[str] = []
     for part in re.split(r"(?<=[。！？!?])", card_summary):
-        sentence = sentence_from(part, 700)
+        sentence = sentence_from(scrub_item_source_labels(item, part), 700)
         key = state.copy_signature(sentence)
         if not sentence or not key or key in seen:
             continue
@@ -251,7 +274,7 @@ def canonical_detail_summary(
         sentences.append(sentence)
 
     for part in optional_parts:
-        sentence = sentence_from(part, 700)
+        sentence = sentence_from(scrub_item_source_labels(item, part), 700)
         key = state.copy_signature(sentence)
         if not sentence or not key or key in seen:
             continue
@@ -978,7 +1001,7 @@ def item_card(
         str(item.get("what_changed", "")),
         str(item.get("why_it_matters", "")),
     ]:
-        text = compact_text(scrub_public_summary(fact), 500)
+        text = compact_text(scrub_item_source_labels(item, fact), 500)
         if (
             not text
             or text in seen_facts
@@ -1253,14 +1276,14 @@ def self_test() -> None:
     if item_card("OpenAI", "openai", aligned_item, "2099-01-01")["candidate_title"] != item_decision("OpenAI", aligned_item)["candidate_title"]:
         fail("reviewed import card candidate titles must match adopted decisions")
     malformed_item = {
-        "title": "OpenAIがClaude Mythos 5超えのセキュリティー特化AI「」のアップデートを発表＆セキュリティー特化Codexプラグイン「Codex Security」もアップデート",
+        "title": "OpenAIがClaude Mythos 5超えのセキュリティー特化AI「GPT-5.5-Cyber」「」のアップデートを発表＆セキュリティー特化Codexプラグイン「Codex Security」もアップデート",
         "watch_topic_id": "openai_security",
         "source_published_date": "2099-01-01",
         "sources": [
             {"label": "OpenAI", "url": "https://openai.com/example"}
         ],
         "change_class": "material_update",
-        "summary": "OpenAIがClaude Mythos 5超えのセキュリティー特化AI「」のアップデートを発表＆セキュリティー特化Codexプラグイン「Codex Security」もアップデート",
+        "summary": "OpenAIがClaude Mythos 5超えのセキュリティー特化AI「GPT-5.5-Cyber」「」のアップデートを発表＆セキュリティー特化Codexプラグイン「Codex Security」もアップデート",
         "confirmed_facts": [
             "Codex Securityの更新が確認された。",
             "セキュリティー特化AIの更新が確認対象になった。",
@@ -1276,6 +1299,8 @@ def self_test() -> None:
     malformed_card = item_card("OpenAI", "openai", malformed_item, "2099-01-01")
     if "「」" in malformed_card["title"]:
         fail("reviewed import must remove empty Japanese quotes from public titles")
+    if "GPT-5.5-Cyber" not in malformed_card["title"]:
+        fail("reviewed import must preserve dotted model version names")
     if not summary_is_reader_facing(malformed_card["title"], malformed_card["summary"]):
         fail("reviewed import must not emit title-only card summaries")
     state.validate_decisions_and_cards(
