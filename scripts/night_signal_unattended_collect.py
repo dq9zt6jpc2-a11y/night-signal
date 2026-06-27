@@ -18,6 +18,7 @@ import json
 import os
 import re
 import sys
+import threading
 import time
 import urllib.error
 import urllib.parse
@@ -126,7 +127,16 @@ def fail(message: str) -> None:
 
 
 class ModelRequestError(RuntimeError):
-    pass
+    def __init__(
+        self,
+        message: str,
+        *,
+        rate_limited: bool = False,
+        retry_after: int | None = None,
+    ) -> None:
+        super().__init__(message)
+        self.rate_limited = rate_limited
+        self.retry_after = retry_after
 
 
 def load_object(path: Path) -> dict[str, Any]:
@@ -716,6 +726,115 @@ def news_query(category: dict[str, Any], issue_date: str) -> str:
     return news_queries(category, issue_date)[0]
 
 
+def article_result_matches(original_title: str, candidate_title: str) -> bool:
+    return (
+        state_contract.title_repetition_score(original_title, candidate_title) >= 0.45
+        or state_contract.text_overlap(original_title, candidate_title) >= 2
+    )
+
+
+def enrich_discovered_record(
+    category: dict[str, Any],
+    record: dict[str, Any],
+) -> dict[str, Any]:
+    original_title = record_public_title(record)
+    if not original_title:
+        return record
+    search_url = "https://www.bing.com/search?" + urllib.parse.urlencode(
+        {"format": "rss", "q": f'"{original_title}"'}
+    )
+    try:
+        raw, _, _ = request_bytes(search_url, timeout=12)
+        root = ET.fromstring(raw)
+    except (OSError, TimeoutError, urllib.error.URLError, ET.ParseError):
+        return record
+    category_label = str(category.get("label", ""))
+    for item in root.findall(".//item")[:5]:
+        candidate_title = compact_text(item.findtext("title") or "", 220)
+        candidate_url = compact_text(item.findtext("link") or "", 1000)
+        description = html_fragment_text(item.findtext("description") or "", 1000)
+        if (
+            not candidate_url.startswith(("http://", "https://"))
+            or "news.google.com" in candidate_url
+            or not article_result_matches(original_title, candidate_title)
+            or not category_identity_ok(
+                category_label,
+                candidate_title,
+                description,
+            )
+        ):
+            continue
+        for attempt in (candidate_url, jina_url(candidate_url)):
+            try:
+                page_raw, content_type, _ = request_bytes(attempt, timeout=12)
+                page_title, body = page_text(page_raw, content_type)
+            except (OSError, TimeoutError, urllib.error.URLError, ValueError):
+                continue
+            combined = compact_text(f"{description} {body}", 2400)
+            if (
+                len(combined) < 180
+                or not category_identity_ok(category_label, original_title, combined)
+                or not article_result_matches(
+                    original_title,
+                    page_title or candidate_title,
+                )
+            ):
+                continue
+            parsed = urllib.parse.urlparse(candidate_url)
+            publisher_url = (
+                f"{parsed.scheme}://{parsed.netloc}"
+                if parsed.scheme in {"http", "https"} and parsed.netloc
+                else str(record.get("publisher_url", ""))
+            )
+            return {
+                **record,
+                "url": candidate_url,
+                "publisher_url": publisher_url,
+                "original_discovery_url": str(record.get("url", "")),
+                "title": original_title,
+                "excerpt": combined,
+                "evidence": (
+                    f"Google News RSSで「{original_title}」を確認し、"
+                    f"完全一致検索から配信元ページ{candidate_url}を特定した。"
+                    f"本文抽出: {combined[:700]}"
+                ),
+            }
+    return record
+
+
+def enrich_discovered_records(
+    category: dict[str, Any],
+    records: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    limit = 4 if category.get("label") in HIGH_THROUGHPUT_CATEGORIES else 3
+    ranked = sorted(
+        records,
+        key=lambda record: cluster_priority(record, category),
+        reverse=True,
+    )
+    target_urls: list[str] = []
+    for record in ranked:
+        url = str(record.get("url", ""))
+        if (
+            url
+            and url not in target_urls
+            and contains_material_signal(
+                str(record.get("title", "")),
+                str(record.get("excerpt", "")),
+            )
+        ):
+            target_urls.append(url)
+        if len(target_urls) >= limit:
+            break
+    targets = set(target_urls)
+    return [
+        enrich_discovered_record(category, record)
+        if str(record.get("url", "")) in targets
+        else record
+        for record in records
+    ]
+
+
 def fetch_news(category: dict[str, Any], issue_date: str) -> list[dict[str, Any]]:
     records: list[dict[str, Any]] = []
     failures: list[dict[str, Any]] = []
@@ -784,7 +903,7 @@ def fetch_news(category: dict[str, Any], issue_date: str) -> list[dict[str, Any]
                     ),
                 }
             )
-    return records or failures
+    return enrich_discovered_records(category, records) if records else failures
 
 
 def category_contracts() -> list[dict[str, Any]]:
@@ -837,6 +956,7 @@ def model_request(
     retry_wait_cap: int = 120,
 ) -> dict[str, Any]:
     errors: list[str] = []
+    rate_limit_waits: list[int] = []
     attempt_messages = list(messages)
     timeout = int(os.getenv("NIGHT_SIGNAL_MODEL_TIMEOUT_SECONDS", DEFAULT_MODEL_TIMEOUT_SECONDS))
     retries = (
@@ -908,13 +1028,22 @@ def model_request(
                 ) from exc
             retry_after = exc.headers.get("Retry-After")
             try:
-                wait_seconds = max(1, min(retry_wait_cap, int(retry_after or "65")))
+                requested_wait = max(1, int(retry_after or "65"))
             except ValueError:
-                wait_seconds = 65
+                requested_wait = 65
+            wait_seconds = min(retry_wait_cap, requested_wait)
+            rate_limit_waits.append(requested_wait)
             errors.append(
                 f"attempt {attempt + 1}: HTTP {exc.code}; "
-                f"retry_after={wait_seconds}"
+                f"retry_after={requested_wait}"
             )
+            if requested_wait > retry_wait_cap:
+                raise ModelRequestError(
+                    "GitHub Models rate limit exceeds the bounded retry window: "
+                    + " / ".join(errors),
+                    rate_limited=True,
+                    retry_after=requested_wait,
+                ) from exc
             if attempt < retries - 1:
                 time.sleep(wait_seconds)
         except (
@@ -927,7 +1056,11 @@ def model_request(
             errors.append(f"attempt {attempt + 1}: {type(exc).__name__}: {exc}")
             if attempt < retries - 1:
                 time.sleep(5 * (attempt + 1))
-    raise ModelRequestError("GitHub Models request failed: " + " / ".join(errors))
+    raise ModelRequestError(
+        "GitHub Models request failed: " + " / ".join(errors),
+        rate_limited=bool(rate_limit_waits),
+        retry_after=max(rate_limit_waits, default=None),
+    )
 
 
 SYSTEM_PROMPT = """You are the unattended NIGHT SIGNAL evidence extractor.
@@ -1911,6 +2044,8 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
             for record in news_records
             if record.get("observed")
         ]
+    model_rate_limited = threading.Event()
+
     def review_category(category: dict[str, Any]) -> tuple[str, dict[str, Any], dict[str, Any]]:
         label = str(category["label"])
         print(
@@ -1924,32 +2059,40 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
             ),
             flush=True,
         )
-        try:
-            raw = model_request(
-                token,
-                [
-                    {"role": "system", "content": SYSTEM_PROMPT},
-                    {
-                        "role": "user",
-                        "content": json.dumps(
-                            category_prompt(
-                                category,
-                                issue_date,
-                                records_by_category[label],
+        model_error = ""
+        if model_rate_limited.is_set():
+            model_error = "shared_rate_limit_circuit_open"
+        else:
+            try:
+                raw = model_request(
+                    token,
+                    [
+                        {"role": "system", "content": SYSTEM_PROMPT},
+                        {
+                            "role": "user",
+                            "content": json.dumps(
+                                category_prompt(
+                                    category,
+                                    issue_date,
+                                    records_by_category[label],
+                                ),
+                                ensure_ascii=False,
                             ),
-                            ensure_ascii=False,
-                        ),
-                    },
-                ],
-                retry_wait_cap=90,
-            )
-        except ModelRequestError as exc:
+                        },
+                    ],
+                    retry_wait_cap=90,
+                )
+            except ModelRequestError as exc:
+                model_error = str(exc)
+                if exc.rate_limited:
+                    model_rate_limited.set()
+        if model_error:
             print(
                 json.dumps(
                     {
                         "phase": "category_model_fallback",
                         "category": label,
-                        "error": str(exc),
+                        "error": model_error,
                     },
                     ensure_ascii=False,
                 ),
@@ -1962,7 +2105,7 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
                     f"{label}はモデル抽出が一時失敗したため、"
                     "取得済み証拠から重要クラスタを補完した。"
                 ),
-                "model_error": str(exc),
+                "model_error": model_error,
             }
         normalized = normalize_result(
             raw,
@@ -2144,6 +2287,16 @@ def canary(token: str) -> bool:
 
 
 def self_test() -> None:
+    if not article_result_matches(
+        "OpenAI GPT-5.6シリーズを発表",
+        "OpenAIのGPT-5.6シリーズを解説",
+    ):
+        fail("matching publisher article was not recognized")
+    if article_result_matches(
+        "OpenAI GPT-5.6シリーズを発表",
+        "宇都宮ブレックスが新アリーナ計画を発表",
+    ):
+        fail("unrelated publisher article passed title matching")
     category = {
         "label": "Test",
         "watch_topics": [

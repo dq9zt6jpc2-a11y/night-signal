@@ -72,6 +72,8 @@ def main() -> int:
         fail("unattended workflow must parallelize category extraction without broadening calls")
     if "NIGHT_SIGNAL_SKIP_MODEL" in collector:
         fail("a one-shot canary must not disable all category model extraction")
+    if "shared_rate_limit_circuit_open" not in collector:
+        fail("rate-limited model calls must stop once the shared circuit opens")
     canary_step = unattended.split("- name: Verify GitHub Models access", 1)[-1].split(
         "- name: Stop after canary", 1
     )[0]
