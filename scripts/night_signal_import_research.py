@@ -168,7 +168,10 @@ def reader_summary_from_parts(title: str, parts: list[Any], *, limit: int = 900)
 
 def item_importance(item: dict[str, Any], category: str) -> str:
     importance = scrub_public_summary(item.get("why_it_matters", ""))
-    if useful_importance(importance):
+    if (
+        useful_importance(importance)
+        and not state.public_render_copy_violations(importance, kind="summary")
+    ):
         return importance
     value_class = topic_value_class(item.get("topic_value_class", "operational_status_change"))
     template = TOPIC_CONTEXT_SENTENCES.get(
@@ -227,28 +230,37 @@ def canonical_detail_summary(
     ):
         return existing
 
-    parts: list[Any] = [card_summary]
-    parts.extend(
+    optional_parts: list[Any] = [
         fact
         for fact in item.get("confirmed_facts", [])
         if useful_fact(fact, category)
         and state.title_repetition_score(title, scrub_public_summary(fact)) < 0.82
-    )
-    parts.extend(
-        [
-            item_importance(item, category),
-            scrub_public_summary(item.get("limits_or_unknowns", "")) or DEFAULT_LIMITS_SENTENCE,
-        ]
-    )
+    ]
+    optional_parts.append(item_importance(item, category))
+    optional_parts.append(scrub_public_summary(item.get("limits_or_unknowns", "")))
+    optional_parts.append(DEFAULT_LIMITS_SENTENCE)
+
     seen: set[str] = set()
     sentences: list[str] = []
-    for part in parts:
+    for part in re.split(r"(?<=[。！？!?])", card_summary):
         sentence = sentence_from(part, 700)
         key = state.copy_signature(sentence)
         if not sentence or not key or key in seen:
             continue
         seen.add(key)
         sentences.append(sentence)
+
+    for part in optional_parts:
+        sentence = sentence_from(part, 700)
+        key = state.copy_signature(sentence)
+        if not sentence or not key or key in seen:
+            continue
+        candidate = compact_text(" ".join([*sentences, sentence]), 2600)
+        if not summary_is_reader_facing(title, candidate):
+            continue
+        seen.add(key)
+        sentences.append(sentence)
+
     composed = compact_text(" ".join(sentences), 2600)
     if (
         composed
@@ -1270,6 +1282,23 @@ def self_test() -> None:
         {"decisions": [item_decision("OpenAI", malformed_item)]},
         [item_candidate("OpenAI", malformed_item)],
         [malformed_card],
+    )
+    contaminated_item = {
+        **malformed_item,
+        "confirmed_facts": [
+            *malformed_item["confirmed_facts"],
+            "収集方法と掲載判断は内部の確認対象として処理した。",
+        ],
+    }
+    contaminated_card = item_card(
+        "OpenAI", "openai", contaminated_item, "2099-01-01"
+    )
+    if "収集方法" in contaminated_card["detail"]["summary"]:
+        fail("reviewed import must omit invalid optional facts during authoring")
+    state.validate_decisions_and_cards(
+        {"decisions": [item_decision("OpenAI", contaminated_item)]},
+        [item_candidate("OpenAI", contaminated_item)],
+        [contaminated_card],
     )
     domain_cleaned_title = public_card_title(
         {
