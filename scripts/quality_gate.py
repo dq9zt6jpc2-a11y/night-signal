@@ -501,8 +501,6 @@ def detail_summary_heading(issue_dt) -> str:
 
 
 def detail_min_summary_chars(issue_dt) -> int:
-    if effective_on_or_after(COVERAGE_CONTRACT, "detail_depth_effective_date", issue_dt):
-        return int(COVERAGE_CONTRACT.get("minimum_current_detail_summary_chars", 240))
     if effective_on_or_after(COVERAGE_CONTRACT, "summary_quality_effective_date", issue_dt):
         return int(COVERAGE_CONTRACT.get("minimum_detail_summary_chars", 240))
     return LEGACY_MIN_SUMMARY_LEAD_CHARS
@@ -804,8 +802,7 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
                 article_structure_failures.append(f"{name}: missing confirmed facts")
             else:
                 facts = [visible_text(item) for item in re.findall(r"<li[^>]*>(.*?)</li>", fact_match.group(1), flags=re.S)]
-                min_facts = int(COVERAGE_CONTRACT.get("minimum_material_facts_per_published_item", 2))
-                if len([fact for fact in facts if fact]) < min_facts:
+                if not any(facts):
                     article_structure_failures.append(f"{name}: not enough confirmed facts")
                 for fact in facts:
                     validate_public_summary_language(f"detail page {name} fact", fact, issue_date)

@@ -580,7 +580,6 @@ def validate_new_or_changed_items(contract: dict, issue_date: str, root_html: st
     synthesis_required = effective_on_or_after(contract, "synthesis_manifest_effective_date", issue_dt)
     claim_verification_required = effective_on_or_after(contract, "claim_verification_effective_date", issue_dt)
     allowed_summary_modes = contract.get("allowed_summary_modes", [])
-    minimum_material_facts = int(contract.get("minimum_material_facts_per_published_item", 0))
     allowed_claim_types = set(contract.get("allowed_claim_types", []))
     allowed_evidence_kinds = set(contract.get("allowed_claim_evidence_kinds", []))
     required_source_states = contract.get("claim_type_required_source_states", {})
@@ -615,7 +614,7 @@ def validate_new_or_changed_items(contract: dict, issue_date: str, root_html: st
                 fail(f"{category} new_or_changed_items[{index}] summary_mode is required for article synthesis")
             if (
                 not isinstance(material_facts, list)
-                or len(material_facts) < minimum_material_facts
+                or not material_facts
                 or any(not isinstance(fact, str) or len(re.sub(r"\s+", "", fact)) < 12 or not has_japanese(fact) for fact in material_facts)
             ):
                 fail(f"{category} new_or_changed_items[{index}] needs concrete material_facts")

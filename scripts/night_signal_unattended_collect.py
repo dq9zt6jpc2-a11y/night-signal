@@ -103,9 +103,6 @@ PUBLICATION_EVENT_RE = re.compile(
     r"rose|fell|increase|decrease)",
     re.I,
 )
-MAX_CATEGORY_EVIDENCE = 18
-MAX_CATEGORY_ITEMS = 12
-MAX_CATEGORY_SIGNALS = 12
 CATEGORY_IDENTITY_TERMS = {
     "OpenAI": ["OpenAI", "ChatGPT", "Codex", "Azure OpenAI", "生成AI", "AIモデル"],
     "SoftBank": ["SoftBank", "ソフトバンク", "SBG", "Arm"],
@@ -326,7 +323,7 @@ def select_clustered_evidence(
         seen_routes.add(route)
         selected.append(record)
     selected.extend(discovered)
-    return selected[:MAX_CATEGORY_EVIDENCE]
+    return selected
 
 
 PUBLIC_COPY_REPLACEMENTS = [
@@ -450,7 +447,7 @@ def publication_item_supported(title: str, *evidence_values: str) -> bool:
             supporting_sentences,
             limit=8,
         )
-        return len(facts) >= 3 and bool(state_contract.analysis_conclusion(facts))
+        return bool(facts) and bool(state_contract.analysis_conclusion(facts))
     return bool(PUBLICATION_EVENT_RE.search(f"{title} {evidence}"))
 
 
@@ -459,10 +456,16 @@ def analysis_narrative(title: str, facts: list[str]) -> tuple[str, str, str] | N
         return None
     scope = state_contract.analysis_scope_sentence(title)
     conclusion = state_contract.analysis_conclusion(facts)
-    if not scope or not conclusion or len(facts) < 3:
+    if not scope or not conclusion or not facts:
         return None
     summary = unique_sentences(" ".join([scope, *facts[:4], conclusion]), 1200)
     return scope, conclusion, summary
+
+
+def facts_add_information_beyond_title(title: str, facts: list[str]) -> bool:
+    return bool(facts) and any(
+        not state_contract.materially_same_fact(title, fact) for fact in facts
+    )
 
 
 def natural_detail_summary(
@@ -1069,34 +1072,35 @@ SYSTEM_PROMPT = """You are the unattended NIGHT SIGNAL evidence extractor.
 Return one JSON object with keys items, signals, no_change_summary.
 Use only the supplied evidence records and exact URLs. Do not use memory.
 The issue window is the issue date and preceding two calendar days.
-Return every distinct evidence-backed material cluster as an item, up to the
-technical safety limit of 12. This is not a target or editorial quota: do not
-drop a supported important update to make the list shorter. Use signals only
-for relevant records that lack enough evidence for an item. Keep
+Return every distinct evidence-backed material cluster as an item. Do not drop
+a supported important update to make the list shorter. Use signals only for
+relevant records that lack enough evidence for an item. Keep
 no_change_summary under 300 Japanese characters.
 
 items are publication-worthy confirmed changes. Retain names, exact dates,
 numbers, results, uncertainty, and context. Each item must contain:
 watch_topic_id, title, summary, source_published_date, topic_value_class,
 priority_class, slug, detail_summary, what_changed, why_it_matters,
-confirmed_facts (3-6), limits_or_unknowns, sources (1-3).
-Each source needs label and an exact supplied URL. summary should be clear
-Japanese with 120-300 characters; detail_summary 300-900 characters.
-what_changed and why_it_matters must each be 80-260 characters.
-Use 3-6 confirmed_facts of 40-180 characters, limits_or_unknowns up to
-240 characters, and at most 3 sources. Use available source substance; never
-pad a thin source with generic prose.
+confirmed_facts, limits_or_unknowns, sources.
+Each source needs label and an exact supplied URL. Write clear Japanese. Let
+summary and detail depth follow the available evidence: keep thin sources
+concise and preserve names, dates, numbers, conditions, and context from rich
+sources.
+Include every distinct confirmed fact that materially helps a reader understand
+the update, and only sources that support those facts. Use available source
+substance; never pad a thin source with generic prose.
 
 Every confirmed_fact must be a distinct event fact stated in the supplied
 title or body excerpt. Publisher names, publication dates, source metadata,
 importance analysis, generic impact language, and remaining unknowns are not
-confirmed facts. Use the full body excerpt when it contains names, dates,
+confirmed facts. At least one confirmed fact must add concrete information
+beyond merely repeating the title. Use the full body excerpt when it contains names, dates,
 amounts, decisions, results, or conditions. If the evidence does not support
-three distinct facts, return the finding as a signal and never pad an item.
+at least one concrete fact, return the finding as a signal and never pad an item.
 An analysis, explainer, opinion, or video commentary is not a new event merely
 because its publication date is recent or its title contains a large number.
-It may become an item only when the supplied body provides at least three
-concrete supporting facts and a clear analytical conclusion. For such an item,
+It may become an item only when the supplied body provides concrete supporting
+facts and a clear analytical conclusion. For such an item,
 what_changed must state what the article or video examines, why_it_matters must
 state the conclusion reached, and summary/detail_summary must contain both the
 question examined and the evidence-backed analysis. Otherwise keep it as a
@@ -1199,8 +1203,6 @@ def clean_sources(
                 "evidence_summary": str(record.get("evidence", "")),
             }
         )
-        if len(cleaned) == 3:
-            break
     return cleaned
 
 
@@ -1280,7 +1282,7 @@ def promoted_signal_item(
         if state_contract.analysis_headline(title)
         else state_contract.normalize_material_facts(title, fact_values, limit=4)
     )
-    if len(facts) < 3:
+    if not facts_add_information_beyond_title(title, facts):
         return None
     analysis = analysis_narrative(title, facts)
     if analysis is not None:
@@ -1511,8 +1513,7 @@ def fallback_item_from_record(
         topic_value=topic_value,
     )
     if (
-        len(summary) < 80
-        or state_contract.reader_summary_violations(title, summary)
+        state_contract.reader_summary_violations(title, summary)
         or not reader_public_copy_ok(summary, kind="summary")
     ):
         return None
@@ -1522,7 +1523,7 @@ def fallback_item_from_record(
         if state_contract.analysis_headline(title)
         else state_contract.normalize_material_facts(title, fact_values, limit=4)
     )
-    if len(facts) < 3:
+    if not facts_add_information_beyond_title(title, facts):
         return None
     analysis = analysis_narrative(title, facts)
     if analysis is not None:
@@ -1590,8 +1591,6 @@ def backfill_items_from_evidence(
         if isinstance(item, dict)
     }
     for record in select_clustered_evidence(category, records):
-        if len(normalized["items"]) >= MAX_CATEGORY_ITEMS:
-            break
         item = fallback_item_from_record(category, issue_date, record)
         if not item:
             continue
@@ -1666,8 +1665,6 @@ def backfill_signals_from_evidence(
         if isinstance(entry, dict)
     }
     for record in select_clustered_evidence(category, records):
-        if len(normalized["signals"]) >= MAX_CATEGORY_SIGNALS:
-            break
         signal = fallback_signal_from_record(category, issue_date, record)
         if not signal:
             continue
@@ -1675,10 +1672,7 @@ def backfill_signals_from_evidence(
         if cluster_seen(seen, key):
             continue
         seen.add(key)
-        if (
-            signal["change_class"] == "material_update"
-            and len(normalized["items"]) < MAX_CATEGORY_ITEMS
-        ):
+        if signal["change_class"] == "material_update":
             if any(
                 same_material_event(signal["title"], item.get("title", ""))
                 for item in normalized["items"]
@@ -1837,9 +1831,10 @@ def normalize_result(
                 not category_identity_ok(str(category.get("label", "")), title, summary),
             ),
             ("duplicate_title", title in seen_titles),
-            ("short_summary", len(summary) < 80),
-            ("short_detail", len(detail) < 220),
-            ("insufficient_facts", len(facts) < 3),
+            (
+                "insufficient_facts",
+                not facts_add_information_beyond_title(title, facts),
+            ),
             ("incomplete_analysis", not analysis_ready),
             ("missing_source", not sources),
             ("duplicate_cluster", cluster_seen(seen_clusters, item_cluster)),
@@ -2006,8 +2001,6 @@ def normalize_result(
                 "observation_channel": str(record.get("channel", "web")),
             }
         )
-    items = items[:MAX_CATEGORY_ITEMS]
-    signals = signals[:MAX_CATEGORY_SIGNALS]
     no_change = compact_text(str(raw.get("no_change_summary", "")), 1500)
     if len(no_change) < 20:
         observed_count = sum(bool(record.get("observed")) for record in records)
@@ -2309,8 +2302,6 @@ def self_test() -> None:
     }
     if "term-8" not in " ".join(news_queries(wide_category, "2099-01-01")):
         fail("discovery queries dropped later watch topics")
-    if MAX_CATEGORY_ITEMS < 8:
-        fail("publication item safety limit is acting as a sparse editorial quota")
     if not article_result_matches(
         "OpenAI GPT-5.6シリーズを発表",
         "OpenAIのGPT-5.6シリーズを解説",
@@ -2487,8 +2478,9 @@ def self_test() -> None:
     }
     if len(copied_fields) < 3:
         fail("material signal promotion copied one sentence into public fields")
-    if len(set(promoted["confirmed_facts"])) < 3:
-        fail("material signal promotion did not create distinct facts")
+    promoted_facts = promoted["confirmed_facts"]
+    if not promoted_facts or len(set(promoted_facts)) != len(promoted_facts):
+        fail("material signal promotion did not preserve distinct facts")
     quiet_result = normalize_result(
         {"items": [], "signals": [], "no_change_summary": "All configured source roles were checked."},
         category,

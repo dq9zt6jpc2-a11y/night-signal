@@ -1034,11 +1034,9 @@ def validate_summary_basis(detail: dict[str, Any], *, issue_date: str, source_da
         reject_public_copy(f"cards[{card_index}].detail.summary_basis.{key}", value, kind="summary")
 
     facts = basis.get("confirmed_facts")
-    if effective_on_or_after(contract, "detail_depth_effective_date", issue_date):
-        min_facts = int(contract.get("minimum_current_material_facts_per_published_item", 3))
-    else:
-        min_facts = int(contract.get("minimum_material_facts_per_published_item", 2))
-    if not isinstance(facts, list) or len([fact for fact in facts if isinstance(fact, str) and fact.strip()]) < min_facts:
+    if not isinstance(facts, list) or not any(
+        isinstance(fact, str) and fact.strip() for fact in facts
+    ):
         fail(f"cards[{card_index}].detail.summary_basis.confirmed_facts must contain confirmed material facts")
     for fact_index, fact in enumerate(facts, start=1):
         if not isinstance(fact, str) or not fact.strip():
@@ -1049,11 +1047,11 @@ def validate_summary_basis(detail: dict[str, Any], *, issue_date: str, source_da
             kind="summary",
         )
     unique_facts = {copy_signature(fact) for fact in facts if isinstance(fact, str) and copy_signature(fact)}
-    if len(unique_facts) < min_facts:
+    if not unique_facts:
         fail(f"cards[{card_index}].detail.summary_basis.confirmed_facts are repetitive")
     if effective_on_or_after(contract, "material_fact_semantics_effective_date", issue_date):
         material_facts = normalize_material_facts("", facts, limit=len(facts))
-        if len(material_facts) < min_facts:
+        if not material_facts:
             fail(
                 f"cards[{card_index}].detail.summary_basis.confirmed_facts "
                 "must be independent event facts, not source metadata or analysis"

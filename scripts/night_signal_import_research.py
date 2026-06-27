@@ -489,8 +489,13 @@ def validate_bundle(bundle: dict[str, Any], issue_date: str) -> dict[str, list[d
                 if isinstance(facts, list)
                 else []
             )
-            if len(normalized_facts) < 3:
-                fail(f"{label} items[{index}] needs at least three confirmed facts")
+            if not normalized_facts or not any(
+                not state.materially_same_fact(str(item["title"]), fact)
+                for fact in normalized_facts
+            ):
+                fail(
+                    f"{label} items[{index}] needs confirmed information beyond its title"
+                )
             item["confirmed_facts"] = normalized_facts
             if state.analysis_headline(str(item["title"])):
                 conclusion = state.analysis_conclusion(
@@ -500,8 +505,8 @@ def validate_bundle(bundle: dict[str, Any], issue_date: str) -> dict[str, list[d
                     fail(f"{label} items[{index}] analysis lacks a supported conclusion")
                 item["what_changed"] = state.analysis_scope_sentence(str(item["title"]))
                 item["why_it_matters"] = conclusion
-            if not isinstance(sources, list) or not sources or len(sources) > 3:
-                fail(f"{label} items[{index}] needs one to three sources")
+            if not isinstance(sources, list) or not sources:
+                fail(f"{label} items[{index}] needs at least one source")
             for source in sources:
                 if (
                     not isinstance(source, dict)
@@ -954,7 +959,7 @@ def item_card(
         ],
         limit=4,
     )
-    if len(facts) < 3:
+    if not facts:
         fail(f"item lost material facts during card construction: {item.get('title', '')}")
     source_urls = [str(source["url"]) for source in item["sources"]]
     slug = str(item["slug"])
