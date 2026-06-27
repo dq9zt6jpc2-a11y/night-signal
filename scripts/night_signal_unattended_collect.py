@@ -491,6 +491,13 @@ def natural_detail_summary(
         lead = f"{lead}。"
 
     lead_key = sentence_key(lead)
+    existing_context = ""
+    if (
+        existing
+        and not SUMMARY_LABEL_RE.search(existing)
+        and not state_contract.GENERIC_CONTEXT_RE.search(existing)
+    ):
+        existing_context = existing
     useful_facts = [
         reader_facing_text(fact, 500)
         for fact in facts
@@ -513,7 +520,13 @@ def natural_detail_summary(
     composed = unique_sentences(
         " ".join(
             part
-            for part in (lead, *useful_facts, importance_sentence, limits_sentence)
+            for part in (
+                lead,
+                existing_context,
+                *useful_facts,
+                importance_sentence,
+                limits_sentence,
+            )
             if part
         ),
         2600,
@@ -1746,15 +1759,6 @@ def normalize_result(
             item.get("limits_or_unknowns", ""),
             900,
         )
-        if len(summary) < 100:
-            summary = compact_text(
-                "。".join(
-                    value
-                    for value in (summary, what_changed, why_it_matters)
-                    if value
-                ),
-                1000,
-            )
         summary = unique_sentences(summary, 1000)
         what_changed = unique_sentences(what_changed, 700)
         why_it_matters = unique_sentences(why_it_matters, 700)
@@ -1763,6 +1767,19 @@ def normalize_result(
             if state_contract.analysis_headline(title)
             else state_contract.normalize_material_facts(title, facts, limit=8)
         )
+        if len(summary) < 100:
+            summary = unique_sentences(
+                " ".join(
+                    value
+                    for value in (
+                        *facts[:4],
+                        why_it_matters,
+                        *(() if len(facts) >= 3 else (what_changed, summary)),
+                    )
+                    if value
+                ),
+                1000,
+            )
         analysis = analysis_narrative(title, facts)
         analysis_ready = not state_contract.analysis_headline(title) or analysis is not None
         if analysis is not None:
@@ -1820,25 +1837,48 @@ def normalize_result(
         source_cluster = record_cluster_key(records_by_url.get(sources[0]["url"], {})) if sources else ""
         item_cluster = normalized_topic_key(title, source_cluster)
         topic_value = str(item.get("topic_value_class", ""))
-        if (
-            topic not in valid_topics
-            or not title
-            or not reader_public_copy_ok(title, kind="title")
-            or not reader_public_copy_ok(summary, kind="summary")
-            or not reader_public_copy_ok(detail, kind="summary")
-            or not reader_public_copy_ok(what_changed, kind="summary")
-            or not reader_public_copy_ok(why_it_matters, kind="summary")
-            or not category_identity_ok(str(category.get("label", "")), title, summary)
-            or title in seen_titles
-            or len(summary) < 80
-            or len(detail) < 220
-            or len(facts) < 3
-            or not analysis_ready
-            or not sources
-            or cluster_seen(seen_clusters, item_cluster)
-            or topic_value not in ALLOWED_TOPIC_VALUES
-            or not valid_date(item.get("source_published_date"), issue_date)
-        ):
+        rejection_checks = [
+            ("unknown_topic", topic not in valid_topics),
+            ("empty_title", not title),
+            ("title_copy", not reader_public_copy_ok(title, kind="title")),
+            ("summary_copy", not reader_public_copy_ok(summary, kind="summary")),
+            ("detail_copy", not reader_public_copy_ok(detail, kind="summary")),
+            ("change_copy", not reader_public_copy_ok(what_changed, kind="summary")),
+            ("importance_copy", not reader_public_copy_ok(why_it_matters, kind="summary")),
+            (
+                "category_identity",
+                not category_identity_ok(str(category.get("label", "")), title, summary),
+            ),
+            ("duplicate_title", title in seen_titles),
+            ("short_summary", len(summary) < 80),
+            ("short_detail", len(detail) < 220),
+            ("insufficient_facts", len(facts) < 3),
+            ("incomplete_analysis", not analysis_ready),
+            ("missing_source", not sources),
+            ("duplicate_cluster", cluster_seen(seen_clusters, item_cluster)),
+            ("unknown_topic_value", topic_value not in ALLOWED_TOPIC_VALUES),
+            (
+                "invalid_source_date",
+                not valid_date(item.get("source_published_date"), issue_date),
+            ),
+        ]
+        rejection_reasons = [reason for reason, rejected in rejection_checks if rejected]
+        if rejection_reasons:
+            print(
+                json.dumps(
+                    {
+                        "phase": "normalized_item_rejected",
+                        "category": category.get("label"),
+                        "title": title,
+                        "reasons": rejection_reasons,
+                        "summary_length": len(summary),
+                        "detail_length": len(detail),
+                        "fact_count": len(facts),
+                    },
+                    ensure_ascii=False,
+                ),
+                flush=True,
+            )
             continue
         seen_titles.add(title)
         seen_clusters.add(item_cluster)
@@ -2388,6 +2428,27 @@ def self_test() -> None:
     detail_summary = normalized["items"][0]["detail_summary"]
     if SUMMARY_LABEL_RE.search(detail_summary) or GENERIC_IMPORTANCE_RE.search(detail_summary):
         fail("normalization created label-heavy or internal detail copy")
+    short_raw = json.loads(json.dumps(raw))
+    short_raw["items"][0]["summary"] = "OpenAIが開発者向け機能を更新した。"
+    short_raw["items"][0]["detail_summary"] = (
+        "OpenAIは開発者向け機能の更新対象と提供条件を公表した。"
+        "公式資料では既存サービスからの移行手順と利用開始日も示している。"
+    )
+    short_item = normalize_result(
+        short_raw,
+        category,
+        "2099-01-03",
+        records,
+    )["items"]
+    if (
+        len(short_item) != 1
+        or len(short_item[0]["summary"]) < 80
+        or len(short_item[0]["detail_summary"]) < 220
+    ):
+        fail(
+            "normalization did not expand a fact-rich short model response: "
+            + json.dumps(short_item, ensure_ascii=False)
+        )
     raw["items"][0]["sources"] = [{"url": "https://unverified.example/"}]
     if normalize_result(raw, category, "2099-01-03", records)["items"]:
         fail("normalization accepted an unverified source")
