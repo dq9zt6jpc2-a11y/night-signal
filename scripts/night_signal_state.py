@@ -1099,8 +1099,8 @@ def normalized_cards(issue: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def render_card(card: dict[str, Any], *, root: bool) -> str:
-    title = html.escape(display_text(card["title"], 92))
-    summary = html.escape(display_text(card["summary"], 220))
+    title = html.escape(str(card["title"]))
+    summary = html.escape(str(card["summary"]))
     section_id = html.escape(str(card["section_id"]), quote=True)
     source_date = html.escape(str(card["source_published_date"]))
     label = str(card.get("freshness_label") or "")
@@ -1125,8 +1125,8 @@ def render_card(card: dict[str, Any], *, root: bool) -> str:
 
 
 def render_priority_card(index: int, card: dict[str, Any]) -> str:
-    title = html.escape(display_text(card["title"], 110))
-    summary = html.escape(display_text(card["summary"], 180))
+    title = html.escape(str(card["title"]))
+    summary = html.escape(str(card["summary"]))
     section_id = html.escape(str(card["section_id"]), quote=True)
     priority_class = html.escape(str(card.get("priority_class", "signal")))
     return f"""        <article class="priority-card {priority_class}"><span class="rank">{index}</span><h3>{title}</h3><p>{summary}</p><a class="tag" href="#{section_id}">詳細へ</a></article>"""
@@ -2864,6 +2864,16 @@ def self_test() -> None:
         fail("issue renderer must not add cards outside canonical issue state")
     if any(card.get("retained_from_issue_date") for card in display_cards):
         fail("issue renderer must not rehydrate cards from an older issue")
+    long_title = "OpenAIが長い製品名を含む重要更新を発表し、提供範囲と利用条件を詳しく公表した" * 3
+    long_card_html = render_card(
+        {
+            **display_cards[0],
+            "title": long_title,
+        },
+        root=False,
+    )
+    if long_title not in html.unescape(long_card_html):
+        fail("issue renderer must not truncate canonical card titles")
     print("NIGHT SIGNAL STATE PASSED")
 
 
