@@ -139,6 +139,36 @@ PUBLISHER_SUFFIX_RE = re.compile(
 DOMAIN_RE = re.compile(
     r"\b(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}(?:/[^\s。、]*)?"
 )
+FACT_SOURCE_METADATA_RE = re.compile(
+    r"(?:が|は)?\s*20\d{2}[-/.年]\d{1,2}(?:[-/.月]\d{1,2}日?)?付の"
+    r"(?:情報|記事|動画)?として配信|"
+    r"(?:配信元|掲載元|出典日(?:付)?|確認日(?:付)?)\s*[:：]|"
+    r"(?:Google News RSS|検索結果)で.{0,100}(?:確認|配信)|"
+    r"(?:更新|公表|掲載|配信)日は.{0,80}(?:対象期間|期間に含ま)|"
+    r"[（(](?:共同通信|時事通信|Reuters|ロイター)[）)]\s*"
+    r"(?:Yahoo!|YouTube|MSN)?[。．.!！?？]*$",
+    re.I,
+)
+FACT_ANALYSIS_OR_UNKNOWN_RE = re.compile(
+    r"判断する材料になる|判断材料となる|"
+    r"(?:今後|引き続き|追加の).{0,80}(?:確認対象|確認が必要|焦点となる)|"
+    r"(?:影響|対象)範囲.{0,80}(?:確認対象|確認が必要)|"
+    r"影響しうる|注目される|重要となる|"
+    r"対象範囲、実施時期と継続性",
+)
+FACT_MARKUP_RE = re.compile(r"<\s*/?\s*[a-z!]|\bhref\s*=|&(?:lt|gt|nbsp);", re.I)
+GENERIC_CONTEXT_RE = re.compile(
+    r"(?:"
+    r"性能、提供範囲、既存製品との関係|"
+    r"規模、条件、資金使途と市場反応|"
+    r"対象範囲、対策の実効性と残る制約|"
+    r"対象範囲、実施時期と関係者の役割|"
+    r"今回の結果と次工程への影響|"
+    r"変更された時期と前後工程への影響|"
+    r"作品内容、展開時期と反応|"
+    r"対象範囲、実施時期と継続性"
+    r").{0,120}判断する材料になる"
+)
 TOPIC_CONTEXT_SENTENCES = {
     "technical_or_product_shift": "性能、提供範囲、既存製品との関係は、{category}の技術選択と競争力を判断する材料になる。",
     "market_or_financial_impact": "規模、条件、資金使途と市場反応は、{category}の投資余力と評価を判断する材料になる。",
@@ -864,6 +894,84 @@ def reader_summary_violations(title: str, summary: str) -> list[str]:
     return violations
 
 
+def material_fact_violations(text: str) -> list[str]:
+    value = html.unescape(str(text)).strip()
+    violations: list[str] = []
+    if len(value) < 18:
+        violations.append("too short to be a material fact")
+    if FACT_MARKUP_RE.search(value):
+        violations.append("contains markup")
+    if FACT_SOURCE_METADATA_RE.search(value):
+        violations.append("is source metadata, not an event fact")
+    if FACT_ANALYSIS_OR_UNKNOWN_RE.search(value):
+        violations.append("is analysis or an unknown, not a confirmed fact")
+    if public_render_copy_violations(value, kind="summary"):
+        violations.append("is not reader-facing public copy")
+    return violations
+
+
+def materially_same_fact(left: str, right: str) -> bool:
+    left_signature = copy_signature(left)
+    right_signature = copy_signature(right)
+    if not left_signature or not right_signature:
+        return False
+    if (
+        left_signature == right_signature
+        or left_signature in right_signature
+        or right_signature in left_signature
+    ):
+        return True
+    left_ngrams = {
+        left_signature[index : index + 3]
+        for index in range(max(0, len(left_signature) - 2))
+    }
+    right_ngrams = {
+        right_signature[index : index + 3]
+        for index in range(max(0, len(right_signature) - 2))
+    }
+    if not left_ngrams or not right_ngrams:
+        return False
+    overlap = len(left_ngrams & right_ngrams) / min(len(left_ngrams), len(right_ngrams))
+    left_numbers = set(re.findall(r"\d+(?:\.\d+)?", left_signature))
+    right_numbers = set(re.findall(r"\d+(?:\.\d+)?", right_signature))
+    if left_numbers and left_numbers == right_numbers and overlap >= 0.52:
+        return True
+    return overlap >= 0.82
+
+
+def normalize_material_facts(title: str, values: list[Any], limit: int = 8) -> list[str]:
+    facts: list[str] = []
+    signatures: list[str] = []
+    for raw in values:
+        value = " ".join(html.unescape(str(raw)).split())
+        for part in re.split(r"(?<=[。！？!?])\s*", value):
+            fact = part.strip(" -–—|｜")
+            if not fact or material_fact_violations(fact):
+                continue
+            signature = copy_signature(fact)
+            if not signature:
+                continue
+            duplicate_index = next(
+                (
+                    index
+                    for index, existing_fact in enumerate(facts)
+                    if materially_same_fact(fact, existing_fact)
+                ),
+                None,
+            )
+            if duplicate_index is not None:
+                existing = signatures[duplicate_index]
+                if len(signature) >= len(existing) * 1.25:
+                    facts[duplicate_index] = fact
+                    signatures[duplicate_index] = signature
+                continue
+            facts.append(fact)
+            signatures.append(signature)
+            if len(facts) >= limit:
+                return facts
+    return facts
+
+
 def validate_reader_summary(label: str, title: str, summary: str) -> None:
     violations = reader_summary_violations(title, summary)
     if violations:
@@ -914,6 +1022,13 @@ def validate_summary_basis(detail: dict[str, Any], *, issue_date: str, source_da
     unique_facts = {copy_signature(fact) for fact in facts if isinstance(fact, str) and copy_signature(fact)}
     if len(unique_facts) < min_facts:
         fail(f"cards[{card_index}].detail.summary_basis.confirmed_facts are repetitive")
+    if effective_on_or_after(contract, "material_fact_semantics_effective_date", issue_date):
+        material_facts = normalize_material_facts("", facts, limit=len(facts))
+        if len(material_facts) < min_facts:
+            fail(
+                f"cards[{card_index}].detail.summary_basis.confirmed_facts "
+                "must be independent event facts, not source metadata or analysis"
+            )
 
     if effective_on_or_after(contract, "claim_source_linkage_effective_date", issue_date):
         fact_sources = basis.get("fact_sources")

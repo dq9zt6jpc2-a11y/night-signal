@@ -48,7 +48,6 @@ ORPHAN_SOURCE_SENTENCE_RE = re.compile(
     r"^(?:ニュース|ファイナンス|MSN|web|オンライン)[。．.!！?？]*$",
     re.I,
 )
-DEFAULT_LIMITS_SENTENCE = "影響範囲、対象範囲、追加条件、続報の有無は引き続き確認が必要。"
 
 
 def fail(message: str) -> None:
@@ -67,9 +66,7 @@ def compact_text(value: Any, limit: int = 1600) -> str:
 
 def useful_fact(fact: Any, category: str) -> bool:
     text = compact_text(fact, 500)
-    if len(text) < 18:
-        return False
-    if GENERIC_IMPORTANCE_RE.search(text):
+    if GENERIC_IMPORTANCE_RE.search(text) or state.material_fact_violations(text):
         return False
     if category and f"{category}の重要更新として確認" in text:
         return False
@@ -106,6 +103,7 @@ def scrub_public_summary(value: Any) -> str:
         cleaned = state.PUBLISHER_SUFFIX_RE.sub("", sentence)
         cleaned = state.DOMAIN_RE.sub("", cleaned)
         cleaned = EMPTY_JA_QUOTE_RE.sub("", cleaned)
+        cleaned = TRAILING_MEDIA_CREDIT_RE.sub("", cleaned)
         cleaned = TRAILING_DOMAIN_RE.sub("", cleaned).strip(" -–—|｜")
         if cleaned and not ORPHAN_SOURCE_SENTENCE_RE.fullmatch(cleaned):
             sentences.append(cleaned)
@@ -153,6 +151,8 @@ def public_card_title(item: dict[str, Any]) -> str:
 
 def summary_is_reader_facing(title: str, summary: str) -> bool:
     if state.public_render_copy_violations(summary, kind="summary"):
+        return False
+    if state.GENERIC_CONTEXT_RE.search(summary):
         return False
     return not state.reader_summary_violations(title, summary)
 
@@ -225,7 +225,7 @@ def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
     lead = event_parts[0] if event_parts else public_focus_phrase(title, category)
     summary = reader_summary_from_parts(
         title,
-        [lead, importance, *event_parts[1:], limits or DEFAULT_LIMITS_SENTENCE],
+        [lead, *event_parts[1:], importance, limits],
         limit=900,
     )
     if summary:
@@ -233,7 +233,7 @@ def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
 
     summary = reader_summary_from_parts(
         title,
-        [public_focus_phrase(title, category), importance, limits or DEFAULT_LIMITS_SENTENCE],
+        [public_focus_phrase(title, category), importance, limits],
         limit=900,
     )
     if summary:
@@ -251,6 +251,7 @@ def canonical_detail_summary(
     if (
         len(existing) >= 280
         and not SUMMARY_LABEL_RE.search(existing)
+        and not state.GENERIC_CONTEXT_RE.search(existing)
         and not state.public_render_copy_violations(existing, kind="summary")
         and summary_is_reader_facing(title, existing)
         and state.text_overlap(card_summary, existing) >= 2
@@ -265,7 +266,6 @@ def canonical_detail_summary(
     ]
     optional_parts.append(item_importance(item, category, title))
     optional_parts.append(scrub_public_summary(item.get("limits_or_unknowns", "")))
-    optional_parts.append(DEFAULT_LIMITS_SENTENCE)
 
     seen: set[str] = set()
     sentences: list[str] = []
@@ -467,8 +467,18 @@ def validate_bundle(bundle: dict[str, Any], issue_date: str) -> dict[str, list[d
             seen_titles.add(item["title"])
             facts = item.get("confirmed_facts")
             sources = item.get("sources")
-            if not isinstance(facts, list) or len(facts) < 3:
+            normalized_facts = (
+                state.normalize_material_facts(
+                    str(item["title"]),
+                    [scrub_item_source_labels(item, fact) for fact in facts],
+                    limit=8,
+                )
+                if isinstance(facts, list)
+                else []
+            )
+            if len(normalized_facts) < 3:
                 fail(f"{label} items[{index}] needs at least three confirmed facts")
+            item["confirmed_facts"] = normalized_facts
             if not isinstance(sources, list) or not sources or len(sources) > 3:
                 fail(f"{label} items[{index}] needs one to three sources")
             for source in sources:
@@ -877,6 +887,14 @@ def no_change_candidate(
 
 def item_candidate(category: str, item: dict[str, Any]) -> dict[str, Any]:
     title, summary = public_item_copy(category, item)
+    material_facts = state.normalize_material_facts(
+        title,
+        [
+            scrub_public_summary(raw_fact)
+            for raw_fact in item["confirmed_facts"]
+        ],
+        limit=8,
+    )
     return {
         "category": category,
         "watch_topic_id": str(item["watch_topic_id"]),
@@ -885,14 +903,7 @@ def item_candidate(category: str, item: dict[str, Any]) -> dict[str, Any]:
         "source_urls": [str(source["url"]) for source in item["sources"]],
         "change_class": str(item.get("change_class", "new_event")),
         "summary": summary,
-        "material_facts": [
-            fact
-            for fact in (
-                scrub_public_summary(raw_fact)
-                for raw_fact in item["confirmed_facts"]
-            )
-            if fact and not state.public_render_copy_violations(fact, kind="summary")
-        ],
+        "material_facts": material_facts,
         "counter_evidence_checked": True,
     }
 
@@ -997,25 +1008,16 @@ def item_card(
     item: dict[str, Any],
     issue_date: str,
 ) -> dict[str, Any]:
-    facts = []
-    seen_facts: set[str] = set()
-    for fact in [
-        *[str(fact) for fact in item["confirmed_facts"]],
-        str(item.get("summary", "")),
-        str(item.get("what_changed", "")),
-        str(item.get("why_it_matters", "")),
-    ]:
-        text = compact_text(scrub_item_source_labels(item, fact), 500)
-        if (
-            not text
-            or text in seen_facts
-            or state.public_render_copy_violations(text, kind="summary")
-        ):
-            continue
-        seen_facts.add(text)
-        facts.append(text)
-        if len(facts) >= 4:
-            break
+    facts = state.normalize_material_facts(
+        public_card_title(item),
+        [
+            compact_text(scrub_item_source_labels(item, fact), 500)
+            for fact in item["confirmed_facts"]
+        ],
+        limit=4,
+    )
+    if len(facts) < 3:
+        fail(f"item lost material facts during card construction: {item.get('title', '')}")
     source_urls = [str(source["url"]) for source in item["sources"]]
     slug = str(item["slug"])
     slug_stem = slug[:-5] if slug.endswith(".html") else slug
@@ -1266,9 +1268,9 @@ def self_test() -> None:
         "change_class": "material_update",
         "summary": "IPO延期報道を受け、ソフトバンクG株の下落が確認された。",
         "confirmed_facts": [
-            "IPO延期報道を受け、ソフトバンクG株の下落が確認された。",
-            "AI関連投資の評価に対する市場反応が確認された。",
-            "追加条件や会社側の正式確認は引き続き確認対象になる。",
+            "米OpenAIがIPOの先送りを検討していると報じられた。",
+            "報道後、ソフトバンクG株は約2年ぶりの大幅安となった。",
+            "同社株は前日終値から7.2％下落して取引を終えた。",
         ],
         "topic_value_class": "market_or_financial_impact",
         "what_changed": "IPO延期報道を受け、ソフトバンクG株の下落が確認された。",
@@ -1289,9 +1291,9 @@ def self_test() -> None:
         "change_class": "material_update",
         "summary": "OpenAIがClaude Mythos 5超えのセキュリティー特化AI「GPT-5.5-Cyber」「」のアップデートを発表＆セキュリティー特化Codexプラグイン「Codex Security」もアップデート",
         "confirmed_facts": [
-            "Codex Securityの更新が確認された。",
-            "セキュリティー特化AIの更新が確認対象になった。",
-            "対象範囲や追加条件は引き続き確認が必要になる。",
+            "OpenAIはCodex Securityの更新版を公開した。",
+            "更新版には脆弱性検出後の修正案を生成する機能が追加された。",
+            "GPT-5.5-Cyberにも新しい安全性評価結果が反映された。",
         ],
         "topic_value_class": "technical_or_product_shift",
         "what_changed": "OpenAIがセキュリティー特化AIとCodex Securityの更新を公表した。",

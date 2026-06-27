@@ -91,6 +91,22 @@ LOW_SIGNAL_VALUE_RE = re.compile(
     r"Derivatives|価格・チャート・時価総額|体験授業|特別展示|夏休み",
     re.I,
 )
+PUBLICATION_EVENT_RE = re.compile(
+    r"(発表|決定|合意|契約|提携|買収|統合|開始|提供開始|発売|公開|更新|"
+    r"就任|退任|移籍|獲得|退団|採用|建設|着工|延期|中止|承認|規制|"
+    r"訪中|訪米|会談|協議|出資|資金調達|上場|申請|"
+    r"上昇|下落|急落|増加|減少|改善|悪化|達成|突破|判明|結果|決算|"
+    r"CPI|GDP|失業率|雇用統計|利益|売上|"
+    r"announc|agree|sign|launch|release|update|acqui|merge|appoint|"
+    r"resign|join|leave|delay|cancel|approve|invest|raise|filed|"
+    r"rose|fell|increase|decrease)",
+    re.I,
+)
+ANALYSIS_ONLY_HEADLINE_RE = re.compile(
+    r"(^|[【\[])(?:解説|分析|検証|日経平均の正体)|"
+    r"(?:正体|裏側|危険|バブル|なぜ|どう見る|読み解く|徹底解説)",
+    re.I,
+)
 HIGH_THROUGHPUT_CATEGORIES = {"OpenAI", "SpaceX", "SoftBank", "宇都宮ブレックス"}
 MAX_CATEGORY_EVIDENCE = 18
 MAX_CATEGORY_ITEMS = 3
@@ -157,6 +173,16 @@ class VisibleTextParser(HTMLParser):
 
 def compact_text(value: str, limit: int = 1600) -> str:
     return " ".join(html.unescape(value).split())[:limit]
+
+
+def html_fragment_text(value: str, limit: int = 1600) -> str:
+    parser = VisibleTextParser()
+    try:
+        parser.feed(html.unescape(value))
+        parser.close()
+    except (ValueError, TypeError):
+        return compact_text(value, limit)
+    return compact_text(" ".join(parser.parts), limit)
 
 
 def normalized_topic_key(*values: Any) -> str:
@@ -374,9 +400,7 @@ def record_public_title(record: dict[str, Any]) -> str:
 
 def useful_fact(fact: str, category_label: str) -> bool:
     text = reader_facing_text(fact, 500)
-    if len(text) < 18:
-        return False
-    if GENERIC_IMPORTANCE_RE.search(text):
+    if GENERIC_IMPORTANCE_RE.search(text) or state_contract.material_fact_violations(text):
         return False
     if category_label and f"{category_label}の重要更新として確認" in text:
         return False
@@ -410,6 +434,19 @@ def low_signal_value(*values: str) -> bool:
     return bool(LOW_SIGNAL_VALUE_RE.search(text))
 
 
+def publication_event_supported(title: str, *evidence_values: str) -> bool:
+    evidence = " ".join(str(value or "") for value in evidence_values)
+    if ANALYSIS_ONLY_HEADLINE_RE.search(title):
+        supporting = " ".join(
+            sentence
+            for sentence in sentence_parts(evidence)
+            if state_contract.title_repetition_score(title, sentence) < 0.82
+        )
+        if not PUBLICATION_EVENT_RE.search(supporting):
+            return False
+    return bool(PUBLICATION_EVENT_RE.search(f"{title} {evidence}"))
+
+
 def natural_detail_summary(
     *,
     summary: str,
@@ -421,20 +458,29 @@ def natural_detail_summary(
     category_label: str,
 ) -> str:
     existing = reader_facing_text(detail, 2600)
-    if len(existing) >= 280 and not SUMMARY_LABEL_RE.search(existing):
+    if (
+        len(existing) >= 280
+        and not SUMMARY_LABEL_RE.search(existing)
+        and not state_contract.GENERIC_CONTEXT_RE.search(existing)
+    ):
         return existing
 
     lead = reader_facing_text(what_changed or summary or existing, 700)
     if lead and not lead.endswith("。"):
         lead = f"{lead}。"
 
+    lead_key = sentence_key(lead)
     useful_facts = [
         reader_facing_text(fact, 500)
         for fact in facts
         if useful_fact(fact, category_label)
-    ][:3]
+        and sentence_key(reader_facing_text(fact, 500)) != lead_key
+    ][:4]
     importance_sentence = ""
-    if useful_importance(why_it_matters):
+    if (
+        useful_importance(why_it_matters)
+        and not state_contract.GENERIC_CONTEXT_RE.search(why_it_matters)
+    ):
         importance = reader_facing_text(why_it_matters, 700).rstrip("。")
         importance_sentence = f"{importance}。"
 
@@ -452,6 +498,21 @@ def natural_detail_summary(
         2600,
     )
     return composed or existing
+
+
+def event_limits_sentence(title: str, excerpt: str) -> str:
+    text = f"{title} {excerpt}".lower()
+    if any(term in text for term in ("視察団", "訪中", "訪米", "business delegation")):
+        return "各団体の協議内容と、今後の追加訪問の日程は明らかになっていない。"
+    if any(term in text for term in ("決算", "利益", "売上", "評価益", "資金調達", "社債")):
+        return "会計上の利益と現金収支の差、評価条件の変動影響は参照元だけでは確定できない。"
+    if any(term in text for term in ("契約", "提携", "共同開発", "partnership", "contract")):
+        return "契約期間、各社の役割、実用化または提供開始の時期は明らかになっていない。"
+    if any(term in text for term in ("製品", "モデル", "発売", "公開", "release", "launch")):
+        return "提供地域、価格、利用条件と実運用での性能は明らかになっていない。"
+    if any(term in text for term in ("移籍", "獲得", "退団", "選手")):
+        return "契約期間、起用法と編成全体への影響は明らかになっていない。"
+    return "発表に含まれない条件と今後の変更は、続報が出るまで確定できない。"
 
 
 def page_text(raw: bytes, content_type: str) -> tuple[str, str]:
@@ -678,7 +739,7 @@ def fetch_news(category: dict[str, Any], issue_date: str) -> list[dict[str, Any]
             link = compact_text(item.findtext("link") or "", 1000)
             if not title or not link.startswith(("http://", "https://")) or link in seen_urls:
                 continue
-            description = compact_text(item.findtext("description") or "", 700)
+            description = html_fragment_text(item.findtext("description") or "", 700)
             source = item.find("source")
             source_label = (
                 compact_text(source.text or "", 120)
@@ -879,6 +940,15 @@ what_changed and why_it_matters must each be 80-160 characters.
 Use exactly 3 confirmed_facts of 40-120 characters, limits_or_unknowns up to
 160 characters, and at most 2 sources.
 
+Every confirmed_fact must be a distinct event fact stated in the supplied
+title or body excerpt. Publisher names, publication dates, source metadata,
+importance analysis, generic impact language, and remaining unknowns are not
+confirmed facts. Use the full body excerpt when it contains names, dates,
+amounts, decisions, results, or conditions. If the evidence does not support
+three distinct facts, return the finding as a signal and never pad an item.
+An analysis, explainer, opinion, or video commentary is not a new event merely
+because its publication date is recent or its title contains a large number.
+
 signals are relevant recent findings that should remain visible but are not
 strong enough for an article. Each signal must contain watch_topic_id, title,
 summary, source_published_date, source_url, source_label, change_class,
@@ -1035,7 +1105,7 @@ def promoted_signal_item(
     topic_value: str,
     issue_date: str,
     record: dict[str, Any],
-) -> dict[str, Any]:
+) -> dict[str, Any] | None:
     source_date = str(signal["source_published_date"])
     source_label = str(record.get("label") or signal.get("source_label") or record.get("url"))
     source_url = str(record.get("url") or signal.get("source_url"))
@@ -1050,25 +1120,23 @@ def promoted_signal_item(
         ),
         700,
     )
-    facts = unique_nonempty(
-        [
-            title,
-            what_changed,
-            summary,
-            f"{source_label}が{source_date}付の情報として配信した。",
-            excerpt,
-        ],
-        500,
-    )[:4]
+    facts = state_contract.normalize_material_facts(
+        title,
+        [title, excerpt, signal_summary],
+        limit=4,
+    )
     if len(facts) < 3:
-        facts.append(f"{source_date}を出典日として扱う。")
+        return None
+    summary = unique_sentences(" ".join([*facts, why_it_matters]), 900)
+    what_changed = facts[0]
+    limits = event_limits_sentence(title, excerpt)
     detail = natural_detail_summary(
         summary=summary,
         detail="",
         what_changed=what_changed,
         why_it_matters=why_it_matters,
         facts=facts,
-        limits_or_unknowns="追加の公式発表、条件、数値の内訳は今後の確認対象となる。",
+        limits_or_unknowns=limits,
         category_label="",
     )
     return {
@@ -1087,7 +1155,7 @@ def promoted_signal_item(
         "what_changed": what_changed,
         "why_it_matters": why_it_matters,
         "confirmed_facts": facts[:4],
-        "limits_or_unknowns": "追加の公式発表、条件、数値の内訳は今後の確認対象となる。",
+        "limits_or_unknowns": limits,
         "sources": [
             {
                 "label": source_label,
@@ -1289,17 +1357,24 @@ def fallback_item_from_record(
         or not reader_public_copy_ok(summary, kind="summary")
     ):
         return None
-    facts = unique_nonempty(
-        [
-            what_changed,
-            *supporting,
-            f"{record.get('label') or '確認元'}が{source_date}付の情報として配信した。",
-        ],
-        500,
+    facts = state_contract.normalize_material_facts(
+        title,
+        [what_changed, *supporting, excerpt],
+        limit=4,
     )
     if len(facts) < 3:
         return None
-    limits = "詳細条件、正式な続報、数値の内訳は追加確認の対象となる。"
+    summary = unique_sentences(
+        " ".join(
+            [
+                *facts,
+                *([] if state_contract.GENERIC_CONTEXT_RE.search(why_it_matters) else [why_it_matters]),
+            ]
+        ),
+        1000,
+    )
+    what_changed = facts[0]
+    limits = event_limits_sentence(title, excerpt)
     detail = natural_detail_summary(
         summary=summary,
         detail="",
@@ -1385,7 +1460,7 @@ def fallback_signal_from_record(
         or low_signal_value(title, excerpt)
     ):
         return None
-    material = contains_material_signal(title, excerpt)
+    material = publication_event_supported(title, excerpt)
     topic_value = topic_value_from_record(record)
     _, _, summary, _ = evidence_narrative(
         category_label=category_label,
@@ -1449,18 +1524,18 @@ def backfill_signals_from_evidence(
             ):
                 normalized["signals"].append(signal)
                 continue
-            normalized["items"].append(
-                promoted_signal_item(
-                    topic=str(signal["watch_topic_id"]),
-                    title=str(signal["title"]),
-                    signal=signal,
-                    signal_summary=str(signal["summary"]),
-                    topic_value=str(signal["topic_value_class"]),
-                    issue_date=issue_date,
-                    record=record,
-                )
+            promoted = promoted_signal_item(
+                topic=str(signal["watch_topic_id"]),
+                title=str(signal["title"]),
+                signal=signal,
+                signal_summary=str(signal["summary"]),
+                topic_value=str(signal["topic_value_class"]),
+                issue_date=issue_date,
+                record=record,
             )
-            continue
+            if promoted is not None:
+                normalized["items"].append(promoted)
+                continue
         normalized["signals"].append(signal)
 
 
@@ -1521,8 +1596,14 @@ def normalize_result(
         summary = unique_sentences(summary, 1000)
         what_changed = unique_sentences(what_changed, 700)
         why_it_matters = unique_sentences(why_it_matters, 700)
-        facts = unique_nonempty(facts, 500)
-        if len(detail) < 280 or SUMMARY_LABEL_RE.search(detail):
+        facts = state_contract.normalize_material_facts(title, facts, limit=8)
+        if state_contract.GENERIC_CONTEXT_RE.search(summary) and len(facts) >= 3:
+            summary = unique_sentences(" ".join(facts[:4]), 1000)
+        if (
+            len(detail) < 280
+            or SUMMARY_LABEL_RE.search(detail)
+            or state_contract.GENERIC_CONTEXT_RE.search(detail)
+        ):
             detail = natural_detail_summary(
                 summary=summary,
                 detail=detail,
@@ -1549,17 +1630,11 @@ def normalize_result(
                 ),
                 1000,
             )
-        if sources and len(facts) < 3:
-            facts = unique_nonempty(
-                [
-                    *facts,
-                    title,
-                    summary,
-                    f"{sources[0]['label']}が{item.get('source_published_date')}付の情報として配信した。",
-                ],
-                500,
-            )
-        if len(detail) < 280 or SUMMARY_LABEL_RE.search(detail):
+        if (
+            len(detail) < 280
+            or SUMMARY_LABEL_RE.search(detail)
+            or state_contract.GENERIC_CONTEXT_RE.search(detail)
+        ):
             detail = natural_detail_summary(
                 summary=summary,
                 detail=detail,
@@ -1667,11 +1742,13 @@ def normalize_result(
             continue
         if not category_identity_ok(str(category.get("label", "")), title, signal_summary):
             continue
-        material_signal = contains_material_signal(title, signal_summary, str(record.get("excerpt", "")))
+        material_signal = publication_event_supported(
+            title,
+            signal_summary,
+            str(record.get("excerpt", "")),
+        )
         if material_signal and change_class in {"background_only", "duplicate_followup"}:
             change_class = "material_update"
-        if material_signal and topic_value == "operational_status_change":
-            topic_value = "market_or_financial_impact"
         rejection_class = (
             str(signal.get("rejection_reason_class"))
             if signal.get("rejection_reason_class")
@@ -1687,19 +1764,21 @@ def normalize_result(
         if material_signal and rejection_class in {"no_material_change", "lower_importance"}:
             rejection_class = "duplicate_covered"
         if material_signal and len(signal_summary) >= 80 and url:
+            promoted = promoted_signal_item(
+                topic=topic,
+                title=title,
+                signal=signal,
+                signal_summary=signal_summary,
+                topic_value=topic_value,
+                issue_date=issue_date,
+                record=record,
+            )
+        else:
+            promoted = None
+        if promoted is not None:
             seen_titles.add(title)
             seen_clusters.add(signal_cluster)
-            items.append(
-                promoted_signal_item(
-                    topic=topic,
-                    title=title,
-                    signal=signal,
-                    signal_summary=signal_summary,
-                    topic_value=topic_value,
-                    issue_date=issue_date,
-                    record=record,
-                )
-            )
+            items.append(promoted)
             continue
         rejection_reason = reader_facing_text(
             signal.get("rejection_reason", ""),
@@ -2084,7 +2163,7 @@ def self_test() -> None:
                 "confirmed_facts": [
                     "公式資料で開発者向け機能の更新が公表された。",
                     "対象となる機能と提供条件が明示された。",
-                    "更新日は当日の発行対象期間に含まれている。",
+                    "更新に伴い既存サービスの移行手順も示された。",
                 ],
                 "limits_or_unknowns": (
                     "利用企業への長期的な影響と追加条件は今後の確認対象となる。"
@@ -2141,9 +2220,9 @@ def self_test() -> None:
                 "title": "SpaceXが200億ドル規模の社債を検討",
                 "summary": (
                     "SpaceXが200億ドル規模の社債発行を検討していると報じられた。"
-                    "格付や資金使途、テスラとの関係を含む資本政策の見方に影響する。"
-                    "大型資金調達は宇宙事業の投資余力と市場評価を読む材料になる。"
-                    "Starship、Starlink、打ち上げインフラへの資本配分もあわせて注目される。"
+                    "調達候補額は最大200億ドルで、複数の金融機関と協議している。"
+                    "発行条件の決定前に外部格付けを取得する方針が示された。"
+                    "調達資金はStarshipとStarlinkの設備投資に充てる案が検討されている。"
                 ),
                 "source_published_date": "2099-01-02",
                 "source_url": "https://example.com/item",
@@ -2164,8 +2243,9 @@ def self_test() -> None:
                 **records[0],
                 "label": "Financial Times",
                 "excerpt": (
-                    "SpaceXが200億ドル規模の社債発行を検討し、"
-                    "格付、資金調達条件、テスラとの関係が市場で注目されている。"
+                    "SpaceXが最大200億ドルの社債発行を複数の金融機関と協議している。"
+                    "発行前に外部格付けを取得し、調達資金をStarshipとStarlinkの"
+                    "設備投資へ充てる案が検討されている。"
                 ),
             }
         ],
@@ -2313,8 +2393,82 @@ def self_test() -> None:
         "2099-01-03",
         [duplicate_record],
     )
-    if len(promoted_fallback["items"]) != 1 or promoted_fallback["signals"]:
-        fail("material fallback signals must become public items")
+    if promoted_fallback["items"] or len(promoted_fallback["signals"]) != 1:
+        fail("headline-only fallback must remain internal instead of being padded")
+    analysis_only: dict[str, Any] = {"items": [], "signals": []}
+    backfill_signals_from_evidence(
+        analysis_only,
+        {
+            "label": "SoftBank",
+            "watch_topics": [
+                {
+                    "id": "ai_infrastructure",
+                    "terms": ["SoftBank", "OpenAI", "AI"],
+                    "event_classes": ["market_or_financial_impact"],
+                }
+            ],
+        },
+        "2099-01-03",
+        [
+            {
+                "label": "YouTube",
+                "url": "https://example.com/softbank-analysis",
+                "source_role": "social_or_video_signal",
+                "channel": "youtube",
+                "source_class": "discovered_media",
+                "observed": True,
+                "published_date": "2099-01-02",
+                "title": (
+                    "【日経平均の正体】ソフトバンクG利益5兆円の裏側、"
+                    "OpenAI評価益7兆円が映すAIバブルの危険"
+                ),
+                "excerpt": (
+                    "【日経平均の正体】ソフトバンクG利益5兆円の裏側、"
+                    "OpenAI評価益7兆円が映すAIバブルの危険"
+                ),
+            }
+        ],
+    )
+    if analysis_only["items"] or len(analysis_only["signals"]) != 1:
+        fail("fresh commentary must not be promoted as a new event")
+    japan_item = fallback_item_from_record(
+        {
+            "label": "日本経済",
+            "watch_topics": [
+                {
+                    "id": "trade_economic_relations",
+                    "terms": ["日本経済界", "訪中", "視察団", "経済交流"],
+                    "event_classes": ["decision_or_policy"],
+                }
+            ],
+        },
+        "2099-01-03",
+        {
+            "label": "Regional News",
+            "url": "https://example.com/japan-china-delegations",
+            "source_role": "independent_media_or_data",
+            "channel": "web",
+            "source_class": "discovered_media",
+            "observed": True,
+            "published_date": "2099-01-02",
+            "title": "日本経済界は「改善希望」 中国、視察団の訪中巡り",
+            "excerpt": (
+                "中国外務省の副報道局長は2日の記者会見で、日本から複数の視察団が"
+                "訪れたことは中日関係の改善を望む表れだと述べた。"
+                "博覧会は北京で1日から3日まで開かれた。"
+                "日本商工会議所、関西経済連合会、大阪商工会議所の幹部が訪問した。"
+            ),
+        },
+    )
+    if japan_item is None:
+        fail("body-rich reference did not become an information-complete item")
+    japan_copy = " ".join(
+        [japan_item["summary"], japan_item["detail_summary"], *japan_item["confirmed_facts"]]
+    )
+    if not all(term in japan_copy for term in ("副報道局長", "1日から3日", "日本商工会議所")):
+        fail("body-rich reference lost concrete names, dates, or participants")
+    if any(state_contract.material_fact_violations(fact) for fact in japan_item["confirmed_facts"]):
+        fail("body-rich reference created non-material confirmed facts")
     print("NIGHT SIGNAL UNATTENDED COLLECT SELF-TEST PASSED")
 
 

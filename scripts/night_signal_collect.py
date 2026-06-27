@@ -107,6 +107,13 @@ Rules:
   topic. One finding may cover multiple topics when the source genuinely does.
 - Every finding must use a direct source URL, concrete Japanese summary, source
   date when available, and all applicable watch_topic_ids.
+- Open the direct reference when it provides article text, a release, a PDF,
+  a table, or chart data. Preserve the names, dates, amounts, comparisons,
+  decisions, results, and conditions that make the reference informative; do
+  not stop at its headline when fuller evidence is available.
+- When only a headline or search snippet can be verified, keep the finding
+  broad but say that the body is unavailable. Do not infer missing detail or
+  manufacture additional claim atoms from publication metadata.
 - Inspect every seed source target exactly once during the sweep. Copy its
   closure result into every returned observation so downstream slot validation
   remains deterministic.

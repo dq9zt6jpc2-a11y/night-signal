@@ -101,6 +101,18 @@ Mission:
   facts, limits/unknowns, and source dates.
 - Detail summary_basis.fact_sources must map every confirmed fact to one or more
   URLs from detail.sources. Do not leave material facts uncited.
+- Use reference body text fully when it contains names, dates, amounts,
+  comparisons, decisions, results, or conditions. A useful summary preserves
+  those specifics instead of replacing them with generic impact language.
+- Every confirmed fact must be a distinct event fact found in the supplied
+  observations. Publisher names, publication dates, source metadata,
+  importance analysis, and unknowns are not confirmed facts. Never repeat the
+  title or summary to reach the minimum fact count.
+- If fewer than three independent event facts are supported, keep the finding
+  as a candidate and reject it as insufficient_evidence. Do not create a card.
+- A newly published explainer, opinion, or video commentary is not itself a new
+  event merely because its title has a large number. Use the underlying event
+  date and evidence when deciding freshness.
 - Treat discovery_findings as the horizon scan for important changes outside
   the configured topic wording. Map each finding to its closest watch_topic_id,
   retain it as a candidate, and reject it only with a concrete allowed reason.
@@ -340,6 +352,108 @@ def validate_candidate_is_not_placeholder(issue_date: str, category: str, candid
     hits = [pattern for pattern in placeholder_patterns if re.search(pattern, text)]
     if hits:
         fail(f"{category} no-change placeholder must stay out of candidates: {candidate.get('title')}")
+
+
+def normalize_category_content(result: dict[str, Any]) -> dict[str, Any]:
+    candidates = result.get("candidates")
+    decisions = result.get("decisions")
+    cards = result.get("cards")
+    if not isinstance(candidates, list) or not isinstance(decisions, list) or not isinstance(cards, list):
+        return result
+
+    decisions_by_title = {
+        str(decision.get("candidate_title")): decision
+        for decision in decisions
+        if isinstance(decision, dict)
+    }
+    candidates_by_title = {
+        str(candidate.get("title")): candidate
+        for candidate in candidates
+        if isinstance(candidate, dict)
+    }
+    kept_cards: list[dict[str, Any]] = []
+    for card in cards:
+        if not isinstance(card, dict):
+            continue
+        candidate_title = str(card.get("candidate_title", ""))
+        detail = card.get("detail")
+        basis = detail.get("summary_basis") if isinstance(detail, dict) else None
+        raw_facts = basis.get("confirmed_facts") if isinstance(basis, dict) else None
+        facts = (
+            state.normalize_material_facts(str(card.get("title", "")), raw_facts, limit=8)
+            if isinstance(raw_facts, list)
+            else []
+        )
+        mappings = basis.get("fact_sources") if isinstance(basis, dict) else None
+        detail_urls = {
+            str(source.get("url"))
+            for source in detail.get("sources", [])
+            if isinstance(source, dict)
+        } if isinstance(detail, dict) else set()
+        normalized_mappings: list[dict[str, Any]] = []
+        for fact in facts:
+            fact_signature = state.copy_signature(fact)
+            source_urls: list[str] = []
+            for mapping in mappings if isinstance(mappings, list) else []:
+                if not isinstance(mapping, dict):
+                    continue
+                mapped_signature = state.copy_signature(str(mapping.get("fact", "")))
+                if not fact_signature or not mapped_signature or (
+                    fact_signature not in mapped_signature
+                    and mapped_signature not in fact_signature
+                ):
+                    continue
+                source_urls.extend(
+                    str(url)
+                    for url in mapping.get("source_urls", [])
+                    if str(url) in detail_urls
+                )
+            if source_urls:
+                normalized_mappings.append(
+                    {"fact": fact, "source_urls": sorted(set(source_urls))}
+                )
+
+        if len(facts) < 3 or len(normalized_mappings) != len(facts):
+            decision = decisions_by_title.get(candidate_title)
+            if isinstance(decision, dict):
+                decision.update(
+                    {
+                        "adoption_decision": "reject",
+                        "materiality_basis": "参照元から独立した具体的事実を3件確認できない。",
+                        "reject_reason_class": "insufficient_evidence",
+                        "reject_reason": "見出しや配信情報で補わず、本文情報の追加確認を待つ。",
+                    }
+                )
+            candidate = candidates_by_title.get(candidate_title)
+            if isinstance(candidate, dict):
+                candidate["material_facts"] = facts
+            continue
+
+        basis["confirmed_facts"] = facts
+        basis["fact_sources"] = normalized_mappings
+        candidate = candidates_by_title.get(candidate_title)
+        if isinstance(candidate, dict):
+            candidate["material_facts"] = facts
+
+        summary = str(card.get("summary", ""))
+        if state.GENERIC_CONTEXT_RE.search(summary) or state.reader_summary_violations(
+            str(card.get("title", "")), summary
+        ):
+            card["summary"] = " ".join(facts[:4])
+        detail_summary = str(detail.get("summary", ""))
+        if state.GENERIC_CONTEXT_RE.search(detail_summary) or state.reader_summary_violations(
+            str(card.get("title", "")), detail_summary
+        ):
+            detail["summary"] = " ".join(
+                [
+                    *facts[:4],
+                    str(basis.get("why_it_matters", "")),
+                    str(basis.get("limits_or_unknowns", "")),
+                ]
+            ).strip()
+        kept_cards.append(card)
+    result["cards"] = kept_cards
+    return result
 
 
 def validate_category_result(
@@ -809,6 +923,7 @@ def synthesize(
                     retries=retries,
                 )
             )
+        result = normalize_category_content(result)
         validate_category_result(
             issue_date,
             category,
@@ -1002,6 +1117,53 @@ def self_test() -> None:
         globals()["fail"] = original_fail
     if not captured_failures or "claim/source linkage" not in captured_failures[0]:
         fail("synthesis validation must reject material candidates without claim/source linkage")
+    padded_title = (
+        "【日経平均の正体】ソフトバンクG利益5兆円の裏側、"
+        "OpenAI評価益7兆円が映すAIバブルの危険"
+    )
+    padded_facts = [
+        f"{padded_title}。",
+        (
+            f"{padded_title}。対象範囲、実施時期と継続性は、"
+            "SoftBankの運営状況への影響を判断する材料になる。"
+        ),
+        "YouTubeが2099-01-01付の情報として配信した。",
+    ]
+    padded_result = normalize_category_content(
+        {
+            "candidates": [{"title": padded_title, "material_facts": padded_facts}],
+            "decisions": [
+                {
+                    "candidate_title": padded_title,
+                    "adoption_decision": "adopt",
+                    "reject_reason_class": None,
+                    "reject_reason": None,
+                }
+            ],
+            "cards": [
+                {
+                    "candidate_title": padded_title,
+                    "title": padded_title,
+                    "summary": padded_facts[1],
+                    "detail": {
+                        "sources": [{"label": "YouTube", "url": "https://example.com/video"}],
+                        "summary": padded_facts[1],
+                        "summary_basis": {
+                            "why_it_matters": "AI投資への依存度を判断する材料になる。",
+                            "confirmed_facts": padded_facts,
+                            "fact_sources": [
+                                {"fact": fact, "source_urls": ["https://example.com/video"]}
+                                for fact in padded_facts
+                            ],
+                            "limits_or_unknowns": "動画本文の追加確認が必要。",
+                        },
+                    },
+                }
+            ],
+        }
+    )
+    if padded_result["cards"] or padded_result["decisions"][0]["adoption_decision"] != "reject":
+        fail("synthesis normalization must demote padded headline-only cards")
     signature = category_signature(
         "2099-01-01",
         "OpenAI",
