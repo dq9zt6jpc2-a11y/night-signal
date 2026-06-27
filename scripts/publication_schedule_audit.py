@@ -70,12 +70,13 @@ def main() -> int:
         fail("unattended workflow must not override model calls into long retry loops")
     if "NIGHT_SIGNAL_MODEL_CONCURRENCY: 2" not in unattended:
         fail("unattended workflow must parallelize category extraction without broadening calls")
-    if (
-        "NIGHT_SIGNAL_SKIP_MODEL" not in collector
-        or 'os.getenv("GITHUB_ENV")' not in collector
-        or "without further model calls" not in collector
-    ):
-        fail("a degraded model canary must switch collection directly to evidence fallback")
+    if "NIGHT_SIGNAL_SKIP_MODEL" in collector:
+        fail("a one-shot canary must not disable all category model extraction")
+    canary_step = unattended.split("- name: Verify GitHub Models access", 1)[-1].split(
+        "- name: Stop after canary", 1
+    )[0]
+    if "inputs.canary_only == true" not in canary_step:
+        fail("the GitHub Models canary must run only for an explicit canary request")
     if "models: read" not in unattended or "night_signal_unattended_collect.py" not in unattended:
         fail("unattended workflow must use GitHub Models without an external API secret")
     if "--event-name workflow_dispatch" in unattended:

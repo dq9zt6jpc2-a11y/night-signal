@@ -63,6 +63,7 @@ jobs:
         run: python3 scripts/night_signal_runtime_audit.py "$ISSUE_DATE"
 
       - name: Verify GitHub Models access
+        if: ${{ inputs.canary_only == true }}
         run: python3 scripts/night_signal_unattended_collect.py --canary
 
       - name: Stop after canary

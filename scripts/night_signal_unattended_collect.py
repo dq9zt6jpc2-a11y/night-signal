@@ -1911,8 +1911,6 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
             for record in news_records
             if record.get("observed")
         ]
-    skip_model = os.getenv("NIGHT_SIGNAL_SKIP_MODEL", "").strip() == "1"
-
     def review_category(category: dict[str, Any]) -> tuple[str, dict[str, Any], dict[str, Any]]:
         label = str(category["label"])
         print(
@@ -1926,55 +1924,46 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
             ),
             flush=True,
         )
-        raw: dict[str, Any]
-        if skip_model:
+        try:
+            raw = model_request(
+                token,
+                [
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {
+                        "role": "user",
+                        "content": json.dumps(
+                            category_prompt(
+                                category,
+                                issue_date,
+                                records_by_category[label],
+                            ),
+                            ensure_ascii=False,
+                        ),
+                    },
+                ],
+                retry_wait_cap=90,
+            )
+        except ModelRequestError as exc:
+            print(
+                json.dumps(
+                    {
+                        "phase": "category_model_fallback",
+                        "category": label,
+                        "error": str(exc),
+                    },
+                    ensure_ascii=False,
+                ),
+                flush=True,
+            )
             raw = {
                 "items": [],
                 "signals": [],
-                "no_change_summary": f"{label}は取得済み証拠から重要クラスタを抽出した。",
-                "model_error": "canary_degraded",
+                "no_change_summary": (
+                    f"{label}はモデル抽出が一時失敗したため、"
+                    "取得済み証拠から重要クラスタを補完した。"
+                ),
+                "model_error": str(exc),
             }
-        else:
-            try:
-                raw = model_request(
-                    token,
-                    [
-                        {"role": "system", "content": SYSTEM_PROMPT},
-                        {
-                            "role": "user",
-                            "content": json.dumps(
-                                category_prompt(
-                                    category,
-                                    issue_date,
-                                    records_by_category[label],
-                                ),
-                                ensure_ascii=False,
-                            ),
-                        },
-                    ],
-                    retry_wait_cap=90,
-                )
-            except ModelRequestError as exc:
-                print(
-                    json.dumps(
-                        {
-                            "phase": "category_model_fallback",
-                            "category": label,
-                            "error": str(exc),
-                        },
-                        ensure_ascii=False,
-                    ),
-                    flush=True,
-                )
-                raw = {
-                    "items": [],
-                    "signals": [],
-                    "no_change_summary": (
-                        f"{label}はモデル抽出が一時失敗したため、"
-                        "取得済み証拠から重要クラスタを補完した。"
-                    ),
-                    "model_error": str(exc),
-                }
         normalized = normalize_result(
             raw,
             category,
@@ -2579,11 +2568,7 @@ def main() -> int:
     if not token:
         fail("GITHUB_TOKEN or GH_TOKEN is required")
     if args.canary:
-        model_available = canary(token)
-        github_env = os.getenv("GITHUB_ENV")
-        if github_env:
-            with Path(github_env).open("a", encoding="utf-8") as handle:
-                handle.write(f"NIGHT_SIGNAL_SKIP_MODEL={'0' if model_available else '1'}\n")
+        canary(token)
         return 0
     if args.skip_if_fresh and current_fresh_issue(args.issue_date):
         print(f"NIGHT SIGNAL UNATTENDED COLLECT SKIPPED: fresh issue {args.issue_date}")
