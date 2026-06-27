@@ -66,7 +66,7 @@ jobs:
             echo "published=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Locate latest reviewed state checkpoint
+      - name: Locate latest Evidence checkpoint
         id: checkpoint
         if: ${{ steps.current_publication.outputs.published != 'true' }}
         env:
@@ -77,12 +77,12 @@ jobs:
             --jq '([.artifacts[] | select(.expired == false)] | sort_by(.created_at) | last | .workflow_run.id) // empty')"
           echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
           if [[ -n "$RUN_ID" ]]; then
-            echo "Reviewed state checkpoint found in run $RUN_ID."
+            echo "Evidence checkpoint found in run $RUN_ID."
           else
-            echo "No reviewed state checkpoint is available."
+            echo "No Evidence checkpoint is available."
           fi
 
-      - name: Restore reviewed state checkpoint
+      - name: Restore Evidence checkpoint
         if: ${{ steps.checkpoint.outputs.run_id != '' }}
         uses: actions/download-artifact@v8.0.1
         with:
@@ -101,12 +101,12 @@ jobs:
           if [[ "$FORCE_COLLECTION" == "true" ]]; then
             python3 scripts/night_signal_publish.py "$ISSUE_DATE" --verification-profile deploy
           else
-            python3 scripts/night_signal_publish.py "$ISSUE_DATE" --reuse-reviewed-bundle --verification-profile deploy
+            python3 scripts/night_signal_publish.py "$ISSUE_DATE" --reuse-evidence --verification-profile deploy
           fi
           PYTHONPYCACHEPREFIX=tmp/pycache python3 -m py_compile scripts/*.py
           git diff --check
 
-      - name: Save reviewed state checkpoint
+      - name: Save Evidence checkpoint
         if: ${{ always() && steps.current_publication.outputs.published != 'true' }}
         uses: actions/upload-artifact@v7.0.1
         with:

@@ -27,20 +27,20 @@ def main() -> int:
     recovery_cases = {
         "fresh_evening_issue": runtime.decide_recovery(
             fresh_evening_issue=True,
-            reviewed_bundle_usable=False,
+            evidence_usable=False,
         ),
-        "reviewed_bundle": runtime.decide_recovery(
+        "evidence": runtime.decide_recovery(
             fresh_evening_issue=False,
-            reviewed_bundle_usable=True,
+            evidence_usable=True,
         ),
         "github_models_unattended": runtime.decide_recovery(
             fresh_evening_issue=False,
-            reviewed_bundle_usable=False,
+            evidence_usable=False,
             github_models_token=True,
         ),
         "blocked_no_honest_collector": runtime.decide_recovery(
             fresh_evening_issue=False,
-            reviewed_bundle_usable=False,
+            evidence_usable=False,
         ),
     }
     failures.extend(

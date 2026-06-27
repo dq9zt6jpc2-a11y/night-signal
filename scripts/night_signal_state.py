@@ -12,7 +12,6 @@ import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
 from render_detail import FORBIDDEN_TEXT as DETAIL_FORBIDDEN_TEXT
@@ -24,33 +23,6 @@ CONFIG_PATH = ROOT / "config" / "night_signal_coverage.json"
 SOURCES_PATH = ROOT / "config" / "night_signal_sources.json"
 MARKER_PATH = ROOT / ".night-signal-issue-date"
 DEFAULT_STATE_ROOT = ROOT / "state"
-LIVE_EVIDENCE_CONTRACT_DATE = "2026-06-13"
-
-STATE_NAMES = [
-    "frontier_built",
-    "observations_collected",
-    "candidates_normalized",
-    "topic_value_decided",
-    "issue_rendered",
-    "publication_ready",
-]
-
-MATERIAL_SIGNAL_RE = re.compile(
-    r"("
-    r"\d+(?:\.\d+)?\s*(?:%|％|億|兆|万|ドル|円|bps|bp)|"
-    r"bond|bonds|社債|債券|debt|loan|bridge loan|借り換え|資金調達|"
-    r"rating|ratings|格付|投資適格|investment grade|Baa|BBB|"
-    r"market share|シェア|share falls|50%|50％|"
-    r"target price|price target|目標株価|buy rating|sell rating|"
-    r"IPO|上場|Nasdaq|時価総額|valuation|"
-    r"merger|合併|統合|tie-up|acquisition|買収|M&A|"
-    r"hire|hiring|joins|leaves|departing|移籍|獲得|退社|人材|"
-    r"契約|受注|提携|partnership|contract|"
-    r"launch result|打ち上げ結果|docking|ドッキング|"
-    r"policy|regulation|規制|安全|recall|リコール"
-    r")",
-    re.I,
-)
 
 PUBLIC_COPY_FORBIDDEN_TERMS = sorted(
     set(
@@ -116,12 +88,6 @@ VAGUE_TITLE_PHRASES = [
 ]
 SCHEDULE_ONLY_TERMS = ["開幕予定", "開催予定", "決勝予定", "予定通り"]
 SCHEDULE_MATERIAL_TERMS = ["変更", "決定", "発表", "延期", "前倒し", "中止", "追加", "確定"]
-CANDIDATE_PLACEHOLDER_PATTERNS = [
-    r"直近確認",
-    r"確定差分は不足",
-    r"単独記事にする確定差分",
-    r"公式・媒体・SNS系の証跡で確認した",
-]
 PUBLISHER_SUFFIX_RE = re.compile(
     r"\s[-–—]\s*(?:"
     r"[A-Za-z0-9][A-Za-z0-9 .&!|｜・-]*|"
@@ -193,171 +159,6 @@ def topic_context_sentence(value_class: str, category: str) -> str:
     )
     return template.format(category=category or "対象分野")
 
-SOURCE_OBSERVATION_SCHEMA: dict[str, Any] = {
-    "type": "object",
-    "additionalProperties": False,
-    "required": [
-        "category",
-        "watch_topic_id",
-        "source_role",
-        "channel",
-        "slot_state",
-        "url",
-        "observed_at_jst",
-        "published_date",
-        "evidence_summary",
-        "source_target_results",
-        "claim_atoms",
-        "discovery_findings",
-    ],
-    "properties": {
-        "category": {"type": "string"},
-        "watch_topic_id": {"type": "string"},
-        "source_role": {"type": "string", "enum": ["primary_or_official", "independent_media_or_data", "social_or_video_signal"]},
-        "channel": {"type": "string", "enum": ["web", "sns_x", "instagram", "facebook", "youtube", "data", "calendar"]},
-        "slot_state": {"type": "string", "enum": ["observed_live", "reused_from_cache", "source_unavailable", "not_applicable"]},
-        "url": {"type": "string"},
-        "observed_at_jst": {"type": "string"},
-        "published_date": {"type": ["string", "null"]},
-        "evidence_summary": {"type": "string"},
-        "source_target_results": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "additionalProperties": False,
-                "required": [
-                    "label",
-                    "url",
-                    "channel",
-                    "slot_state",
-                    "published_date",
-                    "evidence_summary",
-                    "checked_at_jst",
-                    "verification_method",
-                ],
-                "properties": {
-                    "label": {"type": "string"},
-                    "url": {"type": "string"},
-                    "channel": {"type": "string", "enum": ["web", "sns_x", "instagram", "facebook", "youtube", "data", "calendar"]},
-                    "slot_state": {"type": "string", "enum": ["observed_live", "reused_from_cache", "source_unavailable", "not_applicable"]},
-                    "published_date": {"type": ["string", "null"]},
-                    "evidence_summary": {"type": "string"},
-                    "checked_at_jst": {"type": "string"},
-                    "verification_method": {
-                        "type": "string",
-                        "enum": [
-                            "responses_web_search",
-                            "reviewed_live_web",
-                            "direct_fetch",
-                            "cached_result",
-                            "unavailable",
-                        ],
-                    },
-                },
-            },
-        },
-        "claim_atoms": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "additionalProperties": False,
-                "required": ["claim_type", "claim", "source_state"],
-                "properties": {
-                    "claim_type": {"type": "string", "enum": ["announcement", "schedule", "numeric", "result", "award", "status"]},
-                    "claim": {"type": "string"},
-                    "source_state": {
-                        "type": "string",
-                        "enum": ["confirmed_update", "scheduled", "published_value", "final_result", "confirmed_award", "confirmed_status"],
-                    },
-                },
-            },
-        },
-        "discovery_findings": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "additionalProperties": False,
-                "required": ["title", "summary", "source_url", "published_date", "suggested_watch_topic_id"],
-                "properties": {
-                    "title": {"type": "string"},
-                    "summary": {"type": "string"},
-                    "source_url": {"type": "string"},
-                    "published_date": {"type": ["string", "null"]},
-                    "suggested_watch_topic_id": {"type": "string"},
-                },
-            },
-        },
-    },
-}
-
-CANDIDATE_SCHEMA: dict[str, Any] = {
-    "type": "object",
-    "additionalProperties": False,
-    "required": [
-        "category",
-        "watch_topic_id",
-        "title",
-        "source_published_date",
-        "source_urls",
-        "change_class",
-        "summary",
-        "material_facts",
-        "counter_evidence_checked",
-    ],
-    "properties": {
-        "category": {"type": "string"},
-        "watch_topic_id": {"type": "string"},
-        "title": {"type": "string"},
-        "source_published_date": {"type": "string"},
-        "source_urls": {"type": "array", "items": {"type": "string"}},
-        "change_class": {
-            "type": "string",
-            "enum": ["new_event", "material_update", "routine_recurring", "duplicate_followup", "background_only"],
-        },
-        "summary": {"type": "string"},
-        "material_facts": {"type": "array", "items": {"type": "string"}},
-        "counter_evidence_checked": {"type": "boolean"},
-    },
-}
-
-TOPIC_DECISION_SCHEMA: dict[str, Any] = {
-    "type": "object",
-    "additionalProperties": False,
-    "required": [
-        "candidate_title",
-        "adoption_decision",
-        "topic_value_class",
-        "reader_delta",
-        "materiality_basis",
-        "reject_reason_class",
-        "reject_reason",
-    ],
-    "properties": {
-        "candidate_title": {"type": "string"},
-        "adoption_decision": {"type": "string", "enum": ["adopt", "reject"]},
-        "topic_value_class": {
-            "type": "string",
-            "enum": [
-                "decision_or_policy",
-                "market_or_financial_impact",
-                "technical_or_product_shift",
-                "operational_status_change",
-                "event_result_or_outcome",
-                "material_schedule_change",
-                "risk_or_safety_signal",
-                "cultural_or_audience_signal",
-            ],
-        },
-        "reader_delta": {"type": "string"},
-        "materiality_basis": {"type": "string"},
-        "reject_reason_class": {
-            "type": ["string", "null"],
-            "enum": ["duplicate_covered", "lower_importance", "no_material_change", "insufficient_evidence", "insufficient_relevance", None],
-        },
-        "reject_reason": {"type": ["string", "null"]},
-    },
-}
-
 DETAIL_SOURCE_SCHEMA: dict[str, Any] = {
     "type": "object",
     "additionalProperties": False,
@@ -400,19 +201,6 @@ SUMMARY_BASIS_SCHEMA: dict[str, Any] = {
     },
 }
 
-SOURCE_TARGET_SCHEMA: dict[str, Any] = {
-    "type": "object",
-    "additionalProperties": False,
-    "required": ["label", "url", "source_role", "channel", "source_class"],
-    "properties": {
-        "label": {"type": "string"},
-        "url": {"type": "string"},
-        "source_role": {"type": "string"},
-        "channel": {"type": "string"},
-        "source_class": {"type": "string"},
-    },
-}
-
 DETAIL_CARD_SCHEMA: dict[str, Any] = {
     "type": "object",
     "additionalProperties": False,
@@ -429,7 +217,7 @@ CARD_SCHEMA: dict[str, Any] = {
     "type": "object",
     "additionalProperties": False,
     "required": [
-        "candidate_title",
+        "watch_topic_id",
         "title",
         "summary",
         "section_id",
@@ -440,7 +228,7 @@ CARD_SCHEMA: dict[str, Any] = {
         "detail",
     ],
     "properties": {
-        "candidate_title": {"type": "string"},
+        "watch_topic_id": {"type": "string"},
         "title": {"type": "string"},
         "summary": {"type": "string"},
         "section_id": {"type": "string"},
@@ -452,116 +240,19 @@ CARD_SCHEMA: dict[str, Any] = {
     },
 }
 
-COLLECTION_TASK_SCHEMA: dict[str, Any] = {
-    "type": "object",
-    "additionalProperties": False,
-    "required": [
-        "issue_date",
-        "slot_id",
-        "category",
-        "section_id",
-        "watch_topics",
-        "source_role",
-        "channel",
-        "priority",
-        "reuse_policy",
-        "model_route",
-        "batch_group",
-        "prompt_cache_key",
-        "hypotheses",
-        "source_targets",
-        "search_queries",
-        "acceptance",
-        "output_schema",
-    ],
-    "properties": {
-        "issue_date": {"type": "string"},
-        "slot_id": {"type": "string"},
-        "category": {"type": "string"},
-        "section_id": {"type": "string"},
-        "watch_topics": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "additionalProperties": False,
-                "required": ["watch_topic_id", "search_terms", "required_channels"],
-                "properties": {
-                    "watch_topic_id": {"type": "string"},
-                    "search_terms": {"type": "array", "items": {"type": "string"}},
-                    "required_channels": {"type": "array", "items": {"type": "string"}},
-                },
-            },
-        },
-        "source_role": {"type": "string"},
-        "channel": {"type": "string"},
-        "priority": {"type": "string"},
-        "reuse_policy": {"type": "string"},
-        "model_route": {"type": "string"},
-        "batch_group": {"type": "string"},
-        "prompt_cache_key": {"type": "string"},
-        "hypotheses": {"type": "array", "items": {"type": "string"}},
-        "source_targets": {"type": "array", "items": SOURCE_TARGET_SCHEMA},
-        "search_queries": {"type": "array", "items": {"type": "string"}},
-        "acceptance": {
-            "type": "object",
-            "additionalProperties": False,
-            "required": ["slot_closure_states", "must_record", "must_not_publish"],
-            "properties": {
-                "slot_closure_states": {"type": "array", "items": {"type": "string"}},
-                "must_record": {"type": "array", "items": {"type": "string"}},
-                "must_not_publish": {"type": "array", "items": {"type": "string"}},
-            },
-        },
-        "output_schema": {"type": "string"},
-    },
-}
-
-COLLECTION_PLAN_SCHEMA: dict[str, Any] = {
-    "type": "object",
-    "additionalProperties": False,
-    "required": ["issue_date", "tasks", "source_observation_schema_ref"],
-    "properties": {
-        "issue_date": {"type": "string"},
-        "tasks": {"type": "array", "items": COLLECTION_TASK_SCHEMA},
-        "source_observation_schema_ref": {"type": "string"},
-    },
-}
-
 ISSUE_STATE_SCHEMA: dict[str, Any] = {
     "type": "object",
     "additionalProperties": False,
-    "required": [
-        "issue_date",
-        "state",
-        "frontier",
-        "observations",
-        "candidates",
-        "decisions",
-        "cards",
-        "coverage_manifest",
-        "blockers",
-    ],
+    "required": ["issue_date", "cards", "coverage_manifest"],
     "properties": {
         "issue_date": {"type": "string"},
-        "state": {"type": "string", "enum": STATE_NAMES},
-        "frontier": {"type": "array", "items": {"type": "object"}},
-        "observations": {"type": "array", "items": SOURCE_OBSERVATION_SCHEMA},
-        "candidates": {"type": "array", "items": CANDIDATE_SCHEMA},
-        "decisions": {"type": "array", "items": TOPIC_DECISION_SCHEMA},
         "cards": {"type": "array", "items": CARD_SCHEMA},
         "coverage_manifest": {"type": "object"},
-        "blockers": {"type": "array", "items": {"type": "string"}},
     },
 }
 
 SCHEMAS = {
-    "source_observation": SOURCE_OBSERVATION_SCHEMA,
-    "candidate": CANDIDATE_SCHEMA,
-    "topic_decision": TOPIC_DECISION_SCHEMA,
     "card": CARD_SCHEMA,
-    "source_target": SOURCE_TARGET_SCHEMA,
-    "collection_task": COLLECTION_TASK_SCHEMA,
-    "collection_plan": COLLECTION_PLAN_SCHEMA,
     "issue_state": ISSUE_STATE_SCHEMA,
 }
 
@@ -590,39 +281,6 @@ def read_json(path: Path) -> dict[str, Any]:
     return value
 
 
-def read_json_records(path: Path) -> list[dict[str, Any]]:
-    try:
-        text = path.read_text(encoding="utf-8")
-    except FileNotFoundError:
-        fail(f"missing file: {display_path(path)}")
-    if path.suffix == ".jsonl":
-        records: list[dict[str, Any]] = []
-        for index, line in enumerate(text.splitlines(), start=1):
-            if not line.strip():
-                continue
-            try:
-                value = json.loads(line)
-            except json.JSONDecodeError as exc:
-                fail(f"invalid JSONL in {display_path(path)}:{index}: {exc}")
-            if not isinstance(value, dict):
-                fail(f"{display_path(path)}:{index} must be a JSON object")
-            records.append(value)
-        return records
-
-    try:
-        value = json.loads(text)
-    except json.JSONDecodeError as exc:
-        fail(f"invalid JSON in {display_path(path)}: {exc}")
-    if isinstance(value, list) and all(isinstance(item, dict) for item in value):
-        return value
-    if isinstance(value, dict):
-        for key in (path.stem, "items", "records"):
-            records = value.get(key)
-            if isinstance(records, list) and all(isinstance(item, dict) for item in records):
-                return records
-    fail(f"{display_path(path)} must be a JSON array of objects or JSONL objects")
-
-
 def jst_today() -> str:
     return datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d")
 
@@ -632,49 +290,6 @@ def category_required_channels(contract: dict[str, Any], category: dict[str, Any
     if not isinstance(channels, list) or any(not isinstance(channel, str) for channel in channels):
         fail(f"{category.get('label', '<unknown>')} has invalid required channels")
     return channels
-
-
-def build_frontier(contract: dict[str, Any]) -> list[dict[str, Any]]:
-    categories = contract.get("categories")
-    if not isinstance(categories, list) or not categories:
-        fail("coverage contract missing categories")
-
-    frontier: list[dict[str, Any]] = []
-    for category in categories:
-        if not isinstance(category, dict):
-            fail("coverage category must be an object")
-        label = category.get("label")
-        section_id = category.get("section_id")
-        if not isinstance(label, str) or not isinstance(section_id, str):
-            fail("coverage category missing label or section_id")
-        axes = category.get("axes", [])
-        topics = category.get("watch_topics", [])
-        if not isinstance(axes, list) or not isinstance(topics, list):
-            fail(f"{label} axes/watch_topics must be lists")
-        axis_terms = [term for axis in axes if isinstance(axis, dict) for term in axis.get("terms", []) if isinstance(term, str)]
-        channels = category_required_channels(contract, category)
-        for topic in topics:
-            if not isinstance(topic, dict) or not isinstance(topic.get("id"), str):
-                fail(f"{label} watch topic is invalid")
-            topic_terms = [term for term in topic.get("terms", []) if isinstance(term, str)]
-            frontier.append(
-                {
-                    "category": label,
-                    "section_id": section_id,
-                    "watch_topic_id": topic["id"],
-                    "required_channels": channels,
-                    "search_terms": compact_terms(topic_terms + axis_terms, limit=24),
-                    "event_classes": sorted(
-                        {
-                            value
-                            for value in topic.get("event_classes", [])
-                            if isinstance(value, str)
-                        }
-                    ),
-                    "source_roles": ["primary_or_official", "independent_media_or_data", "social_or_video_signal"],
-                }
-            )
-    return frontier
 
 
 def selected_issue_date() -> str | None:
@@ -695,14 +310,12 @@ def artifact_status(issue_date: str) -> dict[str, bool]:
         except json.JSONDecodeError:
             issue = {}
     return {
-        "research_bundle": (state_dir / "research_bundle.json").exists(),
+        "evidence": (state_dir / "evidence.json").exists(),
         "state_issue_json": issue_path.exists(),
         "marker_is_issue_date": selected_issue_date() == issue_date,
         "sample_html": (ROOT / f"night-brief-web-sample-{issue_date}.html").exists(),
         "root_site_html": (ROOT / "site" / "index.html").exists(),
         "dated_site_html": (ROOT / "site" / issue_date / "index.html").exists(),
-        "extraction_log": (ROOT / "details" / f"extraction-log-{issue_date}.html").exists(),
-        "site_extraction_log": (ROOT / "site" / issue_date / "details" / f"extraction-log-{issue_date}.html").exists(),
     }
 
 
@@ -710,33 +323,37 @@ def readiness(issue_date: str) -> dict[str, Any]:
     contract = read_json(CONFIG_PATH)
     artifacts = artifact_status(issue_date)
     blockers = [name for name, ok in artifacts.items() if not ok]
-    frontier = build_frontier(contract)
+    topic_count = sum(
+        len(category.get("watch_topics", []))
+        for category in contract.get("categories", [])
+        if isinstance(category, dict)
+    )
     if artifacts["state_issue_json"] and not blockers:
         source_state = "publication_ready"
     elif artifacts["state_issue_json"]:
         source_state = "issue_built"
-    elif artifacts["research_bundle"]:
+    elif artifacts["evidence"]:
         source_state = "evidence_collected"
     else:
         source_state = "collection_pending"
     return {
         "issue_date": issue_date,
         "state": "publication_ready" if not blockers else source_state,
-        "frontier_count": len(frontier),
+        "watch_topic_count": topic_count,
         "artifacts": artifacts,
         "blockers": blockers,
         "purpose_invariants": {
-            "evidence_bundle_present": artifacts["research_bundle"],
+            "evidence_bundle_present": artifacts["evidence"],
             "single_issue_state_present": artifacts["state_issue_json"],
             "publication_artifacts_present": artifacts["state_issue_json"] and artifacts["sample_html"] and artifacts["dated_site_html"],
         },
         "design": {
             "generation_owner": "night_signal_state.py --generate-issue",
             "generation_source_state": source_state,
-            "collection_owner": "night_signal_publish.py -> night_signal_unattended_collect.py",
-            "story_owner": "night_signal_import_research.py",
+            "collection_owner": "night_signal_publish.py -> night_signal_collect.py",
+            "story_owner": "night_signal_editor.py",
             "publication_rule": "publish only selected JST-current issue artifacts",
-            "content_contract": "reviewed sources become important-update cards; renderers consume only validated issue state.",
+            "content_contract": "Evidence is edited once into public updates; validators reject and renderers only display.",
         },
     }
 
@@ -1118,38 +735,6 @@ def text_overlap(left: str, right: str) -> int:
     return len(content_terms(left) & content_terms(right))
 
 
-def validate_card_candidate_binding(raw: dict[str, Any], candidate: dict[str, Any], *, card_index: int) -> None:
-    candidate_title = require_str(raw, "candidate_title")
-    card_title = require_str(raw, "title")
-    card_summary = require_str(raw, "summary")
-    detail = raw.get("detail")
-    if not isinstance(detail, dict):
-        fail(f"cards[{card_index}] missing detail object")
-    detail_summary = require_str(detail, "summary")
-    basis = detail.get("summary_basis")
-    basis_text = ""
-    if isinstance(basis, dict):
-        basis_values: list[str] = []
-        for key in ("what_changed", "why_it_matters", "limits_or_unknowns"):
-            value = basis.get(key)
-            if isinstance(value, str):
-                basis_values.append(value)
-        facts = basis.get("confirmed_facts")
-        if isinstance(facts, list):
-            basis_values.extend(str(fact) for fact in facts if isinstance(fact, str))
-        basis_text = " ".join(basis_values)
-
-    candidate_text = " ".join(
-        str(candidate.get(key, ""))
-        for key in ("title", "summary", "change_class", "source_published_date")
-    )
-    public_text = " ".join([card_summary, detail_summary, basis_text])
-    if text_overlap(public_text, candidate_text) < 2:
-        fail(f"cards[{card_index}] public copy is not bound to its candidate facts: {candidate_title}")
-    if text_overlap(card_summary, detail_summary) < 2 and text_overlap(card_summary, basis_text) < 2:
-        fail(f"cards[{card_index}] summary and detail describe different facts: {card_title}")
-
-
 def validate_public_card_copy(raw: dict[str, Any], detail: dict[str, Any], *, issue_date: str, card_index: int) -> None:
     title = require_str(raw, "title")
     summary = require_str(raw, "summary")
@@ -1213,22 +798,6 @@ def relative_day_label(issue_date: str, source_date: str) -> str:
     return {0: "今日", 1: "昨日", 2: "一昨日"}.get(delta, "")
 
 
-def normalize_public_summary(text: str) -> str:
-    text = re.sub(r"\s+", " ", str(text).strip())
-    text = re.sub(r"[。．.]{2,}", "。", text)
-    text = re.sub(r"([！？!?]){2,}", r"\1", text)
-    parts = [part.strip() for part in re.split(r"(?<=[。！？!?])", text) if part.strip()]
-    seen: set[str] = set()
-    kept: list[str] = []
-    for part in parts:
-        key = re.sub(r"[、。．.!！?？\s「」『』（）()]", "", part).lower()
-        if key and key in seen:
-            continue
-        seen.add(key)
-        kept.append(part)
-    return " ".join(kept) if kept else text
-
-
 def normalized_cards(issue: dict[str, Any]) -> list[dict[str, Any]]:
     issue_date = require_str(issue, "issue_date")
     cards = require_list(issue, "cards")
@@ -1239,9 +808,9 @@ def normalized_cards(issue: dict[str, Any]) -> list[dict[str, Any]]:
     for index, raw in enumerate(cards, start=1):
         if not isinstance(raw, dict):
             fail(f"cards[{index}] must be an object")
-        candidate_title = require_str(raw, "candidate_title")
         title = require_str(raw, "title")
-        summary = normalize_public_summary(require_str(raw, "summary"))
+        watch_topic_id = str(raw.get("watch_topic_id", "")).strip()
+        summary = require_str(raw, "summary")
         section_id = require_str(raw, "section_id")
         category = require_str(raw, "category")
         source_date = require_str(raw, "source_published_date")
@@ -1249,7 +818,7 @@ def normalized_cards(issue: dict[str, Any]) -> list[dict[str, Any]]:
         if not isinstance(detail, dict):
             fail(f"cards[{index}] missing detail object")
         slug = require_str(detail, "slug")
-        detail = {**detail, "summary": normalize_public_summary(require_str(detail, "summary"))}
+        detail = {**detail, "summary": require_str(detail, "summary")}
         raw_for_validation = {**raw, "summary": summary, "detail": detail}
         validate_public_card_copy(raw_for_validation, detail, issue_date=issue_date, card_index=index)
         if not slug.endswith(f"-{issue_date}.html"):
@@ -1260,7 +829,7 @@ def normalized_cards(issue: dict[str, Any]) -> list[dict[str, Any]]:
         normalized.append(
             {
                 **raw,
-                "candidate_title": candidate_title,
+                "watch_topic_id": watch_topic_id,
                 "title": title,
                 "summary": summary,
                 "section_id": section_id,
@@ -1317,7 +886,7 @@ def latest_three_dates(issue_date: str) -> set[str]:
 
 
 def display_cluster_key(card: dict[str, Any]) -> tuple[str, str]:
-    text = str(card.get("title") or card.get("candidate_title") or "")
+    text = str(card.get("title") or "")
     text = re.sub(r"\s+執筆(?:\s+[-–—].*)?$", " ", text)
     text = re.sub(r"\s+[-–—]\s+[^。]{1,120}$", " ", text)
     text = re.sub(r"https?://\S+", " ", text)
@@ -1439,32 +1008,6 @@ def rolling_display_cards(
     return display_cards
 
 
-def observed_evidence_urls(observations: list[dict[str, Any]]) -> set[str]:
-    urls: set[str] = set()
-    for observation in observations:
-        if observation.get("slot_state") in {"observed_live", "reused_from_cache"}:
-            url = observation.get("url")
-            if isinstance(url, str) and url.startswith(("http://", "https://")):
-                urls.add(url)
-        for result in observation.get("source_target_results", []):
-            if not isinstance(result, dict):
-                continue
-            url = result.get("url")
-            if (
-                result.get("slot_state") in {"observed_live", "reused_from_cache"}
-                and isinstance(url, str)
-                and url.startswith(("http://", "https://"))
-            ):
-                urls.add(url)
-        for finding in observation.get("discovery_findings", []):
-            if not isinstance(finding, dict):
-                continue
-            url = finding.get("source_url")
-            if isinstance(url, str) and url.startswith(("http://", "https://")):
-                urls.add(url)
-    return urls
-
-
 def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, root: bool = False) -> str:
     issue_date = require_str(issue, "issue_date")
     display_date = issue_date.replace("-", ".")
@@ -1487,7 +1030,6 @@ def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, roo
     for section_id, label in section_labels.items():
         nav_links.append(f'<a href="#{html.escape(section_id, quote=True)}">{html.escape(label)}</a>')
     nav_links.append('<a href="details/policy.html">方針</a>')
-    nav_links.append(f'<a href="details/extraction-log-{html.escape(issue_date, quote=True)}.html">抽出ログ</a>')
 
     priority = "\n".join(render_priority_card(index, card) for index, card in enumerate(cards[:4], start=1))
     sections = []
@@ -1550,626 +1092,196 @@ def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, roo
 """
 
 
-def render_extraction_log(issue: dict[str, Any]) -> str:
-    issue_date = require_str(issue, "issue_date")
-    checked = issue.get("last_checked_jst") or datetime.now(ZoneInfo("Asia/Tokyo")).isoformat(timespec="seconds")
-    manifest = issue.get("coverage_manifest")
-    if not isinstance(manifest, dict):
-        fail("issue state missing coverage_manifest object")
-    manifest = dict(manifest)
-    manifest["date"] = issue_date
-    manifest.setdefault("last_checked_jst", checked)
-    contract = read_json(CONFIG_PATH)
-    categories = [
-        category["label"]
-        for category in contract.get("categories", [])
-        if isinstance(category, dict) and isinstance(category.get("label"), str)
-    ]
-    category_text = "、".join(categories)
-    manifest.setdefault("contract_version", contract.get("contract_version"))
-    manifest_json = json.dumps(manifest, ensure_ascii=False, indent=2)
-    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
-    heading = f"{issue_dt.year}年{issue_dt.month}月{issue_dt.day}日版の抽出ログ"
-    return f"""<!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>抽出ログ {html.escape(issue_date)} | NIGHT SIGNAL</title><link rel="stylesheet" href="_style.css"></head>
-<body><main><a class="back" href="../index.html">一覧へ戻る</a><article class="article"><div class="kicker">Coverage Log</div><h1>{heading}</h1>
-<p>Web、SNS/X、Instagram、Facebook、YouTubeをカテゴリ別・探索軸別に横断し、公式、主要報道、専門媒体、データ、予定、反証をカテゴリごとに記録した。対象カテゴリ: {html.escape(category_text)}。</p>
-<h2>分類</h2><ul><li>公式 / 主要報道 / 専門媒体 / SNS/X / Instagram / Facebook / YouTube / データ / 予定 / 反証 を各カテゴリで記録。</li><li>採用 / 保留 / 除外 / 未確認 はcoverage-manifestに保存した。</li><li>new_or_changed_items と no_change_checks はカテゴリごとに記録し、掲載項目のURLは詳細ページの原文確認と重ねた。</li></ul>
-<script type="application/json" id="coverage-manifest">{manifest_json}</script></article></main></body></html>
-"""
-
-
-def validate_frontier(issue: dict[str, Any]) -> list[dict[str, Any]]:
-    frontier = require_list(issue, "frontier")
-    issue_date = require_str(issue, "issue_date")
-    if issue_date < LIVE_EVIDENCE_CONTRACT_DATE:
-        if not frontier or any(not isinstance(item, dict) for item in frontier):
-            fail("legacy issue frontier must contain objects")
-        return frontier
-    expected = build_frontier(read_json(CONFIG_PATH))
-    if len(frontier) != len(expected):
-        fail(f"frontier count mismatch in issue state: {len(frontier)} != {len(expected)}")
-    expected_keys = {(item["category"], item["watch_topic_id"]) for item in expected}
-    actual_keys = {
-        (str(item.get("category")), str(item.get("watch_topic_id")))
-        for item in frontier
-        if isinstance(item, dict)
-    }
-    if actual_keys != expected_keys:
-        missing = sorted(expected_keys - actual_keys)
-        extra = sorted(actual_keys - expected_keys)
-        fail(f"frontier does not match coverage contract: missing={missing[:5]}, extra={extra[:5]}")
-    return expected
-
-
-def validate_observation_records(
-    observations: list[Any],
-    frontier: list[dict[str, Any]],
-    *,
-    issue_date: str | None = None,
-    source_registry: dict[str, list[dict[str, str]]] | None = None,
-) -> dict[str, Any]:
-    closed_states = {"observed_live", "reused_from_cache", "source_unavailable", "not_applicable"}
-    allowed_roles = {"primary_or_official", "independent_media_or_data", "social_or_video_signal"}
-    allowed_channels = {"web", "sns_x", "instagram", "facebook", "youtube", "data", "calendar"}
-    if source_registry is None:
-        source_registry = (
-            load_source_registry_for_issue(issue_date)
-            if issue_date
-            else load_source_registry()
-        )
-    for index, observation in enumerate(observations, start=1):
-        if not isinstance(observation, dict):
-            fail(f"observations[{index}] must be an object")
-        for key in ("category", "watch_topic_id", "source_role", "channel", "slot_state", "url", "observed_at_jst", "evidence_summary"):
-            if not isinstance(observation.get(key), str) or not observation[key].strip():
-                fail(f"observations[{index}] missing required string: {key}")
-        if observation["source_role"] not in allowed_roles:
-            fail(f"observations[{index}] invalid source_role: {observation['source_role']}")
-        if observation["channel"] not in allowed_channels:
-            fail(f"observations[{index}] invalid channel: {observation['channel']}")
-        if observation["slot_state"] not in closed_states:
-            fail(f"observations[{index}] invalid slot_state: {observation['slot_state']}")
-        target_results = observation.get("source_target_results")
-        if not isinstance(target_results, list) or not target_results:
-            fail(f"observations[{index}] source_target_results must be a non-empty list")
-        result_urls: set[str] = set()
-        verified_target_count = 0
-        live_target_count = 0
-        strict_live_evidence = (
-            issue_date or observation["observed_at_jst"][:10]
-        ) >= LIVE_EVIDENCE_CONTRACT_DATE
-        for result_index, result in enumerate(target_results, start=1):
-            if not isinstance(result, dict):
-                fail(f"observations[{index}] source_target_results[{result_index}] must be an object")
-            required_result_keys = [
-                "label",
-                "url",
-                "channel",
-                "slot_state",
-                "evidence_summary",
-            ]
-            if strict_live_evidence:
-                required_result_keys.extend(("checked_at_jst", "verification_method"))
-            for key in required_result_keys:
-                if not isinstance(result.get(key), str) or not result[key].strip():
-                    fail(f"observations[{index}] source_target_results[{result_index}] missing required string: {key}")
-            if result["channel"] not in allowed_channels:
-                fail(f"observations[{index}] source_target_results[{result_index}] invalid channel: {result['channel']}")
-            if result["slot_state"] not in closed_states:
-                fail(f"observations[{index}] source_target_results[{result_index}] invalid slot_state: {result['slot_state']}")
-            if not result["url"].startswith(("http://", "https://")):
-                fail(f"observations[{index}] source_target_results[{result_index}] url must be absolute")
-            if strict_live_evidence:
-                try:
-                    checked_at = datetime.fromisoformat(result["checked_at_jst"])
-                except ValueError:
-                    fail(f"observations[{index}] source_target_results[{result_index}] checked_at_jst must be ISO-8601")
-                if checked_at.strftime("%Y-%m-%d") != observation["observed_at_jst"][:10]:
-                    fail(f"observations[{index}] source_target_results[{result_index}] checked_at_jst date mismatch")
-                allowed_methods = {
-                    "responses_web_search",
-                    "reviewed_live_web",
-                    "direct_fetch",
-                    "cached_result",
-                    "unavailable",
-                }
-                if result["verification_method"] not in allowed_methods:
-                    fail(f"observations[{index}] source_target_results[{result_index}] invalid verification_method")
-                if result["slot_state"] == "source_unavailable" and result["verification_method"] != "unavailable":
-                    fail(f"observations[{index}] source_target_results[{result_index}] unavailable source needs unavailable method")
-                if result["slot_state"] in {"observed_live", "reused_from_cache"} and result["verification_method"] == "unavailable":
-                    fail(f"observations[{index}] source_target_results[{result_index}] observed source cannot use unavailable method")
-            if result["slot_state"] in {"observed_live", "reused_from_cache"}:
-                verified_target_count += 1
-            if result["slot_state"] == "observed_live":
-                live_target_count += 1
-            if strict_live_evidence and re.search(r"時点の更新有無を確認した[。.]?$", result["evidence_summary"]):
-                fail(f"observations[{index}] source_target_results[{result_index}] evidence summary is generic, not source-specific")
-            result_urls.add(result["url"])
-        unavailable_slot = observation["slot_state"] == "source_unavailable"
-        if verified_target_count == 0 and not unavailable_slot:
-            fail(f"observations[{index}] has no verified source result")
-        if strict_live_evidence and live_target_count == 0 and not unavailable_slot:
-            fail(f"observations[{index}] has no live source result for the current daily contract")
-        if strict_live_evidence:
-            expected_targets = source_targets_for_slot(source_registry, observation)
-            missing_targets = [target["url"] for target in expected_targets if target["url"] not in result_urls]
-            if missing_targets:
-                fail(f"observations[{index}] missing source target results: " + ", ".join(missing_targets[:6]))
-        claim_atoms = observation.get("claim_atoms")
-        if not isinstance(claim_atoms, list):
-            fail(f"observations[{index}] claim_atoms must be a list")
-
-    state = coverage_state(observations, frontier=frontier)
-    if state["missing_slots"]:
-        first = state["missing_slots"][0]
-        fail(
-            "collection state has unclosed observation slots; first missing "
-            f"{first['category']} / {first['watch_topic_id']} / {first['source_role']} / {first['channel']}"
-        )
-    return state
-
-
-def validate_observations(
-    issue: dict[str, Any],
-    frontier: list[dict[str, Any]],
-    issue_path: Path | None = None,
-) -> list[dict[str, Any]]:
-    observations = require_list(issue, "observations")
-    issue_date = require_str(issue, "issue_date")
-    plan_path = issue_path.parent / "collection_plan.json" if issue_path else None
-    validate_observation_records(
-        observations,
-        frontier,
-        issue_date=issue_date,
-        source_registry=load_source_registry_for_issue(
-            issue_date,
-            plan_path=plan_path,
-        ),
-    )
-    return observations
-
-
-def validate_candidates(issue: dict[str, Any], frontier: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    issue_date = require_str(issue, "issue_date")
-    contract = read_json(CONFIG_PATH)
-    candidates = require_list(issue, "candidates")
-    watch_keys = {(item["category"], item["watch_topic_id"]) for item in frontier}
-    allowed_change = {"new_event", "material_update", "routine_recurring", "duplicate_followup", "background_only"}
-    for index, candidate in enumerate(candidates, start=1):
-        if not isinstance(candidate, dict):
-            fail(f"candidates[{index}] must be an object")
-        category = require_str(candidate, "category")
-        topic = require_str(candidate, "watch_topic_id")
-        key = (category, topic)
-        if key not in watch_keys:
-            fail(f"candidates[{index}] is outside coverage contract: {category}/{topic}")
-        title = require_str(candidate, "title")
-        require_str(candidate, "source_published_date")
-        summary = require_str(candidate, "summary")
-        if effective_on_or_after(contract, "public_copy_contract_effective_date", issue_date):
-            reject_public_copy(f"candidates[{index}].title", title, kind="title")
-            reject_public_copy(f"candidates[{index}].summary", summary, kind="summary")
-        if effective_on_or_after(contract, "candidate_placeholder_ban_effective_date", issue_date):
-            placeholder_hits = [
-                pattern
-                for pattern in CANDIDATE_PLACEHOLDER_PATTERNS
-                if re.search(pattern, title) or re.search(pattern, summary)
-            ]
-            if placeholder_hits:
-                fail(
-                    f"candidates[{index}] is a no-change placeholder, not a candidate: "
-                    + ", ".join(placeholder_hits)
-                )
-        if candidate.get("change_class") not in allowed_change:
-            fail(f"candidates[{index}] invalid change_class")
-        source_urls = candidate.get("source_urls")
-        if not isinstance(source_urls, list) or not source_urls or any(not isinstance(url, str) or not url.startswith(("http://", "https://")) for url in source_urls):
-            fail(f"candidates[{index}] source_urls must contain absolute URLs")
-        facts = candidate.get("material_facts")
-        if not isinstance(facts, list):
-            fail(f"candidates[{index}] material_facts must be a list")
-        if not isinstance(candidate.get("counter_evidence_checked"), bool):
-            fail(f"candidates[{index}] counter_evidence_checked must be boolean")
-    return candidates
-
-
-def observed_claim_source_urls(issue_date: str, observations: list[dict[str, Any]]) -> set[str]:
-    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
-    allowed_dates = {
-        issue_dt.isoformat(),
-        issue_dt.fromordinal(issue_dt.toordinal() - 1).isoformat(),
-        issue_dt.fromordinal(issue_dt.toordinal() - 2).isoformat(),
-    }
-    urls: set[str] = set()
-    for observation in observations:
-        if not isinstance(observation, dict):
-            continue
-        if observation.get("slot_state") != "observed_live" or observation.get("published_date") not in allowed_dates:
-            continue
-        claim_atoms = observation.get("claim_atoms")
-        if not isinstance(claim_atoms, list) or not claim_atoms:
-            continue
-        url = observation.get("url")
-        if isinstance(url, str) and url.startswith(("http://", "https://")):
-            urls.add(url)
-        for result in observation.get("source_target_results", []):
-            if not isinstance(result, dict):
-                continue
-            result_url = result.get("url")
-            if (
-                isinstance(result_url, str)
-                and result_url.startswith(("http://", "https://"))
-                and result.get("slot_state") == "observed_live"
-                and result.get("published_date") in allowed_dates
-            ):
-                urls.add(result_url)
-    return urls
-
-
-def validate_claim_source_linkage(issue: dict[str, Any], observations: list[dict[str, Any]], candidates: list[dict[str, Any]]) -> None:
-    issue_date = require_str(issue, "issue_date")
-    contract = read_json(CONFIG_PATH)
-    if not effective_on_or_after(contract, "claim_source_linkage_effective_date", issue_date):
-        return
-    claim_urls = observed_claim_source_urls(issue_date, observations)
-    for index, candidate in enumerate(candidates, start=1):
-        if candidate.get("change_class") not in {"new_event", "material_update"}:
-            continue
-        source_urls = candidate.get("source_urls")
-        if not isinstance(source_urls, list) or not any(url in claim_urls for url in source_urls):
-            fail(f"candidates[{index}] material item lacks claim/source linkage")
-
-
-def validate_decisions_and_cards(issue: dict[str, Any], candidates: list[dict[str, Any]], cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    decisions = require_list(issue, "decisions")
-    candidate_by_title = {str(candidate.get("title")): candidate for candidate in candidates}
-    candidate_titles = set(candidate_by_title)
-    adopted_titles: list[str] = []
-    allowed_values = set(TOPIC_DECISION_SCHEMA["properties"]["topic_value_class"]["enum"])
-    for index, decision in enumerate(decisions, start=1):
-        if not isinstance(decision, dict):
-            fail(f"decisions[{index}] must be an object")
-        title = require_str(decision, "candidate_title")
-        if title not in candidate_titles:
-            fail(f"decisions[{index}] references unknown candidate: {title}")
-        adoption = decision.get("adoption_decision")
-        if adoption not in {"adopt", "reject"}:
-            fail(f"decisions[{index}] invalid adoption_decision")
-        if decision.get("topic_value_class") not in allowed_values:
-            fail(f"decisions[{index}] invalid topic_value_class")
-        require_str(decision, "reader_delta")
-        require_str(decision, "materiality_basis")
-        candidate = candidate_by_title[title]
-        if rejects_material_signal(decision, candidate):
-            fail(f"decisions[{index}] rejects material signal as no-change: {title}")
-        if adoption == "adopt":
-            adopted_titles.append(title)
-        elif not decision.get("reject_reason_class") or not decision.get("reject_reason"):
-            fail(f"decisions[{index}] rejected item needs reject reason")
-
-    card_candidate_titles = [str(card.get("candidate_title")) for card in cards]
-    if sorted(card_candidate_titles) != sorted(adopted_titles):
-        fail(f"cards must reference adopted decisions: cards={card_candidate_titles}, adopted={adopted_titles}")
-    public_titles = [str(card.get("title")) for card in cards]
-    if len(public_titles) != len(set(public_titles)):
-        fail("cards must have unique public titles")
-    for card_index, card in enumerate(cards, start=1):
-        if not isinstance(card, dict):
-            fail(f"cards[{card_index}] must be an object")
-        candidate_title = require_str(card, "candidate_title")
-        validate_card_candidate_binding(card, candidate_by_title[candidate_title], card_index=card_index)
-    return decisions
-
-
-def rejects_material_signal(decision: dict[str, Any], candidate: dict[str, Any]) -> bool:
-    candidate_text = " ".join(
-        str(candidate.get(key, ""))
-        for key in ("title", "summary", "change_class")
-    )
-    return (
-        decision.get("adoption_decision") == "reject"
-        and decision.get("reject_reason_class") in {"no_material_change", "lower_importance"}
-        and candidate.get("change_class") in {"new_event", "material_update"}
-        and bool(MATERIAL_SIGNAL_RE.search(candidate_text))
-    )
-
-
 def validate_manifest_alignment(issue: dict[str, Any], cards: list[dict[str, Any]]) -> None:
     manifest = issue.get("coverage_manifest")
     if not isinstance(manifest, dict):
         fail("issue state missing coverage_manifest object")
-    categories = manifest.get("categories")
-    if not isinstance(categories, dict):
-        fail("coverage_manifest missing categories object")
     contract = read_json(CONFIG_PATH)
     issue_date = require_str(issue, "issue_date")
-    strict_live_evidence = issue_date >= LIVE_EVIDENCE_CONTRACT_DATE
-    if strict_live_evidence:
-        completed_at = manifest.get("collection_completed_at_jst")
-        if not isinstance(completed_at, str):
-            fail("coverage_manifest missing collection_completed_at_jst")
-        try:
-            completed = datetime.fromisoformat(completed_at)
-        except ValueError:
-            fail("coverage_manifest collection_completed_at_jst must be ISO-8601")
-        if completed.strftime("%Y-%m-%d") != issue_date:
-            fail("coverage_manifest collection_completed_at_jst date mismatch")
-        if manifest.get("collection_mode") not in {
-            "responses_web_search",
-            "reviewed_live_web",
-            "github_models_unattended",
-        }:
-            fail("coverage_manifest collection_mode must describe a live research path")
+    completed_at = manifest.get("collection_completed_at_jst")
+    if not isinstance(completed_at, str):
+        fail("coverage_manifest missing collection_completed_at_jst")
+    try:
+        completed = datetime.fromisoformat(completed_at)
+    except ValueError:
+        fail("coverage_manifest collection_completed_at_jst must be ISO-8601")
+    if completed.strftime("%Y-%m-%d") != issue_date:
+        fail("coverage_manifest collection_completed_at_jst date mismatch")
+    if manifest.get("collection_mode") not in {
+        "responses_web_search",
+        "reviewed_live_web",
+        "github_models_unattended",
+    }:
+        fail("coverage_manifest collection_mode must describe a live research path")
     if effective_on_or_after(contract, "detail_information_contract_effective_date", issue_date):
         expected_version = expected_contract_version(contract, issue_date)
         if manifest.get("contract_version") != expected_version:
             fail(f"coverage_manifest contract_version must be {expected_version}")
-    cards_by_section: dict[str, list[str]] = {}
-    candidate_topics_by_category: dict[str, set[str]] = {}
-    for candidate in issue.get("candidates", []):
-        if isinstance(candidate, dict):
-            candidate_topics_by_category.setdefault(
-                str(candidate.get("category")), set()
-            ).add(str(candidate.get("watch_topic_id")))
+        evidence_hash = manifest.get("evidence_sha256")
+        current_contract = expected_version == contract.get("contract_version")
+        if evidence_hash is not None or current_contract:
+            if not isinstance(evidence_hash, str) or not re.fullmatch(r"[0-9a-f]{64}", evidence_hash):
+                fail("coverage_manifest evidence_sha256 must be a SHA-256 hex digest")
+    public_titles = [str(card.get("title")) for card in cards]
+    if len(public_titles) != len(set(public_titles)):
+        fail("cards must have unique public titles")
+
+
+def validate_issue_evidence(
+    issue: dict[str, Any],
+    cards: list[dict[str, Any]],
+    issue_path: Path | None,
+    evidence_bundle: dict[str, Any] | None = None,
+) -> None:
+    if evidence_bundle is None and issue_path is None:
+        return
+    bundle = evidence_bundle or read_json(issue_path.parent / "evidence.json")
+    issue_date = require_str(issue, "issue_date")
+    if bundle.get("issue_date") != issue_date:
+        fail("Evidence date does not match issue date")
+    if issue_path is not None:
+        evidence_path = issue_path.parent / "evidence.json"
+        if evidence_path.exists():
+            actual_hash = hashlib.sha256(evidence_path.read_bytes()).hexdigest()
+            expected_hash = issue.get("coverage_manifest", {}).get("evidence_sha256")
+            if expected_hash is not None and expected_hash != actual_hash:
+                fail("Issue was built from different Evidence content")
+    checked_at = bundle.get("checked_at_jst")
+    if not isinstance(checked_at, str) or not checked_at.startswith(issue_date):
+        fail("research bundle checked_at_jst must be on the issue date")
+
+    configured = {
+        str(category["label"]): category
+        for category in read_json(CONFIG_PATH).get("categories", [])
+        if isinstance(category, dict)
+    }
+    bundle_categories = bundle.get("categories")
+    if not isinstance(bundle_categories, dict) or set(bundle_categories) != set(configured):
+        fail("research bundle must cover every configured category exactly once")
+    registry = load_source_registry()
+    cards_by_category: dict[str, list[dict[str, Any]]] = {}
     for card in cards:
-        cards_by_section.setdefault(str(card.get("section_id")), []).append(str(card.get("title")))
-    for category in contract.get("categories", []):
-        if not isinstance(category, dict):
-            continue
-        label = str(category.get("label"))
-        section_id = str(category.get("section_id"))
-        entry = categories.get(label)
+        cards_by_category.setdefault(str(card.get("category")), []).append(card)
+
+    for label, category in configured.items():
+        entry = bundle_categories[label]
         if not isinstance(entry, dict):
-            fail(f"coverage_manifest missing category: {label}")
-        published = entry.get("published_card_titles")
-        if published != cards_by_section.get(section_id, []):
-            fail(f"{label} published_card_titles must match adopted cards")
-        required_lists = [
-            "new_or_changed_items",
-            "no_change_checks",
-            "latest_candidates",
-        ]
-        for key in required_lists:
-            if not isinstance(entry.get(key), list):
-                fail(f"{label} coverage_manifest missing list: {key}")
-        if not strict_live_evidence:
-            continue
-        observed_urls = observed_evidence_urls(
-            [
-                observation
-                for observation in issue.get("observations", [])
-                if isinstance(observation, dict)
-                and observation.get("category") == label
-            ]
-        )
-        checked_topics: set[str] = set()
-        for index, check in enumerate(entry["no_change_checks"], start=1):
-            if not isinstance(check, dict):
-                fail(f"{label} no_change_checks[{index}] must be an object")
-            topic_id = check.get("topic_id")
-            result = check.get("result")
-            evidence_urls = check.get("evidence_urls")
-            if not isinstance(topic_id, str) or not topic_id:
-                fail(f"{label} no_change_checks[{index}] missing topic_id")
-            if not isinstance(result, str) or len(compact_text(result)) < 20:
-                fail(f"{label} no_change_checks[{index}] result is too weak")
-            if (
-                not isinstance(evidence_urls, list)
-                or not evidence_urls
-                or any(url not in observed_urls for url in evidence_urls)
-            ):
-                fail(f"{label} no_change_checks[{index}] needs verified evidence URLs")
-            checked_topics.add(topic_id)
+            fail(f"research bundle category must be an object: {label}")
+        checks = entry.get("source_checks")
+        if not isinstance(checks, list) or not checks:
+            fail(f"research bundle has no source checks: {label}")
+
         required_topics = {
             str(topic.get("id"))
             for topic in category.get("watch_topics", [])
             if isinstance(topic, dict)
         }
-        covered_topics = candidate_topics_by_category.get(label, set()) | checked_topics
-        if covered_topics < required_topics:
-            fail(
-                f"{label} topic review is incomplete: "
-                + ", ".join(sorted(required_topics - covered_topics))
-            )
+        checked_topics: set[str] = set()
+        checked_urls: set[str] = set()
+        observed_urls: set[str] = set()
+        observed_by_topic: dict[str, set[str]] = {
+            topic: set() for topic in required_topics
+        }
+        for index, check in enumerate(checks, start=1):
+            if not isinstance(check, dict):
+                fail(f"{label} source_checks[{index}] must be an object")
+            url = check.get("url")
+            state = check.get("slot_state")
+            topics = check.get("watch_topic_ids")
+            if not isinstance(url, str) or not url.startswith(("http://", "https://")):
+                fail(f"{label} source_checks[{index}] has an invalid URL")
+            if state not in {"observed_live", "source_unavailable"}:
+                fail(f"{label} source_checks[{index}] has an invalid state")
+            if not isinstance(topics, list) or any(topic not in required_topics for topic in topics):
+                fail(f"{label} source_checks[{index}] has invalid watch topics")
+            if not str(check.get("checked_at_jst", "")).startswith(issue_date):
+                fail(f"{label} source_checks[{index}] has a stale check time")
+            if not isinstance(check.get("evidence_summary"), str) or not str(
+                check.get("evidence_summary")
+            ).strip():
+                fail(f"{label} source_checks[{index}] has no evidence summary")
+            checked_topics.update(str(topic) for topic in topics)
+            checked_urls.add(url)
+            if state == "observed_live":
+                observed_urls.add(url)
+                for topic in topics:
+                    observed_by_topic[str(topic)].add(url)
+
+        seed_urls = {
+            str(source.get("url"))
+            for source in registry.get(label, [])
+            if isinstance(source, dict)
+        }
+        if not seed_urls <= checked_urls:
+            fail(f"{label} has seed sources without explicit result states")
+        if not required_topics <= checked_topics:
+            fail(f"{label} has unchecked watch topics")
+        if not observed_urls:
+            fail(f"{label} has no observed evidence URL")
+
+        for card in cards_by_category.get(label, []):
+            topic_id = str(card.get("watch_topic_id"))
+            if topic_id not in required_topics:
+                fail(f"{label} public update uses an unknown watch topic")
+            detail = card.get("detail")
+            if not isinstance(detail, dict):
+                fail(f"{label} public update has no detail object")
+            detail_urls = {
+                str(source.get("url"))
+                for source in detail.get("sources", [])
+                if isinstance(source, dict)
+            }
+            if not detail_urls or not detail_urls <= observed_by_topic[topic_id]:
+                fail(f"{label} public update cites unobserved evidence")
+            basis = detail.get("summary_basis")
+            if not isinstance(basis, dict):
+                fail(f"{label} public update has no summary basis")
+            facts = basis.get("confirmed_facts")
+            mappings = basis.get("fact_sources")
+            if not isinstance(facts, list) or not isinstance(mappings, list):
+                fail(f"{label} public update has invalid fact mappings")
+            mapped = {
+                str(mapping.get("fact")): {
+                    str(url) for url in mapping.get("source_urls", [])
+                }
+                for mapping in mappings
+                if isinstance(mapping, dict)
+                and isinstance(mapping.get("source_urls"), list)
+            }
+            if set(str(fact) for fact in facts) != set(mapped):
+                fail(f"{label} public update must map every fact exactly once")
+            if any(not urls or not urls <= detail_urls for urls in mapped.values()):
+                fail(f"{label} public update has a fact mapped outside its sources")
 
 
-def validate_issue_state(issue: dict[str, Any], issue_path: Path | None = None) -> None:
+def validate_issue_state(
+    issue: dict[str, Any],
+    issue_path: Path | None = None,
+    evidence_bundle: dict[str, Any] | None = None,
+) -> None:
     issue_date = require_str(issue, "issue_date")
     if issue_path and issue_path.parent.name.startswith("20") and issue_path.parent.name != issue_date:
         fail(f"issue_date does not match state directory: {issue_date} != {issue_path.parent.name}")
-    if issue.get("state") not in STATE_NAMES:
-        fail("issue state has invalid state name")
-    blockers = require_list(issue, "blockers")
-    if blockers:
-        fail("issue state still has blockers: " + "; ".join(str(item) for item in blockers))
-    frontier = validate_frontier(issue)
-    observations = validate_observations(issue, frontier, issue_path)
-    candidates = validate_candidates(issue, frontier)
-    validate_claim_source_linkage(issue, observations, candidates)
     cards = normalized_cards(issue)
-    validate_decisions_and_cards(issue, candidates, cards)
     validate_manifest_alignment(issue, cards)
+    validate_issue_evidence(issue, cards, issue_path, evidence_bundle)
 
 
 def build_coverage_manifest(
     issue_date: str,
-    results_by_category: dict[str, dict[str, Any]],
-    observations: list[dict[str, Any]],
     *,
     collection_mode: str,
     collection_completed_at_jst: str,
+    evidence_sha256: str,
 ) -> dict[str, Any]:
-    """Build the one publication manifest from reviewed story state."""
+    """Build the minimal publication metadata kept with an Issue."""
     contract = read_json(CONFIG_PATH)
-    source_registry = load_source_registry()
-    classified_hosts: dict[str, set[str]] = {
-        source_class: {
-            urlparse(str(source["url"])).netloc.lower().removeprefix("www.")
-            for sources in source_registry.values()
-            for source in sources
-            if source.get("source_class") == source_class
-        }
-        for source_class in ("official", "official_dataset", "major_media", "specialist_media")
-    }
-    classified_hosts["major_media"].update(
-        {
-            "apnews.com",
-            "bloomberg.com",
-            "businessinsider.com",
-            "ft.com",
-            "theguardian.com",
-            "nypost.com",
-            "reuters.com",
-            "wsj.com",
-        }
-    )
-    observed_urls: dict[str, set[str]] = {}
-    for observation in observations:
-        if not isinstance(observation, dict):
-            continue
-        label = str(observation.get("category"))
-        urls = observed_urls.setdefault(label, set())
-        if observation.get("slot_state") in {"observed_live", "reused_from_cache"}:
-            url = observation.get("url")
-            if isinstance(url, str) and url.startswith(("http://", "https://")):
-                urls.add(url)
-        for target in observation.get("source_target_results", []):
-            if not isinstance(target, dict):
-                continue
-            url = target.get("url")
-            if (
-                target.get("slot_state") in {"observed_live", "reused_from_cache"}
-                and isinstance(url, str)
-                and url.startswith(("http://", "https://"))
-            ):
-                urls.add(url)
-        for finding in observation.get("discovery_findings", []):
-            if not isinstance(finding, dict):
-                continue
-            url = finding.get("source_url")
-            if isinstance(url, str) and url.startswith(("http://", "https://")):
-                urls.add(url)
-
-    categories: dict[str, dict[str, Any]] = {}
-    for category in contract.get("categories", []):
-        if not isinstance(category, dict):
-            continue
-        label = str(category.get("label"))
-        result = results_by_category.get(
-            label,
-            {"candidates": [], "decisions": [], "cards": [], "no_change_checks": []},
-        )
-        candidates = [item for item in result.get("candidates", []) if isinstance(item, dict)]
-        decisions = [item for item in result.get("decisions", []) if isinstance(item, dict)]
-        cards = [item for item in result.get("cards", []) if isinstance(item, dict)]
-        adopted = {
-            str(item.get("candidate_title"))
-            for item in decisions
-            if item.get("adoption_decision") == "adopt"
-        }
-        held = [
-            str(item.get("candidate_title"))
-            for item in decisions
-            if item.get("adoption_decision") == "reject"
-            and item.get("reject_reason_class") == "insufficient_evidence"
-        ]
-        excluded = [
-            str(item.get("candidate_title"))
-            for item in decisions
-            if item.get("adoption_decision") == "reject"
-            and item.get("reject_reason_class") != "insufficient_evidence"
-        ]
-        evidence = {
-            key: []
-            for key in ("official", "major_media", "specialist_media", "sns_x", "youtube_video")
-        }
-        for url in observed_urls.get(label, set()):
-            host = urlparse(url).netloc.lower().removeprefix("www.")
-            if host in classified_hosts["official"] or host in classified_hosts["official_dataset"]:
-                evidence["official"].append(url)
-            elif host in classified_hosts["major_media"]:
-                evidence["major_media"].append(url)
-            elif host in {"x.com", "twitter.com"}:
-                evidence["sns_x"].append(url)
-            elif host in {"youtube.com", "youtu.be"}:
-                evidence["youtube_video"].append(url)
-            else:
-                evidence["specialist_media"].append(url)
-        evidence = {key: sorted(set(values)) for key, values in evidence.items()}
-        categories[label] = {
-            **evidence,
-            "data_numeric": [
-                str(item.get("summary"))
-                for item in candidates
-                if any(char.isdigit() for char in str(item.get("summary")))
-            ]
-            or [f"{issue_date}時点で数値を伴う更新なし"],
-            "schedule_calendar": [f"{issue_date}の公表・予定・結果を照合"],
-            "counter_search": [
-                str(check.get("result"))
-                for check in result.get("no_change_checks", [])
-                if isinstance(check, dict) and isinstance(check.get("result"), str)
-            ]
-            or [f"{issue_date}時点の反証検索を実施"],
-            "adopted": sorted(adopted),
-            "held": held or ["保留候補なし"],
-            "excluded": excluded or ["除外候補なし"],
-            "unresolved": ["未確認の重大リスクなし"],
-            "critical_unresolved": [],
-            "search_terms": sorted(
-                {
-                    str(term)
-                    for topic in category.get("watch_topics", [])
-                    if isinstance(topic, dict)
-                    for term in topic.get("terms", [])
-                    if isinstance(term, str)
-                }
-            ),
-            "freshness_check": f"{issue_date} JSTの直近3日を基準に照合",
-            "published_card_titles": [str(card.get("title")) for card in cards],
-            "new_or_changed_items": [
-                {
-                    "title": str(card.get("title")),
-                    "summary": str(card.get("summary")),
-                    "sources": [
-                        str(source.get("url"))
-                        for source in card.get("detail", {}).get("sources", [])
-                        if isinstance(source, dict)
-                    ],
-                    "summary_mode": (
-                        "multi_source_synthesis"
-                        if len(card.get("detail", {}).get("sources", [])) > 1
-                        else "single_source_summary"
-                    ),
-                    "material_facts": card.get("detail", {})
-                    .get("summary_basis", {})
-                    .get("confirmed_facts", []),
-                }
-                for card in cards
-            ],
-            "latest_candidates": [
-                {
-                    "topic_id": str(item.get("watch_topic_id")),
-                    "title": str(item.get("title")),
-                    "source_url": str(item.get("source_urls", [""])[0]),
-                    "source_published_date": str(item.get("source_published_date")),
-                    "decision": "adopted" if str(item.get("title")) in adopted else "no_fresh_item",
-                    "change_class": str(item.get("change_class")),
-                    "rationale": str(item.get("summary")),
-                }
-                for item in candidates
-            ],
-            "no_change_checks": result.get("no_change_checks", []),
-        }
     return {
         "contract_version": contract.get("contract_version"),
         "date": issue_date,
-        "last_checked_jst": collection_completed_at_jst,
         "collection_completed_at_jst": collection_completed_at_jst,
         "collection_mode": collection_mode,
-        "categories": categories,
+        "evidence_sha256": evidence_sha256,
     }
 
 
@@ -2196,7 +1308,6 @@ def generate_issue(issue_path: Path, output_root: Path, *, write_marker: bool) -
         render_issue_html(issue, display_cards, root=False),
         encoding="utf-8",
     )
-    (details_dir / f"extraction-log-{issue_date}.html").write_text(render_extraction_log(issue), encoding="utf-8")
     if write_marker:
         (output_root / ".night-signal-issue-date").write_text(issue_date + "\n", encoding="utf-8")
     return {
@@ -2204,233 +1315,8 @@ def generate_issue(issue_path: Path, output_root: Path, *, write_marker: bool) -
         "cards": len(cards),
         "display_cards": len(display_cards),
         "sample_html": str(output_root / f"night-brief-web-sample-{issue_date}.html"),
-        "extraction_log": str(details_dir / f"extraction-log-{issue_date}.html"),
         "marker_written": write_marker,
     }
-
-
-def required_observation_slots(frontier: list[dict[str, Any]]) -> list[dict[str, str]]:
-    slots: list[dict[str, str]] = []
-    for item in frontier:
-        category = str(item["category"])
-        watch_topic_id = str(item["watch_topic_id"])
-        channels = item.get("required_channels", [])
-        if not isinstance(channels, list):
-            fail(f"{category} {watch_topic_id} required_channels must be a list")
-        slots.append(
-            efficient_slot(
-                category=category,
-                watch_topic_id=watch_topic_id,
-                source_role="primary_or_official",
-                channel="web",
-            )
-        )
-        slots.append(
-            efficient_slot(
-                category=category,
-                watch_topic_id=watch_topic_id,
-                source_role="independent_media_or_data",
-                channel="web",
-            )
-        )
-        for channel in channels:
-            if channel in {"sns_x", "instagram", "facebook", "youtube"}:
-                slots.append(
-                    efficient_slot(
-                        category=category,
-                        watch_topic_id=watch_topic_id,
-                        source_role="social_or_video_signal",
-                        channel=channel,
-                    )
-                )
-    return slots
-
-
-def slug_text(value: str) -> str:
-    normalized = re.sub(r"[^0-9A-Za-z]+", "-", value.lower()).strip("-")
-    if normalized:
-        return normalized
-    return "u" + hashlib.sha1(value.encode("utf-8")).hexdigest()[:10]
-
-
-def slot_id(slot: dict[str, str]) -> str:
-    return "-".join(
-        [
-            slug_text(slot["category"]),
-            slug_text(slot["watch_topic_id"]),
-            slug_text(slot["source_role"]),
-            slug_text(slot["channel"]),
-        ]
-    )
-
-
-def compact_terms(terms: list[str], limit: int = 10) -> list[str]:
-    seen: list[str] = []
-    for term in terms:
-        normalized = term.strip()
-        if len(normalized) < 2 or normalized.lower() in {item.lower() for item in seen}:
-            continue
-        seen.append(normalized)
-        if len(seen) >= limit:
-            break
-    return seen
-
-
-def role_query_terms(source_role: str, channel: str) -> list[str]:
-    if source_role == "primary_or_official":
-        return ["official", "IR", "newsroom", "release"]
-    if source_role == "independent_media_or_data":
-        return ["Reuters", "Bloomberg", "Nikkei", "specialist media", "data"]
-    if channel == "sns_x":
-        return ["site:x.com", "official x", "latest"]
-    if channel == "instagram":
-        return ["site:instagram.com", "official instagram", "latest"]
-    if channel == "facebook":
-        return ["site:facebook.com", "official facebook", "latest"]
-    if channel == "youtube":
-        return ["site:youtube.com", "official channel", "latest video"]
-    return ["social", "official account", "latest"]
-
-
-def build_search_queries(issue_date: str, frontier_item: dict[str, Any], slot: dict[str, str]) -> list[str]:
-    terms = compact_terms([str(item) for item in frontier_item.get("search_terms", []) if isinstance(item, str)])
-    base = " ".join([slot["category"], slot["watch_topic_id"], *terms[:6]])
-    role_terms = " ".join(role_query_terms(slot["source_role"], slot["channel"]))
-    channel = slot["channel"]
-    return [
-        f"{base} {role_terms} {channel} {issue_date}",
-        f"{slot['category']} {slot['watch_topic_id']} latest update {role_terms} {issue_date}",
-    ]
-
-
-def material_signal_terms(category: str) -> list[str]:
-    common = [
-        "major announcement",
-        "breaking",
-        "decision",
-        "policy",
-        "partnership",
-        "investment",
-        "acquisition",
-        "funding",
-        "market reaction",
-        "recall",
-        "safety",
-        "leadership",
-        "talent",
-        "contract",
-        "infrastructure",
-        "results",
-        "guidance",
-        "outlook",
-        "regulation",
-        "lawsuit",
-        "日本",
-        "発表",
-        "買収",
-        "提携",
-        "出資",
-        "政策",
-        "人事",
-        "広告",
-        "販売",
-        "市場反応",
-        "リコール",
-        "安全",
-        "決算",
-        "見通し",
-    ]
-    by_category = {
-        "Honda": [
-            "QuantumScape",
-            "solid-state battery",
-            "全固体電池",
-            "battery partnership",
-            "EV strategy",
-            "HEV",
-            "China sales",
-            "North America sales",
-            "production",
-            "tariff",
-            "Honda stock",
-        ],
-        "F1": [
-            "Honda",
-            "HRC",
-            "Aston Martin",
-            "power unit",
-            "PU",
-            "ERS",
-            "battery",
-            "reliability",
-            "retirement",
-            "technical directive",
-            "FIA",
-            "race result",
-            "driver comments",
-        ],
-        "日本経済": [
-            "BOJ",
-            "Ueda",
-            "CPI",
-            "wages",
-            "JGB",
-            "yen",
-            "stock market",
-            "ETF",
-            "fund flows",
-            "GDP",
-            "industrial production",
-            "retail sales",
-            "trade",
-            "tariff",
-            "government package",
-        ],
-        "OpenAI": [
-            "Noam Shazeer",
-            "Character.AI",
-            "Japan advertising",
-            "SB OpenAI Japan",
-            "model release",
-            "API",
-            "enterprise",
-            "safety",
-        ],
-        "SpaceX": [
-            "Cursor",
-            "Anysphere",
-            "xAI",
-            "Starship",
-            "Starlink",
-            "launch failure",
-            "contract",
-            "IPO",
-            "valuation",
-        ],
-        "宇都宮ブレックス": [
-            "アリーナ",
-            "新アリーナ",
-            "宇都宮市",
-            "B.PREMIER",
-            "Bプレミア",
-            "ロスター",
-            "契約",
-            "移籍",
-        ],
-    }
-    return compact_terms(by_category.get(category, []) + common, limit=28)
-
-
-def collection_hypotheses(frontier_item: dict[str, Any], slot: dict[str, str]) -> list[str]:
-    category = slot["category"]
-    topic = slot["watch_topic_id"]
-    role = slot["source_role"]
-    channel = slot["channel"]
-    return [
-        f"{category}/{topic}に前回状態から読者理解を変える新規または実質更新がある可能性。",
-        f"{category}/{topic}は定例、重複、背景、または変化なしで公開候補にしない可能性。",
-        f"{role}/{channel}で一次根拠、独立確認、または反証が見つかる可能性。",
-    ]
 
 
 def load_source_registry() -> dict[str, list[dict[str, str]]]:
@@ -2459,892 +1345,85 @@ def load_source_registry() -> dict[str, list[dict[str, str]]]:
     return normalized
 
 
-def validate_strategic_signal_contract(
-    contract: dict[str, Any],
-    registry: dict[str, list[dict[str, str]]],
-    plan: dict[str, Any],
-) -> None:
-    required_topics = {
-        "OpenAI": {
-            "topic": "strategic_talent_japan_gtm",
-            "terms": {"Noam Shazeer", "Character.AI", "Gemini", "日本", "広告", "SB OpenAI Japan"},
-            "sources": {"axios.com", "apnews.com"},
-            "plan_markers": {"Noam Shazeer", "日本", "広告"},
-        },
-        "SpaceX": {
-            "topic": "ai_mna_compute",
-            "terms": {"Cursor", "Anysphere", "AI coding", "acquisition", "買収", "xAI"},
-            "sources": {"businessinsider.com", "theguardian.com", "marketwatch.com"},
-            "plan_markers": {"Cursor", "Anysphere", "買収"},
-        },
-        "宇都宮ブレックス": {
-            "topic": "arena_regional_admin",
-            "terms": {"アリーナ", "新アリーナ", "建設", "宇都宮市", "地域行政", "B.PREMIER"},
-            "sources": {"city.utsunomiya.lg.jp", "bleague.jp/new-bleague", "shimotsuke.co.jp"},
-            "plan_markers": {"アリーナ", "建設", "宇都宮市"},
-        },
-    }
-
-    categories = contract.get("categories")
-    if not isinstance(categories, list):
-        fail("coverage contract missing categories")
-    by_label = {
-        category.get("label"): category
-        for category in categories
-        if isinstance(category, dict) and isinstance(category.get("label"), str)
-    }
-    for category, requirement in required_topics.items():
-        config = by_label.get(category)
-        if not isinstance(config, dict):
-            fail(f"{category} strategic signal category missing")
-        topics = config.get("watch_topics")
-        topic = next(
-            (
-                item
-                for item in topics
-                if isinstance(item, dict) and item.get("id") == requirement["topic"]
-            ),
-            None,
-        ) if isinstance(topics, list) else None
-        if not isinstance(topic, dict):
-            fail(f"{category} missing strategic watch topic: {requirement['topic']}")
-        terms = {term for term in topic.get("terms", []) if isinstance(term, str)}
-        missing_terms = sorted(requirement["terms"] - terms)
-        if missing_terms:
-            fail(f"{category} strategic watch topic missing terms: " + ", ".join(missing_terms))
-
-        source_text = " ".join(
-            f"{target.get('label', '')} {target.get('url', '')}"
-            for target in registry.get(category, [])
-        )
-        for marker in sorted(requirement["sources"]):
-            if marker not in source_text:
-                fail(f"{category} strategic source target missing: {marker}")
-
-        plan_text = " ".join(
-            " ".join(str(term) for term in topic.get("search_terms", []) if isinstance(term, str))
-            for task in plan.get("tasks", [])
-            if isinstance(task, dict) and task.get("category") == category
-            for topic in task.get("watch_topics", [])
-            if isinstance(topic, dict) and topic.get("watch_topic_id") == requirement["topic"]
-        )
-        for marker in sorted(requirement["plan_markers"]):
-            if marker not in plan_text:
-                fail(f"{category} strategic collection plan missing: {marker}")
-
-    for category in by_label:
-        terms = material_signal_terms(str(category))
-        if len(terms) < 10:
-            fail(f"{category} must have broad material signal terms")
-        category_tasks = [
-            task
-            for task in plan.get("tasks", [])
-            if isinstance(task, dict) and task.get("category") == category
-        ]
-        query_text = " ".join(
-            query
-            for task in category_tasks
-            for query in task.get("search_queries", [])
-            if isinstance(query, str)
-        )
-        missing_terms = [term for term in terms[:3] if term not in query_text]
-        if missing_terms:
-            fail(f"{category} material signal terms missing from collection queries: " + ", ".join(missing_terms))
-
-
-def load_source_registry_for_issue(
-    issue_date: str,
-    *,
-    plan_path: Path | None = None,
-) -> dict[str, list[dict[str, str]]]:
-    plan_path = plan_path or DEFAULT_STATE_ROOT / issue_date / "collection_plan.json"
-    if not plan_path.exists():
-        return load_source_registry()
-
-    plan = read_json(plan_path)
-    if plan.get("issue_date") != issue_date or not isinstance(plan.get("tasks"), list):
-        fail(f"collection plan snapshot is invalid: {plan_path}")
-
-    registry: dict[str, list[dict[str, str]]] = {}
-    seen_urls: dict[str, set[str]] = {}
-    for task_index, task in enumerate(plan["tasks"], start=1):
-        if not isinstance(task, dict):
-            fail(f"collection plan task[{task_index}] must be an object")
-        category = task.get("category")
-        targets = task.get("source_targets")
-        if not isinstance(category, str) or not category.strip():
-            fail(f"collection plan task[{task_index}] missing category")
-        if not isinstance(targets, list) or not targets:
-            fail(f"collection plan task[{task_index}] missing source_targets")
-        category_targets = registry.setdefault(category, [])
-        category_urls = seen_urls.setdefault(category, set())
-        for target_index, target in enumerate(targets, start=1):
-            if not isinstance(target, dict):
-                fail(
-                    f"collection plan task[{task_index}] "
-                    f"source_targets[{target_index}] must be an object"
-                )
-            normalized: dict[str, str] = {}
-            for key in ("label", "url", "source_role", "channel", "source_class"):
-                value = target.get(key)
-                if not isinstance(value, str) or not value.strip():
-                    fail(
-                        f"collection plan task[{task_index}] "
-                        f"source_targets[{target_index}] missing {key}"
-                    )
-                normalized[key] = value.strip()
-            if not normalized["url"].startswith(("https://", "http://")):
-                fail(
-                    f"collection plan task[{task_index}] "
-                    f"source_targets[{target_index}] url must be absolute"
-                )
-            if normalized["url"] not in category_urls:
-                category_targets.append(normalized)
-                category_urls.add(normalized["url"])
-    if not registry:
-        fail(f"collection plan snapshot has no source targets: {plan_path}")
-    return registry
-
-
-def target_matches_slot(target: dict[str, str], slot: dict[str, str]) -> bool:
-    if target["source_role"] != slot["source_role"]:
-        return False
-    if slot["source_role"] == "social_or_video_signal":
-        # One social slot keeps collection efficient; source_target_results then
-        # proves X, Instagram, and Facebook were each closed at URL level.
-        if slot["channel"] == "sns_x":
-            return target["channel"] in {"sns_x", "instagram", "facebook"}
-        return target["channel"] == slot["channel"]
-    return target["channel"] == slot["channel"]
-
-
-def source_targets_for_slot(registry: dict[str, list[dict[str, str]]], slot: dict[str, str]) -> list[dict[str, str]]:
-    targets = [target for target in registry.get(slot["category"], []) if target_matches_slot(target, slot)]
-    if not targets:
-        fail(
-            "collection task has no seed sources: "
-            f"{slot['category']} / {slot['watch_topic_id']} / {slot['source_role']} / {slot['channel']}"
-        )
-    return targets
-
-
-def task_acceptance(slot: dict[str, str]) -> dict[str, list[str]]:
-    must_record = [
-        "url_or_stable_source_id",
-        "observed_at_jst",
-        "published_date_or_null",
-        "evidence_summary",
-        "source_target_results_for_every_seed_target",
-        "claim_atoms",
-    ]
-    if slot["source_role"] == "primary_or_official":
-        must_record.append("official_or_primary_authority")
-    if slot["source_role"] == "independent_media_or_data":
-        must_record.append("independent_confirmation_or_data_basis")
-    if slot["channel"] in {"sns_x", "instagram", "facebook", "youtube"}:
-        must_record.append("social_or_video_post_context")
-    return {
-        "slot_closure_states": ["observed_live", "reused_from_cache", "source_unavailable", "not_applicable"],
-        "must_record": must_record,
-        "must_not_publish": [
-            "rumor_without_primary_or_major_confirmation",
-            "search_result_page_as_source",
-            "schedule_only_without_material_change",
-            "old_background_as_fresh_news",
-        ],
-    }
-
-
-def batch_group(slot: dict[str, str]) -> str:
-    return "-".join([slug_text(slot["model_route"]), slug_text(slot["priority"]), slug_text(slot["reuse_policy"])])
-
-
-def prompt_cache_key(slot: dict[str, str]) -> str:
-    return "-".join(["night-signal", "source-observation", slug_text(slot["model_route"]), slug_text(slot["source_role"]), slug_text(slot["channel"])])
-
-
-def collection_plan(issue_date: str) -> dict[str, Any]:
-    frontier = build_frontier(read_json(CONFIG_PATH))
-    source_registry = load_source_registry()
-    slots = required_observation_slots(frontier)
-    grouped_slots: dict[tuple[str, str, str], list[dict[str, str]]] = {}
-    for slot in slots:
-        key = (slot["category"], slot["source_role"], slot["channel"])
-        grouped_slots.setdefault(key, []).append(slot)
-    frontier_by_category: dict[str, list[dict[str, Any]]] = {}
-    for item in frontier:
-        frontier_by_category.setdefault(str(item["category"]), []).append(item)
-
-    tasks: list[dict[str, Any]] = []
-    seen_ids: set[str] = set()
-    priority_rank = {"normal": 0, "high": 1}
-    for (category, source_role, channel), group in grouped_slots.items():
-        representative = max(group, key=lambda item: priority_rank.get(item["priority"], 0))
-        category_topics = frontier_by_category[category]
-        sweep_slot = {
-            **representative,
-            "watch_topic_id": "category_sweep",
-            "category": category,
-            "source_role": source_role,
-            "channel": channel,
-        }
-        sweep_id = "-".join(
-            [
-                slug_text(category),
-                slug_text(source_role),
-                slug_text(channel),
-            ]
-        )
-        topic_payload = [
-            {
-                "watch_topic_id": str(item["watch_topic_id"]),
-                "search_terms": compact_terms(
-                    [str(term) for term in item.get("search_terms", []) if isinstance(term, str)],
-                    limit=12,
-                ),
-                "required_channels": [str(value) for value in item.get("required_channels", [])],
-                "event_classes": [
-                    str(value) for value in item.get("event_classes", [])
-                ],
-            }
-            for item in category_topics
-        ]
-        topic_ids = [item["watch_topic_id"] for item in topic_payload]
-        role_terms = " ".join(role_query_terms(source_role, channel))
-        event_classes = sorted(
-            {
-                value
-                for topic in topic_payload
-                for value in topic.get("event_classes", [])
-            }
-        )
-        material_terms = material_signal_terms(category)
-        material_query = " ".join(material_terms[:14])
-        discovery_lenses = [
-            "official announcement release decision",
-            "numbers results dates status change",
-            "major media independent verification",
-            "market reaction risk counter evidence",
-            "social video interview schedule correction",
-        ]
-        task = {
-            "issue_date": issue_date,
-            "slot_id": sweep_id,
-            "category": category,
-            "section_id": str(category_topics[0]["section_id"]),
-            "watch_topics": topic_payload,
-            "source_role": source_role,
-            "channel": channel,
-            "priority": representative["priority"],
-            "reuse_policy": representative["reuse_policy"],
-            "model_route": representative["model_route"],
-            "batch_group": batch_group(sweep_slot),
-            "prompt_cache_key": prompt_cache_key(sweep_slot),
-            "hypotheses": [
-                f"{category}の既知トピック（{', '.join(topic_ids)}）に当日または直近3日間の実質更新がある可能性。",
-                f"{category}に既存watch_topic_idだけでは表現できない重要変化がある可能性。",
-                f"{category}の重大変化語（{', '.join(material_terms[:10])}）に該当する題目候補が出ている可能性。",
-                f"{source_role}/{channel}で一次根拠、独立確認、反証、または変化なしを判定できる可能性。",
-            ],
-            "discovery_lenses": discovery_lenses,
-            "source_targets": source_targets_for_slot(source_registry, sweep_slot),
-            "search_queries": [
-                f"{category} latest important developments {role_terms} {channel} {issue_date}",
-                f"{category} breaking announcement change result data {role_terms} {issue_date}",
-                f"{category} {' '.join(event_classes)} {role_terms} latest {issue_date}",
-                f"{category} {' '.join(discovery_lenses)} {issue_date}",
-                f"{category} {material_query} {role_terms} {issue_date}",
-                f"{category} overlooked update correction contradiction {issue_date}",
-            ],
-            "acceptance": task_acceptance(sweep_slot),
-            "output_schema": "collection_sweep",
-        }
-        if task["slot_id"] in seen_ids:
-            fail(f"duplicate collection task slot_id: {task['slot_id']}")
-        seen_ids.add(task["slot_id"])
-        tasks.append(task)
-    return {
-        "issue_date": issue_date,
-        "tasks": tasks,
-        "source_observation_schema_ref": "source_observation",
-    }
-
-
-def write_collection_plan(issue_date: str, state_root: Path, output_path: Path | None = None) -> dict[str, Any]:
-    plan = collection_plan(issue_date)
-    output = output_path or (state_root / issue_date / "collection_plan.json")
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(plan, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    batch_counts = count_by(plan["tasks"], "batch_group")
-    route_counts = count_by(plan["tasks"], "model_route")
-    reuse_counts = count_by(plan["tasks"], "reuse_policy")
-    priority_counts = count_by(plan["tasks"], "priority")
-    return {
-        "issue_date": issue_date,
-        "collection_plan": str(output),
-        "tasks": len(plan["tasks"]),
-        "batch_group_counts": batch_counts,
-        "model_route_counts": route_counts,
-        "priority_counts": priority_counts,
-        "reuse_policy_counts": reuse_counts,
-    }
-
-
-def efficient_slot(category: str, watch_topic_id: str, source_role: str, channel: str) -> dict[str, str]:
-    high_velocity_categories = {"OpenAI", "SpaceX", "F1", "YOASOBI / 幾田りら", "宇都宮ブレックス"}
-    market_topics = {"market_price_nav", "market_price_reaction", "us_markets_fund_flows_rates"}
-    official_topics = {"prices_wages_boj", "official_launch_manifest", "product_release", "race_schedule_results"}
-
-    priority = "normal"
-    if category in high_velocity_categories and channel in {"sns_x", "youtube"}:
-        priority = "high"
-    if watch_topic_id in market_topics or watch_topic_id in official_topics:
-        priority = "high"
-    if source_role == "independent_media_or_data" and category in {"日本経済", "アジア経済", "北米経済"}:
-        priority = "high"
-
-    reuse_policy = "daily_fetch"
-    if channel == "youtube" and priority != "high":
-        reuse_policy = "reuse_24h_unless_primary_changed"
-    if source_role == "independent_media_or_data" and priority == "normal":
-        reuse_policy = "reuse_12h_unless_candidate_changed"
-
-    return {
-        "category": category,
-        "watch_topic_id": watch_topic_id,
-        "source_role": source_role,
-        "channel": channel,
-        "priority": priority,
-        "reuse_policy": reuse_policy,
-        "model_route": "evidence_extraction",
-    }
-
-
-def observation_key(observation: dict[str, Any]) -> tuple[str, str, str, str]:
-    return (
-        str(observation.get("category", "")),
-        str(observation.get("watch_topic_id", "")),
-        str(observation.get("source_role", "")),
-        str(observation.get("channel", "")),
-    )
-
-
-def coverage_state(
-    observations: list[dict[str, Any]] | None = None,
-    *,
-    frontier: list[dict[str, Any]] | None = None,
-) -> dict[str, Any]:
-    frontier = frontier or build_frontier(read_json(CONFIG_PATH))
-    slots = required_observation_slots(frontier)
-    observations = observations or []
-    closed_states = {"observed_live", "reused_from_cache", "source_unavailable", "not_applicable"}
-    observed = {
-        observation_key(item)
-        for item in observations
-        if isinstance(item, dict) and item.get("slot_state") in closed_states
-    }
-    missing = [
-        slot
-        for slot in slots
-        if (
-            slot["category"],
-            slot["watch_topic_id"],
-            slot["source_role"],
-            slot["channel"],
-        )
-        not in observed
-    ]
-    priority_counts = count_by(slots, "priority")
-    reuse_counts = count_by(slots, "reuse_policy")
-    model_route_counts = count_by(slots, "model_route")
-    return {
-        "frontier_count": len(frontier),
-        "required_observation_slots": len(slots),
-        "observed_slots": len(slots) - len(missing),
-        "priority_counts": priority_counts,
-        "reuse_policy_counts": reuse_counts,
-        "model_route_counts": model_route_counts,
-        "missing_slots": missing,
-        "collection_complete": not missing,
-    }
-
-
-def count_by(items: list[dict[str, str]], key: str) -> dict[str, int]:
-    counts: dict[str, int] = {}
-    for item in items:
-        value = item.get(key, "unknown")
-        counts[value] = counts.get(value, 0) + 1
-    return dict(sorted(counts.items()))
-
-
 def print_json(value: Any) -> None:
     print(json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True))
 
 
-def print_coverage_summary(value: dict[str, Any]) -> None:
-    categories: dict[str, int] = {}
-    for slot in value["missing_slots"]:
-        categories[slot["category"]] = categories.get(slot["category"], 0) + 1
-    print(
-        json.dumps(
-            {
-                "collection_complete": value["collection_complete"],
-                "frontier_count": value["frontier_count"],
-                "required_observation_slots": value["required_observation_slots"],
-                "observed_slots": value["observed_slots"],
-                "missing_slots": len(value["missing_slots"]),
-                "missing_slots_by_category": dict(sorted(categories.items())),
-                "model_route_counts": value["model_route_counts"],
-                "priority_counts": value["priority_counts"],
-                "reuse_policy_counts": value["reuse_policy_counts"],
-            },
-            ensure_ascii=False,
-            indent=2,
-            sort_keys=True,
-        )
-    )
-
-
-def collection_plan_summary(plan: dict[str, Any]) -> dict[str, Any]:
-    tasks = plan["tasks"]
-    return {
-        "issue_date": plan["issue_date"],
-        "tasks": len(tasks),
-        "batch_group_counts": count_by(tasks, "batch_group"),
-        "model_route_counts": count_by(tasks, "model_route"),
-        "priority_counts": count_by(tasks, "priority"),
-        "reuse_policy_counts": count_by(tasks, "reuse_policy"),
-    }
-
-
 def self_test() -> None:
-    contract = read_json(CONFIG_PATH)
-    frontier = build_frontier(contract)
-    registry = load_source_registry()
-    categories = contract.get("categories", [])
-    topic_count = sum(len(category.get("watch_topics", [])) for category in categories if isinstance(category, dict))
-    if len(frontier) != topic_count:
-        fail(f"frontier count mismatch: {len(frontier)} != {topic_count}")
-    for name, schema in SCHEMAS.items():
-        if schema.get("type") != "object" or not schema.get("required"):
-            fail(f"{name} schema is not strict enough")
-    coverage = coverage_state([])
-    plan = collection_plan("2099-01-01")
-    validate_strategic_signal_contract(contract, registry, plan)
-    if coverage["required_observation_slots"] <= len(frontier):
-        fail("observation slots must expand source roles/channels beyond watch topics")
-    if len(plan["tasks"]) >= coverage["required_observation_slots"]:
-        fail("collection plan must consolidate observation slots into fewer category sweeps")
-    if len({task["slot_id"] for task in plan["tasks"]}) != len(plan["tasks"]):
-        fail("collection plan slot_id values must be unique")
-    if any(not task.get("source_targets") for task in plan["tasks"]):
-        fail("collection plan tasks must include seed source targets")
-    social_tasks = [
-        task
-        for task in plan["tasks"]
-        if task["source_role"] == "social_or_video_signal" and task["channel"] == "sns_x"
+    issue_date = "2099-01-01"
+    source_url = "https://openai.com/example"
+    facts = [
+        "OpenAIはCodex Securityの更新版を公開した。",
+        "更新版には脆弱性検出後の修正支援が追加された。",
     ]
-    if not any(any(target["channel"] == "instagram" for target in task["source_targets"]) for task in social_tasks):
-        fail("social source tasks must include Instagram seed targets when configured")
-    if not any(any(target["channel"] == "facebook" for target in task["source_targets"]) for task in social_tasks):
-        fail("social source tasks must include Facebook seed targets when configured")
-    if any("source_target_results_for_every_seed_target" not in task["acceptance"]["must_record"] for task in plan["tasks"]):
-        fail("collection plan tasks must require source target result closure")
-    if any(len(task.get("discovery_lenses", [])) < 5 for task in plan["tasks"]):
-        fail("collection plan tasks must include generic discovery lenses")
-    planned_topic_slots = {
-        (task["category"], topic["watch_topic_id"], task["source_role"], task["channel"])
-        for task in plan["tasks"]
-        for topic in task["watch_topics"]
-    }
-    required_topic_slots = {
-        (slot["category"], slot["watch_topic_id"], slot["source_role"], slot["channel"])
-        for slot in required_observation_slots(frontier)
-    }
-    if planned_topic_slots != required_topic_slots:
-        fail("collection sweeps must preserve every required observation slot")
-    target_references = [
-        target["url"]
-        for task in plan["tasks"]
-        for target in task["source_targets"]
-    ]
-    if len(target_references) != len(set(target_references)):
-        fail("collection sweeps must inspect each seed target only once")
-    if "source_target_results" not in SOURCE_OBSERVATION_SCHEMA["required"]:
-        fail("source observations must record per-target results")
-    if coverage["collection_complete"]:
-        fail("empty observations must not be collection-complete")
-    if coverage["priority_counts"].get("high", 0) <= 0:
-        fail("coverage state must identify high-priority slots")
-    if coverage["reuse_policy_counts"].get("reuse_24h_unless_primary_changed", 0) <= 0:
-        fail("coverage state must identify reusable low-change slots")
-    if not public_copy_violations("品質ゲートで確認して作業する", kind="summary"):
-        fail("public copy guard must reject process wording")
-    if not public_render_copy_violations("SpaceX corrected post-IPO as market highlights risks and liquidity - IDNFinancials.com", kind="title"):
-        fail("public copy guard must reject untranslated publisher-suffixed titles")
-    if not public_render_copy_violations("OpenAI、サイバー防衛「Daybreak」強化 修正パッチを適用 - ｄメニューニュース", kind="title"):
-        fail("public copy guard must reject publisher-suffixed Japanese titles")
-    try:
-        validate_reader_summary(
-            "self-test summary",
-            "SpaceX、IPO後調整でリスクと流動性が焦点に",
-            "SpaceX、IPO後調整でリスクと流動性が焦点に。SpaceX、IPO後調整でリスクと流動性が焦点に。",
-        )
-    except SystemExit:
-        pass
-    else:
-        fail("public copy guard must reject title-repetition summaries")
-    clean_title_violations = public_copy_violations("OpenAI、Codexの共有機能を追加", kind="title")
-    if clean_title_violations:
-        fail("public copy guard rejected a reader-facing title: " + "; ".join(clean_title_violations))
-    placeholder_failures: list[str] = []
-    original_fail = fail
-
-    def capture_placeholder_failure(message: str) -> None:
-        placeholder_failures.append(message)
-        raise RuntimeError(message)
-
-    globals()["fail"] = capture_placeholder_failure
-    try:
-        try:
-            validate_candidates(
-                {
-                    "issue_date": "2099-01-01",
-                    "candidates": [
-                        {
-                            "category": "OpenAI",
-                            "watch_topic_id": "product_release",
-                            "title": "OpenAI、product_releaseの直近確認",
-                            "source_published_date": "2099-01-01",
-                            "source_urls": ["https://openai.com/"],
-                            "change_class": "background_only",
-                            "summary": "OpenAIのproduct_releaseを公式・媒体・SNS系の証跡で確認したが、単独記事にする確定差分は不足した。",
-                            "material_facts": [],
-                            "counter_evidence_checked": True,
-                        }
-                    ],
-                },
-                frontier,
-            )
-        except RuntimeError:
-            pass
-    finally:
-        globals()["fail"] = original_fail
-    if not placeholder_failures or "no-change placeholder" not in placeholder_failures[0]:
-        fail("candidate validation must reject no-change placeholders")
-
-    def self_test_card(candidate_title: str, title: str, summary: str) -> dict[str, Any]:
-        return {
-            "candidate_title": candidate_title,
-            "title": title,
-            "summary": summary,
-            "detail": {
-                "summary": summary,
-                "summary_basis": {
-                    "what_changed": summary,
-                    "why_it_matters": summary,
-                    "confirmed_facts": [summary],
-                    "limits_or_unknowns": "未確定点は公表範囲に限られる。",
-                },
-            },
-        }
-
-    validate_decisions_and_cards(
-        {
-            "decisions": [
-                {
-                    "candidate_title": "OpenAI Codex sharing candidate",
-                    "adoption_decision": "adopt",
-                    "topic_value_class": "technical_or_product_shift",
-                    "reader_delta": "共有機能の追加により、開発チームで記録内容を確認しやすくなる。",
-                    "materiality_basis": "公式発表で新しい機能追加を確認できる。",
-                    "reject_reason_class": None,
-                    "reject_reason": None,
-                }
-            ]
-        },
-        [
-            {
-                "title": "OpenAI Codex sharing candidate",
-                "summary": "OpenAI Codex sharing candidateとして、Codexの共有機能が追加された。",
-                "change_class": "material_update",
-                "source_published_date": "2099-01-01",
-            }
-        ],
-        [
-            self_test_card(
-                "OpenAI Codex sharing candidate",
-                "OpenAI、Codexに共有機能を追加",
-                "OpenAI Codex sharing candidateとして、Codexの共有機能が追加された。",
-            )
-        ],
-    )
-    if not rejects_material_signal(
-        {
-            "candidate_title": "SpaceX、200億ドル社債を検討",
-            "adoption_decision": "reject",
-            "topic_value_class": "market_or_financial_impact",
-            "reader_delta": "SpaceXが200億ドル規模の社債を検討している。",
-            "materiality_basis": "資金調達と投資判断に関わる。",
-            "reject_reason_class": "no_material_change",
-            "reject_reason": "単独記事にする差分が不足した。",
-        },
-        {
-            "title": "SpaceX、200億ドル社債を検討",
-            "summary": "SpaceXが200億ドル規模の社債を検討している。",
-            "change_class": "material_update",
-        },
-    ):
-        fail("material candidate rejection guard must reject no-change decisions")
-    if rejects_material_signal(
-        {
-            "candidate_title": "OpenAI、IPOの直近確認",
-            "adoption_decision": "reject",
-            "topic_value_class": "market_or_financial_impact",
-            "reader_delta": "直近確認では確定差分が不足した。",
-            "materiality_basis": "監視対象を確認した。",
-            "reject_reason_class": "no_material_change",
-            "reject_reason": "単独記事にする差分が不足した。",
-        },
-        {
-            "title": "OpenAI、IPOの直近確認",
-            "summary": "確定差分は不足した。",
-            "change_class": "background_only",
-        },
-    ):
-        fail("material candidate guard must allow background watch-topic checks")
-    validate_decisions_and_cards(
-        {
-            "decisions": [
-                {
-                    "candidate_title": "SpaceX、200億ドル社債を検討",
-                    "adoption_decision": "adopt",
-                    "topic_value_class": "market_or_financial_impact",
-                    "reader_delta": "SpaceXが200億ドル規模の社債を検討している。",
-                    "materiality_basis": "資金調達と投資判断に関わる。",
-                    "reject_reason_class": None,
-                    "reject_reason": None,
-                }
-            ]
-        },
-        [
-            {
-                "title": "SpaceX、200億ドル社債を検討",
-                "summary": "SpaceXが200億ドル規模の社債を検討している。",
-                "change_class": "material_update",
-            }
-        ],
-        [
-            self_test_card(
-                "SpaceX、200億ドル社債を検討",
-                "SpaceX、200億ドル社債を検討",
-                "SpaceXが200億ドル規模の社債を検討している。",
-            )
-        ],
-    )
-    try:
-        validate_decisions_and_cards(
-            {
-                "decisions": [
-                    {
-                        "candidate_title": "ChatGPT安全更新",
-                        "adoption_decision": "adopt",
-                        "topic_value_class": "technical_or_product_shift",
-                        "reader_delta": "安全更新により応答制御が変わる。",
-                        "materiality_basis": "公式発表で新しい安全更新を確認できる。",
-                        "reject_reason_class": None,
-                        "reject_reason": None,
-                    }
-                ]
-            },
-            [
-                {
-                    "title": "ChatGPT安全更新",
-                    "summary": "ChatGPTが会話の流れからリスク兆候を拾い、応答を調整する安全更新を発表した。",
-                    "change_class": "material_update",
-                    "source_published_date": "2099-01-01",
-                }
-            ],
-            [
-                {
-                    "candidate_title": "ChatGPT安全更新",
-                    "title": "ChatGPT安全更新",
-                    "summary": "ChatGPTに家計管理プレビューが加わり、口座連携を始めた。",
-                    "detail": {
-                        "summary": "家計管理プレビューでは口座連携とダッシュボードを提供する。",
-                        "summary_basis": {
-                            "what_changed": "家計管理プレビューが始まった。",
-                            "why_it_matters": "金融データ連携に関係する。",
-                            "confirmed_facts": ["口座連携が提供される。"],
-                            "limits_or_unknowns": "対象地域は限定される。",
-                        },
-                    },
-                }
-            ],
-        )
-    except SystemExit:
-        pass
-    else:
-        fail("card/candidate binding must reject mismatched title and summary facts")
-    rendered = render_detail_html(
-        {
-            "issue_date": "2099-01-01",
-            "section_id": "openai",
-            "kicker": "OpenAI",
-            "title": "OpenAI、Codexの共有機能を追加",
-            "h1": "OpenAI、Codexの共有機能を追加",
-            "summary": "OpenAIがCodexの共有機能を追加し、チーム内で記録内容を共有しやすくした。",
+    card = {
+        "watch_topic_id": "product_release",
+        "title": "OpenAI、Codex Securityの更新版を公開",
+        "summary": (
+            "OpenAIはCodex Securityの更新版を公開し、脆弱性検出後の修正支援を追加した。"
+            "企業のコード監査で、検出から修正までを一つの流れで扱える。"
+        ),
+        "section_id": "openai",
+        "category": "OpenAI",
+        "source_published_date": issue_date,
+        "topic_value_class": "technical_or_product_shift",
+        "priority_class": "priority",
+        "detail": {
+            "slug": f"openai-codex-security-{issue_date}.html",
+            "sources": [{"label": "OpenAI", "url": source_url}],
+            "summary": (
+                "OpenAIはCodex Securityの更新版を公開し、脆弱性検出後の修正支援を追加した。"
+                "企業のコード監査では、検出結果を修正作業へつなげられる。"
+            ),
             "summary_basis": {
-                "what_changed": "OpenAIがCodexの共有機能を追加した。",
-                "why_it_matters": "開発チームが記録内容を同じ画面で共有しやすくなる。",
-                "confirmed_facts": [
-                    "OpenAIがCodexの共有機能を発表した。",
-                    "共有対象はCodexの記録内容で、チーム利用を想定している。",
-                ],
+                "what_changed": "OpenAIがCodex Securityの更新版と修正支援機能を公開した。",
+                "why_it_matters": "企業のコード監査で検出から修正までを一つの流れで扱える。",
+                "confirmed_facts": facts,
                 "fact_sources": [
-                    {
-                        "fact": "OpenAIがCodexの共有機能を発表した。",
-                        "source_urls": ["https://openai.com/"],
-                    },
-                    {
-                        "fact": "共有対象はCodexの記録内容で、チーム利用を想定している。",
-                        "source_urls": ["https://openai.com/"],
-                    },
+                    {"fact": fact, "source_urls": [source_url]} for fact in facts
                 ],
-                "limits_or_unknowns": "提供範囲や利用条件は公式発表の範囲で確認済みの内容に限る。",
-                "source_dates": ["2099-01-01"],
+                "limits_or_unknowns": "提供地域と利用条件の詳細は公表資料の範囲に限られる。",
+                "source_dates": [issue_date],
             },
-            "sources": [{"label": "OpenAI公式", "url": "https://openai.com/"}],
-        }
-    )
-    if "30秒概要" in rendered or "要点と背景" not in rendered or "確認した事実" not in rendered or "未確定点" not in rendered:
-        fail("detail renderer must use the current information-complete structure")
-    render_issue = {
-        "issue_date": "2099-01-03",
-        "observations": [
-            {
-                "category": "Honda",
-                "slot_state": "observed_live",
-                "url": "https://global.honda/",
-                "source_target_results": [
-                    {
-                        "url": "https://global.honda/",
-                        "slot_state": "observed_live",
-                    }
-                ],
-                "discovery_findings": [],
-            }
-        ],
-        "candidates": [
-            {
-                "category": "OpenAI",
-                "title": "OpenAI、Codexに共有機能を追加",
-                "source_published_date": "2099-01-03",
-                "summary": "OpenAIがCodexの共有機能を追加し、チーム内で記録内容を共有しやすくした。",
-            },
-            {
-                "category": "Honda",
-                "watch_topic_id": "market_price_reaction",
-                "title": "Honda、中国販売の月次減少を確認",
-                "source_published_date": "2099-01-02",
-                "summary": "Hondaの中国販売に月次で大きな減少があり、市場環境と日本勢の苦戦を読む材料になる。",
-                "source_urls": ["https://global.honda/"],
-                "change_class": "routine_recurring",
-            },
-            {
-                "category": "SpaceX",
-                "title": "SpaceX、古い発射実績を背景資料に残す",
-                "source_published_date": "2098-12-30",
-                "summary": "3日より古い情報は公開候補ボードには出さず、背景資料に留める。",
-            },
-        ],
-        "decisions": [
-            {"candidate_title": "OpenAI、Codexに共有機能を追加", "adoption_decision": "adopt"},
-            {"candidate_title": "Honda、中国販売の月次減少を確認", "adoption_decision": "reject"},
-            {"candidate_title": "SpaceX、古い発射実績を背景資料に残す", "adoption_decision": "reject"},
-        ],
-    }
-    render_cards = [
-        {
-            "candidate_title": "OpenAI、Codexに共有機能を追加",
-            "title": "OpenAI、Codexに共有機能を追加",
-            "summary": "OpenAIがCodexの共有機能を追加し、チーム内で記録内容を共有しやすくした。",
-            "section_id": "openai",
-            "category": "OpenAI",
-            "source_published_date": "2099-01-03",
-            "topic_value_class": "technical_or_product_shift",
-            "priority_class": "signal",
-            "issue_date": "2099-01-03",
-            "slug": "openai-codex-sharing-2099-01-03.html",
-            "freshness_label": "今日",
-        }
-    ]
-    render_html = render_issue_html(render_issue, render_cards, root=False)
-    banned_public_labels = ["カテゴリ別" + "新着", "一覧" + "のみ"]
-    if any(label in render_html for label in banned_public_labels):
-        fail("issue renderer must avoid legacy list-only labels")
-    if "OpenAI、Codexに共有機能を追加" not in render_html:
-        fail("issue renderer must keep adopted detail cards visible in their category section")
-    if "確認情報" in render_html or "参照元" in render_html:
-        fail("issue renderer must not expose compact confirmation items")
-    if ("候補" + "題目") in render_html:
-        fail("issue renderer must not expose a separate candidate-topic section")
-    if "重要更新 1件" not in render_html:
-        fail("issue renderer must keep the traditional important-updates section format")
-    if "repeat(auto-fit,minmax(300px,1fr))" not in render_html or "-webkit-line-clamp:5" not in render_html:
-        fail("issue renderer must keep responsive card layout guards")
-    long_title = "OpenAIが長い製品名を含む重要更新を発表し、提供範囲と利用条件を詳しく公表した" * 3
-    long_card_html = render_card(
-        {
-            **render_cards[0],
-            "title": long_title,
         },
-        root=False,
-    )
-    if long_title not in html.unescape(long_card_html):
-        fail("issue renderer must not truncate canonical card titles")
+    }
+    issue = {
+        "issue_date": issue_date,
+        "cards": [card],
+        "coverage_manifest": build_coverage_manifest(
+            issue_date,
+            collection_mode="reviewed_live_web",
+            collection_completed_at_jst=f"{issue_date}T19:30:00+09:00",
+            evidence_sha256="0" * 64,
+        ),
+    }
+    validate_issue_state(issue)
+    rendered = render_issue_html(issue, normalized_cards(issue))
+    if "候補" in rendered or "確認情報" in rendered:
+        fail("renderer exposed a removed candidate or confirmation layer")
+    if reader_summary_violations(card["title"], f"{card['title']}。{card['title']}。") == []:
+        fail("summary validation accepted title repetition")
     print("NIGHT SIGNAL STATE PASSED")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--schema", choices=sorted(SCHEMAS))
-    parser.add_argument("--frontier", action="store_true")
-    parser.add_argument("--collection-plan", action="store_true")
-    parser.add_argument("--coverage-state", action="store_true")
-    parser.add_argument("--observations", type=Path)
-    parser.add_argument("--summary", action="store_true")
     parser.add_argument("--readiness", action="store_true")
     parser.add_argument("--date", default=jst_today())
     parser.add_argument("--allow-blocked", action="store_true")
     parser.add_argument("--self-test", action="store_true")
-    parser.add_argument("--write-collection-plan")
-    parser.add_argument("--validate-observations", type=Path)
     parser.add_argument("--generate-issue", type=Path)
     parser.add_argument("--validate-issue", type=Path)
-    parser.add_argument("--state-root", type=Path, default=DEFAULT_STATE_ROOT)
     parser.add_argument("--output-root", type=Path, default=ROOT)
-    parser.add_argument("--output", type=Path)
     parser.add_argument("--no-marker", action="store_true")
     args = parser.parse_args()
 
     if args.schema:
         print_json(SCHEMAS[args.schema])
         return 0
-    if args.frontier:
-        print_json(build_frontier(read_json(CONFIG_PATH)))
-        return 0
-    if args.collection_plan:
-        plan = collection_plan(args.date)
-        print_json(collection_plan_summary(plan) if args.summary else plan)
-        return 0
-    if args.coverage_state:
-        observations = read_json_records(args.observations) if args.observations else []
-        state = coverage_state(observations)
-        if args.summary:
-            print_coverage_summary(state)
-        else:
-            print_json(state)
+    if args.self_test:
+        self_test()
         return 0
     if args.readiness:
         state = readiness(args.date)
@@ -3355,27 +1434,9 @@ def main() -> int:
     if args.generate_issue:
         print_json(generate_issue(args.generate_issue, args.output_root, write_marker=not args.no_marker))
         return 0
-    if args.write_collection_plan:
-        print_json(write_collection_plan(args.write_collection_plan, args.state_root, args.output))
-        return 0
-    if args.validate_observations:
-        observations = read_json_records(args.validate_observations)
-        state = validate_observation_records(observations, build_frontier(read_json(CONFIG_PATH)))
-        print_json(
-            {
-                "observations": str(args.validate_observations),
-                "valid": True,
-                "observed_slots": state["observed_slots"],
-                "required_observation_slots": state["required_observation_slots"],
-            }
-        )
-        return 0
     if args.validate_issue:
         validate_issue_state(read_json(args.validate_issue), args.validate_issue)
         print_json({"issue_state": str(args.validate_issue), "valid": True})
-        return 0
-    if args.self_test:
-        self_test()
         return 0
     parser.print_help()
     return 2

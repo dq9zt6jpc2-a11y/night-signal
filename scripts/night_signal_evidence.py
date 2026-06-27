@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -42,145 +43,74 @@ def category_topics() -> dict[str, list[str]]:
     }
 
 
-def source_check(
-    category: str,
-    source: dict[str, Any],
-    topics: list[str],
-    checked_at: str,
-    unavailable: dict[str, str],
-    evidence_by_url: dict[str, str],
-) -> dict[str, Any]:
-    url = str(source["url"])
-    if url in unavailable:
-        state = "source_unavailable"
-        summary = str(unavailable[url])
-        method = "unavailable"
-    elif url in evidence_by_url:
-        state = "observed_live"
-        summary = str(evidence_by_url[url])
-        method = "reviewed_live_web"
-    else:
-        fail(f"source lacks an observed or unavailable result: {category}: {url}")
-    return {
-        "watch_topic_ids": topics,
-        "source_role": str(source["source_role"]),
-        "channel": str(source["channel"]),
-        "label": str(source["label"]),
-        "url": url,
-        "slot_state": state,
-        "published_date": None,
-        "evidence_summary": summary,
-        "checked_at_jst": checked_at,
-        "verification_method": method,
-    }
-
-
-def additional_check(
-    category: str,
-    topic_ids: list[str],
-    source: dict[str, Any],
-    checked_at: str,
-) -> dict[str, Any]:
-    url = str(source.get("url", ""))
-    summary = str(source.get("evidence_summary", "")).strip()
-    if not url.startswith(("http://", "https://")) or not summary:
-        fail(f"additional evidence is incomplete: {category}: {url}")
-    return {
-        "watch_topic_ids": topic_ids,
-        "source_role": str(source.get("source_role", "independent_media_or_data")),
-        "channel": str(source.get("channel", "web")),
-        "label": str(source.get("label") or url),
-        "url": url,
-        "slot_state": "observed_live",
-        "published_date": source.get("published_date"),
-        "evidence_summary": summary,
-        "checked_at_jst": checked_at,
-        "verification_method": "reviewed_live_web",
-    }
-
-
-def build_bundle(
+def build_evidence_bundle(
     issue_date: str,
     checked_at: str,
-    reviewed_categories: dict[str, dict[str, Any]],
-    unavailable: dict[str, str],
-    evidence_by_url: dict[str, str],
+    records_by_category: dict[str, list[dict[str, Any]]],
     *,
     collection_mode: str,
 ) -> dict[str, Any]:
+    """Build the pure collector output without editorial items or prose."""
     if not checked_at.startswith(issue_date):
         fail("checked_at_jst must be on the issue date")
     registry = load_object(SOURCE_CONFIG).get("categories")
     if not isinstance(registry, dict):
         fail("source registry categories must be an object")
     topics_by_category = category_topics()
-    if set(reviewed_categories) != set(topics_by_category):
-        fail("review must cover every configured category exactly once")
+    if set(records_by_category) != set(topics_by_category):
+        fail("evidence must cover every configured category exactly once")
 
-    output: dict[str, Any] = {}
+    categories: dict[str, Any] = {}
     for category, topics in topics_by_category.items():
-        reviewed = reviewed_categories[category]
-        items = reviewed.get("items", [])
-        signals = reviewed.get("signals", [])
-        discovery = reviewed.get("discovery_sources", [])
-        no_change = reviewed.get("no_change_summary")
-        if not all(isinstance(value, list) for value in (items, signals, discovery)):
-            fail(f"{category} items, signals, and discovery_sources must be lists")
-        if not isinstance(no_change, str) or len(no_change) < 20:
-            fail(f"{category} no_change_summary is too short")
-
-        checks = [
-            source_check(category, source, topics, checked_at, unavailable, evidence_by_url)
+        records = [record for record in records_by_category[category] if isinstance(record, dict)]
+        by_url = {
+            str(record.get("url")): record
+            for record in records
+            if str(record.get("url", "")).startswith(("http://", "https://"))
+        }
+        checks: list[dict[str, Any]] = []
+        ordered_urls: list[str] = []
+        for source in registry.get(category, []):
+            if isinstance(source, dict):
+                ordered_urls.append(str(source.get("url")))
+        ordered_urls.extend(url for url in by_url if url not in ordered_urls)
+        source_by_url = {
+            str(source.get("url")): source
             for source in registry.get(category, [])
             if isinstance(source, dict)
-        ]
-        checked_urls = {str(check["url"]) for check in checks}
-
-        extra_sources: list[tuple[list[str], dict[str, Any]]] = []
-        for source in discovery:
-            if isinstance(source, dict):
-                extra_sources.append((topics, source))
-        for item in items:
-            if not isinstance(item, dict):
-                fail(f"{category} item must be an object")
-            topic_ids = [str(item.get("watch_topic_id"))]
-            for source in item.get("sources", []):
-                if isinstance(source, dict):
-                    extra_sources.append((topic_ids, source))
-        for signal in signals:
-            if not isinstance(signal, dict):
-                fail(f"{category} signal must be an object")
-            extra_sources.append(
-                (
-                    [str(signal.get("watch_topic_id"))],
-                    {
-                        "label": signal.get("source_label", signal.get("title")),
-                        "url": signal.get("source_url"),
-                        "source_role": signal.get("observation_source_role", "independent_media_or_data"),
-                        "channel": signal.get("observation_channel", "web"),
-                        "published_date": signal.get("source_published_date"),
-                        "evidence_summary": signal.get("summary"),
-                    },
-                )
+        }
+        for url in ordered_urls:
+            record = by_url.get(url, {})
+            source = source_by_url.get(url, record)
+            observed = bool(record.get("observed"))
+            summary = str(record.get("evidence") or record.get("excerpt") or "").strip()
+            if not observed:
+                summary = str(record.get("error") or "source could not be read").strip()
+            if not summary:
+                fail(f"evidence result has no summary: {category}: {url}")
+            checks.append(
+                {
+                    "watch_topic_ids": topics,
+                    "source_role": str(source.get("source_role", "independent_media_or_data")),
+                    "channel": str(source.get("channel", "web")),
+                    "label": str(source.get("label") or record.get("label") or url),
+                    "url": url,
+                    "slot_state": "observed_live" if observed else "source_unavailable",
+                    "published_date": record.get("published_date"),
+                    "evidence_summary": summary,
+                    "checked_at_jst": checked_at,
+                    "verification_method": "direct_fetch" if observed else "unavailable",
+                }
             )
-        for topic_ids, source in extra_sources:
-            url = str(source.get("url", ""))
-            if url in checked_urls:
-                continue
-            checks.append(additional_check(category, topic_ids, source, checked_at))
-            checked_urls.add(url)
-
-        output[category] = {
-            "items": items,
-            "signals": signals,
+        categories[category] = {
+            "records": records,
             "source_checks": checks,
-            "no_change_summary": no_change,
         }
     return {
         "issue_date": issue_date,
         "checked_at_jst": checked_at,
         "collection_mode": collection_mode,
-        "categories": output,
+        "categories": categories,
     }
 
 
@@ -189,3 +119,7 @@ def write_bundle(path: Path, bundle: dict[str, Any]) -> None:
     temp = path.with_suffix(".json.tmp")
     temp.write_text(json.dumps(bundle, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     temp.replace(path)
+
+
+def bundle_sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()

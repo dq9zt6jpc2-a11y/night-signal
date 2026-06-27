@@ -57,20 +57,12 @@ def rewrite_root_links(html: str) -> str:
     return html.replace('href="details/', f'href="{ISSUE_DATE}/details/')
 
 
-def rewrite_issue_index_links(html: str) -> str:
-    marker = '<a href="details/extraction-log-'
-    if '<a href="../index.html">最新号</a>' not in html and marker in html:
-        html = html.replace(marker, '<a href="../index.html">最新号</a>\n        ' + marker, 1)
-    return html
-
-
 def linked_detail_names(html: str) -> set[str]:
     names = {
         match.group(1)
         for match in re.finditer(r'href="(?:\d{4}-\d{2}-\d{2}/)?details/([^"#?]+\.html)', html)
     }
     names.add("policy.html")
-    names.add(f"extraction-log-{ISSUE_DATE}.html")
     return names
 
 
@@ -150,7 +142,7 @@ def main() -> int:
         shutil.rmtree(SITE_ISSUE)
     SITE_DETAILS.mkdir(parents=True, exist_ok=True)
     sample_html = SAMPLE.read_text(encoding="utf-8")
-    (SITE_ISSUE / "index.html").write_text(rewrite_issue_index_links(sample_html), encoding="utf-8")
+    (SITE_ISSUE / "index.html").write_text(sample_html, encoding="utf-8")
     for name in sorted(linked_detail_names(sample_html)):
         source = DETAILS / name
         if not source.exists():

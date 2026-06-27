@@ -9,10 +9,10 @@ evidence-backed important updates in the established format.
 GITHUB_TOKEN=... python3 scripts/night_signal_publish.py YYYY-MM-DD
 ```
 
-The 19:35 fallback may reuse a fresh same-date reviewed bundle:
+The 19:35 fallback may reuse a fresh same-date Evidence:
 
 ```bash
-GITHUB_TOKEN=... python3 scripts/night_signal_publish.py YYYY-MM-DD --reuse-reviewed-bundle
+GITHUB_TOKEN=... python3 scripts/night_signal_publish.py YYYY-MM-DD --reuse-evidence
 ```
 
 Deploy committed state without collecting:
@@ -30,9 +30,9 @@ python3 scripts/night_signal_publish.py YYYY-MM-DD --public-audit
 ## Production path
 
 1. `night_signal_publish.py` owns the run.
-2. `night_signal_unattended_collect.py` performs broad source discovery.
+2. `night_signal_collect.py` performs broad source discovery.
 3. `night_signal_evidence.py` writes the single verified Evidence bundle.
-4. `night_signal_import_research.py` builds all important-update state.
+4. `night_signal_editor.py` builds all important-update state.
 5. `night_signal_state.py` validates and renders the issue.
 6. Local audits pass before commit.
 7. `pages.yml` deploys committed state and the owner verifies public URLs.
@@ -52,8 +52,8 @@ failure.
 ```bash
 python3 scripts/night_signal_state.py --self-test
 python3 scripts/night_signal_publish.py --self-test
-python3 scripts/night_signal_unattended_collect.py --self-test
-python3 scripts/night_signal_import_research.py --self-test
+python3 scripts/night_signal_collect.py --self-test
+python3 scripts/night_signal_editor.py --self-test
 python3 scripts/publication_schedule_audit.py
 python3 scripts/simulate_runtime_failures.py
 python3 scripts/simulate_quality_gate_failures.py

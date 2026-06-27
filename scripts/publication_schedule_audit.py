@@ -46,17 +46,17 @@ def main() -> int:
     if collection.count('python3 scripts/night_signal_publish.py "$ISSUE_DATE"') != 2:
         fail("force and normal branches must both use the canonical pipeline")
     for direct_owner in (
-        "python3 scripts/night_signal_unattended_collect.py",
-        "python3 scripts/night_signal_import_research.py",
+        "python3 scripts/night_signal_collect.py",
+        "python3 scripts/night_signal_editor.py",
     ):
         if direct_owner in collection:
             fail(f"workflow bypasses the canonical pipeline: {direct_owner}")
     if not ordered(
         collection,
         "Detect an already verified publication",
-        "Restore reviewed state checkpoint",
+        "Restore Evidence checkpoint",
         "Build audited issue",
-        "Save reviewed state checkpoint",
+        "Save Evidence checkpoint",
         "Commit audited issue",
         "Dispatch Pages publication",
         "Wait for Pages publication",
@@ -65,7 +65,7 @@ def main() -> int:
     if "steps.current_publication.outputs.published != 'true'" not in collection:
         fail("verified publication must short-circuit the fallback attempt")
     if "actions/upload-artifact@v7.0.1" not in collection or "actions/download-artifact@v8.0.1" not in collection:
-        fail("a failed first attempt must leave a reusable reviewed bundle")
+        fail("a failed first attempt must leave a reusable Evidence")
     if "models: read" not in collection or "contents: write" not in collection or "actions: write" not in collection:
         fail("workflow permissions do not match collection and publication duties")
     if "git push origin HEAD:main" not in collection or "gh workflow run pages.yml" not in collection:

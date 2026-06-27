@@ -1,15 +1,8 @@
 #!/usr/bin/env python3
-"""Collect a reviewed NIGHT SIGNAL bundle without Codex or OpenAI API keys.
-
-The GitHub Actions fallback fetches every configured seed source, adds a broad
-news-discovery sweep per category, and asks GitHub Models to extract only facts
-present in that evidence. The resulting reviewed bundle enters the same state,
-quality, and publication gates as the primary collector.
-"""
+"""Shared source and editorial primitives for the NIGHT SIGNAL pipeline."""
 
 from __future__ import annotations
 
-import argparse
 import concurrent.futures
 import email.utils
 import hashlib
@@ -118,7 +111,7 @@ CATEGORY_IDENTITY_TERMS = {
 
 
 def fail(message: str) -> None:
-    print(f"NIGHT SIGNAL UNATTENDED COLLECT FAILED: {message}", file=sys.stderr)
+    print(f"NIGHT SIGNAL CORE FAILED: {message}", file=sys.stderr)
     raise SystemExit(1)
 
 
@@ -737,10 +730,10 @@ def news_query(category: dict[str, Any], issue_date: str) -> str:
     return news_queries(category, issue_date)[0]
 
 
-def article_result_matches(original_title: str, candidate_title: str) -> bool:
+def article_result_matches(original_title: str, result_title: str) -> bool:
     return (
-        state_contract.title_repetition_score(original_title, candidate_title) >= 0.45
-        or state_contract.text_overlap(original_title, candidate_title) >= 2
+        state_contract.title_repetition_score(original_title, result_title) >= 0.45
+        or state_contract.text_overlap(original_title, result_title) >= 2
     )
 
 
@@ -761,16 +754,16 @@ def enrich_discovered_record(
         return record
     category_label = str(category.get("label", ""))
     for item in root.findall(".//item")[:5]:
-        candidate_title = compact_text(item.findtext("title") or "", 220)
+        result_title = compact_text(item.findtext("title") or "", 220)
         candidate_url = compact_text(item.findtext("link") or "", 1000)
         description = html_fragment_text(item.findtext("description") or "", 1000)
         if (
             not candidate_url.startswith(("http://", "https://"))
             or "news.google.com" in candidate_url
-            or not article_result_matches(original_title, candidate_title)
+            or not article_result_matches(original_title, result_title)
             or not category_identity_ok(
                 category_label,
-                candidate_title,
+                result_title,
                 description,
             )
         ):
@@ -787,7 +780,7 @@ def enrich_discovered_record(
                 or not category_identity_ok(category_label, original_title, combined)
                 or not article_result_matches(
                     original_title,
-                    page_title or candidate_title,
+                    page_title or result_title,
                 )
             ):
                 continue
@@ -1153,7 +1146,10 @@ def category_prompt(
                 "channel": record.get("channel"),
                 "published_date": record.get("published_date"),
                 "title": record.get("title"),
-                "excerpt": compact_text(str(record.get("excerpt", "")), 240),
+                "excerpt": compact_text(
+                    str(record.get("excerpt") or record.get("evidence") or ""),
+                    1000,
+                ),
                 "cluster_key": record_cluster_key(record),
                 "material_signal": bool(
                     MATERIAL_SIGNAL_RE.search(
@@ -2016,7 +2012,7 @@ def normalize_result(
     }
 
 
-def collect(issue_date: str, token: str) -> dict[str, Any]:
+def collect_evidence(issue_date: str) -> dict[str, Any]:
     sources = load_object(SOURCE_CONFIG).get("categories")
     if not isinstance(sources, dict):
         fail("source config categories must be an object")
@@ -2035,259 +2031,45 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
                 contracts,
             )
         )
-    fetched_by_category: dict[str, list[dict[str, Any]]] = {
-        str(category["label"]): []
-        for category in contracts
+    records_by_category: dict[str, list[dict[str, Any]]] = {
+        str(category["label"]): [] for category in contracts
     }
     for record in fetched:
-        fetched_by_category[str(record["category"])].append(record)
-    checked_at = collection_checked_at(issue_date)
-    unavailable: dict[str, str] = {}
-    evidence: dict[str, str] = {}
-    reviewed_categories: dict[str, dict[str, Any]] = {}
-    records_by_category: dict[str, list[dict[str, Any]]] = {}
+        records_by_category[str(record["category"])].append(record)
     for category, news_records in zip(contracts, news_lists):
         label = str(category["label"])
-        seed_records = fetched_by_category[label]
-        for record in seed_records:
-            if record.get("observed"):
-                evidence[str(record["url"])] = str(record["evidence"])
-            else:
-                unavailable[str(record["url"])] = (
-                    f"{checked_at}に直接取得とJina Reader経由取得を試したが、"
-                    f"本文を確認できなかった。理由: {record.get('error', '不明')}"
-                )
-        for record in news_records:
-            if record.get("observed"):
-                evidence[str(record["url"])] = str(record["evidence"])
-        records_by_category[label] = seed_records + [
+        known_urls = {str(record.get("url")) for record in records_by_category[label]}
+        records_by_category[label].extend(
             record
             for record in news_records
-            if record.get("observed")
-        ]
-    model_rate_limited = threading.Event()
-    model_chain = models.extraction_models()
+            if record.get("observed") and str(record.get("url")) not in known_urls
+        )
 
-    def review_category(category: dict[str, Any]) -> tuple[str, dict[str, Any], dict[str, Any]]:
-        label = str(category["label"])
-        print(
-            json.dumps(
-                {
-                    "phase": "category_review_start",
-                    "category": label,
-                    "records": len(records_by_category[label]),
-                },
-                ensure_ascii=False,
-            ),
-            flush=True,
-        )
-        model_error = ""
-        raw: dict[str, Any] | None = None
-        if model_rate_limited.is_set():
-            model_error = "shared_rate_limit_circuit_open"
-        else:
-            messages = [
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {
-                    "role": "user",
-                    "content": json.dumps(
-                        category_prompt(
-                            category,
-                            issue_date,
-                            records_by_category[label],
-                        ),
-                        ensure_ascii=False,
-                    ),
-                },
-            ]
-            model_errors: list[str] = []
-            rate_limited_models = 0
-            for model_name in model_chain:
-                try:
-                    raw = model_request(
-                        token,
-                        messages,
-                        model_name=model_name,
-                        retry_wait_cap=90,
-                    )
-                    if model_name != model_chain[0]:
-                        print(
-                            json.dumps(
-                                {
-                                    "phase": "category_model_route_fallback",
-                                    "category": label,
-                                    "model": model_name,
-                                },
-                                ensure_ascii=False,
-                            ),
-                            flush=True,
-                        )
-                    break
-                except ModelRequestError as exc:
-                    model_errors.append(f"{model_name}: {exc}")
-                    if not exc.rate_limited:
-                        break
-                    rate_limited_models += 1
-            if raw is None:
-                model_error = " | ".join(model_errors)
-                if rate_limited_models == len(model_chain):
-                    model_rate_limited.set()
-        if model_error:
-            print(
-                json.dumps(
-                    {
-                        "phase": "category_model_fallback",
-                        "category": label,
-                        "error": model_error,
-                    },
-                    ensure_ascii=False,
-                ),
-                flush=True,
-            )
-            raw = {
-                "items": [],
-                "signals": [],
-                "no_change_summary": (
-                    f"{label}はモデル抽出が一時失敗したため、"
-                    "取得済み証拠から重要クラスタを補完した。"
-                ),
-                "model_error": model_error,
-            }
-        assert raw is not None
-        normalized = normalize_result(
-            raw,
-            category,
-            issue_date,
-            records_by_category[label],
-        )
-        backfill_items_from_evidence(
-            normalized,
-            category,
-            issue_date,
-            records_by_category[label],
-        )
-        backfill_signals_from_evidence(
-            normalized,
-            category,
-            issue_date,
-            records_by_category[label],
-        )
-        normalized["discovery_sources"] = [
-            {
-                "label": str(record.get("label") or "Google News"),
-                "url": str(record["url"]),
-                "source_role": "independent_media_or_data",
-                "channel": "web",
-                "published_date": record.get("published_date"),
-                "evidence_summary": str(record.get("evidence", "")),
-            }
-            for record in records_by_category[label]
-            if record.get("observed")
-            and record.get("source_class") == "discovered_media"
-        ]
-        normalized["discovery_sources"].extend(
-            {
-                "label": f"{record.get('label') or '配信元'} 媒体ページ",
-                "url": str(record["publisher_url"]),
-                "source_role": "independent_media_or_data",
-                "channel": "web",
-                "published_date": record.get("published_date"),
-                "evidence_summary": (
-                    f"Google News RSSのsource属性から、"
-                    f"{record.get('label') or '配信元'}の媒体URL"
-                    f"{record['publisher_url']}を確認した。"
-                ),
-            }
-            for record in records_by_category[label]
-            if record.get("observed")
-            and record.get("source_class") == "discovered_media"
-            and record.get("publisher_url")
-        )
-        raw_items = [
-            {
-                "title": item.get("title"),
-                "watch_topic_id": item.get("watch_topic_id"),
-                "source_published_date": item.get("source_published_date"),
-                "topic_value_class": item.get("topic_value_class"),
-                "summary_length": len(str(item.get("summary", ""))),
-                "detail_length": len(str(item.get("detail_summary", ""))),
-                "fact_count": len(item.get("confirmed_facts", []))
-                if isinstance(item.get("confirmed_facts"), list)
-                else 0,
-                "source_urls": [
-                    source.get("url")
-                    for source in item.get("sources", [])
-                    if isinstance(source, dict)
-                ],
-            }
-            for item in raw.get("items", [])
-            if isinstance(item, dict)
-        ]
-        report = {
-            "phase": "category_review_complete",
-            "category": label,
-            "raw_items": raw_items,
-            "raw_signals": len(raw.get("signals", []))
-            if isinstance(raw.get("signals"), list)
-            else 0,
-            "model_fallback": bool(raw.get("model_error")),
-            "normalized_items": len(normalized["items"]),
-            "normalized_signals": len(normalized["signals"]),
-        }
-        return label, normalized, report
-
-    model_workers = max(1, int(os.getenv("NIGHT_SIGNAL_MODEL_CONCURRENCY", "1")))
-    print(
-        json.dumps(
-            {
-                "phase": "category_review_pool",
-                "categories": len(contracts),
-                "model_workers": model_workers,
-            },
-            ensure_ascii=False,
-        ),
-        flush=True,
-    )
-    with concurrent.futures.ThreadPoolExecutor(max_workers=model_workers) as executor:
-        futures = {
-            executor.submit(review_category, category): str(category["label"])
-            for category in contracts
-        }
-        for future in concurrent.futures.as_completed(futures):
-            label, normalized, report = future.result()
-            reviewed_categories[label] = normalized
-            print(json.dumps(report, ensure_ascii=False), flush=True)
-    total_items = sum(
-        len(entry["items"])
-        for entry in reviewed_categories.values()
-    )
-    if total_items == 0:
-        fail("GitHub Models produced no evidence-backed publication item")
-    state_dir = STATE_ROOT / issue_date
-    state_dir.mkdir(parents=True, exist_ok=True)
-    bundle_path = state_dir / "research_bundle.json"
-    bundle = evidence_contract.build_bundle(
+    checked_at = collection_checked_at(issue_date)
+    bundle = evidence_contract.build_evidence_bundle(
         issue_date,
         checked_at,
-        reviewed_categories,
-        unavailable,
-        evidence,
+        records_by_category,
         collection_mode="github_models_unattended",
     )
-    evidence_contract.write_bundle(bundle_path, bundle)
+    state_dir = STATE_ROOT / issue_date
+    state_dir.mkdir(parents=True, exist_ok=True)
+    evidence_path = state_dir / "evidence.json"
+    evidence_contract.write_bundle(evidence_path, bundle)
     return {
         "issue_date": issue_date,
         "checked_at_jst": checked_at,
-        "categories": len(reviewed_categories),
+        "categories": len(records_by_category),
         "source_checks": sum(
             len(entry["source_checks"])
             for entry in bundle["categories"].values()
         ),
-        "items": total_items,
-        "signals": sum(len(entry["signals"]) for entry in reviewed_categories.values()),
-        "bundle": str(bundle_path),
+        "records": sum(
+            len(entry["records"])
+            for entry in bundle["categories"].values()
+        ),
+        "evidence": str(evidence_path),
         "collection_mode": "github_models_unattended",
-        "unavailable_sources": len(unavailable),
     }
 
 
@@ -2737,27 +2519,4 @@ def self_test() -> None:
         fail("body-rich reference lost concrete names, dates, or participants")
     if any(state_contract.material_fact_violations(fact) for fact in japan_item["confirmed_facts"]):
         fail("body-rich reference created non-material confirmed facts")
-    print("NIGHT SIGNAL UNATTENDED COLLECT SELF-TEST PASSED")
-
-
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "issue_date",
-        nargs="?",
-        default=datetime.now(JST).date().isoformat(),
-    )
-    parser.add_argument("--self-test", action="store_true")
-    args = parser.parse_args()
-    if args.self_test:
-        self_test()
-        return 0
-    token = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")
-    if not token:
-        fail("GITHUB_TOKEN or GH_TOKEN is required")
-    print(json.dumps(collect(args.issue_date, token), ensure_ascii=False, indent=2))
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+    print("NIGHT SIGNAL CORE SELF-TEST PASSED")

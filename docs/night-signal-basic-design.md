@@ -45,11 +45,11 @@ Topic definitions
 
 永続状態は原則として次に限定する。
 
-- Evidence bundle
+- `evidence.json`
 - `issue.json`
 - 再実行に必要な最小checkpoint
 
-同じ内容を候補、決定、card、manifestへ重複保存しない。日次の説明ログや
+同じ内容を候補、決定、cardへ重複保存しない。日次の説明ログや
 チャット履歴も作らない。
 
 ## 4. 責任境界
@@ -142,9 +142,3 @@ Issue契約だけを安定させる。
 - 後段ValidatorやRendererによる文章生成・補修
 - 品質改善が測定されていない技術の本番追加
 - 完了していない機能を基本設計上の既成事実として記載すること
-
-## 11. 現在の移行対象
-
-現行実装には、Evidenceと編集結果の混在、Collector内の文章生成、Validatorと
-Rendererの文章補修が残っている。次の変更では新しい仕組みを足すのではなく、
-これらの重複責任をEditorへ移して元の処理を削除する。

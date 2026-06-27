@@ -12,7 +12,7 @@ from urllib.parse import unquote
 from datetime import datetime
 from pathlib import Path
 
-from coverage_audit import effective_on_or_after, load_contract, max_adopted_source_age_days, validate_coverage_contract
+from coverage_audit import effective_on_or_after, load_contract, max_adopted_source_age_days
 import night_signal_state as state_contract
 
 
@@ -45,9 +45,6 @@ HERO_DAILY_TOPIC_TERMS = [
 ]
 
 REQUIRED_CATEGORIES = [category["label"] for category in COVERAGE_CONTRACT["categories"]]
-CATEGORY_CONFIG_BY_LABEL = {
-    category["label"]: category for category in COVERAGE_CONTRACT["categories"]
-}
 REQUIRED_SECTIONS = {
     category["section_id"]: category["label"] for category in COVERAGE_CONTRACT["categories"]
 }
@@ -55,23 +52,6 @@ REQUIRED_SECTIONS = {
 MIN_CARDS_PER_SECTION = int(COVERAGE_CONTRACT.get("minimum_published_cards_per_category", 0))
 MIN_DETAIL_TEXT_CHARS = 300
 MAX_SOURCE_LINKS_PER_DETAIL = 3
-
-REQUIRED_COVERAGE_TERMS = [
-    "公式",
-    "主要報道",
-    "専門媒体",
-    "SNS/X",
-    "YouTube",
-    "データ",
-    "予定",
-    "反証",
-    "保留",
-    "除外",
-    "未確認",
-]
-
-REQUIRED_SOURCE_CLASSES = list(COVERAGE_CONTRACT["source_classes"])
-REQUIRED_DECISION_CLASSES = list(COVERAGE_CONTRACT["decision_classes"])
 
 TITLE_POLICY_LEAK_TERMS = [
     "一次で固定",
@@ -583,7 +563,7 @@ def validate_detail_daily_delta(issue_date: str, root_html: str, dated_html: str
         return
     linked = set(re.findall(rf'href="{issue_date}/details/([^"#?]+\.html)', root_html))
     linked.update(re.findall(r'href="details/([^"#?]+\.html)', dated_html))
-    excluded = {"policy.html", f"extraction-log-{issue_date}.html"}
+    excluded = {"policy.html"}
     copied = []
     for name in sorted(linked - excluded):
         previous_name = name.replace(issue_date, previous_date)
@@ -634,7 +614,7 @@ def validate_card_detail_alignment(issue_date: str, root_html: str, dated_html: 
 
     failures = []
     for (detail_issue_date, name), titles in sorted(by_detail.items()):
-        if name in {"policy.html", f"extraction-log-{issue_date}.html"}:
+        if name == "policy.html":
             continue
         path = SITE_ROOT / detail_issue_date / "details" / name
         html = read(path)
@@ -729,7 +709,6 @@ def validate_local_links(issue_date: str) -> None:
 def validate_detail_scope(issue_date: str, root_html: str, dated_html: str) -> None:
     linked = linked_detail_names(issue_date, root_html, dated_html)
     linked.add("policy.html")
-    linked.add(f"extraction-log-{issue_date}.html")
     actual = {path.name for path in (SITE_ROOT / issue_date / "details").glob("*.html")}
     extra = actual - linked
     missing = linked - actual
@@ -748,7 +727,7 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
     information_required = detail_information_required(issue_dt)
     min_summary_chars = detail_min_summary_chars(issue_dt)
     linked = linked_detail_names(issue_date, root_html, dated_html)
-    excluded = {"policy.html", f"extraction-log-{issue_date}.html"}
+    excluded = {"policy.html"}
     if filename_date_required:
         wrong_issue_details = [
             name for name in sorted(linked - excluded) if not name.endswith(f"-{issue_date}.html")
@@ -871,83 +850,15 @@ def validate_category_sections(root_html: str) -> None:
         fail("category sections below minimum cards: " + ", ".join(too_thin))
 
 
-def validate_extraction_log(issue_date: str, extraction_log_html: str) -> None:
-    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
-    expected_japanese_date = f"{issue_dt.year}年{issue_dt.month}月{issue_dt.day}日版"
-    if expected_japanese_date not in extraction_log_html:
-        fail(f"extraction log heading does not show {expected_japanese_date}")
-
-    missing_categories = [term for term in REQUIRED_CATEGORIES if term not in extraction_log_html]
-    if missing_categories:
-        fail("extraction log missing categories: " + ", ".join(missing_categories))
-
-    missing_terms = [term for term in REQUIRED_COVERAGE_TERMS if term not in extraction_log_html]
-    if missing_terms:
-        fail("extraction log missing coverage terms: " + ", ".join(missing_terms))
-
-    if "採用" not in extraction_log_html:
-        fail("extraction log does not record adopted items")
-
-    if "未確認" not in extraction_log_html and "重大リスク" not in extraction_log_html:
-        fail("extraction log does not classify unresolved risk")
-
-    manifest_match = re.search(
-        r'<script type="application/json" id="coverage-manifest">(.*?)</script>',
-        extraction_log_html,
-        flags=re.S,
-    )
-    if not manifest_match:
-        fail("extraction log missing coverage-manifest JSON")
-    try:
-        manifest = json.loads(manifest_match.group(1))
-    except json.JSONDecodeError as exc:
-        fail(f"coverage-manifest JSON is invalid: {exc}")
-
-    if manifest.get("date") != issue_date:
-        fail(f"coverage-manifest date mismatch: {manifest.get('date')} != {issue_date}")
-
-    categories = manifest.get("categories")
-    if not isinstance(categories, dict):
-        fail("coverage-manifest missing categories object")
-
-    for category in REQUIRED_CATEGORIES:
-        entry = categories.get(category)
-        if not isinstance(entry, dict):
-            fail(f"coverage-manifest missing category entry: {category}")
-        optional_source_classes = set(CATEGORY_CONFIG_BY_LABEL[category].get("optional_source_classes", []))
-        for source_class in REQUIRED_SOURCE_CLASSES:
-            value = entry.get(source_class)
-            if source_class in optional_source_classes and (not isinstance(value, list) or not value):
-                continue
-            if not isinstance(value, list) or not value:
-                fail(f"{category} missing source evidence: {source_class}")
-            if any(not isinstance(item, str) or len(item.strip()) < 4 for item in value):
-                fail(f"{category} has weak source evidence: {source_class}")
-        for decision_class in REQUIRED_DECISION_CLASSES:
-            value = entry.get(decision_class)
-            if not isinstance(value, list):
-                fail(f"{category} missing decision list: {decision_class}")
-        search_terms = entry.get("search_terms")
-        if not isinstance(search_terms, list) or not search_terms:
-            fail(f"{category} missing search_terms")
-        if not entry.get("freshness_check"):
-            fail(f"{category} missing freshness_check")
-        if entry.get("critical_unresolved"):
-            fail(f"{category} has critical unresolved risks: {entry['critical_unresolved']}")
-
-
 def validate(issue_date: str) -> None:
     issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
     sample = ROOT / f"night-brief-web-sample-{issue_date}.html"
     dated_index = SITE_ROOT / issue_date / "index.html"
     root_index = SITE_ROOT / "index.html"
-    extraction_log = ROOT / "details" / f"extraction-log-{issue_date}.html"
 
     sample_html = read(sample)
     root_html = read(root_index)
     dated_html = read(dated_index)
-    extraction_log_html = read(extraction_log)
-    validate_extraction_log(issue_date, extraction_log_html)
     validate_daily_delta(issue_date, sample_html)
 
     expected_title = f"NIGHT SIGNAL | {issue_date}"
@@ -1043,15 +954,11 @@ def validate(issue_date: str) -> None:
     validate_unique_detail_links("dated issue page", dated_html)
     validate_unique_display_clusters("root page", root_html)
     validate_unique_display_clusters("dated issue page", dated_html)
-    validate_coverage_contract(issue_date, root_html, extraction_log_html)
     validate_detail_quality(issue_date, root_html, dated_html)
     validate_card_detail_alignment(issue_date, root_html, dated_html)
     validate_detail_daily_delta(issue_date, root_html, dated_html)
 
-    required_links = [
-        f"{issue_date}/details/extraction-log-{issue_date}.html",
-        f"{issue_date}/details/policy.html",
-    ]
+    required_links = [f"{issue_date}/details/policy.html"]
     for link in required_links:
         if link not in root_html:
             fail(f"missing required root link: {link}")

@@ -40,7 +40,6 @@ def main() -> int:
     if issue_date != expected:
         fail(f"selected issue is {issue_date}, expected JST current issue {expected}")
     require(ROOT / f"night-brief-web-sample-{issue_date}.html")
-    require(ROOT / "details" / f"extraction-log-{issue_date}.html")
     require(ROOT / "site" / issue_date / "index.html")
     require(ROOT / "site" / "index.html")
     print(f"CURRENT ISSUE AUDIT PASSED: {issue_date}")

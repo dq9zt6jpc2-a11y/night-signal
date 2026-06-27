@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
+import night_signal_evidence as evidence_store
 import night_signal_runtime_audit as runtime
 
 
@@ -82,28 +83,28 @@ def state_dir(issue_date: str) -> Path:
     return STATE_ROOT / issue_date
 
 
-def has_research_bundle(issue_date: str) -> bool:
-    return (state_dir(issue_date) / "research_bundle.json").exists()
+def has_evidence(issue_date: str) -> bool:
+    return (state_dir(issue_date) / "evidence.json").exists()
 
 
-def fresh_reviewed_bundle(issue_date: str) -> bool:
-    status = runtime.reviewed_bundle_state(issue_date, STATE_ROOT)
+def fresh_evidence(issue_date: str) -> bool:
+    status = runtime.evidence_state(issue_date, STATE_ROOT)
     if not status.get("usable"):
         return False
     try:
         bundle = json.loads(
-            (state_dir(issue_date) / "research_bundle.json").read_text(encoding="utf-8")
+            (state_dir(issue_date) / "evidence.json").read_text(encoding="utf-8")
         )
     except json.JSONDecodeError:
         return False
-    return reviewed_bundle_reusable(
+    return evidence_reusable(
         bundle,
         issue_date,
         now=datetime.now(ZoneInfo("Asia/Tokyo")),
     )
 
 
-def reviewed_bundle_reusable(
+def evidence_reusable(
     bundle: dict[str, Any],
     issue_date: str,
     *,
@@ -124,14 +125,39 @@ def reviewed_bundle_reusable(
     )
 
 
-def collect_and_build(issue_date: str, *, reuse_reviewed_bundle: bool) -> None:
-    if not (reuse_reviewed_bundle and fresh_reviewed_bundle(issue_date)):
-        if not (os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")):
-            fail("GITHUB_TOKEN is required for unattended collection")
-        run([sys.executable, "scripts/night_signal_unattended_collect.py", issue_date])
-    if not has_research_bundle(issue_date):
-        fail(f"collection did not create research_bundle.json for {issue_date}")
-    run([sys.executable, "scripts/night_signal_import_research.py", issue_date])
+def issue_matches_evidence(issue_date: str) -> bool:
+    evidence_path = state_dir(issue_date) / "evidence.json"
+    try:
+        evidence = json.loads(
+            evidence_path.read_text(encoding="utf-8")
+        )
+        issue = json.loads(
+            (state_dir(issue_date) / "issue.json").read_text(encoding="utf-8")
+        )
+    except (FileNotFoundError, json.JSONDecodeError):
+        return False
+    manifest = issue.get("coverage_manifest")
+    return (
+        isinstance(manifest, dict)
+        and issue.get("issue_date") == issue_date
+        and evidence.get("issue_date") == issue_date
+        and manifest.get("collection_completed_at_jst") == evidence.get("checked_at_jst")
+        and manifest.get("collection_mode") == evidence.get("collection_mode")
+        and manifest.get("evidence_sha256") == evidence_store.bundle_sha256(evidence_path)
+    )
+
+
+def collect_and_build(issue_date: str, *, reuse_evidence: bool) -> None:
+    evidence_is_reusable = reuse_evidence and fresh_evidence(issue_date)
+    if evidence_is_reusable and issue_matches_evidence(issue_date):
+        return
+    if not (os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")):
+        fail("GITHUB_TOKEN is required for Editor model access")
+    if not evidence_is_reusable:
+        run([sys.executable, "scripts/night_signal_collect.py", issue_date])
+    if not has_evidence(issue_date):
+        fail(f"collection did not create evidence.json for {issue_date}")
+    run([sys.executable, "scripts/night_signal_editor.py", issue_date])
 
 
 def assemble_and_render(issue_date: str) -> None:
@@ -251,28 +277,28 @@ def self_test() -> None:
     else:
         fail("pre-final collection must not pass final deployment")
     reusable = {"checked_at_jst": "2099-01-01T19:20:00+09:00"}
-    if not reviewed_bundle_reusable(
+    if not evidence_reusable(
         reusable,
         "2099-01-01",
         now=datetime.fromisoformat("2099-01-01T19:50:00+09:00"),
     ):
-        fail("fresh same-date reviewed bundle was not reusable")
+        fail("fresh same-date Evidence was not reusable")
     for rejected_date, rejected_now in (
         ("2098-12-31", "2099-01-01T19:50:00+09:00"),
         ("2099-01-01", "2099-01-01T22:30:00+09:00"),
     ):
-        if reviewed_bundle_reusable(
+        if evidence_reusable(
             reusable,
             rejected_date,
             now=datetime.fromisoformat(rejected_now),
         ):
-            fail("stale or cross-date reviewed bundle was reusable")
-    if reviewed_bundle_reusable(
+            fail("stale or cross-date Evidence was reusable")
+    if evidence_reusable(
         {"checked_at_jst": "2099-01-01T18:59:00+09:00"},
         "2099-01-01",
         now=datetime.fromisoformat("2099-01-01T19:20:00+09:00"),
     ):
-        fail("pre-final reviewed bundle was reusable")
+        fail("pre-final Evidence was reusable")
     print("NIGHT SIGNAL PUBLISH SELF-TEST PASSED")
 
 
@@ -295,9 +321,9 @@ def self_tests(profile: str) -> None:
     if profile != "full":
         fail(f"unknown verification profile: {profile}")
     run([sys.executable, "scripts/simulate_runtime_failures.py"])
-    run([sys.executable, "scripts/night_signal_unattended_collect.py", "--self-test"])
+    run([sys.executable, "scripts/night_signal_collect.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_eval.py", "--self-test"])
-    run([sys.executable, "scripts/night_signal_import_research.py", "--self-test"])
+    run([sys.executable, "scripts/night_signal_editor.py", "--self-test"])
     run([sys.executable, "scripts/publication_schedule_audit.py"])
 
 
@@ -315,7 +341,7 @@ def readiness(issue_date: str, *, check: bool) -> dict[str, Any]:
 def prepare(
     issue_date: str,
     *,
-    reuse_reviewed_bundle: bool,
+    reuse_evidence: bool,
     deploy_existing: bool,
     verification_profile: str,
 ) -> dict[str, Any]:
@@ -332,8 +358,8 @@ def prepare(
             current_stage = "plan_written"
             runtime.write_checkpoint(issue_date, current_stage, "completed", "current collection contract loaded", STATE_ROOT)
             current_stage = "collection_complete"
-            collect_and_build(issue_date, reuse_reviewed_bundle=reuse_reviewed_bundle)
-            runtime.write_checkpoint(issue_date, current_stage, "completed", "reviewed research bundle written", STATE_ROOT)
+            collect_and_build(issue_date, reuse_evidence=reuse_evidence)
+            runtime.write_checkpoint(issue_date, current_stage, "completed", "Evidence written", STATE_ROOT)
             current_stage = "story_build_complete"
             runtime.write_checkpoint(issue_date, current_stage, "completed", "important updates and manifest written", STATE_ROOT)
         freshness = collection_freshness(
@@ -381,7 +407,7 @@ def main() -> int:
     parser.add_argument("--resolve-issue-date", action="store_true")
     parser.add_argument("--event-name", default="")
     parser.add_argument("--requested-issue-date", default="")
-    parser.add_argument("--reuse-reviewed-bundle", action="store_true")
+    parser.add_argument("--reuse-evidence", action="store_true")
     parser.add_argument("--deploy-existing", action="store_true")
     parser.add_argument("--public-audit", action="store_true")
     parser.add_argument("--self-test", action="store_true")
@@ -400,15 +426,15 @@ def main() -> int:
     if args.self_test:
         self_test()
         return 0
-    if args.reuse_reviewed_bundle and args.deploy_existing:
-        fail("--reuse-reviewed-bundle and --deploy-existing are mutually exclusive")
+    if args.reuse_evidence and args.deploy_existing:
+        fail("--reuse-evidence and --deploy-existing are mutually exclusive")
     if args.public_audit:
         result = public_audit(args.issue_date)
     else:
         verification_profile = args.verification_profile or ("deploy" if args.deploy_existing else "full")
         result = prepare(
             args.issue_date,
-            reuse_reviewed_bundle=args.reuse_reviewed_bundle,
+            reuse_evidence=args.reuse_evidence,
             deploy_existing=args.deploy_existing,
             verification_profile=verification_profile,
         )

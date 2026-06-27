@@ -120,8 +120,8 @@ def manifest_state(issue_date: str, state_root: Path, now: datetime) -> dict[str
     return result
 
 
-def reviewed_bundle_state(issue_date: str, state_root: Path) -> dict[str, Any]:
-    path = state_root / issue_date / "research_bundle.json"
+def evidence_state(issue_date: str, state_root: Path) -> dict[str, Any]:
+    path = state_root / issue_date / "evidence.json"
     result = {"path": str(path), "exists": path.exists(), "usable": False}
     if not path.exists():
         return result
@@ -143,7 +143,8 @@ def reviewed_bundle_state(issue_date: str, state_root: Path) -> dict[str, Any]:
             and all(
                 (
                     check.get("slot_state") == "observed_live"
-                    and check.get("verification_method") == "reviewed_live_web"
+                    and check.get("verification_method")
+                    in {"direct_fetch", "reviewed_live_web"}
                 )
                 or (
                     check.get("slot_state") == "source_unavailable"
@@ -181,13 +182,13 @@ def git_state() -> dict[str, Any]:
 def decide_recovery(
     *,
     fresh_evening_issue: bool,
-    reviewed_bundle_usable: bool,
+    evidence_usable: bool,
     github_models_token: bool = False,
 ) -> str:
     if fresh_evening_issue:
         return "fresh_evening_issue"
-    if reviewed_bundle_usable:
-        return "reviewed_bundle"
+    if evidence_usable:
+        return "evidence"
     if github_models_token:
         return "github_models_unattended"
     return "blocked_no_honest_collector"
@@ -258,12 +259,14 @@ def write_checkpoint(
         fail(f"unknown runtime status: {status}")
     path = checkpoint_path(issue_date, state_root)
     path.parent.mkdir(parents=True, exist_ok=True)
-    value: dict[str, Any] = {"issue_date": issue_date, "history": []}
+    stages: dict[str, Any] = {}
     if path.exists():
         try:
             loaded = json.loads(path.read_text(encoding="utf-8"))
-            if isinstance(loaded, dict):
-                value = loaded
+            if isinstance(loaded, dict) and loaded.get("issue_date") == issue_date:
+                loaded_stages = loaded.get("stages")
+                if isinstance(loaded_stages, dict):
+                    stages = loaded_stages
         except json.JSONDecodeError:
             pass
     event = {
@@ -272,13 +275,12 @@ def write_checkpoint(
         "detail": detail,
         "recorded_at_jst": datetime.now(JST).isoformat(timespec="seconds"),
     }
-    history = value.setdefault("history", [])
-    if not isinstance(history, list):
-        history = []
-        value["history"] = history
-    history.append(event)
-    value["history"] = history[-100:]
-    value["last_event"] = event
+    stages[stage] = event
+    value = {
+        "issue_date": issue_date,
+        "stages": stages,
+        "last_event": event,
+    }
     temp = path.with_suffix(".json.tmp")
     temp.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     temp.replace(path)
@@ -294,20 +296,20 @@ def evaluate(
 ) -> dict[str, Any]:
     current = now or datetime.now(JST)
     manifest = manifest_state(issue_date, state_root, current)
-    bundle = reviewed_bundle_state(issue_date, state_root)
+    evidence = evidence_state(issue_date, state_root)
     github_models_available = bool(
         os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")
     )
     recovery = decide_recovery(
         fresh_evening_issue=bool(manifest["fresh_evening_issue"]),
-        reviewed_bundle_usable=bool(bundle["usable"]),
+        evidence_usable=bool(evidence["usable"]),
         github_models_token=github_models_available,
     )
     result = {
         "issue_date": issue_date,
         "checked_at_jst": current.astimezone(JST).isoformat(timespec="seconds"),
         "manifest": manifest,
-        "reviewed_bundle": bundle,
+        "evidence": evidence,
         "github_models_token_available": github_models_available,
         "git": git_state(),
         "recovery_path": recovery,
@@ -337,17 +339,17 @@ def self_test() -> None:
             fail(f"classification mismatch: {text!r}: {actual} != {expected}")
     if decide_recovery(
         fresh_evening_issue=False,
-        reviewed_bundle_usable=False,
+        evidence_usable=False,
     ) != "blocked_no_honest_collector":
         fail("no-collector state must block publication")
     if decide_recovery(
         fresh_evening_issue=True,
-        reviewed_bundle_usable=False,
+        evidence_usable=False,
     ) != "fresh_evening_issue":
         fail("fresh issue must select deploy-existing recovery")
     if decide_recovery(
         fresh_evening_issue=False,
-        reviewed_bundle_usable=False,
+        evidence_usable=False,
         github_models_token=True,
     ) != "github_models_unattended":
         fail("GitHub token must select unattended collection fallback")

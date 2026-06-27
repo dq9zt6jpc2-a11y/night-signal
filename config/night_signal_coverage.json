@@ -1,5 +1,5 @@
 {
-  "contract_version": "2026-06-27.01",
+  "contract_version": "2026-06-28.01",
   "legacy_contract_versions": [
     {
       "through_date": "2026-05-25",
@@ -16,67 +16,16 @@
     {
       "through_date": "2026-06-26",
       "version": "2026-06-19.01"
+    },
+    {
+      "through_date": "2026-06-27",
+      "version": "2026-06-27.01"
     }
   ],
   "description": "NIGHT SIGNAL daily collection contract. A public issue must prove that every category and configured watch topic was searched through official/primary Web, independent media or data, X/SNS, and YouTube before publication. Economy coverage is regional: Japan, Asia ex-Japan focus, and North America; broad standalone investment sections are not allowed and country-specific official evidence must not be substituted from another country. IT/space topics must include official release plus X signals; YOASOBI/Ikuta coverage must include official HP plus staff/person social channels including X and Instagram.",
-  "source_classes": {
-    "official": {
-      "min_items": 1,
-      "url_required": true
-    },
-    "major_media": {
-      "min_items": 1,
-      "url_required": true
-    },
-    "specialist_media": {
-      "min_items": 1,
-      "url_required": true
-    },
-    "sns_x": {
-      "min_items": 1,
-      "url_required": true
-    },
-    "youtube_video": {
-      "min_items": 1,
-      "url_required": true
-    },
-    "data_numeric": {
-      "min_items": 1,
-      "url_required": false,
-      "must_contain_digit": true
-    },
-    "schedule_calendar": {
-      "min_items": 1,
-      "url_required": false
-    },
-    "counter_search": {
-      "min_items": 1,
-      "url_required": false
-    }
-  },
-  "decision_classes": {
-    "adopted": {
-      "min_items": 0
-    },
-    "held": {
-      "min_items": 1
-    },
-    "excluded": {
-      "min_items": 1
-    },
-    "unresolved": {
-      "min_items": 1
-    }
-  },
-  "minimum_distinct_url_hosts_per_category": 5,
-  "minimum_url_evidence_per_category": 8,
-  "minimum_search_queries_per_axis": 2,
   "minimum_published_cards_per_category": 0,
-  "minimum_new_or_changed_items_per_category": 0,
   "rolling_display_cards_effective_date": "2026-06-20",
   "minimum_changed_cards_vs_previous_issue": 1,
-  "candidate_placeholder_ban_effective_date": "2026-06-23",
-  "minimum_new_or_changed_summary_chars": 120,
   "minimum_detail_summary_chars": 120,
   "material_fact_semantics_effective_date": "2026-06-27",
   "summary_quality_effective_date": "2026-05-22",
@@ -84,10 +33,6 @@
   "detail_summary_heading": "要点と背景",
   "detail_summary_heading_effective_date": "2026-06-05",
   "detail_information_contract_effective_date": "2026-06-05",
-  "public_copy_contract_effective_date": "2026-06-06",
-  "synthesis_manifest_effective_date": "2026-05-26",
-  "publication_screening_effective_date": "2026-05-26",
-  "topic_value_gate_effective_date": "2026-06-03",
   "claim_source_linkage_effective_date": "2026-06-12",
   "allowed_topic_value_classes": [
     "decision_or_policy",
@@ -99,84 +44,12 @@
     "risk_or_safety_signal",
     "cultural_or_audience_signal"
   ],
-  "weak_standalone_topic_value_classes": [
-    "material_schedule_change"
-  ],
-  "claim_verification_effective_date": "2026-06-01",
-  "allowed_summary_modes": [
-    "single_source_summary",
-    "multi_source_synthesis"
-  ],
-  "allowed_claim_types": [
-    "announcement",
-    "schedule",
-    "numeric",
-    "result",
-    "award",
-    "status"
-  ],
-  "allowed_claim_evidence_kinds": [
-    "official_release",
-    "official_calendar",
-    "official_result",
-    "official_dataset",
-    "official_award",
-    "direct_source",
-    "major_media_confirmation"
-  ],
-  "claim_type_required_source_states": {
-    "announcement": [
-      "confirmed_update"
-    ],
-    "schedule": [
-      "scheduled"
-    ],
-    "numeric": [
-      "published_value"
-    ],
-    "result": [
-      "final_result"
-    ],
-    "award": [
-      "confirmed_award"
-    ],
-    "status": [
-      "confirmed_status"
-    ]
-  },
   "allowed_change_classes": [
     "new_event",
     "material_update",
     "routine_recurring",
     "duplicate_followup",
     "background_only"
-  ],
-  "minimum_latest_candidates_per_watch_topic": 1,
-  "minimum_watch_topic_checks_per_topic": 1,
-  "minimum_investigation_paths_per_watch_topic": 3,
-  "search_sweep_required_effective_date": "2026-05-22",
-  "scoped_primary_evidence_effective_date": "2026-05-25",
-  "minimum_search_sweep_queries_per_watch_topic": 2,
-  "allowed_search_sweep_results": [
-    "new_update_found",
-    "covered_by_existing_candidate",
-    "no_new_update"
-  ],
-  "allowed_discovery_event_classes": [
-    "official_update",
-    "product_update",
-    "research_breakthrough",
-    "capital_markets",
-    "market_reaction",
-    "financials",
-    "partnership",
-    "infrastructure",
-    "regulation_safety",
-    "operations_market",
-    "schedule_result",
-    "people_contracts",
-    "macro_data",
-    "fund_flows"
   ],
   "required_watch_topic_channels": [
     "web",
@@ -186,25 +59,6 @@
   "maximum_adopted_candidate_source_age_days": 3,
   "strict_adopted_candidate_source_age_effective_date": "2026-05-22",
   "latest_three_calendar_days_effective_date": "2026-06-01",
-  "fresh_non_adopted_reason_required_effective_date": "2026-05-22",
-  "allowed_non_adoption_reason_classes": [
-    "duplicate_covered",
-    "lower_importance",
-    "no_material_change",
-    "insufficient_evidence",
-    "insufficient_relevance"
-  ],
-  "minimum_no_change_checks_per_category": 1,
-  "zero_category_challenge_effective_date": "2026-05-31",
-  "minimum_zero_category_representative_candidates": 3,
-  "allowed_zero_category_rejection_classes": [
-    "routine_recurring",
-    "duplicate_covered",
-    "stale_background",
-    "insufficient_evidence",
-    "insufficient_relevance",
-    "source_unavailable"
-  ],
   "categories": [
     {
       "label": "OpenAI",
@@ -1847,12 +1701,5 @@
         }
       ]
     }
-  ],
-  "minimum_investigation_hypotheses_per_watch_topic": 2,
-  "required_investigation_source_roles": [
-    "primary_or_official",
-    "independent_media_or_data",
-    "social_or_video_signal"
-  ],
-  "minimum_investigation_time_window_hours": 24
+  ]
 }
