@@ -34,6 +34,14 @@ GENERIC_IMPORTANCE_RE = re.compile(
 TRAILING_DOMAIN_RE = re.compile(r"\s*[-–—|｜]\s*[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+(?:/[^\s。、]*)?\s*$")
 EMPTY_JA_QUOTE_RE = re.compile(r"[「『]\s*[」』]")
 DEFAULT_LIMITS_SENTENCE = "影響範囲、対象範囲、追加条件、続報の有無は引き続き確認が必要。"
+TOPIC_CONTEXT_SENTENCES = {
+    "technical_or_product_shift": "性能、提供範囲、既存製品との関係は、{category}の技術選択と競争力を判断する材料になる。",
+    "market_or_financial_impact": "規模、条件、資金使途と市場反応は、{category}の投資余力と評価を判断する材料になる。",
+    "risk_or_safety_signal": "対象範囲、対策の実効性と残る制約は、{category}の安全性と運用継続性を判断する材料になる。",
+    "decision_or_policy": "対象範囲、実施時期と関係者の役割は、{category}の事業計画への影響を判断する材料になる。",
+    "event_result_or_outcome": "今回の結果と次工程への影響は、{category}の計画進捗と今後の見通しを判断する材料になる。",
+    "operational_status_change": "対象範囲、実施時期と継続性は、{category}の運営状況への影響を判断する材料になる。",
+}
 
 
 def fail(message: str) -> None:
@@ -120,11 +128,7 @@ def public_card_title(item: dict[str, Any]) -> str:
 def summary_is_reader_facing(title: str, summary: str) -> bool:
     if state.public_render_copy_violations(summary, kind="summary"):
         return False
-    try:
-        state.validate_reader_summary("reviewed import card summary", title, summary)
-    except SystemExit:
-        return False
-    return True
+    return not state.reader_summary_violations(title, summary)
 
 
 def public_focus_phrase(title: str, category: str) -> str:
@@ -162,51 +166,16 @@ def reader_summary_from_parts(title: str, parts: list[Any], *, limit: int = 900)
     return ""
 
 
-def title_bound_summary(
-    item: dict[str, Any],
-    title: str,
-    category: str,
-    *,
-    lead: Any | None = None,
-    limit: int = 900,
-) -> str:
-    facts = [
-        compact_text(scrub_public_summary(fact), 360)
-        for fact in item.get("confirmed_facts", [])
-        if useful_fact(fact, category)
-    ][:2]
-    importance = (
-        scrub_public_summary(item.get("why_it_matters", ""))
-        if useful_importance(item.get("why_it_matters", ""))
-        else f"{category}の事業・技術・市場動向を読む上で確認対象になる。"
+def item_importance(item: dict[str, Any], category: str) -> str:
+    importance = scrub_public_summary(item.get("why_it_matters", ""))
+    if useful_importance(importance):
+        return importance
+    value_class = topic_value_class(item.get("topic_value_class", "operational_status_change"))
+    template = TOPIC_CONTEXT_SENTENCES.get(
+        value_class,
+        TOPIC_CONTEXT_SENTENCES["operational_status_change"],
     )
-    limits = scrub_public_summary(item.get("limits_or_unknowns", "")) or DEFAULT_LIMITS_SENTENCE
-    parts = [
-        lead if lead is not None else public_focus_phrase(title, category),
-        importance,
-        *facts,
-        item.get("what_changed", ""),
-        limits,
-    ]
-    summary = reader_summary_from_parts(title, parts, limit=limit)
-    if summary:
-        return summary
-    focus = sentence_from(lead if lead is not None else public_focus_phrase(title, category))
-    fallback = compact_text(
-        " ".join(
-            part
-            for part in (
-                focus,
-                sentence_from(importance),
-                sentence_from(limits),
-            )
-            if part
-        ),
-        limit,
-    )
-    if fallback and not state.public_render_copy_violations(fallback, kind="summary"):
-        return fallback
-    return compact_text(f"{category}の事業・技術・市場動向を確認する更新。{DEFAULT_LIMITS_SENTENCE}", limit)
+    return template.format(category=category or "対象分野")
 
 
 def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
@@ -218,66 +187,28 @@ def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
         compact_text(scrub_public_summary(fact), 320)
         for fact in item.get("confirmed_facts", [])
         if useful_fact(fact, category)
-    ][:2]
-    parts = [
-        compact_text(scrub_public_summary(item.get("why_it_matters", "")), 500),
-        *facts,
-        compact_text(scrub_public_summary(item.get("what_changed", "")), 500),
-        compact_text(scrub_public_summary(item.get("limits_or_unknowns", "")), 500),
-    ]
-    seen: set[str] = set()
-    kept: list[str] = []
-    for part in parts:
-        sentence = part.rstrip("。")
-        if not sentence:
-            continue
-        if not kept and state.title_repetition_score(title, sentence) >= 0.82:
-            continue
-        key = state.copy_signature(sentence)
-        if not key or key in seen:
-            continue
-        seen.add(key)
-        kept.append(f"{sentence}。")
-        candidate = compact_text(" ".join(kept), 900)
-        if summary_is_reader_facing(title, candidate):
-            return candidate
-    fallback_parts = [part for part in parts if part]
-    if fallback_parts:
-        fallback = compact_text(
-            " ".join(f"{part.rstrip('。')}。" for part in fallback_parts[:3]),
-            900,
-        )
-        if summary_is_reader_facing(title, fallback):
-            return fallback
-    return title_bound_summary(item, title, category)
-
-
-def item_basis_text(item: dict[str, Any], category: str) -> str:
-    facts = [
-        compact_text(fact, 500)
-        for fact in item.get("confirmed_facts", [])
-        if useful_fact(fact, category)
-    ][:4]
-    return scrub_public_summary(
-        " ".join(
-            str(part)
-            for part in (
-                item.get("what_changed", ""),
-                item.get("why_it_matters", ""),
-                *facts,
-                item.get("limits_or_unknowns", ""),
-            )
-            if part
-        )
+    ][:3]
+    what_changed = compact_text(scrub_public_summary(item.get("what_changed", "")), 500)
+    limits = compact_text(scrub_public_summary(item.get("limits_or_unknowns", "")), 500)
+    importance = item_importance(item, category)
+    event_parts = [part for part in (what_changed, *facts, original) if part]
+    lead = event_parts[0] if event_parts else public_focus_phrase(title, category)
+    summary = reader_summary_from_parts(
+        title,
+        [lead, importance, *event_parts[1:], limits or DEFAULT_LIMITS_SENTENCE],
+        limit=900,
     )
+    if summary:
+        return summary
 
-
-def public_copy_bound(card_summary: str, detail_summary: str, item: dict[str, Any], category: str) -> bool:
-    basis = item_basis_text(item, category)
-    return (
-        state.text_overlap(card_summary, detail_summary) >= 2
-        or state.text_overlap(card_summary, basis) >= 2
+    summary = reader_summary_from_parts(
+        title,
+        [public_focus_phrase(title, category), importance, limits or DEFAULT_LIMITS_SENTENCE],
+        limit=900,
     )
+    if summary:
+        return summary
+    fail(f"unable to construct a reader-facing card summary: {title}")
 
 
 def canonical_detail_summary(
@@ -296,111 +227,36 @@ def canonical_detail_summary(
     ):
         return existing
 
-    lead_candidates = [
-        card_summary,
-        item.get("what_changed"),
-        item.get("summary"),
-        existing,
-    ]
-    lead = ""
-    for index, candidate in enumerate(lead_candidates):
-        candidate_text = scrub_public_summary(candidate)
-        if not candidate_text:
-            continue
-        if index != 0 and state.title_repetition_score(title, candidate_text) >= 0.82:
-            continue
-        lead = compact_text(candidate_text, 700)
-        break
-    if lead and not lead.endswith("。"):
-        lead = f"{lead}。"
-
-    facts = [
-        compact_text(fact, 500)
+    parts: list[Any] = [card_summary]
+    parts.extend(
+        fact
         for fact in item.get("confirmed_facts", [])
         if useful_fact(fact, category)
-    ][:3]
-    fact_sentence = ""
-    if facts:
-        fact_sentence = "確認できた点は、" + "、".join(
-            fact.rstrip("。") for fact in facts
-        ) + "。"
-
-    importance_sentence = ""
-    if useful_importance(item.get("why_it_matters", "")):
-        importance = compact_text(item.get("why_it_matters", ""), 700).rstrip("。")
-        importance_sentence = f"{importance}。"
-
-    limits = compact_text(item.get("limits_or_unknowns", ""), 700)
-    limits_sentence = limits if not limits or limits.endswith("。") else f"{limits}。"
-
-    composed = scrub_public_summary(
-        " ".join(
-            part
-            for part in (
-                lead,
-                fact_sentence,
-                importance_sentence,
-                limits_sentence,
-            )
-            if part
-        )
+        and state.title_repetition_score(title, scrub_public_summary(fact)) < 0.82
     )
-    if composed and summary_is_reader_facing(title, composed) and public_copy_bound(card_summary, composed, item, category):
+    parts.extend(
+        [
+            item_importance(item, category),
+            scrub_public_summary(item.get("limits_or_unknowns", "")) or DEFAULT_LIMITS_SENTENCE,
+        ]
+    )
+    seen: set[str] = set()
+    sentences: list[str] = []
+    for part in parts:
+        sentence = sentence_from(part, 700)
+        key = state.copy_signature(sentence)
+        if not sentence or not key or key in seen:
+            continue
+        seen.add(key)
+        sentences.append(sentence)
+    composed = compact_text(" ".join(sentences), 2600)
+    if (
+        composed
+        and summary_is_reader_facing(title, composed)
+        and state.text_overlap(card_summary, composed) >= 2
+    ):
         return composed
-
-    fallback_parts = [
-        scrub_public_summary(part)
-        for part in (
-            card_summary,
-            importance_sentence,
-            fact_sentence,
-            limits_sentence,
-        )
-        if part
-    ]
-    fallback = scrub_public_summary(" ".join(fallback_parts))
-    if fallback and summary_is_reader_facing(title, fallback) and public_copy_bound(card_summary, fallback, item, category):
-        return fallback
-
-    non_title_facts = [
-        fact
-        for fact in facts
-        if state.title_repetition_score(title, fact) < 0.82
-    ][:2]
-    bound_generic = scrub_public_summary(
-        " ".join(
-            part
-            for part in (
-                card_summary,
-                *non_title_facts,
-                limits_sentence or "影響範囲、追加条件、続報の有無は引き続き確認が必要。",
-            )
-            if part
-        )
-    )
-    if bound_generic and summary_is_reader_facing(title, bound_generic) and state.text_overlap(card_summary, bound_generic) >= 2:
-        return bound_generic
-
-    minimal_bound = scrub_public_summary(
-        f"{card_summary.rstrip('。')}。影響範囲、追加条件、続報の有無は引き続き確認が必要。"
-    )
-    if minimal_bound and summary_is_reader_facing(title, minimal_bound):
-        return minimal_bound
-
-    generic_parts = [
-        f"この更新は{category}の事業・市場動向を確認する材料になる。",
-        *non_title_facts,
-        limits_sentence or "影響範囲、追加条件、続報の有無は引き続き確認が必要。",
-    ]
-    generic = scrub_public_summary(" ".join(generic_parts))
-    if generic and summary_is_reader_facing(title, generic) and state.text_overlap(card_summary, generic) >= 2:
-        return generic
-
-    rebound = title_bound_summary(item, title, category, lead=card_summary, limit=1600)
-    if rebound and summary_is_reader_facing(title, rebound) and state.text_overlap(card_summary, rebound) >= 2:
-        return rebound
-
-    return title_bound_summary(item, title, category, lead=card_summary or title, limit=1600)
+    fail(f"unable to construct a card-bound detail summary: {title}")
 
 
 def public_item_copy(category: str, item: dict[str, Any]) -> tuple[str, str]:

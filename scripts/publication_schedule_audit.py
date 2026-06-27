@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PUBLISH_WORKFLOW = ROOT / ".github" / "workflows" / "pages.yml"
 RUNTIME_WATCHDOG_WORKFLOW = ROOT / ".github" / "workflows" / "runtime-watchdog.yml"
 UNATTENDED_WORKFLOW = ROOT / ".github" / "workflows" / "unattended-collection.yml"
+UNATTENDED_COLLECTOR = ROOT / "scripts" / "night_signal_unattended_collect.py"
 
 
 def cron_minutes(text: str) -> list[int]:
@@ -30,6 +31,7 @@ def fail(message: str) -> None:
 def main() -> int:
     publish = PUBLISH_WORKFLOW.read_text(encoding="utf-8")
     unattended = UNATTENDED_WORKFLOW.read_text(encoding="utf-8")
+    collector = UNATTENDED_COLLECTOR.read_text(encoding="utf-8")
     publish_times = cron_minutes(publish)
     unattended_times = cron_minutes(unattended)
     if RUNTIME_WATCHDOG_WORKFLOW.exists():
@@ -68,6 +70,12 @@ def main() -> int:
         fail("unattended workflow must not override model calls into long retry loops")
     if "NIGHT_SIGNAL_MODEL_CONCURRENCY: 2" not in unattended:
         fail("unattended workflow must parallelize category extraction without broadening calls")
+    if (
+        "NIGHT_SIGNAL_SKIP_MODEL" not in collector
+        or 'os.getenv("GITHUB_ENV")' not in collector
+        or "without further model calls" not in collector
+    ):
+        fail("a degraded model canary must switch collection directly to evidence fallback")
     if "models: read" not in unattended or "night_signal_unattended_collect.py" not in unattended:
         fail("unattended workflow must use GitHub Models without an external API secret")
     if "--event-name workflow_dispatch" in unattended:

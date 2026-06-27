@@ -820,21 +820,29 @@ def title_repetition_score(title: str, text: str) -> float:
     return len(title_terms & text_terms) / max(1, len(title_terms))
 
 
-def validate_reader_summary(label: str, title: str, summary: str) -> None:
+def reader_summary_violations(title: str, summary: str) -> list[str]:
     title_key = copy_signature(title)
     summary_key = copy_signature(summary)
     sentences = [part.strip() for part in re.split(r"(?<=[。！？!?])", summary) if part.strip()]
+    violations: list[str] = []
     if title_key and summary_key.count(title_key) >= 2:
-        fail(f"{label} repeats the title instead of summarizing")
+        violations.append("repeats the title instead of summarizing")
     if (
         title_repetition_score(title, summary) >= 0.82
         and len(content_terms(summary)) <= len(content_terms(title)) + 2
         and (len(sentences) <= 1 or len(summary_key) < len(title_key) * 1.6)
     ):
-        fail(f"{label} is too similar to its title")
+        violations.append("is too similar to its title")
     unique = {copy_signature(sentence) for sentence in sentences if copy_signature(sentence)}
     if len(sentences) >= 2 and len(unique) <= 1:
-        fail(f"{label} repeats the same sentence")
+        violations.append("repeats the same sentence")
+    return violations
+
+
+def validate_reader_summary(label: str, title: str, summary: str) -> None:
+    violations = reader_summary_violations(title, summary)
+    if violations:
+        fail(f"{label} {violations[0]}")
 
 
 def validate_detail_sources(detail: dict[str, Any], card_index: int) -> None:

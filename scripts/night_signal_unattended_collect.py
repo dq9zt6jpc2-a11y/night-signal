@@ -109,6 +109,10 @@ def fail(message: str) -> None:
     raise SystemExit(1)
 
 
+class ModelRequestError(RuntimeError):
+    pass
+
+
 def load_object(path: Path) -> dict[str, Any]:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
@@ -353,11 +357,6 @@ def natural_detail_summary(
         for fact in facts
         if useful_fact(fact, category_label)
     ][:3]
-    fact_sentence = ""
-    if useful_facts:
-        joined = "、".join(fact.rstrip("。") for fact in useful_facts)
-        fact_sentence = f"確認できた点は、{joined}。"
-
     importance_sentence = ""
     if useful_importance(why_it_matters):
         importance = reader_facing_text(why_it_matters, 700).rstrip("。")
@@ -368,15 +367,10 @@ def natural_detail_summary(
     if limits:
         limits_sentence = limits if limits.endswith("。") else f"{limits}。"
 
-    composed = compact_text(
+    composed = unique_sentences(
         " ".join(
             part
-            for part in (
-                lead,
-                fact_sentence,
-                importance_sentence,
-                limits_sentence,
-            )
+            for part in (lead, *useful_facts, importance_sentence, limits_sentence)
             if part
         ),
         2600,
@@ -761,7 +755,9 @@ def model_request(
             return result
         except urllib.error.HTTPError as exc:
             if exc.code != 429:
-                fail(f"GitHub Models request failed with HTTP {exc.code}")
+                raise ModelRequestError(
+                    f"GitHub Models request failed with HTTP {exc.code}"
+                ) from exc
             retry_after = exc.headers.get("Retry-After")
             try:
                 wait_seconds = max(1, min(retry_wait_cap, int(retry_after or "65")))
@@ -783,7 +779,7 @@ def model_request(
             errors.append(f"attempt {attempt + 1}: {type(exc).__name__}: {exc}")
             if attempt < retries - 1:
                 time.sleep(5 * (attempt + 1))
-    fail("GitHub Models request failed: " + " / ".join(errors))
+    raise ModelRequestError("GitHub Models request failed: " + " / ".join(errors))
 
 
 SYSTEM_PROMPT = """You are the unattended NIGHT SIGNAL evidence extractor.
@@ -1032,6 +1028,62 @@ def category_hint_from_title(title: str) -> str:
     return "当該テーマ"
 
 
+TOPIC_CONTEXT_SENTENCES = {
+    "technical_or_product_shift": "性能、提供範囲、既存製品との関係は、{category}の技術選択と競争力を判断する材料になる。",
+    "market_or_financial_impact": "規模、条件、資金使途と市場反応は、{category}の投資余力と評価を判断する材料になる。",
+    "risk_or_safety_signal": "対象範囲、対策の実効性と残る制約は、{category}の安全性と運用継続性を判断する材料になる。",
+    "decision_or_policy": "対象範囲、実施時期と関係者の役割は、{category}の事業計画への影響を判断する材料になる。",
+    "event_result_or_outcome": "今回の結果と次工程への影響は、{category}の計画進捗と今後の見通しを判断する材料になる。",
+    "operational_status_change": "対象範囲、実施時期と継続性は、{category}の運営状況への影響を判断する材料になる。",
+}
+
+
+def evidence_narrative(
+    *,
+    category_label: str,
+    title: str,
+    excerpt: str,
+    topic_value: str,
+) -> tuple[str, str, str, list[str]]:
+    title_sentences = sentence_parts(title)
+    event = title_sentences[0] if title_sentences else sentence_from_title(title)
+    event_key = sentence_key(event)
+    supporting: list[str] = []
+    for sentence in sentence_parts(excerpt):
+        key = sentence_key(sentence)
+        if not key or key == event_key or key in {sentence_key(value) for value in supporting}:
+            continue
+        if state_contract.title_repetition_score(title, sentence) >= 0.95:
+            continue
+        supporting.append(sentence)
+        if len(supporting) == 2:
+            break
+    template = TOPIC_CONTEXT_SENTENCES.get(
+        topic_value,
+        TOPIC_CONTEXT_SENTENCES["operational_status_change"],
+    )
+    importance = template.format(category=category_label or "対象分野")
+    summary = unique_sentences(" ".join([event, *supporting, importance]), 1000)
+    if state_contract.reader_summary_violations(title, summary):
+        summary = unique_sentences(
+            " ".join(
+                [
+                    event,
+                    *supporting,
+                    importance,
+                    "対象範囲と追加条件は今後の発表で具体化される。",
+                ]
+            ),
+            1000,
+        )
+    return event, importance, summary, supporting
+
+
+def sentence_from_title(title: str) -> str:
+    text = reader_facing_text(title, 500).rstrip("。")
+    return f"{text}。" if text else ""
+
+
 def best_topic_for_record(category: dict[str, Any], record: dict[str, Any]) -> str:
     text = f"{record.get('title', '')} {record.get('excerpt', '')}".lower()
     best_topic = ""
@@ -1086,19 +1138,23 @@ def fallback_item_from_record(
         or low_signal_value(title, excerpt)
     ):
         return None
-    summary = unique_sentences(f"{title}。{excerpt}", 1000)
-    if len(summary) < 80:
-        return None
-    what_changed = sentence_parts(summary)[0] if sentence_parts(summary) else summary
-    why_it_matters = unique_sentences(
-        f"{title}は、{category_label}の直近3日内の具体的な変化として、"
-        "事業、競争環境、予定、または市場評価に影響しうる材料になる。",
-        700,
+    topic_value = topic_value_from_record(record)
+    what_changed, why_it_matters, summary, supporting = evidence_narrative(
+        category_label=category_label,
+        title=title,
+        excerpt=excerpt,
+        topic_value=topic_value,
     )
+    if (
+        len(summary) < 80
+        or state_contract.reader_summary_violations(title, summary)
+        or not reader_public_copy_ok(summary, kind="summary")
+    ):
+        return None
     facts = unique_nonempty(
         [
-            title,
-            excerpt,
+            what_changed,
+            *supporting,
             f"{record.get('label') or '確認元'}が{source_date}付の情報として配信した。",
         ],
         500,
@@ -1120,7 +1176,7 @@ def fallback_item_from_record(
         "title": title,
         "summary": summary,
         "source_published_date": source_date,
-        "topic_value_class": topic_value_from_record(record),
+        "topic_value_class": topic_value,
         "priority_class": "priority",
         "slug": (
             "auto-"
@@ -1192,10 +1248,19 @@ def fallback_signal_from_record(
     ):
         return None
     material = contains_material_signal(title, excerpt)
+    topic_value = topic_value_from_record(record)
+    _, _, summary, _ = evidence_narrative(
+        category_label=category_label,
+        title=title,
+        excerpt=excerpt,
+        topic_value=topic_value,
+    )
+    if state_contract.reader_summary_violations(title, summary):
+        return None
     return {
         "watch_topic_id": topic,
         "title": title,
-        "summary": unique_sentences(f"{title}。{excerpt}", 1200),
+        "summary": summary,
         "source_published_date": source_date,
         "source_url": str(record.get("url")),
         "source_label": str(record.get("label") or record.get("url")),
@@ -1206,7 +1271,7 @@ def fallback_signal_from_record(
             if material
             else "関連情報として確認したが、記事化に必要な具体的な変化は限定的なため候補として保持する。"
         ),
-        "topic_value_class": topic_value_from_record(record),
+        "topic_value_class": topic_value,
         "observation_source_role": str(record.get("source_role", "independent_media_or_data")),
         "observation_channel": str(record.get("channel", "web")),
     }
@@ -1567,6 +1632,8 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
             for record in news_records
             if record.get("observed")
         ]
+    skip_model = os.getenv("NIGHT_SIGNAL_SKIP_MODEL", "").strip() == "1"
+
     def review_category(category: dict[str, Any]) -> tuple[str, dict[str, Any], dict[str, Any]]:
         label = str(category["label"])
         print(
@@ -1580,46 +1647,55 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
             ),
             flush=True,
         )
-        try:
-            raw = model_request(
-                token,
-                [
-                    {"role": "system", "content": SYSTEM_PROMPT},
-                    {
-                        "role": "user",
-                        "content": json.dumps(
-                            category_prompt(
-                                category,
-                                issue_date,
-                                records_by_category[label],
-                            ),
-                            ensure_ascii=False,
-                        ),
-                    },
-                ],
-                retry_wait_cap=90,
-            )
-        except SystemExit as exc:
-            print(
-                json.dumps(
-                    {
-                        "phase": "category_model_fallback",
-                        "category": label,
-                        "error": str(exc),
-                    },
-                    ensure_ascii=False,
-                ),
-                flush=True,
-            )
+        raw: dict[str, Any]
+        if skip_model:
             raw = {
                 "items": [],
                 "signals": [],
-                "no_change_summary": (
-                    f"{label}はモデル抽出が一時失敗したため、"
-                    "取得済み証拠から重要クラスタを補完した。"
-                ),
-                "model_error": str(exc),
+                "no_change_summary": f"{label}は取得済み証拠から重要クラスタを抽出した。",
+                "model_error": "canary_degraded",
             }
+        else:
+            try:
+                raw = model_request(
+                    token,
+                    [
+                        {"role": "system", "content": SYSTEM_PROMPT},
+                        {
+                            "role": "user",
+                            "content": json.dumps(
+                                category_prompt(
+                                    category,
+                                    issue_date,
+                                    records_by_category[label],
+                                ),
+                                ensure_ascii=False,
+                            ),
+                        },
+                    ],
+                    retry_wait_cap=90,
+                )
+            except ModelRequestError as exc:
+                print(
+                    json.dumps(
+                        {
+                            "phase": "category_model_fallback",
+                            "category": label,
+                            "error": str(exc),
+                        },
+                        ensure_ascii=False,
+                    ),
+                    flush=True,
+                )
+                raw = {
+                    "items": [],
+                    "signals": [],
+                    "no_change_summary": (
+                        f"{label}はモデル抽出が一時失敗したため、"
+                        "取得済み証拠から重要クラスタを補完した。"
+                    ),
+                    "model_error": str(exc),
+                }
         normalized = normalize_result(
             raw,
             category,
@@ -1774,7 +1850,7 @@ def collect(issue_date: str, token: str) -> dict[str, Any]:
     }
 
 
-def canary(token: str) -> None:
+def canary(token: str) -> bool:
     try:
         result = model_request(
             token,
@@ -1787,15 +1863,16 @@ def canary(token: str) -> None:
             retries_override=1,
             retry_wait_cap=5,
         )
-    except SystemExit as exc:
+    except ModelRequestError as exc:
         print(
             "NIGHT SIGNAL GITHUB MODELS CANARY DEGRADED: "
-            f"{exc}. Collection will continue with evidence-backed fallback."
+            f"{exc}. Collection will use evidence-backed fallback without further model calls."
         )
-        return
+        return False
     if result.get("ok") is not True:
         fail(f"GitHub Models canary returned unexpected data: {result}")
     print("NIGHT SIGNAL GITHUB MODELS CANARY PASSED")
+    return True
 
 
 def self_test() -> None:
@@ -1954,6 +2031,48 @@ def self_test() -> None:
     past_checked_at = collection_checked_at("2000-01-01")
     if not past_checked_at.startswith("2000-01-01T23:59:59+09:00"):
         fail("past-date recovery timestamp escaped the requested issue date")
+    fallback_item = fallback_item_from_record(
+        {
+            "label": "OpenAI",
+            "watch_topics": [
+                {
+                    "id": "openai_security",
+                    "terms": ["OpenAI", "Codex", "security"],
+                    "event_classes": ["technical_or_product_shift"],
+                }
+            ],
+        },
+        "2099-01-03",
+        {
+            "label": "Technology News",
+            "url": "https://example.com/openai-security",
+            "source_role": "independent_media_or_data",
+            "channel": "web",
+            "source_class": "discovered_media",
+            "observed": True,
+            "published_date": "2099-01-02",
+            "title": (
+                "OpenAIがセキュリティー特化AIとCodex Securityの"
+                "アップデートを発表"
+            ),
+            "excerpt": (
+                "Codex Securityでは脆弱性検出後の修正支援が更新された。"
+                "企業向け提供の対象範囲と利用条件は今後具体化される。"
+            ),
+        },
+    )
+    if fallback_item is None:
+        fail("evidence fallback did not create a supported material item")
+    if state_contract.reader_summary_violations(
+        fallback_item["title"], fallback_item["summary"]
+    ):
+        fail("evidence fallback created a title-like card summary")
+    if state_contract.text_overlap(
+        fallback_item["summary"], fallback_item["detail_summary"]
+    ) < 2:
+        fail("evidence fallback card and detail lost their shared factual core")
+    if "確認できた点は" in fallback_item["detail_summary"]:
+        fail("evidence fallback created label-heavy detail copy")
     print("NIGHT SIGNAL UNATTENDED COLLECT SELF-TEST PASSED")
 
 
@@ -1975,7 +2094,11 @@ def main() -> int:
     if not token:
         fail("GITHUB_TOKEN or GH_TOKEN is required")
     if args.canary:
-        canary(token)
+        model_available = canary(token)
+        github_env = os.getenv("GITHUB_ENV")
+        if github_env:
+            with Path(github_env).open("a", encoding="utf-8") as handle:
+                handle.write(f"NIGHT_SIGNAL_SKIP_MODEL={'0' if model_available else '1'}\n")
         return 0
     if args.skip_if_fresh and current_fresh_issue(args.issue_date):
         print(f"NIGHT SIGNAL UNATTENDED COLLECT SKIPPED: fresh issue {args.issue_date}")
