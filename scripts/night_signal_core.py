@@ -1171,6 +1171,14 @@ def valid_date(value: Any, issue_date: str) -> bool:
     return end - timedelta(days=2) <= parsed <= end
 
 
+def reader_facing_source_label(value: Any, url: str) -> str:
+    label = compact_text(str(value or ""), 120)
+    if re.search(r"[0-9A-Za-z\u3040-\u30ff\u3400-\u9fff]", label):
+        return label
+    hostname = urllib.parse.urlparse(url).hostname or ""
+    return hostname.removeprefix("www.") or url
+
+
 def clean_sources(
     raw_sources: Any,
     records_by_url: dict[str, dict[str, Any]],
@@ -1189,7 +1197,10 @@ def clean_sources(
         seen.add(url)
         cleaned.append(
             {
-                "label": str(record.get("label") or source.get("label") or url),
+                "label": reader_facing_source_label(
+                    record.get("label") or source.get("label"),
+                    url,
+                ),
                 "url": url,
                 "source_role": str(
                     record.get("source_role", "independent_media_or_data")
@@ -2094,6 +2105,19 @@ def self_test() -> None:
         "宇都宮ブレックスが新アリーナ計画を発表",
     ):
         fail("unrelated publisher article passed title matching")
+    unreadable_source_url = "https://www.example.com/item"
+    cleaned_unreadable_source = clean_sources(
+        [{"url": unreadable_source_url, "label": "—"}],
+        {
+            unreadable_source_url: {
+                "label": "—",
+                "url": unreadable_source_url,
+                "observed": True,
+            }
+        },
+    )
+    if cleaned_unreadable_source[0]["label"] != "example.com":
+        fail("unreadable source label did not fall back to its hostname")
     category = {
         "label": "Test",
         "watch_topics": [
