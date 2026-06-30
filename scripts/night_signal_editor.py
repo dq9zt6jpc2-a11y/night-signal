@@ -107,7 +107,11 @@ def scrub_public_summary(value: Any) -> str:
         cleaned = TRAILING_DOMAIN_RE.sub("", cleaned).strip(" -–—|｜")
         if cleaned and not ORPHAN_SOURCE_SENTENCE_RE.fullmatch(cleaned):
             sentences.append(cleaned)
-    return compact_text(" ".join(sentences), 2600)
+    text = compact_text(" ".join(sentences), 2600)
+    text = re.sub(r"([。．.!！？?])\s+(?=[。．.!！？?])", r"\1", text)
+    text = re.sub(r"[。．.]{2,}", "。", text)
+    text = re.sub(r"[！？!?]{2,}", lambda match: match.group(0)[0], text)
+    return text
 
 
 def scrub_item_source_labels(item: dict[str, Any], value: Any) -> str:
@@ -516,6 +520,10 @@ def edit_evidence(
 
 def self_test() -> None:
     core.self_test()
+    if scrub_public_summary("更新を確認した。。影響は継続調査する！？") != (
+        "更新を確認した。 影響は継続調査する！"
+    ):
+        fail("Editor did not normalize repeated public punctuation")
     item = {
         "watch_topic_id": "product_release",
         "title": "OpenAIがCodex Securityの更新版を公開 - Example News",
