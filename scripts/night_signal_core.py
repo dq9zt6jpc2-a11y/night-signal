@@ -141,6 +141,21 @@ def load_object(path: Path) -> dict[str, Any]:
 
 
 class VisibleTextParser(HTMLParser):
+    HIDDEN_TAGS = {
+        "script",
+        "style",
+        "noscript",
+        "svg",
+        "nav",
+        "footer",
+        "aside",
+        "dialog",
+        "form",
+        "button",
+        "select",
+        "option",
+    }
+
     def __init__(self) -> None:
         super().__init__()
         self.parts: list[str] = []
@@ -151,11 +166,11 @@ class VisibleTextParser(HTMLParser):
         tag: str,
         attrs: list[tuple[str, str | None]],
     ) -> None:
-        if tag in {"script", "style", "noscript", "svg"}:
+        if tag in self.HIDDEN_TAGS:
             self.hidden_depth += 1
 
     def handle_endtag(self, tag: str) -> None:
-        if tag in {"script", "style", "noscript", "svg"} and self.hidden_depth:
+        if tag in self.HIDDEN_TAGS and self.hidden_depth:
             self.hidden_depth -= 1
 
     def handle_data(self, data: str) -> None:
@@ -444,6 +459,68 @@ def publication_item_supported(title: str, *evidence_values: str) -> bool:
     return bool(PUBLICATION_EVENT_RE.search(f"{title} {evidence}"))
 
 
+def publication_evidence_record(
+    category: dict[str, Any],
+    issue_date: str,
+    record: dict[str, Any],
+) -> bool:
+    """Return whether a coverage record can support a public update."""
+    if not record.get("observed") or not valid_date(record.get("published_date"), issue_date):
+        return False
+    title = record_public_title(record)
+    excerpt = reader_facing_text(record.get("excerpt") or record.get("evidence") or "", 2400)
+    category_label = str(category.get("label", ""))
+    if (
+        not title
+        or not excerpt
+        or state_contract.navigation_shell_text(f"{title} {excerpt}")
+        or state_contract.NO_UPDATE_ASSERTION_RE.search(f"{title} {excerpt}")
+        or not category_identity_ok(category_label, title, excerpt)
+        or low_signal_value(title, excerpt)
+        or not publication_item_supported(title, excerpt)
+    ):
+        return False
+    return True
+
+
+def publication_evidence_records(
+    category: dict[str, Any],
+    issue_date: str,
+    records: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    return [
+        record
+        for record in select_clustered_evidence(category, records)
+        if publication_evidence_record(category, issue_date, record)
+    ]
+
+
+def fact_supported_by_records(
+    fact: str,
+    source_records: list[dict[str, Any]],
+) -> bool:
+    fact_numbers = set(re.findall(r"\d+(?:\.\d+)?", fact))
+    for record in source_records:
+        title = record_public_title(record)
+        evidence = reader_facing_text(
+            f"{record.get('title', '')} {record.get('excerpt') or record.get('evidence') or ''}",
+            3000,
+        )
+        evidence_numbers = set(re.findall(r"\d+(?:\.\d+)?", evidence))
+        if fact_numbers and not fact_numbers <= evidence_numbers:
+            continue
+        evidence_japanese = len(re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", evidence))
+        evidence_latin = len(re.findall(r"[A-Za-z]", evidence))
+        if evidence_latin >= 24 and evidence_japanese < 6:
+            return True
+        if (
+            state_contract.materially_same_fact(fact, title)
+            or state_contract.text_overlap(fact, evidence) >= 2
+        ):
+            return True
+    return False
+
+
 def analysis_narrative(title: str, facts: list[str]) -> tuple[str, str, str] | None:
     if not state_contract.analysis_headline(title):
         return None
@@ -528,19 +605,31 @@ def natural_detail_summary(
     return composed or existing
 
 
+UNCERTAINTY_RE = re.compile(
+    r"未定|未確定|未公表|明らかになっていない|公表していない|"
+    r"開示していない|今後決定|調整中|検討中|"
+    r"not disclosed|not announced|unknown|pending|to be decided",
+    re.I,
+)
+
+
 def event_limits_sentence(title: str, excerpt: str) -> str:
-    text = f"{title} {excerpt}".lower()
-    if any(term in text for term in ("視察団", "訪中", "訪米", "business delegation")):
-        return "各団体の協議内容と、今後の追加訪問の日程は明らかになっていない。"
-    if any(term in text for term in ("決算", "利益", "売上", "評価益", "資金調達", "社債")):
-        return "会計上の利益と現金収支の差、評価条件の変動影響は参照元だけでは確定できない。"
-    if any(term in text for term in ("契約", "提携", "共同開発", "partnership", "contract")):
-        return "契約期間、各社の役割、実用化または提供開始の時期は明らかになっていない。"
-    if any(term in text for term in ("製品", "モデル", "発売", "公開", "release", "launch")):
-        return "提供地域、価格、利用条件と実運用での性能は明らかになっていない。"
-    if any(term in text for term in ("移籍", "獲得", "退団", "選手")):
-        return "契約期間、起用法と編成全体への影響は明らかになっていない。"
-    return "発表に含まれない条件と今後の変更は、続報が出るまで確定できない。"
+    del title
+    for sentence in sentence_parts(excerpt):
+        if UNCERTAINTY_RE.search(sentence) and not state_contract.NO_UPDATE_ASSERTION_RE.search(sentence):
+            return sentence.rstrip("。")
+    return ""
+
+
+def without_uncertainty_sentences(value: str) -> str:
+    return unique_sentences(
+        " ".join(
+            sentence
+            for sentence in sentence_parts(value)
+            if not UNCERTAINTY_RE.search(sentence)
+        ),
+        1200,
+    )
 
 
 def page_text(raw: bytes, content_type: str) -> tuple[str, str]:
@@ -1073,10 +1162,10 @@ no_change_summary under 300 Japanese characters.
 items are publication-worthy confirmed changes. Retain names, exact dates,
 numbers, results, uncertainty, and context. Each item must contain:
 watch_topic_id, title, summary, source_published_date, topic_value_class,
-priority_class, slug, detail_summary, what_changed, why_it_matters,
+priority_class, slug, what_changed, why_it_matters,
 confirmed_facts, limits_or_unknowns, sources.
 Each source needs label and an exact supplied URL. Write clear Japanese. Let
-summary and detail depth follow the available evidence: keep thin sources
+summary depth follows the available evidence: keep thin sources
 concise and preserve names, dates, numbers, conditions, and context from rich
 sources.
 Include every distinct confirmed fact that materially helps a reader understand
@@ -1095,7 +1184,7 @@ because its publication date is recent or its title contains a large number.
 It may become an item only when the supplied body provides concrete supporting
 facts and a clear analytical conclusion. For such an item,
 what_changed must state what the article or video examines, why_it_matters must
-state the conclusion reached, and summary/detail_summary must contain both the
+state the conclusion reached, and summary must contain both the
 question examined and the evidence-backed analysis. Otherwise keep it as a
 signal. Keep 分析, 検証, or 解説 in the public title so it cannot be mistaken
 for a newly announced underlying event.
@@ -1113,17 +1202,18 @@ than the window belongs only in no_change_summary. If evidence is insufficient,
 return empty arrays and explain what was checked. Never invent a date, number,
 source, or certainty. Public fields must explain the event itself and must not
 mention research, collection, monitoring, selection, or publication procedure.
-detail_summary must be one natural Japanese paragraph. Do not use labels such
-as 変更点, 重要性, 確認事実, or 未確定点, and do not say that an item is kept in
-the list or monitored broadly. Include concrete facts, why the change matters,
-and remaining uncertainty without repeating the same sentence."""
+Do not use labels such as 変更点, 重要性, 確認事実, or 未確定点, and do not say
+that an item is kept in the list or monitored broadly. Include concrete facts
+and why the change matters without repeating the same sentence.
+limits_or_unknowns must be empty unless a
+supplied source explicitly states the uncertainty; never infer a generic unknown."""
 
 def category_prompt(
     category: dict[str, Any],
     issue_date: str,
     records: list[dict[str, Any]],
 ) -> dict[str, Any]:
-    selected = select_clustered_evidence(category, records)
+    selected = publication_evidence_records(category, issue_date, records)
     return {
         "issue_date": issue_date,
         "category": category["label"],
@@ -1276,13 +1366,9 @@ def promoted_signal_item(
     summary = unique_sentences(signal_summary, 900)
     summary_sentences = sentence_parts(summary)
     what_changed = summary_sentences[0] if summary_sentences else summary
-    why_it_matters = unique_sentences(
-        " ".join(summary_sentences[1:]) or (
-            f"{title}は、{category_hint_from_title(title)}に関わる新しい材料として、"
-            "投資判断、事業運営、予定確認のいずれかに影響しうる。"
-        ),
-        700,
-    )
+    why_it_matters = unique_sentences(" ".join(summary_sentences[1:]), 700)
+    if not why_it_matters:
+        return None
     fact_values = [title, excerpt, signal_summary]
     facts = (
         state_contract.normalize_analysis_facts(title, fact_values, limit=6)
@@ -1335,13 +1421,6 @@ def promoted_signal_item(
         "observation_source_role": str(record.get("source_role", "independent_media_or_data")),
         "observation_channel": str(record.get("channel", "web")),
     }
-
-
-def category_hint_from_title(title: str) -> str:
-    for category, terms in CATEGORY_IDENTITY_TERMS.items():
-        if any(term.lower() in title.lower() for term in terms):
-            return category
-    return "当該テーマ"
 
 
 def event_context_sentence(
@@ -1398,12 +1477,17 @@ def event_context_sentence(
             f"資金の流入先、規模と継続性は、{category_label}の市場選好と"
             "金融環境の変化を判断する材料になる。"
         )
+    if any(term in text for term in ("視察団", "訪中", "訪米", "business delegation")):
+        return (
+            "訪問した団体、協議日程と相手国の説明は、企業間交流が"
+            "実際に再開・拡大しているかを判断する材料になる。"
+        )
     if any(term in text for term in ("獲得", "移籍", "退団", "新規契約")):
         return (
             f"選手の役割、契約条件と編成で担う役割は、{category_label}の"
             "戦力構成と次シーズンの起用方針を判断する材料になる。"
         )
-    return state_contract.topic_context_sentence(topic_value, category_label)
+    return ""
 
 
 def evidence_narrative(
@@ -1436,18 +1520,6 @@ def evidence_narrative(
         700,
     )
     summary = unique_sentences(" ".join([event, *supporting, importance]), 1000)
-    if state_contract.reader_summary_violations(title, summary):
-        summary = unique_sentences(
-            " ".join(
-                [
-                    event,
-                    *supporting,
-                    importance,
-                    "対象範囲と追加条件は今後の発表で具体化される。",
-                ]
-            ),
-            1000,
-        )
     return event, importance, summary, supporting
 
 
@@ -1536,6 +1608,8 @@ def fallback_item_from_record(
     if analysis is not None:
         what_changed, why_it_matters, summary = analysis
     else:
+        if not why_it_matters:
+            return None
         summary = unique_sentences(
             " ".join(
                 [
@@ -1597,7 +1671,7 @@ def backfill_items_from_evidence(
         for item in normalized.get("items", [])
         if isinstance(item, dict)
     }
-    for record in select_clustered_evidence(category, records):
+    for record in publication_evidence_records(category, issue_date, records):
         item = fallback_item_from_record(category, issue_date, record)
         if not item:
             continue
@@ -1671,7 +1745,7 @@ def backfill_signals_from_evidence(
         for entry in collection
         if isinstance(entry, dict)
     }
-    for record in select_clustered_evidence(category, records):
+    for record in publication_evidence_records(category, issue_date, records):
         signal = fallback_signal_from_record(category, issue_date, record)
         if not signal:
             continue
@@ -1718,10 +1792,10 @@ def normalize_result(
         for topic in category.get("watch_topics", [])
         if isinstance(topic, dict)
     }
+    eligible_records = publication_evidence_records(category, issue_date, records)
     records_by_url = {
         str(record["url"]): record
-        for record in records
-        if record.get("observed")
+        for record in eligible_records
     }
     items: list[dict[str, Any]] = []
     seen_titles: set[str] = set()
@@ -1732,7 +1806,7 @@ def normalize_result(
         topic = str(item.get("watch_topic_id", ""))
         title = reader_facing_text(item.get("title", ""), 180)
         summary = reader_facing_text(item.get("summary", ""), 1000)
-        detail = reader_facing_text(item.get("detail_summary", ""), 2600)
+        detail = ""
         what_changed = reader_facing_text(item.get("what_changed", ""), 700)
         why_it_matters = reader_facing_text(
             item.get("why_it_matters", ""),
@@ -1743,36 +1817,37 @@ def normalize_result(
             for fact in item.get("confirmed_facts", [])
             if isinstance(fact, str) and fact.strip()
         ]
-        limits_or_unknowns = reader_facing_text(
-            item.get("limits_or_unknowns", ""),
-            900,
+        sources = clean_sources(item.get("sources"), records_by_url)
+        source_excerpt = " ".join(
+            str(records_by_url.get(source["url"], {}).get("excerpt") or "")
+            for source in sources
         )
-        summary = unique_sentences(summary, 1000)
+        limits_or_unknowns = event_limits_sentence("", source_excerpt)
+        summary = without_uncertainty_sentences(summary)
         what_changed = unique_sentences(what_changed, 700)
-        why_it_matters = unique_sentences(why_it_matters, 700)
+        why_it_matters = without_uncertainty_sentences(why_it_matters)
         facts = (
             state_contract.normalize_analysis_facts(title, facts, limit=8)
             if state_contract.analysis_headline(title)
             else state_contract.normalize_material_facts(title, facts, limit=8)
         )
-        if len(summary) < 100:
-            summary = unique_sentences(
-                " ".join(
-                    value
-                    for value in (
-                        *facts[:4],
-                        why_it_matters,
-                        *(() if len(facts) >= 3 else (what_changed, summary)),
-                    )
-                    if value
-                ),
-                1000,
-            )
+        source_records = [records_by_url[source["url"]] for source in sources]
+        facts = [
+            fact
+            for fact in facts
+            if fact_supported_by_records(fact, source_records)
+        ]
+        if facts:
+            what_changed = facts[0]
+        summary = unique_sentences(
+            " ".join(value for value in (*facts[:4], why_it_matters) if value),
+            1000,
+        )
         analysis = analysis_narrative(title, facts)
         analysis_ready = not state_contract.analysis_headline(title) or analysis is not None
         if analysis is not None:
             what_changed, why_it_matters, summary = analysis
-        if state_contract.GENERIC_CONTEXT_RE.search(summary) and len(facts) >= 3:
+        if state_contract.GENERIC_CONTEXT_RE.search(summary):
             summary = unique_sentences(" ".join(facts[:4]), 1000)
         if (
             len(detail) < 280
@@ -1790,7 +1865,6 @@ def normalize_result(
                 category_label=str(category.get("label", "")),
             )
         detail = unique_sentences(detail, 2600)
-        sources = clean_sources(item.get("sources"), records_by_url)
         first_record = records_by_url.get(sources[0]["url"], {}) if sources else {}
         if sources and len(summary) < 80:
             summary = unique_sentences(
@@ -1825,6 +1899,11 @@ def normalize_result(
         source_cluster = record_cluster_key(records_by_url.get(sources[0]["url"], {})) if sources else ""
         item_cluster = normalized_topic_key(title, source_cluster)
         topic_value = str(item.get("topic_value_class", ""))
+        source_dates = {
+            str(source.get("published_date"))
+            for source in sources
+            if source.get("published_date")
+        }
         rejection_checks = [
             ("unknown_topic", topic not in valid_topics),
             ("empty_title", not title),
@@ -1840,7 +1919,7 @@ def normalize_result(
             ("duplicate_title", title in seen_titles),
             (
                 "insufficient_facts",
-                not facts_add_information_beyond_title(title, facts),
+                not facts,
             ),
             ("incomplete_analysis", not analysis_ready),
             ("missing_source", not sources),
@@ -1849,6 +1928,10 @@ def normalize_result(
             (
                 "invalid_source_date",
                 not valid_date(item.get("source_published_date"), issue_date),
+            ),
+            (
+                "source_date_not_in_evidence",
+                str(item.get("source_published_date", "")) not in source_dates,
             ),
         ]
         rejection_reasons = [reason for reason, rejected in rejection_checks if rejected]
@@ -1916,6 +1999,8 @@ def normalize_result(
             or cluster_seen(seen_clusters, signal_cluster)
             or not record
             or not valid_date(signal.get("source_published_date"), issue_date)
+            or str(signal.get("source_published_date", ""))
+            != str(record.get("published_date") or "")
         ):
             continue
         change_class = str(signal.get("change_class", "background_only"))
@@ -2118,6 +2203,107 @@ def self_test() -> None:
     )
     if cleaned_unreadable_source[0]["label"] != "example.com":
         fail("unreadable source label did not fall back to its hostname")
+    music_category = {
+        "label": "YOASOBI / 幾田りら",
+        "watch_topics": [
+            {
+                "id": "music_release_chart_tieup",
+                "terms": ["YOASOBI", "幾田りら", "チャート"],
+                "event_classes": ["cultural_or_audience_signal"],
+            }
+        ],
+    }
+    navigation_record = {
+        "label": "Music chart index",
+        "url": "https://example.com/charts/",
+        "source_role": "independent_media_or_data",
+        "channel": "web",
+        "source_class": "specialist_media",
+        "observed": True,
+        "published_date": "2099-01-02",
+        "title": "Music CHARTS",
+        "excerpt": (
+            "このページをスキップ 閉じる CHART INSIGHT MUSIC CHARTS "
+            "GLOBAL BOOKS JAPAN WORLD NEWS SHOPPING CART もっと見る。"
+            "YOASOBIや幾田りらに関する新曲やチャート変動の具体的事実は"
+            "本文に記載されていない。"
+        ),
+    }
+    if publication_evidence_record(music_category, "2099-01-03", navigation_record):
+        fail("navigation index was treated as publication Evidence")
+    if category_prompt(music_category, "2099-01-03", [navigation_record])["evidence"]:
+        fail("navigation index reached the Editor prompt")
+    no_update_record = {
+        **navigation_record,
+        "url": "https://example.com/music-daily",
+        "title": "音楽チャートの6月30日更新",
+        "excerpt": (
+            "YOASOBIや幾田りらに関する新曲やチャート変動の具体的事実は"
+            "本文に記載されていない。"
+        ),
+    }
+    if publication_evidence_record(music_category, "2099-01-03", no_update_record):
+        fail("a no-update statement was treated as an important update")
+    undated_record = {
+        **navigation_record,
+        "url": "https://example.com/yoasobi-release",
+        "published_date": None,
+        "title": "YOASOBIが新曲を公開",
+        "excerpt": "YOASOBIが新曲を公開し、配信を開始した。",
+    }
+    if publication_evidence_record(music_category, "2099-01-03", undated_record):
+        fail("an undated source was allowed to invent the issue date")
+    english_record = {
+        **navigation_record,
+        "url": "https://example.com/openai-release",
+        "published_date": "2099-01-02",
+        "title": "OpenAI launches a new security model",
+        "excerpt": (
+            "OpenAI announced the model on January 2. The release adds automated "
+            "vulnerability triage for enterprise customers."
+        ),
+    }
+    openai_category = {
+        "label": "OpenAI",
+        "watch_topics": [
+            {
+                "id": "product_release",
+                "terms": ["OpenAI", "security model"],
+                "event_classes": ["technical_or_product_shift"],
+            }
+        ],
+    }
+    if not publication_evidence_record(openai_category, "2099-01-03", english_record):
+        fail("English primary Evidence was filtered before translation")
+    if not fact_supported_by_records(
+        "OpenAIは企業向けに脆弱性の自動分類機能を追加した。",
+        [english_record],
+    ):
+        fail("translated fact lost its English Evidence support")
+    if fact_supported_by_records(
+        "OpenAIは999社へ脆弱性の自動分類機能を提供した。",
+        [english_record],
+    ):
+        fail("translated fact invented a number absent from English Evidence")
+    _, parsed_body = page_text(
+        (
+            "<html><head><title>Example</title></head><body>"
+            "<nav>HOME MENU NEWS SHOPPING CART</nav>"
+            "<article>YOASOBIが新曲を6月30日に発売した。</article>"
+            "</body></html>"
+        ).encode(),
+        "text/html; charset=utf-8",
+    )
+    if "SHOPPING CART" in parsed_body or "新曲を6月30日に発売" not in parsed_body:
+        fail("HTML extraction did not separate navigation from article text")
+    if event_limits_sentence("選手の新規契約", "選手の新規契約を発表した。"):
+        fail("fallback invented an uncertainty absent from Evidence")
+    explicit_limit = event_limits_sentence(
+        "選手の新規契約",
+        "選手の新規契約を発表した。契約期間は未公表である。",
+    )
+    if "契約期間は未公表" not in explicit_limit:
+        fail("source-stated uncertainty was not retained")
     category = {
         "label": "Test",
         "watch_topics": [
@@ -2133,6 +2319,11 @@ def self_test() -> None:
             "channel": "web",
             "observed": True,
             "published_date": "2099-01-02",
+            "title": "OpenAIが開発者向け機能を更新",
+            "excerpt": (
+                "OpenAIは開発者向け機能を更新し、対象機能と提供条件を公表した。"
+                "既存サービスからの移行手順と利用開始日も示した。"
+            ),
             "evidence": "verified",
         }
     ]
@@ -2182,6 +2373,10 @@ def self_test() -> None:
     detail_summary = normalized["items"][0]["detail_summary"]
     if SUMMARY_LABEL_RE.search(detail_summary) or GENERIC_IMPORTANCE_RE.search(detail_summary):
         fail("normalization created label-heavy or internal detail copy")
+    wrong_date_raw = json.loads(json.dumps(raw))
+    wrong_date_raw["items"][0]["source_published_date"] = "2099-01-03"
+    if normalize_result(wrong_date_raw, category, "2099-01-03", records)["items"]:
+        fail("normalization accepted a source date absent from Evidence")
     short_raw = json.loads(json.dumps(raw))
     short_raw["items"][0]["summary"] = "OpenAIが開発者向け機能を更新した。"
     short_raw["items"][0]["detail_summary"] = (
@@ -2197,7 +2392,10 @@ def self_test() -> None:
     if (
         len(short_item) != 1
         or len(short_item[0]["summary"]) < 80
-        or len(short_item[0]["detail_summary"]) < 220
+        or not all(
+            fact in short_item[0]["detail_summary"]
+            for fact in short_item[0]["confirmed_facts"]
+        )
     ):
         fail(
             "normalization did not expand a fact-rich short model response: "
@@ -2418,7 +2616,7 @@ def self_test() -> None:
         [duplicate_record],
     )
     if promoted_fallback["items"] or len(promoted_fallback["signals"]) != 1:
-        fail("headline-only fallback must remain internal instead of being padded")
+        fail("headline-only Evidence was padded into an item instead of a signal")
     analysis_only: dict[str, Any] = {"items": [], "signals": []}
     backfill_signals_from_evidence(
         analysis_only,
@@ -2453,8 +2651,8 @@ def self_test() -> None:
             }
         ],
     )
-    if analysis_only["items"] or len(analysis_only["signals"]) != 1:
-        fail("fresh commentary must not be promoted as a new event")
+    if analysis_only["items"] or analysis_only["signals"]:
+        fail("headline-only commentary escaped coverage-only storage")
     analysis_item = fallback_item_from_record(
         {
             "label": "SoftBank",

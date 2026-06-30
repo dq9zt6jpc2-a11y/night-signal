@@ -1,5 +1,5 @@
 {
-  "contract_version": "2026-06-28.01",
+  "contract_version": "2026-06-30.01",
   "legacy_contract_versions": [
     {
       "through_date": "2026-05-25",
@@ -20,6 +20,10 @@
     {
       "through_date": "2026-06-27",
       "version": "2026-06-27.01"
+    },
+    {
+      "through_date": "2026-06-29",
+      "version": "2026-06-28.01"
     }
   ],
   "description": "NIGHT SIGNAL daily collection contract. A public issue must prove that every category and configured watch topic was searched through official/primary Web, independent media or data, X/SNS, and YouTube before publication. Economy coverage is regional: Japan, Asia ex-Japan focus, and North America; broad standalone investment sections are not allowed and country-specific official evidence must not be substituted from another country. IT/space topics must include official release plus X signals; YOASOBI/Ikuta coverage must include official HP plus staff/person social channels including X and Instagram.",
@@ -28,6 +32,7 @@
   "minimum_changed_cards_vs_previous_issue": 1,
   "minimum_detail_summary_chars": 120,
   "material_fact_semantics_effective_date": "2026-06-27",
+  "publication_evidence_contract_effective_date": "2026-06-30",
   "summary_quality_effective_date": "2026-05-22",
   "article_summary_effective_date": "2026-05-26",
   "detail_summary_heading": "要点と背景",

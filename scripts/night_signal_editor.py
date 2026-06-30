@@ -83,10 +83,12 @@ def scrub_public_title(value: Any) -> str:
     title = re.sub(r"https?://\S+", "", title)
     title = state.DOMAIN_RE.sub("", title)
     title = EMPTY_JA_QUOTE_RE.sub("", title)
+    title = state.EMPTY_GROUP_RE.sub("", title)
     for _ in range(3):
         cleaned = state.PUBLISHER_SUFFIX_RE.sub("", title)
         cleaned = TRAILING_DOMAIN_RE.sub("", cleaned)
         cleaned = EMPTY_JA_QUOTE_RE.sub("", cleaned)
+        cleaned = state.EMPTY_GROUP_RE.sub("", cleaned)
         cleaned = cleaned.strip(" -–—|｜")
         if cleaned == title:
             break
@@ -105,7 +107,11 @@ def scrub_public_summary(value: Any) -> str:
         cleaned = EMPTY_JA_QUOTE_RE.sub("", cleaned)
         cleaned = TRAILING_MEDIA_CREDIT_RE.sub("", cleaned)
         cleaned = TRAILING_DOMAIN_RE.sub("", cleaned).strip(" -–—|｜")
-        if cleaned and not ORPHAN_SOURCE_SENTENCE_RE.fullmatch(cleaned):
+        if (
+            cleaned
+            and not ORPHAN_SOURCE_SENTENCE_RE.fullmatch(cleaned)
+            and not state.ORPHAN_LEADING_PARTICLE_RE.search(cleaned)
+        ):
             sentences.append(cleaned)
     text = compact_text(" ".join(sentences), 2600)
     text = re.sub(r"([。．.!！？?])\s+(?=[。．.!！？?])", r"\1", text)
@@ -210,8 +216,7 @@ def item_importance(
         and (not title or state.title_repetition_score(title, importance) < 0.82)
     ):
         return importance
-    value_class = topic_value_class(item.get("topic_value_class", "operational_status_change"))
-    return state.topic_context_sentence(value_class, category)
+    return ""
 
 
 def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
@@ -282,7 +287,9 @@ def canonical_detail_summary(
         and state.title_repetition_score(title, scrub_public_summary(fact)) < 0.82
     ]
     optional_parts.append(item_importance(item, category, title))
-    optional_parts.append(scrub_public_summary(item.get("limits_or_unknowns", "")))
+    limits = scrub_public_summary(item.get("limits_or_unknowns", ""))
+    if limits:
+        optional_parts.append(limits)
 
     seen: set[str] = set()
     sentences: list[str] = []
@@ -359,6 +366,7 @@ def item_card(
     if not facts:
         fail(f"item lost material facts during card construction: {item.get('title', '')}")
     source_urls = [str(source["url"]) for source in item["sources"]]
+    limits = scrub_public_summary(item.get("limits_or_unknowns", ""))
     slug = str(item["slug"])
     slug_stem = slug[:-5] if slug.endswith(".html") else slug
     if not slug_stem.endswith(f"-{issue_date}"):
@@ -392,7 +400,7 @@ def item_card(
                     {"fact": fact, "source_urls": source_urls}
                     for fact in facts
                 ],
-                "limits_or_unknowns": scrub_public_summary(item["limits_or_unknowns"]),
+                **({"limits_or_unknowns": limits} if limits else {}),
                 "source_dates": [str(item["source_published_date"])],
             },
         },
@@ -572,6 +580,13 @@ def self_test() -> None:
         fail("Editor did not map every confirmed fact to evidence")
     if SUMMARY_LABEL_RE.search(card["detail"]["summary"]):
         fail("Editor kept label-heavy detail copy")
+    item_without_limits = dict(item)
+    item_without_limits.pop("limits_or_unknowns")
+    card_without_limits = item_card(
+        "OpenAI", "openai", item_without_limits, "2099-01-01"
+    )
+    if "limits_or_unknowns" in card_without_limits["detail"]["summary_basis"]:
+        fail("Editor invented an uncertainty absent from the source item")
     print("NIGHT SIGNAL EDITOR SELF-TEST PASSED")
 
 

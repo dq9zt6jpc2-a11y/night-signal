@@ -6,7 +6,7 @@ the reader-facing sections we want to publish:
 
 - 要点と背景
 - 確認した事実
-- 未確定点
+- 未確定点（参照元に明記されている場合）
 - 原文確認
 
 Current issues use a compact information structure, not a time-boxed overview.
@@ -177,8 +177,11 @@ def required_summary_basis(data: dict[str, Any]) -> dict[str, Any]:
     basis = data.get("summary_basis")
     if not isinstance(basis, dict):
         fail("missing required object: summary_basis")
-    for key in ("what_changed", "why_it_matters", "limits_or_unknowns"):
+    for key in ("what_changed", "why_it_matters"):
         required_str(basis, key)
+    limits = basis.get("limits_or_unknowns")
+    if limits is not None and (not isinstance(limits, str) or not limits.strip()):
+        fail("summary_basis.limits_or_unknowns must be omitted or non-empty")
     facts = required_list(basis, "confirmed_facts")
     if any(not isinstance(fact, str) or not fact.strip() for fact in facts):
         fail("summary_basis.confirmed_facts must contain reader-facing facts")
@@ -198,8 +201,11 @@ def reject_forbidden(label: str, text: str) -> None:
 
 
 def reject_basis_forbidden(basis: dict[str, Any]) -> None:
-    for key in ("what_changed", "why_it_matters", "limits_or_unknowns"):
+    for key in ("what_changed", "why_it_matters"):
         reject_forbidden(f"summary_basis.{key}", required_str(basis, key))
+    limits = basis.get("limits_or_unknowns")
+    if isinstance(limits, str) and limits.strip():
+        reject_forbidden("summary_basis.limits_or_unknowns", limits.strip())
     for index, fact in enumerate(required_list(basis, "confirmed_facts"), start=1):
         reject_forbidden(f"summary_basis.confirmed_facts[{index}]", str(fact))
 
@@ -220,13 +226,18 @@ def render_sources(sources: list[Any], allow_multiple: bool) -> str:
 
 
 def render_information_basis(summary: str, basis: dict[str, Any]) -> str:
-    limits = html.escape(required_str(basis, "limits_or_unknowns"))
+    limits = str(basis.get("limits_or_unknowns") or "").strip()
     facts = [
         f"        <li>{html.escape(str(fact).strip())}</li>"
         for fact in required_list(basis, "confirmed_facts")
         if str(fact).strip()
     ]
     dates = "、".join(html.escape(str(date).strip()) for date in required_list(basis, "source_dates") if str(date).strip())
+    limits_section = (
+        f'\n\n      <h2>未確定点</h2>\n      <p class="limits">{html.escape(limits)}</p>'
+        if limits
+        else ""
+    )
     return f"""      <h2>要点と背景</h2>
       <div class="article-summary">
         <p>{html.escape(summary)}</p>
@@ -236,10 +247,7 @@ def render_information_basis(summary: str, basis: dict[str, Any]) -> str:
       <h2>確認した事実</h2>
       <ul class="fact-list">
 {chr(10).join(facts)}
-      </ul>
-
-      <h2>未確定点</h2>
-      <p class="limits">{limits}</p>"""
+      </ul>{limits_section}"""
 
 
 def render(data: dict[str, Any]) -> str:

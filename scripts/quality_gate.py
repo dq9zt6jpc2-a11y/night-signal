@@ -760,10 +760,13 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
         if any(any(term in heading for term in DETAIL_FORBIDDEN_SECTION_HEADINGS) for heading in h2_texts):
             checklist_headings.append(name)
         if information_required:
-            required_h2 = [detail_summary_heading(issue_dt), "確認した事実", "未確定点"]
+            required_h2_variants = [
+                [detail_summary_heading(issue_dt), "確認した事実"],
+                [detail_summary_heading(issue_dt), "確認した事実", "未確定点"],
+            ]
         else:
-            required_h2 = [detail_summary_heading(issue_dt)]
-        if h2_texts != required_h2:
+            required_h2_variants = [[detail_summary_heading(issue_dt)]]
+        if h2_texts not in required_h2_variants:
             article_structure_failures.append(f"{name}: h2={h2_texts or '-'}")
         summary_class = "article-summary" if article_summary_required else "summary-lead"
         summary_match = re.search(rf'<div class="{summary_class}">(.*?)</div>', html, flags=re.S)

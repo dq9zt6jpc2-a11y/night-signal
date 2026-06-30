@@ -109,12 +109,35 @@ FACT_SOURCE_METADATA_RE = re.compile(
     r"(?:Yahoo!|YouTube|MSN)?[。．.!！?？]*$",
     re.I,
 )
+NO_UPDATE_ASSERTION_RE = re.compile(
+    r"(?:具体的|新たな|明確な).{0,50}(?:事実|変化|更新|発表|内容)"
+    r".{0,50}(?:記載|確認|公表|掲載|含ま).{0,12}"
+    r"(?:されていない|できない|見当たらない|ない)|"
+    r"(?:該当|関連)する.{0,50}(?:新曲|変動|更新|発表|事実)"
+    r".{0,30}(?:記載されていない|確認できない|見当たらない|ない)",
+    re.I,
+)
+NAVIGATION_MARKER_RE = re.compile(
+    r"このページをスキップ|閉じる|shopping cart|もっと見る|"
+    r"(?:^|\s)(?:home|menu|news|charts?|books?|global|world|japan|overseas|special)"
+    r"(?=\s|$)",
+    re.I,
+)
+NAVIGATION_RUN_RE = re.compile(
+    r"(?:\b[A-Z][A-Z0-9&]{1,}\b[\s＋+|｜]*){5,}"
+)
+ORPHAN_LEADING_PARTICLE_RE = re.compile(r"^(?:は|が|を|に|で|と|へ)(?=[^\s])")
+EMPTY_GROUP_RE = re.compile(r"[（(【\[]\s*[）)】\]]")
 FACT_ANALYSIS_OR_UNKNOWN_RE = re.compile(
     r"判断する材料になる|判断材料となる|"
     r"(?:今後|引き続き|追加の).{0,80}(?:確認対象|確認が必要|焦点となる)|"
     r"(?:影響|対象)範囲.{0,80}(?:確認対象|確認が必要)|"
     r"影響しうる|注目される|重要となる|"
-    r"対象範囲、実施時期と継続性",
+    r"対象範囲、実施時期と継続性|"
+    r"(?:未定|未確定|未公表|明らかになっていない|公表していない|"
+    r"開示していない|今後決定|調整中|検討中)|"
+    + NO_UPDATE_ASSERTION_RE.pattern,
+    re.I,
 )
 FACT_MARKUP_RE = re.compile(r"<\s*/?\s*[a-z!]|\bhref\s*=|&(?:lt|gt|nbsp);", re.I)
 GENERIC_CONTEXT_RE = re.compile(
@@ -177,7 +200,6 @@ SUMMARY_BASIS_SCHEMA: dict[str, Any] = {
         "why_it_matters",
         "confirmed_facts",
         "fact_sources",
-        "limits_or_unknowns",
         "source_dates",
     ],
     "properties": {
@@ -448,7 +470,26 @@ def public_render_copy_violations(text: str, *, kind: str) -> list[str]:
         violations.append("publisher/domain name leaked")
     if kind == "title" and PUBLISHER_SUFFIX_RE.search(stripped):
         violations.append("publisher suffix leaked")
+    if ORPHAN_LEADING_PARTICLE_RE.search(stripped):
+        violations.append("sentence starts with an orphaned particle")
+    if kind == "title" and EMPTY_GROUP_RE.search(stripped):
+        violations.append("empty brackets left after source cleanup")
+    if navigation_shell_text(stripped):
+        violations.append("navigation or page-shell text leaked")
+    if kind == "summary" and NO_UPDATE_ASSERTION_RE.search(stripped):
+        violations.append("no-update statement exposed as an important update")
+    if kind == "summary" and GENERIC_CONTEXT_RE.search(stripped):
+        violations.append("generic context template exposed as article substance")
     return violations
+
+
+def navigation_shell_text(text: str) -> bool:
+    value = html.unescape(str(text))
+    markers = {
+        match.group(0).strip().lower()
+        for match in NAVIGATION_MARKER_RE.finditer(value)
+    }
+    return len(markers) >= 4 or bool(NAVIGATION_RUN_RE.search(value))
 
 
 def reject_public_copy(label: str, text: str, *, kind: str) -> None:
@@ -646,9 +687,18 @@ def validate_summary_basis(detail: dict[str, Any], *, issue_date: str, source_da
     if not isinstance(basis, dict):
         fail(f"cards[{card_index}].detail.summary_basis is required for information-complete detail pages")
 
-    for key in ("what_changed", "why_it_matters", "limits_or_unknowns"):
+    for key in ("what_changed", "why_it_matters"):
         value = require_str(basis, key)
         reject_public_copy(f"cards[{card_index}].detail.summary_basis.{key}", value, kind="summary")
+    limits = basis.get("limits_or_unknowns")
+    if limits is not None:
+        if not isinstance(limits, str) or not limits.strip():
+            fail(f"cards[{card_index}].detail.summary_basis.limits_or_unknowns must be omitted or non-empty")
+        reject_public_copy(
+            f"cards[{card_index}].detail.summary_basis.limits_or_unknowns",
+            limits,
+            kind="summary",
+        )
 
     facts = basis.get("confirmed_facts")
     if not isinstance(facts, list) or not any(
@@ -946,6 +996,20 @@ def rolling_display_cards(
     display_cards: list[dict[str, Any]] = []
     seen: set[tuple[str, str]] = set()
 
+    def reader_facing_card(card: dict[str, Any]) -> bool:
+        detail = card.get("detail")
+        if not isinstance(detail, dict):
+            return False
+        basis = detail.get("summary_basis")
+        facts = basis.get("confirmed_facts", []) if isinstance(basis, dict) else []
+        fields = [
+            (str(card.get("title", "")), "title"),
+            (str(card.get("summary", "")), "summary"),
+            (str(detail.get("summary", "")), "summary"),
+            *[(str(fact), "summary") for fact in facts if isinstance(fact, str)],
+        ]
+        return all(not public_render_copy_violations(text, kind=kind) for text, kind in fields)
+
     def add_card(
         card: dict[str, Any],
         *,
@@ -953,7 +1017,7 @@ def rolling_display_cards(
         retained_from_issue_date: str | None = None,
     ) -> None:
         source_date = str(card.get("source_published_date", ""))
-        if source_date not in allowed_source_dates:
+        if source_date not in allowed_source_dates or not reader_facing_card(card):
             return
         key = display_cluster_key(card)
         if display_cluster_seen(seen, key):
@@ -993,6 +1057,7 @@ def rolling_display_cards(
             for card in previous_issue.get("cards", [])
             if isinstance(card, dict)
             and str(card.get("source_published_date", "")) in allowed_source_dates
+            and reader_facing_card(card)
         ]
         if not retained_raw_cards:
             continue
@@ -1159,6 +1224,11 @@ def validate_issue_evidence(
     if not isinstance(bundle_categories, dict) or set(bundle_categories) != set(configured):
         fail("research bundle must cover every configured category exactly once")
     registry = load_source_registry()
+    evidence_contract_active = effective_on_or_after(
+        read_json(CONFIG_PATH),
+        "publication_evidence_contract_effective_date",
+        issue_date,
+    )
     cards_by_category: dict[str, list[dict[str, Any]]] = {}
     for card in cards:
         cards_by_category.setdefault(str(card.get("category")), []).append(card)
@@ -1219,6 +1289,14 @@ def validate_issue_evidence(
         if not observed_urls:
             fail(f"{label} has no observed evidence URL")
 
+        records = entry.get("records")
+        record_by_url = {
+            str(record.get("url")): record
+            for record in records
+            if isinstance(record, dict)
+            and str(record.get("url", "")).startswith(("http://", "https://"))
+        } if isinstance(records, list) else {}
+
         for card in cards_by_category.get(label, []):
             topic_id = str(card.get("watch_topic_id"))
             if topic_id not in required_topics:
@@ -1233,6 +1311,16 @@ def validate_issue_evidence(
             }
             if not detail_urls or not detail_urls <= observed_by_topic[topic_id]:
                 fail(f"{label} public update cites unobserved evidence")
+            if evidence_contract_active:
+                source_date = str(card.get("source_published_date", ""))
+                evidence_dates = {
+                    str(record_by_url.get(url, {}).get("published_date") or "")
+                    for url in detail_urls
+                }
+                if "" in evidence_dates or source_date not in evidence_dates:
+                    fail(
+                        f"{label} public update source date is not present in its Evidence"
+                    )
             basis = detail.get("summary_basis")
             if not isinstance(basis, dict):
                 fail(f"{label} public update has no summary basis")
@@ -1401,6 +1489,29 @@ def self_test() -> None:
     rendered = render_issue_html(issue, normalized_cards(issue))
     if "候補" in rendered or "確認情報" in rendered:
         fail("renderer exposed a removed candidate or confirmation layer")
+    detail_without_limits = dict(card["detail"])
+    basis_without_limits = dict(detail_without_limits["summary_basis"])
+    basis_without_limits.pop("limits_or_unknowns")
+    detail_without_limits["summary_basis"] = basis_without_limits
+    detail_without_limits.update(
+        {
+            "issue_date": issue_date,
+            "section_id": card["section_id"],
+            "kicker": card["category"],
+            "title": card["title"],
+            "h1": card["title"],
+        }
+    )
+    rendered_detail = render_detail_html(detail_without_limits)
+    if "未確定点" in rendered_detail:
+        fail("detail renderer created an uncertainty absent from the source")
+    if not public_render_copy_violations(
+        "はホンダのEV事業再編が強気材料になる可能性を分析した。",
+        kind="summary",
+    ):
+        fail("public-copy validation accepted a sentence with a missing subject")
+    if not public_render_copy_violations("ホンダEV事業再編の分析（）", kind="title"):
+        fail("public-copy validation accepted empty source brackets")
     if reader_summary_violations(card["title"], f"{card['title']}。{card['title']}。") == []:
         fail("summary validation accepted title repetition")
     print("NIGHT SIGNAL STATE PASSED")
