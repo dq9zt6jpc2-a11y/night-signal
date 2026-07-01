@@ -177,8 +177,12 @@ def required_summary_basis(data: dict[str, Any]) -> dict[str, Any]:
     basis = data.get("summary_basis")
     if not isinstance(basis, dict):
         fail("missing required object: summary_basis")
-    for key in ("what_changed", "why_it_matters"):
-        required_str(basis, key)
+    required_str(basis, "what_changed")
+    why_it_matters = basis.get("why_it_matters")
+    if why_it_matters is not None and (
+        not isinstance(why_it_matters, str) or not why_it_matters.strip()
+    ):
+        fail("summary_basis.why_it_matters must be omitted or non-empty")
     limits = basis.get("limits_or_unknowns")
     if limits is not None and (not isinstance(limits, str) or not limits.strip()):
         fail("summary_basis.limits_or_unknowns must be omitted or non-empty")
@@ -201,8 +205,10 @@ def reject_forbidden(label: str, text: str) -> None:
 
 
 def reject_basis_forbidden(basis: dict[str, Any]) -> None:
-    for key in ("what_changed", "why_it_matters"):
-        reject_forbidden(f"summary_basis.{key}", required_str(basis, key))
+    reject_forbidden("summary_basis.what_changed", required_str(basis, "what_changed"))
+    why_it_matters = basis.get("why_it_matters")
+    if isinstance(why_it_matters, str) and why_it_matters.strip():
+        reject_forbidden("summary_basis.why_it_matters", why_it_matters.strip())
     limits = basis.get("limits_or_unknowns")
     if isinstance(limits, str) and limits.strip():
         reject_forbidden("summary_basis.limits_or_unknowns", limits.strip())

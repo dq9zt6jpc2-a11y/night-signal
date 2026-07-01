@@ -233,48 +233,8 @@ def cluster_seen(seen: set[str], key: str) -> bool:
     )
 
 
-EVENT_ENTITY_PATTERNS = {
-    "openai": r"openai|オープンai",
-    "softbank": r"softbank|ソフトバンク|sbg",
-    "honda": r"honda|ホンダ",
-    "f1": r"\bf1\b|fia|formula\s*1",
-    "spacex": r"spacex|starship|starlink",
-    "yoasobi": r"yoasobi|幾田りら",
-    "brex": r"宇都宮ブレックス|\bbrex\b",
-}
-EVENT_ACTION_PATTERNS = {
-    "ipo": r"\bipo\b|上場",
-    "delay": r"延期|先送り|delay|postpone",
-    "price_drop": r"急落|反落|下落|大幅安|falls?",
-    "security": r"security|セキュリティ|サイバー|脆弱性",
-    "term_limit": r"任期|term limit",
-    "abolish": r"撤廃|abolish|remove",
-    "release": r"発売|リリース|公開|release",
-    "partnership": r"提携|契約|協業|partnership|contract",
-    "construction": r"建設|パイプライン|construction|pipeline",
-    "mobile": r"携帯|モバイル|mobile|carrier",
-}
-
-
-def event_markers(value: Any) -> tuple[set[str], set[str]]:
-    text = str(value or "").lower()
-    entities = {
-        marker
-        for marker, pattern in EVENT_ENTITY_PATTERNS.items()
-        if re.search(pattern, text, flags=re.I)
-    }
-    actions = {
-        marker
-        for marker, pattern in EVENT_ACTION_PATTERNS.items()
-        if re.search(pattern, text, flags=re.I)
-    }
-    return entities, actions
-
-
 def same_material_event(left: Any, right: Any) -> bool:
-    left_entities, left_actions = event_markers(left)
-    right_entities, right_actions = event_markers(right)
-    return bool(left_entities & right_entities) and len(left_actions & right_actions) >= 2
+    return state_contract.same_material_event(left, right)
 
 
 def cluster_priority(record: dict[str, Any], category: dict[str, Any]) -> tuple[int, str]:
@@ -534,8 +494,27 @@ def analysis_narrative(title: str, facts: list[str]) -> tuple[str, str, str] | N
 
 def facts_add_information_beyond_title(title: str, facts: list[str]) -> bool:
     return bool(facts) and any(
-        not state_contract.materially_same_fact(title, fact) for fact in facts
+        state_contract.fact_adds_information(title, fact) for fact in facts
     )
+
+
+def source_material_facts(
+    title: str,
+    records: list[dict[str, Any]],
+    *,
+    limit: int = 6,
+) -> list[str]:
+    candidates: list[str] = []
+    for record in records:
+        excerpt = str(record.get("excerpt") or "")
+        for sentence in sentence_parts(excerpt):
+            if len(re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", sentence)) < 8:
+                continue
+            if state_contract.title_repetition_score(title, sentence) >= 0.95:
+                continue
+            if useful_fact(sentence, ""):
+                candidates.append(sentence)
+    return state_contract.normalize_material_facts(title, candidates, limit=limit)
 
 
 def natural_detail_summary(
@@ -826,6 +805,15 @@ def article_result_matches(original_title: str, result_title: str) -> bool:
     )
 
 
+def article_search_queries(record: dict[str, Any], original_title: str) -> list[str]:
+    queries = [f'"{original_title}"']
+    publisher = urllib.parse.urlparse(str(record.get("publisher_url", "")))
+    host = publisher.netloc.lower().removeprefix("www.")
+    if host:
+        queries.append(f"site:{host} {original_title}")
+    return list(dict.fromkeys(queries))
+
+
 def enrich_discovered_record(
     category: dict[str, Any],
     record: dict[str, Any],
@@ -833,65 +821,73 @@ def enrich_discovered_record(
     original_title = record_public_title(record)
     if not original_title:
         return record
-    search_url = "https://www.bing.com/search?" + urllib.parse.urlencode(
-        {"format": "rss", "q": f'"{original_title}"'}
-    )
-    try:
-        raw, _, _ = request_bytes(search_url, timeout=12)
-        root = ET.fromstring(raw)
-    except (OSError, TimeoutError, urllib.error.URLError, ET.ParseError):
-        return record
     category_label = str(category.get("label", ""))
-    for item in root.findall(".//item")[:5]:
-        result_title = compact_text(item.findtext("title") or "", 220)
-        candidate_url = compact_text(item.findtext("link") or "", 1000)
-        description = html_fragment_text(item.findtext("description") or "", 1000)
-        if (
-            not candidate_url.startswith(("http://", "https://"))
-            or "news.google.com" in candidate_url
-            or not article_result_matches(original_title, result_title)
-            or not category_identity_ok(
-                category_label,
-                result_title,
-                description,
-            )
-        ):
+    seen_candidates: set[str] = set()
+    candidate_attempts = 0
+    for query in article_search_queries(record, original_title):
+        search_url = "https://www.bing.com/search?" + urllib.parse.urlencode(
+            {"format": "rss", "q": query}
+        )
+        try:
+            raw, _, _ = request_bytes(search_url, timeout=12)
+            root = ET.fromstring(raw)
+        except (OSError, TimeoutError, urllib.error.URLError, ET.ParseError):
             continue
-        for attempt in (candidate_url, jina_url(candidate_url)):
-            try:
-                page_raw, content_type, _ = request_bytes(attempt, timeout=12)
-                page_title, body = page_text(page_raw, content_type)
-            except (OSError, TimeoutError, urllib.error.URLError, ValueError):
-                continue
-            combined = compact_text(f"{description} {body}", 2400)
+        for item in root.findall(".//item")[:5]:
+            result_title = compact_text(item.findtext("title") or "", 220)
+            candidate_url = compact_text(item.findtext("link") or "", 1000)
+            description = html_fragment_text(item.findtext("description") or "", 1000)
             if (
-                len(combined) < 180
-                or not category_identity_ok(category_label, original_title, combined)
-                or not article_result_matches(
-                    original_title,
-                    page_title or result_title,
+                candidate_url in seen_candidates
+                or not candidate_url.startswith(("http://", "https://"))
+                or "news.google.com" in candidate_url
+                or not article_result_matches(original_title, result_title)
+                or not category_identity_ok(
+                    category_label,
+                    result_title,
+                    description,
                 )
             ):
                 continue
-            parsed = urllib.parse.urlparse(candidate_url)
-            publisher_url = (
-                f"{parsed.scheme}://{parsed.netloc}"
-                if parsed.scheme in {"http", "https"} and parsed.netloc
-                else str(record.get("publisher_url", ""))
-            )
-            return {
-                **record,
-                "url": candidate_url,
-                "publisher_url": publisher_url,
-                "original_discovery_url": str(record.get("url", "")),
-                "title": original_title,
-                "excerpt": combined,
-                "evidence": (
-                    f"Google News RSSで「{original_title}」を確認し、"
-                    f"完全一致検索から配信元ページ{candidate_url}を特定した。"
-                    f"本文抽出: {combined[:700]}"
-                ),
-            }
+            seen_candidates.add(candidate_url)
+            candidate_attempts += 1
+            for attempt in (candidate_url, jina_url(candidate_url)):
+                try:
+                    page_raw, content_type, _ = request_bytes(attempt, timeout=12)
+                    page_title, body = page_text(page_raw, content_type)
+                except (OSError, TimeoutError, urllib.error.URLError, ValueError):
+                    continue
+                combined = compact_text(f"{description} {body}", 2400)
+                if (
+                    len(combined) < 180
+                    or not category_identity_ok(category_label, original_title, combined)
+                    or not article_result_matches(
+                        original_title,
+                        page_title or result_title,
+                    )
+                ):
+                    continue
+                parsed = urllib.parse.urlparse(candidate_url)
+                publisher_url = (
+                    f"{parsed.scheme}://{parsed.netloc}"
+                    if parsed.scheme in {"http", "https"} and parsed.netloc
+                    else str(record.get("publisher_url", ""))
+                )
+                return {
+                    **record,
+                    "url": candidate_url,
+                    "publisher_url": publisher_url,
+                    "original_discovery_url": str(record.get("url", "")),
+                    "title": original_title,
+                    "excerpt": combined,
+                    "evidence": (
+                        f"Google News RSSで「{original_title}」を確認し、"
+                        f"配信元ページ{candidate_url}を特定した。"
+                        f"本文抽出: {combined[:700]}"
+                    ),
+                }
+            if candidate_attempts >= 3:
+                return record
     return record
 
 
@@ -1160,7 +1156,7 @@ a supported important update to make the list shorter.
 items are publication-worthy confirmed changes. Retain names, exact dates,
 numbers, results, uncertainty, and context. Each item must contain:
 watch_topic_id, title, summary, source_published_date, topic_value_class,
-priority_class, slug, what_changed, why_it_matters,
+priority_class, slug, what_changed, optional why_it_matters,
 confirmed_facts, limits_or_unknowns, sources.
 Each source needs label and an exact supplied URL. Write clear Japanese. Let
 summary depth follows the available evidence: keep thin sources
@@ -1176,7 +1172,8 @@ importance analysis, generic impact language, and remaining unknowns are not
 confirmed facts. At least one confirmed fact must add concrete information
 beyond merely repeating the title. Use the full body excerpt when it contains names, dates,
 amounts, decisions, results, or conditions. If the evidence does not support
-at least one concrete fact, return the finding as a signal and never pad an item.
+at least one concrete fact, omit it from items and leave it in Evidence; never
+create a public or intermediate summary by padding it.
 An analysis, explainer, opinion, or video commentary is not a new event merely
 because its publication date is recent or its title contains a large number.
 It may become an item only when the supplied body provides concrete supporting
@@ -1195,7 +1192,8 @@ fields must explain the event itself and must not
 mention research, collection, monitoring, selection, or publication procedure.
 Do not use labels such as 変更点, 重要性, 確認事実, or 未確定点, and do not say
 that an item is kept in the list or monitored broadly. Include concrete facts
-and why the change matters without repeating the same sentence.
+without repetition. Use why_it_matters only for a source-backed analytical
+conclusion; otherwise omit it or return an empty string.
 limits_or_unknowns must be empty unless a
 supplied source explicitly states the uncertainty; never infer a generic unknown."""
 
@@ -1357,9 +1355,7 @@ def promoted_signal_item(
     summary_sentences = sentence_parts(summary)
     what_changed = summary_sentences[0] if summary_sentences else summary
     why_it_matters = unique_sentences(" ".join(summary_sentences[1:]), 700)
-    if not why_it_matters:
-        return None
-    fact_values = [title, excerpt, signal_summary]
+    fact_values = [title, excerpt]
     facts = (
         state_contract.normalize_analysis_facts(title, fact_values, limit=6)
         if state_contract.analysis_headline(title)
@@ -1371,7 +1367,8 @@ def promoted_signal_item(
     if analysis is not None:
         what_changed, why_it_matters, summary = analysis
     else:
-        summary = unique_sentences(" ".join([*facts, why_it_matters]), 900)
+        why_it_matters = ""
+        summary = unique_sentences(" ".join(facts), 900)
         what_changed = facts[0]
     limits = event_limits_sentence(title, excerpt)
     detail = natural_detail_summary(
@@ -1413,73 +1410,6 @@ def promoted_signal_item(
     }
 
 
-def event_context_sentence(
-    category_label: str,
-    title: str,
-    excerpt: str,
-    topic_value: str,
-) -> str:
-    text = f"{title} {excerpt}".lower()
-    if ("ipo" in text or "上場" in text) and any(
-        term in text for term in ("延期", "先送り", "delay", "postpone")
-    ):
-        return (
-            f"上場時期の後ずれは、{category_label}の資金調達計画、保有価値と"
-            "投資家の評価が変わる時期を見極める材料になる。"
-        )
-    if any(term in text for term in ("急落", "反落", "下落", "大幅安")):
-        return (
-            f"株価反応の大きさは、{category_label}への成長期待とリスク評価が"
-            "市場でどの程度変化したかを判断する材料になる。"
-        )
-    if any(term in text for term in ("security", "セキュリティ", "サイバー", "脆弱性")):
-        return (
-            f"診断対象、修復支援の範囲と導入条件は、{category_label}の技術が"
-            "実運用の安全対策まで担えるかを判断する材料になる。"
-        )
-    if any(term in text for term in ("ecu", "標準化", "共同開発")):
-        return (
-            "ECU仕様の共通化範囲と参加企業の役割は、開発費、調達網と"
-            f"次世代車の投入速度に対する{category_label}の影響を判断する材料になる。"
-        )
-    if "pu" in text and any(term in text for term in ("アップグレード", "upgrade", "aduo")):
-        return (
-            "投入時期と残りの更新権は、マシンの性能向上、信頼性と"
-            f"シーズン後半の{category_label}の競争力を判断する材料になる。"
-        )
-    if "starlink" in text and any(term in text for term in ("モバイル", "携帯", "mobile")):
-        return (
-            "提供地域、料金と既存通信会社との接続条件は、Starlinkが"
-            "地上の携帯市場へ与える競争圧力を判断する材料になる。"
-        )
-    if any(term in text for term in ("パイプライン", "pipeline", "天然ガス")):
-        return (
-            "建設時期、供給能力と許認可は、Starshipの燃料確保と"
-            "打ち上げ頻度を支える地上設備の実現性を判断する材料になる。"
-        )
-    if any(term in text for term in ("発売", "ep", "アルバム", "展覧会", "トレーラー")):
-        return (
-            f"収録内容、発売後の反応と関連企画の展開は、{category_label}の"
-            "作品到達度と次の活動への広がりを判断する材料になる。"
-        )
-    if any(term in text for term in ("資金流入", "債券", "金利", "物価", "gdp")):
-        return (
-            f"資金の流入先、規模と継続性は、{category_label}の市場選好と"
-            "金融環境の変化を判断する材料になる。"
-        )
-    if any(term in text for term in ("視察団", "訪中", "訪米", "business delegation")):
-        return (
-            "訪問した団体、協議日程と相手国の説明は、企業間交流が"
-            "実際に再開・拡大しているかを判断する材料になる。"
-        )
-    if any(term in text for term in ("獲得", "移籍", "退団", "新規契約")):
-        return (
-            f"選手の役割、契約条件と編成で担う役割は、{category_label}の"
-            "戦力構成と次シーズンの起用方針を判断する材料になる。"
-        )
-    return ""
-
-
 def evidence_narrative(
     *,
     category_label: str,
@@ -1500,16 +1430,9 @@ def evidence_narrative(
         supporting.append(sentence)
         if len(supporting) == 2:
             break
-    importance = reader_facing_text(
-        event_context_sentence(
-            category_label,
-            title,
-            excerpt,
-            topic_value,
-        ),
-        700,
-    )
-    summary = unique_sentences(" ".join([event, *supporting, importance]), 1000)
+    del category_label, topic_value
+    importance = supporting[-1] if supporting else ""
+    summary = unique_sentences(" ".join([event, *supporting]), 1000)
     return event, importance, summary, supporting
 
 
@@ -1598,17 +1521,8 @@ def fallback_item_from_record(
     if analysis is not None:
         what_changed, why_it_matters, summary = analysis
     else:
-        if not why_it_matters:
-            return None
-        summary = unique_sentences(
-            " ".join(
-                [
-                    *facts,
-                    *([] if state_contract.GENERIC_CONTEXT_RE.search(why_it_matters) else [why_it_matters]),
-                ]
-            ),
-            1000,
-        )
+        why_it_matters = ""
+        summary = unique_sentences(" ".join(facts), 1000)
         what_changed = facts[0]
     limits = event_limits_sentence(title, excerpt)
     detail = natural_detail_summary(
@@ -1670,6 +1584,71 @@ def backfill_items_from_evidence(
             continue
         seen.add(key)
         normalized["items"].append(item)
+
+
+def merge_related_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    merged: list[dict[str, Any]] = []
+    for item in items:
+        match_index = next(
+            (
+                index
+                for index, existing in enumerate(merged)
+                if str(existing.get("watch_topic_id", ""))
+                == str(item.get("watch_topic_id", ""))
+                and same_material_event(
+                    str(existing.get("title", "")),
+                    str(item.get("title", "")),
+                )
+            ),
+            None,
+        )
+        if match_index is None:
+            merged.append(item)
+            continue
+
+        existing = merged[match_index]
+        primary = min(
+            (existing, item),
+            key=lambda value: len(str(value.get("title", ""))) or 999,
+        )
+        facts = state_contract.normalize_material_facts(
+            "",
+            [
+                *existing.get("confirmed_facts", []),
+                *item.get("confirmed_facts", []),
+            ],
+            limit=8,
+        )
+        sources: list[dict[str, Any]] = []
+        seen_urls: set[str] = set()
+        for source in [*existing.get("sources", []), *item.get("sources", [])]:
+            if not isinstance(source, dict):
+                continue
+            url = str(source.get("url", ""))
+            if not url or url in seen_urls:
+                continue
+            seen_urls.add(url)
+            sources.append(source)
+        title = str(primary.get("title", ""))
+        summary = unique_sentences(" ".join(facts), 1000)
+        merged[match_index] = {
+            **primary,
+            "summary": summary,
+            "what_changed": facts[0] if facts else str(primary.get("what_changed", "")),
+            "why_it_matters": (
+                str(primary.get("why_it_matters", ""))
+                if state_contract.analysis_headline(title)
+                else ""
+            ),
+            "confirmed_facts": facts,
+            "sources": sources,
+            "source_published_date": max(
+                str(existing.get("source_published_date", "")),
+                str(item.get("source_published_date", "")),
+            ),
+            "detail_summary": summary,
+        }
+    return merged
 
 
 def fallback_signal_from_record(
@@ -1827,16 +1806,20 @@ def normalize_result(
             for fact in facts
             if fact_supported_by_records(fact, source_records)
         ]
+        facts = state_contract.normalize_material_facts(
+            title,
+            [*facts, *source_material_facts(title, source_records)],
+            limit=6,
+        )
         if facts:
             what_changed = facts[0]
-        summary = unique_sentences(
-            " ".join(value for value in (*facts[:4], why_it_matters) if value),
-            1000,
-        )
+        summary = unique_sentences(" ".join(facts[:6]), 1000)
         analysis = analysis_narrative(title, facts)
         analysis_ready = not state_contract.analysis_headline(title) or analysis is not None
         if analysis is not None:
             what_changed, why_it_matters, summary = analysis
+        else:
+            why_it_matters = ""
         if state_contract.GENERIC_CONTEXT_RE.search(summary):
             summary = unique_sentences(" ".join(facts[:4]), 1000)
         if (
@@ -1901,7 +1884,11 @@ def normalize_result(
             ("summary_copy", not reader_public_copy_ok(summary, kind="summary")),
             ("detail_copy", not reader_public_copy_ok(detail, kind="summary")),
             ("change_copy", not reader_public_copy_ok(what_changed, kind="summary")),
-            ("importance_copy", not reader_public_copy_ok(why_it_matters, kind="summary")),
+            (
+                "importance_copy",
+                bool(why_it_matters)
+                and not reader_public_copy_ok(why_it_matters, kind="summary"),
+            ),
             (
                 "category_identity",
                 not category_identity_ok(str(category.get("label", "")), title, summary),
@@ -1909,7 +1896,7 @@ def normalize_result(
             ("duplicate_title", title in seen_titles),
             (
                 "insufficient_facts",
-                not facts,
+                not facts_add_information_beyond_title(title, facts),
             ),
             ("incomplete_analysis", not analysis_ready),
             ("missing_source", not sources),
@@ -2538,8 +2525,8 @@ def self_test() -> None:
         fail("evidence fallback card and detail lost their shared factual core")
     if "確認できた点は" in fallback_item["detail_summary"]:
         fail("evidence fallback created label-heavy detail copy")
-    if "実運用の安全対策" not in fallback_item["summary"]:
-        fail("evidence fallback used a generic importance sentence")
+    if "判断する材料" in fallback_item["summary"]:
+        fail("evidence fallback added unsupported importance prose")
     cleaned_model_title = reader_facing_text(
         "OpenAIがGPT-5.5-Cyberを更新 - MSN"
     )
@@ -2566,16 +2553,26 @@ def self_test() -> None:
         "ソフトバンクがフィジカルAIロボットの量産を開始",
     ):
         fail("semantic clustering merged distinct material events")
-    roster_context = reader_facing_text(
-        event_context_sentence(
-            "宇都宮ブレックス",
-            "宇都宮ブレックスが荒川颯を獲得",
-            "新規契約を発表した。",
-            "decision_or_policy",
-        )
+    merged_investment = merge_related_items(
+        [
+            {
+                "watch_topic_id": "ai_infrastructure",
+                "title": "ソフトバンクG、OpenAIに1兆6273億円を10月に追加出資",
+                "source_published_date": "2099-01-02",
+                "confirmed_facts": ["ソフトバンクGはOpenAIへの追加出資を10月に予定する。"],
+                "sources": [{"url": "https://example.com/plan"}],
+            },
+            {
+                "watch_topic_id": "ai_infrastructure",
+                "title": "ソフトバンクG、OpenAIに1.6兆円を払い込み",
+                "source_published_date": "2099-01-02",
+                "confirmed_facts": ["ソフトバンクGはOpenAIに1.6兆円を払い込んだ。"],
+                "sources": [{"url": "https://example.com/payment"}],
+            },
+        ]
     )
-    if state_contract.public_render_copy_violations(roster_context, kind="summary"):
-        fail("event-specific context bypassed public-copy normalization")
+    if len(merged_investment) != 1 or len(merged_investment[0]["sources"]) != 2:
+        fail("related publication items were not merged before card rendering")
     if not low_signal_value("Hondaの夏休み体験授業でF1を特別展示"):
         fail("routine promotional events must not become important updates")
     promoted_fallback: dict[str, Any] = {"items": [], "signals": []}
@@ -2605,8 +2602,8 @@ def self_test() -> None:
         "2099-01-03",
         [duplicate_record],
     )
-    if promoted_fallback["items"] or len(promoted_fallback["signals"]) != 1:
-        fail("headline-only Evidence was padded into an item instead of a signal")
+    if promoted_fallback["items"] or promoted_fallback["signals"]:
+        fail("headline-only Evidence leaked beyond the Evidence layer")
     analysis_only: dict[str, Any] = {"items": [], "signals": []}
     backfill_signals_from_evidence(
         analysis_only,

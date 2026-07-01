@@ -220,10 +220,6 @@ def item_importance(
 
 
 def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
-    original = compact_text(scrub_item_source_labels(item, item.get("summary", "")), 900)
-    if original and summary_is_reader_facing(title, original):
-        return original
-
     facts = state.normalize_material_facts(
         title,
         [
@@ -235,7 +231,11 @@ def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
     )
     what_changed = compact_text(scrub_item_source_labels(item, item.get("what_changed", "")), 500)
     limits = compact_text(scrub_item_source_labels(item, item.get("limits_or_unknowns", "")), 500)
-    importance = item_importance(item, category, title)
+    importance = (
+        item_importance(item, category, title)
+        if state.analysis_headline(title)
+        else ""
+    )
     if state.analysis_headline(title):
         what_changed = state.analysis_scope_sentence(title)
         importance = state.analysis_conclusion(
@@ -243,7 +243,7 @@ def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
         )
         if not importance:
             fail(f"analysis item lacks an evidence-backed conclusion: {title}")
-    event_parts = [part for part in (what_changed, *facts, original) if part]
+    event_parts = [part for part in (what_changed, *facts) if part]
     lead = event_parts[0] if event_parts else public_focus_phrase(title, category)
     summary = reader_summary_from_parts(
         title,
@@ -269,24 +269,14 @@ def canonical_detail_summary(
     title: str,
     card_summary: str,
 ) -> str:
-    existing = scrub_item_source_labels(item, item.get("detail_summary", ""))
-    if (
-        len(existing) >= 280
-        and not SUMMARY_LABEL_RE.search(existing)
-        and not state.GENERIC_CONTEXT_RE.search(existing)
-        and not state.public_render_copy_violations(existing, kind="summary")
-        and summary_is_reader_facing(title, existing)
-        and state.text_overlap(card_summary, existing) >= 2
-    ):
-        return existing
-
     optional_parts: list[Any] = [
         fact
         for fact in item.get("confirmed_facts", [])
         if useful_fact(fact, category)
         and state.title_repetition_score(title, scrub_public_summary(fact)) < 0.82
     ]
-    optional_parts.append(item_importance(item, category, title))
+    if state.analysis_headline(title):
+        optional_parts.append(item_importance(item, category, title))
     limits = scrub_public_summary(item.get("limits_or_unknowns", ""))
     if limits:
         optional_parts.append(limits)
@@ -373,6 +363,7 @@ def item_card(
         slug_stem = f"{slug_stem}-{issue_date}"
     slug = f"{slug_stem}.html"
     card_title, card_summary = public_item_copy(category, item)
+    why_it_matters = scrub_public_summary(item.get("why_it_matters", ""))
     return {
         "watch_topic_id": str(item["watch_topic_id"]),
         "title": card_title,
@@ -394,7 +385,7 @@ def item_card(
             "summary": canonical_detail_summary(category, item, card_title, card_summary),
             "summary_basis": {
                 "what_changed": scrub_public_summary(item["what_changed"]),
-                "why_it_matters": scrub_public_summary(item["why_it_matters"]),
+                **({"why_it_matters": why_it_matters} if why_it_matters else {}),
                 "confirmed_facts": facts,
                 "fact_sources": [
                     {"fact": fact, "source_urls": source_urls}
@@ -466,6 +457,7 @@ def edit_evidence(
         core.backfill_items_from_evidence(
             normalized, category, issue_date, records
         )
+        normalized["items"] = core.merge_related_items(normalized["items"])
         return label, [
             item_card(
                 label,

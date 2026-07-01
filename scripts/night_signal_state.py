@@ -117,6 +117,11 @@ FACT_SOURCE_METADATA_RE = re.compile(
     r"(?:Yahoo!|YouTube|MSN)?[。．.!！?？]*$",
     re.I,
 )
+SOURCE_CHANNEL_RE = re.compile(
+    r"公式(?:サイト|ページ|IR|ニュースルーム)|ニュースルーム|IRページ|"
+    r"記事|動画|検索結果|RSS",
+    re.I,
+)
 NO_UPDATE_ASSERTION_RE = re.compile(
     r"(?:具体的|新たな|明確な|直接的な).{0,50}"
     r"(?:事実|変化|更新|発表|内容|導入|成果|影響)"
@@ -173,25 +178,6 @@ ANALYSIS_REASONING_RE = re.compile(
     r"リスク|割高|割安|持続性|感応度|分析(?:した|している|すると)",
     re.I,
 )
-TOPIC_CONTEXT_SENTENCES = {
-    "technical_or_product_shift": "性能、提供範囲、既存製品との関係は、{category}の技術選択と競争力を判断する材料になる。",
-    "market_or_financial_impact": "規模、条件、資金使途と市場反応は、{category}の投資余力と評価を判断する材料になる。",
-    "risk_or_safety_signal": "対象範囲、対策の実効性と残る制約は、{category}の安全性と運用継続性を判断する材料になる。",
-    "decision_or_policy": "対象範囲、実施時期と関係者の役割は、{category}の事業計画への影響を判断する材料になる。",
-    "event_result_or_outcome": "今回の結果と次工程への影響は、{category}の計画進捗と今後の見通しを判断する材料になる。",
-    "material_schedule_change": "変更された時期と前後工程への影響は、{category}の計画実現性を判断する材料になる。",
-    "cultural_or_audience_signal": "作品内容、展開時期と反応は、{category}の次の活動と支持の広がりを判断する材料になる。",
-    "operational_status_change": "対象範囲、実施時期と継続性は、{category}の運営状況への影響を判断する材料になる。",
-}
-
-
-def topic_context_sentence(value_class: str, category: str) -> str:
-    template = TOPIC_CONTEXT_SENTENCES.get(
-        value_class,
-        TOPIC_CONTEXT_SENTENCES["operational_status_change"],
-    )
-    return template.format(category=category or "対象分野")
-
 DETAIL_SOURCE_SCHEMA: dict[str, Any] = {
     "type": "object",
     "additionalProperties": False,
@@ -207,7 +193,6 @@ SUMMARY_BASIS_SCHEMA: dict[str, Any] = {
     "additionalProperties": False,
     "required": [
         "what_changed",
-        "why_it_matters",
         "confirmed_facts",
         "fact_sources",
         "source_dates",
@@ -502,6 +487,36 @@ def navigation_shell_text(text: str) -> bool:
     return len(markers) >= 4 or bool(NAVIGATION_RUN_RE.search(value))
 
 
+def same_material_event(left: Any, right: Any) -> bool:
+    left_signature = copy_signature(str(left))
+    right_signature = copy_signature(str(right))
+    left_ngrams = {
+        left_signature[index : index + 3]
+        for index in range(max(0, len(left_signature) - 2))
+    }
+    right_ngrams = {
+        right_signature[index : index + 3]
+        for index in range(max(0, len(right_signature) - 2))
+    }
+    similarity = (
+        len(left_ngrams & right_ngrams) / min(len(left_ngrams), len(right_ngrams))
+        if left_ngrams and right_ngrams
+        else 0.0
+    )
+    return materially_same_fact(str(left), str(right)) or (
+        text_overlap(str(left), str(right)) >= 2 and similarity >= 0.4
+    )
+
+
+def card_event_text(card: dict[str, Any]) -> str:
+    detail = card.get("detail")
+    basis = detail.get("summary_basis") if isinstance(detail, dict) else None
+    facts = basis.get("confirmed_facts", []) if isinstance(basis, dict) else []
+    return " ".join(
+        [str(card.get("title", "")), str(card.get("summary", "")), *map(str, facts)]
+    )
+
+
 def source_label_leaked(card: dict[str, Any]) -> bool:
     detail = card.get("detail")
     if not isinstance(detail, dict):
@@ -536,7 +551,15 @@ def public_card_is_reader_facing(card: dict[str, Any]) -> bool:
         (str(detail.get("summary", "")), "summary"),
         *[(str(fact), "summary") for fact in facts if isinstance(fact, str)],
     ]
+    title = str(card.get("title", ""))
+    material_facts = normalize_material_facts(title, facts, limit=max(1, len(facts)))
+    adds_information = any(
+        fact_adds_information(title, fact) for fact in material_facts
+    )
     return (
+        bool(material_facts)
+        and adds_information
+        and
         all(
             not public_render_copy_violations(text, kind=kind)
             for text, kind in fields
@@ -677,6 +700,20 @@ def materially_same_fact(left: str, right: str) -> bool:
     return overlap >= 0.82
 
 
+def fact_adds_information(title: str, fact: str) -> bool:
+    if materially_same_fact(title, fact):
+        return False
+    if not SOURCE_CHANNEL_RE.search(fact):
+        return True
+    without_channel = SOURCE_CHANNEL_RE.sub("", fact)
+    without_channel = re.sub(
+        r"20\d{2}年\d{1,2}月\d{1,2}日(?:に|、)?",
+        "",
+        without_channel,
+    )
+    return bool(content_terms(without_channel) - content_terms(title))
+
+
 def normalize_material_facts(title: str, values: list[Any], limit: int = 8) -> list[str]:
     facts: list[str] = []
     signatures: list[str] = []
@@ -735,7 +772,14 @@ def validate_detail_sources(detail: dict[str, Any], card_index: int) -> None:
             fail(f"cards[{card_index}] detail.sources[{source_index}].url must be absolute http(s): {url}")
 
 
-def validate_summary_basis(detail: dict[str, Any], *, issue_date: str, source_date: str, card_index: int) -> None:
+def validate_summary_basis(
+    detail: dict[str, Any],
+    *,
+    title: str,
+    issue_date: str,
+    source_date: str,
+    card_index: int,
+) -> None:
     contract = read_json(CONFIG_PATH)
     if not effective_on_or_after(contract, "detail_information_contract_effective_date", issue_date):
         return
@@ -743,9 +787,24 @@ def validate_summary_basis(detail: dict[str, Any], *, issue_date: str, source_da
     if not isinstance(basis, dict):
         fail(f"cards[{card_index}].detail.summary_basis is required for information-complete detail pages")
 
-    for key in ("what_changed", "why_it_matters"):
-        value = require_str(basis, key)
-        reject_public_copy(f"cards[{card_index}].detail.summary_basis.{key}", value, kind="summary")
+    value = require_str(basis, "what_changed")
+    reject_public_copy(
+        f"cards[{card_index}].detail.summary_basis.what_changed",
+        value,
+        kind="summary",
+    )
+    why_it_matters = basis.get("why_it_matters")
+    if why_it_matters is not None:
+        if not isinstance(why_it_matters, str) or not why_it_matters.strip():
+            fail(
+                f"cards[{card_index}].detail.summary_basis.why_it_matters "
+                "must be omitted or non-empty"
+            )
+        reject_public_copy(
+            f"cards[{card_index}].detail.summary_basis.why_it_matters",
+            why_it_matters,
+            kind="summary",
+        )
     limits = basis.get("limits_or_unknowns")
     if limits is not None:
         if not isinstance(limits, str) or not limits.strip():
@@ -778,6 +837,11 @@ def validate_summary_basis(detail: dict[str, Any], *, issue_date: str, source_da
             fail(
                 f"cards[{card_index}].detail.summary_basis.confirmed_facts "
                 "must be independent event facts, not source metadata or analysis"
+            )
+        if not any(fact_adds_information(title, fact) for fact in material_facts):
+            fail(
+                f"cards[{card_index}].detail.summary_basis.confirmed_facts "
+                "must add source-backed information beyond the title"
             )
 
     if effective_on_or_after(contract, "claim_source_linkage_effective_date", issue_date):
@@ -891,7 +955,13 @@ def validate_public_card_copy(raw: dict[str, Any], detail: dict[str, Any], *, is
         fail(f"cards[{card_index}] looks schedule-only; routine dates must stay out of published topics")
 
     validate_detail_sources(detail, card_index)
-    validate_summary_basis(detail, issue_date=issue_date, source_date=source_date, card_index=card_index)
+    validate_summary_basis(
+        detail,
+        title=title,
+        issue_date=issue_date,
+        source_date=source_date,
+        card_index=card_index,
+    )
 
 
 def relative_day_label(issue_date: str, source_date: str) -> str:
@@ -1060,6 +1130,18 @@ def rolling_display_cards(
     ) -> None:
         source_date = str(card.get("source_published_date", ""))
         if source_date not in allowed_source_dates or not public_card_is_reader_facing(card):
+            return
+        if retained_from_issue_date and any(
+            str(existing.get("category", "")) == str(card.get("category", ""))
+            and (
+                same_material_event(
+                    str(existing.get("title", "")),
+                    str(card.get("title", "")),
+                )
+                or same_material_event(card_event_text(existing), card_event_text(card))
+            )
+            for existing in display_cards
+        ):
             return
         key = display_cluster_key(card)
         if display_cluster_seen(seen, key):
@@ -1558,6 +1640,20 @@ def self_test() -> None:
     rendered_detail = render_detail_html(detail_without_limits)
     if "未確定点" in rendered_detail:
         fail("detail renderer created an uncertainty absent from the source")
+    detail_without_why = json.loads(json.dumps(detail_without_limits))
+    detail_without_why["summary_basis"].pop("why_it_matters")
+    render_detail_html(detail_without_why)
+    headline_only = json.loads(json.dumps(card))
+    headline_only["detail"]["summary_basis"]["confirmed_facts"] = [
+        headline_only["title"]
+    ]
+    if public_card_is_reader_facing(headline_only):
+        fail("headline-only card passed the reader-facing contract")
+    if fact_adds_information(
+        "Honda 2026年5月の生産・販売・輸出実績を発表",
+        "Hondaは2026年6月29日に2026年5月の生産・販売・輸出実績を公式サイトで発表した。",
+    ):
+        fail("source channel and publication date were mistaken for substantive information")
     if not public_render_copy_violations(
         "はホンダのEV事業再編が強気材料になる可能性を分析した。",
         kind="summary",

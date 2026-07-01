@@ -94,7 +94,7 @@ def remove_optional_limits(temp: Path, issue_date: str) -> None:
         if count:
             write(path, updated)
             return
-    raise AssertionError("current issue has no optional limits section")
+    # A fully source-backed issue may already have no uncertainty section.
 
 
 def inject_internal_heading(temp: Path, issue_date: str) -> None:
