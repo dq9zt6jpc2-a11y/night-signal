@@ -1023,6 +1023,7 @@ def model_request(
     *,
     model_name: str | None = None,
     retry_wait_cap: int = 120,
+    request_label: str = "",
 ) -> dict[str, Any]:
     errors: list[str] = []
     rate_limit_waits: list[int] = []
@@ -1040,7 +1041,7 @@ def model_request(
         }
         request = urllib.request.Request(
             MODELS_URL,
-            data=json.dumps(payload).encode("utf-8"),
+            data=json.dumps(payload, separators=(",", ":")).encode("utf-8"),
             headers={
                 "Accept": "application/vnd.github+json",
                 "Authorization": f"Bearer {token}",
@@ -1059,6 +1060,7 @@ def model_request(
                     json.dumps(
                         {
                             "phase": "model_usage",
+                            **({"category": request_label} if request_label else {}),
                             "model": payload["model"],
                             "prompt_tokens": usage.get("prompt_tokens"),
                             "completion_tokens": usage.get("completion_tokens"),

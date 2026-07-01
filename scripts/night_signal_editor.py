@@ -50,6 +50,10 @@ ORPHAN_SOURCE_SENTENCE_RE = re.compile(
 )
 
 
+class UnpublishableItem(RuntimeError):
+    """A single evidence item cannot support reader-facing copy."""
+
+
 def fail(message: str) -> None:
     print(f"NIGHT SIGNAL RESEARCH IMPORT FAILED: {message}", file=sys.stderr)
     raise SystemExit(1)
@@ -269,7 +273,7 @@ def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
     )
     if summary:
         return summary
-    fail(f"unable to construct a reader-facing card summary: {title}")
+    raise UnpublishableItem(f"unable to construct a reader-facing card summary: {title}")
 
 
 def canonical_detail_summary(
@@ -303,13 +307,33 @@ def canonical_detail_summary(
         and state.text_overlap(card_summary, composed) >= 2
     ):
         return composed
-    fail(f"unable to construct a card-bound detail summary: {title}")
+    raise UnpublishableItem(f"unable to construct a card-bound detail summary: {title}")
 
 
 def public_item_copy(category: str, item: dict[str, Any]) -> tuple[str, str]:
     title = public_card_title(item)
     summary = public_card_summary(item, title, category)
     return title, summary
+
+
+def quality_model_required(category_payload: dict[str, Any]) -> bool:
+    evidence = [
+        item
+        for item in category_payload.get("evidence", [])
+        if isinstance(item, dict)
+    ]
+    cluster_counts: dict[str, int] = {}
+    for item in evidence:
+        cluster = str(item.get("cluster_key", ""))
+        if cluster:
+            cluster_counts[cluster] = cluster_counts.get(cluster, 0) + 1
+        title = str(item.get("title", ""))
+        excerpt = str(item.get("excerpt", ""))
+        japanese = len(re.findall(r"[ぁ-んァ-ヶ一-龯]", excerpt))
+        latin = len(re.findall(r"[A-Za-z]", excerpt))
+        if state.analysis_headline(title) or (latin >= 24 and japanese < 6):
+            return True
+    return any(count > 1 for count in cluster_counts.values())
 
 
 def read_evidence(path: Path) -> dict[str, Any]:
@@ -347,7 +371,9 @@ def item_card(
         ],
     )
     if not facts:
-        fail(f"item lost material facts during card construction: {item.get('title', '')}")
+        raise UnpublishableItem(
+            f"item lost material facts during card construction: {item.get('title', '')}"
+        )
     source_urls = [str(source["url"]) for source in item["sources"]]
     limits = scrub_public_summary(item.get("limits_or_unknowns", ""))
     slug = str(item["slug"])
@@ -406,8 +432,45 @@ def edit_evidence(
         fail("Evidence must cover every configured category exactly once")
 
     contracts = core.category_contracts()
-    model_chain = models.extraction_models()
-    model_rate_limited = threading.Event()
+    degraded_models: set[str] = set()
+    degraded_models_lock = threading.Lock()
+
+    def cards_from_raw(
+        raw: dict[str, Any],
+        category: dict[str, Any],
+        label: str,
+        records: list[dict[str, Any]],
+    ) -> tuple[list[dict[str, Any]], int]:
+        normalized = core.normalize_result(raw, category, issue_date, records)
+        core.backfill_items_from_evidence(normalized, category, issue_date, records)
+        normalized["items"] = core.merge_related_items(normalized["items"])
+        cards: list[dict[str, Any]] = []
+        failed = 0
+        for item in normalized["items"]:
+            try:
+                cards.append(
+                    item_card(
+                        label,
+                        str(configs[label]["section_id"]),
+                        item,
+                        issue_date,
+                    )
+                )
+            except UnpublishableItem as exc:
+                failed += 1
+                print(
+                    json.dumps(
+                        {
+                            "phase": "unpublishable_item",
+                            "category": label,
+                            "title": str(item.get("title", "")),
+                            "reason": str(exc),
+                        },
+                        ensure_ascii=False,
+                    ),
+                    flush=True,
+                )
+        return cards, failed
 
     def review_category(category: dict[str, Any]) -> tuple[str, list[dict[str, Any]]]:
         label = str(category["label"])
@@ -416,8 +479,10 @@ def edit_evidence(
             fail(f"Evidence records are missing: {label}")
         records = [record for record in entry["records"] if isinstance(record, dict)]
         category_payload = core.category_prompt(category, issue_date, records)
-        raw: dict[str, Any] | None = None
-        if category_payload["evidence"] and not model_rate_limited.is_set():
+        selected_result: tuple[list[dict[str, Any]], int] | None = None
+        if category_payload["evidence"]:
+            quality_required = quality_model_required(category_payload)
+            model_chain = models.routed_models(quality_required=quality_required)
             messages = [
                 {"role": "system", "content": core.SYSTEM_PROMPT},
                 {
@@ -425,41 +490,48 @@ def edit_evidence(
                     "content": json.dumps(
                         category_payload,
                         ensure_ascii=False,
+                        separators=(",", ":"),
                     ),
                 },
             ]
-            rate_limited_models = 0
             for model_name in model_chain:
+                with degraded_models_lock:
+                    if model_name in degraded_models:
+                        continue
                 try:
                     raw = core.model_request(
                         token,
                         messages,
                         model_name=model_name,
                         retry_wait_cap=90,
+                        request_label=label,
                     )
-                    break
                 except core.ModelRequestError as exc:
-                    if not exc.rate_limited:
-                        break
-                    rate_limited_models += 1
-            if raw is None and rate_limited_models == len(model_chain):
-                model_rate_limited.set()
-        if raw is None:
-            raw = {"items": []}
-        normalized = core.normalize_result(raw, category, issue_date, records)
-        core.backfill_items_from_evidence(
-            normalized, category, issue_date, records
-        )
-        normalized["items"] = core.merge_related_items(normalized["items"])
-        return label, [
-            item_card(
-                label,
-                str(configs[label]["section_id"]),
-                item,
-                issue_date,
-            )
-            for item in normalized["items"]
-        ]
+                    if exc.rate_limited:
+                        with degraded_models_lock:
+                            degraded_models.add(model_name)
+                    continue
+                result = cards_from_raw(raw, category, label, records)
+                selected_result = result
+                print(
+                    json.dumps(
+                        {
+                            "phase": "model_route",
+                            "category": label,
+                            "model": model_name,
+                            "route": "quality" if quality_required else "routine",
+                            "cards": len(result[0]),
+                            "rejected_items": result[1],
+                            "accepted": True,
+                        },
+                        ensure_ascii=False,
+                    ),
+                    flush=True,
+                )
+                break
+        if selected_result is None:
+            selected_result = cards_from_raw({"items": []}, category, label, records)
+        return label, selected_result[0]
 
     cards_by_category: dict[str, list[dict[str, Any]]] = {}
     workers = max(1, int(os.getenv("NIGHT_SIGNAL_MODEL_CONCURRENCY", "1")))
@@ -505,6 +577,27 @@ def edit_evidence(
 
 def self_test() -> None:
     core.self_test()
+    if quality_model_required(
+        {"evidence": [{"title": "企業が新製品を発売", "excerpt": "企業は新製品を7月に発売した。", "cluster_key": "a"}]}
+    ):
+        fail("Editor routed a routine factual extraction to the quality model")
+    if not quality_model_required(
+        {"evidence": [{"title": "【分析】市場構造を検証", "excerpt": "複数の数値から市場構造を分析した。", "cluster_key": "b"}]}
+    ):
+        fail("Editor did not route analysis work to the quality model")
+    if not quality_model_required(
+        {"evidence": [{"title": "Product update", "excerpt": "The company released a major product update with new enterprise controls.", "cluster_key": "c"}]}
+    ):
+        fail("Editor did not route translation-heavy work to the quality model")
+    if not quality_model_required(
+        {
+            "evidence": [
+                {"title": "発表1", "excerpt": "企業が新方針を公表した。", "cluster_key": "shared"},
+                {"title": "発表2", "excerpt": "別資料が条件を示した。", "cluster_key": "shared"},
+            ]
+        }
+    ):
+        fail("Editor did not route cross-source synthesis to the quality model")
     if scrub_public_summary("更新を確認した。。影響は継続調査する！？") != (
         "更新を確認した。 影響は継続調査する！"
     ):

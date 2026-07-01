@@ -25,12 +25,17 @@ def extraction_models() -> list[str]:
     primary = override or config.get("model")
     if not isinstance(primary, str) or not primary:
         raise ValueError("extraction model is missing")
+    quality_model = config.get("quality_model")
     fallbacks = config.get("fallback_models", [])
     if not isinstance(fallbacks, list):
         raise ValueError("fallback_models must be a list")
     return list(
         dict.fromkeys(
-            [primary, *[value for value in fallbacks if isinstance(value, str) and value]]
+            [
+                primary,
+                *([quality_model] if isinstance(quality_model, str) and quality_model else []),
+                *[value for value in fallbacks if isinstance(value, str) and value],
+            ]
         )
     )
 
@@ -39,9 +44,36 @@ def extraction_model() -> str:
     return extraction_models()[0]
 
 
+def routed_models(*, quality_required: bool) -> list[str]:
+    config = load_config()["extraction"]
+    routine = extraction_model()
+    quality = config.get("quality_model")
+    preferred = (
+        str(quality)
+        if quality_required and isinstance(quality, str) and quality
+        else routine
+    )
+    return list(dict.fromkeys([preferred, *extraction_models()]))
+
+
 def self_test() -> None:
-    if not extraction_models():
+    chain = extraction_models()
+    if not chain:
         raise SystemExit("extraction model chain is empty")
+    if len(chain) != len(set(chain)):
+        raise SystemExit("extraction model chain contains duplicates")
+    config = load_config()["extraction"]
+    if (
+        not os.getenv("NIGHT_SIGNAL_MODEL")
+        and config.get("quality_model")
+        and chain.index(str(config["quality_model"])) == 0
+    ):
+        raise SystemExit("quality model must be an escalation, not the routine model")
+    if routed_models(quality_required=False)[0] != chain[0]:
+        raise SystemExit("routine routing must use the routine model first")
+    quality = config.get("quality_model")
+    if quality and routed_models(quality_required=True)[0] != quality:
+        raise SystemExit("quality routing must use the quality model first")
     print("NIGHT SIGNAL MODELS PASSED")
 
 
