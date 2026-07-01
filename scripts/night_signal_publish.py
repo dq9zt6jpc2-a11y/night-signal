@@ -13,7 +13,6 @@ from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
-import night_signal_evidence as evidence_store
 import night_signal_runtime_audit as runtime
 
 
@@ -125,32 +124,8 @@ def evidence_reusable(
     )
 
 
-def issue_matches_evidence(issue_date: str) -> bool:
-    evidence_path = state_dir(issue_date) / "evidence.json"
-    try:
-        evidence = json.loads(
-            evidence_path.read_text(encoding="utf-8")
-        )
-        issue = json.loads(
-            (state_dir(issue_date) / "issue.json").read_text(encoding="utf-8")
-        )
-    except (FileNotFoundError, json.JSONDecodeError):
-        return False
-    manifest = issue.get("coverage_manifest")
-    return (
-        isinstance(manifest, dict)
-        and issue.get("issue_date") == issue_date
-        and evidence.get("issue_date") == issue_date
-        and manifest.get("collection_completed_at_jst") == evidence.get("checked_at_jst")
-        and manifest.get("collection_mode") == evidence.get("collection_mode")
-        and manifest.get("evidence_sha256") == evidence_store.bundle_sha256(evidence_path)
-    )
-
-
 def collect_and_build(issue_date: str, *, reuse_evidence: bool) -> None:
     evidence_is_reusable = reuse_evidence and fresh_evidence(issue_date)
-    if evidence_is_reusable and issue_matches_evidence(issue_date):
-        return
     if not (os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")):
         fail("GITHUB_TOKEN is required for Editor model access")
     if not evidence_is_reusable:
