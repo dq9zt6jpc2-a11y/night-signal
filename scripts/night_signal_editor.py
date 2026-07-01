@@ -134,7 +134,7 @@ def scrub_item_source_labels(item: dict[str, Any], value: Any) -> str:
             text,
             flags=re.I,
         )
-    return compact_text(text, 2600)
+    return scrub_public_summary(text)
 
 
 def public_card_title(item: dict[str, Any]) -> str:
@@ -532,6 +532,11 @@ def self_test() -> None:
         "更新を確認した。 影響は継続調査する！"
     ):
         fail("Editor did not normalize repeated public punctuation")
+    if scrub_item_source_labels(
+        {"sources": [{"label": "Moomoo"}]},
+        "宇宙関連株への影響を分析。 Moomoo。",
+    ) != "宇宙関連株への影響を分析。":
+        fail("Editor left repeated punctuation after removing a source label")
     item = {
         "watch_topic_id": "product_release",
         "title": "OpenAIがCodex Securityの更新版を公開 - Example News",
