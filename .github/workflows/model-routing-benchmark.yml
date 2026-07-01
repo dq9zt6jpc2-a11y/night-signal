@@ -1,0 +1,28 @@
+name: NIGHT SIGNAL Model Routing Benchmark
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  models: read
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Compare models on immutable Evidence
+        run: |
+          python3 scripts/night_signal_model_benchmark.py 2026-07-01 --output /tmp/model-routing-report.json
+
+      - name: Save report
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: night-signal-model-routing-report
+          path: /tmp/model-routing-report.json
+          retention-days: 1
