@@ -111,7 +111,9 @@ jobs:
         uses: actions/upload-artifact@v7.0.1
         with:
           name: night-signal-state-${{ env.ISSUE_DATE }}
-          path: state/${{ env.ISSUE_DATE }}/evidence.json
+          path: |
+            state/${{ env.ISSUE_DATE }}/evidence.json
+            state/${{ env.ISSUE_DATE }}/issue.json
           if-no-files-found: warn
           retention-days: 2
           compression-level: 6

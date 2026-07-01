@@ -431,15 +431,15 @@ def edit_evidence(
         if not isinstance(entry, dict) or not isinstance(entry.get("records"), list):
             fail(f"Evidence records are missing: {label}")
         records = [record for record in entry["records"] if isinstance(record, dict)]
+        category_payload = core.category_prompt(category, issue_date, records)
         raw: dict[str, Any] | None = None
-        model_errors: list[str] = []
-        if not model_rate_limited.is_set():
+        if category_payload["evidence"] and not model_rate_limited.is_set():
             messages = [
                 {"role": "system", "content": core.SYSTEM_PROMPT},
                 {
                     "role": "user",
                     "content": json.dumps(
-                        core.category_prompt(category, issue_date, records),
+                        category_payload,
                         ensure_ascii=False,
                     ),
                 },
@@ -455,23 +455,15 @@ def edit_evidence(
                     )
                     break
                 except core.ModelRequestError as exc:
-                    model_errors.append(f"{model_name}: {exc}")
                     if not exc.rate_limited:
                         break
                     rate_limited_models += 1
             if raw is None and rate_limited_models == len(model_chain):
                 model_rate_limited.set()
         if raw is None:
-            raw = {
-                "items": [],
-                "signals": [],
-                "no_change_summary": " ".join(model_errors) or "model extraction unavailable",
-            }
+            raw = {"items": []}
         normalized = core.normalize_result(raw, category, issue_date, records)
         core.backfill_items_from_evidence(
-            normalized, category, issue_date, records
-        )
-        core.backfill_signals_from_evidence(
             normalized, category, issue_date, records
         )
         return label, [

@@ -61,51 +61,6 @@
       }
     },
     {
-      "watch_topic_id": "enterprise_infrastructure",
-      "title": "Azure OpenAI を採用し、生成 AI 活用の全社展開を推進――内製化に舵を切り、業務部門とIT部門が一体となってミドルアップダウンで進める大塚製薬工場のデジタル戦略とは",
-      "summary": "Azure OpenAI を採用し、生成 AI 活用の全社展開を推進――内製化に舵を切り、業務部門とIT部門が一体となってミドルアップダウンで進める大塚製薬工場のデジタル戦略とは。 大塚製薬工場がAzure OpenAIを採用し、生成AIの全社展開と内製化を推進しているが、具体的な新規導入や成果は本文からは確認できない。",
-      "section_id": "openai",
-      "category": "OpenAI",
-      "source_published_date": "2026-06-30",
-      "topic_value_class": "operational_status_change",
-      "priority_class": "priority",
-      "detail": {
-        "slug": "auto-b4a1fef3c50e-2026-07-01.html",
-        "sources": [
-          {
-            "label": "Microsoft",
-            "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOM0FxdGh0Z21wbGkwczNtb1JRR2EwX3haYzM3ODVIMnh5aTZscVo1aFROdkFuZm43QzdyU2ZNckZxT2dCUVduaE5xMVM0V01TeVJwX1hwQkYwcFlpRmd0cXVJbDJiMTB5RzU2M2wwbjBGY1o2ZkVUcTJZZTAxR2xJX2NnYkVYRVNHN3c2WXFra1BadWtuemk5azRRRUM0RGR3MzJMcm1kei11c1pLMFJCWTdpXzI?oc=5"
-          }
-        ],
-        "summary": "Azure OpenAI を採用し、生成 AI 活用の全社展開を推進――内製化に舵を切り、業務部門とIT部門が一体となってミドルアップダウンで進める大塚製薬工場のデジタル戦略とは。 大塚製薬工場がAzure OpenAIを採用し、生成AIの全社展開と内製化を推進しているが、具体的な新規導入や成果は本文からは確認できない。",
-        "summary_basis": {
-          "what_changed": "Azure OpenAI を採用し、生成 AI 活用の全社展開を推進――内製化に舵を切り、業務部門とIT部門が一体となってミドルアップダウンで進める大塚製薬工場のデジタル戦略とは",
-          "why_it_matters": "Azure OpenAI を採用し、生成 AI 活用の全社展開を推進――内製化に舵を切り、業務部門とIT部門が一体となってミドルアップダウンで進める大塚製薬工場のデジタル戦略とは Microsoft。",
-          "confirmed_facts": [
-            "Azure OpenAI を採用し、生成 AI 活用の全社展開を推進――内製化に舵を切り、業務部門とIT部門が一体となってミドルアップダウンで進める大塚製薬工場のデジタル戦略とは",
-            "大塚製薬工場がAzure OpenAIを採用し、生成AIの全社展開と内製化を推進しているが、具体的な新規導入や成果は本文からは確認できない。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "Azure OpenAI を採用し、生成 AI 活用の全社展開を推進――内製化に舵を切り、業務部門とIT部門が一体となってミドルアップダウンで進める大塚製薬工場のデジタル戦略とは",
-              "source_urls": [
-                "https://news.google.com/rss/articles/CBMitAFBVV95cUxOM0FxdGh0Z21wbGkwczNtb1JRR2EwX3haYzM3ODVIMnh5aTZscVo1aFROdkFuZm43QzdyU2ZNckZxT2dCUVduaE5xMVM0V01TeVJwX1hwQkYwcFlpRmd0cXVJbDJiMTB5RzU2M2wwbjBGY1o2ZkVUcTJZZTAxR2xJX2NnYkVYRVNHN3c2WXFra1BadWtuemk5azRRRUM0RGR3MzJMcm1kei11c1pLMFJCWTdpXzI?oc=5"
-              ]
-            },
-            {
-              "fact": "大塚製薬工場がAzure OpenAIを採用し、生成AIの全社展開と内製化を推進しているが、具体的な新規導入や成果は本文からは確認できない。",
-              "source_urls": [
-                "https://news.google.com/rss/articles/CBMitAFBVV95cUxOM0FxdGh0Z21wbGkwczNtb1JRR2EwX3haYzM3ODVIMnh5aTZscVo1aFROdkFuZm43QzdyU2ZNckZxT2dCUVduaE5xMVM0V01TeVJwX1hwQkYwcFlpRmd0cXVJbDJiMTB5RzU2M2wwbjBGY1o2ZkVUcTJZZTAxR2xJX2NnYkVYRVNHN3c2WXFra1BadWtuemk5azRRRUM0RGR3MzJMcm1kei11c1pLMFJCWTdpXzI?oc=5"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-06-30"
-          ]
-        }
-      }
-    },
-    {
       "watch_topic_id": "ai_infrastructure",
       "title": "ソフトバンクG、OpenAIに1兆6273億円の追加出資 第3弾は10月に",
       "summary": "ソフトバンクグループはOpenAIに1兆6273億円の追加出資を決定した。 ソフトバンクGのAI分野への積極的な資本投入が続き、OpenAIとの関係強化が進む。 ソフトバンクG、OpenAIに1兆6273億円の追加出資 第3弾は10月に。",
@@ -210,51 +165,6 @@
               "fact": "国産生成AI最新版「Sarashina3 シリーズ」がソフトバンクのクラウドで提供開始された。",
               "source_urls": [
                 "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBqazc0Y0dBcHcwcllGVlJ3ejNQNGtaTVMwcTRQbzd5U1pUbU1tVkx3YzZtZXlYaE1CWHNwamZucjFBZDM5d1VqdU5ZZHpaNXJBMkltMjBwMGt0VGx0RXcyRNIBZkFVX3lxTE9mRm5teTY3Qm04WVRYUkZ3aUVpaWZCNTAxb29rVVBlMHppNTk4SkhUSENYWVBpbTdSLVR5aFZSWUNkMDdxaFRGTzlMaExpd0E4Zlptb2tQX2p6TXAwR0NyLWM3Q2ZRdw?oc=5"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-07-01"
-          ]
-        }
-      }
-    },
-    {
-      "watch_topic_id": "ai_infrastructure",
-      "title": "6月30日のArm Holdings PLC (ARM) 値動きは3.76%上昇：投資家が知っておくべき情報",
-      "summary": "6月30日のArm Holdings PLC (ARM) 値動きは3.76%上昇：投資家が知っておくべき情報。 Arm Holdings PLCの株価が6月30日に3.76%上昇したが、ソフトバンクGへの直接的な影響や詳細は本文に記載されていない。",
-      "section_id": "softbank",
-      "category": "SoftBank",
-      "source_published_date": "2026-07-01",
-      "topic_value_class": "market_or_financial_impact",
-      "priority_class": "priority",
-      "detail": {
-        "slug": "auto-6b08d025ec1d-2026-07-01.html",
-        "sources": [
-          {
-            "label": "TradingKey",
-            "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxOSVlDNm9wTDM3WTVaUk1PMEN4b0NjTzFUM01Ha01ZYV92WjI4Y2JVUGswV1FfeTAzb28wSTdFdkJROWhRR2U1Zll0LTFVcHRQdmQyVzFmc0NpakNOOEZwdmNMYmwwT2N0U0tWZ2ljWjZxM1J0VWZUU2dsS1hhc2FucktJTk5ZYktxMFZLaHB3?oc=5"
-          }
-        ],
-        "summary": "6月30日のArm Holdings PLC (ARM) 値動きは3.76%上昇：投資家が知っておくべき情報。 Arm Holdings PLCの株価が6月30日に3.76%上昇したが、ソフトバンクGへの直接的な影響や詳細は本文に記載されていない。",
-        "summary_basis": {
-          "what_changed": "6月30日のArm Holdings PLC (ARM) 値動きは3.76%上昇：投資家が知っておくべき情報",
-          "why_it_matters": "6月30日のArm Holdings PLC (ARM) 値動きは3.76%上昇：投資家が知っておくべき情報 TradingKey。",
-          "confirmed_facts": [
-            "6月30日のArm Holdings PLC (ARM) 値動きは3.76%上昇：投資家が知っておくべき情報",
-            "Arm Holdings PLCの株価が6月30日に3.76%上昇したが、ソフトバンクGへの直接的な影響や詳細は本文に記載されていない。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "6月30日のArm Holdings PLC (ARM) 値動きは3.76%上昇：投資家が知っておくべき情報",
-              "source_urls": [
-                "https://news.google.com/rss/articles/CBMijgFBVV95cUxOSVlDNm9wTDM3WTVaUk1PMEN4b0NjTzFUM01Ha01ZYV92WjI4Y2JVUGswV1FfeTAzb28wSTdFdkJROWhRR2U1Zll0LTFVcHRQdmQyVzFmc0NpakNOOEZwdmNMYmwwT2N0U0tWZ2ljWjZxM1J0VWZUU2dsS1hhc2FucktJTk5ZYktxMFZLaHB3?oc=5"
-              ]
-            },
-            {
-              "fact": "Arm Holdings PLCの株価が6月30日に3.76%上昇したが、ソフトバンクGへの直接的な影響や詳細は本文に記載されていない。",
-              "source_urls": [
-                "https://news.google.com/rss/articles/CBMijgFBVV95cUxOSVlDNm9wTDM3WTVaUk1PMEN4b0NjTzFUM01Ha01ZYV92WjI4Y2JVUGswV1FfeTAzb28wSTdFdkJROWhRR2U1Zll0LTFVcHRQdmQyVzFmc0NpakNOOEZwdmNMYmwwT2N0U0tWZ2ljWjZxM1J0VWZUU2dsS1hhc2FucktJTk5ZYktxMFZLaHB3?oc=5"
               ]
             }
           ],
@@ -446,96 +356,6 @@
       }
     },
     {
-      "watch_topic_id": "vietnam_macro_investment",
-      "title": "【ベトナム】ＦＰＴと米ＡＩ教育企業、人材育成で提携［ＩＴ］",
-      "summary": "【ベトナム】ＦＰＴと米ＡＩ教育企業、人材育成で提携［ＩＴ］。 ベトナムのＦＰＴと米ＡＩ教育企業が人材育成で提携したが、経済や投資への具体的な影響は本文からは確認できない。",
-      "section_id": "asia",
-      "category": "アジア経済",
-      "source_published_date": "2026-07-01",
-      "topic_value_class": "operational_status_change",
-      "priority_class": "priority",
-      "detail": {
-        "slug": "auto-fb7f4e3e4a14-2026-07-01.html",
-        "sources": [
-          {
-            "label": "千葉テレビ放送",
-            "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE81TVUyX1E0NExfcHlvMWdHSU9pa29HX1JYbG1LcWtxcl9rSFhTSXRTeHlvd3RjaW94R193dnZERk1TRFBWTE54Qlp4UTUyODNrcFV5RGJHb1Bzc2xmWVNz?oc=5"
-          }
-        ],
-        "summary": "【ベトナム】ＦＰＴと米ＡＩ教育企業、人材育成で提携［ＩＴ］。 ベトナムのＦＰＴと米ＡＩ教育企業が人材育成で提携したが、経済や投資への具体的な影響は本文からは確認できない。",
-        "summary_basis": {
-          "what_changed": "【ベトナム】ＦＰＴと米ＡＩ教育企業、人材育成で提携［ＩＴ］ 千葉テレビ放送",
-          "why_it_matters": "【ベトナム】ＦＰＴと米ＡＩ教育企業、人材育成で提携［ＩＴ］ 千葉テレビ放送。",
-          "confirmed_facts": [
-            "【ベトナム】ＦＰＴと米ＡＩ教育企業、人材育成で提携［ＩＴ］",
-            "ベトナムのＦＰＴと米ＡＩ教育企業が人材育成で提携したが、経済や投資への具体的な影響は本文からは確認できない。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "【ベトナム】ＦＰＴと米ＡＩ教育企業、人材育成で提携［ＩＴ］",
-              "source_urls": [
-                "https://news.google.com/rss/articles/CBMiX0FVX3lxTE81TVUyX1E0NExfcHlvMWdHSU9pa29HX1JYbG1LcWtxcl9rSFhTSXRTeHlvd3RjaW94R193dnZERk1TRFBWTE54Qlp4UTUyODNrcFV5RGJHb1Bzc2xmWVNz?oc=5"
-              ]
-            },
-            {
-              "fact": "ベトナムのＦＰＴと米ＡＩ教育企業が人材育成で提携したが、経済や投資への具体的な影響は本文からは確認できない。",
-              "source_urls": [
-                "https://news.google.com/rss/articles/CBMiX0FVX3lxTE81TVUyX1E0NExfcHlvMWdHSU9pa29HX1JYbG1LcWtxcl9rSFhTSXRTeHlvd3RjaW94R193dnZERk1TRFBWTE54Qlp4UTUyODNrcFV5RGJHb1Bzc2xmWVNz?oc=5"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-07-01"
-          ]
-        }
-      }
-    },
-    {
-      "watch_topic_id": "vietnam_macro_investment",
-      "title": "「ASIA TOP AWARDS 2026」記者発表会開催、タイ・ベトナム国交樹立50周年を記念 授賞式は12月20日にホーチミン市で",
-      "summary": "「ASIA TOP AWARDS 2026」記者発表会開催、タイ・ベトナム国交樹立50周年を記念 授賞式は12月20日にホーチミン市で。 タイとベトナム国交樹立50周年記念の授賞式が12月20日にホーチミン市で開催されるが、経済や投資への直接的な影響は本文からは確認できない。",
-      "section_id": "asia",
-      "category": "アジア経済",
-      "source_published_date": "2026-06-30",
-      "topic_value_class": "cultural_or_audience_signal",
-      "priority_class": "priority",
-      "detail": {
-        "slug": "auto-8a755e37f7f5-2026-07-01.html",
-        "sources": [
-          {
-            "label": "タイランドハイパーリンクス",
-            "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFA3NmRBYTFISXNXRDJ6eTFTUW9kOWdDU1gwOGhTeGJxaURoczNuMzBfTXhtcjQzLVFkaTJmdnJlSEluSFBzWHlScXRHeG4yd3pGeGhNMA?oc=5"
-          }
-        ],
-        "summary": "「ASIA TOP AWARDS 2026」記者発表会開催、タイ・ベトナム国交樹立50周年を記念 授賞式は12月20日にホーチミン市で。 タイとベトナム国交樹立50周年記念の授賞式が12月20日にホーチミン市で開催されるが、経済や投資への直接的な影響は本文からは確認できない。",
-        "summary_basis": {
-          "what_changed": "「ASIA TOP AWARDS 2026」記者発表会開催、タイ・ベトナム国交樹立50周年を記念 授賞式は12月20日にホーチミン市で",
-          "why_it_matters": "「ASIA TOP AWARDS 2026」記者発表会開催、タイ・ベトナム国交樹立50周年を記念 授賞式は12月20日にホーチミン市で タイランドハイパーリンクス。",
-          "confirmed_facts": [
-            "「ASIA TOP AWARDS 2026」記者発表会開催、タイ・ベトナム国交樹立50周年を記念 授賞式は12月20日にホーチミン市で",
-            "タイとベトナム国交樹立50周年記念の授賞式が12月20日にホーチミン市で開催されるが、経済や投資への直接的な影響は本文からは確認できない。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "「ASIA TOP AWARDS 2026」記者発表会開催、タイ・ベトナム国交樹立50周年を記念 授賞式は12月20日にホーチミン市で",
-              "source_urls": [
-                "https://news.google.com/rss/articles/CBMiVEFVX3lxTFA3NmRBYTFISXNXRDJ6eTFTUW9kOWdDU1gwOGhTeGJxaURoczNuMzBfTXhtcjQzLVFkaTJmdnJlSEluSFBzWHlScXRHeG4yd3pGeGhNMA?oc=5"
-              ]
-            },
-            {
-              "fact": "タイとベトナム国交樹立50周年記念の授賞式が12月20日にホーチミン市で開催されるが、経済や投資への直接的な影響は本文からは確認できない。",
-              "source_urls": [
-                "https://news.google.com/rss/articles/CBMiVEFVX3lxTFA3NmRBYTFISXNXRDJ6eTFTUW9kOWdDU1gwOGhTeGJxaURoczNuMzBfTXhtcjQzLVFkaTJmdnJlSEluSFBzWHlScXRHeG4yd3pGeGhNMA?oc=5"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-06-30"
-          ]
-        }
-      }
-    },
-    {
       "watch_topic_id": "club_roster_staff",
       "title": "宇都宮ブレックスが田臥勇太と契約を継続",
       "summary": "宇都宮ブレックスが田臥勇太と契約を継続した。 田臥勇太はBプレミアの舞台でプレーを続ける。 田臥勇太は「情熱を持ってチャレンジし続けたい」とコメントした。 田臥勇太は日本バスケットボール界のレジェンドであり、Bプレミアでの継続出場はチームとリーグの注目度向上につながる。",
@@ -593,6 +413,7 @@
     "date": "2026-07-01",
     "collection_completed_at_jst": "2026-07-01T21:35:52+09:00",
     "collection_mode": "github_models_unattended",
-    "evidence_sha256": "bd56dd30c05bdd5f081ccccf215dff7aea715b38eb6191fa68b8edad293bf503"
+    "evidence_sha256": "bd56dd30c05bdd5f081ccccf215dff7aea715b38eb6191fa68b8edad293bf503",
+    "editor_contract_sha256": "893f1d1f9ab9302298ddb20c50253038af47eceebb73ce679aa779e3f4dd17d2"
   }
 }

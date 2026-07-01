@@ -1096,8 +1096,8 @@ def model_request(
                                     "The previous response exceeded the output "
                                     "budget. Return compact valid JSON while "
                                     "retaining every distinct item, date, fact, "
-                                    "and URL. Shorten prose and omit lower-value "
-                                    "signals; do not reduce the item count."
+                                    "and URL. Shorten prose without reducing the "
+                                    "item count."
                                 ),
                             },
                         ]
@@ -1151,13 +1151,11 @@ def model_request(
 
 SYSTEM_PROMPT = """You are the unattended NIGHT SIGNAL evidence extractor.
 
-Return one JSON object with keys items, signals, no_change_summary.
+Return one JSON object with the key items.
 Use only the supplied evidence records and exact URLs. Do not use memory.
 The issue window is the issue date and preceding two calendar days.
 Return every distinct evidence-backed material cluster as an item. Do not drop
-a supported important update to make the list shorter. Use signals only for
-relevant records that lack enough evidence for an item. Keep
-no_change_summary under 300 Japanese characters.
+a supported important update to make the list shorter.
 
 items are publication-worthy confirmed changes. Retain names, exact dates,
 numbers, results, uncertainty, and context. Each item must contain:
@@ -1185,22 +1183,15 @@ It may become an item only when the supplied body provides concrete supporting
 facts and a clear analytical conclusion. For such an item,
 what_changed must state what the article or video examines, why_it_matters must
 state the conclusion reached, and summary must contain both the
-question examined and the evidence-backed analysis. Otherwise keep it as a
-signal. Keep 分析, 検証, or 解説 in the public title so it cannot be mistaken
+question examined and the evidence-backed analysis. Otherwise omit it. Keep
+分析, 検証, or 解説 in the public title so it cannot be mistaken
 for a newly announced underlying event.
-
-signals are relevant recent findings that should remain visible but are not
-strong enough for an article. Each signal must contain watch_topic_id, title,
-summary, source_published_date, source_url, source_label, change_class,
-rejection_reason_class, rejection_reason, topic_value_class.
-Keep each signal summary at 60-140 Japanese characters and rejection_reason
-under 100 characters.
 
 Unknown important changes may use the closest supplied watch_topic_id. Do not
 silently drop potentially important recent evidence. Routine background older
-than the window belongs only in no_change_summary. If evidence is insufficient,
-return empty arrays and explain what was checked. Never invent a date, number,
-source, or certainty. Public fields must explain the event itself and must not
+than the window must not be returned. If evidence is insufficient, return an
+empty items array. Never invent a date, number, source, or certainty. Public
+fields must explain the event itself and must not
 mention research, collection, monitoring, selection, or publication procedure.
 Do not use labels such as 変更点, 重要性, 確認事実, or 未確定点, and do not say
 that an item is kept in the list or monitored broadly. Include concrete facts
@@ -1227,7 +1218,6 @@ def category_prompt(
             if isinstance(topic, dict)
         ],
         "allowed_topic_value_classes": sorted(ALLOWED_TOPIC_VALUES),
-        "allowed_change_classes": sorted(ALLOWED_CHANGE_CLASSES),
         "evidence": [
             {
                 "label": record.get("label"),

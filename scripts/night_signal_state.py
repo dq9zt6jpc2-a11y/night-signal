@@ -23,6 +23,14 @@ CONFIG_PATH = ROOT / "config" / "night_signal_coverage.json"
 SOURCES_PATH = ROOT / "config" / "night_signal_sources.json"
 MARKER_PATH = ROOT / ".night-signal-issue-date"
 DEFAULT_STATE_ROOT = ROOT / "state"
+EDITOR_CONTRACT_PATHS = (
+    ROOT / "scripts" / "night_signal_core.py",
+    ROOT / "scripts" / "night_signal_editor.py",
+    ROOT / "scripts" / "night_signal_models.py",
+    ROOT / "scripts" / "night_signal_state.py",
+    ROOT / "config" / "night_signal_coverage.json",
+    ROOT / "config" / "night_signal_models.json",
+)
 
 PUBLIC_COPY_FORBIDDEN_TERMS = sorted(
     set(
@@ -110,7 +118,8 @@ FACT_SOURCE_METADATA_RE = re.compile(
     re.I,
 )
 NO_UPDATE_ASSERTION_RE = re.compile(
-    r"(?:具体的|新たな|明確な).{0,50}(?:事実|変化|更新|発表|内容)"
+    r"(?:具体的|新たな|明確な|直接的な).{0,50}"
+    r"(?:事実|変化|更新|発表|内容|導入|成果|影響)"
     r".{0,50}(?:記載|確認|公表|掲載|含ま).{0,12}"
     r"(?:されていない|できない|見当たらない|ない)|"
     r"(?:該当|関連)する.{0,50}(?:新曲|変動|更新|発表|事実)"
@@ -119,6 +128,7 @@ NO_UPDATE_ASSERTION_RE = re.compile(
 )
 NAVIGATION_MARKER_RE = re.compile(
     r"このページをスキップ|閉じる|shopping cart|もっと見る|"
+    r"ニュース一覧|選手名鑑|日程結果|順位表|個人成績|公式(?:Twitter|X)|"
     r"(?:^|\s)(?:home|menu|news|charts?|books?|global|world|japan|overseas|special)"
     r"(?=\s|$)",
     re.I,
@@ -490,6 +500,52 @@ def navigation_shell_text(text: str) -> bool:
         for match in NAVIGATION_MARKER_RE.finditer(value)
     }
     return len(markers) >= 4 or bool(NAVIGATION_RUN_RE.search(value))
+
+
+def source_label_leaked(card: dict[str, Any]) -> bool:
+    detail = card.get("detail")
+    if not isinstance(detail, dict):
+        return False
+    title = str(card.get("title", "")).casefold()
+    basis = detail.get("summary_basis")
+    facts = basis.get("confirmed_facts", []) if isinstance(basis, dict) else []
+    fields = [
+        str(card.get("summary", "")),
+        str(detail.get("summary", "")),
+        *[str(fact) for fact in facts if isinstance(fact, str)],
+    ]
+    for source in detail.get("sources", []):
+        if not isinstance(source, dict):
+            continue
+        label = str(source.get("label", "")).strip()
+        if len(label) >= 3 and label.casefold() not in title:
+            if any(label.casefold() in field.casefold() for field in fields):
+                return True
+    return False
+
+
+def public_card_is_reader_facing(card: dict[str, Any]) -> bool:
+    detail = card.get("detail")
+    if not isinstance(detail, dict):
+        return False
+    basis = detail.get("summary_basis")
+    facts = basis.get("confirmed_facts", []) if isinstance(basis, dict) else []
+    fields = [
+        (str(card.get("title", "")), "title"),
+        (str(card.get("summary", "")), "summary"),
+        (str(detail.get("summary", "")), "summary"),
+        *[(str(fact), "summary") for fact in facts if isinstance(fact, str)],
+    ]
+    return (
+        all(
+            not public_render_copy_violations(text, kind=kind)
+            for text, kind in fields
+        )
+        and not reader_summary_violations(
+            str(card.get("title", "")), str(card.get("summary", ""))
+        )
+        and not source_label_leaked(card)
+    )
 
 
 def reject_public_copy(label: str, text: str, *, kind: str) -> None:
@@ -996,20 +1052,6 @@ def rolling_display_cards(
     display_cards: list[dict[str, Any]] = []
     seen: set[tuple[str, str]] = set()
 
-    def reader_facing_card(card: dict[str, Any]) -> bool:
-        detail = card.get("detail")
-        if not isinstance(detail, dict):
-            return False
-        basis = detail.get("summary_basis")
-        facts = basis.get("confirmed_facts", []) if isinstance(basis, dict) else []
-        fields = [
-            (str(card.get("title", "")), "title"),
-            (str(card.get("summary", "")), "summary"),
-            (str(detail.get("summary", "")), "summary"),
-            *[(str(fact), "summary") for fact in facts if isinstance(fact, str)],
-        ]
-        return all(not public_render_copy_violations(text, kind=kind) for text, kind in fields)
-
     def add_card(
         card: dict[str, Any],
         *,
@@ -1017,7 +1059,7 @@ def rolling_display_cards(
         retained_from_issue_date: str | None = None,
     ) -> None:
         source_date = str(card.get("source_published_date", ""))
-        if source_date not in allowed_source_dates or not reader_facing_card(card):
+        if source_date not in allowed_source_dates or not public_card_is_reader_facing(card):
             return
         key = display_cluster_key(card)
         if display_cluster_seen(seen, key):
@@ -1057,7 +1099,7 @@ def rolling_display_cards(
             for card in previous_issue.get("cards", [])
             if isinstance(card, dict)
             and str(card.get("source_published_date", "")) in allowed_source_dates
-            and reader_facing_card(card)
+            and public_card_is_reader_facing(card)
         ]
         if not retained_raw_cards:
             continue
@@ -1370,7 +1412,18 @@ def build_coverage_manifest(
         "collection_completed_at_jst": collection_completed_at_jst,
         "collection_mode": collection_mode,
         "evidence_sha256": evidence_sha256,
+        "editor_contract_sha256": editor_contract_sha256(),
     }
+
+
+def editor_contract_sha256() -> str:
+    digest = hashlib.sha256()
+    for path in EDITOR_CONTRACT_PATHS:
+        digest.update(str(path.relative_to(ROOT)).encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
 
 
 def generate_issue(issue_path: Path, output_root: Path, *, write_marker: bool) -> dict[str, Any]:
@@ -1510,8 +1563,28 @@ def self_test() -> None:
         kind="summary",
     ):
         fail("public-copy validation accepted a sentence with a missing subject")
+    if not public_render_copy_violations(
+        "生成AIの全社展開を推進したが、具体的な導入や成果は本文からは確認できない。",
+        kind="summary",
+    ):
+        fail("public-copy validation accepted a no-update summary")
     if not public_render_copy_violations("ホンダEV事業再編の分析（）", kind="title"):
         fail("public-copy validation accepted empty source brackets")
+    if not navigation_shell_text(
+        "B1ニュース一覧 B2ニュース一覧 日程結果 順位表 個人成績 選手名鑑"
+    ):
+        fail("public-copy validation accepted navigation shell text")
+    leaked_source = dict(card)
+    leaked_source["summary"] = f"{card['summary']} Example News"
+    leaked_detail = dict(card["detail"])
+    leaked_detail["sources"] = [
+        {"label": "Example News", "url": "https://example.com/story"}
+    ]
+    leaked_source["detail"] = leaked_detail
+    if not source_label_leaked(leaked_source):
+        fail("retained-card validation accepted a leaked source label")
+    if not re.fullmatch(r"[0-9a-f]{64}", editor_contract_sha256()):
+        fail("editor contract fingerprint is invalid")
     if reader_summary_violations(card["title"], f"{card['title']}。{card['title']}。") == []:
         fail("summary validation accepted title repetition")
     print("NIGHT SIGNAL STATE PASSED")
