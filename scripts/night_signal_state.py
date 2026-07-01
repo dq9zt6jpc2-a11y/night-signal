@@ -517,6 +517,18 @@ def card_event_text(card: dict[str, Any]) -> str:
     )
 
 
+def confirmed_fact_summary(card: dict[str, Any]) -> str:
+    detail = card.get("detail")
+    basis = detail.get("summary_basis") if isinstance(detail, dict) else None
+    facts = basis.get("confirmed_facts", []) if isinstance(basis, dict) else []
+    material_facts = normalize_material_facts(
+        str(card.get("title", "")),
+        facts,
+        limit=8,
+    )
+    return " ".join(material_facts)
+
+
 def source_label_leaked(card: dict[str, Any]) -> bool:
     detail = card.get("detail")
     if not isinstance(detail, dict):
@@ -1131,25 +1143,33 @@ def rolling_display_cards(
         source_date = str(card.get("source_published_date", ""))
         if source_date not in allowed_source_dates or not public_card_is_reader_facing(card):
             return
+        display_card = card
+        if retained_from_issue_date:
+            factual_summary = confirmed_fact_summary(card)
+            if factual_summary:
+                display_card = {**card, "summary": factual_summary}
         if retained_from_issue_date and any(
-            str(existing.get("category", "")) == str(card.get("category", ""))
+            str(existing.get("category", "")) == str(display_card.get("category", ""))
             and (
                 same_material_event(
                     str(existing.get("title", "")),
-                    str(card.get("title", "")),
+                    str(display_card.get("title", "")),
                 )
-                or same_material_event(card_event_text(existing), card_event_text(card))
+                or same_material_event(
+                    card_event_text(existing),
+                    card_event_text(display_card),
+                )
             )
             for existing in display_cards
         ):
             return
-        key = display_cluster_key(card)
+        key = display_cluster_key(display_card)
         if display_cluster_seen(seen, key):
             return
         seen.add(key)
         display_cards.append(
             {
-                **card,
+                **display_card,
                 "issue_date": issue_date,
                 "detail_issue_date": detail_issue_date,
                 "freshness_label": relative_day_label(issue_date, source_date),
@@ -1654,6 +1674,18 @@ def self_test() -> None:
         "Hondaは2026年6月29日に2026年5月の生産・販売・輸出実績を公式サイトで発表した。",
     ):
         fail("source channel and publication date were mistaken for substantive information")
+    retained_example = json.loads(json.dumps(card))
+    retained_example["title"] = "SpaceX株がナスダック100指数に組み入れ"
+    retained_example["summary"] = "同じ事実の反復と根拠のない影響文。"
+    retained_example["detail"]["summary_basis"]["confirmed_facts"] = [
+        "SpaceX株が前場で1％以上上昇した。",
+        "SpaceX株がナスダック100指数に組み入れられた。",
+    ]
+    if confirmed_fact_summary(retained_example) != (
+        "SpaceX株が前場で1％以上上昇した。 "
+        "SpaceX株がナスダック100指数に組み入れられた。"
+    ):
+        fail("retained card summary did not preserve distinct confirmed facts")
     if not public_render_copy_violations(
         "はホンダのEV事業再編が強気材料になる可能性を分析した。",
         kind="summary",
