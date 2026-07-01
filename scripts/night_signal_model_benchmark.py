@@ -127,19 +127,46 @@ def benchmark_model(
             },
         ]
         captured = io.StringIO()
-        with contextlib.redirect_stdout(captured):
-            raw = core.model_request(token, messages, model_name=model, retry_wait_cap=90)
+        try:
+            with contextlib.redirect_stdout(captured):
+                raw = core.model_request(token, messages, model_name=model, retry_wait_cap=90)
+        except core.ModelRequestError:
+            category_metrics.append(
+                {
+                    "category": label,
+                    "eligible_records": len(payload["evidence"]),
+                    "model_items": 0,
+                    "cards": 0,
+                    "fallback_cards": 0,
+                    "model_request_failed": True,
+                }
+            )
+            continue
         model_usage = usage_from_log(captured.getvalue())
         for key in usage:
             usage[key] += model_usage[key]
-        normalized = core.normalize_result(raw, category, issue_date, records)
-        model_items = len(normalized["items"])
-        core.backfill_items_from_evidence(normalized, category, issue_date, records)
-        normalized["items"] = core.merge_related_items(normalized["items"])
-        category_cards = [
-            editor.item_card(label, str(configs[label]["section_id"]), item, issue_date)
-            for item in normalized["items"]
-        ]
+        try:
+            normalized = core.normalize_result(raw, category, issue_date, records)
+            model_items = len(normalized["items"])
+            core.backfill_items_from_evidence(normalized, category, issue_date, records)
+            normalized["items"] = core.merge_related_items(normalized["items"])
+            category_cards = [
+                editor.item_card(label, str(configs[label]["section_id"]), item, issue_date)
+                for item in normalized["items"]
+            ]
+        except SystemExit:
+            category_metrics.append(
+                {
+                    "category": label,
+                    "eligible_records": len(payload["evidence"]),
+                    "model_items": 0,
+                    "cards": 0,
+                    "fallback_cards": 0,
+                    "quality_gate_failed": True,
+                    **model_usage,
+                }
+            )
+            continue
         cards.extend(category_cards)
         category_metrics.append(
             {
@@ -157,10 +184,14 @@ def benchmark_model(
         collection_completed_at_jst=str(evidence["checked_at_jst"]),
         evidence_sha256="0" * 64,
     )
-    state.validate_issue_state(
-        {"issue_date": issue_date, "cards": cards, "coverage_manifest": manifest},
-        evidence_bundle=evidence,
-    )
+    validation_passed = True
+    try:
+        state.validate_issue_state(
+            {"issue_date": issue_date, "cards": cards, "coverage_manifest": manifest},
+            evidence_bundle=evidence,
+        )
+    except SystemExit:
+        validation_passed = False
     facts = [
         fact
         for card in cards
@@ -181,6 +212,10 @@ def benchmark_model(
         ),
         "cards": len(cards),
         "facts": len(facts),
+        "validation_passed": validation_passed,
+        "quality_gate_failures": sum(
+            bool(item.get("quality_gate_failed")) for item in category_metrics
+        ),
         "duplicate_pairs": duplicate_pairs,
         "fallback_cards": sum(item.get("fallback_cards", 0) for item in category_metrics),
         **baseline_recall(baseline_cards, cards),
