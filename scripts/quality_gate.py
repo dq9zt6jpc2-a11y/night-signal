@@ -789,9 +789,7 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
                 for fact in facts:
                     validate_public_summary_language(f"detail page {name} fact", fact, issue_date)
             limits_match = re.search(r'<p class="limits">(.*?)</p>', html, flags=re.S)
-            if not limits_match or not visible_text(limits_match.group(1)):
-                article_structure_failures.append(f"{name}: missing limits/unknowns")
-            elif "確認して" in visible_text(limits_match.group(1)):
+            if limits_match and "確認して" in visible_text(limits_match.group(1)):
                 article_structure_failures.append(f"{name}: limits read like an instruction")
         source_match = re.search(r'<div class="source">(.*?)</div>', html, flags=re.S)
         if summary_match and source_match:

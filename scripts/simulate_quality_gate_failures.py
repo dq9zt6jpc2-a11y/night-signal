@@ -49,6 +49,14 @@ def expect_pass(temp: Path, issue_date: str) -> None:
         raise AssertionError(f"baseline failed\n{result.stdout}\n{result.stderr}")
 
 
+def expect_pass_after(name: str, mutate) -> None:
+    issue_date = latest_issue_date()
+    temp = fixture()
+    mutate(temp, issue_date)
+    expect_pass(temp, issue_date)
+    print(f"PASS expected quality acceptance: {name}")
+
+
 def expect_fail(name: str, mutate) -> None:
     issue_date = latest_issue_date()
     temp = fixture()
@@ -69,6 +77,24 @@ def remove_current_detail(temp: Path, issue_date: str) -> None:
     if not match:
         raise AssertionError("current issue has no detail link")
     (temp / "site" / issue_date / "details" / match.group(1)).unlink()
+
+
+def remove_optional_limits(temp: Path, issue_date: str) -> None:
+    index = (temp / "site" / issue_date / "index.html").read_text(encoding="utf-8")
+    for name in re.findall(r'href="details/([^"#?]+\.html)"', index):
+        path = temp / "site" / issue_date / "details" / name
+        html = path.read_text(encoding="utf-8")
+        updated, count = re.subn(
+            r'\s*<h2>未確定点</h2>\s*<p class="limits">.*?</p>',
+            "",
+            html,
+            count=1,
+            flags=re.S,
+        )
+        if count:
+            write(path, updated)
+            return
+    raise AssertionError("current issue has no optional limits section")
 
 
 def inject_internal_heading(temp: Path, issue_date: str) -> None:
@@ -109,6 +135,7 @@ def main() -> int:
     issue_date = latest_issue_date()
     expect_pass(fixture(), issue_date)
     print("PASS quality baseline")
+    expect_pass_after("source-backed detail without unknowns", remove_optional_limits)
     expect_fail("missing detail page", remove_current_detail)
     expect_fail("internal process heading", inject_internal_heading)
     expect_fail("dated page date mismatch", mismatch_dated_page)
