@@ -413,7 +413,6 @@ def publication_item_supported(title: str, *evidence_values: str) -> bool:
         facts = state_contract.normalize_material_facts(
             title,
             supporting_sentences,
-            limit=8,
         )
         return bool(facts) and bool(state_contract.analysis_conclusion(facts))
     return bool(PUBLICATION_EVENT_RE.search(f"{title} {evidence}"))
@@ -488,7 +487,7 @@ def analysis_narrative(title: str, facts: list[str]) -> tuple[str, str, str] | N
     conclusion = state_contract.analysis_conclusion(facts)
     if not scope or not conclusion or not facts:
         return None
-    summary = unique_sentences(" ".join([scope, *facts[:4], conclusion]), 1200)
+    summary = unique_sentences(" ".join([scope, *facts, conclusion]), None)
     return scope, conclusion, summary
 
 
@@ -502,7 +501,7 @@ def source_material_facts(
     title: str,
     records: list[dict[str, Any]],
     *,
-    limit: int = 6,
+    limit: int | None = None,
 ) -> list[str]:
     candidates: list[str] = []
     for record in records:
@@ -553,7 +552,7 @@ def natural_detail_summary(
         for fact in facts
         if useful_fact(fact, category_label)
         and sentence_key(reader_facing_text(fact, 500)) != lead_key
-    ][:4]
+    ]
     importance_sentence = ""
     if (
         useful_importance(why_it_matters)
@@ -1312,16 +1311,28 @@ def sentence_parts(value: str) -> list[str]:
     return parts
 
 
-def unique_sentences(value: str, limit: int = 1200) -> str:
-    seen: set[str] = set()
+def unique_sentences(value: str, limit: int | None = 1200) -> str:
     kept: list[str] = []
     for sentence in sentence_parts(value):
-        key = sentence_key(sentence)
-        if not key or key in seen:
+        if not sentence_key(sentence):
             continue
-        seen.add(key)
+        duplicate_index = next(
+            (
+                index
+                for index, existing in enumerate(kept)
+                if state_contract.materially_same_fact(sentence, existing)
+            ),
+            None,
+        )
+        if duplicate_index is not None:
+            if state_contract.fact_specificity(sentence) > state_contract.fact_specificity(
+                kept[duplicate_index]
+            ):
+                kept[duplicate_index] = sentence
+            continue
         kept.append(sentence)
-    return compact_text("".join(kept), limit)
+    composed = "".join(kept)
+    return compact_text(composed, limit) if limit is not None else composed
 
 
 def unique_nonempty(values: list[str], limit: int) -> list[str]:
@@ -1357,9 +1368,9 @@ def promoted_signal_item(
     why_it_matters = unique_sentences(" ".join(summary_sentences[1:]), 700)
     fact_values = [title, excerpt]
     facts = (
-        state_contract.normalize_analysis_facts(title, fact_values, limit=6)
+        state_contract.normalize_analysis_facts(title, fact_values)
         if state_contract.analysis_headline(title)
-        else state_contract.normalize_material_facts(title, fact_values, limit=4)
+        else state_contract.normalize_material_facts(title, fact_values)
     )
     if not facts_add_information_beyond_title(title, facts):
         return None
@@ -1368,7 +1379,7 @@ def promoted_signal_item(
         what_changed, why_it_matters, summary = analysis
     else:
         why_it_matters = ""
-        summary = unique_sentences(" ".join(facts), 900)
+        summary = unique_sentences(" ".join(facts), None)
         what_changed = facts[0]
     limits = event_limits_sentence(title, excerpt)
     detail = natural_detail_summary(
@@ -1395,7 +1406,7 @@ def promoted_signal_item(
         "detail_summary": detail,
         "what_changed": what_changed,
         "why_it_matters": why_it_matters,
-        "confirmed_facts": facts[:4],
+        "confirmed_facts": facts,
         "limits_or_unknowns": limits,
         "sources": [
             {
@@ -1428,11 +1439,9 @@ def evidence_narrative(
         if state_contract.title_repetition_score(title, sentence) >= 0.95:
             continue
         supporting.append(sentence)
-        if len(supporting) == 2:
-            break
     del category_label, topic_value
     importance = supporting[-1] if supporting else ""
-    summary = unique_sentences(" ".join([event, *supporting]), 1000)
+    summary = unique_sentences(" ".join([event, *supporting]), None)
     return event, importance, summary, supporting
 
 
@@ -1511,9 +1520,9 @@ def fallback_item_from_record(
         return None
     fact_values = [what_changed, *supporting, excerpt]
     facts = (
-        state_contract.normalize_analysis_facts(title, fact_values, limit=6)
+        state_contract.normalize_analysis_facts(title, fact_values)
         if state_contract.analysis_headline(title)
-        else state_contract.normalize_material_facts(title, fact_values, limit=4)
+        else state_contract.normalize_material_facts(title, fact_values)
     )
     if not facts_add_information_beyond_title(title, facts):
         return None
@@ -1522,7 +1531,7 @@ def fallback_item_from_record(
         what_changed, why_it_matters, summary = analysis
     else:
         why_it_matters = ""
-        summary = unique_sentences(" ".join(facts), 1000)
+        summary = unique_sentences(" ".join(facts), None)
         what_changed = facts[0]
     limits = event_limits_sentence(title, excerpt)
     detail = natural_detail_summary(
@@ -1549,7 +1558,7 @@ def fallback_item_from_record(
         "detail_summary": detail,
         "what_changed": what_changed,
         "why_it_matters": why_it_matters,
-        "confirmed_facts": facts[:4],
+        "confirmed_facts": facts,
         "limits_or_unknowns": limits,
         "sources": [
             {
@@ -1617,7 +1626,6 @@ def merge_related_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 *existing.get("confirmed_facts", []),
                 *item.get("confirmed_facts", []),
             ],
-            limit=8,
         )
         sources: list[dict[str, Any]] = []
         seen_urls: set[str] = set()
@@ -1630,7 +1638,7 @@ def merge_related_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
             seen_urls.add(url)
             sources.append(source)
         title = str(primary.get("title", ""))
-        summary = unique_sentences(" ".join(facts), 1000)
+        summary = unique_sentences(" ".join(facts), None)
         merged[match_index] = {
             **primary,
             "summary": summary,
@@ -1796,9 +1804,9 @@ def normalize_result(
         what_changed = unique_sentences(what_changed, 700)
         why_it_matters = without_uncertainty_sentences(why_it_matters)
         facts = (
-            state_contract.normalize_analysis_facts(title, facts, limit=8)
+            state_contract.normalize_analysis_facts(title, facts)
             if state_contract.analysis_headline(title)
-            else state_contract.normalize_material_facts(title, facts, limit=8)
+            else state_contract.normalize_material_facts(title, facts)
         )
         source_records = [records_by_url[source["url"]] for source in sources]
         facts = [
@@ -1809,11 +1817,10 @@ def normalize_result(
         facts = state_contract.normalize_material_facts(
             title,
             [*facts, *source_material_facts(title, source_records)],
-            limit=6,
         )
         if facts:
             what_changed = facts[0]
-        summary = unique_sentences(" ".join(facts[:6]), 1000)
+        summary = unique_sentences(" ".join(facts), None)
         analysis = analysis_narrative(title, facts)
         analysis_ready = not state_contract.analysis_headline(title) or analysis is not None
         if analysis is not None:
@@ -1821,54 +1828,17 @@ def normalize_result(
         else:
             why_it_matters = ""
         if state_contract.GENERIC_CONTEXT_RE.search(summary):
-            summary = unique_sentences(" ".join(facts[:4]), 1000)
-        if (
-            len(detail) < 280
-            or SUMMARY_LABEL_RE.search(detail)
-            or state_contract.GENERIC_CONTEXT_RE.search(detail)
-            or not state_contract.analysis_summary_complete(title, detail)
-        ):
-            detail = natural_detail_summary(
-                summary=summary,
-                detail=detail,
-                what_changed=what_changed,
-                why_it_matters=why_it_matters,
-                facts=facts,
-                limits_or_unknowns=limits_or_unknowns,
-                category_label=str(category.get("label", "")),
-            )
+            summary = unique_sentences(" ".join(facts), None)
+        detail = natural_detail_summary(
+            summary=summary,
+            detail="",
+            what_changed=what_changed,
+            why_it_matters=why_it_matters,
+            facts=facts,
+            limits_or_unknowns=limits_or_unknowns,
+            category_label=str(category.get("label", "")),
+        )
         detail = unique_sentences(detail, 2600)
-        first_record = records_by_url.get(sources[0]["url"], {}) if sources else {}
-        if sources and len(summary) < 80:
-            summary = unique_sentences(
-                " ".join(
-                    value
-                    for value in (
-                        summary,
-                        what_changed,
-                        why_it_matters,
-                        str(first_record.get("excerpt") or first_record.get("evidence") or ""),
-                    )
-                    if value
-                ),
-                1000,
-            )
-        if (
-            len(detail) < 280
-            or SUMMARY_LABEL_RE.search(detail)
-            or state_contract.GENERIC_CONTEXT_RE.search(detail)
-            or not state_contract.analysis_summary_complete(title, detail)
-        ):
-            detail = natural_detail_summary(
-                summary=summary,
-                detail=detail,
-                what_changed=what_changed,
-                why_it_matters=why_it_matters,
-                facts=facts,
-                limits_or_unknowns=limits_or_unknowns,
-                category_label=str(category.get("label", "")),
-            )
-            detail = unique_sentences(detail, 2600)
         source_cluster = record_cluster_key(records_by_url.get(sources[0]["url"], {})) if sources else ""
         item_cluster = normalized_topic_key(title, source_cluster)
         topic_value = str(item.get("topic_value_class", ""))
@@ -1952,7 +1922,7 @@ def normalize_result(
                 "detail_summary": detail,
                 "what_changed": what_changed,
                 "why_it_matters": why_it_matters,
-                "confirmed_facts": facts[:8],
+                "confirmed_facts": facts,
                 "limits_or_unknowns": limits_or_unknowns,
                 "sources": sources,
                 "observation_source_role": first_source["source_role"],

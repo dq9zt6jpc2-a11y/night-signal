@@ -524,9 +524,10 @@ def confirmed_fact_summary(card: dict[str, Any]) -> str:
     material_facts = normalize_material_facts(
         str(card.get("title", "")),
         facts,
-        limit=8,
     )
-    return " ".join(material_facts)
+    title = str(card.get("title", ""))
+    informative = [fact for fact in material_facts if fact_adds_information(title, fact)]
+    return " ".join(informative or material_facts)
 
 
 def source_label_leaked(card: dict[str, Any]) -> bool:
@@ -713,20 +714,33 @@ def materially_same_fact(left: str, right: str) -> bool:
 
 
 def fact_adds_information(title: str, fact: str) -> bool:
-    if materially_same_fact(title, fact):
-        return False
-    if not SOURCE_CHANNEL_RE.search(fact):
-        return True
     without_channel = SOURCE_CHANNEL_RE.sub("", fact)
     without_channel = re.sub(
         r"20\d{2}年\d{1,2}月\d{1,2}日(?:に|、)?",
         "",
         without_channel,
     )
-    return bool(content_terms(without_channel) - content_terms(title))
+    title_terms = content_terms(title)
+    fact_terms = content_terms(without_channel)
+    title_numbers = set(re.findall(r"\d+(?:\.\d+)?", title))
+    fact_numbers = set(re.findall(r"\d+(?:\.\d+)?", without_channel))
+    return bool((fact_terms - title_terms) or (fact_numbers - title_numbers))
 
 
-def normalize_material_facts(title: str, values: list[Any], limit: int = 8) -> list[str]:
+def fact_specificity(text: str) -> tuple[int, int, int]:
+    signature = copy_signature(text)
+    return (
+        len(set(re.findall(r"\d+(?:\.\d+)?", signature))),
+        len(content_terms(text)),
+        len(signature),
+    )
+
+
+def normalize_material_facts(
+    title: str,
+    values: list[Any],
+    limit: int | None = None,
+) -> list[str]:
     facts: list[str] = []
     signatures: list[str] = []
     for raw in values:
@@ -747,21 +761,51 @@ def normalize_material_facts(title: str, values: list[Any], limit: int = 8) -> l
                 None,
             )
             if duplicate_index is not None:
-                existing = signatures[duplicate_index]
-                if len(signature) >= len(existing) * 1.25:
+                if fact_specificity(fact) > fact_specificity(facts[duplicate_index]):
                     facts[duplicate_index] = fact
                     signatures[duplicate_index] = signature
                 continue
             facts.append(fact)
             signatures.append(signature)
-            if len(facts) >= limit:
+            if limit is not None and len(facts) >= limit:
                 return facts
     return facts
 
 
-def normalize_analysis_facts(title: str, values: list[Any], limit: int = 8) -> list[str]:
-    facts = normalize_material_facts(title, values, limit=max(limit * 2, 8))
-    return [fact for fact in facts if not materially_same_fact(title, fact)][:limit]
+def normalize_analysis_facts(
+    title: str,
+    values: list[Any],
+    limit: int | None = None,
+) -> list[str]:
+    facts = normalize_material_facts(title, values)
+    kept = [fact for fact in facts if fact_adds_information(title, fact)]
+    return kept[:limit] if limit is not None else kept
+
+
+def summary_covers_material_facts(summary: str, facts: list[Any]) -> bool:
+    material_facts = normalize_material_facts("", facts)
+    summary_sentences = [
+        part.strip()
+        for part in re.split(r"(?<=[。！？!?])\s*", summary)
+        if part.strip()
+    ]
+
+    def covered(fact: str, sentence: str) -> bool:
+        if materially_same_fact(fact, sentence):
+            return True
+        fact_terms = content_terms(fact)
+        fact_numbers = set(re.findall(r"\d+(?:\.\d+)?", fact))
+        sentence_numbers = set(re.findall(r"\d+(?:\.\d+)?", sentence))
+        return (
+            bool(fact_terms)
+            and fact_terms <= content_terms(sentence)
+            and fact_numbers <= sentence_numbers
+        )
+
+    return bool(material_facts) and all(
+        any(covered(fact, sentence) for sentence in summary_sentences)
+        for fact in material_facts
+    )
 
 
 def validate_reader_summary(label: str, title: str, summary: str) -> None:
@@ -974,6 +1018,13 @@ def validate_public_card_copy(raw: dict[str, Any], detail: dict[str, Any], *, is
         source_date=source_date,
         card_index=card_index,
     )
+    if effective_on_or_after(contract, "complete_fact_summary_effective_date", issue_date):
+        basis = detail.get("summary_basis")
+        facts = basis.get("confirmed_facts", []) if isinstance(basis, dict) else []
+        if not summary_covers_material_facts(f"{title}。 {summary}", facts):
+            fail(f"cards[{card_index}].summary dropped a distinct confirmed fact")
+        if not summary_covers_material_facts(f"{title}。 {detail_summary}", facts):
+            fail(f"cards[{card_index}].detail.summary dropped a distinct confirmed fact")
 
 
 def relative_day_label(issue_date: str, source_date: str) -> str:
@@ -1681,11 +1732,27 @@ def self_test() -> None:
         "SpaceX株が前場で1％以上上昇した。",
         "SpaceX株がナスダック100指数に組み入れられた。",
     ]
-    if confirmed_fact_summary(retained_example) != (
-        "SpaceX株が前場で1％以上上昇した。 "
-        "SpaceX株がナスダック100指数に組み入れられた。"
-    ):
-        fail("retained card summary did not preserve distinct confirmed facts")
+    if confirmed_fact_summary(retained_example) != "SpaceX株が前場で1％以上上昇した。":
+        fail("retained card summary did not preserve new facts without replaying its title")
+    complete_facts = [
+        "計画の総事業費は2兆円とされた。",
+        "建設開始は2030年を予定している。",
+        "初号機の運転開始は2035年を予定している。",
+        "設備容量は1.2ギガワットとされた。",
+        "事業主体には国営電力会社が参加する。",
+        "燃料供給は複数年契約で行う方針が示された。",
+    ]
+    complete_summary = " ".join(complete_facts)
+    if not summary_covers_material_facts(complete_summary, complete_facts):
+        fail("complete-fact summary validation lost a distinct supported fact")
+    if normalize_material_facts(
+        "",
+        [
+            "計画の総事業費は2兆円とされた。",
+            "計画の総事業費について、総額2兆円になると発表された。",
+        ],
+    ) != ["計画の総事業費について、総額2兆円になると発表された。"]:
+        fail("material-fact normalization did not keep the richer duplicate")
     if not public_render_copy_violations(
         "はホンダのEV事業再編が強気材料になる可能性を分析した。",
         kind="summary",

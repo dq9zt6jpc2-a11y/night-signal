@@ -176,29 +176,41 @@ def public_focus_phrase(title: str, category: str) -> str:
     return focus.strip("、。 ") or category or "この更新"
 
 
-def sentence_from(value: Any, limit: int = 520) -> str:
-    text = compact_text(scrub_public_summary(value), limit).rstrip("。")
+def sentence_from(value: Any) -> str:
+    text = scrub_public_summary(value).rstrip("。")
     if not text:
         return ""
     return f"{text}。"
 
 
-def reader_summary_from_parts(title: str, parts: list[Any], *, limit: int = 900) -> str:
-    seen: set[str] = set()
+def reader_summary_from_parts(title: str, parts: list[Any]) -> str:
     kept: list[str] = []
     for part in parts:
-        sentence = sentence_from(part)
-        if not sentence:
-            continue
-        key = state.copy_signature(sentence)
-        if not key or key in seen:
-            continue
-        seen.add(key)
-        kept.append(sentence)
-        candidate = compact_text(" ".join(kept), limit)
-        if len(kept) >= 2 and summary_is_reader_facing(title, candidate):
-            return candidate
-    candidate = compact_text(" ".join(kept), limit)
+        for raw_sentence in re.split(r"(?<=[。！？!?])\s*", str(part)):
+            sentence = sentence_from(raw_sentence)
+            if not sentence:
+                continue
+            duplicate_index = next(
+                (
+                    index
+                    for index, existing in enumerate(kept)
+                    if state.materially_same_fact(sentence, existing)
+                ),
+                None,
+            )
+            if duplicate_index is not None:
+                if state.fact_specificity(sentence) > state.fact_specificity(
+                    kept[duplicate_index]
+                ):
+                    kept[duplicate_index] = sentence
+                continue
+            kept.append(sentence)
+    informative = [
+        sentence for sentence in kept if state.fact_adds_information(title, sentence)
+    ]
+    if informative:
+        kept = informative
+    candidate = " ".join(kept)
     if candidate and summary_is_reader_facing(title, candidate):
         return candidate
     return ""
@@ -223,14 +235,13 @@ def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
     facts = state.normalize_material_facts(
         title,
         [
-            compact_text(scrub_item_source_labels(item, fact), 320)
+            scrub_item_source_labels(item, fact)
             for fact in item.get("confirmed_facts", [])
             if useful_fact(fact, category)
         ],
-        limit=4,
     )
-    what_changed = compact_text(scrub_item_source_labels(item, item.get("what_changed", "")), 500)
-    limits = compact_text(scrub_item_source_labels(item, item.get("limits_or_unknowns", "")), 500)
+    what_changed = scrub_item_source_labels(item, item.get("what_changed", ""))
+    limits = scrub_item_source_labels(item, item.get("limits_or_unknowns", ""))
     importance = (
         item_importance(item, category, title)
         if state.analysis_headline(title)
@@ -248,7 +259,6 @@ def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
     summary = reader_summary_from_parts(
         title,
         [lead, *event_parts[1:], importance, limits],
-        limit=900,
     )
     if summary:
         return summary
@@ -256,7 +266,6 @@ def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
     summary = reader_summary_from_parts(
         title,
         [public_focus_phrase(title, category), importance, limits],
-        limit=900,
     )
     if summary:
         return summary
@@ -281,28 +290,13 @@ def canonical_detail_summary(
     if limits:
         optional_parts.append(limits)
 
-    seen: set[str] = set()
-    sentences: list[str] = []
-    for part in re.split(r"(?<=[。！？!?])", card_summary):
-        sentence = sentence_from(scrub_item_source_labels(item, part), 700)
-        key = state.copy_signature(sentence)
-        if not sentence or not key or key in seen:
-            continue
-        seen.add(key)
-        sentences.append(sentence)
-
-    for part in optional_parts:
-        sentence = sentence_from(scrub_item_source_labels(item, part), 700)
-        key = state.copy_signature(sentence)
-        if not sentence or not key or key in seen:
-            continue
-        candidate = compact_text(" ".join([*sentences, sentence]), 2600)
-        if not summary_is_reader_facing(title, candidate):
-            continue
-        seen.add(key)
-        sentences.append(sentence)
-
-    composed = compact_text(" ".join(sentences), 2600)
+    composed = reader_summary_from_parts(
+        title,
+        [
+            card_summary,
+            *[scrub_item_source_labels(item, part) for part in optional_parts],
+        ],
+    )
     if (
         composed
         and summary_is_reader_facing(title, composed)
@@ -348,10 +342,9 @@ def item_card(
     facts = state.normalize_material_facts(
         public_card_title(item),
         [
-            compact_text(scrub_item_source_labels(item, fact), 500)
+            scrub_item_source_labels(item, fact)
             for fact in item["confirmed_facts"]
         ],
-        limit=4,
     )
     if not facts:
         fail(f"item lost material facts during card construction: {item.get('title', '')}")
@@ -567,6 +560,41 @@ def self_test() -> None:
         mapping["fact"] for mapping in basis["fact_sources"]
     }:
         fail("Editor did not map every confirmed fact to evidence")
+    rich_item = {
+        **item,
+        "title": "ベトナム、初の原子力発電所建設計画を加速",
+        "what_changed": "ベトナム政府が初の原子力発電所建設計画を加速した。",
+        "why_it_matters": "",
+        "confirmed_facts": [
+            "建設候補地はニントゥアン省に置かれる。",
+            "第1原発はロシアの協力で建設する計画となっている。",
+            "第1原発はロシアの協力で建設する計画である。",
+            "第2原発は日本との協力を想定している。",
+            "政府は2030年までの着工を目標に掲げた。",
+            "初号機の運転開始時期は2035年を想定している。",
+            "設備容量は合計4ギガワットを計画している。",
+        ],
+        "sources": [{"label": "Government", "url": "https://example.com/nuclear"}],
+    }
+    rich_card = item_card("日本経済", "japan-economy", rich_item, "2099-01-01")
+    rich_facts = rich_card["detail"]["summary_basis"]["confirmed_facts"]
+    if len(rich_facts) != 6:
+        fail("Editor truncated distinct facts or retained a duplicate paraphrase")
+    if not state.summary_covers_material_facts(
+        f"{rich_card['title']}。 {rich_card['summary']}", rich_facts
+    ):
+        fail("Editor summary did not preserve every distinct confirmed fact")
+    thin_item = {
+        **item,
+        "title": "企業が国内工場への追加投資を決定",
+        "what_changed": "企業が国内工場への追加投資を決定した。",
+        "why_it_matters": "",
+        "confirmed_facts": ["追加投資額は500億円で、2027年に新設備を稼働する。"],
+        "limits_or_unknowns": "",
+    }
+    thin_card = item_card("日本経済", "japan-economy", thin_item, "2099-01-01")
+    if thin_card["summary"] != "追加投資額は500億円で、2027年に新設備を稼働する。":
+        fail("Editor padded a thin source instead of keeping its supported fact concise")
     if SUMMARY_LABEL_RE.search(card["detail"]["summary"]):
         fail("Editor kept label-heavy detail copy")
     item_without_limits = dict(item)
