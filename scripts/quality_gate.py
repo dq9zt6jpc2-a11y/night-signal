@@ -432,6 +432,15 @@ def validate_no_confirmation_layer(context: str, html: str) -> None:
 
 
 def validate_public_summary_language(context: str, text: str, issue_date: str) -> None:
+    state_violations = state_contract.public_render_copy_violations(
+        text,
+        kind="summary",
+    )
+    if state_violations:
+        fail(
+            f"{context} is not reader-facing public copy: "
+            + "; ".join(state_violations)
+        )
     japanese_chars = len(re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", text))
     latin_chars = len(re.findall(r"[A-Za-z]", text))
     if latin_chars >= 24 and japanese_chars < 6:

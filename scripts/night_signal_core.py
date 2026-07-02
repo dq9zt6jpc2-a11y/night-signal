@@ -424,7 +424,11 @@ def publication_evidence_record(
     record: dict[str, Any],
 ) -> bool:
     """Return whether a coverage record can support a public update."""
-    if not record.get("observed") or not valid_date(record.get("published_date"), issue_date):
+    if (
+        not record.get("observed")
+        or not valid_date(record.get("published_date"), issue_date)
+        or not record_document_is_current(record, issue_date)
+    ):
         return False
     title = record_public_title(record)
     excerpt = reader_facing_text(record.get("excerpt") or record.get("evidence") or "", 2400)
@@ -804,6 +808,116 @@ def article_result_matches(original_title: str, result_title: str) -> bool:
     )
 
 
+def normalized_ocr_digits(value: str) -> str:
+    return re.sub(r"(?<=\d)\s+(?=\d)", "", str(value))
+
+
+def document_period_months(value: str) -> set[int]:
+    normalized = normalized_ocr_digits(value)
+    return {
+        int(month)
+        for month in re.findall(
+            r"(?<!\d)(\d{1,2})\s*月\s*(?:調査|期|分|実績|結果)",
+            normalized,
+        )
+        if 1 <= int(month) <= 12
+    }
+
+
+def embedded_document_date(value: str) -> date | None:
+    normalized = normalized_ocr_digits(value)
+    published = re.search(
+        r"Published Time:\s*([^\n]{8,80}?GMT)",
+        normalized,
+        flags=re.I,
+    )
+    if published:
+        try:
+            return email.utils.parsedate_to_datetime(published.group(1)).date()
+        except (TypeError, ValueError):
+            pass
+    document_header = normalized[:1600]
+    japanese = (
+        re.search(
+            r"(?<!\d)(20\d{2})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日",
+            document_header,
+        )
+        if re.search(
+            r"経済レポート|発行日|作成日|お問い合わせ|Number of Pages|Markdown Content",
+            document_header,
+            flags=re.I,
+        )
+        else None
+    )
+    if japanese:
+        try:
+            return date(*(int(part) for part in japanese.groups()))
+        except ValueError:
+            pass
+    return None
+
+
+def url_document_month(value: str) -> tuple[int, int] | None:
+    match = re.search(r"/(20\d{2})/(0?[1-9]|1[0-2])(?:/|$)", str(value))
+    return (int(match.group(1)), int(match.group(2))) if match else None
+
+
+def document_matches_discovery(
+    record: dict[str, Any],
+    candidate_url: str,
+    page_title: str,
+    body: str,
+) -> bool:
+    try:
+        discovery_date = date.fromisoformat(str(record.get("published_date", "")))
+    except ValueError:
+        return False
+    candidate_text = f"{page_title} {body}"
+    document_date = embedded_document_date(candidate_text)
+    if document_date and abs((discovery_date - document_date).days) > 7:
+        return False
+    document_month = url_document_month(candidate_url)
+    if document_month:
+        distance = abs(
+            (discovery_date.year * 12 + discovery_date.month)
+            - (document_month[0] * 12 + document_month[1])
+        )
+        if distance > 1:
+            return False
+    discovery_months = document_period_months(record_public_title(record))
+    page_months = document_period_months(page_title)
+    return not (
+        discovery_months
+        and page_months
+        and discovery_months.isdisjoint(page_months)
+    )
+
+
+def record_document_is_current(record: dict[str, Any], issue_date: str) -> bool:
+    try:
+        issue_day = date.fromisoformat(issue_date)
+    except ValueError:
+        return False
+    text = f"{record.get('title', '')} {record.get('excerpt', '')}"
+    document_date = embedded_document_date(text)
+    if document_date and not 0 <= (issue_day - document_date).days <= 7:
+        return False
+    document_month = (
+        url_document_month(str(record.get("url", "")))
+        if record.get("source_class") == "discovered_media"
+        or record.get("original_discovery_url")
+        else None
+    )
+    if document_month:
+        distance = abs(
+            (issue_day.year * 12 + issue_day.month)
+            - (document_month[0] * 12 + document_month[1])
+        )
+        if distance > 1:
+            return False
+    return True
+
+
 def article_search_queries(record: dict[str, Any], original_title: str) -> list[str]:
     queries = [f'"{original_title}"']
     publisher = urllib.parse.urlparse(str(record.get("publisher_url", "")))
@@ -863,6 +977,12 @@ def enrich_discovered_record(
                     or not article_result_matches(
                         original_title,
                         page_title or result_title,
+                    )
+                    or not document_matches_discovery(
+                        record,
+                        candidate_url,
+                        page_title or result_title,
+                        combined,
                     )
                 ):
                     continue
@@ -2700,4 +2820,32 @@ def self_test() -> None:
         fail("body-rich reference lost concrete names, dates, or participants")
     if any(state_contract.material_fact_violations(fact) for fact in japan_item["confirmed_facts"]):
         fail("body-rich reference created non-material confirmed facts")
+    stale_pdf_record = {
+        "published_date": "2099-07-02",
+        "title": "日銀短観（6月調査）の結果を公表",
+        "url": "https://example.com/2098/12/old-report.pdf",
+        "excerpt": (
+            "Title: 日銀短観（2098年12月調査）結果 URL Source: https://example.com "
+            "Published Time: Mon, 15 Dec 2098 08:06:30 GMT Number of Pages: 5 "
+            "Markdown Content: お問い合わせ 調査部 E-mail: report@example.com TEL: 03-0000-0000"
+        ),
+    }
+    if record_document_is_current(stale_pdf_record, "2099-07-02"):
+        fail("stale embedded document date passed current Evidence validation")
+    if document_matches_discovery(
+        stale_pdf_record,
+        stale_pdf_record["url"],
+        "日銀短観（2098年12月調査）結果",
+        stale_pdf_record["excerpt"],
+    ):
+        fail("mismatched report month passed discovered-page validation")
+    fresh_pdf_record = {
+        **stale_pdf_record,
+        "published_date": "2099-07-02",
+        "title": "日銀短観（6月調査）の結果を公表",
+        "url": "https://example.com/2099/07/current-report.pdf",
+        "excerpt": "2099年7月2日 経済レポート 日銀短観（6月調査）の結果を公表した。",
+    }
+    if not record_document_is_current(fresh_pdf_record, "2099-07-02"):
+        fail("current report was rejected by document-date validation")
     print("NIGHT SIGNAL CORE SELF-TEST PASSED")

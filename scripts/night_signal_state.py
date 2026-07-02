@@ -155,6 +155,13 @@ FACT_ANALYSIS_OR_UNKNOWN_RE = re.compile(
     re.I,
 )
 FACT_MARKUP_RE = re.compile(r"<\s*/?\s*[a-z!]|\bhref\s*=|&(?:lt|gt|nbsp);", re.I)
+DOCUMENT_EXTRACTION_NOISE_RE = re.compile(
+    r"(?:お問い合わせ|問合せ).{0,120}(?:E-?mail|TEL|担当)|"
+    r"Title:\s*.{0,180}URL Source:\s*.{0,180}Published Time:|"
+    r"Number of Pages:\s*\d+|Markdown Content:|"
+    r"(?:^|\s)>\s*-?50\s*>\s*-?40\s*>\s*-?30",
+    re.I,
+)
 GENERIC_CONTEXT_RE = re.compile(
     r"(?:"
     r"性能、提供範囲、既存製品との関係|"
@@ -471,6 +478,8 @@ def public_render_copy_violations(text: str, *, kind: str) -> list[str]:
         violations.append("empty brackets left after source cleanup")
     if navigation_shell_text(stripped):
         violations.append("navigation or page-shell text leaked")
+    if DOCUMENT_EXTRACTION_NOISE_RE.search(stripped):
+        violations.append("document metadata, contact block, or chart axis leaked")
     if kind == "summary" and NO_UPDATE_ASSERTION_RE.search(stripped):
         violations.append("no-update statement exposed as an important update")
     if kind == "summary" and GENERIC_CONTEXT_RE.search(stripped):
@@ -1769,6 +1778,16 @@ def self_test() -> None:
         "B1ニュース一覧 B2ニュース一覧 日程結果 順位表 個人成績 選手名鑑"
     ):
         fail("public-copy validation accepted navigation shell text")
+    if not public_render_copy_violations(
+        "お問い合わせ 調査部 E-mail: report@example.com 担当者 TEL: 03-0000-0000",
+        kind="summary",
+    ):
+        fail("public-copy validation accepted a document contact block")
+    if not public_render_copy_violations(
+        "Title: Report URL Source: https://example.com Published Time: Mon, 15 Dec 2025 08:06:30 GMT Number of Pages: 5 Markdown Content:",
+        kind="summary",
+    ):
+        fail("public-copy validation accepted document extraction metadata")
     leaked_source = dict(card)
     leaked_source["summary"] = f"{card['summary']} Example News"
     leaked_detail = dict(card["detail"])
