@@ -1,0 +1,53 @@
+{
+  "issue_date": "2026-07-02",
+  "stages": {
+    "startup": {
+      "stage": "startup",
+      "status": "started",
+      "detail": "publication driver started",
+      "recorded_at_jst": "2026-07-02T20:50:46+09:00"
+    },
+    "runtime_checked": {
+      "stage": "runtime_checked",
+      "status": "completed",
+      "detail": "deploy verification passed",
+      "recorded_at_jst": "2026-07-02T20:50:47+09:00"
+    },
+    "plan_written": {
+      "stage": "plan_written",
+      "status": "completed",
+      "detail": "current collection contract loaded",
+      "recorded_at_jst": "2026-07-02T20:50:47+09:00"
+    },
+    "collection_complete": {
+      "stage": "collection_complete",
+      "status": "completed",
+      "detail": "Evidence written",
+      "recorded_at_jst": "2026-07-02T21:04:53+09:00"
+    },
+    "story_build_complete": {
+      "stage": "story_build_complete",
+      "status": "completed",
+      "detail": "important updates and manifest written",
+      "recorded_at_jst": "2026-07-02T21:04:53+09:00"
+    },
+    "render_complete": {
+      "stage": "render_complete",
+      "status": "completed",
+      "detail": "issue and detail pages rendered",
+      "recorded_at_jst": "2026-07-02T21:04:53+09:00"
+    },
+    "local_gates_complete": {
+      "stage": "local_gates_complete",
+      "status": "completed",
+      "detail": "all local publication gates passed",
+      "recorded_at_jst": "2026-07-02T21:04:54+09:00"
+    }
+  },
+  "last_event": {
+    "stage": "local_gates_complete",
+    "status": "completed",
+    "detail": "all local publication gates passed",
+    "recorded_at_jst": "2026-07-02T21:04:54+09:00"
+  }
+}
