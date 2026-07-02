@@ -165,8 +165,8 @@
     },
     {
       "watch_topic_id": "vietnam_macro_investment",
-      "title": "【ベトナム】ＦＰＴと米ＡＩ教育企業、人材育成で提携［ＩＴ］",
-      "summary": "ベトナムのIT企業FPTが米国のAI教育企業と提携した。",
+      "title": "FPTとDataCamp、日本企業向けAI人材変革サービスで提携",
+      "summary": "FPTジャパンホールディングスは米DataCampとMOUを締結し、日本企業向けにAI戦略策定、スキル評価、研修設計、教育、短期実証を一体化したAI人材変革サービスを共同展開する。FPTはDataCamp既存顧客への日本語支援・研修・教材ローカライズも担い、大学・教育機関への無償提供を含む普及活動を進める。日本を起点に韓国・ASEANへの展開も視野に入れる。",
       "section_id": "asia",
       "category": "アジア経済",
       "source_published_date": "2026-07-01",
@@ -176,26 +176,45 @@
         "slug": "auto-fb7f4e3e4a14-2026-07-02.html",
         "sources": [
           {
+            "label": "FPT",
+            "url": "https://fptsoftware.jp/newsroom/news-and-press-release/press-release/20260629"
+          },
+          {
             "label": "千葉テレビ放送",
             "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE81TVUyX1E0NExfcHlvMWdHSU9pa29HX1JYbG1LcWtxcl9rSFhTSXRTeHlvd3RjaW94R193dnZERk1TRFBWTE54Qlp4UTUyODNrcFV5RGJHb1Bzc2xmWVNz?oc=5"
           }
         ],
-        "summary": "ベトナムのIT企業FPTが米国のAI教育企業と提携した。",
+        "summary": "FPTジャパンホールディングスは米DataCampとMOUを締結し、日本企業向けにAI戦略策定、スキル評価、研修設計、教育、短期実証を一体化したAI人材変革サービスを共同展開する。FPTはDataCamp既存顧客への日本語支援・研修・教材ローカライズも担い、大学・教育機関への無償提供を含む普及活動を進める。日本を起点に韓国・ASEANへの展開も視野に入れる。",
         "summary_basis": {
-          "what_changed": "ベトナムのIT企業FPTが米国のAI教育企業と提携した。",
+          "what_changed": "FPTジャパンホールディングスが米DataCampと、日本市場でのAI人材育成・企業変革支援に関するMOUを締結した。",
           "confirmed_facts": [
-            "ベトナムのIT企業FPTが米国のAI教育企業と提携した。"
+            "FPTジャパンホールディングスは米DataCampとMOUを締結し、日本企業向けにAI戦略策定、スキル評価、研修設計、教育、短期実証を一体化したAI人材変革サービスを共同展開する。",
+            "FPTはDataCamp既存顧客への日本語支援・研修・教材ローカライズも担い、大学・教育機関への無償提供を含む普及活動を進める。",
+            "日本を起点に韓国・ASEANへの展開も視野に入れる。"
           ],
           "fact_sources": [
             {
-              "fact": "ベトナムのIT企業FPTが米国のAI教育企業と提携した。",
+              "fact": "FPTジャパンホールディングスは米DataCampとMOUを締結し、日本企業向けにAI戦略策定、スキル評価、研修設計、教育、短期実証を一体化したAI人材変革サービスを共同展開する。",
               "source_urls": [
-                "https://news.google.com/rss/articles/CBMiX0FVX3lxTE81TVUyX1E0NExfcHlvMWdHSU9pa29HX1JYbG1LcWtxcl9rSFhTSXRTeHlvd3RjaW94R193dnZERk1TRFBWTE54Qlp4UTUyODNrcFV5RGJHb1Bzc2xmWVNz?oc=5"
+                "https://fptsoftware.jp/newsroom/news-and-press-release/press-release/20260629"
+              ]
+            },
+            {
+              "fact": "FPTはDataCamp既存顧客への日本語支援・研修・教材ローカライズも担い、大学・教育機関への無償提供を含む普及活動を進める。",
+              "source_urls": [
+                "https://fptsoftware.jp/newsroom/news-and-press-release/press-release/20260629"
+              ]
+            },
+            {
+              "fact": "日本を起点に韓国・ASEANへの展開も視野に入れる。",
+              "source_urls": [
+                "https://fptsoftware.jp/newsroom/news-and-press-release/press-release/20260629"
               ]
             }
           ],
           "source_dates": [
-            "2026-07-01"
+            "2026-07-01",
+            "2026-06-29"
           ]
         }
       }
@@ -243,7 +262,7 @@
     "date": "2026-07-02",
     "collection_completed_at_jst": "2026-07-02T20:26:50+09:00",
     "collection_mode": "github_models_unattended",
-    "evidence_sha256": "3fe962bb9a4601b30c11de6b6798700fb1de550c51ebb3d3bd109d87888691e4",
-    "editor_contract_sha256": "e7ce236cb713a9a910876bfe3a2fec232656706f1de531966b2d8803d5c3e384"
+    "evidence_sha256": "13ad188c21b1164de21a52be1e44644c6eda608fcd45241b6eb5e19c7b0be550",
+    "editor_contract_sha256": "315d98ac64d973da885a4406e78d43e0dfe63a97852147cec95c227a0c546609"
   }
 }

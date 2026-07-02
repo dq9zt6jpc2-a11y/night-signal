@@ -6104,6 +6104,20 @@
           "evidence": "Google News RSSで「【ベトナム】ＦＰＴと米ＡＩ教育企業、人材育成で提携［ＩＴ］ - 千葉テレビ放送」を確認した。配信元は千葉テレビ放送、配信日は2026-07-01。"
         },
         {
+          "label": "FPTジャパンホールディングス",
+          "url": "https://fptsoftware.jp/newsroom/news-and-press-release/press-release/20260629",
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "source_class": "official",
+          "publisher_url": "https://fptsoftware.jp",
+          "original_discovery_url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE81TVUyX1E0NExfcHlvMWdHSU9pa29HX1JYbG1LcWtxcl9rSFhTSXRTeHlvd3RjaW94R193dnZERk1TRFBWTE54Qlp4UTUyODNrcFV5RGJHb1Bzc2xmWVNz?oc=5",
+          "observed": true,
+          "published_date": "2026-06-29",
+          "title": "ＦＰＴ、DataCampと戦略的パートナーシップを締結",
+          "excerpt": "FPTジャパンホールディングスは2026年6月29日、米DataCampと、日本市場でのAI人材育成および企業変革支援を目的とするMOUを締結した。FPT主導でAI戦略策定、スキル評価、研修設計、DataCampを使った研修・ワークショップ、短期プロジェクトによる効果検証を一体提供する。FPTはDataCampの国内既存顧客に日本語サポート、研修、教材ローカライズを提供する。両社は大学・教育機関への無償提供を含む普及活動を進め、日本を起点に韓国・ASEAN展開も視野に入れる。",
+          "evidence": "FPTジャパンホールディングスの公式発表で、米DataCampとのMOU、AI戦略策定から教育・短期実証までの共同サービス、日本語支援、大学等への無償提供、韓国・ASEANへの将来展開を確認した。"
+        },
+        {
           "label": "Vietnam.vn",
           "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQdklkQVJHZHFyNnlmM1dTd0lTY1VLNHZtdXhraTNGV0pJdlhFY0JlMXY4bVk4REo2UEl1cndrUXRITUQ2N0FDSEtFVlpHYmN5OWpQY3B1RWs5SExMLVJlaTlZS1VNOWZnVTlSWnJlUTFfZHBrT2NmQ3ctQ1lNZ3N1NktIeE9JOTUtMkgteVVCRlhhYW9DRWcxbWIzMFg?oc=5",
           "source_role": "independent_media_or_data",
@@ -6549,6 +6563,23 @@
           "slot_state": "observed_live",
           "published_date": "2026-07-01",
           "evidence_summary": "Google News RSSで「【ベトナム】ＦＰＴと米ＡＩ教育企業、人材育成で提携［ＩＴ］ - 千葉テレビ放送」を確認した。配信元は千葉テレビ放送、配信日は2026-07-01。",
+          "checked_at_jst": "2026-07-02T20:26:50+09:00",
+          "verification_method": "direct_fetch"
+        },
+        {
+          "watch_topic_ids": [
+            "india_macro_policy",
+            "vietnam_macro_investment",
+            "china_macro_policy",
+            "india_vietnam_markets_supply_chain"
+          ],
+          "source_role": "primary_or_official",
+          "channel": "web",
+          "label": "FPTジャパンホールディングス",
+          "url": "https://fptsoftware.jp/newsroom/news-and-press-release/press-release/20260629",
+          "slot_state": "observed_live",
+          "published_date": "2026-06-29",
+          "evidence_summary": "FPTジャパンホールディングスの公式発表で、米DataCampとのMOU、AI戦略策定から教育・短期実証までの共同サービス、日本語支援、大学等への無償提供、韓国・ASEANへの将来展開を確認した。",
           "checked_at_jst": "2026-07-02T20:26:50+09:00",
           "verification_method": "direct_fetch"
         },

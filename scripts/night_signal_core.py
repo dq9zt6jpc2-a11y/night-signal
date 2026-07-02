@@ -418,6 +418,40 @@ def publication_item_supported(title: str, *evidence_values: str) -> bool:
     return bool(PUBLICATION_EVENT_RE.search(f"{title} {evidence}"))
 
 
+def source_material_facts(
+    title: str,
+    records: list[dict[str, Any]],
+    *,
+    limit: int | None = None,
+) -> list[str]:
+    candidates: list[str] = []
+    for record in records:
+        excerpt = str(record.get("excerpt") or "")
+        for sentence in sentence_parts(excerpt):
+            if len(re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", sentence)) < 8:
+                continue
+            if state_contract.title_repetition_score(title, sentence) >= 0.95:
+                continue
+            if useful_fact(sentence, ""):
+                candidates.append(sentence)
+    return state_contract.normalize_material_facts(title, candidates, limit=limit)
+
+
+def record_has_material_body(title: str, record: dict[str, Any]) -> bool:
+    """Return whether the fetched body adds usable substance beyond its headline."""
+    excerpt = str(record.get("excerpt") or "")
+    for sentence in sentence_parts(excerpt):
+        if state_contract.title_repetition_score(title, sentence) >= 0.95:
+            continue
+        japanese_count = len(re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", sentence))
+        latin_words = re.findall(r"[A-Za-z][A-Za-z0-9'-]{2,}", sentence)
+        if japanese_count >= 8 and useful_fact(sentence, ""):
+            return True
+        if len(latin_words) >= 8 and not state_contract.navigation_shell_text(sentence):
+            return True
+    return False
+
+
 def publication_evidence_record(
     category: dict[str, Any],
     issue_date: str,
@@ -441,6 +475,7 @@ def publication_evidence_record(
         or not category_identity_ok(category_label, title, excerpt)
         or low_signal_value(title, excerpt)
         or not publication_item_supported(title, excerpt)
+        or not record_has_material_body(title, record)
     ):
         return False
     return True
@@ -499,25 +534,6 @@ def facts_add_information_beyond_title(title: str, facts: list[str]) -> bool:
     return bool(facts) and any(
         state_contract.fact_adds_information(title, fact) for fact in facts
     )
-
-
-def source_material_facts(
-    title: str,
-    records: list[dict[str, Any]],
-    *,
-    limit: int | None = None,
-) -> list[str]:
-    candidates: list[str] = []
-    for record in records:
-        excerpt = str(record.get("excerpt") or "")
-        for sentence in sentence_parts(excerpt):
-            if len(re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", sentence)) < 8:
-                continue
-            if state_contract.title_repetition_score(title, sentence) >= 0.95:
-                continue
-            if useful_fact(sentence, ""):
-                candidates.append(sentence)
-    return state_contract.normalize_material_facts(title, candidates, limit=limit)
 
 
 def natural_detail_summary(
@@ -801,15 +817,36 @@ def news_query(category: dict[str, Any], issue_date: str) -> str:
     return news_queries(category, issue_date)[0]
 
 
+def canonical_article_match_text(value: str) -> str:
+    text = str(value).lower()
+    replacements = (
+        (r"パートナーシップ|協業|連携|mou|覚書|共同(?:展開|開発)?", " 提携 "),
+        (r"announc\w*|launch\w*|発表|公表|公開|提供開始", " 発表 "),
+        (r"acqui\w*|買収|取得", " 買収 "),
+        (r"agreement|contract|契約|合意|締結", " 契約 "),
+    )
+    for pattern, replacement in replacements:
+        text = re.sub(pattern, replacement, text, flags=re.I)
+    return compact_text(text, 1200)
+
+
 def article_result_matches(original_title: str, result_title: str) -> bool:
+    canonical_original = canonical_article_match_text(original_title)
+    canonical_result = canonical_article_match_text(result_title)
     return (
         state_contract.title_repetition_score(original_title, result_title) >= 0.45
         or state_contract.text_overlap(original_title, result_title) >= 2
+        or state_contract.title_repetition_score(
+            canonical_original,
+            canonical_result,
+        ) >= 0.45
+        or state_contract.text_overlap(canonical_original, canonical_result) >= 2
     )
 
 
 def normalized_ocr_digits(value: str) -> str:
-    return re.sub(r"(?<=\d)\s+(?=\d)", "", str(value))
+    text = re.sub(r"(?<!\d)(20\d)\s+(\d)(?=\s*年)", r"\1\2", str(value))
+    return re.sub(r"(?<=\d)\s+(?=\d\s*(?:月|日))", "", text)
 
 
 def document_period_months(value: str) -> set[int]:
@@ -924,6 +961,7 @@ def article_search_queries(record: dict[str, Any], original_title: str) -> list[
     host = publisher.netloc.lower().removeprefix("www.")
     if host:
         queries.append(f"site:{host} {original_title}")
+    queries.append(original_title)
     return list(dict.fromkeys(queries))
 
 
@@ -954,7 +992,10 @@ def enrich_discovered_record(
                 candidate_url in seen_candidates
                 or not candidate_url.startswith(("http://", "https://"))
                 or "news.google.com" in candidate_url
-                or not article_result_matches(original_title, result_title)
+                or not article_result_matches(
+                    original_title,
+                    f"{result_title} {description}",
+                )
                 or not category_identity_ok(
                     category_label,
                     result_title,
@@ -976,7 +1017,7 @@ def enrich_discovered_record(
                     or not category_identity_ok(category_label, original_title, combined)
                     or not article_result_matches(
                         original_title,
-                        page_title or result_title,
+                        f"{page_title or result_title} {combined}",
                     )
                     or not document_matches_discovery(
                         record,
@@ -1014,7 +1055,10 @@ def enrich_discovered_records(
     category: dict[str, Any],
     records: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
-    limit = 6
+    topic_count = sum(
+        1 for topic in category.get("watch_topics", []) if isinstance(topic, dict)
+    )
+    limit = min(10, max(6, topic_count * 2))
     ranked = sorted(
         records,
         key=lambda record: cluster_priority(record, category),
@@ -1030,6 +1074,7 @@ def enrich_discovered_records(
                 str(record.get("title", "")),
                 str(record.get("excerpt", "")),
             )
+            and not record_has_material_body(record_public_title(record), record)
         ):
             target_urls.append(url)
         if len(target_urls) >= limit:
@@ -2679,18 +2724,39 @@ def self_test() -> None:
         "title": "OpenAIがCodex Securityのアップグレードを公開",
         "excerpt": "OpenAIがCodex Securityのアップグレードを公開。",
     }
+    openai_category = {
+        "label": "OpenAI",
+        "watch_topics": [
+            {
+                "id": "openai_security",
+                "terms": ["OpenAI", "Codex", "security"],
+                "event_classes": ["technical_or_product_shift"],
+            }
+        ],
+    }
+    if publication_evidence_record(openai_category, "2099-01-03", duplicate_record):
+        fail("headline-only record was accepted as publication Evidence")
+    body_rich_record = {
+        **duplicate_record,
+        "excerpt": (
+            "Codex Securityでは脆弱性検出後の修正支援が更新された。"
+            "企業向け提供の対象範囲も拡大された。"
+        ),
+    }
+    if not publication_evidence_record(openai_category, "2099-01-03", body_rich_record):
+        fail("body-rich record was rejected as publication Evidence")
+    fpt_headline = "【ベトナム】FPTと米AI教育企業、人材育成で提携"
+    fpt_result = (
+        "FPT、DataCampと戦略的パートナーシップを締結。"
+        "日本企業向けのAI教育と人材変革を共同展開する。"
+    )
+    if not article_result_matches(fpt_headline, fpt_result):
+        fail("article enrichment could not match a body-rich primary source")
+    if fpt_headline not in article_search_queries({}, fpt_headline):
+        fail("article enrichment omitted the unquoted discovery query")
     backfill_signals_from_evidence(
         promoted_fallback,
-        {
-            "label": "OpenAI",
-            "watch_topics": [
-                {
-                    "id": "openai_security",
-                    "terms": ["OpenAI", "Codex", "security"],
-                    "event_classes": ["technical_or_product_shift"],
-                }
-            ],
-        },
+        openai_category,
         "2099-01-03",
         [duplicate_record],
     )
