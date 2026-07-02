@@ -363,16 +363,21 @@ def item_card(
     item: dict[str, Any],
     issue_date: str,
 ) -> dict[str, Any]:
-    facts = state.normalize_material_facts(
-        public_card_title(item),
-        [
-            scrub_item_source_labels(item, fact)
-            for fact in item["confirmed_facts"]
-        ],
-    )
+    card_title, card_summary = public_item_copy(category, item)
+    facts = [
+        fact
+        for fact in state.normalize_material_facts(
+            card_title,
+            [
+                scrub_item_source_labels(item, fact)
+                for fact in item["confirmed_facts"]
+            ],
+        )
+        if state.fact_adds_information(card_title, fact)
+    ]
     if not facts:
         raise UnpublishableItem(
-            f"item lost material facts during card construction: {item.get('title', '')}"
+            f"item lacks a confirmed fact beyond its public title: {card_title}"
         )
     source_urls = [str(source["url"]) for source in item["sources"]]
     limits = scrub_public_summary(item.get("limits_or_unknowns", ""))
@@ -381,7 +386,6 @@ def item_card(
     if not slug_stem.endswith(f"-{issue_date}"):
         slug_stem = f"{slug_stem}-{issue_date}"
     slug = f"{slug_stem}.html"
-    card_title, card_summary = public_item_copy(category, item)
     why_it_matters = scrub_public_summary(item.get("why_it_matters", ""))
     return {
         "watch_topic_id": str(item["watch_topic_id"]),
