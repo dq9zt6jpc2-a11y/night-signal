@@ -101,7 +101,7 @@ keep thin evidence concise.
 
 For each item, write a reader-facing Japanese title and distinct confirmed facts.
 Facts must come from the supplied title or excerpt and retain useful names, dates,
-numbers, results, scope, conditions, and source-stated uncertainty. At least one fact
+numbers, results, scope, and conditions. At least one fact
 must add information beyond the title. Do not use publisher metadata, generic impact,
 importance boilerplate, inferred unknowns, or repeated paraphrases as facts. Cite only
 supplied URLs that support the facts. Omit records that contain navigation text or no
