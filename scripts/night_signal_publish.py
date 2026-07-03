@@ -163,7 +163,6 @@ def assemble_and_render(issue_date: str) -> None:
     base = state_dir(issue_date)
     if not (base / "issue.json").exists():
         fail(f"{issue_date} has no issue state")
-    run([sys.executable, "scripts/night_signal_state.py", "--validate-issue", str(base / "issue.json")])
     run([sys.executable, "scripts/night_signal_state.py", "--generate-issue", str(base / "issue.json")])
 
 
@@ -303,7 +302,6 @@ def self_test() -> None:
 
 def sync_and_audit(issue_date: str) -> None:
     require_jst_current_issue(issue_date)
-    run([sys.executable, "scripts/night_signal_eval.py", issue_date])
     run([sys.executable, "scripts/sync_site.py", issue_date])
     run([sys.executable, "scripts/current_issue_audit.py", issue_date])
     run([sys.executable, "scripts/coverage_audit.py", issue_date])

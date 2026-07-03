@@ -144,7 +144,6 @@ def scrub_item_source_labels(item: dict[str, Any], value: Any) -> str:
 def public_card_title(item: dict[str, Any]) -> str:
     candidates = [
         item.get("title", ""),
-        re.split(r"(?<=[。！？!?])", compact_text(item.get("summary", ""), 180))[0],
         item.get("what_changed", ""),
         *[
             fact
@@ -488,7 +487,7 @@ def edit_evidence(
             quality_required = quality_model_required(category_payload)
             model_chain = models.routed_models(quality_required=quality_required)
             messages = [
-                {"role": "system", "content": core.SYSTEM_PROMPT},
+                {"role": "system", "content": models.SYSTEM_PROMPT},
                 {
                     "role": "user",
                     "content": json.dumps(
@@ -503,18 +502,19 @@ def edit_evidence(
                     if model_name in degraded_models:
                         continue
                 try:
-                    raw = core.model_request(
+                    raw = models.request(
                         token,
                         messages,
                         model_name=model_name,
                         retry_wait_cap=90,
                         request_label=label,
                     )
-                except core.ModelRequestError as exc:
+                except models.ModelRequestError as exc:
                     if exc.rate_limited:
                         with degraded_models_lock:
                             degraded_models.add(model_name)
-                    continue
+                        continue
+                    raise
                 result = cards_from_raw(raw, category, label, records)
                 selected_result = result
                 print(
@@ -614,18 +614,10 @@ def self_test() -> None:
     item = {
         "watch_topic_id": "product_release",
         "title": "OpenAIがCodex Securityの更新版を公開 - Example News",
-        "summary": (
-            "OpenAIはCodex Securityの更新版を公開し、脆弱性検出後の修正支援を追加した。"
-            "企業のコード監査で、検出から修正までを一つの流れで扱える点が重要になる。"
-        ),
         "source_published_date": "2099-01-01",
         "topic_value_class": "technical_or_product_shift",
         "priority_class": "priority",
         "slug": "openai-codex-security",
-        "detail_summary": (
-            "OpenAIはCodex Securityの更新版を公開し、脆弱性検出後の修正支援を追加した。"
-            "企業のコード監査では、検出結果を修正作業へつなげられる。"
-        ),
         "what_changed": "OpenAIがCodex Securityの更新版と修正支援機能を公開した。",
         "why_it_matters": "企業のコード監査で検出から修正までを一つの流れで扱える。",
         "confirmed_facts": [

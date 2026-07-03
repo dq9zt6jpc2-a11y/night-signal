@@ -26,6 +26,7 @@ def self_test() -> None:
             "url": f"https://example.com/{index}",
             "observed": True,
             "source_class": "discovered_media",
+            "published_date": "2099-01-01",
             "title": f"Material update {index}",
             "excerpt": f"A distinct material change {index} was announced.",
         }
@@ -33,6 +34,8 @@ def self_test() -> None:
     ]
     if len(core.select_clustered_evidence(category, records)) != len(records):
         core.fail("collector truncated distinct Evidence records")
+    if len(core.enrichment_target_urls(category, "2099-01-01", records)) != len(records):
+        core.fail("collector capped distinct headline-only enrichment targets")
     print("NIGHT SIGNAL COLLECT SELF-TEST PASSED")
 
 

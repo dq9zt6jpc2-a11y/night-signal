@@ -5,11 +5,122 @@ from __future__ import annotations
 
 import json
 import os
+import re
+import time
+import urllib.error
+import urllib.request
 from pathlib import Path
 from typing import Any
 
 
 CONFIG_PATH = Path(__file__).resolve().parents[1] / "config" / "night_signal_models.json"
+MODELS_URL = "https://models.github.ai/inference/chat/completions"
+DEFAULT_TIMEOUT_SECONDS = 90
+DEFAULT_RETRIES = 3
+DEFAULT_MAX_TOKENS = 8000
+USER_AGENT = (
+    "Mozilla/5.0 (compatible; NightSignalBot/1.0; "
+    "+https://dq9zt6jpc2-a11y.github.io/night-signal/)"
+)
+
+TOPIC_VALUE_CLASSES = [
+    "decision_or_policy",
+    "market_or_financial_impact",
+    "technical_or_product_shift",
+    "operational_status_change",
+    "event_result_or_outcome",
+    "material_schedule_change",
+    "risk_or_safety_signal",
+    "cultural_or_audience_signal",
+]
+
+EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "properties": {
+        "items": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "watch_topic_id": {"type": "string"},
+                    "title": {"type": "string"},
+                    "source_published_date": {
+                        "type": "string",
+                        "pattern": r"^\d{4}-\d{2}-\d{2}$",
+                    },
+                    "topic_value_class": {
+                        "type": "string",
+                        "enum": TOPIC_VALUE_CLASSES,
+                    },
+                    "priority_class": {
+                        "type": "string",
+                        "enum": ["top", "priority", "standard"],
+                    },
+                    "confirmed_facts": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "minItems": 1,
+                    },
+                    "sources": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "label": {"type": "string"},
+                                "url": {"type": "string"},
+                            },
+                            "required": ["label", "url"],
+                            "additionalProperties": False,
+                        },
+                        "minItems": 1,
+                    },
+                },
+                "required": [
+                    "watch_topic_id",
+                    "title",
+                    "source_published_date",
+                    "topic_value_class",
+                    "priority_class",
+                    "confirmed_facts",
+                    "sources",
+                ],
+                "additionalProperties": False,
+            },
+        }
+    },
+    "required": ["items"],
+    "additionalProperties": False,
+}
+
+SYSTEM_PROMPT = """You edit supplied NIGHT SIGNAL evidence into material updates.
+Return JSON matching the supplied schema. Use only supplied records and exact URLs.
+Return every distinct, evidence-backed material update; do not impose an item limit.
+Merge reports of the same event, retaining later event-state changes such as a plan
+becoming an executed action as separate facts. Keep genuinely different events and
+keep thin evidence concise.
+
+For each item, write a reader-facing Japanese title and distinct confirmed facts.
+Facts must come from the supplied title or excerpt and retain useful names, dates,
+numbers, results, scope, conditions, and source-stated uncertainty. At least one fact
+must add information beyond the title. Do not use publisher metadata, generic impact,
+importance boilerplate, inferred unknowns, or repeated paraphrases as facts. Cite only
+supplied URLs that support the facts. Omit records that contain navigation text or no
+concrete fact beyond a headline. For analysis or commentary, keep 分析, 検証, or 解説 in
+the title and include both concrete supporting facts and the source's conclusion.
+Never invent a date, number, source, category relationship, or certainty."""
+
+
+class ModelRequestError(RuntimeError):
+    def __init__(
+        self,
+        message: str,
+        *,
+        rate_limited: bool = False,
+        retry_after: int | None = None,
+    ) -> None:
+        super().__init__(message)
+        self.rate_limited = rate_limited
+        self.retry_after = retry_after
 
 
 def load_config() -> dict[str, Any]:
@@ -56,6 +167,119 @@ def routed_models(*, quality_required: bool) -> list[str]:
     return list(dict.fromkeys([preferred, *extraction_models()]))
 
 
+def request(
+    token: str,
+    messages: list[dict[str, str]],
+    *,
+    model_name: str | None = None,
+    retry_wait_cap: int = 120,
+    request_label: str = "",
+) -> dict[str, Any]:
+    """Request one schema-constrained editorial result from GitHub Models."""
+    errors: list[str] = []
+    rate_limit_waits: list[int] = []
+    timeout = int(os.getenv("NIGHT_SIGNAL_MODEL_TIMEOUT_SECONDS", DEFAULT_TIMEOUT_SECONDS))
+    retries = int(os.getenv("NIGHT_SIGNAL_MODEL_RETRIES", DEFAULT_RETRIES))
+    max_tokens = int(os.getenv("NIGHT_SIGNAL_MODEL_MAX_TOKENS", DEFAULT_MAX_TOKENS))
+    payload = {
+        "model": model_name or extraction_model(),
+        "messages": messages,
+        "temperature": 0.1,
+        "max_tokens": max_tokens,
+        "response_format": {
+            "type": "json_schema",
+            "json_schema": {
+                "name": "night_signal_editor_result",
+                "strict": True,
+                "schema": EDITOR_RESPONSE_SCHEMA,
+            },
+        },
+    }
+    encoded_payload = json.dumps(payload, separators=(",", ":")).encode("utf-8")
+    for attempt in range(retries):
+        http_request = urllib.request.Request(
+            MODELS_URL,
+            data=encoded_payload,
+            headers={
+                "Accept": "application/vnd.github+json",
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+                "User-Agent": USER_AGENT,
+                "X-GitHub-Api-Version": "2026-03-10",
+            },
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(http_request, timeout=timeout) as response:
+                value = json.loads(response.read().decode("utf-8"))
+            usage = value.get("usage", {})
+            if isinstance(usage, dict):
+                print(
+                    json.dumps(
+                        {
+                            "phase": "model_usage",
+                            **({"category": request_label} if request_label else {}),
+                            "model": payload["model"],
+                            "prompt_tokens": usage.get("prompt_tokens"),
+                            "completion_tokens": usage.get("completion_tokens"),
+                            "total_tokens": usage.get("total_tokens"),
+                        },
+                        ensure_ascii=False,
+                    ),
+                    flush=True,
+                )
+            choice = value["choices"][0]
+            content = choice["message"]["content"]
+            if not isinstance(content, str):
+                raise ValueError("model content is not a string")
+            content = re.sub(r"^```(?:json)?\s*|\s*```$", "", content.strip())
+            try:
+                result = json.loads(content)
+                if not isinstance(result, dict) or not isinstance(result.get("items"), list):
+                    raise ValueError("model result does not match the editor response shape")
+            except (json.JSONDecodeError, ValueError) as exc:
+                raise ModelRequestError(
+                    "GitHub Models returned a response outside the strict editor schema"
+                ) from exc
+            return result
+        except urllib.error.HTTPError as exc:
+            if exc.code != 429:
+                raise ModelRequestError(
+                    f"GitHub Models request failed with HTTP {exc.code}"
+                ) from exc
+            retry_after = exc.headers.get("Retry-After")
+            try:
+                requested_wait = max(1, int(retry_after or "65"))
+            except ValueError:
+                requested_wait = 65
+            rate_limit_waits.append(requested_wait)
+            errors.append(
+                f"attempt {attempt + 1}: HTTP {exc.code}; retry_after={requested_wait}"
+            )
+            if requested_wait > retry_wait_cap:
+                raise ModelRequestError(
+                    "GitHub Models rate limit exceeds the bounded retry window: "
+                    + " / ".join(errors),
+                    rate_limited=True,
+                    retry_after=requested_wait,
+                ) from exc
+            if attempt < retries - 1:
+                time.sleep(min(retry_wait_cap, requested_wait))
+        except (KeyError, IndexError, ValueError) as exc:
+            raise ModelRequestError(
+                f"GitHub Models returned an invalid response envelope: {exc}"
+            ) from exc
+        except (OSError, TimeoutError) as exc:
+            errors.append(f"attempt {attempt + 1}: {type(exc).__name__}: {exc}")
+            if attempt < retries - 1:
+                time.sleep(5 * (attempt + 1))
+    raise ModelRequestError(
+        "GitHub Models request failed: " + " / ".join(errors),
+        rate_limited=bool(rate_limit_waits),
+        retry_after=max(rate_limit_waits, default=None),
+    )
+
+
 def self_test() -> None:
     chain = extraction_models()
     if not chain:
@@ -74,6 +298,12 @@ def self_test() -> None:
     quality = config.get("quality_model")
     if quality and routed_models(quality_required=True)[0] != quality:
         raise SystemExit("quality routing must use the quality model first")
+    item_schema = EDITOR_RESPONSE_SCHEMA["properties"]["items"]["items"]
+    redundant_fields = {"summary", "detail_summary", "what_changed", "why_it_matters"}
+    if redundant_fields & set(item_schema["properties"]):
+        raise SystemExit("editor response schema contains derived prose fields")
+    if item_schema.get("additionalProperties") is not False:
+        raise SystemExit("editor response schema must reject undeclared fields")
     print("NIGHT SIGNAL MODELS PASSED")
 
 
