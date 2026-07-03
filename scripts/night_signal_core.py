@@ -587,6 +587,7 @@ def source_search_fallback(source: dict[str, Any]) -> dict[str, Any]:
     excerpt = ""
     resolved_url = ""
     used_query = ""
+    discovered_records: list[dict[str, Any]] = []
     for query in queries:
         search_url = "https://www.bing.com/search?" + urllib.parse.urlencode(
             {"format": "rss", "q": query}
@@ -594,18 +595,32 @@ def source_search_fallback(source: dict[str, Any]) -> dict[str, Any]:
         raw, content_type, resolved_url = request_bytes(search_url)
         try:
             root = ET.fromstring(raw)
-            results = [
-                " / ".join(
-                    part
-                    for part in (
-                        compact_text(item.findtext("title") or "", 180),
-                        compact_text(item.findtext("link") or "", 500),
-                        compact_text(item.findtext("description") or "", 300),
-                    )
-                    if part
+            results: list[str] = []
+            discovered_records = []
+            for item in root.findall(".//item"):
+                title = compact_text(item.findtext("title") or "", 220)
+                link = compact_text(item.findtext("link") or "", 1000)
+                description = html_fragment_text(item.findtext("description") or "", 900)
+                if not title or not link.startswith(("http://", "https://")):
+                    continue
+                results.append(" / ".join(part for part in (title, link, description) if part))
+                discovered_records.append(
+                    {
+                        "label": str(source["label"]),
+                        "url": link,
+                        "source_role": str(source.get("source_role", "social_or_video_signal")),
+                        "channel": str(source.get("channel", "web")),
+                        "source_class": str(source.get("source_class", "discovered_media")),
+                        "observed": True,
+                        "published_date": parse_rss_date(item.findtext("pubDate")),
+                        "title": title,
+                        "excerpt": description or title,
+                        "evidence": (
+                            f"{source['label']}に限定した検索で「{title}」を確認した。"
+                            f"配信日は{parse_rss_date(item.findtext('pubDate')) or '日付不明'}。"
+                        ),
+                    }
                 )
-                for item in root.findall(".//item")[:5]
-            ]
             excerpt = compact_text(" ".join(results), 1600)
         except ET.ParseError:
             _, excerpt = page_text(raw, content_type)
@@ -622,8 +637,9 @@ def source_search_fallback(source: dict[str, Any]) -> dict[str, Any]:
         "resolved_url": resolved_url,
         "title": f"{source['label']}限定検索",
         "excerpt": excerpt,
+        "verification_method": "source_limited_search",
+        "discovered_records": discovered_records,
         "evidence": (
-            f"{source['label']}の直取得とReader取得が利用できなかったため、"
             f"{source_kind}{source_url}に限定したBing RSS検索を確認した。"
             f"検索語: {used_query}。検索結果: {excerpt[:500]}"
         ),
@@ -632,6 +648,11 @@ def source_search_fallback(source: dict[str, Any]) -> dict[str, Any]:
 
 def fetch_source(source: dict[str, Any]) -> dict[str, Any]:
     url = str(source["url"])
+    if source.get("channel") in {"sns_x", "youtube", "instagram", "facebook"}:
+        try:
+            return source_search_fallback(source)
+        except (OSError, TimeoutError, urllib.error.URLError, ValueError):
+            pass
     attempts = [url]
     if not url.startswith("https://r.jina.ai/"):
         attempts.append(jina_url(url))
@@ -651,6 +672,7 @@ def fetch_source(source: dict[str, Any]) -> dict[str, Any]:
                 "resolved_url": resolved_url,
                 "title": title or str(source["label"]),
                 "excerpt": excerpt,
+                "verification_method": "direct_fetch" if attempt == url else "reader_fetch",
                 "evidence": (
                     f"{source['label']}を{via}で取得し、"
                     f"ページ「{title or source['label']}」の本文を確認した。"
@@ -674,6 +696,7 @@ def fetch_source(source: dict[str, Any]) -> dict[str, Any]:
         **source,
         "url": url,
         "observed": False,
+        "verification_method": "unavailable",
         "error": compact_text(" / ".join(errors), 700),
     }
 
@@ -688,9 +711,52 @@ def parse_rss_date(value: str | None) -> str | None:
     return parsed.astimezone(JST).date().isoformat()
 
 
-def news_queries(category: dict[str, Any], issue_date: str) -> list[str]:
+def discovery_identity_query(category: dict[str, Any]) -> str:
     label = str(category["label"])
-    configured_terms: list[str] = []
+    terms = CATEGORY_IDENTITY_TERMS.get(label, [label])
+    useful = list(dict.fromkeys(str(term) for term in terms if str(term).strip()))[:6]
+    return " OR ".join(f'"{term}"' if " " in term else term for term in useful)
+
+
+def discovery_queries(category: dict[str, Any], issue_date: str) -> list[dict[str, Any]]:
+    """Build bounded searches that prove each watch topic was actually queried."""
+    identity = discovery_identity_query(category)
+    queries: list[dict[str, Any]] = []
+    configured_topic_terms: set[str] = set()
+    for topic in category.get("watch_topics", []):
+        if not isinstance(topic, dict) or not topic.get("id"):
+            continue
+        topic_id = str(topic["id"])
+        terms = list(
+            dict.fromkeys(
+                str(term).strip()
+                for term in [*topic.get("terms", []), *topic.get("event_classes", [])]
+                if str(term).strip()
+            )
+        )
+        configured_topic_terms.update(term.lower() for term in terms)
+        for index in range(0, len(terms), 20):
+            group = terms[index : index + 20]
+            queries.append(
+                {
+                    "query_id": f"topic:{topic_id}:{index // 20 + 1}",
+                    "purpose": "watch_topic",
+                    "watch_topic_ids": [topic_id],
+                    "query": f"({identity}) ({' OR '.join(group)}) when:3d",
+                    "provider": "google_news_rss",
+                    "channel": "web",
+                }
+            )
+
+    axis_only_terms = list(
+        dict.fromkeys(
+            str(term).strip()
+            for axis in category.get("axes", [])
+            if isinstance(axis, dict)
+            for term in axis.get("terms", [])
+            if str(term).strip().lower() not in configured_topic_terms
+        )
+    )
     material_terms = [
         "partnership",
         "security",
@@ -704,22 +770,22 @@ def news_queries(category: dict[str, Any], issue_date: str) -> list[str]:
         "Japan company",
         "official",
     ]
-    for axis in category.get("axes", []):
-        if isinstance(axis, dict):
-            configured_terms.extend(str(term) for term in axis.get("terms", []))
-    for topic in category.get("watch_topics", []):
-        if not isinstance(topic, dict):
-            continue
-        configured_terms.extend(str(term) for term in topic.get("terms", []))
-        configured_terms.extend(str(event) for event in topic.get("event_classes", []))
-    scoped = list(dict.fromkeys(configured_terms))
-    groups = [scoped[index : index + 8] for index in range(0, len(scoped), 8)][:4]
-    groups.extend([material_terms[:6], material_terms[6:]])
-    return [
-        f"({label}) ({' OR '.join(group)}) when:3d"
-        for group in groups
-        if group
-    ]
+    horizon_terms = list(dict.fromkeys([*axis_only_terms, *material_terms]))
+    queries.append(
+        {
+            "query_id": "horizon:material-change",
+            "purpose": "horizon",
+            "watch_topic_ids": [],
+            "query": f"({identity}) ({' OR '.join(horizon_terms)}) when:3d",
+            "provider": "google_news_rss",
+            "channel": "web",
+        }
+    )
+    return queries
+
+
+def news_queries(category: dict[str, Any], issue_date: str) -> list[str]:
+    return [str(spec["query"]) for spec in discovery_queries(category, issue_date)]
 
 
 def news_query(category: dict[str, Any], issue_date: str) -> str:
@@ -883,7 +949,6 @@ def enrich_discovered_record(
         return record
     category_label = str(category.get("label", ""))
     seen_candidates: set[str] = set()
-    candidate_attempts = 0
     for query in article_search_queries(record, original_title):
         search_url = "https://www.bing.com/search?" + urllib.parse.urlencode(
             {"format": "rss", "q": query}
@@ -893,7 +958,7 @@ def enrich_discovered_record(
             root = ET.fromstring(raw)
         except (OSError, TimeoutError, urllib.error.URLError, ET.ParseError):
             continue
-        for item in root.findall(".//item")[:5]:
+        for item in root.findall(".//item"):
             result_title = compact_text(item.findtext("title") or "", 220)
             candidate_url = compact_text(item.findtext("link") or "", 1000)
             description = html_fragment_text(item.findtext("description") or "", 1000)
@@ -913,7 +978,22 @@ def enrich_discovered_record(
             ):
                 continue
             seen_candidates.add(candidate_url)
-            candidate_attempts += 1
+            snippet_record = {
+                **record,
+                "url": candidate_url,
+                "publisher_url": (
+                    f"{urllib.parse.urlparse(candidate_url).scheme}://"
+                    f"{urllib.parse.urlparse(candidate_url).netloc}"
+                ),
+                "original_discovery_url": str(record.get("url", "")),
+                "title": original_title,
+                "excerpt": description,
+                "evidence": (
+                    f"Google News RSSで「{original_title}」を確認し、"
+                    f"配信元検索で{candidate_url}と本文抜粋を特定した。"
+                    f"検索抜粋: {description[:700]}"
+                ),
+            }
             for attempt in (candidate_url, jina_url(candidate_url)):
                 try:
                     page_raw, content_type, _ = request_bytes(attempt, timeout=12)
@@ -955,8 +1035,17 @@ def enrich_discovered_record(
                         f"本文抽出: {combined[:700]}"
                     ),
                 }
-            if candidate_attempts >= 3:
-                return record
+            if (
+                description
+                and document_matches_discovery(
+                    record,
+                    candidate_url,
+                    result_title,
+                    description,
+                )
+                and record_has_material_body(original_title, snippet_record)
+            ):
+                return snippet_record
     return record
 
 
@@ -1001,11 +1090,35 @@ def enrich_discovered_records(
     ]
 
 
-def fetch_news(category: dict[str, Any], issue_date: str) -> list[dict[str, Any]]:
-    records: list[dict[str, Any]] = []
-    failures: list[dict[str, Any]] = []
-    seen_urls: set[str] = set()
-    for query in news_queries(category, issue_date):
+def discovery_record_is_relevant(
+    category: dict[str, Any],
+    issue_date: str,
+    record: dict[str, Any],
+) -> bool:
+    title = record_public_title(record)
+    excerpt = str(record.get("excerpt") or "")
+    return bool(
+        valid_date(record.get("published_date"), issue_date)
+        and category_identity_ok(str(category.get("label", "")), title, excerpt)
+        and not low_signal_value(title, excerpt)
+    )
+
+
+def discovery_record_is_material(record: dict[str, Any]) -> bool:
+    title = record_public_title(record)
+    excerpt = str(record.get("excerpt") or "")
+    return bool(
+        state_contract.analysis_headline(title)
+        or PUBLICATION_EVENT_RE.search(title)
+        or MATERIAL_SIGNAL_RE.search(f"{title} {excerpt}")
+    )
+
+
+def fetch_news(category: dict[str, Any], issue_date: str) -> dict[str, Any]:
+    records_by_url: dict[str, dict[str, Any]] = {}
+    checks: list[dict[str, Any]] = []
+    for spec in discovery_queries(category, issue_date):
+        query = str(spec["query"])
         rss_url = (
             "https://news.google.com/rss/search?"
             + urllib.parse.urlencode(
@@ -1021,20 +1134,29 @@ def fetch_news(category: dict[str, Any], issue_date: str) -> list[dict[str, Any]
             raw, _, _ = request_bytes(rss_url)
             root = ET.fromstring(raw)
         except (OSError, TimeoutError, urllib.error.URLError, ET.ParseError) as exc:
-            failures.append(
+            checks.append(
                 {
-                    "observed": False,
+                    **spec,
                     "url": rss_url,
                     "label": "Google News RSS",
-                    "error": f"{type(exc).__name__}: {exc}",
+                    "slot_state": "search_unavailable",
+                    "result_count": 0,
+                    "relevant_result_count": 0,
+                    "material_candidate_count": 0,
+                    "resolved_candidate_count": 0,
+                    "evidence_summary": f"検索に失敗した: {type(exc).__name__}: {exc}",
                 }
             )
             continue
-        for item in root.findall(".//item")[:8]:
+        result_count = 0
+        relevant_urls: set[str] = set()
+        material_urls: set[str] = set()
+        for item in root.findall(".//item"):
             title = compact_text(item.findtext("title") or "", 220)
             link = compact_text(item.findtext("link") or "", 1000)
-            if not title or not link.startswith(("http://", "https://")) or link in seen_urls:
+            if not title or not link.startswith(("http://", "https://")):
                 continue
+            result_count += 1
             description = html_fragment_text(item.findtext("description") or "", 700)
             source = item.find("source")
             source_label = (
@@ -1049,27 +1171,89 @@ def fetch_news(category: dict[str, Any], issue_date: str) -> list[dict[str, Any]
             )
             if not publisher_url.startswith(("http://", "https://")):
                 publisher_url = ""
-            seen_urls.add(link)
-            records.append(
-                {
-                    "label": source_label,
-                    "url": link,
-                    "source_role": "independent_media_or_data",
-                    "channel": "web",
-                    "source_class": "discovered_media",
-                    "publisher_url": publisher_url,
-                    "observed": True,
-                    "published_date": parse_rss_date(item.findtext("pubDate")),
-                    "title": title,
-                    "excerpt": description or title,
-                    "evidence": (
-                        f"Google News RSSで「{title}」を確認した。"
-                        f"配信元は{source_label}、配信日は"
-                        f"{parse_rss_date(item.findtext('pubDate')) or '日付不明'}。"
-                    ),
-                }
-            )
-    return enrich_discovered_records(category, issue_date, records) if records else failures
+            record = {
+                "label": source_label,
+                "url": link,
+                "source_role": "independent_media_or_data",
+                "channel": "web",
+                "source_class": "discovered_media",
+                "publisher_url": publisher_url,
+                "observed": True,
+                "published_date": parse_rss_date(item.findtext("pubDate")),
+                "title": title,
+                "excerpt": description or title,
+                "discovery_query_ids": [str(spec["query_id"])],
+                "watch_topic_ids": list(spec["watch_topic_ids"]),
+                "evidence": (
+                    f"Google News RSSで「{title}」を確認した。"
+                    f"配信元は{source_label}、配信日は"
+                    f"{parse_rss_date(item.findtext('pubDate')) or '日付不明'}。"
+                ),
+            }
+            if not discovery_record_is_relevant(category, issue_date, record):
+                continue
+            relevant_urls.add(link)
+            if discovery_record_is_material(record):
+                material_urls.add(link)
+            current = records_by_url.get(link)
+            if current is None:
+                records_by_url[link] = record
+            else:
+                current["discovery_query_ids"] = list(
+                    dict.fromkeys(
+                        [*current.get("discovery_query_ids", []), str(spec["query_id"])]
+                    )
+                )
+                current["watch_topic_ids"] = list(
+                    dict.fromkeys(
+                        [*current.get("watch_topic_ids", []), *spec["watch_topic_ids"]]
+                    )
+                )
+        checks.append(
+            {
+                **spec,
+                "url": rss_url,
+                "label": "Google News RSS",
+                "slot_state": "searched",
+                "result_count": result_count,
+                "relevant_result_count": len(relevant_urls),
+                "material_candidate_count": len(material_urls),
+                "resolved_candidate_count": 0,
+                "material_urls": sorted(material_urls),
+                "evidence_summary": (
+                    f"{result_count}件を確認し、対象期間・カテゴリに合う結果は"
+                    f"{len(relevant_urls)}件、重要更新候補は{len(material_urls)}件だった。"
+                ),
+            }
+        )
+
+    records = enrich_discovered_records(category, issue_date, list(records_by_url.values()))
+    enriched_by_url: dict[str, dict[str, Any]] = {}
+    for record in records:
+        enriched_by_url[str(record.get("url"))] = record
+        original_url = str(record.get("original_discovery_url") or "")
+        if original_url:
+            enriched_by_url[original_url] = record
+    for check in checks:
+        if check["slot_state"] == "search_unavailable":
+            continue
+        material_urls = check.pop("material_urls", [])
+        resolved = sum(
+            bool(record and record_has_material_body(record_public_title(record), record))
+            for url in material_urls
+            for record in [enriched_by_url.get(str(url))]
+        )
+        check["resolved_candidate_count"] = resolved
+        if check["relevant_result_count"] == 0:
+            check["slot_state"] = "searched_no_results"
+        elif check["material_candidate_count"] == 0:
+            check["slot_state"] = "searched_no_material_results"
+        elif resolved:
+            check["slot_state"] = "searched_resolved"
+        else:
+            check["slot_state"] = "searched_unresolved"
+        check["evidence_summary"] += f" 本文を解決できた重要更新候補は{resolved}件。"
+    return {"records": records, "discovery_checks": checks}
 
 
 def category_contracts() -> list[dict[str, Any]]:
@@ -1576,32 +1760,45 @@ def collect_evidence(issue_date: str) -> dict[str, Any]:
         if isinstance(source, dict)
     ]
     with concurrent.futures.ThreadPoolExecutor(max_workers=12) as executor:
-        fetched = list(executor.map(fetch_source, flat_sources))
-        news_lists = list(
-            executor.map(
-                lambda category: fetch_news(category, issue_date),
-                contracts,
-            )
-        )
+        news_futures = [
+            executor.submit(fetch_news, category, issue_date)
+            for category in contracts
+        ]
+        source_futures = [executor.submit(fetch_source, source) for source in flat_sources]
+        fetched = [future.result() for future in source_futures]
+        news_results = [future.result() for future in news_futures]
     records_by_category: dict[str, list[dict[str, Any]]] = {
         str(category["label"]): [] for category in contracts
     }
+    discovery_checks_by_category: dict[str, list[dict[str, Any]]] = {
+        str(category["label"]): [] for category in contracts
+    }
     for record in fetched:
-        records_by_category[str(record["category"])].append(record)
-    for category, news_records in zip(contracts, news_lists):
+        label = str(record["category"])
+        records_by_category[label].append(
+            {key: value for key, value in record.items() if key != "discovered_records"}
+        )
+        records_by_category[label].extend(
+            child
+            for child in record.get("discovered_records", [])
+            if isinstance(child, dict)
+        )
+    for category, news_result in zip(contracts, news_results):
         label = str(category["label"])
         known_urls = {str(record.get("url")) for record in records_by_category[label]}
         records_by_category[label].extend(
             record
-            for record in news_records
+            for record in news_result["records"]
             if record.get("observed") and str(record.get("url")) not in known_urls
         )
+        discovery_checks_by_category[label] = news_result["discovery_checks"]
 
     checked_at = collection_checked_at(issue_date)
     bundle = evidence_contract.build_evidence_bundle(
         issue_date,
         checked_at,
         records_by_category,
+        discovery_checks_by_category=discovery_checks_by_category,
         collection_mode="github_models_unattended",
     )
     state_dir = STATE_ROOT / issue_date
@@ -1616,6 +1813,10 @@ def collect_evidence(issue_date: str) -> dict[str, Any]:
             len(entry["source_checks"])
             for entry in bundle["categories"].values()
         ),
+        "discovery_checks": sum(
+            len(entry["discovery_checks"])
+            for entry in bundle["categories"].values()
+        ),
         "records": sum(
             len(entry["records"])
             for entry in bundle["categories"].values()
@@ -1628,7 +1829,7 @@ def collect_evidence(issue_date: str) -> dict[str, Any]:
 def self_test() -> None:
     wide_category = {
         "label": "CoverageTest",
-        "axes": [],
+        "axes": [{"id": "adjacent", "terms": ["axis-only-term"]}],
         "watch_topics": [
             {"id": f"topic-{index}", "terms": [f"term-{index}"], "event_classes": []}
             for index in range(9)
@@ -1636,6 +1837,25 @@ def self_test() -> None:
     }
     if "term-8" not in " ".join(news_queries(wide_category, "2099-01-01")):
         fail("discovery queries dropped later watch topics")
+    discovery_specs = discovery_queries(wide_category, "2099-01-01")
+    searched_topics = {
+        topic
+        for spec in discovery_specs
+        if spec["purpose"] == "watch_topic"
+        for topic in spec["watch_topic_ids"]
+    }
+    expected_topics = {topic["id"] for topic in wide_category["watch_topics"]}
+    if searched_topics != expected_topics:
+        fail("discovery queries did not map every watch topic")
+    if not any(spec["purpose"] == "horizon" for spec in discovery_specs):
+        fail("discovery queries omitted the adjacent-change horizon")
+    horizon_queries = " ".join(
+        str(spec["query"])
+        for spec in discovery_specs
+        if spec["purpose"] == "horizon"
+    )
+    if "axis-only-term" not in horizon_queries:
+        fail("discovery queries dropped an axis-only adjacent term")
     if not article_result_matches(
         "OpenAI GPT-5.6シリーズを発表",
         "OpenAIのGPT-5.6シリーズを解説",

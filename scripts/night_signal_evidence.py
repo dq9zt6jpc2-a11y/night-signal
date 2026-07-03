@@ -48,6 +48,7 @@ def build_evidence_bundle(
     checked_at: str,
     records_by_category: dict[str, list[dict[str, Any]]],
     *,
+    discovery_checks_by_category: dict[str, list[dict[str, Any]]],
     collection_mode: str,
 ) -> dict[str, Any]:
     """Build the pure collector output without editorial items or prose."""
@@ -59,6 +60,8 @@ def build_evidence_bundle(
     topics_by_category = category_topics()
     if set(records_by_category) != set(topics_by_category):
         fail("evidence must cover every configured category exactly once")
+    if set(discovery_checks_by_category) != set(topics_by_category):
+        fail("discovery checks must cover every configured category exactly once")
 
     categories: dict[str, Any] = {}
     for category, topics in topics_by_category.items():
@@ -69,11 +72,11 @@ def build_evidence_bundle(
             if str(record.get("url", "")).startswith(("http://", "https://"))
         }
         checks: list[dict[str, Any]] = []
-        ordered_urls: list[str] = []
-        for source in registry.get(category, []):
-            if isinstance(source, dict):
-                ordered_urls.append(str(source.get("url")))
-        ordered_urls.extend(url for url in by_url if url not in ordered_urls)
+        ordered_urls = [
+            str(source.get("url"))
+            for source in registry.get(category, [])
+            if isinstance(source, dict)
+        ]
         source_by_url = {
             str(source.get("url")): source
             for source in registry.get(category, [])
@@ -90,7 +93,7 @@ def build_evidence_bundle(
                 fail(f"evidence result has no summary: {category}: {url}")
             checks.append(
                 {
-                    "watch_topic_ids": topics,
+                    "watch_topic_ids": [],
                     "source_role": str(source.get("source_role", "independent_media_or_data")),
                     "channel": str(source.get("channel", "web")),
                     "label": str(source.get("label") or record.get("label") or url),
@@ -99,12 +102,30 @@ def build_evidence_bundle(
                     "published_date": record.get("published_date"),
                     "evidence_summary": summary,
                     "checked_at_jst": checked_at,
-                    "verification_method": "direct_fetch" if observed else "unavailable",
+                    "verification_method": str(
+                        record.get("verification_method")
+                        or ("direct_fetch" if observed else "unavailable")
+                    ),
+                }
+            )
+        discovery_checks: list[dict[str, Any]] = []
+        for check in discovery_checks_by_category[category]:
+            if not isinstance(check, dict):
+                continue
+            summary = str(check.get("evidence_summary") or "").strip()
+            if not summary:
+                fail(f"discovery result has no summary: {category}")
+            discovery_checks.append(
+                {
+                    **check,
+                    "checked_at_jst": checked_at,
+                    "evidence_summary": summary,
                 }
             )
         categories[category] = {
             "records": records,
             "source_checks": checks,
+            "discovery_checks": discovery_checks,
         }
     return {
         "issue_date": issue_date,

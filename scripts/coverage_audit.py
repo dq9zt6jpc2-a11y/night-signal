@@ -97,7 +97,9 @@ def validate_category(
     cards: list[dict[str, Any]],
     registry: dict[str, list[dict[str, Any]]],
     issue_date: str,
-) -> tuple[int, int]:
+    *,
+    strict_discovery: bool,
+) -> tuple[int, int, int]:
     checks = entry.get("source_checks")
     if not isinstance(checks, list) or not checks:
         fail(f"{label} has no source checks")
@@ -133,11 +135,79 @@ def validate_category(
             check.get("evidence_summary")
         ).strip():
             fail(f"{label} source_checks[{index}] has no evidence summary")
-        checked_topics.update(str(topic) for topic in topics)
+        if not strict_discovery:
+            checked_topics.update(str(topic) for topic in topics)
         checked_channels.add(channel)
         checked_urls.add(url)
         if check_state == "observed_live":
             observed_urls.add(url)
+
+    discovery_checks = entry.get("discovery_checks", [])
+    if strict_discovery and (not isinstance(discovery_checks, list) or not discovery_checks):
+        fail(f"{label} has no discovery checks")
+    horizon_searched = False
+    material_candidates = 0
+    resolved_candidates = 0
+    valid_discovery_states = {
+        "searched_no_results",
+        "searched_no_material_results",
+        "searched_resolved",
+        "searched_unresolved",
+        "search_unavailable",
+    }
+    for index, check in enumerate(discovery_checks, start=1):
+        if not isinstance(check, dict):
+            fail(f"{label} discovery_checks[{index}] must be an object")
+        url = check.get("url")
+        check_state = check.get("slot_state")
+        topics = check.get("watch_topic_ids")
+        purpose = check.get("purpose")
+        if not isinstance(url, str) or not url.startswith(("http://", "https://")):
+            fail(f"{label} discovery_checks[{index}] has an invalid URL")
+        if check_state not in valid_discovery_states:
+            fail(f"{label} discovery_checks[{index}] has an invalid state")
+        if not isinstance(topics, list) or any(topic not in required_topics for topic in topics):
+            fail(f"{label} discovery_checks[{index}] has invalid watch topics")
+        if purpose == "watch_topic" and len(topics) != 1:
+            fail(f"{label} discovery_checks[{index}] must map to one watch topic")
+        if purpose == "horizon" and topics:
+            fail(f"{label} discovery_checks[{index}] horizon search must not claim a topic")
+        if purpose not in {"watch_topic", "horizon"}:
+            fail(f"{label} discovery_checks[{index}] has an invalid purpose")
+        if not str(check.get("checked_at_jst", "")).startswith(issue_date):
+            fail(f"{label} discovery_checks[{index}] was not checked on {issue_date}")
+        if not isinstance(check.get("query"), str) or not str(check.get("query")).strip():
+            fail(f"{label} discovery_checks[{index}] has no query")
+        if not isinstance(check.get("evidence_summary"), str) or not str(
+            check.get("evidence_summary")
+        ).strip():
+            fail(f"{label} discovery_checks[{index}] has no evidence summary")
+        for metric in (
+            "result_count",
+            "relevant_result_count",
+            "material_candidate_count",
+            "resolved_candidate_count",
+        ):
+            if not isinstance(check.get(metric), int) or int(check[metric]) < 0:
+                fail(f"{label} discovery_checks[{index}] has invalid {metric}")
+        if int(check["resolved_candidate_count"]) > int(check["material_candidate_count"]):
+            fail(f"{label} discovery_checks[{index}] resolves more candidates than it found")
+        if check_state != "search_unavailable":
+            checked_topics.update(str(topic) for topic in topics)
+            horizon_searched = horizon_searched or purpose == "horizon"
+        material_candidates += int(check["material_candidate_count"])
+        resolved_candidates += int(check["resolved_candidate_count"])
+
+    records = entry.get("records")
+    if not isinstance(records, list):
+        fail(f"{label} records must be a list")
+    observed_urls.update(
+        str(record.get("url"))
+        for record in records
+        if isinstance(record, dict)
+        and record.get("observed")
+        and str(record.get("url", "")).startswith(("http://", "https://"))
+    )
 
     seed_urls = {
         str(source.get("url"))
@@ -148,17 +218,21 @@ def validate_category(
         fail(f"{label} has seed URLs without result states")
     if not required_topics <= checked_topics:
         fail(f"{label} has unchecked watch topics: {', '.join(sorted(required_topics - checked_topics))}")
+    if strict_discovery and not horizon_searched:
+        fail(f"{label} has no completed horizon search")
     if not required_channels <= checked_channels:
         fail(f"{label} has unchecked channels: {', '.join(sorted(required_channels - checked_channels))}")
     if not observed_urls:
         fail(f"{label} has no observed live evidence")
+    if strict_discovery and material_candidates and not resolved_candidates:
+        fail(f"{label} found material candidates but resolved no substantive evidence")
 
     category_cards = [card for card in cards if card.get("category") == label]
     for card in category_cards:
         sources = card_sources(card)
         if not sources or not sources <= observed_urls:
             fail(f"{label} public update cites unobserved evidence: {card.get('title')}")
-    return len(checks), len(observed_urls)
+    return len(checks), len(discovery_checks), len(observed_urls)
 
 
 def validate(issue_date: str) -> dict[str, int]:
@@ -175,6 +249,9 @@ def validate(issue_date: str) -> dict[str, int]:
         fail("research bundle date mismatch")
 
     contract = load_contract()
+    strict_discovery = effective_on_or_after(
+        contract, "topic_discovery_contract_effective_date", date.fromisoformat(issue_date)
+    )
     configured = configured_categories(contract)
     categories = bundle.get("categories")
     if not isinstance(categories, dict) or set(categories) != set(configured):
@@ -182,15 +259,23 @@ def validate(issue_date: str) -> dict[str, int]:
     cards = [card for card in issue.get("cards", []) if isinstance(card, dict)]
     registry = source_registry()
     source_checks = 0
+    discovery_checks = 0
     observed_urls = 0
     for label, config in configured.items():
         entry = categories[label]
         if not isinstance(entry, dict):
             fail(f"{label} evidence entry must be an object")
-        checks, observed = validate_category(
-            label, config, entry, cards, registry, issue_date
+        checks, discoveries, observed = validate_category(
+            label,
+            config,
+            entry,
+            cards,
+            registry,
+            issue_date,
+            strict_discovery=strict_discovery,
         )
         source_checks += checks
+        discovery_checks += discoveries
         observed_urls += observed
 
     dated_index = SITE_ROOT / issue_date / "index.html"
@@ -212,16 +297,84 @@ def validate(issue_date: str) -> dict[str, int]:
         "categories": len(configured),
         "cards": len(cards),
         "source_checks": source_checks,
+        "discovery_checks": discovery_checks,
         "observed_urls": observed_urls,
     }
 
 
+def self_test() -> None:
+    issue_date = "2099-01-02"
+    source_url = "https://example.com/news"
+    config = {
+        "label": "Test",
+        "required_watch_topic_channels": ["web"],
+        "watch_topics": [{"id": "topic-one"}],
+    }
+    entry = {
+        "records": [{"url": source_url, "observed": True}],
+        "source_checks": [
+            {
+                "watch_topic_ids": [],
+                "channel": "web",
+                "url": source_url,
+                "slot_state": "observed_live",
+                "checked_at_jst": f"{issue_date}T20:00:00+09:00",
+                "evidence_summary": "source reached",
+            }
+        ],
+        "discovery_checks": [
+            {
+                "purpose": "watch_topic",
+                "watch_topic_ids": ["topic-one"],
+                "query": "Test update when:3d",
+                "url": "https://example.com/search/topic",
+                "slot_state": "searched_resolved",
+                "result_count": 2,
+                "relevant_result_count": 1,
+                "material_candidate_count": 1,
+                "resolved_candidate_count": 1,
+                "checked_at_jst": f"{issue_date}T20:00:00+09:00",
+                "evidence_summary": "topic searched",
+            },
+            {
+                "purpose": "horizon",
+                "watch_topic_ids": [],
+                "query": "Test adjacent change when:3d",
+                "url": "https://example.com/search/horizon",
+                "slot_state": "searched_no_results",
+                "result_count": 0,
+                "relevant_result_count": 0,
+                "material_candidate_count": 0,
+                "resolved_candidate_count": 0,
+                "checked_at_jst": f"{issue_date}T20:00:00+09:00",
+                "evidence_summary": "horizon searched",
+            },
+        ],
+    }
+    result = validate_category(
+        "Test",
+        config,
+        entry,
+        [],
+        {"Test": [{"url": source_url}]},
+        issue_date,
+        strict_discovery=True,
+    )
+    if result != (1, 2, 1):
+        fail(f"unexpected self-test metrics: {result}")
+    print("COVERAGE AUDIT SELF-TEST PASSED")
+
+
 def main() -> int:
+    if "--self-test" in sys.argv[1:]:
+        self_test()
+        return 0
     issue_date = sys.argv[1] if len(sys.argv) > 1 else datetime.now().date().isoformat()
     result = validate(issue_date)
     print(
         f"COVERAGE AUDIT PASSED: {issue_date}, categories={result['categories']}, "
         f"cards={result['cards']}, source_checks={result['source_checks']}, "
+        f"discovery_checks={result['discovery_checks']}, "
         f"observed_urls={result['observed_urls']}"
     )
     return 0

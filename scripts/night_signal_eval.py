@@ -60,12 +60,18 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
         fail("research bundle categories must be an object")
 
     source_checks = 0
+    discovery_checks = 0
+    material_candidates = 0
+    resolved_candidates = 0
+    unresolved_categories: list[str] = []
     observed_urls: set[str] = set()
     unavailable_urls: set[str] = set()
     reviewed_topics: set[tuple[str, str]] = set()
     for label, entry in categories.items():
         if not isinstance(entry, dict):
             continue
+        category_material = 0
+        category_resolved = 0
         for check in entry.get("source_checks", []):
             if not isinstance(check, dict):
                 continue
@@ -76,9 +82,37 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
                     observed_urls.add(url)
                 elif check.get("slot_state") == "source_unavailable":
                     unavailable_urls.add(url)
-            for topic in check.get("watch_topic_ids", []):
-                if isinstance(topic, str):
-                    reviewed_topics.add((str(label), topic))
+        category_discovery_checks = [
+            check
+            for check in entry.get("discovery_checks", [])
+            if isinstance(check, dict)
+        ]
+        if category_discovery_checks:
+            for check in category_discovery_checks:
+                discovery_checks += 1
+                if check.get("slot_state") != "search_unavailable":
+                    for topic in check.get("watch_topic_ids", []):
+                        if isinstance(topic, str):
+                            reviewed_topics.add((str(label), topic))
+                category_material += int(check.get("material_candidate_count", 0))
+                category_resolved += int(check.get("resolved_candidate_count", 0))
+        else:
+            for check in entry.get("source_checks", []):
+                if not isinstance(check, dict):
+                    continue
+                for topic in check.get("watch_topic_ids", []):
+                    if isinstance(topic, str):
+                        reviewed_topics.add((str(label), topic))
+        for record in entry.get("records", []):
+            if not isinstance(record, dict) or not record.get("observed"):
+                continue
+            url = record.get("url")
+            if isinstance(url, str):
+                observed_urls.add(url)
+        material_candidates += category_material
+        resolved_candidates += category_resolved
+        if category_material and not category_resolved:
+            unresolved_categories.append(str(label))
 
     expected_topics = {
         (label, topic)
@@ -113,6 +147,7 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
     checks = {
         "all_categories_collected": set(categories) == set(configured),
         "all_watch_topics_reviewed": reviewed_topics >= expected_topics,
+        "material_candidates_resolved": not unresolved_categories,
         "public_updates_present": bool(cards),
         "all_facts_cited": facts > 0 and mapped_facts == facts,
         "all_citations_observed": bool(cited_urls) and cited_urls <= observed_urls,
@@ -122,6 +157,10 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
         "watch_topics_expected": len(expected_topics),
         "watch_topics_reviewed": len(reviewed_topics & expected_topics),
         "source_checks": source_checks,
+        "discovery_checks": discovery_checks,
+        "material_candidates": material_candidates,
+        "resolved_candidates": resolved_candidates,
+        "unresolved_categories": unresolved_categories,
         "observed_urls": len(observed_urls),
         "unavailable_urls": len(unavailable_urls),
         "evidence_hosts": len({normalized_host(url) for url in observed_urls}),
