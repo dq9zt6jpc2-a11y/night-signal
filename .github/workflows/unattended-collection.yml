@@ -59,7 +59,13 @@ jobs:
 
       - name: Detect an already verified publication
         id: current_publication
+        env:
+          FORCE_COLLECTION: ${{ inputs.force || false }}
         run: |
+          if [[ "$FORCE_COLLECTION" == "true" ]]; then
+            echo "published=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           if python3 scripts/publication_audit.py "$ISSUE_DATE"; then
             echo "published=true" >> "$GITHUB_OUTPUT"
           else

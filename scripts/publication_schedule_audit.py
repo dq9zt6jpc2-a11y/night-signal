@@ -64,6 +64,14 @@ def main() -> int:
         fail("collection, checkpoint, commit, and publication stages are out of order")
     if "steps.current_publication.outputs.published != 'true'" not in collection:
         fail("verified publication must short-circuit the fallback attempt")
+    if not ordered(
+        collection,
+        'FORCE_COLLECTION: ${{ inputs.force || false }}',
+        'if [[ "$FORCE_COLLECTION" == "true" ]]',
+        'echo "published=false" >> "$GITHUB_OUTPUT"',
+        'python3 scripts/publication_audit.py "$ISSUE_DATE"',
+    ):
+        fail("manual force must bypass only the verified-publication short circuit")
     if "actions/upload-artifact@v7.0.1" not in collection or "actions/download-artifact@v8.0.1" not in collection:
         fail("a failed first attempt must leave a reusable Evidence")
     if "models: read" not in collection or "contents: write" not in collection or "actions: write" not in collection:
