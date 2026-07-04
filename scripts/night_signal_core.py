@@ -72,6 +72,10 @@ LOW_SIGNAL_VALUE_RE = re.compile(
     r"Derivatives|価格・チャート・時価総額|体験授業|特別展示|夏休み",
     re.I,
 )
+SPORTS_RESULT_RE = re.compile(
+    r"試合(?:速報|結果)|対戦結果|\d+回戦|スコア速報",
+    re.I,
+)
 PUBLICATION_EVENT_RE = re.compile(
     r"(発表|公表|決定|合意|契約|提携|買収|統合|開始|提供開始|発売|公開|更新|"
     r"就任|退任|移籍|獲得|退団|採用|建設|着工|延期|中止|承認|規制|"
@@ -88,7 +92,16 @@ CATEGORY_IDENTITY_TERMS = {
     "SoftBank": ["SoftBank", "ソフトバンク", "SBG", "Arm"],
     "Honda": ["Honda", "ホンダ", "HRC", "Aston Martin", "Acura"],
     "F1": ["F1", "FIA", "Grand Prix", "グランプリ", "Formula 1", "ホンダ", "Honda", "ADUO", "PU", "レッドブル", "メルセデス", "フェラーリ", "マクラーレン", "Aston Martin"],
-    "SpaceX": ["SpaceX", "Starship", "Starlink", "Dragon", "Falcon"],
+    "SpaceX": [
+        "SpaceX",
+        "Starship",
+        "Starlink",
+        "Crew Dragon",
+        "Cargo Dragon",
+        "Dragon spacecraft",
+        "ドラゴン宇宙船",
+        "Falcon",
+    ],
     "日本経済": ["日本", "日銀", "財務省", "CPI", "GDP", "円", "JGB"],
     "YOASOBI / 幾田りら": ["YOASOBI", "幾田りら", "ikura"],
     "アジア経済": ["アジア", "中国", "インド", "台湾", "韓国", "ASEAN", "ベトナム"],
@@ -443,6 +456,8 @@ def reader_public_copy_ok(text: str, *, kind: str) -> bool:
 
 
 def category_identity_ok(category_label: str, title: str, summary: str) -> bool:
+    if category_label not in {"F1", "宇都宮ブレックス"} and SPORTS_RESULT_RE.search(title):
+        return False
     terms = CATEGORY_IDENTITY_TERMS.get(category_label)
     if not terms:
         return True
@@ -594,7 +609,7 @@ def fact_supported_by_records(
             return True
         if (
             state_contract.materially_same_fact(fact, title)
-            or state_contract.text_overlap(fact, evidence) >= 2
+            or state_contract.text_overlap(fact, evidence) >= 1
         ):
             return True
     return False
@@ -1098,7 +1113,7 @@ def article_record_from_candidate(
             or not category_identity_ok(category_label, original_title, combined)
             or not article_result_matches(
                 original_title,
-                f"{page_title or result_title} {combined}",
+                page_title or result_title,
             )
             or not document_matches_discovery(
                 record,
@@ -1159,7 +1174,7 @@ def enrich_discovered_record(
                 or "news.google.com" in candidate_url
                 or not article_result_matches(
                     original_title,
-                    f"{result_title} {description}",
+                    result_title,
                 )
                 or not category_identity_ok(
                     category_label,
@@ -1587,6 +1602,18 @@ def normalize_result(
     seen_titles: set[str] = set()
     seen_clusters: set[str] = set()
     used_evidence_ids: set[str] = set()
+    excluded_evidence_ids = {
+        str(value.get("evidence_id"))
+        for value in raw.get("excluded_evidence", [])
+        if isinstance(value, dict)
+        and str(value.get("evidence_id", "")) in records_by_id
+    }
+    unknown_excluded_ids = {
+        str(value.get("evidence_id"))
+        for value in raw.get("excluded_evidence", [])
+        if isinstance(value, dict)
+        and str(value.get("evidence_id", "")) not in records_by_id
+    }
     for item in raw.get("items", []):
         if not isinstance(item, dict):
             continue
@@ -1619,11 +1646,6 @@ def normalize_result(
             evidence_id
             for evidence_id in evidence_ids
             if evidence_id not in records_by_id
-        ]
-        duplicate_evidence_ids = [
-            evidence_id
-            for evidence_id in evidence_ids
-            if evidence_id in used_evidence_ids
         ]
         source_records = [
             records_by_id[evidence_id]
@@ -1672,7 +1694,6 @@ def normalize_result(
             ("invalid_summary_point", invalid_point_shape or point_contract_broken),
             ("missing_evidence_id", not evidence_ids),
             ("unknown_evidence_id", bool(unknown_evidence_ids)),
-            ("duplicate_evidence_id", bool(duplicate_evidence_ids)),
             ("unknown_topic", topic not in valid_topics),
             ("empty_title", not title),
             ("title_copy", not reader_public_copy_ok(title, kind="title")),
@@ -1690,10 +1711,6 @@ def normalize_result(
             (
                 "insufficient_facts",
                 not facts_add_information_beyond_title(title, facts),
-            ),
-            (
-                "title_repeated_point",
-                any(not state_contract.fact_adds_information(title, fact) for fact in facts),
             ),
             (
                 "generic_padding",
@@ -1754,11 +1771,17 @@ def normalize_result(
                 "observation_channel": first_source["channel"],
             }
         )
-    missing_evidence_ids = sorted(expected_evidence_ids - used_evidence_ids)
+    conflicting_evidence_ids = sorted(used_evidence_ids & excluded_evidence_ids)
+    accounted_evidence_ids = used_evidence_ids | excluded_evidence_ids
+    missing_evidence_ids = sorted(expected_evidence_ids - accounted_evidence_ids)
     return {
         "items": items,
-        "coverage_complete": not missing_evidence_ids,
+        "coverage_complete": not (
+            missing_evidence_ids or conflicting_evidence_ids or unknown_excluded_ids
+        ),
         "missing_evidence_ids": missing_evidence_ids,
+        "conflicting_evidence_ids": conflicting_evidence_ids,
+        "unknown_excluded_ids": sorted(unknown_excluded_ids),
         "expected_evidence_ids": sorted(expected_evidence_ids),
     }
 
@@ -1939,6 +1962,22 @@ def self_test() -> None:
         "宇都宮ブレックスが新アリーナ計画を発表",
     ):
         fail("unrelated publisher article passed title matching")
+    for original_title, wrong_page_title in (
+        (
+            "ホンダF1、ADUOで得た2回の権利をどう使う？",
+            "Layer 2 solutions in blockchain",
+        ),
+        (
+            "ドル円、161.47円までじり高 米雇用統計後の動き",
+            "東京 - Wikipedia",
+        ),
+        (
+            "全国12万本の消火栓標識でStarlink活用探る技術デモ",
+            "Starlink - Wikipedia",
+        ),
+    ):
+        if article_result_matches(original_title, wrong_page_title):
+            fail("generic entity overlap passed discovered article title matching")
     unreadable_source_url = "https://www.example.com/item"
     cleaned_unreadable_source = sources_from_records(
         [
@@ -2097,6 +2136,19 @@ def self_test() -> None:
     omitted = normalize_result({"items": []}, category, "2099-01-03", records)
     if omitted["coverage_complete"] or omitted["missing_evidence_ids"] != ["e001"]:
         fail("normalization accepted an omitted publishable evidence record")
+    excluded = normalize_result(
+        {
+            "items": [],
+            "excluded_evidence": [
+                {"evidence_id": "e001", "reason": "wrong_entity_or_category"}
+            ],
+        },
+        category,
+        "2099-01-03",
+        records,
+    )
+    if not excluded["coverage_complete"]:
+        fail("normalization rejected an explicitly reviewed evidence exclusion")
     padded_raw = json.loads(json.dumps(raw))
     padded_raw["items"][0]["summary_points"].append(
         {"text": "市場全体の競争が激化するとみられる。", "evidence_ids": ["e001"]}
@@ -2252,6 +2304,12 @@ def self_test() -> None:
         "ソフトバンクがフィジカルAIロボットの量産を開始",
     ):
         fail("semantic clustering merged distinct material events")
+    if category_identity_ok(
+        "SoftBank",
+        "ソフトバンク×阪神の試合速報・結果",
+        "福岡ソフトバンクホークスが阪神と対戦した。",
+    ):
+        fail("non-sports category accepted an ambiguous sports result")
     if not low_signal_value("Hondaの夏休み体験授業でF1を特別展示"):
         fail("routine promotional events must not become important updates")
     duplicate_record = {

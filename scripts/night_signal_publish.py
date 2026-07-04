@@ -15,6 +15,7 @@ from zoneinfo import ZoneInfo
 
 import night_signal_state as state
 import night_signal_runtime_audit as runtime
+import night_signal_evidence as evidence_store
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -110,6 +111,8 @@ def evidence_reusable(
     *,
     now: datetime,
 ) -> bool:
+    if bundle.get("collector_contract_version") != evidence_store.COLLECTOR_CONTRACT_VERSION:
+        return False
     try:
         checked = datetime.fromisoformat(str(bundle["checked_at_jst"]))
     except (KeyError, TypeError, ValueError):
@@ -274,7 +277,10 @@ def self_test() -> None:
         pass
     else:
         fail("pre-final collection must not pass final deployment")
-    reusable = {"checked_at_jst": "2099-01-01T19:20:00+09:00"}
+    reusable = {
+        "checked_at_jst": "2099-01-01T19:20:00+09:00",
+        "collector_contract_version": evidence_store.COLLECTOR_CONTRACT_VERSION,
+    }
     if not evidence_reusable(
         reusable,
         "2099-01-01",
@@ -292,7 +298,10 @@ def self_test() -> None:
         ):
             fail("stale or cross-date Evidence was reusable")
     if evidence_reusable(
-        {"checked_at_jst": "2099-01-01T18:59:00+09:00"},
+        {
+            "checked_at_jst": "2099-01-01T18:59:00+09:00",
+            "collector_contract_version": evidence_store.COLLECTOR_CONTRACT_VERSION,
+        },
         "2099-01-01",
         now=datetime.fromisoformat("2099-01-01T19:20:00+09:00"),
     ):

@@ -13,6 +13,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_CONFIG = ROOT / "config" / "night_signal_sources.json"
 COVERAGE_CONFIG = ROOT / "config" / "night_signal_coverage.json"
+COLLECTOR_CONTRACT_VERSION = 2
 
 
 def fail(message: str) -> None:
@@ -131,6 +132,7 @@ def build_evidence_bundle(
         "issue_date": issue_date,
         "checked_at_jst": checked_at,
         "collection_mode": collection_mode,
+        "collector_contract_version": COLLECTOR_CONTRACT_VERSION,
         "categories": categories,
     }
 

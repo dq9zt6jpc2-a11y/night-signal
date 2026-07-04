@@ -79,16 +79,37 @@ EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
                 ],
                 "additionalProperties": False,
             },
+        },
+        "excluded_evidence": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "evidence_id": {"type": "string"},
+                    "reason": {
+                        "type": "string",
+                        "enum": [
+                            "duplicate_or_same_event",
+                            "background_or_navigation",
+                            "wrong_entity_or_category",
+                            "no_material_update",
+                        ],
+                    },
+                },
+                "required": ["evidence_id", "reason"],
+                "additionalProperties": False,
+            },
         }
     },
-    "required": ["items"],
+    "required": ["items", "excluded_evidence"],
     "additionalProperties": False,
 }
 
 SYSTEM_PROMPT = """Edit supplied NIGHT SIGNAL evidence into reader-facing Japanese updates.
-Return JSON matching the supplied schema. Assign every supplied evidence id to exactly
-one returned item and cite it in each summary point it supports. Merge ids only when
-they report the same event; never merge different events and never omit an id.
+Return JSON matching the supplied schema. Account for every supplied evidence id either
+in one or more summary points or in excluded_evidence. Exclude only duplicate reports,
+background/navigation pages, wrong entities/categories, or records with no material
+update. Merge ids when they report the same event and keep different events separate.
 
 For each item, write one concise title and ordered summary_points. Each point is one
 reader-facing sentence plus the evidence ids that support it. Together the points are
@@ -99,7 +120,8 @@ update, including an unfamiliar entity's source-stated role, the concrete change
 mechanism or scope, names, quantities, timing, conditions, and results when supplied.
 Do not omit a material fact merely to shorten the summary.
 
-Do not repeat the title or a point in different words.
+Do not repeat the title or a point in different words. A source page may support more
+than one distinct update; its evidence id may be cited by each supported item.
 Do not add publisher metadata, generic importance or impact claims, common knowledge,
 unsupported background, inferred unknowns, or follow-up boilerplate. For analysis or
 commentary, identify it in the title and include both its concrete evidence and its
@@ -303,6 +325,8 @@ def self_test() -> None:
     if quality and extraction_model() in routed_models(quality_required=True)[1:]:
         raise SystemExit("quality routing must not downgrade to the routine model")
     item_schema = EDITOR_RESPONSE_SCHEMA["properties"]["items"]["items"]
+    if "excluded_evidence" not in EDITOR_RESPONSE_SCHEMA["required"]:
+        raise SystemExit("editor schema does not account for reviewed exclusions")
     required_fields = {"summary_points"}
     if not required_fields <= set(item_schema["properties"]):
         raise SystemExit("editor response schema lacks the canonical summary contract")
