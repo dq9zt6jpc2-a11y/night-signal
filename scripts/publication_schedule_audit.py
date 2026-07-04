@@ -72,6 +72,14 @@ def main() -> int:
         'python3 scripts/publication_audit.py "$ISSUE_DATE"',
     ):
         fail("manual force must bypass only the verified-publication short circuit")
+    if not ordered(
+        collection,
+        "reuse_evidence:",
+        'REUSE_EVIDENCE: ${{ inputs.reuse_evidence || false }}',
+        'if [[ "$FORCE_COLLECTION" == "true" && "$REUSE_EVIDENCE" != "true" ]]',
+        'python3 scripts/night_signal_publish.py "$ISSUE_DATE" --reuse-evidence',
+    ):
+        fail("a forced recovery must explicitly resume the canonical Evidence checkpoint")
     if "actions/upload-artifact@v7.0.1" not in collection or "actions/download-artifact@v8.0.1" not in collection:
         fail("a failed first attempt must leave a reusable Evidence")
     if "models: read" not in collection or "contents: write" not in collection or "actions: write" not in collection:

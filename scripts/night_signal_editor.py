@@ -209,7 +209,7 @@ def edit_evidence(
         category: dict[str, Any],
         label: str,
         records: list[dict[str, Any]],
-    ) -> tuple[list[dict[str, Any]], int, bool]:
+    ) -> tuple[list[dict[str, Any]], int, bool, dict[str, Any]]:
         normalized = core.normalize_result(raw, category, issue_date, records)
         cards: list[dict[str, Any]] = []
         failed = 0
@@ -251,7 +251,13 @@ def edit_evidence(
                 ),
                 flush=True,
             )
-        return cards, failed, accepted
+        feedback = {
+            "missing_evidence_ids": normalized["missing_evidence_ids"],
+            "conflicting_evidence_ids": normalized["conflicting_evidence_ids"],
+            "unknown_excluded_ids": normalized["unknown_excluded_ids"],
+            "unpublishable_items": failed,
+        }
+        return cards, failed, accepted, feedback
 
     def review_category(category: dict[str, Any]) -> tuple[str, list[dict[str, Any]]]:
         label = str(category["label"])
@@ -260,7 +266,7 @@ def edit_evidence(
             fail(f"Evidence records are missing: {label}")
         records = [record for record in entry["records"] if isinstance(record, dict)]
         category_payload = core.category_prompt(category, issue_date, records)
-        selected_result: tuple[list[dict[str, Any]], int, bool] | None = None
+        selected_result: tuple[list[dict[str, Any]], int, bool, dict[str, Any]] | None = None
         if category_payload["evidence"]:
             quality_required = quality_model_required(category_payload)
             model_chain = models.routed_models(quality_required=quality_required)
@@ -279,43 +285,75 @@ def edit_evidence(
                 with degraded_models_lock:
                     if model_name in degraded_models:
                         continue
-                try:
-                    raw = models.request(
-                        token,
-                        messages,
-                        model_name=model_name,
-                        retry_wait_cap=90,
-                        request_label=label,
+                attempt_messages = messages
+                for editorial_attempt in range(1, 3):
+                    try:
+                        raw = models.request(
+                            token,
+                            attempt_messages,
+                            model_name=model_name,
+                            retry_wait_cap=90,
+                            request_label=label,
+                        )
+                    except models.ModelRequestError as exc:
+                        if exc.rate_limited:
+                            with degraded_models_lock:
+                                degraded_models.add(model_name)
+                            break
+                        raise
+                    result = cards_from_raw(raw, category, label, records)
+                    print(
+                        json.dumps(
+                            {
+                                "phase": "model_route",
+                                "category": label,
+                                "model": model_name,
+                                "route": "quality" if quality_required else "routine",
+                                "attempt": editorial_attempt,
+                                "cards": len(result[0]),
+                                "rejected_items": result[1],
+                                "accepted": result[2],
+                            },
+                            ensure_ascii=False,
+                        ),
+                        flush=True,
                     )
-                except models.ModelRequestError as exc:
-                    if exc.rate_limited:
-                        with degraded_models_lock:
-                            degraded_models.add(model_name)
-                        continue
-                    raise
-                result = cards_from_raw(raw, category, label, records)
-                print(
-                    json.dumps(
+                    if result[2]:
+                        selected_result = result
+                        break
+                    attempt_messages = [
+                        *messages,
                         {
-                            "phase": "model_route",
-                            "category": label,
-                            "model": model_name,
-                            "route": "quality" if quality_required else "routine",
-                            "cards": len(result[0]),
-                            "rejected_items": result[1],
-                            "accepted": result[2],
+                            "role": "assistant",
+                            "content": json.dumps(
+                                raw,
+                                ensure_ascii=False,
+                                separators=(",", ":"),
+                            ),
                         },
-                        ensure_ascii=False,
-                    ),
-                    flush=True,
-                )
-                if result[2]:
-                    selected_result = result
+                        {
+                            "role": "user",
+                            "content": (
+                                "The previous JSON failed deterministic evidence, repetition, "
+                                "or completeness checks. Return the entire corrected JSON. "
+                                "Keep every fact close to its cited source wording and exact "
+                                "numbers; do not add unsupported names or synthesis. Do not "
+                                "repeat the title. Evidence with no additional supported fact "
+                                "must be excluded as no_material_update. Validation feedback: "
+                                + json.dumps(
+                                    result[3],
+                                    ensure_ascii=False,
+                                    separators=(",", ":"),
+                                )
+                            ),
+                        },
+                    ]
+                if selected_result is not None:
                     break
         if category_payload["evidence"] and selected_result is None:
             fail(f"Editor could not produce complete summaries for every evidence item: {label}")
         if selected_result is None:
-            selected_result = ([], 0, True)
+            selected_result = ([], 0, True, {})
         return label, selected_result[0]
 
     cards_by_category: dict[str, list[dict[str, Any]]] = {}

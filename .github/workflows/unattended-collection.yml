@@ -12,6 +12,11 @@ on:
         required: false
         default: false
         type: boolean
+      reuse_evidence:
+        description: "Resume the canonical pipeline from a valid saved Evidence checkpoint."
+        required: false
+        default: false
+        type: boolean
       dry_run:
         description: "Run collection and audits without committing."
         required: false
@@ -103,8 +108,9 @@ jobs:
         timeout-minutes: 70
         env:
           FORCE_COLLECTION: ${{ inputs.force || false }}
+          REUSE_EVIDENCE: ${{ inputs.reuse_evidence || false }}
         run: |
-          if [[ "$FORCE_COLLECTION" == "true" ]]; then
+          if [[ "$FORCE_COLLECTION" == "true" && "$REUSE_EVIDENCE" != "true" ]]; then
             python3 scripts/night_signal_publish.py "$ISSUE_DATE" --verification-profile deploy
           else
             python3 scripts/night_signal_publish.py "$ISSUE_DATE" --reuse-evidence --verification-profile deploy

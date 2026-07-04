@@ -122,6 +122,9 @@ Do not omit a material fact merely to shorten the summary.
 
 Do not repeat the title or a point in different words. A source page may support more
 than one distinct update; its evidence id may be cited by each supported item.
+Keep names, quantities, and claim wording close to the cited evidence. Each summary
+point must add a fact beyond the title; otherwise exclude that evidence as
+no_material_update instead of restating the headline.
 Do not add publisher metadata, generic importance or impact claims, common knowledge,
 unsupported background, inferred unknowns, or follow-up boilerplate. For analysis or
 commentary, identify it in the title and include both its concrete evidence and its
@@ -219,7 +222,11 @@ def request(
             },
         },
     }
-    encoded_payload = json.dumps(payload, separators=(",", ":")).encode("utf-8")
+    encoded_payload = json.dumps(
+        payload,
+        ensure_ascii=False,
+        separators=(",", ":"),
+    ).encode("utf-8")
     for attempt in range(retries):
         http_request = urllib.request.Request(
             MODELS_URL,
@@ -342,6 +349,13 @@ def self_test() -> None:
         raise SystemExit("editor response schema contains derived prose fields")
     if item_schema.get("additionalProperties") is not False:
         raise SystemExit("editor response schema must reject undeclared fields")
+    encoded = json.dumps(
+        {"text": "日本語の本文"},
+        ensure_ascii=False,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    if b"\\u65e5" in encoded or "日本語".encode("utf-8") not in encoded:
+        raise SystemExit("model payload expands Japanese text into JSON escapes")
     print("NIGHT SIGNAL MODELS PASSED")
 
 
