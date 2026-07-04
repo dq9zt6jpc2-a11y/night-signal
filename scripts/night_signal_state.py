@@ -1433,9 +1433,6 @@ def validate_issue_evidence(
         checked_topics: set[str] = set()
         checked_urls: set[str] = set()
         observed_urls: set[str] = set()
-        observed_by_topic: dict[str, set[str]] = {
-            topic: set() for topic in required_topics
-        }
         for index, check in enumerate(checks, start=1):
             if not isinstance(check, dict):
                 fail(f"{label} source_checks[{index}] must be an object")
@@ -1458,8 +1455,32 @@ def validate_issue_evidence(
             checked_urls.add(url)
             if state == "observed_live":
                 observed_urls.add(url)
-                for topic in topics:
-                    observed_by_topic[str(topic)].add(url)
+
+        discovery_checks = entry.get("discovery_checks")
+        if not isinstance(discovery_checks, list) or not discovery_checks:
+            fail(f"research bundle has no discovery checks: {label}")
+        discovery_states = {
+            "searched_resolved",
+            "searched_unresolved",
+            "searched_no_results",
+            "searched_no_material_results",
+        }
+        for index, check in enumerate(discovery_checks, start=1):
+            if not isinstance(check, dict):
+                fail(f"{label} discovery_checks[{index}] must be an object")
+            state = check.get("slot_state")
+            topics = check.get("watch_topic_ids")
+            if state not in discovery_states:
+                fail(f"{label} discovery_checks[{index}] has an invalid state")
+            if not isinstance(topics, list) or any(topic not in required_topics for topic in topics):
+                fail(f"{label} discovery_checks[{index}] has invalid watch topics")
+            if not str(check.get("checked_at_jst", "")).startswith(issue_date):
+                fail(f"{label} discovery_checks[{index}] has a stale check time")
+            if not isinstance(check.get("evidence_summary"), str) or not str(
+                check.get("evidence_summary")
+            ).strip():
+                fail(f"{label} discovery_checks[{index}] has no evidence summary")
+            checked_topics.update(str(topic) for topic in topics)
 
         seed_urls = {
             str(source.get("url"))
@@ -1480,6 +1501,9 @@ def validate_issue_evidence(
             if isinstance(record, dict)
             and str(record.get("url", "")).startswith(("http://", "https://"))
         } if isinstance(records, list) else {}
+        observed_record_urls = {
+            url for url, record in record_by_url.items() if record.get("observed")
+        }
 
         for card in cards_by_category.get(label, []):
             topic_id = str(card.get("watch_topic_id"))
@@ -1493,7 +1517,7 @@ def validate_issue_evidence(
                 for source in detail.get("sources", [])
                 if isinstance(source, dict)
             }
-            if not detail_urls or not detail_urls <= observed_by_topic[topic_id]:
+            if not detail_urls or not detail_urls <= observed_record_urls:
                 fail(f"{label} public update cites unobserved evidence")
             if evidence_contract_active:
                 source_date = str(card.get("source_published_date", ""))
