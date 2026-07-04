@@ -117,6 +117,11 @@ FACT_SOURCE_METADATA_RE = re.compile(
     r"(?:Yahoo!|YouTube|MSN)?[。．.!！?？]*$",
     re.I,
 )
+SOURCE_CHROME_RE = re.compile(
+    r"(?:^|\s)(?:執筆|written\s+by|by)\s*(?:[-:：]|$)|"
+    r"(?:\s[|｜]\s*[^|｜。、]{1,40}){2,}",
+    re.I,
+)
 SOURCE_CHANNEL_RE = re.compile(
     r"公式(?:サイト|ページ|IR|ニュースルーム)|ニュースルーム|IRページ|"
     r"記事|動画|検索結果|RSS",
@@ -480,6 +485,8 @@ def public_render_copy_violations(text: str, *, kind: str) -> list[str]:
         violations.append("navigation or page-shell text leaked")
     if DOCUMENT_EXTRACTION_NOISE_RE.search(stripped):
         violations.append("document metadata, contact block, or chart axis leaked")
+    if SOURCE_CHROME_RE.search(stripped):
+        violations.append("publisher byline or navigation trail leaked")
     if kind == "summary" and NO_UPDATE_ASSERTION_RE.search(stripped):
         violations.append("no-update statement exposed as an important update")
     if kind == "summary" and GENERIC_CONTEXT_RE.search(stripped):
@@ -647,6 +654,8 @@ def material_fact_violations(text: str) -> list[str]:
         violations.append("contains markup")
     if FACT_SOURCE_METADATA_RE.search(value):
         violations.append("is source metadata, not an event fact")
+    if SOURCE_CHROME_RE.search(value):
+        violations.append("is publisher chrome, not an event fact")
     if FACT_ANALYSIS_OR_UNKNOWN_RE.search(value):
         violations.append("is analysis or an unknown, not a confirmed fact")
     if public_render_copy_violations(value, kind="summary"):
@@ -1788,6 +1797,11 @@ def self_test() -> None:
         kind="summary",
     ):
         fail("public-copy validation accepted document extraction metadata")
+    if not public_render_copy_violations(
+        "企業が新施策を発表 執筆 - Markets | Stocks | Finance | News。",
+        kind="summary",
+    ):
+        fail("public-copy validation accepted publisher navigation chrome")
     leaked_source = dict(card)
     leaked_source["summary"] = f"{card['summary']} Example News"
     leaked_detail = dict(card["detail"])

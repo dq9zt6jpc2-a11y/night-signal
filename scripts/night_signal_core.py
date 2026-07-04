@@ -95,6 +95,43 @@ CATEGORY_IDENTITY_TERMS = {
     "北米経済": ["米", "米国", "アメリカ", "Canada", "Fed", "FRB", "S&P", "Nasdaq"],
     "宇都宮ブレックス": ["宇都宮ブレックス", "BREX", "B.LEAGUE", "Bリーグ"],
 }
+DISCOVERY_CHANGE_TERMS = [
+    "partnership",
+    "提携",
+    "agreement",
+    "合意",
+    "joint",
+    "共同",
+    "acquisition",
+    "買収",
+    "investment",
+    "投資",
+    "security",
+    "安全保障",
+    "supply chain",
+    "供給網",
+    "regulation",
+    "規制",
+    "contract",
+    "契約",
+    "official",
+    "公式",
+    "market share",
+    "シェア",
+    "benchmark",
+    "funding",
+    "資金調達",
+    "debt",
+    "rating",
+    "hiring",
+    "採用",
+    "construction",
+    "建設",
+    "appointment",
+    "就任",
+    "resignation",
+    "退任",
+]
 
 
 def fail(message: str) -> None:
@@ -166,6 +203,59 @@ def html_fragment_text(value: str, limit: int = 1600) -> str:
     except (ValueError, TypeError):
         return compact_text(value, limit)
     return compact_text(" ".join(parser.parts), limit)
+
+
+def structured_article_text(value: str) -> tuple[str, str] | None:
+    articles: list[dict[str, Any]] = []
+
+    def visit(node: Any) -> None:
+        if isinstance(node, list):
+            for child in node:
+                visit(child)
+            return
+        if not isinstance(node, dict):
+            return
+        raw_type = node.get("@type")
+        types = raw_type if isinstance(raw_type, list) else [raw_type]
+        if any(
+            str(kind).lower() in {"article", "newsarticle", "reportagenewsarticle"}
+            for kind in types
+        ):
+            articles.append(node)
+        for child in node.values():
+            if isinstance(child, (dict, list)):
+                visit(child)
+
+    for match in re.finditer(
+        r"<script[^>]+type=[\"']application/ld\+json[\"'][^>]*>(.*?)</script>",
+        value,
+        flags=re.I | re.S,
+    ):
+        try:
+            visit(json.loads(html.unescape(match.group(1))))
+        except (json.JSONDecodeError, TypeError):
+            continue
+    if not articles:
+        return None
+    article = max(
+        articles,
+        key=lambda item: len(
+            str(item.get("articleBody") or item.get("description") or "")
+        ),
+    )
+    title = compact_text(str(article.get("headline") or article.get("name") or ""), 220)
+    body = compact_text(
+        " ".join(
+            str(part)
+            for part in (
+                article.get("description"),
+                article.get("articleBody"),
+            )
+            if part
+        ),
+        4000,
+    )
+    return (title, body) if title and len(body) >= 60 else None
 
 
 def normalized_topic_key(*values: Any) -> str:
@@ -365,6 +455,15 @@ def contains_material_signal(*values: str) -> bool:
     return bool(MATERIAL_SIGNAL_RE.search(text))
 
 
+def material_event_candidate(title: str, *evidence_values: str) -> bool:
+    text = " ".join([str(title), *(str(value or "") for value in evidence_values)])
+    return bool(
+        state_contract.analysis_headline(title)
+        or PUBLICATION_EVENT_RE.search(title)
+        or MATERIAL_SIGNAL_RE.search(text)
+    )
+
+
 def low_signal_value(*values: str) -> bool:
     text = " ".join(str(value or "") for value in values)
     return bool(LOW_SIGNAL_VALUE_RE.search(text))
@@ -383,7 +482,7 @@ def publication_item_supported(title: str, *evidence_values: str) -> bool:
             supporting_sentences,
         )
         return bool(facts) and bool(state_contract.analysis_conclusion(facts))
-    return bool(PUBLICATION_EVENT_RE.search(title))
+    return material_event_candidate(title, evidence)
 
 
 def record_has_only_headline(title: str, record: dict[str, Any]) -> bool:
@@ -544,8 +643,11 @@ def page_text(raw: bytes, content_type: str) -> tuple[str, str]:
     charset = charset_match.group(1) if charset_match else "utf-8"
     text = raw.decode(charset, errors="replace")
     if "<html" not in text[:1000].lower() and "<!doctype" not in text[:1000].lower():
-        plain = compact_text(text)
+        plain = compact_text(text, 4000)
         return plain[:180], plain
+    structured = structured_article_text(text)
+    if structured:
+        return structured
     title_match = re.search(
         r"<title[^>]*>(.*?)</title>",
         text,
@@ -554,7 +656,7 @@ def page_text(raw: bytes, content_type: str) -> tuple[str, str]:
     title = compact_text(title_match.group(1), 180) if title_match else ""
     parser = VisibleTextParser()
     parser.feed(text)
-    return title, compact_text(" ".join(parser.parts))
+    return title, compact_text(" ".join(parser.parts), 4000)
 
 
 def request_bytes(url: str, timeout: int = 15) -> tuple[bytes, str, str]:
@@ -587,7 +689,6 @@ def source_search_fallback(source: dict[str, Any]) -> dict[str, Any]:
     excerpt = ""
     resolved_url = ""
     used_query = ""
-    discovered_records: list[dict[str, Any]] = []
     for query in queries:
         search_url = "https://www.bing.com/search?" + urllib.parse.urlencode(
             {"format": "rss", "q": query}
@@ -596,31 +697,25 @@ def source_search_fallback(source: dict[str, Any]) -> dict[str, Any]:
         try:
             root = ET.fromstring(raw)
             results: list[str] = []
-            discovered_records = []
             for item in root.findall(".//item"):
                 title = compact_text(item.findtext("title") or "", 220)
                 link = compact_text(item.findtext("link") or "", 1000)
                 description = html_fragment_text(item.findtext("description") or "", 900)
                 if not title or not link.startswith(("http://", "https://")):
                     continue
+                result_host = urllib.parse.urlparse(link).netloc.lower().removeprefix("www.")
+                source_host = parsed.netloc.lower().removeprefix("www.")
+                if result_host != source_host and not result_host.endswith(f".{source_host}"):
+                    continue
+                if source.get("channel") == "sns_x":
+                    source_path = parsed.path.rstrip("/").lower()
+                    result_path = urllib.parse.urlparse(link).path.rstrip("/").lower()
+                    if source_path and not (
+                        result_path == source_path
+                        or result_path.startswith(f"{source_path}/")
+                    ):
+                        continue
                 results.append(" / ".join(part for part in (title, link, description) if part))
-                discovered_records.append(
-                    {
-                        "label": str(source["label"]),
-                        "url": link,
-                        "source_role": str(source.get("source_role", "social_or_video_signal")),
-                        "channel": str(source.get("channel", "web")),
-                        "source_class": str(source.get("source_class", "discovered_media")),
-                        "observed": True,
-                        "published_date": parse_rss_date(item.findtext("pubDate")),
-                        "title": title,
-                        "excerpt": description or title,
-                        "evidence": (
-                            f"{source['label']}に限定した検索で「{title}」を確認した。"
-                            f"配信日は{parse_rss_date(item.findtext('pubDate')) or '日付不明'}。"
-                        ),
-                    }
-                )
             excerpt = compact_text(" ".join(results), 1600)
         except ET.ParseError:
             _, excerpt = page_text(raw, content_type)
@@ -638,7 +733,6 @@ def source_search_fallback(source: dict[str, Any]) -> dict[str, Any]:
         "title": f"{source['label']}限定検索",
         "excerpt": excerpt,
         "verification_method": "source_limited_search",
-        "discovered_records": discovered_records,
         "evidence": (
             f"{source_kind}{source_url}に限定したBing RSS検索を確認した。"
             f"検索語: {used_query}。検索結果: {excerpt[:500]}"
@@ -757,30 +851,19 @@ def discovery_queries(category: dict[str, Any], issue_date: str) -> list[dict[st
             if str(term).strip().lower() not in configured_topic_terms
         )
     )
-    material_terms = [
-        "partnership",
-        "security",
-        "market share",
-        "benchmark",
-        "funding",
-        "debt",
-        "rating",
-        "hiring",
-        "contract",
-        "Japan company",
-        "official",
-    ]
-    horizon_terms = list(dict.fromkeys([*axis_only_terms, *material_terms]))
-    queries.append(
-        {
-            "query_id": "horizon:material-change",
-            "purpose": "horizon",
-            "watch_topic_ids": [],
-            "query": f"({identity}) ({' OR '.join(horizon_terms)}) when:3d",
-            "provider": "google_news_rss",
-            "channel": "web",
-        }
-    )
+    horizon_terms = list(dict.fromkeys([*axis_only_terms, *DISCOVERY_CHANGE_TERMS]))
+    for index in range(0, len(horizon_terms), 20):
+        group = horizon_terms[index : index + 20]
+        queries.append(
+            {
+                "query_id": f"horizon:material-change:{index // 20 + 1}",
+                "purpose": "horizon",
+                "watch_topic_ids": [],
+                "query": f"({identity}) ({' OR '.join(group)}) when:3d",
+                "provider": "google_news_rss",
+                "channel": "web",
+            }
+        )
     return queries
 
 
@@ -795,6 +878,7 @@ def news_query(category: dict[str, Any], issue_date: str) -> str:
 def canonical_article_match_text(value: str) -> str:
     text = str(value).lower()
     replacements = (
+        (r"総理大臣|総理|prime minister", " 首相 "),
         (r"パートナーシップ|協業|連携|mou|覚書|共同(?:展開|開発)?", " 提携 "),
         (r"announc\w*|launch\w*|発表|公表|公開|提供開始", " 発表 "),
         (r"acqui\w*|買収|取得", " 買収 "),
@@ -803,6 +887,81 @@ def canonical_article_match_text(value: str) -> str:
     for pattern, replacement in replacements:
         text = re.sub(pattern, replacement, text, flags=re.I)
     return compact_text(text, 1200)
+
+
+EVENT_QUERY_STOPWORDS = {
+    "発表",
+    "公表",
+    "強化",
+    "推進",
+    "開始",
+    "更新",
+    "協力",
+    "提携",
+    "契約",
+    "分野",
+    "方針",
+    "最新",
+    "ニュース",
+    "announced",
+    "announces",
+    "launch",
+    "launched",
+    "release",
+    "released",
+    "update",
+    "updated",
+}
+
+
+def event_probe_terms(title: str) -> list[str]:
+    """Extract a small, deterministic event query without domain-specific rules."""
+    canonical = canonical_article_match_text(record_public_title({"title": title}))
+    chunks = re.split(
+        r"[、。,:：;；/／|｜・（）()【】\[\]\s]+|"
+        r"(?<=[0-9A-Za-z一-龥ぁ-んァ-ンー])(?:から|より|の|と|が|を|へ|に|で)"
+        r"(?=[0-9A-Za-z一-龥ぁ-んァ-ンー])",
+        canonical,
+    )
+    chunks.extend(re.findall(r"[A-Za-z][A-Za-z0-9.+-]{2,}|\d+(?:\.\d+)?", canonical))
+    ranked: list[tuple[int, int, str]] = []
+    seen: set[str] = set()
+    for position, raw in enumerate(chunks):
+        term = raw.strip(" -–—'\"")
+        term = re.sub(r"^(?:から|より|の|と|が|を|へ|に|で)+", "", term)
+        key = term.casefold()
+        if len(term) < 2 or key in EVENT_QUERY_STOPWORDS or key in seen:
+            continue
+        if not re.search(r"[0-9A-Za-z一-龥ァ-ヶー]", term):
+            continue
+        seen.add(key)
+        score = min(len(term), 12)
+        if re.search(r"(?:首相|大統領|政府|省|庁|社|銀行|大学|機構|委員会)$", term):
+            score += 10
+        if re.search(r"[A-Z0-9]", term):
+            score += 5
+        ranked.append((score, -position, term))
+    return [term for _, _, term in sorted(ranked, reverse=True)[:5]]
+
+
+def event_probe_query(title: str) -> str:
+    terms = event_probe_terms(title)
+    return " ".join(terms) if terms else compact_text(title, 180)
+
+
+def article_candidate_score(original_title: str, candidate_text: str) -> int:
+    original = canonical_article_match_text(original_title)
+    candidate = canonical_article_match_text(candidate_text)
+    matched_terms = sum(
+        1 for term in event_probe_terms(original_title) if term.casefold() in candidate
+    )
+    return (
+        round(100 * state_contract.title_repetition_score(original, candidate))
+        + 12 * state_contract.text_overlap(original, candidate)
+        + 18 * matched_terms
+        + 25 * bool(PUBLICATION_EVENT_RE.search(candidate_text))
+        + 15 * bool(MATERIAL_SIGNAL_RE.search(candidate_text))
+    )
 
 
 def article_result_matches(original_title: str, result_title: str) -> bool:
@@ -936,8 +1095,73 @@ def article_search_queries(record: dict[str, Any], original_title: str) -> list[
     host = publisher.netloc.lower().removeprefix("www.")
     if host:
         queries.append(f"site:{host} {original_title}")
-    queries.append(original_title)
+    probe = event_probe_query(original_title)
+    if probe and probe != original_title:
+        queries.append(probe)
     return list(dict.fromkeys(queries))
+
+
+def article_record_from_candidate(
+    category_label: str,
+    record: dict[str, Any],
+    original_title: str,
+    candidate_url: str,
+    result_title: str,
+    description: str,
+) -> dict[str, Any] | None:
+    for attempt in (candidate_url, jina_url(candidate_url)):
+        try:
+            page_raw, content_type, _ = request_bytes(attempt, timeout=12)
+            page_title, body = page_text(page_raw, content_type)
+        except (OSError, TimeoutError, urllib.error.URLError, ValueError):
+            continue
+        body = compact_text(body, 4000)
+        body_record = {**record, "excerpt": body}
+        combined = (
+            body
+            if record_has_material_body(original_title, body_record)
+            else compact_text(f"{description} {body}", 2400)
+        )
+        candidate_record = {**record, "excerpt": combined}
+        if (
+            len(combined) < 80
+            or state_contract.navigation_shell_text(combined)
+            or not record_has_material_body(original_title, candidate_record)
+            or not category_identity_ok(category_label, original_title, combined)
+            or not article_result_matches(
+                original_title,
+                f"{page_title or result_title} {combined}",
+            )
+            or not document_matches_discovery(
+                record,
+                candidate_url,
+                page_title or result_title,
+                combined,
+            )
+        ):
+            continue
+        parsed = urllib.parse.urlparse(candidate_url)
+        resolved_label = parsed.netloc.lower().removeprefix("www.")
+        publisher_url = (
+            f"{parsed.scheme}://{parsed.netloc}"
+            if parsed.scheme in {"http", "https"} and parsed.netloc
+            else str(record.get("publisher_url", ""))
+        )
+        return {
+            **record,
+            "label": resolved_label or str(record.get("label", "")),
+            "url": candidate_url,
+            "publisher_url": publisher_url,
+            "original_discovery_url": str(record.get("url", "")),
+            "title": original_title,
+            "excerpt": combined,
+            "evidence": (
+                f"Google News RSSで「{original_title}」を確認し、"
+                f"配信元ページ{candidate_url}を特定した。"
+                f"本文抽出: {combined[:700]}"
+            ),
+        }
+    return None
 
 
 def enrich_discovered_record(
@@ -948,7 +1172,7 @@ def enrich_discovered_record(
     if not original_title:
         return record
     category_label = str(category.get("label", ""))
-    seen_candidates: set[str] = set()
+    candidates: dict[str, tuple[int, str, str, str]] = {}
     for query in article_search_queries(record, original_title):
         search_url = "https://www.bing.com/search?" + urllib.parse.urlencode(
             {"format": "rss", "q": query}
@@ -963,8 +1187,7 @@ def enrich_discovered_record(
             candidate_url = compact_text(item.findtext("link") or "", 1000)
             description = html_fragment_text(item.findtext("description") or "", 1000)
             if (
-                candidate_url in seen_candidates
-                or not candidate_url.startswith(("http://", "https://"))
+                not candidate_url.startswith(("http://", "https://"))
                 or "news.google.com" in candidate_url
                 or not article_result_matches(
                     original_title,
@@ -977,75 +1200,61 @@ def enrich_discovered_record(
                 )
             ):
                 continue
-            seen_candidates.add(candidate_url)
-            snippet_record = {
-                **record,
-                "url": candidate_url,
-                "publisher_url": (
-                    f"{urllib.parse.urlparse(candidate_url).scheme}://"
-                    f"{urllib.parse.urlparse(candidate_url).netloc}"
+            candidate = (
+                article_candidate_score(
+                    original_title,
+                    f"{result_title} {description}",
                 ),
-                "original_discovery_url": str(record.get("url", "")),
-                "title": original_title,
-                "excerpt": description,
-                "evidence": (
-                    f"Google News RSSで「{original_title}」を確認し、"
-                    f"配信元検索で{candidate_url}と本文抜粋を特定した。"
-                    f"検索抜粋: {description[:700]}"
-                ),
-            }
-            for attempt in (candidate_url, jina_url(candidate_url)):
-                try:
-                    page_raw, content_type, _ = request_bytes(attempt, timeout=12)
-                    page_title, body = page_text(page_raw, content_type)
-                except (OSError, TimeoutError, urllib.error.URLError, ValueError):
-                    continue
-                combined = compact_text(f"{description} {body}", 2400)
-                if (
-                    len(combined) < 180
-                    or not category_identity_ok(category_label, original_title, combined)
-                    or not article_result_matches(
-                        original_title,
-                        f"{page_title or result_title} {combined}",
-                    )
-                    or not document_matches_discovery(
-                        record,
-                        candidate_url,
-                        page_title or result_title,
-                        combined,
-                    )
-                ):
-                    continue
-                parsed = urllib.parse.urlparse(candidate_url)
-                publisher_url = (
-                    f"{parsed.scheme}://{parsed.netloc}"
-                    if parsed.scheme in {"http", "https"} and parsed.netloc
-                    else str(record.get("publisher_url", ""))
-                )
-                return {
-                    **record,
-                    "url": candidate_url,
-                    "publisher_url": publisher_url,
-                    "original_discovery_url": str(record.get("url", "")),
-                    "title": original_title,
-                    "excerpt": combined,
-                    "evidence": (
-                        f"Google News RSSで「{original_title}」を確認し、"
-                        f"配信元ページ{candidate_url}を特定した。"
-                        f"本文抽出: {combined[:700]}"
-                    ),
-                }
-            if (
-                description
-                and document_matches_discovery(
-                    record,
-                    candidate_url,
-                    result_title,
-                    description,
-                )
-                and record_has_material_body(original_title, snippet_record)
-            ):
-                return snippet_record
+                candidate_url,
+                result_title,
+                description,
+            )
+            current = candidates.get(candidate_url)
+            if current is None or candidate[0] > current[0]:
+                candidates[candidate_url] = candidate
+
+    for _, candidate_url, result_title, description in sorted(
+        candidates.values(),
+        reverse=True,
+    )[:8]:
+        parsed_candidate = urllib.parse.urlparse(candidate_url)
+        snippet_record = {
+            **record,
+            "label": parsed_candidate.netloc.lower().removeprefix("www."),
+            "url": candidate_url,
+            "publisher_url": (
+                f"{parsed_candidate.scheme}://{parsed_candidate.netloc}"
+            ),
+            "original_discovery_url": str(record.get("url", "")),
+            "title": original_title,
+            "excerpt": description,
+            "evidence": (
+                f"Google News RSSで「{original_title}」を確認し、"
+                f"配信元検索で{candidate_url}と本文抜粋を特定した。"
+                f"検索抜粋: {description[:700]}"
+            ),
+        }
+        resolved = article_record_from_candidate(
+            category_label,
+            record,
+            original_title,
+            candidate_url,
+            result_title,
+            description,
+        )
+        if resolved:
+            return resolved
+        if (
+            description
+            and document_matches_discovery(
+                record,
+                candidate_url,
+                result_title,
+                description,
+            )
+            and record_has_material_body(original_title, snippet_record)
+        ):
+            return snippet_record
     return record
 
 
@@ -1066,10 +1275,7 @@ def enrichment_target_urls(
             and valid_date(record.get("published_date"), issue_date)
             and category_identity_ok(category_label, title, excerpt)
             and not low_signal_value(title, excerpt)
-            and (
-                state_contract.analysis_headline(title)
-                or bool(PUBLICATION_EVENT_RE.search(title))
-            )
+            and discovery_record_is_material(record)
             and not record_has_material_body(title, record)
         ):
             targets.add(url)
@@ -1107,11 +1313,7 @@ def discovery_record_is_relevant(
 def discovery_record_is_material(record: dict[str, Any]) -> bool:
     title = record_public_title(record)
     excerpt = str(record.get("excerpt") or "")
-    return bool(
-        state_contract.analysis_headline(title)
-        or PUBLICATION_EVENT_RE.search(title)
-        or MATERIAL_SIGNAL_RE.search(f"{title} {excerpt}")
-    )
+    return material_event_candidate(title, excerpt)
 
 
 def fetch_news(category: dict[str, Any], issue_date: str) -> dict[str, Any]:
@@ -1775,14 +1977,7 @@ def collect_evidence(issue_date: str) -> dict[str, Any]:
     }
     for record in fetched:
         label = str(record["category"])
-        records_by_category[label].append(
-            {key: value for key, value in record.items() if key != "discovered_records"}
-        )
-        records_by_category[label].extend(
-            child
-            for child in record.get("discovered_records", [])
-            if isinstance(child, dict)
-        )
+        records_by_category[label].append(record)
     for category, news_result in zip(contracts, news_results):
         label = str(category["label"])
         known_urls = {str(record.get("url")) for record in records_by_category[label]}
@@ -1856,6 +2051,71 @@ def self_test() -> None:
     )
     if "axis-only-term" not in horizon_queries:
         fail("discovery queries dropped an axis-only adjacent term")
+    structured_fixture = (
+        '<html><script type="application/ld+json">'
+        '{"@type":"NewsArticle","headline":"Hondaが新計画を発表",'
+        '"datePublished":"2099-01-02T10:00:00+09:00",'
+        '"description":"Hondaは新計画の投資額と開始時期を公表した。対象地域、設備、'
+        '量産工程、提携先の役割も示し、来年度から段階的に実行すると説明した。"}'
+        "</script></html>"
+    )
+    structured = structured_article_text(structured_fixture)
+    if not structured or "投資額" not in structured[1]:
+        fail("structured article metadata was not extracted")
+    if "2099-01-02T10:00:00" in structured[1]:
+        fail("structured publication metadata leaked into article facts")
+    cross_domain_title = "A国首相とB国首相、経済安全保障分野での連携を強化"
+    probe_terms = event_probe_terms(cross_domain_title)
+    if "強化" in probe_terms or not {"a国首相", "b国首相"} <= set(probe_terms):
+        fail("event probe did not preserve actors while removing generic actions")
+    if article_candidate_score(
+        cross_domain_title,
+        "B国首相とA国首相が会談し、重要鉱物と半導体の協力を確認",
+    ) <= article_candidate_score(
+        cross_domain_title,
+        "A国首相とB国首相が互いを愛称で呼んだ",
+    ):
+        fail("event enrichment preferred a side detail over the material event")
+    cross_domain_category = {
+        "label": "Test",
+        "watch_topics": [
+            {
+                "id": "policy_change",
+                "terms": ["政策", "安全保障"],
+                "event_classes": ["decision_or_policy"],
+            }
+        ],
+    }
+    cross_domain_record = {
+        "label": "Example News",
+        "url": "https://example.com/cross-domain-event",
+        "source_role": "independent_media_or_data",
+        "channel": "web",
+        "source_class": "discovered_media",
+        "observed": True,
+        "published_date": "2099-01-02",
+        "title": cross_domain_title,
+        "excerpt": (
+            "両国は半導体、重要鉱物、通信基盤を優先分野とした。"
+            "共同事業の工程と担当機関も公表した。"
+        ),
+    }
+    if not publication_evidence_record(
+        cross_domain_category,
+        "2099-01-03",
+        cross_domain_record,
+    ):
+        fail("a body-rich material event was lost because its action wording differed")
+    headline_only_cross_domain = {
+        **cross_domain_record,
+        "excerpt": f"{cross_domain_title} Example News",
+    }
+    if enrichment_target_urls(
+        cross_domain_category,
+        "2099-01-03",
+        [headline_only_cross_domain],
+    ) != {headline_only_cross_domain["url"]}:
+        fail("a material headline was not routed to evidence enrichment")
     if not article_result_matches(
         "OpenAI GPT-5.6シリーズを発表",
         "OpenAIのGPT-5.6シリーズを解説",
@@ -2238,8 +2498,8 @@ def self_test() -> None:
     )
     if not article_result_matches(fpt_headline, fpt_result):
         fail("article enrichment could not match a body-rich primary source")
-    if fpt_headline not in article_search_queries({}, fpt_headline):
-        fail("article enrichment omitted the unquoted discovery query")
+    if event_probe_query(fpt_headline) not in article_search_queries({}, fpt_headline):
+        fail("article enrichment omitted the bounded event probe query")
     backfill_items_from_evidence(
         promoted_fallback,
         openai_category,

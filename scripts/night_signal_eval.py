@@ -87,6 +87,7 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
             for check in entry.get("discovery_checks", [])
             if isinstance(check, dict)
         ]
+        unresolved_checks: list[str] = []
         if category_discovery_checks:
             for check in category_discovery_checks:
                 discovery_checks += 1
@@ -96,6 +97,10 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
                             reviewed_topics.add((str(label), topic))
                 category_material += int(check.get("material_candidate_count", 0))
                 category_resolved += int(check.get("resolved_candidate_count", 0))
+                if int(check.get("material_candidate_count", 0)) and not int(
+                    check.get("resolved_candidate_count", 0)
+                ):
+                    unresolved_checks.append(str(check.get("query_id", "unknown")))
         else:
             for check in entry.get("source_checks", []):
                 if not isinstance(check, dict):
@@ -111,8 +116,10 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
                 observed_urls.add(url)
         material_candidates += category_material
         resolved_candidates += category_resolved
-        if category_material and not category_resolved:
-            unresolved_categories.append(str(label))
+        if unresolved_checks:
+            unresolved_categories.append(
+                f"{label}: {', '.join(unresolved_checks)}"
+            )
 
     expected_topics = {
         (label, topic)

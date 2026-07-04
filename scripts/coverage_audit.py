@@ -26,6 +26,13 @@ def fail(message: str) -> None:
     raise SystemExit(1)
 
 
+def discovery_check_lacks_resolution(check: dict[str, Any]) -> bool:
+    return bool(
+        int(check.get("material_candidate_count", 0))
+        and not int(check.get("resolved_candidate_count", 0))
+    )
+
+
 def load_object(path: Path) -> dict[str, Any]:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
@@ -146,8 +153,6 @@ def validate_category(
     if strict_discovery and (not isinstance(discovery_checks, list) or not discovery_checks):
         fail(f"{label} has no discovery checks")
     horizon_searched = False
-    material_candidates = 0
-    resolved_candidates = 0
     valid_discovery_states = {
         "searched_no_results",
         "searched_no_material_results",
@@ -192,12 +197,14 @@ def validate_category(
                 fail(f"{label} discovery_checks[{index}] has invalid {metric}")
         if int(check["resolved_candidate_count"]) > int(check["material_candidate_count"]):
             fail(f"{label} discovery_checks[{index}] resolves more candidates than it found")
+        if strict_discovery and discovery_check_lacks_resolution(check):
+            fail(
+                f"{label} discovery query found material candidates but resolved no "
+                f"substantive evidence: {check.get('query_id', index)}"
+            )
         if check_state != "search_unavailable":
             checked_topics.update(str(topic) for topic in topics)
             horizon_searched = horizon_searched or purpose == "horizon"
-        material_candidates += int(check["material_candidate_count"])
-        resolved_candidates += int(check["resolved_candidate_count"])
-
     records = entry.get("records")
     if not isinstance(records, list):
         fail(f"{label} records must be a list")
@@ -224,9 +231,6 @@ def validate_category(
         fail(f"{label} has unchecked channels: {', '.join(sorted(required_channels - checked_channels))}")
     if not observed_urls:
         fail(f"{label} has no observed live evidence")
-    if strict_discovery and material_candidates and not resolved_candidates:
-        fail(f"{label} found material candidates but resolved no substantive evidence")
-
     category_cards = [card for card in cards if card.get("category") == label]
     for card in category_cards:
         sources = card_sources(card)
@@ -362,6 +366,14 @@ def self_test() -> None:
     )
     if result != (1, 2, 1):
         fail(f"unexpected self-test metrics: {result}")
+    if not discovery_check_lacks_resolution(
+        {"material_candidate_count": 2, "resolved_candidate_count": 0}
+    ):
+        fail("unresolved material discovery was not detected")
+    if discovery_check_lacks_resolution(
+        {"material_candidate_count": 2, "resolved_candidate_count": 1}
+    ):
+        fail("resolved material discovery was marked unresolved")
     print("COVERAGE AUDIT SELF-TEST PASSED")
 
 
