@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import concurrent.futures
 import email.utils
+import gzip
 import hashlib
 import html
 import json
@@ -731,6 +732,27 @@ class GoogleNewsArticleParser(HTMLParser):
             self.params = (article_id, timestamp, signature)
 
 
+def google_news_decoding_params(params_url: str) -> tuple[str, str, str] | None:
+    request = urllib.request.Request(
+        params_url,
+        headers={
+            "Accept": "text/html,application/xhtml+xml",
+            "Accept-Encoding": "gzip",
+            "User-Agent": USER_AGENT,
+        },
+    )
+    with urllib.request.urlopen(request, timeout=12) as response:
+        content_type = response.headers.get("Content-Type", "")
+        charset_match = re.search(r"charset=([A-Za-z0-9._-]+)", content_type)
+        charset = charset_match.group(1) if charset_match else "utf-8"
+        raw = response.read(500_000)
+        if response.headers.get("Content-Encoding", "").lower() == "gzip":
+            raw = gzip.decompress(raw)
+        parser = GoogleNewsArticleParser()
+        parser.feed(raw.decode(charset, errors="replace"))
+        return parser.params
+
+
 def google_news_publisher_url(source_url: str) -> str | None:
     """Resolve a Google News article id through Google's own signed endpoint."""
     parsed = urllib.parse.urlparse(source_url)
@@ -739,21 +761,16 @@ def google_news_publisher_url(source_url: str) -> str | None:
         return None
     if parts[-2] not in {"articles", "read"}:
         return None
-    article_id = parts[-1]
-    params_url = (
-        "https://news.google.com/articles/"
-        + urllib.parse.quote(article_id, safe="")
-        + "?hl=en-US&gl=US&ceid=US:en"
+    query = urllib.parse.parse_qs(parsed.query)
+    query.update({"hl": ["en-US"], "gl": ["US"], "ceid": ["US:en"]})
+    params_url = urllib.parse.urlunparse(
+        parsed._replace(query=urllib.parse.urlencode(query, doseq=True))
     )
     try:
-        page_raw, content_type, _ = request_bytes(params_url, timeout=12)
-        charset_match = re.search(r"charset=([A-Za-z0-9._-]+)", content_type)
-        charset = charset_match.group(1) if charset_match else "utf-8"
-        parser = GoogleNewsArticleParser()
-        parser.feed(page_raw.decode(charset, errors="replace"))
-        if parser.params is None:
+        params = google_news_decoding_params(params_url)
+        if params is None:
             return None
-        resolved_id, timestamp, signature = parser.params
+        resolved_id, timestamp, signature = params
         inner = [
             "garturlreq",
             [
@@ -2722,6 +2739,7 @@ def self_test() -> None:
         fail("Google News Reader resolution was not recognized")
     original_request_bytes = request_bytes
     original_post_form_bytes = post_form_bytes
+    original_google_news_decoding_params = google_news_decoding_params
     decoded_headline = "OpenAIが米政府への5％株式譲渡案を協議"
     encoded_google_url = "https://news.google.com/rss/articles/decode-example?oc=5"
 
@@ -2763,6 +2781,11 @@ def self_test() -> None:
 
     globals()["request_bytes"] = fake_decode_request
     globals()["post_form_bytes"] = fake_decode_post
+    globals()["google_news_decoding_params"] = lambda _: (
+        "decode-example",
+        "123",
+        "signature",
+    )
     try:
         decoded_record = article_record_from_candidate(
             "OpenAI",
@@ -2784,6 +2807,7 @@ def self_test() -> None:
     finally:
         globals()["request_bytes"] = original_request_bytes
         globals()["post_form_bytes"] = original_post_form_bytes
+        globals()["google_news_decoding_params"] = original_google_news_decoding_params
     if (
         not decoded_record
         or decoded_record.get("url")
@@ -2792,6 +2816,7 @@ def self_test() -> None:
     ):
         fail("Google News URL was not resolved to body-rich publisher Evidence")
     original_request_bytes = request_bytes
+    original_google_news_decoding_params = google_news_decoding_params
     reader_headline = "OpenAIが米政府への5％株式譲渡案を協議"
     reader_google_url = "https://news.google.com/rss/articles/example?oc=5"
 
@@ -2808,6 +2833,7 @@ def self_test() -> None:
         return body.encode(), "text/plain; charset=utf-8", jina_url(reader_google_url)
 
     globals()["request_bytes"] = fake_reader_request
+    globals()["google_news_decoding_params"] = lambda _: None
     try:
         reader_record = article_record_from_candidate(
             "OpenAI",
@@ -2828,6 +2854,7 @@ def self_test() -> None:
         )
     finally:
         globals()["request_bytes"] = original_request_bytes
+        globals()["google_news_decoding_params"] = original_google_news_decoding_params
     if not reader_record or not record_has_material_body(reader_headline, reader_record):
         fail("Google News Reader body was not retained as publication Evidence")
     if event_probe_query(fpt_headline) not in article_search_queries({}, fpt_headline):
