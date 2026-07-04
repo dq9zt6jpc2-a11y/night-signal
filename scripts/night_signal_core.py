@@ -686,8 +686,157 @@ def request_bytes(url: str, timeout: int = 15) -> tuple[bytes, str, str]:
         return raw, content_type, response.geturl()
 
 
+def post_form_bytes(
+    url: str,
+    values: dict[str, str],
+    timeout: int = 15,
+) -> tuple[bytes, str, str]:
+    request = urllib.request.Request(
+        url,
+        data=urllib.parse.urlencode(values).encode("utf-8"),
+        headers={
+            "Accept": "*/*",
+            "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+            "User-Agent": USER_AGENT,
+        },
+        method="POST",
+    )
+    with urllib.request.urlopen(request, timeout=timeout) as response:
+        raw = response.read(100_000)
+        content_type = response.headers.get("Content-Type", "")
+        return raw, content_type, response.geturl()
+
+
 def jina_url(url: str) -> str:
     return "https://r.jina.ai/http://" + re.sub(r"^https?://", "", url)
+
+
+class GoogleNewsArticleParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.params: tuple[str, str, str] | None = None
+
+    def handle_starttag(
+        self,
+        tag: str,
+        attrs: list[tuple[str, str | None]],
+    ) -> None:
+        if tag != "div" or self.params is not None:
+            return
+        values = dict(attrs)
+        article_id = values.get("data-n-a-id")
+        timestamp = values.get("data-n-a-ts")
+        signature = values.get("data-n-a-sg")
+        if article_id and timestamp and signature:
+            self.params = (article_id, timestamp, signature)
+
+
+def google_news_publisher_url(source_url: str) -> str | None:
+    """Resolve a Google News article id through Google's own signed endpoint."""
+    parsed = urllib.parse.urlparse(source_url)
+    parts = [part for part in parsed.path.split("/") if part]
+    if parsed.netloc.lower() != "news.google.com" or len(parts) < 2:
+        return None
+    if parts[-2] not in {"articles", "read"}:
+        return None
+    article_id = parts[-1]
+    params_url = (
+        "https://news.google.com/articles/"
+        + urllib.parse.quote(article_id, safe="")
+        + "?hl=en-US&gl=US&ceid=US:en"
+    )
+    try:
+        page_raw, content_type, _ = request_bytes(params_url, timeout=12)
+        charset_match = re.search(r"charset=([A-Za-z0-9._-]+)", content_type)
+        charset = charset_match.group(1) if charset_match else "utf-8"
+        parser = GoogleNewsArticleParser()
+        parser.feed(page_raw.decode(charset, errors="replace"))
+        if parser.params is None:
+            return None
+        resolved_id, timestamp, signature = parser.params
+        inner = [
+            "garturlreq",
+            [
+                [
+                    "X",
+                    "X",
+                    ["X", "X"],
+                    None,
+                    None,
+                    1,
+                    1,
+                    "US:en",
+                    None,
+                    1,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    0,
+                    1,
+                ],
+                "X",
+                "X",
+                1,
+                [1, 1, 1],
+                1,
+                1,
+                None,
+                0,
+                0,
+                None,
+                0,
+            ],
+            resolved_id,
+            int(timestamp),
+            signature,
+        ]
+        envelope = [
+            [
+                [
+                    "Fbv4je",
+                    json.dumps(inner, ensure_ascii=False, separators=(",", ":")),
+                    None,
+                    "generic",
+                ]
+            ]
+        ]
+        raw, _, _ = post_form_bytes(
+            "https://news.google.com/_/DotsSplashUi/data/batchexecute",
+            {"f.req": json.dumps(envelope, ensure_ascii=False, separators=(",", ":"))},
+            timeout=12,
+        )
+        response_text = raw.decode("utf-8", errors="replace")
+        for line in response_text.splitlines():
+            line = line.strip()
+            if not line.startswith("["):
+                continue
+            response = json.loads(line)
+            for entry in response:
+                if (
+                    isinstance(entry, list)
+                    and len(entry) >= 3
+                    and entry[0] == "wrb.fr"
+                    and entry[1] == "Fbv4je"
+                    and isinstance(entry[2], str)
+                ):
+                    decoded = json.loads(entry[2])
+                    publisher_url = decoded[1] if len(decoded) > 1 else None
+                    if isinstance(publisher_url, str) and publisher_url.startswith(
+                        ("http://", "https://")
+                    ):
+                        return publisher_url
+    except (
+        OSError,
+        TimeoutError,
+        ValueError,
+        TypeError,
+        json.JSONDecodeError,
+        urllib.error.URLError,
+    ):
+        return None
+    return None
 
 
 def source_search_fallback(source: dict[str, Any]) -> dict[str, Any]:
@@ -1166,19 +1315,40 @@ def article_record_from_candidate(
     )
     if not discovery_redirect and not candidate_matches_publisher(record, candidate_url):
         return None
-    attempts = (candidate_url, jina_url(candidate_url))
-    for attempt in attempts:
+    publisher_candidate = (
+        google_news_publisher_url(candidate_url)
+        if discovery_redirect
+        else candidate_url
+    )
+    source_candidates = list(
+        dict.fromkeys(
+            [
+                *([publisher_candidate] if publisher_candidate else []),
+                candidate_url,
+            ]
+        )
+    )
+    attempts = [
+        (source_candidate, attempt)
+        for source_candidate in source_candidates
+        for attempt in (source_candidate, jina_url(source_candidate))
+    ]
+    for source_candidate, attempt in attempts:
         try:
             page_raw, content_type, resolved_url = request_bytes(attempt, timeout=12)
             page_title, body = page_text(page_raw, content_type)
         except (OSError, TimeoutError, urllib.error.URLError, ValueError):
             continue
-        reader_resolved_discovery = reader_resolved_discovery_url(
-            candidate_url, resolved_url
+        reader_fetch = (
+            urllib.parse.urlparse(resolved_url).netloc.lower() == "r.jina.ai"
+        )
+        reader_resolved_discovery = (
+            source_candidate == candidate_url
+            and reader_resolved_discovery_url(candidate_url, resolved_url)
         )
         effective_url = (
-            candidate_url
-            if urllib.parse.urlparse(resolved_url).netloc.lower() == "r.jina.ai"
+            source_candidate
+            if reader_fetch
             else resolved_url
         )
         if not reader_resolved_discovery and not candidate_matches_publisher(
@@ -2550,6 +2720,77 @@ def self_test() -> None:
         "https://r.jina.ai/http://news.google.com/rss/articles/example?oc=5",
     ):
         fail("Google News Reader resolution was not recognized")
+    original_request_bytes = request_bytes
+    original_post_form_bytes = post_form_bytes
+    decoded_headline = "OpenAIが米政府への5％株式譲渡案を協議"
+    encoded_google_url = "https://news.google.com/rss/articles/decode-example?oc=5"
+
+    def fake_decode_request(url: str, timeout: int = 15) -> tuple[bytes, str, str]:
+        if url.startswith("https://news.google.com/articles/decode-example"):
+            page = (
+                '<c-wiz><div jscontroller="article" '
+                'data-n-a-id="decode-example" data-n-a-ts="123" '
+                'data-n-a-sg="signature"></div></c-wiz>'
+            )
+            return page.encode(), "text/html; charset=utf-8", url
+        if url == "https://example.com/openai-government-stake":
+            body = (
+                f"Title: {decoded_headline}\n"
+                "Published Time: 2099-01-02T12:00:00+09:00\n"
+                "Markdown Content: OpenAIは米政府に株式5％を譲渡する案を協議した。"
+                "評価額に基づく持分額と議会承認の可能性も報じられた。"
+            )
+            return body.encode(), "text/plain; charset=utf-8", url
+        raise urllib.error.URLError(f"unexpected URL: {url}")
+
+    def fake_decode_post(
+        url: str,
+        values: dict[str, str],
+        timeout: int = 15,
+    ) -> tuple[bytes, str, str]:
+        if "decode-example" not in values.get("f.req", ""):
+            raise urllib.error.URLError("article id missing from decode request")
+        inner = json.dumps(
+            ["garturlres", "https://example.com/openai-government-stake", 1],
+            separators=(",", ":"),
+        )
+        response = [["wrb.fr", "Fbv4je", inner, None, None, None, ""]]
+        return (
+            (")]}'\n\n" + json.dumps(response, separators=(",", ":"))).encode(),
+            "application/json; charset=utf-8",
+            url,
+        )
+
+    globals()["request_bytes"] = fake_decode_request
+    globals()["post_form_bytes"] = fake_decode_post
+    try:
+        decoded_record = article_record_from_candidate(
+            "OpenAI",
+            {
+                "label": "Example News",
+                "url": encoded_google_url,
+                "publisher_url": "https://example.com",
+                "source_class": "discovered_media",
+                "observed": True,
+                "published_date": "2099-01-02",
+                "title": decoded_headline,
+                "excerpt": decoded_headline,
+            },
+            decoded_headline,
+            encoded_google_url,
+            decoded_headline,
+            decoded_headline,
+        )
+    finally:
+        globals()["request_bytes"] = original_request_bytes
+        globals()["post_form_bytes"] = original_post_form_bytes
+    if (
+        not decoded_record
+        or decoded_record.get("url")
+        != "https://example.com/openai-government-stake"
+        or not record_has_material_body(decoded_headline, decoded_record)
+    ):
+        fail("Google News URL was not resolved to body-rich publisher Evidence")
     original_request_bytes = request_bytes
     reader_headline = "OpenAIが米政府への5％株式譲渡案を協議"
     reader_google_url = "https://news.google.com/rss/articles/example?oc=5"
