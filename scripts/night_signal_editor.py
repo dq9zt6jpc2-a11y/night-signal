@@ -102,6 +102,130 @@ def quality_model_required(category_payload: dict[str, Any]) -> bool:
     return False
 
 
+def sanitize_model_result(raw: dict[str, Any]) -> dict[str, Any]:
+    """Merge repeated model points without changing their supported wording."""
+    sanitized = {**raw, "items": []}
+    for raw_item in raw.get("items", []):
+        if not isinstance(raw_item, dict):
+            sanitized["items"].append(raw_item)
+            continue
+        points: list[dict[str, Any]] = []
+        for raw_point in raw_item.get("summary_points", []):
+            if not isinstance(raw_point, dict):
+                points.append(raw_point)
+                continue
+            text = compact_text(raw_point.get("text", ""), 500)
+            evidence_ids = list(
+                dict.fromkeys(
+                    value
+                    for value in raw_point.get("evidence_ids", [])
+                    if isinstance(value, str) and value
+                )
+            )
+            duplicate = next(
+                (
+                    point
+                    for point in points
+                    if isinstance(point, dict)
+                    and state.materially_same_fact(
+                        str(point.get("text", "")),
+                        text,
+                    )
+                ),
+                None,
+            )
+            if duplicate is None:
+                points.append({"text": text, "evidence_ids": evidence_ids})
+            else:
+                duplicate["evidence_ids"] = list(
+                    dict.fromkeys([*duplicate.get("evidence_ids", []), *evidence_ids])
+                )
+        sanitized["items"].append({**raw_item, "summary_points": points})
+    return sanitized
+
+
+def publication_record_chunks(
+    category: dict[str, Any],
+    issue_date: str,
+    records: list[dict[str, Any]],
+    *,
+    max_records: int = 12,
+) -> list[list[dict[str, Any]]]:
+    selected = [
+        record
+        for _, record in core.editor_evidence_records(category, issue_date, records)
+    ]
+    event_groups: list[list[dict[str, Any]]] = []
+    for record in selected:
+        title = core.record_public_title(record)
+        group = next(
+            (
+                candidate
+                for candidate in event_groups
+                if any(
+                    core.same_material_event(
+                        title,
+                        core.record_public_title(existing),
+                    )
+                    for existing in candidate
+                )
+            ),
+            None,
+        )
+        if group is None:
+            event_groups.append([record])
+        else:
+            group.append(record)
+    chunks: list[list[dict[str, Any]]] = []
+    for group in event_groups:
+        if not chunks or len(chunks[-1]) + len(group) > max_records:
+            chunks.append([])
+        chunks[-1].extend(group)
+    return [chunk for chunk in chunks if chunk]
+
+
+def fit_model_payload(
+    payload: dict[str, Any],
+    *,
+    max_bytes: int = 40_000,
+) -> dict[str, Any]:
+    def build(limit: int) -> dict[str, Any]:
+        return {
+            **payload,
+            "evidence": [
+                {**item, "body": compact_text(item.get("body", ""), limit)}
+                for item in payload.get("evidence", [])
+                if isinstance(item, dict)
+            ],
+        }
+
+    def size(value: dict[str, Any]) -> int:
+        return len(
+            json.dumps(
+                value,
+                ensure_ascii=False,
+                separators=(",", ":"),
+            ).encode("utf-8")
+        )
+
+    if size(payload) <= max_bytes:
+        return payload
+    low, high = 240, max(
+        [len(str(item.get("body", ""))) for item in payload.get("evidence", [])]
+        or [240]
+    )
+    while low < high:
+        candidate = (low + high + 1) // 2
+        if size(build(candidate)) <= max_bytes:
+            low = candidate
+        else:
+            high = candidate - 1
+    fitted = build(low)
+    if size(fitted) > max_bytes:
+        raise ValueError("model payload cannot retain every evidence title within the request limit")
+    return fitted
+
+
 def read_evidence(path: Path) -> dict[str, Any]:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
@@ -210,6 +334,7 @@ def edit_evidence(
         label: str,
         records: list[dict[str, Any]],
     ) -> tuple[list[dict[str, Any]], int, bool, dict[str, Any]]:
+        raw = sanitize_model_result(raw)
         normalized = core.normalize_result(raw, category, issue_date, records)
         cards: list[dict[str, Any]] = []
         failed = 0
@@ -265,9 +390,12 @@ def edit_evidence(
         if not isinstance(entry, dict) or not isinstance(entry.get("records"), list):
             fail(f"Evidence records are missing: {label}")
         records = [record for record in entry["records"] if isinstance(record, dict)]
-        category_payload = core.category_prompt(category, issue_date, records)
-        selected_result: tuple[list[dict[str, Any]], int, bool, dict[str, Any]] | None = None
-        if category_payload["evidence"]:
+        chunks = publication_record_chunks(category, issue_date, records)
+        category_cards: list[dict[str, Any]] = []
+        for chunk_index, chunk_records in enumerate(chunks, start=1):
+            category_payload = fit_model_payload(
+                core.category_prompt(category, issue_date, chunk_records)
+            )
             quality_required = quality_model_required(category_payload)
             model_chain = models.routed_models(quality_required=quality_required)
             messages = [
@@ -281,6 +409,9 @@ def edit_evidence(
                     ),
                 },
             ]
+            selected_result: tuple[
+                list[dict[str, Any]], int, bool, dict[str, Any]
+            ] | None = None
             for model_name in model_chain:
                 with degraded_models_lock:
                     if model_name in degraded_models:
@@ -293,7 +424,7 @@ def edit_evidence(
                             attempt_messages,
                             model_name=model_name,
                             retry_wait_cap=90,
-                            request_label=label,
+                            request_label=f"{label} {chunk_index}/{len(chunks)}",
                         )
                     except models.ModelRequestError as exc:
                         if exc.rate_limited:
@@ -301,7 +432,13 @@ def edit_evidence(
                                 degraded_models.add(model_name)
                             break
                         raise
-                    result = cards_from_raw(raw, category, label, records)
+                    raw = sanitize_model_result(raw)
+                    result = cards_from_raw(
+                        raw,
+                        category,
+                        label,
+                        chunk_records,
+                    )
                     print(
                         json.dumps(
                             {
@@ -309,6 +446,8 @@ def edit_evidence(
                                 "category": label,
                                 "model": model_name,
                                 "route": "quality" if quality_required else "routine",
+                                "chunk": chunk_index,
+                                "chunks": len(chunks),
                                 "attempt": editorial_attempt,
                                 "cards": len(result[0]),
                                 "rejected_items": result[1],
@@ -350,11 +489,13 @@ def edit_evidence(
                     ]
                 if selected_result is not None:
                     break
-        if category_payload["evidence"] and selected_result is None:
-            fail(f"Editor could not produce complete summaries for every evidence item: {label}")
-        if selected_result is None:
-            selected_result = ([], 0, True, {})
-        return label, selected_result[0]
+            if selected_result is None:
+                fail(
+                    "Editor could not produce complete summaries for every evidence item: "
+                    f"{label} chunk {chunk_index}/{len(chunks)}"
+                )
+            category_cards.extend(selected_result[0])
+        return label, category_cards
 
     cards_by_category: dict[str, list[dict[str, Any]]] = {}
     workers = max(1, int(os.getenv("NIGHT_SIGNAL_MODEL_CONCURRENCY", "1")))
@@ -400,6 +541,45 @@ def edit_evidence(
 
 def self_test() -> None:
     core.self_test()
+    sanitized = sanitize_model_result(
+        {
+            "items": [
+                {
+                    "summary_points": [
+                        {"text": "投資額は500億円。", "evidence_ids": ["e001"]},
+                        {"text": "投資額は500億円。", "evidence_ids": ["e002"]},
+                    ]
+                }
+            ],
+            "excluded_evidence": [],
+        }
+    )
+    sanitized_points = sanitized["items"][0]["summary_points"]
+    if len(sanitized_points) != 1 or sanitized_points[0]["evidence_ids"] != [
+        "e001",
+        "e002",
+    ]:
+        fail("Editor did not merge repeated model points and their evidence ids")
+    oversized_payload = {
+        "category": "Test",
+        "watch_topics": [],
+        "evidence": [
+            {"id": f"e{index:03d}", "title": f"題名{index}", "body": "詳しい本文。" * 2000}
+            for index in range(1, 4)
+        ],
+    }
+    fitted_payload = fit_model_payload(oversized_payload)
+    fitted_bytes = len(
+        json.dumps(
+            fitted_payload,
+            ensure_ascii=False,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    )
+    if fitted_bytes > 40_000 or {
+        item["id"] for item in fitted_payload["evidence"]
+    } != {"e001", "e002", "e003"}:
+        fail("Editor payload fitting dropped evidence or exceeded the request bound")
     if quality_model_required(
         {"evidence": [{"title": "企業が新製品を発売", "body": "企業は新製品を7月に発売した。"}]}
     ):

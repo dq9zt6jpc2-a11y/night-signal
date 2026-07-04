@@ -125,10 +125,15 @@ def evidence_reusable(
         return False
     checked = checked.astimezone(ZoneInfo("Asia/Tokyo"))
     current = now.astimezone(ZoneInfo("Asia/Tokyo"))
+    explicit_stale_recovery = os.getenv("NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE") == "1"
     return (
         checked.date().isoformat() == issue_date
         and checked.hour >= 19
-        and timedelta(0) <= current - checked <= timedelta(hours=2)
+        and timedelta(0) <= current - checked
+        and (
+            current - checked <= timedelta(hours=2)
+            or explicit_stale_recovery
+        )
     )
 
 
@@ -310,6 +315,20 @@ def self_test() -> None:
         now=datetime.fromisoformat("2099-01-01T19:20:00+09:00"),
     ):
         fail("pre-final Evidence was reusable")
+    original_allow_stale = os.getenv("NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE")
+    try:
+        os.environ["NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE"] = "1"
+        if not evidence_reusable(
+            reusable,
+            "2099-01-01",
+            now=datetime.fromisoformat("2099-01-02T03:00:00+09:00"),
+        ):
+            fail("explicit stale recovery could not resume valid evening Evidence")
+    finally:
+        if original_allow_stale is None:
+            os.environ.pop("NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE", None)
+        else:
+            os.environ["NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE"] = original_allow_stale
     print("NIGHT SIGNAL PUBLISH SELF-TEST PASSED")
 
 
