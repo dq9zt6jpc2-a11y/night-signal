@@ -1455,31 +1455,62 @@ def category_prompt(
     records: list[dict[str, Any]],
 ) -> dict[str, Any]:
     selected = editor_evidence_records(category, issue_date, records)
-    return {
-        "category": category["label"],
-        "watch_topics": [
-            {
-                "id": topic["id"],
-                "terms": topic.get("terms", []),
-                "event_classes": topic.get("event_classes", []),
-            }
-            for topic in category.get("watch_topics", [])
-            if isinstance(topic, dict)
-        ],
-        "evidence": [
-            {
-                "id": evidence_id,
-                "date": record.get("published_date"),
-                "source": record.get("label"),
-                "title": record_public_title(record),
-                "body": reader_facing_text(
-                    str(record.get("excerpt") or record.get("evidence") or ""),
-                    8000,
-                ),
-            }
-            for evidence_id, record in selected
-        ],
-    }
+    body_limit = 8000
+
+    def build_payload(limit: int) -> dict[str, Any]:
+        return {
+            "category": category["label"],
+            "watch_topics": [
+                {
+                    "id": topic["id"],
+                    "terms": topic.get("terms", []),
+                    "event_classes": topic.get("event_classes", []),
+                }
+                for topic in category.get("watch_topics", [])
+                if isinstance(topic, dict)
+            ],
+            "evidence": [
+                {
+                    "id": evidence_id,
+                    "date": record.get("published_date"),
+                    "source": record.get("label"),
+                    "title": record_public_title(record),
+                    "body": reader_facing_text(
+                        str(record.get("excerpt") or record.get("evidence") or ""),
+                        limit,
+                    ),
+                }
+                for evidence_id, record in selected
+            ],
+        }
+
+    payload = build_payload(body_limit)
+    max_payload_bytes = 64_000
+    if (
+        len(
+            json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode(
+                "utf-8"
+            )
+        )
+        > max_payload_bytes
+    ):
+        low, high = 120, body_limit
+        while low < high:
+            candidate = (low + high + 1) // 2
+            candidate_payload = build_payload(candidate)
+            candidate_size = len(
+                json.dumps(
+                    candidate_payload,
+                    ensure_ascii=False,
+                    separators=(",", ":"),
+                ).encode("utf-8")
+            )
+            if candidate_size <= max_payload_bytes:
+                low = candidate
+            else:
+                high = candidate - 1
+        payload = build_payload(low)
+    return payload
 
 
 def valid_date(value: Any, issue_date: str) -> bool:
@@ -2089,6 +2120,22 @@ def self_test() -> None:
         fail("editor prompt still truncates rich source material to a thin excerpt")
     if set(prompt_evidence) != {"id", "date", "source", "title", "body"}:
         fail("editor prompt retained redundant evidence metadata")
+    large_prompt_records = [
+        {
+            **long_record,
+            "url": f"https://example.com/large-item-{index}",
+            "title": f"OpenAIが開発者向け機能{index}を更新",
+        }
+        for index in range(80)
+    ]
+    large_prompt = category_prompt(category, "2099-01-03", large_prompt_records)
+    large_prompt_size = len(
+        json.dumps(large_prompt, ensure_ascii=False, separators=(",", ":")).encode(
+            "utf-8"
+        )
+    )
+    if large_prompt_size > 64_000 or len(large_prompt["evidence"]) != 80:
+        fail("editor prompt did not bound request size while preserving Evidence ids")
     summary_cases = [
         (
             "ジグザグ台湾とW2、越境EC支援で業務提携を発表",
