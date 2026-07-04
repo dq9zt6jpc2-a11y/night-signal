@@ -5,7 +5,6 @@ This is the preferred creation path for detail pages. New issues expose only
 the reader-facing sections we want to publish:
 
 - 要点と背景
-- 確認した事実
 - 未確定点（参照元に明記されている場合）
 - 原文確認
 
@@ -177,7 +176,11 @@ def required_summary_basis(data: dict[str, Any]) -> dict[str, Any]:
     basis = data.get("summary_basis")
     if not isinstance(basis, dict):
         fail("missing required object: summary_basis")
-    required_str(basis, "what_changed")
+    what_changed = basis.get("what_changed")
+    if what_changed is not None and (
+        not isinstance(what_changed, str) or not what_changed.strip()
+    ):
+        fail("summary_basis.what_changed must be omitted or non-empty")
     why_it_matters = basis.get("why_it_matters")
     if why_it_matters is not None and (
         not isinstance(why_it_matters, str) or not why_it_matters.strip()
@@ -205,7 +208,9 @@ def reject_forbidden(label: str, text: str) -> None:
 
 
 def reject_basis_forbidden(basis: dict[str, Any]) -> None:
-    reject_forbidden("summary_basis.what_changed", required_str(basis, "what_changed"))
+    what_changed = basis.get("what_changed")
+    if isinstance(what_changed, str) and what_changed.strip():
+        reject_forbidden("summary_basis.what_changed", what_changed.strip())
     why_it_matters = basis.get("why_it_matters")
     if isinstance(why_it_matters, str) and why_it_matters.strip():
         reject_forbidden("summary_basis.why_it_matters", why_it_matters.strip())
@@ -233,11 +238,6 @@ def render_sources(sources: list[Any], allow_multiple: bool) -> str:
 
 def render_information_basis(summary: str, basis: dict[str, Any]) -> str:
     limits = str(basis.get("limits_or_unknowns") or "").strip()
-    facts = [
-        f"        <li>{html.escape(str(fact).strip())}</li>"
-        for fact in required_list(basis, "confirmed_facts")
-        if str(fact).strip()
-    ]
     dates = "、".join(html.escape(str(date).strip()) for date in required_list(basis, "source_dates") if str(date).strip())
     limits_section = (
         f'\n\n      <h2>未確定点</h2>\n      <p class="limits">{html.escape(limits)}</p>'
@@ -248,12 +248,7 @@ def render_information_basis(summary: str, basis: dict[str, Any]) -> str:
       <div class="article-summary">
         <p>{html.escape(summary)}</p>
         <p class="source-dates">確認日付: {dates}</p>
-      </div>
-
-      <h2>確認した事実</h2>
-      <ul class="fact-list">
-{chr(10).join(facts)}
-      </ul>{limits_section}"""
+      </div>{limits_section}"""
 
 
 def render(data: dict[str, Any]) -> str:

@@ -770,6 +770,8 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
             checklist_headings.append(name)
         if information_required:
             required_h2_variants = [
+                [detail_summary_heading(issue_dt)],
+                [detail_summary_heading(issue_dt), "未確定点"],
                 [detail_summary_heading(issue_dt), "確認した事実"],
                 [detail_summary_heading(issue_dt), "確認した事実", "未確定点"],
             ]
@@ -789,9 +791,7 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
                 weak_summaries.append(f"{name}: {len(summary_text)} chars")
         if information_required:
             fact_match = re.search(r'<ul class="fact-list">(.*?)</ul>', html, flags=re.S)
-            if not fact_match:
-                article_structure_failures.append(f"{name}: missing confirmed facts")
-            else:
+            if fact_match:
                 facts = [visible_text(item) for item in re.findall(r"<li[^>]*>(.*?)</li>", fact_match.group(1), flags=re.S)]
                 if not any(facts):
                     article_structure_failures.append(f"{name}: not enough confirmed facts")

@@ -204,7 +204,6 @@ SUMMARY_BASIS_SCHEMA: dict[str, Any] = {
     "type": "object",
     "additionalProperties": False,
     "required": [
-        "what_changed",
         "confirmed_facts",
         "fact_sources",
         "source_dates",
@@ -667,12 +666,6 @@ def analysis_headline(text: str) -> bool:
     return bool(ANALYSIS_HEADLINE_RE.search(str(text)))
 
 
-def analysis_scope_sentence(title: str) -> str:
-    focus = re.sub(r"^(?:【[^】]{1,40}】|\[[^\]]{1,40}\])\s*", "", str(title)).strip()
-    focus = focus.rstrip("。.!！?？")
-    return f"今回の検証は、{focus}を論点としている。" if focus else ""
-
-
 def analysis_conclusion(values: list[Any]) -> str:
     candidates: list[tuple[int, str]] = []
     for raw in values:
@@ -694,12 +687,6 @@ def analysis_conclusion(values: list[Any]) -> str:
         return ""
     score, conclusion = max(candidates, key=lambda item: item[0])
     return conclusion if score >= 3 else ""
-
-
-def analysis_summary_complete(title: str, summary: str) -> bool:
-    if not analysis_headline(title):
-        return True
-    return "今回の検証" in str(summary) and bool(ANALYSIS_REASONING_RE.search(str(summary)))
 
 
 def materially_same_fact(left: str, right: str) -> bool:
@@ -861,12 +848,18 @@ def validate_summary_basis(
     if not isinstance(basis, dict):
         fail(f"cards[{card_index}].detail.summary_basis is required for information-complete detail pages")
 
-    value = require_str(basis, "what_changed")
-    reject_public_copy(
-        f"cards[{card_index}].detail.summary_basis.what_changed",
-        value,
-        kind="summary",
-    )
+    what_changed = basis.get("what_changed")
+    if what_changed is not None:
+        if not isinstance(what_changed, str) or not what_changed.strip():
+            fail(
+                f"cards[{card_index}].detail.summary_basis.what_changed "
+                "must be omitted or non-empty"
+            )
+        reject_public_copy(
+            f"cards[{card_index}].detail.summary_basis.what_changed",
+            what_changed,
+            kind="summary",
+        )
     why_it_matters = basis.get("why_it_matters")
     if why_it_matters is not None:
         if not isinstance(why_it_matters, str) or not why_it_matters.strip():
@@ -992,39 +985,6 @@ def validate_public_card_copy(raw: dict[str, Any], detail: dict[str, Any], *, is
     validate_reader_summary(f"cards[{card_index}].detail.summary", title, detail_summary)
 
     contract = read_json(CONFIG_PATH)
-    if (
-        effective_on_or_after(contract, "material_fact_semantics_effective_date", issue_date)
-        and analysis_headline(title)
-    ):
-        basis = detail.get("summary_basis")
-        what_changed = str(basis.get("what_changed", "")) if isinstance(basis, dict) else ""
-        why_it_matters = str(basis.get("why_it_matters", "")) if isinstance(basis, dict) else ""
-        analysis_facts = basis.get("confirmed_facts", []) if isinstance(basis, dict) else []
-        summary_key = copy_signature(summary)
-        detail_key = copy_signature(detail_summary)
-        summary_fact_count = sum(
-            bool(copy_signature(fact)) and copy_signature(fact) in summary_key
-            for fact in analysis_facts
-            if isinstance(fact, str)
-        )
-        detail_fact_count = sum(
-            bool(copy_signature(fact)) and copy_signature(fact) in detail_key
-            for fact in analysis_facts
-            if isinstance(fact, str)
-        )
-        if (
-            not analysis_summary_complete(title, summary)
-            or not analysis_summary_complete(title, detail_summary)
-            or "今回の検証" not in what_changed
-            or not ANALYSIS_REASONING_RE.search(why_it_matters)
-            or summary_fact_count < 2
-            or detail_fact_count < 2
-        ):
-            fail(
-                f"cards[{card_index}] analysis summary must explain the question, "
-                "supporting evidence, and conclusion"
-            )
-
     if any(term in title for term in SCHEDULE_ONLY_TERMS) and not any(term in title + summary for term in SCHEDULE_MATERIAL_TERMS):
         fail(f"cards[{card_index}] looks schedule-only; routine dates must stay out of published topics")
 
@@ -1132,6 +1092,14 @@ def render_priority_card(index: int, card: dict[str, Any]) -> str:
     section_id = html.escape(str(card["section_id"]), quote=True)
     priority_class = html.escape(str(card.get("priority_class", "signal")))
     return f"""        <article class="priority-card {priority_class}"><span class="rank">{index}</span><h3>{title}</h3><p>{summary}</p><a class="tag" href="#{section_id}">詳細へ</a></article>"""
+
+
+def priority_cards(cards: list[dict[str, Any]], limit: int = 4) -> list[dict[str, Any]]:
+    rank = {"top": 0, "priority": 1, "standard": 2}
+    return sorted(
+        cards,
+        key=lambda card: rank.get(str(card.get("priority_class", "standard")), 2),
+    )[:limit]
 
 
 def latest_three_dates(issue_date: str) -> set[str]:
@@ -1309,7 +1277,10 @@ def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, roo
         nav_links.append(f'<a href="#{html.escape(section_id, quote=True)}">{html.escape(label)}</a>')
     nav_links.append('<a href="details/policy.html">方針</a>')
 
-    priority = "\n".join(render_priority_card(index, card) for index, card in enumerate(cards[:4], start=1))
+    priority = "\n".join(
+        render_priority_card(index, card)
+        for index, card in enumerate(priority_cards(cards), start=1)
+    )
     sections = []
     for section_id, label in section_labels.items():
         section_cards = [card for card in cards if card["section_id"] == section_id]
@@ -1709,6 +1680,14 @@ def self_test() -> None:
             evidence_sha256="0" * 64,
         ),
     }
+    if priority_cards(
+        [
+            {"title": "standard", "priority_class": "standard"},
+            {"title": "top", "priority_class": "top"},
+            {"title": "priority", "priority_class": "priority"},
+        ]
+    )[0]["title"] != "top":
+        fail("Priority rendering ignored the model's priority class")
     validate_issue_state(issue)
     rendered = render_issue_html(issue, normalized_cards(issue))
     if "候補" in rendered or "確認情報" in rendered:

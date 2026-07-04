@@ -42,12 +42,25 @@ EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
             "items": {
                 "type": "object",
                 "properties": {
+                    "summary_points": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "text": {"type": "string"},
+                                "evidence_ids": {
+                                    "type": "array",
+                                    "items": {"type": "string"},
+                                    "minItems": 1,
+                                },
+                            },
+                            "required": ["text", "evidence_ids"],
+                            "additionalProperties": False,
+                        },
+                        "minItems": 1,
+                    },
                     "watch_topic_id": {"type": "string"},
                     "title": {"type": "string"},
-                    "source_published_date": {
-                        "type": "string",
-                        "pattern": r"^\d{4}-\d{2}-\d{2}$",
-                    },
                     "topic_value_class": {
                         "type": "string",
                         "enum": TOPIC_VALUE_CLASSES,
@@ -56,33 +69,13 @@ EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
                         "type": "string",
                         "enum": ["top", "priority", "standard"],
                     },
-                    "confirmed_facts": {
-                        "type": "array",
-                        "items": {"type": "string"},
-                        "minItems": 1,
-                    },
-                    "sources": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "label": {"type": "string"},
-                                "url": {"type": "string"},
-                            },
-                            "required": ["label", "url"],
-                            "additionalProperties": False,
-                        },
-                        "minItems": 1,
-                    },
                 },
                 "required": [
+                    "summary_points",
                     "watch_topic_id",
                     "title",
-                    "source_published_date",
                     "topic_value_class",
                     "priority_class",
-                    "confirmed_facts",
-                    "sources",
                 ],
                 "additionalProperties": False,
             },
@@ -92,22 +85,25 @@ EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
     "additionalProperties": False,
 }
 
-SYSTEM_PROMPT = """You edit supplied NIGHT SIGNAL evidence into material updates.
-Return JSON matching the supplied schema. Use only supplied records and exact URLs.
-Return every distinct, evidence-backed material update; do not impose an item limit.
-Merge reports of the same event, retaining later event-state changes such as a plan
-becoming an executed action as separate facts. Keep genuinely different events and
-keep thin evidence concise.
+SYSTEM_PROMPT = """Edit supplied NIGHT SIGNAL evidence into reader-facing Japanese updates.
+Return JSON matching the supplied schema. Assign every supplied evidence id to exactly
+one returned item and cite it in each summary point it supports. Merge ids only when
+they report the same event; never merge different events and never omit an id.
 
-For each item, write a reader-facing Japanese title and distinct confirmed facts.
-Facts must come from the supplied title or excerpt and retain useful names, dates,
-numbers, results, scope, and conditions. At least one fact
-must add information beyond the title. Do not use publisher metadata, generic impact,
-importance boilerplate, inferred unknowns, or repeated paraphrases as facts. Cite only
-supplied URLs that support the facts. Omit records that contain navigation text or no
-concrete fact beyond a headline. For analysis or commentary, keep 分析, 検証, or 解説 in
-the title and include both concrete supporting facts and the source's conclusion.
-Never invent a date, number, source, category relationship, or certainty."""
+For each item, write one concise title and ordered summary_points. Each point is one
+reader-facing sentence plus the evidence ids that support it. Together the points are
+the necessary-and-sufficient summary and the confirmed facts; do not create a second
+prose representation. Use one point for one supported fact and add points only when they
+carry additional material information. Preserve what a reader needs to understand the
+update, including an unfamiliar entity's source-stated role, the concrete change,
+mechanism or scope, names, quantities, timing, conditions, and results when supplied.
+Do not omit a material fact merely to shorten the summary.
+
+Do not repeat the title or a point in different words.
+Do not add publisher metadata, generic importance or impact claims, common knowledge,
+unsupported background, inferred unknowns, or follow-up boilerplate. For analysis or
+commentary, identify it in the title and include both its concrete evidence and its
+attributed conclusion. Use only the supplied evidence; never invent facts or certainty."""
 
 
 class ModelRequestError(RuntimeError):
@@ -159,12 +155,18 @@ def routed_models(*, quality_required: bool) -> list[str]:
     config = load_config()["extraction"]
     routine = extraction_model()
     quality = config.get("quality_model")
-    preferred = (
-        str(quality)
-        if quality_required and isinstance(quality, str) and quality
-        else routine
+    fallbacks = [
+        value
+        for value in config.get("fallback_models", [])
+        if isinstance(value, str) and value
+    ]
+    if quality_required and isinstance(quality, str) and quality:
+        return list(dict.fromkeys([quality, *fallbacks]))
+    return list(
+        dict.fromkeys(
+            [routine, *([quality] if isinstance(quality, str) and quality else []), *fallbacks]
+        )
     )
-    return list(dict.fromkeys([preferred, *extraction_models()]))
 
 
 def request(
@@ -298,8 +300,20 @@ def self_test() -> None:
     quality = config.get("quality_model")
     if quality and routed_models(quality_required=True)[0] != quality:
         raise SystemExit("quality routing must use the quality model first")
+    if quality and extraction_model() in routed_models(quality_required=True)[1:]:
+        raise SystemExit("quality routing must not downgrade to the routine model")
     item_schema = EDITOR_RESPONSE_SCHEMA["properties"]["items"]["items"]
-    redundant_fields = {"summary", "detail_summary", "what_changed", "why_it_matters"}
+    required_fields = {"summary_points"}
+    if not required_fields <= set(item_schema["properties"]):
+        raise SystemExit("editor response schema lacks the canonical summary contract")
+    redundant_fields = {
+        "summary",
+        "confirmed_facts",
+        "detail_summary",
+        "what_changed",
+        "why_it_matters",
+        "sources",
+    }
     if redundant_fields & set(item_schema["properties"]):
         raise SystemExit("editor response schema contains derived prose fields")
     if item_schema.get("additionalProperties") is not False:

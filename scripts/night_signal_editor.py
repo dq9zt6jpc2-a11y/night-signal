@@ -28,26 +28,6 @@ TOPIC_VALUE_CLASS_MAP = {
     "roster_change": "operational_status_change",
 }
 SUMMARY_LABEL_RE = re.compile(r"(?:変更点|重要性|確認事実|未確定点)\s*[:：]")
-GENERIC_IMPORTANCE_RE = re.compile(
-    r"重要更新として一覧に残す|変化を広めに把握|関連テーマは|出典日付は"
-)
-TRAILING_DOMAIN_RE = re.compile(r"\s*[-–—|｜]\s*[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+(?:/[^\s。、]*)?\s*$")
-EMPTY_JA_QUOTE_RE = re.compile(r"[「『]\s*[」』]")
-INLINE_PUBLISHER_RE = re.compile(
-    r"\s[-–—]\s*(?:"
-    r"Yahoo![^。！？]{0,40}|MSN|"
-    r"[A-Za-z0-9][A-Za-z0-9 .&!|｜・-]*(?:\.[A-Za-z]{2,})?|"
-    r"[ぁ-んァ-ヶ一-龯]+(?:新聞|ニュース|ファイナンス|通信|テレビ)[^。！？]{0,30}"
-    r")(?=[。！？]|$)"
-)
-TRAILING_MEDIA_CREDIT_RE = re.compile(
-    r"\s*[（(](?:フィスコ|音楽ナタリー|BASKET COUNT|共同通信|時事通信|Reuters|ロイター)[）)]$",
-    re.I,
-)
-ORPHAN_SOURCE_SENTENCE_RE = re.compile(
-    r"^(?:ニュース|ファイナンス|MSN|web|オンライン)[。．.!！?？]*$",
-    re.I,
-)
 
 
 class UnpublishableItem(RuntimeError):
@@ -68,98 +48,8 @@ def compact_text(value: Any, limit: int = 1600) -> str:
     return " ".join(str(value).split())[:limit]
 
 
-def useful_fact(fact: Any, category: str) -> bool:
-    text = compact_text(fact, 500)
-    if GENERIC_IMPORTANCE_RE.search(text) or state.material_fact_violations(text):
-        return False
-    if category and f"{category}の重要更新として確認" in text:
-        return False
-    return True
-
-
-def useful_importance(value: Any) -> bool:
-    text = compact_text(value, 700)
-    return bool(text) and not GENERIC_IMPORTANCE_RE.search(text)
-
-
-def scrub_public_title(value: Any) -> str:
-    title = compact_text(value, 180)
-    title = re.sub(r"https?://\S+", "", title)
-    title = state.DOMAIN_RE.sub("", title)
-    title = EMPTY_JA_QUOTE_RE.sub("", title)
-    title = state.EMPTY_GROUP_RE.sub("", title)
-    for _ in range(3):
-        cleaned = state.PUBLISHER_SUFFIX_RE.sub("", title)
-        cleaned = TRAILING_DOMAIN_RE.sub("", cleaned)
-        cleaned = EMPTY_JA_QUOTE_RE.sub("", cleaned)
-        cleaned = state.EMPTY_GROUP_RE.sub("", cleaned)
-        cleaned = cleaned.strip(" -–—|｜")
-        if cleaned == title:
-            break
-        title = cleaned
-    return compact_text(title.strip())
-
-
-def scrub_public_summary(value: Any) -> str:
-    text = compact_text(value, 2600)
-    text = re.sub(r"https?://\S+", "", text)
-    text = INLINE_PUBLISHER_RE.sub("", text)
-    sentences = []
-    for sentence in re.split(r"(?<=[。！？!?])", text):
-        cleaned = state.PUBLISHER_SUFFIX_RE.sub("", sentence)
-        cleaned = state.DOMAIN_RE.sub("", cleaned)
-        cleaned = EMPTY_JA_QUOTE_RE.sub("", cleaned)
-        cleaned = TRAILING_MEDIA_CREDIT_RE.sub("", cleaned)
-        cleaned = TRAILING_DOMAIN_RE.sub("", cleaned).strip(" -–—|｜")
-        if (
-            cleaned
-            and not ORPHAN_SOURCE_SENTENCE_RE.fullmatch(cleaned)
-            and not state.ORPHAN_LEADING_PARTICLE_RE.search(cleaned)
-        ):
-            sentences.append(cleaned)
-    text = compact_text(" ".join(sentences), 2600)
-    text = re.sub(r"([。．.!！？?])\s+(?=[。．.!！？?])", r"\1", text)
-    text = re.sub(r"[。．.]{2,}", "。", text)
-    text = re.sub(r"[！？!?]{2,}", lambda match: match.group(0)[0], text)
-    return text
-
-
-def scrub_item_source_labels(item: dict[str, Any], value: Any) -> str:
-    text = scrub_public_summary(value)
-    for source in item.get("sources", []):
-        if not isinstance(source, dict):
-            continue
-        label = compact_text(source.get("label", ""), 120)
-        if len(label) < 3:
-            continue
-        text = re.sub(
-            rf"\s*(?:[-–—]\s*)?{re.escape(label)}(?=[。！？!?]|$)",
-            "",
-            text,
-            flags=re.I,
-        )
-    return scrub_public_summary(text)
-
-
 def public_card_title(item: dict[str, Any]) -> str:
-    candidates = [
-        item.get("title", ""),
-        item.get("what_changed", ""),
-        *[
-            fact
-            for fact in item.get("confirmed_facts", [])
-            if useful_fact(fact, str(item.get("category", "")))
-        ],
-    ]
-    first_cleaned = ""
-    for candidate in candidates:
-        cleaned = scrub_public_title(scrub_item_source_labels(item, candidate))
-        cleaned = TRAILING_MEDIA_CREDIT_RE.sub("", cleaned).strip()
-        if cleaned and not first_cleaned:
-            first_cleaned = cleaned
-        if cleaned and not state.public_render_copy_violations(cleaned, kind="title"):
-            return cleaned
-    return first_cleaned
+    return compact_text(item.get("title", ""), 180)
 
 
 def summary_is_reader_facing(title: str, summary: str) -> bool:
@@ -167,151 +57,26 @@ def summary_is_reader_facing(title: str, summary: str) -> bool:
         return False
     if state.GENERIC_CONTEXT_RE.search(summary):
         return False
-    if not state.analysis_summary_complete(title, summary):
-        return False
     return not state.reader_summary_violations(title, summary)
 
 
-def public_focus_phrase(title: str, category: str) -> str:
-    focus = scrub_public_title(title)
-    if category:
-        focus = re.sub(rf"^{re.escape(category)}[、,:：\s]+", "", focus).strip()
-    return focus.strip("、。 ") or category or "この更新"
-
-
-def sentence_from(value: Any) -> str:
-    text = scrub_public_summary(value).rstrip("。")
-    if not text:
-        return ""
-    return f"{text}。"
-
-
-def reader_summary_from_parts(title: str, parts: list[Any]) -> str:
-    kept: list[str] = []
-    for part in parts:
-        for raw_sentence in re.split(r"(?<=[。！？!?])\s*", str(part)):
-            sentence = sentence_from(raw_sentence)
-            if not sentence:
-                continue
-            duplicate_index = next(
-                (
-                    index
-                    for index, existing in enumerate(kept)
-                    if state.materially_same_fact(sentence, existing)
-                ),
-                None,
-            )
-            if duplicate_index is not None:
-                if state.fact_specificity(sentence) > state.fact_specificity(
-                    kept[duplicate_index]
-                ):
-                    kept[duplicate_index] = sentence
-                continue
-            kept.append(sentence)
-    informative = [
-        sentence for sentence in kept if state.fact_adds_information(title, sentence)
-    ]
-    if informative:
-        kept = informative
-    candidate = " ".join(kept)
-    if candidate and summary_is_reader_facing(title, candidate):
-        return candidate
-    return ""
-
-
-def item_importance(
-    item: dict[str, Any],
-    category: str,
-    title: str = "",
-) -> str:
-    importance = scrub_public_summary(item.get("why_it_matters", ""))
-    if (
-        useful_importance(importance)
-        and not state.public_render_copy_violations(importance, kind="summary")
-        and (not title or state.title_repetition_score(title, importance) < 0.82)
-    ):
-        return importance
-    return ""
-
-
-def public_card_summary(item: dict[str, Any], title: str, category: str) -> str:
+def public_card_summary(item: dict[str, Any], title: str) -> str:
     facts = state.normalize_material_facts(
         title,
-        [
-            scrub_item_source_labels(item, fact)
-            for fact in item.get("confirmed_facts", [])
-            if useful_fact(fact, category)
-        ],
+        item.get("confirmed_facts", []),
     )
-    what_changed = scrub_item_source_labels(item, item.get("what_changed", ""))
-    limits = scrub_item_source_labels(item, item.get("limits_or_unknowns", ""))
-    importance = (
-        item_importance(item, category, title)
-        if state.analysis_headline(title)
-        else ""
-    )
-    if state.analysis_headline(title):
-        what_changed = state.analysis_scope_sentence(title)
-        importance = state.analysis_conclusion(
-            [item.get("why_it_matters", ""), *facts]
-        )
-        if not importance:
-            fail(f"analysis item lacks an evidence-backed conclusion: {title}")
-    event_parts = [part for part in (what_changed, *facts) if part]
-    lead = event_parts[0] if event_parts else public_focus_phrase(title, category)
-    summary = reader_summary_from_parts(
-        title,
-        [lead, *event_parts[1:], importance, limits],
-    )
-    if summary:
-        return summary
-
-    summary = reader_summary_from_parts(
-        title,
-        [public_focus_phrase(title, category), importance, limits],
-    )
-    if summary:
-        return summary
-    raise UnpublishableItem(f"unable to construct a reader-facing card summary: {title}")
-
-
-def canonical_detail_summary(
-    category: str,
-    item: dict[str, Any],
-    title: str,
-    card_summary: str,
-) -> str:
-    optional_parts: list[Any] = [
-        fact
-        for fact in item.get("confirmed_facts", [])
-        if useful_fact(fact, category)
-        and state.title_repetition_score(title, scrub_public_summary(fact)) < 0.82
-    ]
-    if state.analysis_headline(title):
-        optional_parts.append(item_importance(item, category, title))
-    limits = scrub_public_summary(item.get("limits_or_unknowns", ""))
-    if limits:
-        optional_parts.append(limits)
-
-    composed = reader_summary_from_parts(
-        title,
-        [
-            card_summary,
-            *[scrub_item_source_labels(item, part) for part in optional_parts],
-        ],
-    )
+    summary = compact_text(item.get("summary", ""), 2600)
     if (
-        composed
-        and summary_is_reader_facing(title, composed)
-        and state.text_overlap(card_summary, composed) >= 2
+        summary_is_reader_facing(title, summary)
+        and state.summary_covers_material_facts(f"{title}。 {summary}", facts)
     ):
-        return composed
-    raise UnpublishableItem(f"unable to construct a card-bound detail summary: {title}")
+        return summary
+    raise UnpublishableItem(f"model summary violates the canonical content contract: {title}")
 
 
-def public_item_copy(category: str, item: dict[str, Any]) -> tuple[str, str]:
+def public_item_copy(item: dict[str, Any]) -> tuple[str, str]:
     title = public_card_title(item)
-    summary = public_card_summary(item, title, category)
+    summary = public_card_summary(item, title)
     return title, summary
 
 
@@ -321,18 +86,20 @@ def quality_model_required(category_payload: dict[str, Any]) -> bool:
         for item in category_payload.get("evidence", [])
         if isinstance(item, dict)
     ]
-    cluster_counts: dict[str, int] = {}
     for item in evidence:
-        cluster = str(item.get("cluster_key", ""))
-        if cluster:
-            cluster_counts[cluster] = cluster_counts.get(cluster, 0) + 1
         title = str(item.get("title", ""))
-        excerpt = str(item.get("excerpt", ""))
-        japanese = len(re.findall(r"[ぁ-んァ-ヶ一-龯]", excerpt))
-        latin = len(re.findall(r"[A-Za-z]", excerpt))
-        if state.analysis_headline(title) or (latin >= 24 and japanese < 6):
+        body = str(item.get("body", ""))
+        japanese = len(re.findall(r"[ぁ-んァ-ヶ一-龯]", body))
+        latin = len(re.findall(r"[A-Za-z]", body))
+        sentence_count = len([part for part in re.split(r"(?<=[。！？.!?])", body) if part.strip()])
+        if (
+            state.analysis_headline(title)
+            or (latin >= 24 and japanese < 6)
+            or len(body) >= 1200
+            or sentence_count >= 6
+        ):
             return True
-    return any(count > 1 for count in cluster_counts.values())
+    return False
 
 
 def read_evidence(path: Path) -> dict[str, Any]:
@@ -362,15 +129,12 @@ def item_card(
     item: dict[str, Any],
     issue_date: str,
 ) -> dict[str, Any]:
-    card_title, card_summary = public_item_copy(category, item)
+    card_title, card_summary = public_item_copy(item)
     facts = [
         fact
         for fact in state.normalize_material_facts(
             card_title,
-            [
-                scrub_item_source_labels(item, fact)
-                for fact in item["confirmed_facts"]
-            ],
+            item["confirmed_facts"],
         )
         if state.fact_adds_information(card_title, fact)
     ]
@@ -378,14 +142,11 @@ def item_card(
         raise UnpublishableItem(
             f"item lacks a confirmed fact beyond its public title: {card_title}"
         )
-    source_urls = [str(source["url"]) for source in item["sources"]]
-    limits = scrub_public_summary(item.get("limits_or_unknowns", ""))
     slug = str(item["slug"])
     slug_stem = slug[:-5] if slug.endswith(".html") else slug
     if not slug_stem.endswith(f"-{issue_date}"):
         slug_stem = f"{slug_stem}-{issue_date}"
     slug = f"{slug_stem}.html"
-    why_it_matters = scrub_public_summary(item.get("why_it_matters", ""))
     return {
         "watch_topic_id": str(item["watch_topic_id"]),
         "title": card_title,
@@ -404,17 +165,17 @@ def item_card(
                 }
                 for source in item["sources"]
             ],
-            "summary": canonical_detail_summary(category, item, card_title, card_summary),
+            "summary": card_summary,
             "summary_basis": {
-                "what_changed": scrub_public_summary(item["what_changed"]),
-                **({"why_it_matters": why_it_matters} if why_it_matters else {}),
                 "confirmed_facts": facts,
-                "fact_sources": [
-                    {"fact": fact, "source_urls": source_urls}
-                    for fact in facts
-                ],
-                **({"limits_or_unknowns": limits} if limits else {}),
-                "source_dates": [str(item["source_published_date"])],
+                "fact_sources": item["fact_sources"],
+                "source_dates": sorted(
+                    {
+                        str(source.get("published_date"))
+                        for source in item["sources"]
+                        if source.get("published_date")
+                    }
+                ),
             },
         },
     }
@@ -443,10 +204,8 @@ def edit_evidence(
         category: dict[str, Any],
         label: str,
         records: list[dict[str, Any]],
-    ) -> tuple[list[dict[str, Any]], int]:
+    ) -> tuple[list[dict[str, Any]], int, bool]:
         normalized = core.normalize_result(raw, category, issue_date, records)
-        core.backfill_items_from_evidence(normalized, category, issue_date, records)
-        normalized["items"] = core.merge_related_items(normalized["items"])
         cards: list[dict[str, Any]] = []
         failed = 0
         for item in normalized["items"]:
@@ -473,7 +232,21 @@ def edit_evidence(
                     ),
                     flush=True,
                 )
-        return cards, failed
+        accepted = bool(normalized["coverage_complete"]) and failed == 0
+        if not accepted:
+            print(
+                json.dumps(
+                    {
+                        "phase": "editor_result_rejected",
+                        "category": label,
+                        "missing_evidence_ids": normalized["missing_evidence_ids"],
+                        "unpublishable_items": failed,
+                    },
+                    ensure_ascii=False,
+                ),
+                flush=True,
+            )
+        return cards, failed, accepted
 
     def review_category(category: dict[str, Any]) -> tuple[str, list[dict[str, Any]]]:
         label = str(category["label"])
@@ -482,7 +255,7 @@ def edit_evidence(
             fail(f"Evidence records are missing: {label}")
         records = [record for record in entry["records"] if isinstance(record, dict)]
         category_payload = core.category_prompt(category, issue_date, records)
-        selected_result: tuple[list[dict[str, Any]], int] | None = None
+        selected_result: tuple[list[dict[str, Any]], int, bool] | None = None
         if category_payload["evidence"]:
             quality_required = quality_model_required(category_payload)
             model_chain = models.routed_models(quality_required=quality_required)
@@ -516,7 +289,6 @@ def edit_evidence(
                         continue
                     raise
                 result = cards_from_raw(raw, category, label, records)
-                selected_result = result
                 print(
                     json.dumps(
                         {
@@ -526,15 +298,19 @@ def edit_evidence(
                             "route": "quality" if quality_required else "routine",
                             "cards": len(result[0]),
                             "rejected_items": result[1],
-                            "accepted": True,
+                            "accepted": result[2],
                         },
                         ensure_ascii=False,
                     ),
                     flush=True,
                 )
-                break
+                if result[2]:
+                    selected_result = result
+                    break
+        if category_payload["evidence"] and selected_result is None:
+            fail(f"Editor could not produce complete summaries for every evidence item: {label}")
         if selected_result is None:
-            selected_result = cards_from_raw({"items": []}, category, label, records)
+            selected_result = ([], 0, True)
         return label, selected_result[0]
 
     cards_by_category: dict[str, list[dict[str, Any]]] = {}
@@ -582,51 +358,53 @@ def edit_evidence(
 def self_test() -> None:
     core.self_test()
     if quality_model_required(
-        {"evidence": [{"title": "企業が新製品を発売", "excerpt": "企業は新製品を7月に発売した。", "cluster_key": "a"}]}
+        {"evidence": [{"title": "企業が新製品を発売", "body": "企業は新製品を7月に発売した。"}]}
     ):
         fail("Editor routed a routine factual extraction to the quality model")
     if not quality_model_required(
-        {"evidence": [{"title": "【分析】市場構造を検証", "excerpt": "複数の数値から市場構造を分析した。", "cluster_key": "b"}]}
+        {"evidence": [{"title": "【分析】市場構造を検証", "body": "複数の数値から市場構造を分析した。"}]}
     ):
         fail("Editor did not route analysis work to the quality model")
     if not quality_model_required(
-        {"evidence": [{"title": "Product update", "excerpt": "The company released a major product update with new enterprise controls.", "cluster_key": "c"}]}
+        {"evidence": [{"title": "Product update", "body": "The company released a major product update with new enterprise controls."}]}
     ):
         fail("Editor did not route translation-heavy work to the quality model")
     if not quality_model_required(
-        {
-            "evidence": [
-                {"title": "発表1", "excerpt": "企業が新方針を公表した。", "cluster_key": "shared"},
-                {"title": "発表2", "excerpt": "別資料が条件を示した。", "cluster_key": "shared"},
-            ]
-        }
+        {"evidence": [{"title": "詳細発表", "body": "具体的な変更内容。" * 100}]}
     ):
-        fail("Editor did not route cross-source synthesis to the quality model")
-    if scrub_public_summary("更新を確認した。。影響は継続調査する！？") != (
-        "更新を確認した。 影響は継続調査する！"
-    ):
-        fail("Editor did not normalize repeated public punctuation")
-    if scrub_item_source_labels(
-        {"sources": [{"label": "Moomoo"}]},
-        "宇宙関連株への影響を分析。 Moomoo。",
-    ) != "宇宙関連株への影響を分析。":
-        fail("Editor left repeated punctuation after removing a source label")
+        fail("Editor did not route body-rich synthesis to the quality model")
     item = {
+        "evidence_ids": ["e001"],
         "watch_topic_id": "product_release",
-        "title": "OpenAIがCodex Securityの更新版を公開 - Example News",
+        "title": "OpenAIがCodex Security更新版を公開",
         "source_published_date": "2099-01-01",
         "topic_value_class": "technical_or_product_shift",
         "priority_class": "priority",
         "slug": "openai-codex-security",
-        "what_changed": "OpenAIがCodex Securityの更新版と修正支援機能を公開した。",
-        "why_it_matters": "企業のコード監査で検出から修正までを一つの流れで扱える。",
         "confirmed_facts": [
-            "OpenAIはCodex Securityの更新版を公開した。",
             "更新版には脆弱性検出後の修正支援が追加された。",
+            "企業向けコード監査で検出から修正までを一つの流れで扱える。",
         ],
-        "limits_or_unknowns": "提供範囲と利用条件の詳細は公表資料の範囲に限られる。",
+        "summary": (
+            "更新版には脆弱性検出後の修正支援が追加された。 "
+            "企業向けコード監査で検出から修正までを一つの流れで扱える。"
+        ),
+        "fact_sources": [
+            {
+                "fact": "更新版には脆弱性検出後の修正支援が追加された。",
+                "source_urls": ["https://openai.com/example"],
+            },
+            {
+                "fact": "企業向けコード監査で検出から修正までを一つの流れで扱える。",
+                "source_urls": ["https://openai.com/example"],
+            },
+        ],
         "sources": [
-            {"label": "OpenAI", "url": "https://openai.com/example"}
+            {
+                "label": "OpenAI",
+                "url": "https://openai.com/example",
+                "published_date": "2099-01-01",
+            }
         ],
     }
     card = item_card("OpenAI", "openai", item, "2099-01-01")
@@ -652,8 +430,6 @@ def self_test() -> None:
     rich_item = {
         **item,
         "title": "ベトナム、初の原子力発電所建設計画を加速",
-        "what_changed": "ベトナム政府が初の原子力発電所建設計画を加速した。",
-        "why_it_matters": "",
         "confirmed_facts": [
             "建設候補地はニントゥアン省に置かれる。",
             "第1原発はロシアの協力で建設する計画となっている。",
@@ -663,8 +439,22 @@ def self_test() -> None:
             "初号機の運転開始時期は2035年を想定している。",
             "設備容量は合計4ギガワットを計画している。",
         ],
-        "sources": [{"label": "Government", "url": "https://example.com/nuclear"}],
+        "sources": [
+            {
+                "label": "Government",
+                "url": "https://example.com/nuclear",
+                "published_date": "2099-01-01",
+            }
+        ],
     }
+    rich_item["confirmed_facts"] = state.normalize_material_facts(
+        rich_item["title"], rich_item["confirmed_facts"]
+    )
+    rich_item["summary"] = " ".join(rich_item["confirmed_facts"])
+    rich_item["fact_sources"] = [
+        {"fact": fact, "source_urls": ["https://example.com/nuclear"]}
+        for fact in rich_item["confirmed_facts"]
+    ]
     rich_card = item_card("日本経済", "japan-economy", rich_item, "2099-01-01")
     rich_facts = rich_card["detail"]["summary_basis"]["confirmed_facts"]
     if len(rich_facts) != 6:
@@ -676,23 +466,26 @@ def self_test() -> None:
     thin_item = {
         **item,
         "title": "企業が国内工場への追加投資を決定",
-        "what_changed": "企業が国内工場への追加投資を決定した。",
-        "why_it_matters": "",
         "confirmed_facts": ["追加投資額は500億円で、2027年に新設備を稼働する。"],
-        "limits_or_unknowns": "",
+        "summary": "追加投資額は500億円で、2027年に新設備を稼働する。",
+        "fact_sources": [
+            {
+                "fact": "追加投資額は500億円で、2027年に新設備を稼働する。",
+                "source_urls": ["https://openai.com/example"],
+            }
+        ],
     }
     thin_card = item_card("日本経済", "japan-economy", thin_item, "2099-01-01")
     if thin_card["summary"] != "追加投資額は500億円で、2027年に新設備を稼働する。":
         fail("Editor padded a thin source instead of keeping its supported fact concise")
     if SUMMARY_LABEL_RE.search(card["detail"]["summary"]):
         fail("Editor kept label-heavy detail copy")
-    item_without_limits = dict(item)
-    item_without_limits.pop("limits_or_unknowns")
-    card_without_limits = item_card(
-        "OpenAI", "openai", item_without_limits, "2099-01-01"
-    )
-    if "limits_or_unknowns" in card_without_limits["detail"]["summary_basis"]:
-        fail("Editor invented an uncertainty absent from the source item")
+    if set(card["detail"]["summary_basis"]) != {
+        "confirmed_facts",
+        "fact_sources",
+        "source_dates",
+    }:
+        fail("Editor retained a second prose path in the summary basis")
     print("NIGHT SIGNAL EDITOR SELF-TEST PASSED")
 
 
