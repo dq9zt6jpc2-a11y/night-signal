@@ -89,14 +89,12 @@ def has_evidence(issue_date: str) -> bool:
 
 
 def fresh_evidence(issue_date: str) -> bool:
-    status = runtime.evidence_state(issue_date, STATE_ROOT)
-    if not status.get("usable"):
+    evidence_path = state_dir(issue_date) / "evidence.json"
+    if not evidence_path.exists():
         return False
     try:
-        bundle = json.loads(
-            (state_dir(issue_date) / "evidence.json").read_text(encoding="utf-8")
-        )
-    except json.JSONDecodeError:
+        bundle = json.loads(evidence_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
         return False
     return evidence_reusable(
         bundle,

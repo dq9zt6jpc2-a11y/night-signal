@@ -567,11 +567,18 @@ def publication_evidence_records(
     issue_date: str,
     records: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
-    return [
-        record
-        for record in select_clustered_evidence(category, records)
-        if publication_evidence_record(category, issue_date, record)
-    ]
+    selected: list[dict[str, Any]] = []
+    seen_urls: set[str] = set()
+    for record in select_clustered_evidence(category, records):
+        url = str(record.get("url", ""))
+        if (
+            url in seen_urls
+            or not publication_evidence_record(category, issue_date, record)
+        ):
+            continue
+        seen_urls.add(url)
+        selected.append(record)
+    return selected
 
 
 def editor_evidence_records(
@@ -984,6 +991,16 @@ def article_result_matches(original_title: str, result_title: str) -> bool:
     )
 
 
+def candidate_matches_publisher(record: dict[str, Any], candidate_url: str) -> bool:
+    expected = urllib.parse.urlparse(str(record.get("publisher_url", ""))).netloc.lower()
+    candidate = urllib.parse.urlparse(candidate_url).netloc.lower()
+    expected = expected.removeprefix("www.")
+    candidate = candidate.removeprefix("www.")
+    if not expected:
+        return True
+    return candidate == expected or candidate.endswith(f".{expected}")
+
+
 def normalized_ocr_digits(value: str) -> str:
     text = re.sub(r"(?<!\d)(20\d)\s+(\d)(?=\s*年)", r"\1\2", str(value))
     return re.sub(r"(?<=\d)\s+(?=\d\s*(?:月|日))", "", text)
@@ -1039,6 +1056,19 @@ def url_document_month(value: str) -> tuple[int, int] | None:
     return (int(match.group(1)), int(match.group(2))) if match else None
 
 
+def url_document_date(value: str) -> date | None:
+    match = re.search(
+        r"/(20\d{2})/(0?[1-9]|1[0-2])/(0?[1-9]|[12]\d|3[01])(?:/|$)",
+        str(value),
+    )
+    if not match:
+        return None
+    try:
+        return date(*(int(part) for part in match.groups()))
+    except ValueError:
+        return None
+
+
 def document_matches_discovery(
     record: dict[str, Any],
     candidate_url: str,
@@ -1051,7 +1081,10 @@ def document_matches_discovery(
         return False
     candidate_text = f"{page_title} {body}"
     document_date = embedded_document_date(candidate_text)
+    url_date = url_document_date(candidate_url)
     if document_date and abs((discovery_date - document_date).days) > 7:
+        return False
+    if url_date and abs((discovery_date - url_date).days) > 7:
         return False
     document_month = url_document_month(candidate_url)
     if document_month:
@@ -1077,7 +1110,10 @@ def record_document_is_current(record: dict[str, Any], issue_date: str) -> bool:
         return False
     text = f"{record.get('title', '')} {record.get('excerpt', '')}"
     document_date = embedded_document_date(text)
+    url_date = url_document_date(str(record.get("url", "")))
     if document_date and not 0 <= (issue_day - document_date).days <= 7:
+        return False
+    if url_date and not 0 <= (issue_day - url_date).days <= 7:
         return False
     document_month = (
         url_document_month(str(record.get("url", "")))
@@ -1115,6 +1151,8 @@ def article_record_from_candidate(
     result_title: str,
     description: str,
 ) -> dict[str, Any] | None:
+    if not candidate_matches_publisher(record, candidate_url):
+        return None
     for attempt in (candidate_url, jina_url(candidate_url)):
         try:
             page_raw, content_type, _ = request_bytes(attempt, timeout=12)
@@ -1195,6 +1233,7 @@ def enrich_discovered_record(
             if (
                 not candidate_url.startswith(("http://", "https://"))
                 or "news.google.com" in candidate_url
+                or not candidate_matches_publisher(record, candidate_url)
                 or not article_result_matches(
                     original_title,
                     result_title,
@@ -2446,6 +2485,16 @@ def self_test() -> None:
     )
     if not article_result_matches(fpt_headline, fpt_result):
         fail("article enrichment could not match a body-rich primary source")
+    if candidate_matches_publisher(
+        {"publisher_url": "https://example.jp"},
+        "https://unrelated.example.com/article",
+    ):
+        fail("article enrichment crossed publisher domains")
+    if not candidate_matches_publisher(
+        {"publisher_url": "https://example.jp"},
+        "https://news.example.jp/article",
+    ):
+        fail("article enrichment rejected a publisher subdomain")
     if event_probe_query(fpt_headline) not in article_search_queries({}, fpt_headline):
         fail("article enrichment omitted the bounded event probe query")
     stale_pdf_record = {
@@ -2460,6 +2509,16 @@ def self_test() -> None:
     }
     if record_document_is_current(stale_pdf_record, "2099-07-02"):
         fail("stale embedded document date passed current Evidence validation")
+    if record_document_is_current(
+        {
+            "source_class": "discovered_media",
+            "url": "https://example.com/2099/06/09/old-story/",
+            "title": "企業が新計画を発表",
+            "excerpt": "企業は新計画の詳細を発表した。",
+        },
+        "2099-07-02",
+    ):
+        fail("stale URL date passed current Evidence validation")
     if document_matches_discovery(
         stale_pdf_record,
         stale_pdf_record["url"],

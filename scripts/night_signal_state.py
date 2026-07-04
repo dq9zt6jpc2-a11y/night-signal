@@ -1495,14 +1495,17 @@ def validate_issue_evidence(
             fail(f"{label} has no observed evidence URL")
 
         records = entry.get("records")
-        record_by_url = {
-            str(record.get("url")): record
-            for record in records
-            if isinstance(record, dict)
-            and str(record.get("url", "")).startswith(("http://", "https://"))
-        } if isinstance(records, list) else {}
+        records_by_url: dict[str, list[dict[str, Any]]] = {}
+        for record in records if isinstance(records, list) else []:
+            if not isinstance(record, dict):
+                continue
+            url = str(record.get("url", ""))
+            if url.startswith(("http://", "https://")):
+                records_by_url.setdefault(url, []).append(record)
         observed_record_urls = {
-            url for url, record in record_by_url.items() if record.get("observed")
+            url
+            for url, url_records in records_by_url.items()
+            if any(record.get("observed") for record in url_records)
         }
 
         for card in cards_by_category.get(label, []):
@@ -1522,10 +1525,11 @@ def validate_issue_evidence(
             if evidence_contract_active:
                 source_date = str(card.get("source_published_date", ""))
                 evidence_dates = {
-                    str(record_by_url.get(url, {}).get("published_date") or "")
+                    str(record.get("published_date") or "")
                     for url in detail_urls
+                    for record in records_by_url.get(url, [])
                 }
-                if "" in evidence_dates or source_date not in evidence_dates:
+                if not source_date or source_date not in evidence_dates:
                     fail(
                         f"{label} public update source date is not present in its Evidence"
                     )

@@ -13,7 +13,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_CONFIG = ROOT / "config" / "night_signal_sources.json"
 COVERAGE_CONFIG = ROOT / "config" / "night_signal_coverage.json"
-COLLECTOR_CONTRACT_VERSION = 2
+COLLECTOR_CONTRACT_VERSION = 3
 
 
 def fail(message: str) -> None:
