@@ -753,8 +753,7 @@ def google_news_decoding_params(params_url: str) -> tuple[str, str, str] | None:
         return parser.params
 
 
-def google_news_publisher_url(source_url: str) -> str | None:
-    """Resolve a Google News article id through Google's own signed endpoint."""
+def _google_news_publisher_url_once(source_url: str) -> str | None:
     parsed = urllib.parse.urlparse(source_url)
     parts = [part for part in parsed.path.split("/") if part]
     if parsed.netloc.lower() != "news.google.com" or len(parts) < 2:
@@ -853,6 +852,15 @@ def google_news_publisher_url(source_url: str) -> str | None:
         urllib.error.URLError,
     ):
         return None
+    return None
+
+
+def google_news_publisher_url(source_url: str) -> str | None:
+    """Resolve a Google News article id, retrying only a failed signed request."""
+    for _ in range(2):
+        resolved = _google_news_publisher_url_once(source_url)
+        if resolved:
+            return resolved
     return None
 
 
@@ -2815,6 +2823,15 @@ def self_test() -> None:
         or not record_has_material_body(decoded_headline, decoded_record)
     ):
         fail("Google News URL was not resolved to body-rich publisher Evidence")
+    original_decode_once = _google_news_publisher_url_once
+    retry_results = iter([None, "https://example.com/retried-article"])
+    globals()["_google_news_publisher_url_once"] = lambda _: next(retry_results)
+    try:
+        retried_url = google_news_publisher_url(encoded_google_url)
+    finally:
+        globals()["_google_news_publisher_url_once"] = original_decode_once
+    if retried_url != "https://example.com/retried-article":
+        fail("Google News URL resolution did not retry a transient failure once")
     original_request_bytes = request_bytes
     original_google_news_decoding_params = google_news_decoding_params
     reader_headline = "OpenAIが米政府への5％株式譲渡案を協議"
