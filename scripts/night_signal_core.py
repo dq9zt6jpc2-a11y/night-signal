@@ -205,6 +205,73 @@ class VisibleTextParser(HTMLParser):
                 self.parts.append(text)
 
 
+class ArticleContainerParser(HTMLParser):
+    HIDDEN_TAGS = VisibleTextParser.HIDDEN_TAGS
+    VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
+    CONTAINER_RE = re.compile(
+        r"(?:article|entry|post|story|news)[_-]?(?:body|content)|"
+        r"(?:body|content)[_-]?(?:article|entry|post|story|news)",
+        re.I,
+    )
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.depth = 0
+        self.hidden_depth = 0
+        self.current: list[str] = []
+        self.candidates: list[str] = []
+
+    def handle_starttag(
+        self,
+        tag: str,
+        attrs: list[tuple[str, str | None]],
+    ) -> None:
+        if self.depth:
+            if tag not in self.VOID_TAGS:
+                self.depth += 1
+            if tag in self.HIDDEN_TAGS:
+                self.hidden_depth += 1
+            return
+        values = dict(attrs)
+        identity = " ".join(
+            str(values.get(name) or "") for name in ("id", "class")
+        )
+        if tag == "article" or self.CONTAINER_RE.search(identity):
+            self.depth = 1
+            self.hidden_depth = 0
+            self.current = []
+
+    def handle_endtag(self, tag: str) -> None:
+        if not self.depth:
+            return
+        if tag in self.HIDDEN_TAGS and self.hidden_depth:
+            self.hidden_depth -= 1
+        self.depth -= 1
+        if self.depth == 0:
+            text = compact_text(" ".join(self.current), 8000)
+            if text:
+                self.candidates.append(text)
+            self.current = []
+
+    def handle_startendtag(
+        self,
+        tag: str,
+        attrs: list[tuple[str, str | None]],
+    ) -> None:
+        if tag not in self.VOID_TAGS:
+            self.handle_starttag(tag, attrs)
+            self.handle_endtag(tag)
+
+    def handle_data(self, data: str) -> None:
+        if self.depth and not self.hidden_depth:
+            text = " ".join(data.split())
+            if text:
+                self.current.append(text)
+
+    def text(self) -> str:
+        return max(self.candidates, key=len, default="")
+
+
 def compact_text(value: str, limit: int = 1600) -> str:
     return " ".join(html.unescape(value).split())[:limit]
 
@@ -661,7 +728,18 @@ def page_text(raw: bytes, content_type: str) -> tuple[str, str]:
         return plain[:180], plain
     structured = structured_article_text(text)
     if structured:
-        return structured
+        title, body = structured
+        if len(body) < 600:
+            parser = ArticleContainerParser()
+            parser.feed(text)
+            container_body = parser.text()
+            if len(container_body) > len(body):
+                body = (
+                    container_body
+                    if len(body) < 120
+                    else compact_text(f"{body} {container_body}", 8000)
+                )
+        return title, body
     title_match = re.search(
         r"<title[^>]*>(.*?)</title>",
         text,
@@ -2195,6 +2273,20 @@ def self_test() -> None:
         fail("structured article metadata was not extracted")
     if "2099-01-02T10:00:00" in structured[1]:
         fail("structured publication metadata leaked into article facts")
+    short_metadata_fixture = (
+        '<html><script type="application/ld+json">'
+        '{"@type":"NewsArticle","headline":"YOASOBIが新MVを公開",'
+        '"description":"YOASOBIが新しいMVを公開した。公開日は7月4日。"}'
+        '</script><div id="entrybody"><p>新MVは短編小説を原作とし、3人の登場人物が'
+        'それぞれの記憶と向き合う姿を描いた。ゲーム内コラボは7月21日まで開催され、'
+        '全6種の限定スキンと楽曲を使ったダンス演出も提供される。</p></div></html>'
+    )
+    _, enriched_body = page_text(
+        short_metadata_fixture.encode(),
+        "text/html; charset=utf-8",
+    )
+    if "全6種の限定スキン" not in enriched_body:
+        fail("short structured metadata was not supplemented by the article body")
     cross_domain_title = "A国首相とB国首相、経済安全保障分野での連携を強化"
     probe_terms = event_probe_terms(cross_domain_title)
     if "強化" in probe_terms or not {"a国首相", "b国首相"} <= set(probe_terms):
