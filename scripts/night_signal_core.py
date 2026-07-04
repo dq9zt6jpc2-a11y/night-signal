@@ -596,16 +596,39 @@ def fact_supported_by_records(
     fact_numbers = set(re.findall(r"\d+(?:\.\d+)?", fact))
     for record in source_records:
         title = record_public_title(record)
+        body = reader_facing_text(
+            str(record.get("excerpt") or record.get("evidence") or ""),
+            8500,
+        )
         evidence = reader_facing_text(
-            f"{record.get('title', '')} {record.get('excerpt') or record.get('evidence') or ''}",
+            f"{record.get('title', '')} {body}",
             8500,
         )
         evidence_numbers = set(re.findall(r"\d+(?:\.\d+)?", evidence))
-        if fact_numbers and not fact_numbers <= evidence_numbers:
+        unsupported_numbers = fact_numbers - evidence_numbers
+        fact_billions = {
+            float(value)
+            for value in re.findall(r"(\d+(?:\.\d+)?)\s*億", fact)
+        }
+        evidence_billions = {
+            float(value) * 10
+            for value in re.findall(
+                r"\$?\s*(\d+(?:\.\d+)?)\s*billion",
+                evidence,
+                flags=re.I,
+            )
+        }
+        unsupported_numbers -= {
+            value
+            for value in unsupported_numbers
+            if any(abs(float(value) - converted) < 0.001 for converted in evidence_billions)
+            and any(abs(float(value) - amount) < 0.001 for amount in fact_billions)
+        }
+        if unsupported_numbers:
             continue
-        evidence_japanese = len(re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", evidence))
-        evidence_latin = len(re.findall(r"[A-Za-z]", evidence))
-        if evidence_latin >= 24 and evidence_japanese < 6:
+        body_japanese = len(re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", body))
+        body_latin = len(re.findall(r"[A-Za-z]", body))
+        if body_latin >= 24 and body_japanese < 6:
             return True
         if (
             state_contract.materially_same_fact(fact, title)
@@ -2072,6 +2095,16 @@ def self_test() -> None:
         [english_record],
     ):
         fail("translated fact invented a number absent from English Evidence")
+    bilingual_record = {
+        **english_record,
+        "title": "SpaceXがIPOを計画",
+        "excerpt": "SpaceX is preparing for a potential $75 billion IPO.",
+    }
+    if not fact_supported_by_records(
+        "SpaceXは約750億ドル規模のIPOを計画している。",
+        [bilingual_record],
+    ):
+        fail("translated billion-to-億 amount lost source support")
     _, parsed_body = page_text(
         (
             "<html><head><title>Example</title></head><body>"
