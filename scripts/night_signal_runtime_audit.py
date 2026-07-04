@@ -131,10 +131,11 @@ def evidence_state(issue_date: str, state_root: Path) -> dict[str, Any]:
         report = evidence_store.validate_bundle(bundle, issue_date)
         result.update(
             {
-                "usable": True,
+                "usable": not report["editor_coverage_gaps"],
                 "source_checks": report["source_checks"],
                 "discovery_checks": report["discovery_checks"],
                 "unresolved_queries": report["unresolved_queries"],
+                "editor_coverage_gaps": report["editor_coverage_gaps"],
             }
         )
     except (

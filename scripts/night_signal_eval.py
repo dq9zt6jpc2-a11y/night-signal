@@ -69,6 +69,7 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
     material_candidates = 0
     resolved_candidates = 0
     unresolved_queries = list(evidence_report["unresolved_queries"])
+    editor_coverage_gaps = list(evidence_report["editor_coverage_gaps"])
     observed_urls = set(evidence_report["observed_urls"])
     unavailable_urls: set[str] = set()
     reviewed_topics = {
@@ -125,6 +126,7 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
         "all_categories_collected": set(categories) == set(configured),
         "all_watch_topics_reviewed": reviewed_topics >= expected_topics,
         "evidence_contract_valid": True,
+        "material_topics_resolved": not editor_coverage_gaps,
         "public_updates_present": bool(cards),
         "all_facts_cited": facts > 0 and mapped_facts == facts,
         "all_citations_observed": bool(cited_urls) and cited_urls <= observed_urls,
@@ -138,6 +140,7 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
         "material_candidates": material_candidates,
         "resolved_candidates": resolved_candidates,
         "unresolved_queries": unresolved_queries,
+        "editor_coverage_gaps": editor_coverage_gaps,
         "observed_urls": len(observed_urls),
         "unavailable_urls": len(unavailable_urls),
         "evidence_hosts": len({normalized_host(url) for url in observed_urls}),

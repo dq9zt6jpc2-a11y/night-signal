@@ -131,6 +131,7 @@ def validate_bundle(
         "discovery_checks": 0,
         "observed_urls": set(),
         "unresolved_queries": [],
+        "editor_coverage_gaps": [],
     }
 
     for label, category in configured.items():
@@ -194,6 +195,10 @@ def validate_bundle(
             )
         horizon_searched = False
         unresolved_queries: list[str] = []
+        topic_resolution = {
+            topic: {"material_candidates": 0, "resolved_candidates": 0}
+            for topic in topics
+        }
         for index, check in enumerate(discovery_checks, start=1):
             _require(isinstance(check, dict), f"{label} discovery_checks[{index}] must be an object")
             check_state = check.get("slot_state")
@@ -249,6 +254,14 @@ def validate_bundle(
                 check["resolved_candidate_count"]
             ):
                 unresolved_queries.append(str(check.get("query_id", index)))
+            if purpose == "watch_topic":
+                topic = str(check_topics[0])
+                topic_resolution[topic]["material_candidates"] += int(
+                    check["material_candidate_count"]
+                )
+                topic_resolution[topic]["resolved_candidates"] += int(
+                    check["resolved_candidate_count"]
+                )
 
         seed_urls = {
             str(source.get("url"))
@@ -282,6 +295,12 @@ def validate_bundle(
             if any(record.get("observed") for record in url_records)
         }
         _require(bool(observed_urls), f"{label} has no observed evidence URL")
+        editor_coverage_gaps = [
+            topic
+            for topic, counts in topic_resolution.items()
+            if counts["material_candidates"] > 0
+            and counts["resolved_candidates"] == 0
+        ]
         category_reports[label] = {
             "topics": topics,
             "checked_topics": checked_topics,
@@ -291,12 +310,17 @@ def validate_bundle(
             "source_checks": len(source_checks),
             "discovery_checks": len(discovery_checks),
             "unresolved_queries": unresolved_queries,
+            "topic_resolution": topic_resolution,
+            "editor_coverage_gaps": editor_coverage_gaps,
         }
         totals["source_checks"] += len(source_checks)
         totals["discovery_checks"] += len(discovery_checks)
         totals["observed_urls"].update(observed_urls)
         totals["unresolved_queries"].extend(
             f"{label}: {query_id}" for query_id in unresolved_queries
+        )
+        totals["editor_coverage_gaps"].extend(
+            f"{label}/{topic}" for topic in editor_coverage_gaps
         )
 
     return {
@@ -305,6 +329,7 @@ def validate_bundle(
         "discovery_checks": totals["discovery_checks"],
         "observed_urls": totals["observed_urls"],
         "unresolved_queries": totals["unresolved_queries"],
+        "editor_coverage_gaps": totals["editor_coverage_gaps"],
     }
 
 

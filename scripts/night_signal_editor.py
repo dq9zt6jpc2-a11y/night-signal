@@ -189,9 +189,14 @@ def edit_evidence(
 ) -> dict[str, Any]:
     evidence = read_evidence(evidence_path)
     try:
-        evidence_store.validate_bundle(evidence, issue_date)
+        evidence_report = evidence_store.validate_bundle(evidence, issue_date)
     except evidence_store.EvidenceContractError as exc:
         fail(str(exc))
+    if evidence_report["editor_coverage_gaps"]:
+        fail(
+            "Evidence has material watch topics without resolved source content: "
+            + ", ".join(evidence_report["editor_coverage_gaps"])
+        )
     categories = evidence["categories"]
     configs = category_config()
 

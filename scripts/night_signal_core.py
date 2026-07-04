@@ -88,7 +88,7 @@ PUBLICATION_EVENT_RE = re.compile(
     re.I,
 )
 CATEGORY_IDENTITY_TERMS = {
-    "OpenAI": ["OpenAI", "ChatGPT", "Codex", "Azure OpenAI", "生成AI", "AIモデル"],
+    "OpenAI": ["OpenAI", "ChatGPT", "Codex", "Azure OpenAI"],
     "SoftBank": ["SoftBank", "ソフトバンク", "SBG", "Arm"],
     "Honda": ["Honda", "ホンダ", "HRC", "Aston Martin", "Acura"],
     "F1": ["F1", "FIA", "Grand Prix", "グランプリ", "Formula 1", "ホンダ", "Honda", "ADUO", "PU", "レッドブル", "メルセデス", "フェラーリ", "マクラーレン", "Aston Martin"],
@@ -106,7 +106,7 @@ CATEGORY_IDENTITY_TERMS = {
     "YOASOBI / 幾田りら": ["YOASOBI", "幾田りら", "ikura"],
     "アジア経済": ["アジア", "中国", "インド", "台湾", "韓国", "ASEAN", "ベトナム"],
     "北米経済": ["米", "米国", "アメリカ", "Canada", "Fed", "FRB", "S&P", "Nasdaq"],
-    "宇都宮ブレックス": ["宇都宮ブレックス", "BREX", "B.LEAGUE", "Bリーグ"],
+    "宇都宮ブレックス": ["宇都宮ブレックス", "Utsunomiya Brex", "宇都宮 BREX"],
 }
 DISCOVERY_CHANGE_TERMS = [
     "partnership",
@@ -1001,6 +1001,15 @@ def candidate_matches_publisher(record: dict[str, Any], candidate_url: str) -> b
     return candidate == expected or candidate.endswith(f".{expected}")
 
 
+def reader_resolved_discovery_url(candidate_url: str, resolved_url: str) -> bool:
+    candidate_host = urllib.parse.urlparse(candidate_url).netloc.lower()
+    resolved_host = urllib.parse.urlparse(resolved_url).netloc.lower()
+    return (
+        candidate_host == "news.google.com"
+        or candidate_host.endswith(".news.google.com")
+    ) and resolved_host == "r.jina.ai"
+
+
 def normalized_ocr_digits(value: str) -> str:
     text = re.sub(r"(?<!\d)(20\d)\s+(\d)(?=\s*年)", r"\1\2", str(value))
     return re.sub(r"(?<=\d)\s+(?=\d\s*(?:月|日))", "", text)
@@ -1157,19 +1166,24 @@ def article_record_from_candidate(
     )
     if not discovery_redirect and not candidate_matches_publisher(record, candidate_url):
         return None
-    attempts = (candidate_url,) if discovery_redirect else (candidate_url, jina_url(candidate_url))
+    attempts = (candidate_url, jina_url(candidate_url))
     for attempt in attempts:
         try:
             page_raw, content_type, resolved_url = request_bytes(attempt, timeout=12)
             page_title, body = page_text(page_raw, content_type)
         except (OSError, TimeoutError, urllib.error.URLError, ValueError):
             continue
+        reader_resolved_discovery = reader_resolved_discovery_url(
+            candidate_url, resolved_url
+        )
         effective_url = (
             candidate_url
             if urllib.parse.urlparse(resolved_url).netloc.lower() == "r.jina.ai"
             else resolved_url
         )
-        if not candidate_matches_publisher(record, effective_url):
+        if not reader_resolved_discovery and not candidate_matches_publisher(
+            record, effective_url
+        ):
             continue
         body = compact_text(body, 8000)
         body_record = {**record, "excerpt": body}
@@ -1197,12 +1211,14 @@ def article_record_from_candidate(
         ):
             continue
         parsed = urllib.parse.urlparse(effective_url)
-        resolved_label = parsed.netloc.lower().removeprefix("www.")
-        publisher_url = (
-            f"{parsed.scheme}://{parsed.netloc}"
-            if parsed.scheme in {"http", "https"} and parsed.netloc
-            else str(record.get("publisher_url", ""))
+        resolved_label = (
+            str(record.get("label", ""))
+            if reader_resolved_discovery
+            else parsed.netloc.lower().removeprefix("www.")
         )
+        publisher_url = str(record.get("publisher_url", ""))
+        if not reader_resolved_discovery and parsed.scheme in {"http", "https"} and parsed.netloc:
+            publisher_url = f"{parsed.scheme}://{parsed.netloc}"
         return {
             **record,
             "label": resolved_label or str(record.get("label", "")),
@@ -2404,6 +2420,18 @@ def self_test() -> None:
         "福岡ソフトバンクホークスが阪神と対戦した。",
     ):
         fail("non-sports category accepted an ambiguous sports result")
+    if category_identity_ok(
+        "OpenAI",
+        "国産生成AIモデルを企業向けに提供開始",
+        "日本語対応の生成AI基盤を公開した。",
+    ):
+        fail("OpenAI category accepted a generic AI update")
+    if category_identity_ok(
+        "宇都宮ブレックス",
+        "川崎ブレイブサンダースが新アリーナ施策を発表",
+        "Bリーグでの取り組みを開始する。",
+    ):
+        fail("Brex category accepted another B.LEAGUE club")
     if not low_signal_value("Hondaの夏休み体験授業でF1を特別展示"):
         fail("routine promotional events must not become important updates")
     duplicate_record = {
@@ -2517,6 +2545,50 @@ def self_test() -> None:
         "https://news.example.jp/article",
     ):
         fail("article enrichment rejected a publisher subdomain")
+    if not reader_resolved_discovery_url(
+        "https://news.google.com/rss/articles/example?oc=5",
+        "https://r.jina.ai/http://news.google.com/rss/articles/example?oc=5",
+    ):
+        fail("Google News Reader resolution was not recognized")
+    original_request_bytes = request_bytes
+    reader_headline = "OpenAIが米政府への5％株式譲渡案を協議"
+    reader_google_url = "https://news.google.com/rss/articles/example?oc=5"
+
+    def fake_reader_request(url: str, timeout: int = 15) -> tuple[bytes, str, str]:
+        if "r.jina.ai" not in url:
+            raise urllib.error.URLError("direct Google News fetch unavailable")
+        body = (
+            f"Title: {reader_headline}\n"
+            "URL Source: http://news.google.com/rss/articles/example?oc=5\n"
+            "Published Time: 2099-01-02T12:00:00+09:00\n"
+            "Markdown Content: OpenAIは米政府に株式5％を譲渡する案を協議した。"
+            "評価額に基づく持分額と議会承認の可能性も報じられた。"
+        )
+        return body.encode(), "text/plain; charset=utf-8", jina_url(reader_google_url)
+
+    globals()["request_bytes"] = fake_reader_request
+    try:
+        reader_record = article_record_from_candidate(
+            "OpenAI",
+            {
+                "label": "Example News",
+                "url": reader_google_url,
+                "publisher_url": "https://example.com",
+                "source_class": "discovered_media",
+                "observed": True,
+                "published_date": "2099-01-02",
+                "title": reader_headline,
+                "excerpt": reader_headline,
+            },
+            reader_headline,
+            reader_google_url,
+            reader_headline,
+            reader_headline,
+        )
+    finally:
+        globals()["request_bytes"] = original_request_bytes
+    if not reader_record or not record_has_material_body(reader_headline, reader_record):
+        fail("Google News Reader body was not retained as publication Evidence")
     if event_probe_query(fpt_headline) not in article_search_queries({}, fpt_headline):
         fail("article enrichment omitted the bounded event probe query")
     stale_pdf_record = {

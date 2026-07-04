@@ -97,8 +97,10 @@ def fresh_evidence(issue_date: str) -> bool:
     except (OSError, json.JSONDecodeError):
         return False
     try:
-        evidence_store.validate_bundle(bundle, issue_date)
+        report = evidence_store.validate_bundle(bundle, issue_date)
     except evidence_store.EvidenceContractError:
+        return False
+    if report["editor_coverage_gaps"]:
         return False
     return evidence_reusable(
         bundle,

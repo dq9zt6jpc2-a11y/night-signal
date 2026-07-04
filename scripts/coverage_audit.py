@@ -75,6 +75,11 @@ def validate(issue_date: str) -> dict[str, int]:
         evidence_report = evidence_store.validate_bundle(bundle, issue_date)
     except evidence_store.EvidenceContractError as exc:
         fail(str(exc))
+    if evidence_report["editor_coverage_gaps"]:
+        fail(
+            "material watch topics lack resolved source content: "
+            + ", ".join(evidence_report["editor_coverage_gaps"])
+        )
     configured = {
         str(category["label"]): category
         for category in contract.get("categories", [])
@@ -180,6 +185,20 @@ def self_test() -> None:
         or len(report["observed_urls"]) != 1
     ):
         fail(f"unexpected self-test metrics: {report}")
+    if report["editor_coverage_gaps"] != ["Test/topic-one"]:
+        fail("unresolved material watch topic was not exposed as a coverage gap")
+    resolved = json.loads(json.dumps(bundle))
+    resolved["categories"]["Test"]["discovery_checks"][0][
+        "resolved_candidate_count"
+    ] = 1
+    resolved_report = evidence_store.validate_bundle(
+        resolved,
+        issue_date,
+        coverage=coverage,
+        registry=registry,
+    )
+    if resolved_report["editor_coverage_gaps"]:
+        fail("resolved material watch topic remained a coverage gap")
     invalid = json.loads(json.dumps(bundle))
     invalid["categories"]["Test"]["discovery_checks"][0]["watch_topic_ids"] = []
     try:
