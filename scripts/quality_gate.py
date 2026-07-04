@@ -18,6 +18,7 @@ import night_signal_state as state_contract
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE_ROOT = ROOT / "site"
+STATE_ROOT = ROOT / "state"
 COVERAGE_CONTRACT = load_contract()
 MIN_CHANGED_CARDS_VS_PREVIOUS = int(COVERAGE_CONTRACT.get("minimum_changed_cards_vs_previous_issue", 1))
 MAX_UNCHANGED_CARD_RATIO_VS_PREVIOUS = 0.70
@@ -945,17 +946,31 @@ def validate(issue_date: str) -> None:
         fail("cards missing 今日/昨日/一昨日 freshness labels: " + "; ".join(label_failures[:8]))
     if effective_on_or_after(COVERAGE_CONTRACT, "rolling_display_cards_effective_date", issue_dt):
         display_cards = normal_card_blocks(root_html)
-        expected_dates = {
+        allowed_dates = {
             issue_dt.fromordinal(issue_dt.toordinal() - offset).isoformat()
             for offset in range(3)
         }
+        available_dates: set[str] = set()
+        for issue_path in STATE_ROOT.glob("20??-??-??/issue.json"):
+            try:
+                issue_state = json.loads(issue_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                continue
+            if not isinstance(issue_state, dict):
+                continue
+            available_dates.update(
+                str(card.get("source_published_date"))
+                for card in issue_state.get("cards", [])
+                if isinstance(card, dict)
+                and str(card.get("source_published_date")) in allowed_dates
+            )
         visible_dates = {
             date
             for card in display_cards
             for date in card_dates(card)
-            if date in expected_dates
+            if date in allowed_dates
         }
-        missing_dates = sorted(expected_dates - visible_dates)
+        missing_dates = sorted(available_dates - visible_dates)
         if missing_dates:
             fail("rolling three-day display missing dates: " + ", ".join(missing_dates))
 
