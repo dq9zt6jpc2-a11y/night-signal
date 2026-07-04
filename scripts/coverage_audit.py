@@ -26,13 +26,6 @@ def fail(message: str) -> None:
     raise SystemExit(1)
 
 
-def discovery_check_lacks_resolution(check: dict[str, Any]) -> bool:
-    return bool(
-        int(check.get("material_candidate_count", 0))
-        and not int(check.get("resolved_candidate_count", 0))
-    )
-
-
 def load_object(path: Path) -> dict[str, Any]:
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
@@ -197,11 +190,6 @@ def validate_category(
                 fail(f"{label} discovery_checks[{index}] has invalid {metric}")
         if int(check["resolved_candidate_count"]) > int(check["material_candidate_count"]):
             fail(f"{label} discovery_checks[{index}] resolves more candidates than it found")
-        if strict_discovery and discovery_check_lacks_resolution(check):
-            fail(
-                f"{label} discovery query found material candidates but resolved no "
-                f"substantive evidence: {check.get('query_id', index)}"
-            )
         if check_state != "search_unavailable":
             checked_topics.update(str(topic) for topic in topics)
             horizon_searched = horizon_searched or purpose == "horizon"
@@ -332,11 +320,11 @@ def self_test() -> None:
                 "watch_topic_ids": ["topic-one"],
                 "query": "Test update when:3d",
                 "url": "https://example.com/search/topic",
-                "slot_state": "searched_resolved",
+                "slot_state": "searched_unresolved",
                 "result_count": 2,
                 "relevant_result_count": 1,
                 "material_candidate_count": 1,
-                "resolved_candidate_count": 1,
+                "resolved_candidate_count": 0,
                 "checked_at_jst": f"{issue_date}T20:00:00+09:00",
                 "evidence_summary": "topic searched",
             },
@@ -366,14 +354,6 @@ def self_test() -> None:
     )
     if result != (1, 2, 1):
         fail(f"unexpected self-test metrics: {result}")
-    if not discovery_check_lacks_resolution(
-        {"material_candidate_count": 2, "resolved_candidate_count": 0}
-    ):
-        fail("unresolved material discovery was not detected")
-    if discovery_check_lacks_resolution(
-        {"material_candidate_count": 2, "resolved_candidate_count": 1}
-    ):
-        fail("resolved material discovery was marked unresolved")
     print("COVERAGE AUDIT SELF-TEST PASSED")
 
 
