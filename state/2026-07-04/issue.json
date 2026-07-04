@@ -1,0 +1,190 @@
+{
+  "issue_date": "2026-07-04",
+  "cards": [
+    {
+      "watch_topic_id": "race_schedule_results",
+      "title": "シルバーストンFIA F2予選結果：カマラがPP、宮田莉朋はスプリント2番手",
+      "summary": "カマラがシルバーストンFIA F2予選で最速タイムを記録し、日曜のポールポジションを獲得した。 宮田莉朋は予選9番手で、スプリントレースの2番グリッドを獲得した。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-07-03",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "standard",
+      "detail": {
+        "slug": "auto-34530df9d2c9-2026-07-04.html",
+        "sources": [
+          {
+            "label": "motorsport.com 日本版｜モータースポーツ情報サイト",
+            "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOQVNYS3FTdDV2bG1rWUdTbzA0RTVBOG1kYUtwVjB4WGl2el9zODBKd2NIQzcxdjdzUno3TkdNUXpCdnJjVFduemFyMmxMMGU4VkVIcVJkOTY0OGJHTERma2otQkpYSGlUQjAzUTdlR0tqZFVwY1pydDVyV2pqZFJqRnNn?oc=5"
+          }
+        ],
+        "summary": "カマラがシルバーストンFIA F2予選で最速タイムを記録し、日曜のポールポジションを獲得した。 宮田莉朋は予選9番手で、スプリントレースの2番グリッドを獲得した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "カマラがシルバーストンFIA F2予選で最速タイムを記録し、日曜のポールポジションを獲得した。",
+            "宮田莉朋は予選9番手で、スプリントレースの2番グリッドを獲得した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "カマラがシルバーストンFIA F2予選で最速タイムを記録し、日曜のポールポジションを獲得した。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiggFBVV95cUxOQVNYS3FTdDV2bG1rWUdTbzA0RTVBOG1kYUtwVjB4WGl2el9zODBKd2NIQzcxdjdzUno3TkdNUXpCdnJjVFduemFyMmxMMGU4VkVIcVJkOTY0OGJHTERma2otQkpYSGlUQjAzUTdlR0tqZFVwY1pydDVyV2pqZFJqRnNn?oc=5"
+              ]
+            },
+            {
+              "fact": "宮田莉朋は予選9番手で、スプリントレースの2番グリッドを獲得した。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiggFBVV95cUxOQVNYS3FTdDV2bG1rWUdTbzA0RTVBOG1kYUtwVjB4WGl2el9zODBKd2NIQzcxdjdzUno3TkdNUXpCdnJjVFduemFyMmxMMGU4VkVIcVJkOTY0OGJHTERma2otQkpYSGlUQjAzUTdlR0tqZFVwY1pydDVyV2pqZFJqRnNn?oc=5"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-03"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "honda_aston_pu",
+      "title": "ホンダ、オランダGPでのアップデート版PU投入を準備中",
+      "summary": "ホンダはアップデート版パワーユニットをオランダGPでの投入を目指して準備中である。 折原エンジニアは、すぐにトップに追いつくことは難しいかもしれないが、大きな性能改善を目指していると述べた。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-07-03",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "detail": {
+        "slug": "auto-7f96980ad679-2026-07-04.html",
+        "sources": [
+          {
+            "label": "motorsport.com 日本版｜モータースポーツ情報サイト",
+            "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxON0hHeVE3Z0ljeDhJVmJmZUJoOGVJcm1lOGxYOWJEU2RfUHVaTzJXUXlNS3hiSWlFVFZzNDMwTWdBc3hOT2t1SG5QVXBhOVRma01DUGI4Y0ZOcEVZOVZXd2l4ZXhyMHBkTmotblE2bG1feFd0UzFfNWtSd0ZYaTRIcDM2SXpSWENlVk5iT0Y4UVFhRldTZkgtcDE3TmJEM0tOSTQ4bGcwcmU2dw?oc=5"
+          }
+        ],
+        "summary": "ホンダはアップデート版パワーユニットをオランダGPでの投入を目指して準備中である。 折原エンジニアは、すぐにトップに追いつくことは難しいかもしれないが、大きな性能改善を目指していると述べた。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "ホンダはアップデート版パワーユニットをオランダGPでの投入を目指して準備中である。",
+            "折原エンジニアは、すぐにトップに追いつくことは難しいかもしれないが、大きな性能改善を目指していると述べた。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "ホンダはアップデート版パワーユニットをオランダGPでの投入を目指して準備中である。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiqgFBVV95cUxON0hHeVE3Z0ljeDhJVmJmZUJoOGVJcm1lOGxYOWJEU2RfUHVaTzJXUXlNS3hiSWlFVFZzNDMwTWdBc3hOT2t1SG5QVXBhOVRma01DUGI4Y0ZOcEVZOVZXd2l4ZXhyMHBkTmotblE2bG1feFd0UzFfNWtSd0ZYaTRIcDM2SXpSWENlVk5iT0Y4UVFhRldTZkgtcDE3TmJEM0tOSTQ4bGcwcmU2dw?oc=5"
+              ]
+            },
+            {
+              "fact": "折原エンジニアは、すぐにトップに追いつくことは難しいかもしれないが、大きな性能改善を目指していると述べた。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiqgFBVV95cUxON0hHeVE3Z0ljeDhJVmJmZUJoOGVJcm1lOGxYOWJEU2RfUHVaTzJXUXlNS3hiSWlFVFZzNDMwTWdBc3hOT2t1SG5QVXBhOVRma01DUGI4Y0ZOcEVZOVZXd2l4ZXhyMHBkTmotblE2bG1feFd0UzFfNWtSd0ZYaTRIcDM2SXpSWENlVk5iT0Y4UVFhRldTZkgtcDE3TmJEM0tOSTQ4bGcwcmU2dw?oc=5"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-03"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "race_schedule_results",
+      "title": "新世代F1でのシルバーストンの魅力減少に関するアロンソの見解",
+      "summary": "新世代F1において、シルバーストンの魅力が大幅に減少する可能性がある。 アロンソは、これはドライバーと観客の双方にとって非常に残念なことになるとコメントした。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-07-03",
+      "topic_value_class": "cultural_or_audience_signal",
+      "priority_class": "standard",
+      "detail": {
+        "slug": "auto-30ba3c6db397-2026-07-04.html",
+        "sources": [
+          {
+            "label": "motorsport.com 日本版｜モータースポーツ情報サイト",
+            "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxOR0EwOE9oZFJob28wTUNuVTFLVERRRFdoQ1lyS2xNTzhfRGg2dzA4TzItX20zUU9QUXJpbEZDdXNSZmRJXzlteXJmd1MwWm4yVmVXVjZKeFNtd3V4eE92TEt6bEFUNEJPNTVKT09JZHM2OVAxa284eU85am52VmxSb1ZCOURoa3d6aHNiamJwNERMOUw4b3VpbW5yMG43N0FhWUJIaFZiY05VQzVrSWk2SUFZZTZwS3c2NWlNeTlFeFN1OEs3U2ktcWxSdw?oc=5"
+          }
+        ],
+        "summary": "新世代F1において、シルバーストンの魅力が大幅に減少する可能性がある。 アロンソは、これはドライバーと観客の双方にとって非常に残念なことになるとコメントした。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "新世代F1において、シルバーストンの魅力が大幅に減少する可能性がある。",
+            "アロンソは、これはドライバーと観客の双方にとって非常に残念なことになるとコメントした。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "新世代F1において、シルバーストンの魅力が大幅に減少する可能性がある。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiywFBVV95cUxOR0EwOE9oZFJob28wTUNuVTFLVERRRFdoQ1lyS2xNTzhfRGg2dzA4TzItX20zUU9QUXJpbEZDdXNSZmRJXzlteXJmd1MwWm4yVmVXVjZKeFNtd3V4eE92TEt6bEFUNEJPNTVKT09JZHM2OVAxa284eU85am52VmxSb1ZCOURoa3d6aHNiamJwNERMOUw4b3VpbW5yMG43N0FhWUJIaFZiY05VQzVrSWk2SUFZZTZwS3c2NWlNeTlFeFN1OEs3U2ktcWxSdw?oc=5"
+              ]
+            },
+            {
+              "fact": "アロンソは、これはドライバーと観客の双方にとって非常に残念なことになるとコメントした。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiywFBVV95cUxOR0EwOE9oZFJob28wTUNuVTFLVERRRFdoQ1lyS2xNTzhfRGg2dzA4TzItX20zUU9QUXJpbEZDdXNSZmRJXzlteXJmd1MwWm4yVmVXVjZKeFNtd3V4eE92TEt6bEFUNEJPNTVKT09JZHM2OVAxa284eU85am52VmxSb1ZCOURoa3d6aHNiamJwNERMOUw4b3VpbW5yMG43N0FhWUJIaFZiY05VQzVrSWk2SUFZZTZwS3c2NWlNeTlFeFN1OEs3U2ktcWxSdw?oc=5"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-03"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "investment_policy_markets",
+      "title": "米雇用統計発表後のドル円相場の動き",
+      "summary": "米雇用統計が予想を下回る結果となり、ドル円は一時161.06円まで下落した。 その後、ドル円は161.47円までじり高となり、米雇用統計発表後の下落分をほぼ取り戻した。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-07-03",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "detail": {
+        "slug": "auto-84664d093308-2026-07-04.html",
+        "sources": [
+          {
+            "label": "ザイFX！",
+            "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFAyOVhjcnNNSS1fQ2RtUWo3bjZGM0hNTlk0ZmhxTml5OTRaOE1FZFdweU9zeUkxX0pJX3F2dElOZEFSX2gtNHF5eTM3NmZwbEsxU0E?oc=5"
+          },
+          {
+            "label": "ザイFX！",
+            "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE95Q0NTeVd5MHY3LTBqTkhQeUxuTHlFc3dGQkdHZjZ4MWE2TzkzLTM3N2ozdzVKd0VqNDlla1JVNFNmNmYxZ3NiUVA1ejhDcVozMmc?oc=5"
+          }
+        ],
+        "summary": "米雇用統計が予想を下回る結果となり、ドル円は一時161.06円まで下落した。 その後、ドル円は161.47円までじり高となり、米雇用統計発表後の下落分をほぼ取り戻した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "米雇用統計が予想を下回る結果となり、ドル円は一時161.06円まで下落した。",
+            "その後、ドル円は161.47円までじり高となり、米雇用統計発表後の下落分をほぼ取り戻した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "米雇用統計が予想を下回る結果となり、ドル円は一時161.06円まで下落した。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiUkFVX3lxTFAyOVhjcnNNSS1fQ2RtUWo3bjZGM0hNTlk0ZmhxTml5OTRaOE1FZFdweU9zeUkxX0pJX3F2dElOZEFSX2gtNHF5eTM3NmZwbEsxU0E?oc=5"
+              ]
+            },
+            {
+              "fact": "その後、ドル円は161.47円までじり高となり、米雇用統計発表後の下落分をほぼ取り戻した。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiUkFVX3lxTE95Q0NTeVd5MHY3LTBqTkhQeUxuTHlFc3dGQkdHZjZ4MWE2TzkzLTM3N2ozdzVKd0VqNDlla1JVNFNmNmYxZ3NiUVA1ejhDcVozMmc?oc=5"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-02",
+            "2026-07-03"
+          ]
+        }
+      }
+    }
+  ],
+  "coverage_manifest": {
+    "contract_version": "2026-07-04.01",
+    "date": "2026-07-04",
+    "collection_completed_at_jst": "2026-07-04T21:05:11+09:00",
+    "collection_mode": "github_models_unattended",
+    "evidence_sha256": "85711eae10fac17cf966e266dd9209d4b6ad57926748f49e0bc7b00d8f6a12f9",
+    "editor_contract_sha256": "08aec0da4aca3c68a11efb813998691d576f01074f26486c3ccd3d9829f9553b"
+  }
+}
