@@ -1151,13 +1151,25 @@ def article_record_from_candidate(
     result_title: str,
     description: str,
 ) -> dict[str, Any] | None:
-    if not candidate_matches_publisher(record, candidate_url):
+    candidate_host = urllib.parse.urlparse(candidate_url).netloc.lower()
+    discovery_redirect = candidate_host == "news.google.com" or candidate_host.endswith(
+        ".news.google.com"
+    )
+    if not discovery_redirect and not candidate_matches_publisher(record, candidate_url):
         return None
-    for attempt in (candidate_url, jina_url(candidate_url)):
+    attempts = (candidate_url,) if discovery_redirect else (candidate_url, jina_url(candidate_url))
+    for attempt in attempts:
         try:
-            page_raw, content_type, _ = request_bytes(attempt, timeout=12)
+            page_raw, content_type, resolved_url = request_bytes(attempt, timeout=12)
             page_title, body = page_text(page_raw, content_type)
         except (OSError, TimeoutError, urllib.error.URLError, ValueError):
+            continue
+        effective_url = (
+            candidate_url
+            if urllib.parse.urlparse(resolved_url).netloc.lower() == "r.jina.ai"
+            else resolved_url
+        )
+        if not candidate_matches_publisher(record, effective_url):
             continue
         body = compact_text(body, 8000)
         body_record = {**record, "excerpt": body}
@@ -1178,13 +1190,13 @@ def article_record_from_candidate(
             )
             or not document_matches_discovery(
                 record,
-                candidate_url,
+                effective_url,
                 page_title or result_title,
                 combined,
             )
         ):
             continue
-        parsed = urllib.parse.urlparse(candidate_url)
+        parsed = urllib.parse.urlparse(effective_url)
         resolved_label = parsed.netloc.lower().removeprefix("www.")
         publisher_url = (
             f"{parsed.scheme}://{parsed.netloc}"
@@ -1194,14 +1206,14 @@ def article_record_from_candidate(
         return {
             **record,
             "label": resolved_label or str(record.get("label", "")),
-            "url": candidate_url,
+            "url": effective_url,
             "publisher_url": publisher_url,
             "original_discovery_url": str(record.get("url", "")),
             "title": original_title,
             "excerpt": combined,
             "evidence": (
                 f"Google News RSSで「{original_title}」を確認し、"
-                f"配信元ページ{candidate_url}を特定した。"
+                f"配信元ページ{effective_url}を特定した。"
                 f"本文抽出: {combined[:700]}"
             ),
         }
@@ -1216,6 +1228,16 @@ def enrich_discovered_record(
     if not original_title:
         return record
     category_label = str(category.get("label", ""))
+    direct = article_record_from_candidate(
+        category_label,
+        record,
+        original_title,
+        str(record.get("url", "")),
+        original_title,
+        str(record.get("excerpt", "")),
+    )
+    if direct:
+        return direct
     candidates: dict[str, tuple[int, str, str, str]] = {}
     for query in article_search_queries(record, original_title):
         search_url = "https://www.bing.com/search?" + urllib.parse.urlencode(

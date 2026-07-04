@@ -14,17 +14,18 @@ from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
+import night_signal_evidence as evidence_store
 from render_detail import FORBIDDEN_TEXT as DETAIL_FORBIDDEN_TEXT
 from render_detail import render as render_detail_html
 
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = ROOT / "config" / "night_signal_coverage.json"
-SOURCES_PATH = ROOT / "config" / "night_signal_sources.json"
 MARKER_PATH = ROOT / ".night-signal-issue-date"
 DEFAULT_STATE_ROOT = ROOT / "state"
 EDITOR_CONTRACT_PATHS = (
     ROOT / "scripts" / "night_signal_core.py",
+    ROOT / "scripts" / "night_signal_evidence.py",
     ROOT / "scripts" / "night_signal_editor.py",
     ROOT / "scripts" / "night_signal_models.py",
     ROOT / "scripts" / "night_signal_state.py",
@@ -311,13 +312,6 @@ def read_json(path: Path) -> dict[str, Any]:
 
 def jst_today() -> str:
     return datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d")
-
-
-def category_required_channels(contract: dict[str, Any], category: dict[str, Any]) -> list[str]:
-    channels = category.get("required_watch_topic_channels", contract.get("required_watch_topic_channels", ["web", "sns_x", "youtube"]))
-    if not isinstance(channels, list) or any(not isinstance(channel, str) for channel in channels):
-        fail(f"{category.get('label', '<unknown>')} has invalid required channels")
-    return channels
 
 
 def selected_issue_date() -> str | None:
@@ -1395,19 +1389,10 @@ def validate_issue_evidence(
             expected_hash = issue.get("coverage_manifest", {}).get("evidence_sha256")
             if expected_hash is not None and expected_hash != actual_hash:
                 fail("Issue was built from different Evidence content")
-    checked_at = bundle.get("checked_at_jst")
-    if not isinstance(checked_at, str) or not checked_at.startswith(issue_date):
-        fail("research bundle checked_at_jst must be on the issue date")
-
-    configured = {
-        str(category["label"]): category
-        for category in read_json(CONFIG_PATH).get("categories", [])
-        if isinstance(category, dict)
-    }
-    bundle_categories = bundle.get("categories")
-    if not isinstance(bundle_categories, dict) or set(bundle_categories) != set(configured):
-        fail("research bundle must cover every configured category exactly once")
-    registry = load_source_registry()
+    try:
+        evidence_report = evidence_store.validate_bundle(bundle, issue_date)
+    except evidence_store.EvidenceContractError as exc:
+        fail(str(exc))
     evidence_contract_active = effective_on_or_after(
         read_json(CONFIG_PATH),
         "publication_evidence_contract_effective_date",
@@ -1417,96 +1402,10 @@ def validate_issue_evidence(
     for card in cards:
         cards_by_category.setdefault(str(card.get("category")), []).append(card)
 
-    for label, category in configured.items():
-        entry = bundle_categories[label]
-        if not isinstance(entry, dict):
-            fail(f"research bundle category must be an object: {label}")
-        checks = entry.get("source_checks")
-        if not isinstance(checks, list) or not checks:
-            fail(f"research bundle has no source checks: {label}")
-
-        required_topics = {
-            str(topic.get("id"))
-            for topic in category.get("watch_topics", [])
-            if isinstance(topic, dict)
-        }
-        checked_topics: set[str] = set()
-        checked_urls: set[str] = set()
-        observed_urls: set[str] = set()
-        for index, check in enumerate(checks, start=1):
-            if not isinstance(check, dict):
-                fail(f"{label} source_checks[{index}] must be an object")
-            url = check.get("url")
-            state = check.get("slot_state")
-            topics = check.get("watch_topic_ids")
-            if not isinstance(url, str) or not url.startswith(("http://", "https://")):
-                fail(f"{label} source_checks[{index}] has an invalid URL")
-            if state not in {"observed_live", "source_unavailable"}:
-                fail(f"{label} source_checks[{index}] has an invalid state")
-            if not isinstance(topics, list) or any(topic not in required_topics for topic in topics):
-                fail(f"{label} source_checks[{index}] has invalid watch topics")
-            if not str(check.get("checked_at_jst", "")).startswith(issue_date):
-                fail(f"{label} source_checks[{index}] has a stale check time")
-            if not isinstance(check.get("evidence_summary"), str) or not str(
-                check.get("evidence_summary")
-            ).strip():
-                fail(f"{label} source_checks[{index}] has no evidence summary")
-            checked_topics.update(str(topic) for topic in topics)
-            checked_urls.add(url)
-            if state == "observed_live":
-                observed_urls.add(url)
-
-        discovery_checks = entry.get("discovery_checks")
-        if not isinstance(discovery_checks, list) or not discovery_checks:
-            fail(f"research bundle has no discovery checks: {label}")
-        discovery_states = {
-            "searched_resolved",
-            "searched_unresolved",
-            "searched_no_results",
-            "searched_no_material_results",
-        }
-        for index, check in enumerate(discovery_checks, start=1):
-            if not isinstance(check, dict):
-                fail(f"{label} discovery_checks[{index}] must be an object")
-            state = check.get("slot_state")
-            topics = check.get("watch_topic_ids")
-            if state not in discovery_states:
-                fail(f"{label} discovery_checks[{index}] has an invalid state")
-            if not isinstance(topics, list) or any(topic not in required_topics for topic in topics):
-                fail(f"{label} discovery_checks[{index}] has invalid watch topics")
-            if not str(check.get("checked_at_jst", "")).startswith(issue_date):
-                fail(f"{label} discovery_checks[{index}] has a stale check time")
-            if not isinstance(check.get("evidence_summary"), str) or not str(
-                check.get("evidence_summary")
-            ).strip():
-                fail(f"{label} discovery_checks[{index}] has no evidence summary")
-            checked_topics.update(str(topic) for topic in topics)
-
-        seed_urls = {
-            str(source.get("url"))
-            for source in registry.get(label, [])
-            if isinstance(source, dict)
-        }
-        if not seed_urls <= checked_urls:
-            fail(f"{label} has seed sources without explicit result states")
-        if not required_topics <= checked_topics:
-            fail(f"{label} has unchecked watch topics")
-        if not observed_urls:
-            fail(f"{label} has no observed evidence URL")
-
-        records = entry.get("records")
-        records_by_url: dict[str, list[dict[str, Any]]] = {}
-        for record in records if isinstance(records, list) else []:
-            if not isinstance(record, dict):
-                continue
-            url = str(record.get("url", ""))
-            if url.startswith(("http://", "https://")):
-                records_by_url.setdefault(url, []).append(record)
-        observed_record_urls = {
-            url
-            for url, url_records in records_by_url.items()
-            if any(record.get("observed") for record in url_records)
-        }
+    for label, category_report in evidence_report["categories"].items():
+        required_topics = category_report["topics"]
+        records_by_url = category_report["records_by_url"]
+        observed_record_urls = category_report["observed_record_urls"]
 
         for card in cards_by_category.get(label, []):
             topic_id = str(card.get("watch_topic_id"))
@@ -1628,32 +1527,6 @@ def generate_issue(issue_path: Path, output_root: Path, *, write_marker: bool) -
         "sample_html": str(output_root / f"night-brief-web-sample-{issue_date}.html"),
         "marker_written": write_marker,
     }
-
-
-def load_source_registry() -> dict[str, list[dict[str, str]]]:
-    registry = read_json(SOURCES_PATH)
-    categories = registry.get("categories")
-    if not isinstance(categories, dict):
-        fail("source registry missing categories")
-    normalized: dict[str, list[dict[str, str]]] = {}
-    for category, targets in categories.items():
-        if not isinstance(category, str) or not isinstance(targets, list):
-            fail("source registry categories must map labels to target lists")
-        normalized_targets: list[dict[str, str]] = []
-        for index, target in enumerate(targets, start=1):
-            if not isinstance(target, dict):
-                fail(f"source registry {category}[{index}] must be an object")
-            normalized_target = {}
-            for key in ("label", "url", "source_role", "channel", "source_class"):
-                value = target.get(key)
-                if not isinstance(value, str) or not value.strip():
-                    fail(f"source registry {category}[{index}] missing {key}")
-                normalized_target[key] = value.strip()
-            if not normalized_target["url"].startswith(("https://", "http://")):
-                fail(f"source registry {category}[{index}] url must be absolute")
-            normalized_targets.append(normalized_target)
-        normalized[category] = normalized_targets
-    return normalized
 
 
 def print_json(value: Any) -> None:

@@ -13,6 +13,7 @@ from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
 import night_signal_state as state
+import night_signal_evidence as evidence_store
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -44,6 +45,10 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
     issue = read_object(issue_path)
     bundle = read_object(base / "evidence.json")
     state.validate_issue_state(issue, issue_path)
+    try:
+        evidence_report = evidence_store.validate_bundle(bundle, issue_date)
+    except evidence_store.EvidenceContractError as exc:
+        fail(str(exc))
 
     contract = state.read_json(state.CONFIG_PATH)
     configured = {
@@ -59,67 +64,32 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
     if not isinstance(categories, dict):
         fail("research bundle categories must be an object")
 
-    source_checks = 0
-    discovery_checks = 0
+    source_checks = evidence_report["source_checks"]
+    discovery_checks = evidence_report["discovery_checks"]
     material_candidates = 0
     resolved_candidates = 0
-    unresolved_categories: list[str] = []
-    observed_urls: set[str] = set()
+    unresolved_queries = list(evidence_report["unresolved_queries"])
+    observed_urls = set(evidence_report["observed_urls"])
     unavailable_urls: set[str] = set()
-    reviewed_topics: set[tuple[str, str]] = set()
-    for label, entry in categories.items():
+    reviewed_topics = {
+        (label, topic)
+        for label, report in evidence_report["categories"].items()
+        for topic in report["checked_topics"]
+    }
+    for entry in categories.values():
         if not isinstance(entry, dict):
             continue
-        category_material = 0
-        category_resolved = 0
         for check in entry.get("source_checks", []):
             if not isinstance(check, dict):
                 continue
-            source_checks += 1
             url = check.get("url")
-            if isinstance(url, str):
-                if check.get("slot_state") == "observed_live":
-                    observed_urls.add(url)
-                elif check.get("slot_state") == "source_unavailable":
-                    unavailable_urls.add(url)
-        category_discovery_checks = [
-            check
-            for check in entry.get("discovery_checks", [])
-            if isinstance(check, dict)
-        ]
-        unresolved_checks: list[str] = []
-        if category_discovery_checks:
-            for check in category_discovery_checks:
-                discovery_checks += 1
-                if check.get("slot_state") != "search_unavailable":
-                    for topic in check.get("watch_topic_ids", []):
-                        if isinstance(topic, str):
-                            reviewed_topics.add((str(label), topic))
-                category_material += int(check.get("material_candidate_count", 0))
-                category_resolved += int(check.get("resolved_candidate_count", 0))
-                if int(check.get("material_candidate_count", 0)) and not int(
-                    check.get("resolved_candidate_count", 0)
-                ):
-                    unresolved_checks.append(str(check.get("query_id", "unknown")))
-        else:
-            for check in entry.get("source_checks", []):
-                if not isinstance(check, dict):
-                    continue
-                for topic in check.get("watch_topic_ids", []):
-                    if isinstance(topic, str):
-                        reviewed_topics.add((str(label), topic))
-        for record in entry.get("records", []):
-            if not isinstance(record, dict) or not record.get("observed"):
+            if isinstance(url, str) and check.get("slot_state") == "source_unavailable":
+                unavailable_urls.add(url)
+        for check in entry.get("discovery_checks", []):
+            if not isinstance(check, dict):
                 continue
-            url = record.get("url")
-            if isinstance(url, str):
-                observed_urls.add(url)
-        material_candidates += category_material
-        resolved_candidates += category_resolved
-        if unresolved_checks:
-            unresolved_categories.append(
-                f"{label}: {', '.join(unresolved_checks)}"
-            )
+            material_candidates += int(check.get("material_candidate_count", 0))
+            resolved_candidates += int(check.get("resolved_candidate_count", 0))
 
     expected_topics = {
         (label, topic)
@@ -154,7 +124,7 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
     checks = {
         "all_categories_collected": set(categories) == set(configured),
         "all_watch_topics_reviewed": reviewed_topics >= expected_topics,
-        "material_candidates_resolved": not unresolved_categories,
+        "evidence_contract_valid": True,
         "public_updates_present": bool(cards),
         "all_facts_cited": facts > 0 and mapped_facts == facts,
         "all_citations_observed": bool(cited_urls) and cited_urls <= observed_urls,
@@ -167,7 +137,7 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
         "discovery_checks": discovery_checks,
         "material_candidates": material_candidates,
         "resolved_candidates": resolved_candidates,
-        "unresolved_categories": unresolved_categories,
+        "unresolved_queries": unresolved_queries,
         "observed_urls": len(observed_urls),
         "unavailable_urls": len(unavailable_urls),
         "evidence_hosts": len({normalized_host(url) for url in observed_urls}),

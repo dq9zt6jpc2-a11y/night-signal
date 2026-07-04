@@ -188,12 +188,12 @@ def edit_evidence(
     token: str,
 ) -> dict[str, Any]:
     evidence = read_evidence(evidence_path)
-    if evidence.get("issue_date") != issue_date:
-        fail("Evidence date does not match the requested Issue date")
-    categories = evidence.get("categories")
+    try:
+        evidence_store.validate_bundle(evidence, issue_date)
+    except evidence_store.EvidenceContractError as exc:
+        fail(str(exc))
+    categories = evidence["categories"]
     configs = category_config()
-    if not isinstance(categories, dict) or set(categories) != set(configs):
-        fail("Evidence must cover every configured category exactly once")
 
     contracts = core.category_contracts()
     degraded_models: set[str] = set()

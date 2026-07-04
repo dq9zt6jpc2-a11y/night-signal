@@ -6,6 +6,7 @@ from __future__ import annotations
 import hashlib
 import json
 import sys
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 
@@ -13,7 +14,25 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_CONFIG = ROOT / "config" / "night_signal_sources.json"
 COVERAGE_CONFIG = ROOT / "config" / "night_signal_coverage.json"
-COLLECTOR_CONTRACT_VERSION = 3
+COLLECTOR_CONTRACT_PATHS = (
+    ROOT / "scripts" / "night_signal_collect.py",
+    ROOT / "scripts" / "night_signal_core.py",
+    ROOT / "scripts" / "night_signal_evidence.py",
+    SOURCE_CONFIG,
+    COVERAGE_CONFIG,
+)
+SOURCE_CHECK_STATES = {"observed_live", "source_unavailable"}
+DISCOVERY_CHECK_STATES = {
+    "searched_no_results",
+    "searched_no_material_results",
+    "searched_resolved",
+    "searched_unresolved",
+    "search_unavailable",
+}
+
+
+class EvidenceContractError(ValueError):
+    """The collector output does not satisfy the canonical Evidence contract."""
 
 
 def fail(message: str) -> None:
@@ -29,6 +48,264 @@ def load_object(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         fail(f"expected object: {path}")
     return value
+
+
+def collector_contract_version() -> str:
+    digest = hashlib.sha256()
+    for path in COLLECTOR_CONTRACT_PATHS:
+        digest.update(str(path.relative_to(ROOT)).encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()[:16]
+
+
+def effective_on_or_after(contract: dict[str, Any], key: str, issue_date: str) -> bool:
+    value = contract.get(key)
+    if not isinstance(value, str):
+        return False
+    try:
+        return date.fromisoformat(issue_date) >= date.fromisoformat(value)
+    except ValueError:
+        return False
+
+
+def required_channels(contract: dict[str, Any], category: dict[str, Any]) -> set[str]:
+    values = category.get(
+        "required_watch_topic_channels",
+        contract.get("required_watch_topic_channels", ["web"]),
+    )
+    if not isinstance(values, list) or any(not isinstance(value, str) for value in values):
+        raise EvidenceContractError(
+            f"{category.get('label', '<unknown>')} has invalid required channels"
+        )
+    return {value for value in values if value}
+
+
+def _require(condition: bool, message: str) -> None:
+    if not condition:
+        raise EvidenceContractError(message)
+
+
+def validate_bundle(
+    bundle: dict[str, Any],
+    issue_date: str,
+    *,
+    coverage: dict[str, Any] | None = None,
+    registry: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Validate collection once and return facts reused by every later stage."""
+    coverage = coverage or load_object(COVERAGE_CONFIG)
+    registry_value = registry or load_object(SOURCE_CONFIG)
+    registry_categories = registry_value.get("categories")
+    _require(isinstance(registry_categories, dict), "source registry categories must be an object")
+    configured = {
+        str(category["label"]): category
+        for category in coverage.get("categories", [])
+        if isinstance(category, dict) and isinstance(category.get("label"), str)
+    }
+    _require(bundle.get("issue_date") == issue_date, "Evidence date does not match issue date")
+    checked_at = bundle.get("checked_at_jst")
+    _require(
+        isinstance(checked_at, str) and checked_at.startswith(issue_date),
+        "Evidence checked_at_jst must be on the issue date",
+    )
+    try:
+        checked_datetime = datetime.fromisoformat(str(checked_at))
+    except ValueError as exc:
+        raise EvidenceContractError("Evidence checked_at_jst must be ISO-8601") from exc
+    _require(checked_datetime.tzinfo is not None, "Evidence checked_at_jst must include a timezone")
+    categories = bundle.get("categories")
+    _require(
+        isinstance(categories, dict) and set(categories) == set(configured),
+        "Evidence must cover every configured category exactly once",
+    )
+    strict_discovery = effective_on_or_after(
+        coverage,
+        "topic_discovery_contract_effective_date",
+        issue_date,
+    )
+    category_reports: dict[str, Any] = {}
+    totals = {
+        "source_checks": 0,
+        "discovery_checks": 0,
+        "observed_urls": set(),
+        "unresolved_queries": [],
+    }
+
+    for label, category in configured.items():
+        entry = categories[label]
+        _require(isinstance(entry, dict), f"Evidence category must be an object: {label}")
+        topics = {
+            str(topic["id"])
+            for topic in category.get("watch_topics", [])
+            if isinstance(topic, dict) and isinstance(topic.get("id"), str)
+        }
+        checked_topics: set[str] = set()
+        checked_channels: set[str] = set()
+        checked_seed_urls: set[str] = set()
+        observed_urls: set[str] = set()
+
+        source_checks = entry.get("source_checks")
+        _require(isinstance(source_checks, list) and bool(source_checks), f"{label} has no source checks")
+        for index, check in enumerate(source_checks, start=1):
+            _require(isinstance(check, dict), f"{label} source_checks[{index}] must be an object")
+            url = check.get("url")
+            check_state = check.get("slot_state")
+            check_topics = check.get("watch_topic_ids")
+            channel = check.get("channel")
+            _require(
+                isinstance(url, str) and url.startswith(("http://", "https://")),
+                f"{label} source_checks[{index}] has an invalid URL",
+            )
+            _require(check_state in SOURCE_CHECK_STATES, f"{label} source_checks[{index}] has an invalid state")
+            _require(
+                isinstance(check_topics, list) and all(topic in topics for topic in check_topics),
+                f"{label} source_checks[{index}] has invalid watch topics",
+            )
+            _require(isinstance(channel, str) and bool(channel), f"{label} source_checks[{index}] has no channel")
+            _require(
+                str(check.get("checked_at_jst", "")).startswith(issue_date),
+                f"{label} source_checks[{index}] has a stale check time",
+            )
+            _require(
+                isinstance(check.get("evidence_summary"), str)
+                and bool(str(check.get("evidence_summary")).strip()),
+                f"{label} source_checks[{index}] has no evidence summary",
+            )
+            method = check.get("verification_method")
+            _require(isinstance(method, str) and bool(method), f"{label} source_checks[{index}] has no verification method")
+            _require(
+                (check_state == "source_unavailable") == (method == "unavailable"),
+                f"{label} source_checks[{index}] has an inconsistent verification result",
+            )
+            if not strict_discovery:
+                checked_topics.update(str(topic) for topic in check_topics)
+            checked_channels.add(channel)
+            checked_seed_urls.add(url)
+            if check_state == "observed_live":
+                observed_urls.add(url)
+
+        discovery_checks = entry.get("discovery_checks", [])
+        if strict_discovery:
+            _require(
+                isinstance(discovery_checks, list) and bool(discovery_checks),
+                f"{label} has no discovery checks",
+            )
+        horizon_searched = False
+        unresolved_queries: list[str] = []
+        for index, check in enumerate(discovery_checks, start=1):
+            _require(isinstance(check, dict), f"{label} discovery_checks[{index}] must be an object")
+            check_state = check.get("slot_state")
+            check_topics = check.get("watch_topic_ids")
+            purpose = check.get("purpose")
+            url = check.get("url")
+            _require(
+                isinstance(url, str) and url.startswith(("http://", "https://")),
+                f"{label} discovery_checks[{index}] has an invalid URL",
+            )
+            _require(check_state in DISCOVERY_CHECK_STATES, f"{label} discovery_checks[{index}] has an invalid state")
+            _require(
+                isinstance(check_topics, list) and all(topic in topics for topic in check_topics),
+                f"{label} discovery_checks[{index}] has invalid watch topics",
+            )
+            _require(
+                (purpose == "watch_topic" and len(check_topics) == 1)
+                or (purpose == "horizon" and not check_topics),
+                f"{label} discovery_checks[{index}] has an invalid purpose mapping",
+            )
+            _require(
+                str(check.get("checked_at_jst", "")).startswith(issue_date),
+                f"{label} discovery_checks[{index}] has a stale check time",
+            )
+            _require(
+                isinstance(check.get("query"), str) and bool(str(check.get("query")).strip()),
+                f"{label} discovery_checks[{index}] has no query",
+            )
+            _require(
+                isinstance(check.get("evidence_summary"), str)
+                and bool(str(check.get("evidence_summary")).strip()),
+                f"{label} discovery_checks[{index}] has no evidence summary",
+            )
+            for metric in (
+                "result_count",
+                "relevant_result_count",
+                "material_candidate_count",
+                "resolved_candidate_count",
+            ):
+                _require(
+                    isinstance(check.get(metric), int) and int(check[metric]) >= 0,
+                    f"{label} discovery_checks[{index}] has invalid {metric}",
+                )
+            _require(
+                int(check["resolved_candidate_count"])
+                <= int(check["material_candidate_count"]),
+                f"{label} discovery_checks[{index}] resolves more candidates than it found",
+            )
+            if check_state != "search_unavailable":
+                checked_topics.update(str(topic) for topic in check_topics)
+                horizon_searched = horizon_searched or purpose == "horizon"
+            if int(check["material_candidate_count"]) and not int(
+                check["resolved_candidate_count"]
+            ):
+                unresolved_queries.append(str(check.get("query_id", index)))
+
+        seed_urls = {
+            str(source.get("url"))
+            for source in registry_categories.get(label, [])
+            if isinstance(source, dict) and isinstance(source.get("url"), str)
+        }
+        _require(seed_urls <= checked_seed_urls, f"{label} has seed sources without explicit result states")
+        _require(topics <= checked_topics, f"{label} has unchecked watch topics")
+        if strict_discovery:
+            _require(horizon_searched, f"{label} has no completed horizon search")
+        _require(
+            required_channels(coverage, category) <= checked_channels,
+            f"{label} has unchecked channels",
+        )
+
+        records = entry.get("records")
+        _require(isinstance(records, list), f"{label} records must be a list")
+        records_by_url: dict[str, list[dict[str, Any]]] = {}
+        for record in records:
+            if not isinstance(record, dict):
+                continue
+            url = str(record.get("url", ""))
+            if not url.startswith(("http://", "https://")):
+                continue
+            records_by_url.setdefault(url, []).append(record)
+            if record.get("observed"):
+                observed_urls.add(url)
+        observed_record_urls = {
+            url
+            for url, url_records in records_by_url.items()
+            if any(record.get("observed") for record in url_records)
+        }
+        _require(bool(observed_urls), f"{label} has no observed evidence URL")
+        category_reports[label] = {
+            "topics": topics,
+            "checked_topics": checked_topics,
+            "records_by_url": records_by_url,
+            "observed_urls": observed_urls,
+            "observed_record_urls": observed_record_urls,
+            "source_checks": len(source_checks),
+            "discovery_checks": len(discovery_checks),
+            "unresolved_queries": unresolved_queries,
+        }
+        totals["source_checks"] += len(source_checks)
+        totals["discovery_checks"] += len(discovery_checks)
+        totals["observed_urls"].update(observed_urls)
+        totals["unresolved_queries"].extend(
+            f"{label}: {query_id}" for query_id in unresolved_queries
+        )
+
+    return {
+        "categories": category_reports,
+        "source_checks": totals["source_checks"],
+        "discovery_checks": totals["discovery_checks"],
+        "observed_urls": totals["observed_urls"],
+        "unresolved_queries": totals["unresolved_queries"],
+    }
 
 
 def category_topics() -> dict[str, list[str]]:
@@ -128,13 +405,18 @@ def build_evidence_bundle(
             "source_checks": checks,
             "discovery_checks": discovery_checks,
         }
-    return {
+    bundle = {
         "issue_date": issue_date,
         "checked_at_jst": checked_at,
         "collection_mode": collection_mode,
-        "collector_contract_version": COLLECTOR_CONTRACT_VERSION,
+        "collector_contract_version": collector_contract_version(),
         "categories": categories,
     }
+    try:
+        validate_bundle(bundle, issue_date)
+    except EvidenceContractError as exc:
+        fail(str(exc))
+    return bundle
 
 
 def write_bundle(path: Path, bundle: dict[str, Any]) -> None:

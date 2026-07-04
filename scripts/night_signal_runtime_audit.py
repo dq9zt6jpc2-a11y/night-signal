@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
+import night_signal_evidence as evidence_store
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE_ROOT = ROOT / "state"
@@ -127,34 +128,21 @@ def evidence_state(issue_date: str, state_root: Path) -> dict[str, Any]:
         return result
     try:
         bundle = json.loads(path.read_text(encoding="utf-8"))
-        categories = bundle.get("categories")
-        if not isinstance(categories, dict):
-            return {**result, "error": "bundle categories must be an object"}
-        checks = [
-            check
-            for entry in categories.values()
-            if isinstance(entry, dict)
-            for check in entry.get("source_checks", [])
-            if isinstance(check, dict)
-        ]
-        result["usable"] = (
-            str(bundle.get("checked_at_jst", "")).startswith(issue_date)
-            and bool(checks)
-            and all(
-                (
-                    check.get("slot_state") == "observed_live"
-                    and check.get("verification_method")
-                    in {"direct_fetch", "reviewed_live_web"}
-                )
-                or (
-                    check.get("slot_state") == "source_unavailable"
-                    and check.get("verification_method") == "unavailable"
-                )
-                for check in checks
-            )
+        report = evidence_store.validate_bundle(bundle, issue_date)
+        result.update(
+            {
+                "usable": True,
+                "source_checks": report["source_checks"],
+                "discovery_checks": report["discovery_checks"],
+                "unresolved_queries": report["unresolved_queries"],
+            }
         )
-        result["source_checks"] = len(checks)
-    except (AttributeError, json.JSONDecodeError) as exc:
+    except (
+        AttributeError,
+        json.JSONDecodeError,
+        OSError,
+        evidence_store.EvidenceContractError,
+    ) as exc:
         result["error"] = str(exc)
     return result
 

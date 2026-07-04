@@ -96,6 +96,10 @@ def fresh_evidence(issue_date: str) -> bool:
         bundle = json.loads(evidence_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return False
+    try:
+        evidence_store.validate_bundle(bundle, issue_date)
+    except evidence_store.EvidenceContractError:
+        return False
     return evidence_reusable(
         bundle,
         issue_date,
@@ -109,7 +113,7 @@ def evidence_reusable(
     *,
     now: datetime,
 ) -> bool:
-    if bundle.get("collector_contract_version") != evidence_store.COLLECTOR_CONTRACT_VERSION:
+    if bundle.get("collector_contract_version") != evidence_store.collector_contract_version():
         return False
     try:
         checked = datetime.fromisoformat(str(bundle["checked_at_jst"]))
@@ -277,7 +281,7 @@ def self_test() -> None:
         fail("pre-final collection must not pass final deployment")
     reusable = {
         "checked_at_jst": "2099-01-01T19:20:00+09:00",
-        "collector_contract_version": evidence_store.COLLECTOR_CONTRACT_VERSION,
+        "collector_contract_version": evidence_store.collector_contract_version(),
     }
     if not evidence_reusable(
         reusable,
@@ -298,7 +302,7 @@ def self_test() -> None:
     if evidence_reusable(
         {
             "checked_at_jst": "2099-01-01T18:59:00+09:00",
-            "collector_contract_version": evidence_store.COLLECTOR_CONTRACT_VERSION,
+            "collector_contract_version": evidence_store.collector_contract_version(),
         },
         "2099-01-01",
         now=datetime.fromisoformat("2099-01-01T19:20:00+09:00"),
