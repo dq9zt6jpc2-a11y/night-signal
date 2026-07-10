@@ -1750,7 +1750,10 @@ def enrichment_target_urls(
 ) -> set[str]:
     targets: set[str] = set()
     category_label = str(category.get("label", ""))
-    for record in select_clustered_evidence(category, records):
+    # Every URL counted as a material candidate must get the same enrichment
+    # opportunity. Clustering is an editorial deduplication step and must not
+    # shrink the collector's resolution set.
+    for record in records:
         url = str(record.get("url", ""))
         title = record_public_title(record)
         excerpt = str(record.get("excerpt") or "")
@@ -2569,6 +2572,16 @@ def self_test() -> None:
         [headline_only_cross_domain],
     ) != {headline_only_cross_domain["url"]}:
         fail("a material headline was not routed to evidence enrichment")
+    clustered_headline = {
+        **headline_only_cross_domain,
+        "url": "https://example.com/cross-domain-event-copy",
+    }
+    if enrichment_target_urls(
+        cross_domain_category,
+        "2099-01-03",
+        [headline_only_cross_domain, clustered_headline],
+    ) != {headline_only_cross_domain["url"], clustered_headline["url"]}:
+        fail("candidate clustering skipped a material URL before enrichment")
     if not article_result_matches(
         "OpenAI GPT-5.6シリーズを発表",
         "OpenAIのGPT-5.6シリーズを解説",
