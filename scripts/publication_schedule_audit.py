@@ -75,11 +75,13 @@ def main() -> int:
     if not ordered(
         collection,
         "reuse_evidence:",
-        'REUSE_EVIDENCE: ${{ inputs.reuse_evidence || false }}',
-        'if [[ "$FORCE_COLLECTION" == "true" && "$REUSE_EVIDENCE" != "true" ]]',
+        "Locate latest Evidence checkpoint",
+        "github.event_name == 'schedule' || inputs.reuse_evidence == true",
+        'REUSE_EVIDENCE: ${{ github.event_name == \'schedule\' || inputs.reuse_evidence || false }}',
+        'if [[ "$REUSE_EVIDENCE" == "true" ]]',
         'python3 scripts/night_signal_publish.py "$ISSUE_DATE" --reuse-evidence',
     ):
-        fail("a forced recovery must explicitly resume the canonical Evidence checkpoint")
+        fail("Evidence reuse must follow the explicit input or scheduled fallback contract")
     if "actions/upload-artifact@v7.0.1" not in collection or "actions/download-artifact@v8.0.1" not in collection:
         fail("a failed first attempt must leave a reusable Evidence")
     if "models: read" not in collection or "contents: write" not in collection or "actions: write" not in collection:
