@@ -141,6 +141,12 @@ For every point, include exact short support_quotes copied from the cited eviden
 Every cited evidence id needs a quote. Choose enough surrounding text to show the category
 subject or its direct relationship to the claim. Do not translate or rewrite quotes.
 
+Evidence marked evidence_depth=headline has no verified body beyond its source headline.
+It is still usable when that headline states multiple concrete facts: make the public title
+shorter, put only the remaining headline-stated facts in summary_points, and quote the exact
+headline wording. Never infer a missing detail or repeat the same fact in title and summary.
+If the headline cannot support a distinct summary fact, exclude it as no_material_update.
+
 Exclude only duplicate reports, navigation/background, wrong category/entity, or no
 material update. A newly published analysis of an old fact is publishable only when the
 new question, evidence, and attributed conclusion are stated; otherwise exclude it.

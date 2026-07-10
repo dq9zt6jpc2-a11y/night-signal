@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import concurrent.futures
 import email.utils
-import gzip
 import hashlib
 import html
 import json
@@ -629,6 +628,36 @@ def record_has_material_body(title: str, record: dict[str, Any]) -> bool:
     return False
 
 
+def headline_supports_distinct_summary(title: str) -> bool:
+    """Return whether a headline states detail that can sit outside a shorter title."""
+    text = canonical_article_match_text(title)
+    if re.search(r"\d+(?:\.\d+)?", text):
+        return True
+    if re.search(
+        r"[、;；]|(?:ため|目的|向け|分野|領域|対象|条件|理由|背景|結果|"
+        r"が続く|に続く|へ展開|まで拡大|を通じて)",
+        text,
+    ):
+        return True
+    return len(re.findall(r"\b(?:with|to|for|after|while|across|using)\b", text)) >= 2
+
+
+def record_evidence_depth(title: str, record: dict[str, Any]) -> str:
+    """Describe the strongest source-backed text available to the editor."""
+    if record_has_material_body(title, record):
+        return "body"
+    excerpt = str(record.get("excerpt") or record.get("evidence") or "")
+    if (
+        record.get("source_class") == "discovered_media"
+        and record.get("observed")
+        and material_event_candidate(title, excerpt)
+        and headline_supports_distinct_summary(title)
+        and not state_contract.navigation_shell_text(f"{title} {excerpt}")
+    ):
+        return "headline"
+    return "none"
+
+
 def publication_evidence_record(
     category: dict[str, Any],
     issue_date: str,
@@ -641,9 +670,6 @@ def publication_evidence_record(
         or not record_document_is_current(record, issue_date)
     ):
         return False
-    source_host = urllib.parse.urlparse(str(record.get("url", ""))).netloc.lower()
-    if source_host == "news.google.com" or source_host.endswith(".news.google.com"):
-        return False
     title = record_public_title(record)
     excerpt = reader_facing_text(record.get("excerpt") or record.get("evidence") or "", 2400)
     category_label = str(category.get("label", ""))
@@ -655,7 +681,7 @@ def publication_evidence_record(
         or not category_identity_ok(category_label, title, excerpt)
         or low_signal_value(title, excerpt)
         or not publication_item_supported(title, excerpt)
-        or not record_has_material_body(title, record)
+        or record_evidence_depth(title, record) == "none"
     ):
         return False
     return True
@@ -859,24 +885,12 @@ class GoogleNewsArticleParser(HTMLParser):
 
 
 def google_news_decoding_params(params_url: str) -> tuple[str, str, str] | None:
-    request = urllib.request.Request(
-        params_url,
-        headers={
-            "Accept": "text/html,application/xhtml+xml",
-            "Accept-Encoding": "gzip",
-            "User-Agent": USER_AGENT,
-        },
-    )
-    with urllib.request.urlopen(request, timeout=12) as response:
-        content_type = response.headers.get("Content-Type", "")
-        charset_match = re.search(r"charset=([A-Za-z0-9._-]+)", content_type)
-        charset = charset_match.group(1) if charset_match else "utf-8"
-        raw = response.read(500_000)
-        if response.headers.get("Content-Encoding", "").lower() == "gzip":
-            raw = gzip.decompress(raw)
-        parser = GoogleNewsArticleParser()
-        parser.feed(raw.decode(charset, errors="replace"))
-        return parser.params
+    raw, content_type, _ = request_bytes(params_url, timeout=12)
+    charset_match = re.search(r"charset=([A-Za-z0-9._-]+)", content_type)
+    charset = charset_match.group(1) if charset_match else "utf-8"
+    parser = GoogleNewsArticleParser()
+    parser.feed(raw.decode(charset, errors="replace"))
+    return parser.params
 
 
 def _google_news_publisher_url_once(source_url: str) -> str | None:
@@ -888,13 +902,35 @@ def _google_news_publisher_url_once(source_url: str) -> str | None:
         return None
     query = urllib.parse.parse_qs(parsed.query)
     query.update({"hl": ["en-US"], "gl": ["US"], "ceid": ["US:en"]})
-    params_url = urllib.parse.urlunparse(
-        parsed._replace(query=urllib.parse.urlencode(query, doseq=True))
+    encoded_query = urllib.parse.urlencode(query, doseq=True)
+    article_id = parts[-1]
+    params_urls = list(
+        dict.fromkeys(
+            [
+                urllib.parse.urlunparse(
+                    parsed._replace(path=f"/articles/{article_id}", query=encoded_query)
+                ),
+                urllib.parse.urlunparse(parsed._replace(query=encoded_query)),
+            ]
+        )
     )
+    params = None
+    for params_url in params_urls:
+        try:
+            params = google_news_decoding_params(params_url)
+        except (
+            OSError,
+            TimeoutError,
+            ValueError,
+            TypeError,
+            urllib.error.URLError,
+        ):
+            continue
+        if params:
+            break
+    if params is None:
+        return None
     try:
-        params = google_news_decoding_params(params_url)
-        if params is None:
-            return None
         resolved_id, timestamp, signature = params
         inner = [
             "garturlreq",
@@ -1370,26 +1406,6 @@ def article_result_matches(original_title: str, result_title: str) -> bool:
     )
 
 
-def corroborating_article_result_matches(
-    original_title: str,
-    result_title: str,
-    description: str,
-) -> bool:
-    """Require event-level agreement before resolving through another publisher."""
-    original = canonical_article_match_text(original_title)
-    candidate = canonical_article_match_text(f"{result_title} {description}")
-    original_numbers = set(re.findall(r"\d+(?:\.\d+)?", original))
-    candidate_numbers = set(re.findall(r"\d+(?:\.\d+)?", candidate))
-    repetition = state_contract.title_repetition_score(original, candidate)
-    overlap = state_contract.text_overlap(original, candidate)
-    return bool(
-        contains_material_signal(original_title)
-        and contains_material_signal(result_title, description)
-        and original_numbers <= candidate_numbers
-        and ((repetition >= 0.55 and overlap >= 5) or overlap >= 8)
-    )
-
-
 def candidate_matches_publisher(record: dict[str, Any], candidate_url: str) -> bool:
     expected = urllib.parse.urlparse(str(record.get("publisher_url", ""))).netloc.lower()
     candidate = urllib.parse.urlparse(candidate_url).netloc.lower()
@@ -1618,8 +1634,7 @@ def record_document_is_current(record: dict[str, Any], issue_date: str) -> bool:
 
 
 def article_search_queries(record: dict[str, Any], original_title: str) -> list[str]:
-    canonical_title = canonical_article_match_text(original_title)
-    queries = [f'"{canonical_title or original_title}"']
+    queries = [f'"{original_title}"']
     publisher = urllib.parse.urlparse(str(record.get("publisher_url", "")))
     host = publisher.netloc.lower().removeprefix("www.")
     if host:
@@ -1761,19 +1776,13 @@ def enrich_discovered_record(
     ) -> dict[str, Any] | None:
         for _, candidate_url, result_title, description in values[:8]:
             parsed_candidate = urllib.parse.urlparse(candidate_url)
-            candidate_publisher = (
-                f"{parsed_candidate.scheme}://{parsed_candidate.netloc}"
-            )
-            resolution_record = (
-                record
-                if candidate_matches_publisher(record, candidate_url)
-                else {**record, "publisher_url": candidate_publisher}
-            )
             snippet_record = {
                 **record,
                 "label": parsed_candidate.netloc.lower().removeprefix("www."),
                 "url": candidate_url,
-                "publisher_url": candidate_publisher,
+                "publisher_url": (
+                    f"{parsed_candidate.scheme}://{parsed_candidate.netloc}"
+                ),
                 "original_discovery_url": str(record.get("url", "")),
                 "title": original_title,
                 "excerpt": description,
@@ -1785,7 +1794,7 @@ def enrich_discovered_record(
             }
             resolved = article_record_from_candidate(
                 category_label,
-                resolution_record,
+                record,
                 original_title,
                 candidate_url,
                 result_title,
@@ -1825,21 +1834,13 @@ def enrich_discovered_record(
             result_title = compact_text(item.findtext("title") or "", 220)
             candidate_url = compact_text(item.findtext("link") or "", 1000)
             description = html_fragment_text(item.findtext("description") or "", 1000)
-            same_publisher = candidate_matches_publisher(record, candidate_url)
             if (
                 not candidate_url.startswith(("http://", "https://"))
                 or "news.google.com" in candidate_url
+                or not candidate_matches_publisher(record, candidate_url)
                 or not article_result_matches(
                     original_title,
                     result_title,
-                )
-                or not (
-                    same_publisher
-                    or corroborating_article_result_matches(
-                        original_title,
-                        result_title,
-                        description,
-                    )
                 )
                 or not category_identity_ok(
                     category_label,
@@ -2104,7 +2105,10 @@ def fetch_news(category: dict[str, Any], issue_date: str) -> dict[str, Any]:
             continue
         material_urls = check.pop("material_urls", [])
         resolved = sum(
-            bool(record and record_has_material_body(record_public_title(record), record))
+            bool(
+                record
+                and record_evidence_depth(record_public_title(record), record) != "none"
+            )
             for url in material_urls
             for record in [enriched_by_url.get(str(url))]
         )
@@ -2117,7 +2121,7 @@ def fetch_news(category: dict[str, Any], issue_date: str) -> dict[str, Any]:
             check["slot_state"] = "searched_resolved"
         else:
             check["slot_state"] = "searched_unresolved"
-        check["evidence_summary"] += f" 本文を解決できた重要更新候補は{resolved}件。"
+        check["evidence_summary"] += f" 編集可能な根拠を確保した重要更新候補は{resolved}件。"
     return {"records": records, "discovery_checks": checks}
 
 
@@ -2170,6 +2174,10 @@ def category_prompt(
                     "date": record.get("published_date"),
                     "source": record.get("label"),
                     "title": record_public_title(record),
+                    "evidence_depth": record_evidence_depth(
+                        record_public_title(record),
+                        record,
+                    ),
                     "body": reader_facing_text(
                         str(record.get("excerpt") or record.get("evidence") or ""),
                         limit,
@@ -2222,7 +2230,11 @@ def sources_from_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     for record in records:
         url = str(record.get("url", ""))
         host = urllib.parse.urlparse(url).netloc.lower()
-        if host == "news.google.com" or host.endswith(".news.google.com"):
+        title = record_public_title(record)
+        if (
+            (host == "news.google.com" or host.endswith(".news.google.com"))
+            and record_evidence_depth(title, record) != "headline"
+        ):
             continue
         if not url or url in seen:
             continue
@@ -2783,6 +2795,77 @@ def self_test() -> None:
     }
     if publication_evidence_record(music_category, "2099-01-03", no_update_record):
         fail("a no-update statement was treated as an important update")
+    headline_record = {
+        **navigation_record,
+        "label": "音楽情報サイト",
+        "url": "https://news.google.com/rss/articles/chart-update?oc=5",
+        "publisher_url": "https://music.example.jp",
+        "source_class": "discovered_media",
+        "title": (
+            "Billboard JAPAN Download Albums（1/2公開）、"
+            "YOASOBI「THE BOOK for.」2週連続DLアルバム首位 "
+            "長渕剛／NiziUが続く"
+        ),
+        "excerpt": (
+            "Billboard JAPAN Download Albums（1/2公開）、"
+            "YOASOBI「THE BOOK for.」2週連続DLアルバム首位 "
+            "長渕剛／NiziUが続く 音楽情報サイト"
+        ),
+    }
+    if record_evidence_depth(record_public_title(headline_record), headline_record) != "headline":
+        fail("fact-rich discovery headline was not retained as headline Evidence")
+    if not publication_evidence_record(
+        music_category,
+        "2099-01-03",
+        headline_record,
+    ):
+        fail("fact-rich discovery headline was filtered before the Editor")
+    headline_payload = category_prompt(
+        music_category,
+        "2099-01-03",
+        [headline_record],
+    )
+    if headline_payload["evidence"][0].get("evidence_depth") != "headline":
+        fail("Editor prompt lost headline Evidence depth")
+    if not sources_from_records([headline_record]):
+        fail("headline Evidence lost its clickable Google News source")
+    headline_normalized = normalize_result(
+        {
+            "items": [
+                {
+                    "summary_points": [
+                        {
+                            "text": (
+                                "1月2日公開のチャートで2週連続首位となり、"
+                                "長渕剛／NiziUが続いた。"
+                            ),
+                            "evidence_ids": ["e001"],
+                            "support_quotes": [
+                                {
+                                    "evidence_id": "e001",
+                                    "quote": (
+                                        "YOASOBI「THE BOOK for.」2週連続DLアルバム首位 "
+                                        "長渕剛／NiziUが続く"
+                                    ),
+                                }
+                            ],
+                        }
+                    ],
+                    "watch_topic_id": "music_release_chart_tieup",
+                    "title": "YOASOBI「THE BOOK for.」がDLアルバム首位を維持",
+                    "topic_value_class": "cultural_or_audience_signal",
+                    "priority_class": "standard",
+                    "change_class": "material_update",
+                }
+            ],
+            "excluded_evidence": [],
+        },
+        music_category,
+        "2099-01-03",
+        [headline_record],
+    )
+    if not headline_normalized["coverage_complete"] or not headline_normalized["items"]:
+        fail("headline Evidence could not produce a non-repetitive supported update")
     undated_record = {
         **navigation_record,
         "url": "https://example.com/yoasobi-release",
@@ -2945,7 +3028,14 @@ def self_test() -> None:
     prompt_evidence = prompt["evidence"][0]
     if len(prompt_evidence["body"]) <= 1000:
         fail("editor prompt still truncates rich source material to a thin excerpt")
-    if set(prompt_evidence) != {"id", "date", "source", "title", "body"}:
+    if set(prompt_evidence) != {
+        "id",
+        "date",
+        "source",
+        "title",
+        "evidence_depth",
+        "body",
+    }:
         fail("editor prompt retained redundant evidence metadata")
     large_prompt_records = [
         {
@@ -3209,35 +3299,6 @@ def self_test() -> None:
     )
     if not article_result_matches(fpt_headline, fpt_result):
         fail("article enrichment could not match a body-rich primary source")
-    chart_headline = (
-        "Billboard JAPAN Download Albums（7/8公開）、YOASOBI「THE BOOK for.」"
-        "2週連続DLアルバム首位 長渕剛／NiziUが続く - 音楽情報サイト"
-    )
-    chart_source_title = (
-        "【ビルボード】YOASOBI『THE BOOK for.』2週連続DLアルバム首位 "
-        "長渕剛／NiziUが続く"
-    )
-    chart_source_body = (
-        "2026年7月8日公開。集計期間は6月29日から7月5日で、"
-        "YOASOBIが2週連続首位となった。"
-    )
-    if not corroborating_article_result_matches(
-        chart_headline,
-        chart_source_title,
-        chart_source_body,
-    ):
-        fail("strict cross-publisher corroboration rejected the same event")
-    if corroborating_article_result_matches(
-        chart_headline,
-        "YOASOBIが前週のDLアルバム首位を獲得",
-        "2026年7月1日公開。集計期間は6月22日から6月28日。",
-    ):
-        fail("cross-publisher corroboration accepted a different reporting period")
-    if f'"{canonical_article_match_text(chart_headline)}"' not in article_search_queries(
-        {},
-        chart_headline,
-    ):
-        fail("article search retained a publisher suffix in the exact event query")
     if candidate_matches_publisher(
         {"publisher_url": "https://example.jp"},
         "https://unrelated.example.com/article",
@@ -3255,7 +3316,6 @@ def self_test() -> None:
         fail("Google News Reader resolution was not recognized")
     original_request_bytes = request_bytes
     original_post_form_bytes = post_form_bytes
-    original_google_news_decoding_params = google_news_decoding_params
     decoded_headline = "OpenAIが米政府への5％株式譲渡案を協議"
     encoded_google_url = "https://news.google.com/rss/articles/decode-example?oc=5"
 
@@ -3297,11 +3357,6 @@ def self_test() -> None:
 
     globals()["request_bytes"] = fake_decode_request
     globals()["post_form_bytes"] = fake_decode_post
-    globals()["google_news_decoding_params"] = lambda _: (
-        "decode-example",
-        "123",
-        "signature",
-    )
     try:
         decoded_record = article_record_from_candidate(
             "OpenAI",
@@ -3323,7 +3378,6 @@ def self_test() -> None:
     finally:
         globals()["request_bytes"] = original_request_bytes
         globals()["post_form_bytes"] = original_post_form_bytes
-        globals()["google_news_decoding_params"] = original_google_news_decoding_params
     if (
         not decoded_record
         or decoded_record.get("url")
