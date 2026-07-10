@@ -9,7 +9,7 @@ import os
 import sqlite3
 import subprocess
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime, time, timedelta
 from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
@@ -81,7 +81,7 @@ def manifest_state(issue_date: str, state_root: Path, now: datetime) -> dict[str
     result: dict[str, Any] = {
         "path": str(path),
         "exists": path.exists(),
-        "fresh_evening_issue": False,
+        "fresh_final_issue": False,
     }
     if not path.exists():
         return result
@@ -102,9 +102,9 @@ def manifest_state(issue_date: str, state_root: Path, now: datetime) -> dict[str
             {
                 "collection_mode": manifest.get("collection_mode"),
                 "collection_completed_at_jst": completed.isoformat(),
-                "fresh_evening_issue": (
+                "fresh_final_issue": (
                     completed.date().isoformat() == issue_date
-                    and completed.hour >= 19
+                    and completed.timetz().replace(tzinfo=None) >= time(15, 30)
                     and current - completed <= timedelta(hours=4)
                     and completed <= current + timedelta(minutes=5)
                     and manifest.get("collection_mode")
@@ -170,12 +170,12 @@ def git_state() -> dict[str, Any]:
 
 def decide_recovery(
     *,
-    fresh_evening_issue: bool,
+    fresh_final_issue: bool,
     evidence_usable: bool,
     github_models_token: bool = False,
 ) -> str:
-    if fresh_evening_issue:
-        return "fresh_evening_issue"
+    if fresh_final_issue:
+        return "fresh_final_issue"
     if evidence_usable:
         return "evidence"
     if github_models_token:
@@ -290,7 +290,7 @@ def evaluate(
         os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")
     )
     recovery = decide_recovery(
-        fresh_evening_issue=bool(manifest["fresh_evening_issue"]),
+        fresh_final_issue=bool(manifest["fresh_final_issue"]),
         evidence_usable=bool(evidence["usable"]),
         github_models_token=github_models_available,
     )
@@ -327,17 +327,17 @@ def self_test() -> None:
         if actual != expected:
             fail(f"classification mismatch: {text!r}: {actual} != {expected}")
     if decide_recovery(
-        fresh_evening_issue=False,
+        fresh_final_issue=False,
         evidence_usable=False,
     ) != "blocked_no_honest_collector":
         fail("no-collector state must block publication")
     if decide_recovery(
-        fresh_evening_issue=True,
+        fresh_final_issue=True,
         evidence_usable=False,
-    ) != "fresh_evening_issue":
+    ) != "fresh_final_issue":
         fail("fresh issue must select deploy-existing recovery")
     if decide_recovery(
-        fresh_evening_issue=False,
+        fresh_final_issue=False,
         evidence_usable=False,
         github_models_token=True,
     ) != "github_models_unattended":

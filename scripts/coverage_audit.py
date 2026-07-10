@@ -133,7 +133,7 @@ def self_test() -> None:
                 "channel": "web",
                 "url": source_url,
                 "slot_state": "observed_live",
-                "checked_at_jst": f"{issue_date}T20:00:00+09:00",
+                "checked_at_jst": f"{issue_date}T17:00:00+09:00",
                 "evidence_summary": "source reached",
                 "verification_method": "direct_fetch",
             }
@@ -141,6 +141,7 @@ def self_test() -> None:
         "discovery_checks": [
             {
                 "purpose": "watch_topic",
+                "channel": "web",
                 "watch_topic_ids": ["topic-one"],
                 "query": "Test update when:3d",
                 "url": "https://example.com/search/topic",
@@ -149,11 +150,12 @@ def self_test() -> None:
                 "relevant_result_count": 1,
                 "material_candidate_count": 1,
                 "resolved_candidate_count": 0,
-                "checked_at_jst": f"{issue_date}T20:00:00+09:00",
+                "checked_at_jst": f"{issue_date}T17:00:00+09:00",
                 "evidence_summary": "topic searched",
             },
             {
                 "purpose": "horizon",
+                "channel": "web",
                 "watch_topic_ids": [],
                 "query": "Test adjacent change when:3d",
                 "url": "https://example.com/search/horizon",
@@ -162,14 +164,14 @@ def self_test() -> None:
                 "relevant_result_count": 0,
                 "material_candidate_count": 0,
                 "resolved_candidate_count": 0,
-                "checked_at_jst": f"{issue_date}T20:00:00+09:00",
+                "checked_at_jst": f"{issue_date}T17:00:00+09:00",
                 "evidence_summary": "horizon searched",
             },
         ],
     }
     bundle = {
         "issue_date": issue_date,
-        "checked_at_jst": f"{issue_date}T20:00:00+09:00",
+        "checked_at_jst": f"{issue_date}T17:00:00+09:00",
         "categories": {"Test": entry},
     }
     registry = {"categories": {"Test": [{"url": source_url}]}}

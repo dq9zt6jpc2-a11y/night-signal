@@ -2,11 +2,7 @@
 """Render a NIGHT SIGNAL detail page from structured content.
 
 This is the preferred creation path for detail pages. New issues expose only
-the reader-facing sections we want to publish:
-
-- 要点と背景
-- 未確定点（参照元に明記されている場合）
-- 原文確認
+the reader-facing sections we want to publish: one overview and direct sources.
 
 Current issues use a compact information structure, not a time-boxed overview.
 Authoring checklist sections are never published.
@@ -29,7 +25,7 @@ CONFIG_PATH = ROOT / "config" / "night_signal_coverage.json"
 LEGACY_MIN_SUMMARY_CHARS = 180
 MAX_SOURCE_LINKS = 3
 LEGACY_SUMMARY_HEADING = "30秒概要"
-DEFAULT_SUMMARY_HEADING = "要点と背景"
+DEFAULT_SUMMARY_HEADING = "概要"
 FORBIDDEN_TEXT = [
     "30秒概要",
     "チェック観点",
@@ -237,18 +233,11 @@ def render_sources(sources: list[Any], allow_multiple: bool) -> str:
 
 
 def render_information_basis(summary: str, basis: dict[str, Any]) -> str:
-    limits = str(basis.get("limits_or_unknowns") or "").strip()
-    dates = "、".join(html.escape(str(date).strip()) for date in required_list(basis, "source_dates") if str(date).strip())
-    limits_section = (
-        f'\n\n      <h2>未確定点</h2>\n      <p class="limits">{html.escape(limits)}</p>'
-        if limits
-        else ""
-    )
-    return f"""      <h2>要点と背景</h2>
+    required_list(basis, "source_dates")
+    return f"""      <h2>概要</h2>
       <div class="article-summary">
         <p>{html.escape(summary)}</p>
-        <p class="source-dates">確認日付: {dates}</p>
-      </div>{limits_section}"""
+      </div>"""
 
 
 def render(data: dict[str, Any]) -> str:

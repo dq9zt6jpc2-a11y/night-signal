@@ -21,6 +21,28 @@ def latest_issue_date() -> str:
     return value
 
 
+def normalize_current_detail_contract(temp: Path) -> None:
+    for path in [temp / "details", temp / "site" / "details", *temp.glob("site/20??-??-??/details")]:
+        if not path.exists():
+            continue
+        for detail in path.glob("*.html"):
+            html = detail.read_text(encoding="utf-8")
+            html = html.replace("<h2>要点と背景</h2>", "<h2>概要</h2>")
+            html = re.sub(
+                r'\s*<p class="source-dates">確認日付:.*?</p>',
+                "",
+                html,
+                flags=re.S,
+            )
+            html = re.sub(
+                r'\s*<h2>未確定点</h2>\s*<p class="limits">.*?</p>',
+                "",
+                html,
+                flags=re.S,
+            )
+            detail.write_text(html, encoding="utf-8")
+
+
 def fixture() -> Path:
     temp = Path(tempfile.mkdtemp(prefix="night-signal-quality-"))
     shutil.copytree(ROOT / "scripts", temp / "scripts", ignore=shutil.ignore_patterns("__pycache__"))
@@ -31,6 +53,7 @@ def fixture() -> Path:
     shutil.copyfile(ROOT / ".night-signal-issue-date", temp / ".night-signal-issue-date")
     for path in ROOT.glob("night-brief-web-sample-*.html"):
         shutil.copyfile(path, temp / path.name)
+    normalize_current_detail_contract(temp)
     return temp
 
 

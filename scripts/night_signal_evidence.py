@@ -82,6 +82,21 @@ def required_channels(contract: dict[str, Any], category: dict[str, Any]) -> set
     return {value for value in values if value}
 
 
+def required_discovery_channels(
+    contract: dict[str, Any],
+    category: dict[str, Any],
+) -> set[str]:
+    values = category.get(
+        "required_discovery_channels",
+        contract.get("required_discovery_channels", ["web"]),
+    )
+    if not isinstance(values, list) or any(not isinstance(value, str) for value in values):
+        raise EvidenceContractError(
+            f"{category.get('label', '<unknown>')} has invalid discovery channels"
+        )
+    return {value for value in values if value}
+
+
 def _require(condition: bool, message: str) -> None:
     if not condition:
         raise EvidenceContractError(message)
@@ -144,6 +159,7 @@ def validate_bundle(
         }
         checked_topics: set[str] = set()
         checked_channels: set[str] = set()
+        checked_discovery_channels: set[str] = set()
         checked_seed_urls: set[str] = set()
         observed_urls: set[str] = set()
 
@@ -204,6 +220,7 @@ def validate_bundle(
             check_state = check.get("slot_state")
             check_topics = check.get("watch_topic_ids")
             purpose = check.get("purpose")
+            channel = check.get("channel")
             url = check.get("url")
             _require(
                 isinstance(url, str) and url.startswith(("http://", "https://")),
@@ -228,6 +245,10 @@ def validate_bundle(
                 f"{label} discovery_checks[{index}] has no query",
             )
             _require(
+                isinstance(channel, str) and bool(channel),
+                f"{label} discovery_checks[{index}] has no channel",
+            )
+            _require(
                 isinstance(check.get("evidence_summary"), str)
                 and bool(str(check.get("evidence_summary")).strip()),
                 f"{label} discovery_checks[{index}] has no evidence summary",
@@ -247,6 +268,7 @@ def validate_bundle(
                 <= int(check["material_candidate_count"]),
                 f"{label} discovery_checks[{index}] resolves more candidates than it found",
             )
+            checked_discovery_channels.add(str(channel))
             if check_state != "search_unavailable":
                 checked_topics.update(str(topic) for topic in check_topics)
                 horizon_searched = horizon_searched or purpose == "horizon"
@@ -276,6 +298,11 @@ def validate_bundle(
             required_channels(coverage, category) <= checked_channels,
             f"{label} has unchecked channels",
         )
+        _require(
+            required_discovery_channels(coverage, category)
+            <= checked_discovery_channels,
+            f"{label} has unchecked discovery channels",
+        )
 
         records = entry.get("records")
         _require(isinstance(records, list), f"{label} records must be a list")
@@ -304,6 +331,7 @@ def validate_bundle(
         category_reports[label] = {
             "topics": topics,
             "checked_topics": checked_topics,
+            "checked_discovery_channels": checked_discovery_channels,
             "records_by_url": records_by_url,
             "observed_urls": observed_urls,
             "observed_record_urls": observed_record_urls,

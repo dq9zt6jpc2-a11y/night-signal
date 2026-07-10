@@ -16,7 +16,7 @@ from typing import Any
 CONFIG_PATH = Path(__file__).resolve().parents[1] / "config" / "night_signal_models.json"
 MODELS_URL = "https://models.github.ai/inference/chat/completions"
 DEFAULT_TIMEOUT_SECONDS = 90
-DEFAULT_RETRIES = 3
+DEFAULT_RETRIES = 2
 DEFAULT_MAX_TOKENS = 8000
 USER_AGENT = (
     "Mozilla/5.0 (compatible; NightSignalBot/1.0; "
@@ -53,8 +53,21 @@ EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
                                     "items": {"type": "string"},
                                     "minItems": 1,
                                 },
+                                "support_quotes": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "evidence_id": {"type": "string"},
+                                            "quote": {"type": "string"},
+                                        },
+                                        "required": ["evidence_id", "quote"],
+                                        "additionalProperties": False,
+                                    },
+                                    "minItems": 1,
+                                },
                             },
-                            "required": ["text", "evidence_ids"],
+                            "required": ["text", "evidence_ids", "support_quotes"],
                             "additionalProperties": False,
                         },
                         "minItems": 1,
@@ -69,6 +82,14 @@ EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
                         "type": "string",
                         "enum": ["top", "priority", "standard"],
                     },
+                    "change_class": {
+                        "type": "string",
+                        "enum": [
+                            "new_event",
+                            "material_update",
+                            "new_analysis_of_existing_fact"
+                        ],
+                    },
                 },
                 "required": [
                     "summary_points",
@@ -76,6 +97,7 @@ EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
                     "title",
                     "topic_value_class",
                     "priority_class",
+                    "change_class",
                 ],
                 "additionalProperties": False,
             },
@@ -105,30 +127,26 @@ EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
     "additionalProperties": False,
 }
 
-SYSTEM_PROMPT = """Edit supplied NIGHT SIGNAL evidence into reader-facing Japanese updates.
-Return JSON matching the supplied schema. Account for every supplied evidence id either
-in one or more summary points or in excluded_evidence. Exclude only duplicate reports,
-background/navigation pages, wrong entities/categories, or records with no material
-update. Merge ids when they report the same event and keep different events separate.
+SYSTEM_PROMPT = """Turn supplied NIGHT SIGNAL evidence into Japanese important updates.
+Success means every evidence id is either used by a summary point or listed in
+excluded_evidence. Merge reports of the same event; keep distinct milestones and events.
 
-For each item, write one concise title and ordered summary_points. Each point is one
-reader-facing sentence plus the evidence ids that support it. Together the points are
-the necessary-and-sufficient summary and the confirmed facts; do not create a second
-prose representation. Use one point for one supported fact and add points only when they
-carry additional material information. Preserve what a reader needs to understand the
-update, including an unfamiliar entity's source-stated role, the concrete change,
-mechanism or scope, names, quantities, timing, conditions, and results when supplied.
-Do not omit a material fact merely to shorten the summary.
+For each update, create one title and the ordered summary_points needed to understand it.
+Keep all source-backed material facts even when the result becomes longer: the subject
+and an unfamiliar subject's stated role, the concrete change, scope or mechanism, names,
+numbers, dates, conditions, reasons, and results when they matter. Each point must add
+information beyond the title. Do not target a fixed length.
 
-Do not repeat the title or a point in different words. A source page may support more
-than one distinct update; its evidence id may be cited by each supported item.
-Keep names, quantities, and claim wording close to the cited evidence. Each summary
-point must add a fact beyond the title; otherwise exclude that evidence as
-no_material_update instead of restating the headline.
-Do not add publisher metadata, generic importance or impact claims, common knowledge,
-unsupported background, inferred unknowns, or follow-up boilerplate. For analysis or
-commentary, identify it in the title and include both its concrete evidence and its
-attributed conclusion. Use only the supplied evidence; never invent facts or certainty."""
+For every point, include exact short support_quotes copied from the cited evidence bodies.
+Every cited evidence id needs a quote. Choose enough surrounding text to show the category
+subject or its direct relationship to the claim. Do not translate or rewrite quotes.
+
+Exclude only duplicate reports, navigation/background, wrong category/entity, or no
+material update. A newly published analysis of an old fact is publishable only when the
+new question, evidence, and attributed conclusion are stated; otherwise exclude it.
+Do not repeat the title or a point, and do not add publisher metadata, generic importance,
+common knowledge, unsupported impact or background, inferred unknowns, or follow-up
+boilerplate. Use only supplied evidence."""
 
 
 class ModelRequestError(RuntimeError):
@@ -211,7 +229,6 @@ def request(
     payload = {
         "model": model_name or extraction_model(),
         "messages": messages,
-        "temperature": 0.1,
         "max_tokens": max_tokens,
         "response_format": {
             "type": "json_schema",
@@ -222,6 +239,8 @@ def request(
             },
         },
     }
+    if not str(payload["model"]).startswith("openai/gpt-5"):
+        payload["temperature"] = 0.1
     encoded_payload = json.dumps(
         payload,
         ensure_ascii=False,
@@ -334,7 +353,7 @@ def self_test() -> None:
     item_schema = EDITOR_RESPONSE_SCHEMA["properties"]["items"]["items"]
     if "excluded_evidence" not in EDITOR_RESPONSE_SCHEMA["required"]:
         raise SystemExit("editor schema does not account for reviewed exclusions")
-    required_fields = {"summary_points"}
+    required_fields = {"summary_points", "change_class"}
     if not required_fields <= set(item_schema["properties"]):
         raise SystemExit("editor response schema lacks the canonical summary contract")
     redundant_fields = {
@@ -349,6 +368,9 @@ def self_test() -> None:
         raise SystemExit("editor response schema contains derived prose fields")
     if item_schema.get("additionalProperties") is not False:
         raise SystemExit("editor response schema must reject undeclared fields")
+    point_schema = item_schema["properties"]["summary_points"]["items"]
+    if "support_quotes" not in point_schema.get("required", []):
+        raise SystemExit("summary points must carry exact source support quotes")
     encoded = json.dumps(
         {"text": "日本語の本文"},
         ensure_ascii=False,

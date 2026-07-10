@@ -37,8 +37,8 @@ def main() -> int:
         fail("Pages must be dispatch-only")
     if "--deploy-existing" not in pages:
         fail("Pages may deploy only committed issue state")
-    if cron_minutes(collection) != [19 * 60 + 5, 19 * 60 + 35]:
-        fail(f"collection attempts must be 19:05 and 19:35 JST: {cron_minutes(collection)}")
+    if cron_minutes(collection) != [15 * 60 + 35, 17 * 60 + 15]:
+        fail(f"collection attempts must be 15:35 and 17:15 JST: {cron_minutes(collection)}")
     if "night-signal-unattended-collection" not in collection or "cancel-in-progress: false" not in collection:
         fail("collection needs one non-cancelling concurrency owner")
     if "timeout-minutes: 105" not in collection or "timeout-minutes: 70" not in collection:
@@ -88,7 +88,7 @@ def main() -> int:
         fail("audited state must be committed before Pages dispatch")
     if 'gh run watch "$RUN_ID" --exit-status' not in collection:
         fail("collection owner must wait for public deployment")
-    print("PUBLICATION SCHEDULE AUDIT PASSED: pages=dispatch-only, collection_jst=[19:05,19:35]")
+    print("PUBLICATION SCHEDULE AUDIT PASSED: pages=dispatch-only, collection_jst=[15:35,17:15], deadline=19:00")
     return 0
 
 

@@ -89,14 +89,13 @@ def quality_model_required(category_payload: dict[str, Any]) -> bool:
     for item in evidence:
         title = str(item.get("title", ""))
         body = str(item.get("body", ""))
-        japanese = len(re.findall(r"[ぁ-んァ-ヶ一-龯]", body))
-        latin = len(re.findall(r"[A-Za-z]", body))
         sentence_count = len([part for part in re.split(r"(?<=[。！？.!?])", body) if part.strip()])
         if (
             state.analysis_headline(title)
-            or (latin >= 24 and japanese < 6)
             or len(body) >= 1200
             or sentence_count >= 6
+            or bool(re.search(r"(?:\|\s*-{3,}\s*\||表\s*[:：]|グラフ|チャート|図\s*[:：]|chart|table|graph)", body, re.I))
+            or len(re.findall(r"\d+(?:\.\d+)?", body)) >= 12
         ):
             return True
     return False
@@ -122,6 +121,17 @@ def sanitize_model_result(raw: dict[str, Any]) -> dict[str, Any]:
                     if isinstance(value, str) and value
                 )
             )
+            support_quotes = [
+                {
+                    "evidence_id": str(value.get("evidence_id", "")),
+                    "quote": compact_text(value.get("quote", ""), 320),
+                }
+                for value in raw_point.get("support_quotes", [])
+                if isinstance(value, dict)
+                and isinstance(value.get("evidence_id"), str)
+                and value.get("evidence_id")
+                and compact_text(value.get("quote", ""), 320)
+            ]
             duplicate = next(
                 (
                     point
@@ -135,10 +145,26 @@ def sanitize_model_result(raw: dict[str, Any]) -> dict[str, Any]:
                 None,
             )
             if duplicate is None:
-                points.append({"text": text, "evidence_ids": evidence_ids})
+                points.append(
+                    {
+                        "text": text,
+                        "evidence_ids": evidence_ids,
+                        "support_quotes": support_quotes,
+                    }
+                )
             else:
                 duplicate["evidence_ids"] = list(
                     dict.fromkeys([*duplicate.get("evidence_ids", []), *evidence_ids])
+                )
+                duplicate["support_quotes"] = list(
+                    {
+                        (str(value.get("evidence_id")), str(value.get("quote"))): value
+                        for value in [
+                            *duplicate.get("support_quotes", []),
+                            *support_quotes,
+                        ]
+                        if isinstance(value, dict)
+                    }.values()
                 )
         sanitized["items"].append({**raw_item, "summary_points": points})
     return sanitized
@@ -177,7 +203,12 @@ def publication_record_chunks(
         else:
             group.append(record)
     chunks: list[list[dict[str, Any]]] = []
-    for group in event_groups:
+    bounded_groups = [
+        group[index : index + max_records]
+        for group in event_groups
+        for index in range(0, len(group), max_records)
+    ]
+    for group in bounded_groups:
         if not chunks or len(chunks[-1]) + len(group) > max_records:
             chunks.append([])
         chunks[-1].extend(group)
@@ -187,43 +218,20 @@ def publication_record_chunks(
 def fit_model_payload(
     payload: dict[str, Any],
     *,
-    max_bytes: int = 40_000,
+    max_bytes: int = 140_000,
 ) -> dict[str, Any]:
-    def build(limit: int) -> dict[str, Any]:
-        return {
-            **payload,
-            "evidence": [
-                {**item, "body": compact_text(item.get("body", ""), limit)}
-                for item in payload.get("evidence", [])
-                if isinstance(item, dict)
-            ],
-        }
-
-    def size(value: dict[str, Any]) -> int:
-        return len(
-            json.dumps(
-                value,
-                ensure_ascii=False,
-                separators=(",", ":"),
-            ).encode("utf-8")
-        )
-
-    if size(payload) <= max_bytes:
-        return payload
-    low, high = 240, max(
-        [len(str(item.get("body", ""))) for item in payload.get("evidence", [])]
-        or [240]
+    size = len(
+        json.dumps(
+            payload,
+            ensure_ascii=False,
+            separators=(",", ":"),
+        ).encode("utf-8")
     )
-    while low < high:
-        candidate = (low + high + 1) // 2
-        if size(build(candidate)) <= max_bytes:
-            low = candidate
-        else:
-            high = candidate - 1
-    fitted = build(low)
-    if size(fitted) > max_bytes:
-        raise ValueError("model payload cannot retain every evidence title within the request limit")
-    return fitted
+    if size > max_bytes:
+        raise ValueError(
+            f"model payload exceeds the lossless request limit: {size} > {max_bytes}"
+        )
+    return payload
 
 
 def read_evidence(path: Path) -> dict[str, Any]:
@@ -280,6 +288,7 @@ def item_card(
         "source_published_date": str(item["source_published_date"]),
         "topic_value_class": topic_value_class(item["topic_value_class"]),
         "priority_class": str(item["priority_class"]),
+        "change_class": str(item["change_class"]),
         "detail": {
             "slug": slug,
             "sources": [
@@ -303,6 +312,92 @@ def item_card(
             },
         },
     }
+
+
+def merge_repeated_cards(cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    merged: list[dict[str, Any]] = []
+    priority_rank = {"top": 0, "priority": 1, "standard": 2}
+    for card in cards:
+        existing = next(
+            (
+                candidate
+                for candidate in merged
+                if candidate.get("category") == card.get("category")
+                and core.same_material_event(candidate.get("title"), card.get("title"))
+            ),
+            None,
+        )
+        if existing is None:
+            merged.append(card)
+            continue
+
+        existing_basis = existing["detail"]["summary_basis"]
+        incoming_basis = card["detail"]["summary_basis"]
+        raw_facts = [
+            *existing_basis.get("confirmed_facts", []),
+            *incoming_basis.get("confirmed_facts", []),
+        ]
+        facts = [
+            fact
+            for fact in state.normalize_material_facts(
+                str(existing["title"]), raw_facts, limit=max(1, len(raw_facts))
+            )
+            if state.fact_adds_information(str(existing["title"]), fact)
+        ]
+        mappings = [
+            mapping
+            for mapping in [
+                *existing_basis.get("fact_sources", []),
+                *incoming_basis.get("fact_sources", []),
+            ]
+            if isinstance(mapping, dict)
+        ]
+        fact_sources = []
+        for fact in facts:
+            urls = list(
+                dict.fromkeys(
+                    str(url)
+                    for mapping in mappings
+                    if state.materially_same_fact(fact, str(mapping.get("fact", "")))
+                    for url in mapping.get("source_urls", [])
+                    if isinstance(url, str) and url
+                )
+            )
+            if urls:
+                fact_sources.append({"fact": fact, "source_urls": urls})
+        if len(fact_sources) != len(facts):
+            merged.append(card)
+            continue
+
+        existing["summary"] = " ".join(facts)
+        existing["detail"]["summary"] = existing["summary"]
+        existing_basis["confirmed_facts"] = facts
+        existing_basis["fact_sources"] = fact_sources
+        existing_basis["source_dates"] = sorted(
+            set(existing_basis.get("source_dates", []))
+            | set(incoming_basis.get("source_dates", []))
+        )
+        existing["detail"]["sources"] = list(
+            {
+                str(source.get("url")): source
+                for source in [
+                    *existing["detail"].get("sources", []),
+                    *card["detail"].get("sources", []),
+                ]
+                if isinstance(source, dict) and source.get("url")
+            }.values()
+        )
+        existing["source_published_date"] = max(
+            str(existing.get("source_published_date", "")),
+            str(card.get("source_published_date", "")),
+        )
+        if priority_rank.get(str(card.get("priority_class")), 2) < priority_rank.get(
+            str(existing.get("priority_class")), 2
+        ):
+            existing["priority_class"] = card["priority_class"]
+        if existing.get("change_class") != card.get("change_class"):
+            existing["change_class"] = "material_update"
+    return merged
 
 
 def edit_evidence(
@@ -412,12 +507,16 @@ def edit_evidence(
             selected_result: tuple[
                 list[dict[str, Any]], int, bool, dict[str, Any]
             ] | None = None
+            quality_model_name = str(
+                models.load_config().get("extraction", {}).get("quality_model", "")
+            )
             for model_name in model_chain:
                 with degraded_models_lock:
                     if model_name in degraded_models:
                         continue
                 attempt_messages = messages
-                for editorial_attempt in range(1, 3):
+                max_editorial_attempts = 2 if model_name == quality_model_name else 1
+                for editorial_attempt in range(1, max_editorial_attempts + 1):
                     try:
                         raw = models.request(
                             token,
@@ -427,7 +526,7 @@ def edit_evidence(
                             request_label=f"{label} {chunk_index}/{len(chunks)}",
                         )
                     except models.ModelRequestError as exc:
-                        if exc.rate_limited:
+                        if exc.rate_limited or model_name != model_chain[-1]:
                             with degraded_models_lock:
                                 degraded_models.add(model_name)
                             break
@@ -495,7 +594,7 @@ def edit_evidence(
                     f"{label} chunk {chunk_index}/{len(chunks)}"
                 )
             category_cards.extend(selected_result[0])
-        return label, category_cards
+        return label, merge_repeated_cards(category_cards)
 
     cards_by_category: dict[str, list[dict[str, Any]]] = {}
     workers = max(1, int(os.getenv("NIGHT_SIGNAL_MODEL_CONCURRENCY", "1")))
@@ -546,8 +645,20 @@ def self_test() -> None:
             "items": [
                 {
                     "summary_points": [
-                        {"text": "投資額は500億円。", "evidence_ids": ["e001"]},
-                        {"text": "投資額は500億円。", "evidence_ids": ["e002"]},
+                        {
+                            "text": "投資額は500億円。",
+                            "evidence_ids": ["e001"],
+                            "support_quotes": [
+                                {"evidence_id": "e001", "quote": "投資額は500億円。"}
+                            ],
+                        },
+                        {
+                            "text": "投資額は500億円。",
+                            "evidence_ids": ["e002"],
+                            "support_quotes": [
+                                {"evidence_id": "e002", "quote": "投資額は500億円。"}
+                            ],
+                        },
                     ]
                 }
             ],
@@ -576,10 +687,24 @@ def self_test() -> None:
             separators=(",", ":"),
         ).encode("utf-8")
     )
-    if fitted_bytes > 40_000 or {
+    if fitted_bytes > 140_000 or {
         item["id"] for item in fitted_payload["evidence"]
     } != {"e001", "e002", "e003"}:
         fail("Editor payload fitting dropped evidence or exceeded the request bound")
+    if fitted_payload != oversized_payload:
+        fail("Editor payload fitting altered source bodies")
+    too_large = {
+        **oversized_payload,
+        "evidence": [
+            {"id": "e999", "title": "題名", "body": "詳しい本文。" * 30000}
+        ],
+    }
+    try:
+        fit_model_payload(too_large)
+    except ValueError:
+        pass
+    else:
+        fail("Editor accepted a payload only by silently shortening its source body")
     if quality_model_required(
         {"evidence": [{"title": "企業が新製品を発売", "body": "企業は新製品を7月に発売した。"}]}
     ):
@@ -588,10 +713,10 @@ def self_test() -> None:
         {"evidence": [{"title": "【分析】市場構造を検証", "body": "複数の数値から市場構造を分析した。"}]}
     ):
         fail("Editor did not route analysis work to the quality model")
-    if not quality_model_required(
+    if quality_model_required(
         {"evidence": [{"title": "Product update", "body": "The company released a major product update with new enterprise controls."}]}
     ):
-        fail("Editor did not route translation-heavy work to the quality model")
+        fail("Editor routed a short factual translation to the quality model")
     if not quality_model_required(
         {"evidence": [{"title": "詳細発表", "body": "具体的な変更内容。" * 100}]}
     ):
@@ -603,6 +728,7 @@ def self_test() -> None:
         "source_published_date": "2099-01-01",
         "topic_value_class": "technical_or_product_shift",
         "priority_class": "priority",
+        "change_class": "material_update",
         "slug": "openai-codex-security",
         "confirmed_facts": [
             "更新版には脆弱性検出後の修正支援が追加された。",
@@ -640,6 +766,7 @@ def self_test() -> None:
         "source_published_date",
         "topic_value_class",
         "priority_class",
+        "change_class",
         "detail",
     }:
         fail("Editor emitted fields outside the minimal public update contract")

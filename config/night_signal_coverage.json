@@ -1,5 +1,5 @@
 {
-  "contract_version": "2026-07-04.01",
+  "contract_version": "2026-07-10.01",
   "legacy_contract_versions": [
     {
       "through_date": "2026-05-25",
@@ -31,8 +31,64 @@
     }
   ],
   "description": "NIGHT SIGNAL daily collection contract. A public issue must prove that every category and configured watch topic was searched through official/primary Web, independent media or data, X/SNS, and YouTube before publication. Economy coverage is regional: Japan, Asia ex-Japan focus, and North America; broad standalone investment sections are not allowed and country-specific official evidence must not be substituted from another country. IT/space topics must include official release plus X signals; YOASOBI/Ikuta coverage must include official HP plus staff/person social channels including X and Instagram.",
+  "publication_deadline_jst": "19:00",
+  "scheduled_collection_attempts_jst": [
+    "15:35",
+    "17:15"
+  ],
+  "required_discovery_channels": [
+    "web",
+    "youtube",
+    "sns_x",
+    "instagram",
+    "facebook",
+    "tiktok"
+  ],
+  "discovery_locales": {
+    "default": [
+      {
+        "id": "ja-JP",
+        "hl": "ja",
+        "gl": "JP",
+        "ceid": "JP:ja"
+      },
+      {
+        "id": "en-US",
+        "hl": "en-US",
+        "gl": "US",
+        "ceid": "US:en"
+      }
+    ],
+    "category_horizon": {
+      "アジア経済": [
+        {
+          "id": "zh-CN",
+          "hl": "zh-CN",
+          "gl": "CN",
+          "ceid": "CN:zh-Hans",
+          "identity_terms": ["中国", "印度", "越南", "亚洲经济"],
+          "change_terms": ["政策", "投资", "合作", "收购", "增长", "供应链"]
+        },
+        {
+          "id": "vi-VN",
+          "hl": "vi",
+          "gl": "VN",
+          "ceid": "VN:vi",
+          "identity_terms": ["Việt Nam", "Ấn Độ", "Trung Quốc", "kinh tế châu Á"],
+          "change_terms": ["chính sách", "đầu tư", "hợp tác", "mua lại", "tăng trưởng"]
+        },
+        {
+          "id": "hi-IN",
+          "hl": "hi",
+          "gl": "IN",
+          "ceid": "IN:hi",
+          "identity_terms": ["भारत", "वियतनाम", "चीन", "एशियाई अर्थव्यवस्था"],
+          "change_terms": ["नीति", "निवेश", "साझेदारी", "अधिग्रहण", "वृद्धि"]
+        }
+      ]
+    }
+  },
   "minimum_published_cards_per_category": 0,
-  "rolling_display_cards_effective_date": "2026-06-20",
   "minimum_changed_cards_vs_previous_issue": 1,
   "minimum_detail_summary_chars": 120,
   "material_fact_semantics_effective_date": "2026-06-27",
@@ -41,7 +97,7 @@
   "topic_discovery_contract_effective_date": "2026-07-04",
   "summary_quality_effective_date": "2026-05-22",
   "article_summary_effective_date": "2026-05-26",
-  "detail_summary_heading": "要点と背景",
+  "detail_summary_heading": "概要",
   "detail_summary_heading_effective_date": "2026-06-05",
   "detail_information_contract_effective_date": "2026-06-05",
   "claim_source_linkage_effective_date": "2026-06-12",
@@ -58,9 +114,7 @@
   "allowed_change_classes": [
     "new_event",
     "material_update",
-    "routine_recurring",
-    "duplicate_followup",
-    "background_only"
+    "new_analysis_of_existing_fact"
   ],
   "required_watch_topic_channels": [
     "web",

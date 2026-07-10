@@ -254,6 +254,7 @@ CARD_SCHEMA: dict[str, Any] = {
         "source_published_date",
         "topic_value_class",
         "priority_class",
+        "change_class",
         "detail",
     ],
     "properties": {
@@ -265,6 +266,7 @@ CARD_SCHEMA: dict[str, Any] = {
         "source_published_date": {"type": "string"},
         "topic_value_class": {"type": "string"},
         "priority_class": {"type": "string"},
+        "change_class": {"type": "string"},
         "detail": DETAIL_CARD_SCHEMA,
     },
 }
@@ -494,49 +496,6 @@ def navigation_shell_text(text: str) -> bool:
         for match in NAVIGATION_MARKER_RE.finditer(value)
     }
     return len(markers) >= 4 or bool(NAVIGATION_RUN_RE.search(value))
-
-
-def same_material_event(left: Any, right: Any) -> bool:
-    left_signature = copy_signature(str(left))
-    right_signature = copy_signature(str(right))
-    left_ngrams = {
-        left_signature[index : index + 3]
-        for index in range(max(0, len(left_signature) - 2))
-    }
-    right_ngrams = {
-        right_signature[index : index + 3]
-        for index in range(max(0, len(right_signature) - 2))
-    }
-    similarity = (
-        len(left_ngrams & right_ngrams) / min(len(left_ngrams), len(right_ngrams))
-        if left_ngrams and right_ngrams
-        else 0.0
-    )
-    return materially_same_fact(str(left), str(right)) or (
-        text_overlap(str(left), str(right)) >= 2 and similarity >= 0.4
-    )
-
-
-def card_event_text(card: dict[str, Any]) -> str:
-    detail = card.get("detail")
-    basis = detail.get("summary_basis") if isinstance(detail, dict) else None
-    facts = basis.get("confirmed_facts", []) if isinstance(basis, dict) else []
-    return " ".join(
-        [str(card.get("title", "")), str(card.get("summary", "")), *map(str, facts)]
-    )
-
-
-def confirmed_fact_summary(card: dict[str, Any]) -> str:
-    detail = card.get("detail")
-    basis = detail.get("summary_basis") if isinstance(detail, dict) else None
-    facts = basis.get("confirmed_facts", []) if isinstance(basis, dict) else []
-    material_facts = normalize_material_facts(
-        str(card.get("title", "")),
-        facts,
-    )
-    title = str(card.get("title", ""))
-    informative = [fact for fact in material_facts if fact_adds_information(title, fact)]
-    return " ".join(informative or material_facts)
 
 
 def source_label_leaked(card: dict[str, Any]) -> bool:
@@ -1025,6 +984,13 @@ def normalized_cards(issue: dict[str, Any]) -> list[dict[str, Any]]:
         section_id = require_str(raw, "section_id")
         category = require_str(raw, "category")
         source_date = require_str(raw, "source_published_date")
+        change_class = require_str(raw, "change_class")
+        contract = read_json(CONFIG_PATH)
+        allowed_changes = {
+            str(value) for value in contract.get("allowed_change_classes", [])
+        }
+        if change_class not in allowed_changes:
+            fail(f"cards[{index}] has invalid change_class: {change_class}")
         detail = raw.get("detail")
         if not isinstance(detail, dict):
             fail(f"cards[{index}] missing detail object")
@@ -1046,6 +1012,7 @@ def normalized_cards(issue: dict[str, Any]) -> list[dict[str, Any]]:
                 "section_id": section_id,
                 "category": category,
                 "source_published_date": source_date,
+                "change_class": change_class,
                 "detail": detail,
                 "slug": slug,
                 "freshness_label": relative_day_label(issue_date, source_date),
@@ -1071,8 +1038,7 @@ def render_card(card: dict[str, Any], *, root: bool) -> str:
     else:
         href_prefix = ""
     slug = html.escape(str(card["slug"]), quote=True)
-    retained_class = " retained" if card.get("retained_from_issue_date") else ""
-    return f"""        <article class="card{retained_class} {topic_class}">
+    return f"""        <article class="card {topic_class}">
           <div class="meta"><span class="pill">{label_text}{source_date}</span><span class="pill">{html.escape(str(card.get("category", "")))}</span></div>
           <h3>{title}</h3>
           <p>{summary}</p>
@@ -1096,155 +1062,22 @@ def priority_cards(cards: list[dict[str, Any]], limit: int = 4) -> list[dict[str
     )[:limit]
 
 
-def latest_three_dates(issue_date: str) -> set[str]:
-    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
-    return {
-        issue_dt.fromordinal(issue_dt.toordinal() - offset).isoformat()
-        for offset in range(3)
-    }
-
-
-def display_cluster_key(card: dict[str, Any]) -> tuple[str, str]:
-    text = str(card.get("title") or "")
-    text = re.sub(r"\s+執筆(?:\s+[-–—].*)?$", " ", text)
-    text = re.sub(r"\s+[-–—]\s+[^。]{1,120}$", " ", text)
-    text = re.sub(r"https?://\S+", " ", text)
-    text = re.sub(r"\b20\d{2}[-/.]\d{1,2}[-/.]\d{1,2}\b", " ", text)
-    text = re.sub(r"[^\w一-龥ぁ-んァ-ンー%％$]+", " ", text.lower())
-    tokens = [
-        token
-        for token in text.split()
-        if token
-        and token
-        not in {
-            "news",
-            "latest",
-            "update",
-            "updates",
-            "発表",
-            "速報",
-            "ニュース",
-            "最新",
-            "確認",
-        }
-    ]
-    return (str(card.get("category", "")), " ".join(tokens[:14]))
-
-
-def display_cluster_seen(
-    seen: set[tuple[str, str]],
-    key: tuple[str, str],
-) -> bool:
-    category, text = key
-    if not text:
-        return False
-    return any(
-        category == seen_category
-        and (
-            text == seen_text
-            or (len(text) >= 12 and seen_text.startswith(text))
-            or (len(seen_text) >= 12 and text.startswith(seen_text))
-        )
-        for seen_category, seen_text in seen
-    )
-
-
-def rolling_display_cards(
-    issue_path: Path,
+def current_display_cards(
     issue: dict[str, Any],
     current_cards: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
     issue_date = require_str(issue, "issue_date")
-    allowed_source_dates = latest_three_dates(issue_date)
-    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
-    state_root = (
-        issue_path.parent.parent
-        if issue_path.parent.parent.exists()
-        else DEFAULT_STATE_ROOT
-    )
-    display_cards: list[dict[str, Any]] = []
-    seen: set[tuple[str, str]] = set()
-
-    def add_card(
-        card: dict[str, Any],
-        *,
-        detail_issue_date: str,
-        retained_from_issue_date: str | None = None,
-    ) -> None:
+    display_cards = []
+    for card in current_cards:
         source_date = str(card.get("source_published_date", ""))
-        if source_date not in allowed_source_dates or not public_card_is_reader_facing(card):
-            return
-        display_card = card
-        if retained_from_issue_date:
-            factual_summary = confirmed_fact_summary(card)
-            if factual_summary:
-                display_card = {**card, "summary": factual_summary}
-        if retained_from_issue_date and any(
-            str(existing.get("category", "")) == str(display_card.get("category", ""))
-            and (
-                same_material_event(
-                    str(existing.get("title", "")),
-                    str(display_card.get("title", "")),
-                )
-                or same_material_event(
-                    card_event_text(existing),
-                    card_event_text(display_card),
-                )
-            )
-            for existing in display_cards
-        ):
-            return
-        key = display_cluster_key(display_card)
-        if display_cluster_seen(seen, key):
-            return
-        seen.add(key)
         display_cards.append(
             {
-                **display_card,
+                **card,
                 "issue_date": issue_date,
-                "detail_issue_date": detail_issue_date,
+                "detail_issue_date": issue_date,
                 "freshness_label": relative_day_label(issue_date, source_date),
-                **(
-                    {"retained_from_issue_date": retained_from_issue_date}
-                    if retained_from_issue_date
-                    else {}
-                ),
             }
         )
-
-    for card in current_cards:
-        add_card(card, detail_issue_date=issue_date)
-
-    issue_files: list[tuple[datetime.date, Path]] = []
-    for candidate in state_root.glob("20??-??-??/issue.json"):
-        try:
-            candidate_dt = datetime.strptime(candidate.parent.name, "%Y-%m-%d").date()
-        except ValueError:
-            continue
-        if candidate_dt >= issue_dt or (issue_dt - candidate_dt).days > 7:
-            continue
-        issue_files.append((candidate_dt, candidate))
-
-    for candidate_dt, candidate_path in sorted(issue_files, reverse=True):
-        previous_issue = read_json(candidate_path)
-        retained_raw_cards = [
-            card
-            for card in previous_issue.get("cards", [])
-            if isinstance(card, dict)
-            and str(card.get("source_published_date", "")) in allowed_source_dates
-            and public_card_is_reader_facing(card)
-        ]
-        if not retained_raw_cards:
-            continue
-        for card in normalized_cards(
-            {**previous_issue, "cards": retained_raw_cards}
-        ):
-            add_card(
-                card,
-                detail_issue_date=candidate_dt.isoformat(),
-                retained_from_issue_date=candidate_dt.isoformat(),
-            )
-
     return display_cards
 
 
@@ -1500,7 +1333,7 @@ def generate_issue(issue_path: Path, output_root: Path, *, write_marker: bool) -
     validate_issue_state(issue, issue_path)
     issue_date = require_str(issue, "issue_date")
     cards = normalized_cards(issue)
-    display_cards = rolling_display_cards(issue_path, issue, cards)
+    display_cards = current_display_cards(issue, cards)
     details_dir = output_root / "details"
     details_dir.mkdir(parents=True, exist_ok=True)
 
@@ -1552,6 +1385,7 @@ def self_test() -> None:
         "source_published_date": issue_date,
         "topic_value_class": "technical_or_product_shift",
         "priority_class": "priority",
+        "change_class": "material_update",
         "detail": {
             "slug": f"openai-codex-security-{issue_date}.html",
             "sources": [{"label": "OpenAI", "url": source_url}],
@@ -1623,15 +1457,6 @@ def self_test() -> None:
         "Hondaは2026年6月29日に2026年5月の生産・販売・輸出実績を公式サイトで発表した。",
     ):
         fail("source channel and publication date were mistaken for substantive information")
-    retained_example = json.loads(json.dumps(card))
-    retained_example["title"] = "SpaceX株がナスダック100指数に組み入れ"
-    retained_example["summary"] = "同じ事実の反復と根拠のない影響文。"
-    retained_example["detail"]["summary_basis"]["confirmed_facts"] = [
-        "SpaceX株が前場で1％以上上昇した。",
-        "SpaceX株がナスダック100指数に組み入れられた。",
-    ]
-    if confirmed_fact_summary(retained_example) != "SpaceX株が前場で1％以上上昇した。":
-        fail("retained card summary did not preserve new facts without replaying its title")
     complete_facts = [
         "計画の総事業費は2兆円とされた。",
         "建設開始は2030年を予定している。",
@@ -1690,7 +1515,7 @@ def self_test() -> None:
     ]
     leaked_source["detail"] = leaked_detail
     if not source_label_leaked(leaked_source):
-        fail("retained-card validation accepted a leaked source label")
+        fail("public-card validation accepted a leaked source label")
     if not re.fullmatch(r"[0-9a-f]{64}", editor_contract_sha256()):
         fail("editor contract fingerprint is invalid")
     if reader_summary_violations(card["title"], f"{card['title']}。{card['title']}。") == []:

@@ -23,8 +23,8 @@ on:
         default: false
         type: boolean
   schedule:
-    - cron: "05 10 * * *"
-    - cron: "35 10 * * *"
+    - cron: "35 06 * * *"
+    - cron: "15 08 * * *"
 
 permissions:
   contents: write

@@ -146,6 +146,16 @@ DISCOVERY_CHANGE_TERMS = [
     "resignation",
     "退任",
 ]
+INDEXED_CHANNEL_DOMAINS = {
+    "youtube": ["youtube.com"],
+    "sns_x": ["x.com", "twitter.com"],
+    "instagram": ["instagram.com"],
+    "facebook": ["facebook.com"],
+    "tiktok": ["tiktok.com"],
+}
+NETWORK_SEMAPHORE = threading.BoundedSemaphore(
+    max(1, int(os.getenv("NIGHT_SIGNAL_NETWORK_CONCURRENCY", "16")))
+)
 
 
 def fail(message: str) -> None:
@@ -379,7 +389,25 @@ def cluster_seen(seen: set[str], key: str) -> bool:
 
 
 def same_material_event(left: Any, right: Any) -> bool:
-    return state_contract.same_material_event(left, right)
+    left_signature = state_contract.copy_signature(str(left))
+    right_signature = state_contract.copy_signature(str(right))
+    left_ngrams = {
+        left_signature[index : index + 3]
+        for index in range(max(0, len(left_signature) - 2))
+    }
+    right_ngrams = {
+        right_signature[index : index + 3]
+        for index in range(max(0, len(right_signature) - 2))
+    }
+    similarity = (
+        len(left_ngrams & right_ngrams) / min(len(left_ngrams), len(right_ngrams))
+        if left_ngrams and right_ngrams
+        else 0.0
+    )
+    return state_contract.materially_same_fact(str(left), str(right)) or (
+        state_contract.text_overlap(str(left), str(right)) >= 2
+        and similarity >= 0.4
+    )
 
 
 def cluster_priority(record: dict[str, Any], category: dict[str, Any]) -> tuple[int, str]:
@@ -613,6 +641,9 @@ def publication_evidence_record(
         or not record_document_is_current(record, issue_date)
     ):
         return False
+    source_host = urllib.parse.urlparse(str(record.get("url", ""))).netloc.lower()
+    if source_host == "news.google.com" or source_host.endswith(".news.google.com"):
+        return False
     title = record_public_title(record)
     excerpt = reader_facing_text(record.get("excerpt") or record.get("evidence") or "", 2400)
     category_label = str(category.get("label", ""))
@@ -719,6 +750,21 @@ def facts_add_information_beyond_title(title: str, facts: list[str]) -> bool:
     )
 
 
+def support_quote_matches_record(quote: str, record: dict[str, Any]) -> bool:
+    value = compact_text(quote, 320)
+    if len(value) < 8:
+        return False
+    evidence = compact_text(
+        f"{record.get('title', '')} {record.get('excerpt') or record.get('evidence') or ''}",
+        8500,
+    )
+    if value.casefold() in evidence.casefold():
+        return True
+    quote_key = state_contract.copy_signature(value)
+    evidence_key = state_contract.copy_signature(evidence)
+    return len(quote_key) >= 8 and quote_key in evidence_key
+
+
 def page_text(raw: bytes, content_type: str) -> tuple[str, str]:
     charset_match = re.search(r"charset=([A-Za-z0-9._-]+)", content_type)
     charset = charset_match.group(1) if charset_match else "utf-8"
@@ -759,10 +805,11 @@ def request_bytes(url: str, timeout: int = 15) -> tuple[bytes, str, str]:
             "User-Agent": USER_AGENT,
         },
     )
-    with urllib.request.urlopen(request, timeout=timeout) as response:
-        raw = response.read(350_000)
-        content_type = response.headers.get("Content-Type", "")
-        return raw, content_type, response.geturl()
+    with NETWORK_SEMAPHORE:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            raw = response.read(350_000)
+            content_type = response.headers.get("Content-Type", "")
+            return raw, content_type, response.geturl()
 
 
 def post_form_bytes(
@@ -780,10 +827,11 @@ def post_form_bytes(
         },
         method="POST",
     )
-    with urllib.request.urlopen(request, timeout=timeout) as response:
-        raw = response.read(100_000)
-        content_type = response.headers.get("Content-Type", "")
-        return raw, content_type, response.geturl()
+    with NETWORK_SEMAPHORE:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            raw = response.read(100_000)
+            content_type = response.headers.get("Content-Type", "")
+            return raw, content_type, response.geturl()
 
 
 def jina_url(url: str) -> str:
@@ -1070,16 +1118,34 @@ def parse_rss_date(value: str | None) -> str | None:
     return parsed.astimezone(JST).date().isoformat()
 
 
-def discovery_identity_query(category: dict[str, Any]) -> str:
+def discovery_identity_queries(
+    category: dict[str, Any],
+    extra_terms: list[str] | None = None,
+) -> list[str]:
     label = str(category["label"])
-    terms = CATEGORY_IDENTITY_TERMS.get(label, [label])
-    useful = list(dict.fromkeys(str(term) for term in terms if str(term).strip()))[:6]
-    return " OR ".join(f'"{term}"' if " " in term else term for term in useful)
+    terms = [*CATEGORY_IDENTITY_TERMS.get(label, [label]), *(extra_terms or [])]
+    useful = list(dict.fromkeys(str(term) for term in terms if str(term).strip()))
+    return [
+        " OR ".join(f'"{term}"' if " " in term else term for term in group)
+        for index in range(0, len(useful), 10)
+        for group in [useful[index : index + 10]]
+        if group
+    ]
+
+
+def configured_discovery_locales() -> tuple[list[dict[str, Any]], dict[str, list[dict[str, Any]]]]:
+    config = load_object(COVERAGE_CONFIG).get("discovery_locales", {})
+    if not isinstance(config, dict):
+        return ([{"id": "ja-JP", "hl": "ja", "gl": "JP", "ceid": "JP:ja"}], {})
+    defaults = [value for value in config.get("default", []) if isinstance(value, dict)]
+    category_horizon = config.get("category_horizon", {})
+    return defaults, category_horizon if isinstance(category_horizon, dict) else {}
 
 
 def discovery_queries(category: dict[str, Any], issue_date: str) -> list[dict[str, Any]]:
     """Build bounded searches that prove each watch topic was actually queried."""
-    identity = discovery_identity_query(category)
+    identities = discovery_identity_queries(category)
+    default_locales, local_horizon = configured_discovery_locales()
     queries: list[dict[str, Any]] = []
     configured_topic_terms: set[str] = set()
     for topic in category.get("watch_topics", []):
@@ -1096,16 +1162,23 @@ def discovery_queries(category: dict[str, Any], issue_date: str) -> list[dict[st
         configured_topic_terms.update(term.lower() for term in terms)
         for index in range(0, len(terms), 20):
             group = terms[index : index + 20]
-            queries.append(
-                {
-                    "query_id": f"topic:{topic_id}:{index // 20 + 1}",
-                    "purpose": "watch_topic",
-                    "watch_topic_ids": [topic_id],
-                    "query": f"({identity}) ({' OR '.join(group)}) when:3d",
-                    "provider": "google_news_rss",
-                    "channel": "web",
-                }
-            )
+            for identity_index, identity in enumerate(identities, start=1):
+                for locale in default_locales:
+                    locale_id = str(locale.get("id") or "default")
+                    queries.append(
+                        {
+                            "query_id": (
+                                f"topic:{topic_id}:{index // 20 + 1}:"
+                                f"identity-{identity_index}:{locale_id}"
+                            ),
+                            "purpose": "watch_topic",
+                            "watch_topic_ids": [topic_id],
+                            "query": f"({identity}) ({' OR '.join(group)}) when:3d",
+                            "provider": "google_news_rss",
+                            "channel": "web",
+                            "locale": locale,
+                        }
+                    )
 
     axis_only_terms = list(
         dict.fromkeys(
@@ -1119,16 +1192,70 @@ def discovery_queries(category: dict[str, Any], issue_date: str) -> list[dict[st
     horizon_terms = list(dict.fromkeys([*axis_only_terms, *DISCOVERY_CHANGE_TERMS]))
     for index in range(0, len(horizon_terms), 20):
         group = horizon_terms[index : index + 20]
-        queries.append(
-            {
-                "query_id": f"horizon:material-change:{index // 20 + 1}",
-                "purpose": "horizon",
-                "watch_topic_ids": [],
-                "query": f"({identity}) ({' OR '.join(group)}) when:3d",
-                "provider": "google_news_rss",
-                "channel": "web",
-            }
+        for identity_index, identity in enumerate(identities, start=1):
+            for locale in default_locales:
+                locale_id = str(locale.get("id") or "default")
+                queries.append(
+                    {
+                        "query_id": (
+                            f"horizon:material-change:{index // 20 + 1}:"
+                            f"identity-{identity_index}:{locale_id}"
+                        ),
+                        "purpose": "horizon",
+                        "watch_topic_ids": [],
+                        "query": f"({identity}) ({' OR '.join(group)}) when:3d",
+                        "provider": "google_news_rss",
+                        "channel": "web",
+                        "locale": locale,
+                    }
+                )
+
+    for locale in local_horizon.get(str(category.get("label")), []):
+        if not isinstance(locale, dict):
+            continue
+        locale_id = str(locale.get("id") or "local")
+        local_identities = discovery_identity_queries(
+            category,
+            [str(value) for value in locale.get("identity_terms", [])],
         )
+        changes = [str(value) for value in locale.get("change_terms", []) if str(value).strip()]
+        if changes:
+            for identity_index, identity in enumerate(local_identities, start=1):
+                queries.append(
+                    {
+                        "query_id": (
+                            f"horizon:local-language:{locale_id}:"
+                            f"identity-{identity_index}"
+                        ),
+                        "purpose": "horizon",
+                        "watch_topic_ids": [],
+                        "query": f"({identity}) ({' OR '.join(changes)}) when:3d",
+                        "provider": "google_news_rss",
+                        "channel": "web",
+                        "locale": locale,
+                    }
+                )
+
+    for channel, domains in INDEXED_CHANNEL_DOMAINS.items():
+        sites = " OR ".join(f"site:{domain}" for domain in domains)
+        for change_index in range(0, len(DISCOVERY_CHANGE_TERMS), 16):
+            indexed_terms = " OR ".join(
+                DISCOVERY_CHANGE_TERMS[change_index : change_index + 16]
+            )
+            for identity_index, identity in enumerate(identities, start=1):
+                queries.append(
+                    {
+                        "query_id": (
+                            f"horizon:indexed:{channel}:"
+                            f"change-{change_index // 16 + 1}:identity-{identity_index}"
+                        ),
+                        "purpose": "horizon",
+                        "watch_topic_ids": [],
+                        "query": f"({sites}) ({identity}) ({indexed_terms})",
+                        "provider": "bing_rss",
+                        "channel": channel,
+                    }
+                )
     return queries
 
 
@@ -1484,6 +1611,7 @@ def article_record_from_candidate(
         ):
             continue
         parsed = urllib.parse.urlparse(effective_url)
+        page_date = embedded_document_date(page_raw.decode("utf-8", errors="ignore"))
         resolved_label = (
             str(record.get("label", ""))
             if reader_resolved_discovery
@@ -1497,6 +1625,7 @@ def article_record_from_candidate(
             "label": resolved_label or str(record.get("label", "")),
             "url": effective_url,
             "publisher_url": publisher_url,
+            "published_date": page_date.isoformat() if page_date else record.get("published_date"),
             "original_discovery_url": str(record.get("url", "")),
             "title": original_title,
             "excerpt": combined,
@@ -1672,31 +1801,143 @@ def discovery_record_is_material(record: dict[str, Any]) -> bool:
     return material_event_candidate(title, excerpt)
 
 
+def fetch_discovery_spec(
+    category: dict[str, Any],
+    issue_date: str,
+    spec: dict[str, Any],
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    query = str(spec["query"])
+    provider = str(spec.get("provider"))
+    locale = spec.get("locale") if isinstance(spec.get("locale"), dict) else {}
+    if provider == "google_news_rss":
+        rss_url = "https://news.google.com/rss/search?" + urllib.parse.urlencode(
+            {
+                "q": query,
+                "hl": str(locale.get("hl") or "ja"),
+                "gl": str(locale.get("gl") or "JP"),
+                "ceid": str(locale.get("ceid") or "JP:ja"),
+            }
+        )
+        provider_label = "Google News RSS"
+    elif provider == "bing_rss":
+        rss_url = "https://www.bing.com/search?" + urllib.parse.urlencode(
+            {"format": "rss", "q": query}
+        )
+        provider_label = "Bing indexed search"
+    else:
+        raise ValueError(f"unsupported discovery provider: {provider}")
+
+    try:
+        raw, _, _ = request_bytes(rss_url)
+        root = ET.fromstring(raw)
+    except (OSError, TimeoutError, urllib.error.URLError, ET.ParseError) as exc:
+        return [], {
+            **spec,
+            "url": rss_url,
+            "label": provider_label,
+            "slot_state": "search_unavailable",
+            "result_count": 0,
+            "relevant_result_count": 0,
+            "material_candidate_count": 0,
+            "resolved_candidate_count": 0,
+            "evidence_summary": f"検索に失敗した: {type(exc).__name__}: {exc}",
+        }
+
+    result_count = 0
+    relevant_urls: set[str] = set()
+    material_urls: set[str] = set()
+    records: list[dict[str, Any]] = []
+    for item in root.findall(".//item"):
+        title = compact_text(item.findtext("title") or "", 220)
+        link = compact_text(item.findtext("link") or "", 1000)
+        if not title or not link.startswith(("http://", "https://")):
+            continue
+        result_count += 1
+        description = html_fragment_text(item.findtext("description") or "", 1200)
+        published_date = parse_rss_date(item.findtext("pubDate"))
+        source = item.find("source") if provider == "google_news_rss" else None
+        parsed = urllib.parse.urlparse(link)
+        source_label = (
+            compact_text(source.text or "", 120)
+            if source is not None
+            else parsed.netloc.lower().removeprefix("www.")
+        )
+        publisher_url = (
+            compact_text(source.get("url") or "", 1000)
+            if source is not None
+            else f"{parsed.scheme}://{parsed.netloc}"
+        )
+        if not publisher_url.startswith(("http://", "https://")):
+            publisher_url = ""
+        channel = str(spec.get("channel") or "web")
+        record = {
+            "label": source_label or provider_label,
+            "url": link,
+            "source_role": (
+                "independent_media_or_data"
+                if channel == "web"
+                else "social_or_video_signal"
+            ),
+            "channel": channel,
+            "source_class": "discovered_media",
+            "publisher_url": publisher_url,
+            "observed": True,
+            "published_date": published_date,
+            "title": title,
+            "excerpt": description or title,
+            "discovery_query_ids": [str(spec["query_id"])],
+            "watch_topic_ids": list(spec["watch_topic_ids"]),
+            "evidence": (
+                f"{provider_label}で「{title}」を確認した。"
+                f"配信元は{source_label or parsed.netloc}、配信日は"
+                f"{published_date or '日付不明'}。"
+            ),
+        }
+        if not discovery_record_is_relevant(category, issue_date, record):
+            continue
+        relevant_urls.add(link)
+        if discovery_record_is_material(record):
+            material_urls.add(link)
+        records.append(record)
+
+    return records, {
+        **spec,
+        "url": rss_url,
+        "label": provider_label,
+        "slot_state": "searched",
+        "result_count": result_count,
+        "relevant_result_count": len(relevant_urls),
+        "material_candidate_count": len(material_urls),
+        "resolved_candidate_count": 0,
+        "material_urls": sorted(material_urls),
+        "evidence_summary": (
+            f"{result_count}件を確認し、対象期間・カテゴリに合う結果は"
+            f"{len(relevant_urls)}件、重要更新候補は{len(material_urls)}件だった。"
+        ),
+    }
+
+
 def fetch_news(category: dict[str, Any], issue_date: str) -> dict[str, Any]:
     records_by_url: dict[str, dict[str, Any]] = {}
-    checks: list[dict[str, Any]] = []
-    for spec in discovery_queries(category, issue_date):
-        query = str(spec["query"])
-        rss_url = (
-            "https://news.google.com/rss/search?"
-            + urllib.parse.urlencode(
-                {
-                    "q": query,
-                    "hl": "ja",
-                    "gl": "JP",
-                    "ceid": "JP:ja",
-                }
-            )
-        )
-        try:
-            raw, _, _ = request_bytes(rss_url)
-            root = ET.fromstring(raw)
-        except (OSError, TimeoutError, urllib.error.URLError, ET.ParseError) as exc:
-            checks.append(
-                {
+    specs = discovery_queries(category, issue_date)
+    search_results: list[tuple[int, list[dict[str, Any]], dict[str, Any]]] = []
+    workers = max(1, int(os.getenv("NIGHT_SIGNAL_SEARCH_CONCURRENCY", "8")))
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
+        futures = {
+            executor.submit(fetch_discovery_spec, category, issue_date, spec): index
+            for index, spec in enumerate(specs)
+        }
+        for future in concurrent.futures.as_completed(futures):
+            index = futures[future]
+            try:
+                records, check = future.result()
+            except (OSError, TimeoutError, ValueError) as exc:
+                spec = specs[index]
+                records = []
+                check = {
                     **spec,
-                    "url": rss_url,
-                    "label": "Google News RSS",
+                    "url": "https://www.bing.com/",
+                    "label": str(spec.get("provider") or "search"),
                     "slot_state": "search_unavailable",
                     "result_count": 0,
                     "relevant_result_count": 0,
@@ -1704,86 +1945,27 @@ def fetch_news(category: dict[str, Any], issue_date: str) -> dict[str, Any]:
                     "resolved_candidate_count": 0,
                     "evidence_summary": f"検索に失敗した: {type(exc).__name__}: {exc}",
                 }
-            )
-            continue
-        result_count = 0
-        relevant_urls: set[str] = set()
-        material_urls: set[str] = set()
-        for item in root.findall(".//item"):
-            title = compact_text(item.findtext("title") or "", 220)
-            link = compact_text(item.findtext("link") or "", 1000)
-            if not title or not link.startswith(("http://", "https://")):
-                continue
-            result_count += 1
-            description = html_fragment_text(item.findtext("description") or "", 700)
-            source = item.find("source")
-            source_label = (
-                compact_text(source.text or "", 120)
-                if source is not None
-                else "Google News"
-            )
-            publisher_url = (
-                compact_text(source.get("url") or "", 1000)
-                if source is not None
-                else ""
-            )
-            if not publisher_url.startswith(("http://", "https://")):
-                publisher_url = ""
-            record = {
-                "label": source_label,
-                "url": link,
-                "source_role": "independent_media_or_data",
-                "channel": "web",
-                "source_class": "discovered_media",
-                "publisher_url": publisher_url,
-                "observed": True,
-                "published_date": parse_rss_date(item.findtext("pubDate")),
-                "title": title,
-                "excerpt": description or title,
-                "discovery_query_ids": [str(spec["query_id"])],
-                "watch_topic_ids": list(spec["watch_topic_ids"]),
-                "evidence": (
-                    f"Google News RSSで「{title}」を確認した。"
-                    f"配信元は{source_label}、配信日は"
-                    f"{parse_rss_date(item.findtext('pubDate')) or '日付不明'}。"
-                ),
-            }
-            if not discovery_record_is_relevant(category, issue_date, record):
-                continue
-            relevant_urls.add(link)
-            if discovery_record_is_material(record):
-                material_urls.add(link)
+            search_results.append((index, records, check))
+
+    checks: list[dict[str, Any]] = []
+    for _, records, check in sorted(search_results, key=lambda value: value[0]):
+        checks.append(check)
+        for record in records:
+            link = str(record.get("url", ""))
             current = records_by_url.get(link)
             if current is None:
                 records_by_url[link] = record
-            else:
-                current["discovery_query_ids"] = list(
-                    dict.fromkeys(
-                        [*current.get("discovery_query_ids", []), str(spec["query_id"])]
-                    )
+                continue
+            current["discovery_query_ids"] = list(
+                dict.fromkeys(
+                    [*current.get("discovery_query_ids", []), *record.get("discovery_query_ids", [])]
                 )
-                current["watch_topic_ids"] = list(
-                    dict.fromkeys(
-                        [*current.get("watch_topic_ids", []), *spec["watch_topic_ids"]]
-                    )
+            )
+            current["watch_topic_ids"] = list(
+                dict.fromkeys(
+                    [*current.get("watch_topic_ids", []), *record.get("watch_topic_ids", [])]
                 )
-        checks.append(
-            {
-                **spec,
-                "url": rss_url,
-                "label": "Google News RSS",
-                "slot_state": "searched",
-                "result_count": result_count,
-                "relevant_result_count": len(relevant_urls),
-                "material_candidate_count": len(material_urls),
-                "resolved_candidate_count": 0,
-                "material_urls": sorted(material_urls),
-                "evidence_summary": (
-                    f"{result_count}件を確認し、対象期間・カテゴリに合う結果は"
-                    f"{len(relevant_urls)}件、重要更新候補は{len(material_urls)}件だった。"
-                ),
-            }
-        )
+            )
 
     records = enrich_discovered_records(category, issue_date, list(records_by_url.values()))
     enriched_by_url: dict[str, dict[str, Any]] = {}
@@ -1872,33 +2054,7 @@ def category_prompt(
             ],
         }
 
-    payload = build_payload(body_limit)
-    max_payload_bytes = 64_000
-    if (
-        len(
-            json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode(
-                "utf-8"
-            )
-        )
-        > max_payload_bytes
-    ):
-        low, high = 120, body_limit
-        while low < high:
-            candidate = (low + high + 1) // 2
-            candidate_payload = build_payload(candidate)
-            candidate_size = len(
-                json.dumps(
-                    candidate_payload,
-                    ensure_ascii=False,
-                    separators=(",", ":"),
-                ).encode("utf-8")
-            )
-            if candidate_size <= max_payload_bytes:
-                low = candidate
-            else:
-                high = candidate - 1
-        payload = build_payload(low)
-    return payload
+    return build_payload(body_limit)
 
 
 def valid_date(value: Any, issue_date: str) -> bool:
@@ -1940,6 +2096,9 @@ def sources_from_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     seen: set[str] = set()
     for record in records:
         url = str(record.get("url", ""))
+        host = urllib.parse.urlparse(url).netloc.lower()
+        if host == "news.google.com" or host.endswith(".news.google.com"):
+            continue
         if not url or url in seen:
             continue
         seen.add(url)
@@ -1990,7 +2149,7 @@ def normalize_result(
     for item in raw.get("items", []):
         if not isinstance(item, dict):
             continue
-        point_values: list[tuple[str, list[str]]] = []
+        point_values: list[tuple[str, list[str], list[dict[str, str]]]] = []
         invalid_point_shape = False
         for raw_point in item.get("summary_points", []):
             if not isinstance(raw_point, dict):
@@ -2004,14 +2163,24 @@ def normalize_result(
                     if isinstance(value, str) and value
                 )
             )
-            if not text or not point_ids:
+            support_quotes = [
+                {
+                    "evidence_id": str(value.get("evidence_id", "")),
+                    "quote": compact_text(str(value.get("quote", "")), 320),
+                }
+                for value in raw_point.get("support_quotes", [])
+                if isinstance(value, dict)
+                and isinstance(value.get("evidence_id"), str)
+                and isinstance(value.get("quote"), str)
+            ]
+            if not text or not point_ids or not support_quotes:
                 invalid_point_shape = True
                 continue
-            point_values.append((text, point_ids))
+            point_values.append((text, point_ids, support_quotes))
         evidence_ids = list(
             dict.fromkeys(
                 evidence_id
-                for _, point_ids in point_values
+                for _, point_ids, _ in point_values
                 for evidence_id in point_ids
             )
         )
@@ -2028,7 +2197,7 @@ def normalize_result(
         sources = sources_from_records(source_records)
         topic = str(item.get("watch_topic_id", ""))
         title = compact_text(str(item.get("title", "")), 180)
-        point_texts = [text for text, _ in point_values]
+        point_texts = [text for text, _, _ in point_values]
         facts = state_contract.normalize_material_facts(
             title,
             point_texts,
@@ -2037,15 +2206,39 @@ def normalize_result(
         point_contract_broken = len(facts) != len(point_values)
         unsupported_facts = [
             text
-            for text, point_ids in point_values
+            for text, point_ids, _ in point_values
             if not fact_supported_by_records(
                 text,
                 [records_by_id[value] for value in point_ids if value in records_by_id],
             )
         ]
+        invalid_support_quotes = [
+            quote
+            for _, point_ids, quotes in point_values
+            for quote in quotes
+            if quote["evidence_id"] not in point_ids
+            or quote["evidence_id"] not in records_by_id
+            or not support_quote_matches_record(
+                quote["quote"], records_by_id.get(quote["evidence_id"], {})
+            )
+            or (
+                str(category.get("label", "")) in CATEGORY_IDENTITY_TERMS
+                and not category_identity_ok(
+                    str(category.get("label", "")), quote["quote"], ""
+                )
+            )
+        ]
+        missing_quote_ids = [
+            evidence_id
+            for _, point_ids, quotes in point_values
+            for evidence_id in point_ids
+            if evidence_id
+            not in {str(quote.get("evidence_id")) for quote in quotes}
+        ]
         factual_text = " ".join([summary, *facts])
         item_cluster = normalized_topic_key(title)
         topic_value = str(item.get("topic_value_class", ""))
+        change_class = str(item.get("change_class", ""))
         source_dates = {
             str(record.get("published_date"))
             for record in source_records
@@ -2061,7 +2254,7 @@ def normalize_result(
                     if evidence_id in records_by_id
                 ],
             }
-            for fact, (_, point_ids) in zip(facts, point_values)
+            for fact, (_, point_ids, _) in zip(facts, point_values)
         ]
         rejection_checks = [
             ("invalid_summary_point", invalid_point_shape or point_contract_broken),
@@ -2090,9 +2283,16 @@ def normalize_result(
                 any(not useful_fact(fact, str(category.get("label", ""))) for fact in facts),
             ),
             ("unsupported_fact", bool(unsupported_facts)),
+            ("unsupported_quote", bool(invalid_support_quotes)),
+            ("missing_support_quote", bool(missing_quote_ids)),
             ("missing_source", not sources),
             ("duplicate_cluster", cluster_seen(seen_clusters, item_cluster)),
             ("unknown_topic_value", topic_value not in ALLOWED_TOPIC_VALUES),
+            (
+                "unknown_change_class",
+                change_class
+                not in {"new_event", "material_update", "new_analysis_of_existing_fact"},
+            ),
             ("invalid_source_date", not valid_date(source_date, issue_date)),
             (
                 "unmapped_fact_source",
@@ -2132,6 +2332,7 @@ def normalize_result(
                     if item.get("priority_class") in {"top", "priority", "standard"}
                     else "standard"
                 ),
+                "change_class": change_class,
                 "slug": (
                     "auto-"
                     + hashlib.sha1(title.encode("utf-8")).hexdigest()[:12]
@@ -2253,6 +2454,16 @@ def self_test() -> None:
         fail("discovery queries did not map every watch topic")
     if not any(spec["purpose"] == "horizon" for spec in discovery_specs):
         fail("discovery queries omitted the adjacent-change horizon")
+    discovered_channels = {str(spec.get("channel")) for spec in discovery_specs}
+    if {"web", *INDEXED_CHANNEL_DOMAINS} - discovered_channels:
+        fail("discovery queries omitted a required public information channel")
+    web_locales = {
+        str(spec.get("locale", {}).get("id"))
+        for spec in discovery_specs
+        if spec.get("channel") == "web" and isinstance(spec.get("locale"), dict)
+    }
+    if not {"ja-JP", "en-US"} <= web_locales:
+        fail("discovery queries did not search both Japanese and English")
     horizon_queries = " ".join(
         str(spec["query"])
         for spec in discovery_specs
@@ -2260,6 +2471,25 @@ def self_test() -> None:
     )
     if "axis-only-term" not in horizon_queries:
         fail("discovery queries dropped an axis-only adjacent term")
+    split_identity_specs = discovery_queries(
+        {"label": "F1", "axes": [], "watch_topics": []},
+        "2099-01-01",
+    )
+    split_identity_queries = " ".join(
+        str(spec["query"]) for spec in split_identity_specs
+    )
+    if any(
+        term not in split_identity_queries
+        for term in CATEGORY_IDENTITY_TERMS["F1"]
+    ):
+        fail("bounded discovery queries dropped a later category identity")
+    indexed_queries = " ".join(
+        str(spec["query"])
+        for spec in split_identity_specs
+        if spec.get("channel") in INDEXED_CHANNEL_DOMAINS
+    )
+    if any(term not in indexed_queries for term in DISCOVERY_CHANGE_TERMS):
+        fail("indexed public-channel queries dropped a material change term")
     structured_fixture = (
         '<html><script type="application/ld+json">'
         '{"@type":"NewsArticle","headline":"Hondaが新計画を発表",'
@@ -2513,8 +2743,15 @@ def self_test() -> None:
                 "title": "OpenAIが開発者向け機能を更新",
                 "topic_value_class": "decision_or_policy",
                 "priority_class": "priority",
+                "change_class": "material_update",
                 "summary_points": [
-                    {"text": fact, "evidence_ids": ["e001"]}
+                    {
+                        "text": fact,
+                        "evidence_ids": ["e001"],
+                        "support_quotes": [
+                            {"evidence_id": "e001", "quote": records[0]["excerpt"]}
+                        ],
+                    }
                     for fact in facts
                 ],
             }
@@ -2548,7 +2785,13 @@ def self_test() -> None:
         fail("normalization rejected an explicitly reviewed evidence exclusion")
     padded_raw = json.loads(json.dumps(raw))
     padded_raw["items"][0]["summary_points"].append(
-        {"text": "市場全体の競争が激化するとみられる。", "evidence_ids": ["e001"]}
+        {
+            "text": "市場全体の競争が激化するとみられる。",
+            "evidence_ids": ["e001"],
+            "support_quotes": [
+                {"evidence_id": "e001", "quote": records[0]["excerpt"]}
+            ],
+        }
     )
     if normalize_result(padded_raw, category, "2099-01-03", records)["items"]:
         fail("normalization accepted an unsupported padding claim")
@@ -2583,8 +2826,10 @@ def self_test() -> None:
             "utf-8"
         )
     )
-    if large_prompt_size > 64_000 or len(large_prompt["evidence"]) != 80:
-        fail("editor prompt did not bound request size while preserving Evidence ids")
+    if large_prompt_size <= 64_000 or len(large_prompt["evidence"]) != 80:
+        fail("editor prompt silently shortened rich Evidence instead of leaving chunking to Editor")
+    if any(len(item["body"]) != len(prompt_evidence["body"]) for item in large_prompt["evidence"]):
+        fail("editor prompt applied unequal or lossy body truncation")
     summary_cases = [
         (
             "ジグザグ台湾とW2、越境EC支援で業務提携を発表",
@@ -2644,8 +2889,15 @@ def self_test() -> None:
                     "title": case_title,
                     "topic_value_class": "decision_or_policy",
                     "priority_class": "priority",
+                    "change_class": "new_event",
                     "summary_points": [
-                        {"text": point, "evidence_ids": ["e001"]}
+                        {
+                            "text": point,
+                            "evidence_ids": ["e001"],
+                            "support_quotes": [
+                                {"evidence_id": "e001", "quote": case_body}
+                            ],
+                        }
                         for point in case_points
                     ],
                 }

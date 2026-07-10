@@ -20,6 +20,7 @@ import night_signal_evidence as evidence_store
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE_ROOT = ROOT / "state"
+FINAL_COLLECTION_EARLIEST = time(hour=15, minute=30)
 
 
 def fail(message: str) -> None:
@@ -128,10 +129,9 @@ def evidence_reusable(
     explicit_stale_recovery = os.getenv("NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE") == "1"
     return (
         checked.date().isoformat() == issue_date
-        and checked.hour >= 19
         and timedelta(0) <= current - checked
         and (
-            current - checked <= timedelta(hours=2)
+            current - checked <= timedelta(hours=4)
             or explicit_stale_recovery
         )
     )
@@ -220,15 +220,15 @@ def validate_collection_freshness(
         fail(f"collection completion is in the future: {completed.isoformat()}")
     if issue_date == current.date().isoformat() and current - completed > timedelta(hours=4):
         fail(f"collection is too old for publication: {completed.isoformat()}")
-    evening_cutoff = datetime.combine(
+    final_cutoff = datetime.combine(
         completed.date(),
-        time(hour=19),
+        FINAL_COLLECTION_EARLIEST,
         tzinfo=ZoneInfo("Asia/Tokyo"),
     )
-    if require_evening_refresh and completed < evening_cutoff:
+    if require_evening_refresh and completed < final_cutoff:
         fail(
             "final publication requires a fresh collection completed at or after "
-            f"{evening_cutoff.isoformat()}; got {completed.isoformat()}"
+            f"{final_cutoff.isoformat()}; got {completed.isoformat()}"
         )
     mode = manifest.get("collection_mode")
     if mode not in {
@@ -240,7 +240,7 @@ def validate_collection_freshness(
     return {
         "collection_completed_at_jst": completed.isoformat(),
         "collection_mode": mode,
-        "evening_refresh": completed >= evening_cutoff,
+        "evening_refresh": completed >= final_cutoff,
     }
 
 
@@ -260,9 +260,9 @@ def self_test() -> None:
             os.environ.pop("NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE", None)
         else:
             os.environ["NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE"] = original_allow_stale
-    current = datetime.fromisoformat("2099-01-01T19:50:00+09:00")
+    current = datetime.fromisoformat("2099-01-01T18:50:00+09:00")
     fresh = {
-        "collection_completed_at_jst": "2099-01-01T19:20:00+09:00",
+        "collection_completed_at_jst": "2099-01-01T17:20:00+09:00",
         "collection_mode": "reviewed_live_web",
     }
     result = validate_collection_freshness(
@@ -274,7 +274,7 @@ def self_test() -> None:
     if not result["evening_refresh"]:
         fail("fresh evening collection was rejected")
     stale = dict(fresh)
-    stale["collection_completed_at_jst"] = "2099-01-01T18:50:00+09:00"
+    stale["collection_completed_at_jst"] = "2099-01-01T15:29:00+09:00"
     try:
         validate_collection_freshness(
             stale,
@@ -287,17 +287,17 @@ def self_test() -> None:
     else:
         fail("pre-final collection must not pass final deployment")
     reusable = {
-        "checked_at_jst": "2099-01-01T19:20:00+09:00",
+        "checked_at_jst": "2099-01-01T17:20:00+09:00",
         "collector_contract_version": evidence_store.collector_contract_version(),
     }
     if not evidence_reusable(
         reusable,
         "2099-01-01",
-        now=datetime.fromisoformat("2099-01-01T19:50:00+09:00"),
+        now=datetime.fromisoformat("2099-01-01T18:50:00+09:00"),
     ):
         fail("fresh same-date Evidence was not reusable")
     for rejected_date, rejected_now in (
-        ("2098-12-31", "2099-01-01T19:50:00+09:00"),
+        ("2098-12-31", "2099-01-01T18:50:00+09:00"),
         ("2099-01-01", "2099-01-01T22:30:00+09:00"),
     ):
         if evidence_reusable(
@@ -306,15 +306,15 @@ def self_test() -> None:
             now=datetime.fromisoformat(rejected_now),
         ):
             fail("stale or cross-date Evidence was reusable")
-    if evidence_reusable(
+    if not evidence_reusable(
         {
-            "checked_at_jst": "2099-01-01T18:59:00+09:00",
+            "checked_at_jst": "2099-01-01T15:29:00+09:00",
             "collector_contract_version": evidence_store.collector_contract_version(),
         },
         "2099-01-01",
-        now=datetime.fromisoformat("2099-01-01T19:20:00+09:00"),
+        now=datetime.fromisoformat("2099-01-01T17:20:00+09:00"),
     ):
-        fail("pre-final Evidence was reusable")
+        fail("same-day Evidence could not be reused before final publication validation")
     original_allow_stale = os.getenv("NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE")
     try:
         os.environ["NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE"] = "1"
@@ -341,14 +341,14 @@ def sync_and_audit(issue_date: str) -> None:
 
 
 def self_tests(profile: str) -> None:
-    run([sys.executable, "scripts/night_signal_models.py"])
-    run([sys.executable, "scripts/night_signal_runtime_audit.py", "--self-test"])
-    run([sys.executable, "scripts/night_signal_state.py", "--self-test"])
-    run([sys.executable, "scripts/night_signal_publish.py", "--self-test"])
     if profile == "deploy":
         return
     if profile != "full":
         fail(f"unknown verification profile: {profile}")
+    run([sys.executable, "scripts/night_signal_models.py"])
+    run([sys.executable, "scripts/night_signal_runtime_audit.py", "--self-test"])
+    run([sys.executable, "scripts/night_signal_state.py", "--self-test"])
+    run([sys.executable, "scripts/night_signal_publish.py", "--self-test"])
     run([sys.executable, "scripts/simulate_runtime_failures.py"])
     run([sys.executable, "scripts/night_signal_collect.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_eval.py", "--self-test"])

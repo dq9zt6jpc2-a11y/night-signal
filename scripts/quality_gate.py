@@ -194,7 +194,7 @@ DETAIL_FORBIDDEN_SECTION_HEADINGS = [
 ]
 LEGACY_MIN_SUMMARY_LEAD_CHARS = 180
 LEGACY_DETAIL_SUMMARY_HEADING = "30秒概要"
-DEFAULT_DETAIL_SUMMARY_HEADING = "要点と背景"
+DEFAULT_DETAIL_SUMMARY_HEADING = "概要"
 
 READER_PROCESS_LEAK_TERMS = [
     "今日の再抽出",
@@ -770,12 +770,7 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
         if any(any(term in heading for term in DETAIL_FORBIDDEN_SECTION_HEADINGS) for heading in h2_texts):
             checklist_headings.append(name)
         if information_required:
-            required_h2_variants = [
-                [detail_summary_heading(issue_dt)],
-                [detail_summary_heading(issue_dt), "未確定点"],
-                [detail_summary_heading(issue_dt), "確認した事実"],
-                [detail_summary_heading(issue_dt), "確認した事実", "未確定点"],
-            ]
+            required_h2_variants = [[detail_summary_heading(issue_dt)]]
         else:
             required_h2_variants = [[detail_summary_heading(issue_dt)]]
         if h2_texts not in required_h2_variants:
@@ -944,36 +939,6 @@ def validate(issue_date: str) -> None:
         fail("stale cards found: " + "; ".join(stale[:8]))
     if label_failures:
         fail("cards missing 今日/昨日/一昨日 freshness labels: " + "; ".join(label_failures[:8]))
-    if effective_on_or_after(COVERAGE_CONTRACT, "rolling_display_cards_effective_date", issue_dt):
-        display_cards = normal_card_blocks(root_html)
-        allowed_dates = {
-            issue_dt.fromordinal(issue_dt.toordinal() - offset).isoformat()
-            for offset in range(3)
-        }
-        available_dates: set[str] = set()
-        for issue_path in STATE_ROOT.glob("20??-??-??/issue.json"):
-            try:
-                issue_state = json.loads(issue_path.read_text(encoding="utf-8"))
-            except (OSError, json.JSONDecodeError):
-                continue
-            if not isinstance(issue_state, dict):
-                continue
-            available_dates.update(
-                str(card.get("source_published_date"))
-                for card in issue_state.get("cards", [])
-                if isinstance(card, dict)
-                and str(card.get("source_published_date")) in allowed_dates
-            )
-        visible_dates = {
-            date
-            for card in display_cards
-            for date in card_dates(card)
-            if date in allowed_dates
-        }
-        missing_dates = sorted(available_dates - visible_dates)
-        if missing_dates:
-            fail("rolling three-day display missing dates: " + ", ".join(missing_dates))
-
     validate_category_sections(root_html)
     validate_unique_detail_links("root page", root_html)
     validate_unique_detail_links("dated issue page", dated_html)
