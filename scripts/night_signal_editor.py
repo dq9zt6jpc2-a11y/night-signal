@@ -48,6 +48,13 @@ def compact_text(value: Any, limit: int = 1600) -> str:
     return " ".join(str(value).split())[:limit]
 
 
+def compact_json(value: Any, limit: int = 12_000) -> str:
+    return compact_text(
+        json.dumps(value, ensure_ascii=False, separators=(",", ":")),
+        limit,
+    )
+
+
 def public_card_title(item: dict[str, Any]) -> str:
     return compact_text(item.get("title", ""), 180)
 
@@ -563,11 +570,7 @@ def edit_evidence(
                         *messages,
                         {
                             "role": "assistant",
-                            "content": json.dumps(
-                                raw,
-                                ensure_ascii=False,
-                                separators=(",", ":"),
-                            ),
+                            "content": compact_json(raw),
                         },
                         {
                             "role": "user",
