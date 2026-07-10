@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import concurrent.futures
 import email.utils
-import functools
 import gzip
 import hashlib
 import html
@@ -214,59 +213,6 @@ class VisibleTextParser(HTMLParser):
             text = " ".join(data.split())
             if text:
                 self.parts.append(text)
-
-
-class PublisherIndexParser(HTMLParser):
-    """Collect article links and advertised feeds from a publisher index page."""
-
-    def __init__(self, base_url: str) -> None:
-        super().__init__()
-        self.base_url = base_url
-        self.links: list[tuple[str, str]] = []
-        self.feeds: list[str] = []
-        self.anchor_url = ""
-        self.anchor_parts: list[str] = []
-
-    def handle_starttag(
-        self,
-        tag: str,
-        attrs: list[tuple[str, str | None]],
-    ) -> None:
-        values = dict(attrs)
-        if tag == "link":
-            rel = str(values.get("rel") or "").lower()
-            media_type = str(values.get("type") or "").lower()
-            href = str(values.get("href") or "")
-            if "alternate" in rel and ("rss" in media_type or "atom" in media_type):
-                resolved = urllib.parse.urljoin(self.base_url, href)
-                if resolved.startswith(("http://", "https://")):
-                    self.feeds.append(resolved)
-            return
-        if tag != "a" or self.anchor_url:
-            return
-        href = str(values.get("href") or "")
-        resolved = urllib.parse.urljoin(self.base_url, href)
-        if not resolved.startswith(("http://", "https://")):
-            return
-        self.anchor_url = resolved
-        self.anchor_parts = [
-            str(values.get(name) or "")
-            for name in ("title", "aria-label")
-            if values.get(name)
-        ]
-
-    def handle_data(self, data: str) -> None:
-        if self.anchor_url:
-            self.anchor_parts.append(data)
-
-    def handle_endtag(self, tag: str) -> None:
-        if tag != "a" or not self.anchor_url:
-            return
-        label = compact_text(" ".join(self.anchor_parts), 400)
-        if label:
-            self.links.append((self.anchor_url, label))
-        self.anchor_url = ""
-        self.anchor_parts = []
 
 
 class ArticleContainerParser(HTMLParser):
@@ -1424,6 +1370,26 @@ def article_result_matches(original_title: str, result_title: str) -> bool:
     )
 
 
+def corroborating_article_result_matches(
+    original_title: str,
+    result_title: str,
+    description: str,
+) -> bool:
+    """Require event-level agreement before resolving through another publisher."""
+    original = canonical_article_match_text(original_title)
+    candidate = canonical_article_match_text(f"{result_title} {description}")
+    original_numbers = set(re.findall(r"\d+(?:\.\d+)?", original))
+    candidate_numbers = set(re.findall(r"\d+(?:\.\d+)?", candidate))
+    repetition = state_contract.title_repetition_score(original, candidate)
+    overlap = state_contract.text_overlap(original, candidate)
+    return bool(
+        contains_material_signal(original_title)
+        and contains_material_signal(result_title, description)
+        and original_numbers <= candidate_numbers
+        and ((repetition >= 0.55 and overlap >= 5) or overlap >= 8)
+    )
+
+
 def candidate_matches_publisher(record: dict[str, Any], candidate_url: str) -> bool:
     expected = urllib.parse.urlparse(str(record.get("publisher_url", ""))).netloc.lower()
     candidate = urllib.parse.urlparse(candidate_url).netloc.lower()
@@ -1432,123 +1398,6 @@ def candidate_matches_publisher(record: dict[str, Any], candidate_url: str) -> b
     if not expected:
         return True
     return candidate == expected or candidate.endswith(f".{expected}")
-
-
-@functools.lru_cache(maxsize=256)
-def publisher_index_document(
-    index_url: str,
-) -> tuple[tuple[tuple[str, str], ...], tuple[str, ...]]:
-    """Fetch a publisher index once and retain only links needed for resolution."""
-    try:
-        raw, content_type, resolved_url = request_bytes(index_url, timeout=12)
-    except (OSError, TimeoutError, urllib.error.URLError, ValueError):
-        return (), ()
-    if "html" not in content_type.lower() and b"<html" not in raw[:2000].lower():
-        return (), ()
-    charset_match = re.search(r"charset=([A-Za-z0-9._-]+)", content_type)
-    charset = charset_match.group(1) if charset_match else "utf-8"
-    parser = PublisherIndexParser(resolved_url)
-    parser.feed(raw.decode(charset, errors="replace"))
-    return tuple(dict.fromkeys(parser.links)), tuple(dict.fromkeys(parser.feeds))
-
-
-@functools.lru_cache(maxsize=256)
-def publisher_feed_entries(feed_url: str) -> tuple[tuple[str, str, str], ...]:
-    """Read an advertised RSS/Atom feed once for recent source-owned article URLs."""
-    try:
-        raw, _, resolved_url = request_bytes(feed_url, timeout=12)
-        root = ET.fromstring(raw)
-    except (OSError, TimeoutError, urllib.error.URLError, ValueError, ET.ParseError):
-        return ()
-    entries: list[tuple[str, str, str]] = []
-    for item in root.iter():
-        if item.tag.rsplit("}", 1)[-1].lower() not in {"item", "entry"}:
-            continue
-        values: dict[str, list[str]] = {}
-        links: list[str] = []
-        for child in list(item):
-            name = child.tag.rsplit("}", 1)[-1].lower()
-            text = "".join(child.itertext()).strip()
-            if text:
-                values.setdefault(name, []).append(text)
-            if name == "link":
-                href = str(child.get("href") or text)
-                if href:
-                    links.append(urllib.parse.urljoin(resolved_url, href))
-        title = compact_text(" ".join(values.get("title", [])), 400)
-        link = next(
-            (
-                candidate
-                for candidate in links
-                if candidate.startswith(("http://", "https://"))
-            ),
-            "",
-        )
-        description = html_fragment_text(
-            " ".join(
-                values.get("description", [])
-                or values.get("summary", [])
-                or values.get("encoded", [])
-                or values.get("content", [])
-            ),
-            2400,
-        )
-        if title and link:
-            entries.append((link, title, description))
-    return tuple(dict.fromkeys(entries))
-
-
-def publisher_resolution_candidates(
-    record: dict[str, Any],
-    original_title: str,
-) -> list[tuple[int, str, str, str]]:
-    """Resolve a discovery headline through the publisher's own index and feed."""
-    publisher_url = str(record.get("publisher_url") or "")
-    parsed = urllib.parse.urlparse(publisher_url)
-    if parsed.scheme not in {"http", "https"} or not parsed.netloc:
-        return []
-    origin = f"{parsed.scheme}://{parsed.netloc}/"
-    index_urls = list(dict.fromkeys([publisher_url, origin]))
-    candidates: dict[str, tuple[int, str, str, str]] = {}
-    feed_urls: set[str] = set()
-    for index_url in index_urls:
-        links, feeds = publisher_index_document(index_url)
-        feed_urls.update(feeds)
-        for candidate_url, result_title in links:
-            if (
-                not candidate_matches_publisher(record, candidate_url)
-                or not article_result_matches(original_title, result_title)
-            ):
-                continue
-            candidate = (
-                article_candidate_score(original_title, result_title),
-                candidate_url,
-                result_title,
-                "",
-            )
-            current = candidates.get(candidate_url)
-            if current is None or candidate[0] > current[0]:
-                candidates[candidate_url] = candidate
-    for feed_url in sorted(feed_urls):
-        for candidate_url, result_title, description in publisher_feed_entries(feed_url):
-            if (
-                not candidate_matches_publisher(record, candidate_url)
-                or not article_result_matches(original_title, result_title)
-            ):
-                continue
-            candidate = (
-                article_candidate_score(
-                    original_title,
-                    f"{result_title} {description}",
-                ),
-                candidate_url,
-                result_title,
-                description,
-            )
-            current = candidates.get(candidate_url)
-            if current is None or candidate[0] > current[0]:
-                candidates[candidate_url] = candidate
-    return sorted(candidates.values(), reverse=True)[:12]
 
 
 def reader_resolved_discovery_url(candidate_url: str, resolved_url: str) -> bool:
@@ -1769,7 +1618,8 @@ def record_document_is_current(record: dict[str, Any], issue_date: str) -> bool:
 
 
 def article_search_queries(record: dict[str, Any], original_title: str) -> list[str]:
-    queries = [f'"{original_title}"']
+    canonical_title = canonical_article_match_text(original_title)
+    queries = [f'"{canonical_title or original_title}"']
     publisher = urllib.parse.urlparse(str(record.get("publisher_url", "")))
     host = publisher.netloc.lower().removeprefix("www.")
     if host:
@@ -1911,13 +1761,19 @@ def enrich_discovered_record(
     ) -> dict[str, Any] | None:
         for _, candidate_url, result_title, description in values[:8]:
             parsed_candidate = urllib.parse.urlparse(candidate_url)
+            candidate_publisher = (
+                f"{parsed_candidate.scheme}://{parsed_candidate.netloc}"
+            )
+            resolution_record = (
+                record
+                if candidate_matches_publisher(record, candidate_url)
+                else {**record, "publisher_url": candidate_publisher}
+            )
             snippet_record = {
                 **record,
                 "label": parsed_candidate.netloc.lower().removeprefix("www."),
                 "url": candidate_url,
-                "publisher_url": (
-                    f"{parsed_candidate.scheme}://{parsed_candidate.netloc}"
-                ),
+                "publisher_url": candidate_publisher,
                 "original_discovery_url": str(record.get("url", "")),
                 "title": original_title,
                 "excerpt": description,
@@ -1929,7 +1785,7 @@ def enrich_discovered_record(
             }
             resolved = article_record_from_candidate(
                 category_label,
-                record,
+                resolution_record,
                 original_title,
                 candidate_url,
                 result_title,
@@ -1955,12 +1811,6 @@ def enrich_discovered_record(
                 return snippet_record
         return None
 
-    publisher_resolved = resolve_candidates(
-        publisher_resolution_candidates(record, original_title)
-    )
-    if publisher_resolved:
-        return publisher_resolved
-
     candidates: dict[str, tuple[int, str, str, str]] = {}
     for query in article_search_queries(record, original_title):
         search_url = "https://www.bing.com/search?" + urllib.parse.urlencode(
@@ -1975,13 +1825,21 @@ def enrich_discovered_record(
             result_title = compact_text(item.findtext("title") or "", 220)
             candidate_url = compact_text(item.findtext("link") or "", 1000)
             description = html_fragment_text(item.findtext("description") or "", 1000)
+            same_publisher = candidate_matches_publisher(record, candidate_url)
             if (
                 not candidate_url.startswith(("http://", "https://"))
                 or "news.google.com" in candidate_url
-                or not candidate_matches_publisher(record, candidate_url)
                 or not article_result_matches(
                     original_title,
                     result_title,
+                )
+                or not (
+                    same_publisher
+                    or corroborating_article_result_matches(
+                        original_title,
+                        result_title,
+                        description,
+                    )
                 )
                 or not category_identity_ok(
                     category_label,
@@ -3351,6 +3209,35 @@ def self_test() -> None:
     )
     if not article_result_matches(fpt_headline, fpt_result):
         fail("article enrichment could not match a body-rich primary source")
+    chart_headline = (
+        "Billboard JAPAN Download Albums（7/8公開）、YOASOBI「THE BOOK for.」"
+        "2週連続DLアルバム首位 長渕剛／NiziUが続く - 音楽情報サイト"
+    )
+    chart_source_title = (
+        "【ビルボード】YOASOBI『THE BOOK for.』2週連続DLアルバム首位 "
+        "長渕剛／NiziUが続く"
+    )
+    chart_source_body = (
+        "2026年7月8日公開。集計期間は6月29日から7月5日で、"
+        "YOASOBIが2週連続首位となった。"
+    )
+    if not corroborating_article_result_matches(
+        chart_headline,
+        chart_source_title,
+        chart_source_body,
+    ):
+        fail("strict cross-publisher corroboration rejected the same event")
+    if corroborating_article_result_matches(
+        chart_headline,
+        "YOASOBIが前週のDLアルバム首位を獲得",
+        "2026年7月1日公開。集計期間は6月22日から6月28日。",
+    ):
+        fail("cross-publisher corroboration accepted a different reporting period")
+    if f'"{canonical_article_match_text(chart_headline)}"' not in article_search_queries(
+        {},
+        chart_headline,
+    ):
+        fail("article search retained a publisher suffix in the exact event query")
     if candidate_matches_publisher(
         {"publisher_url": "https://example.jp"},
         "https://unrelated.example.com/article",
@@ -3361,64 +3248,6 @@ def self_test() -> None:
         "https://news.example.jp/article",
     ):
         fail("article enrichment rejected a publisher subdomain")
-    publisher_headline = (
-        "YOASOBI『THE BOOK for.』が2週連続DLアルバム首位 - 音楽情報サイト"
-    )
-    publisher_google_url = "https://search.example/result/publisher-index"
-    publisher_index_fetches = 0
-    original_request_bytes = request_bytes
-
-    def fake_publisher_request(url: str, timeout: int = 15) -> tuple[bytes, str, str]:
-        nonlocal publisher_index_fetches
-        if url == "https://example.jp/":
-            publisher_index_fetches += 1
-            page = (
-                '<html><head><link rel="alternate" type="application/rss+xml" '
-                'href="/feed/"></head><body><a href="/chart/123">'
-                "YOASOBI『THE BOOK for.』が2週連続DLアルバム首位"
-                "</a></body></html>"
-            )
-            return page.encode(), "text/html; charset=utf-8", url
-        if url == "https://example.jp/chart/123":
-            body = (
-                f"Title: {publisher_headline}\n"
-                "Published Time: Fri, 09 Jul 2099 12:00:00 GMT\n"
-                "Markdown Content: YOASOBIの『THE BOOK for.』は当週も首位を維持した。"
-                "前週に続く2週連続首位で、NiziUの作品が2位に入った。"
-            )
-            return body.encode(), "text/plain; charset=utf-8", url
-        raise urllib.error.URLError(f"unexpected URL: {url}")
-
-    globals()["request_bytes"] = fake_publisher_request
-    publisher_index_document.cache_clear()
-    publisher_feed_entries.cache_clear()
-    try:
-        publisher_record = {
-            "label": "音楽情報サイト",
-            "url": publisher_google_url,
-            "publisher_url": "https://example.jp/",
-            "source_class": "discovered_media",
-            "observed": True,
-            "published_date": "2099-07-09",
-            "title": publisher_headline,
-            "excerpt": publisher_headline,
-        }
-        publisher_resolved = enrich_discovered_record(
-            {"label": "YOASOBI / 幾田りら"},
-            publisher_record,
-        )
-        publisher_resolution_candidates(publisher_record, publisher_headline)
-    finally:
-        globals()["request_bytes"] = original_request_bytes
-        publisher_index_document.cache_clear()
-        publisher_feed_entries.cache_clear()
-    if (
-        publisher_resolved.get("url") != "https://example.jp/chart/123"
-        or not record_has_material_body(publisher_headline, publisher_resolved)
-    ):
-        fail("publisher index did not resolve a current body-rich discovery item")
-    if publisher_index_fetches != 1:
-        fail("publisher index resolution repeated an already cached fetch")
     if not reader_resolved_discovery_url(
         "https://news.google.com/rss/articles/example?oc=5",
         "https://r.jina.ai/http://news.google.com/rss/articles/example?oc=5",
