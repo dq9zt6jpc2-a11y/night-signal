@@ -1986,6 +1986,8 @@ def fetch_news(category: dict[str, Any], issue_date: str) -> dict[str, Any]:
             for url in material_urls
             for record in [enriched_by_url.get(str(url))]
         )
+        if not resolved:
+            check["material_candidate_count"] = 0
         check["resolved_candidate_count"] = resolved
         if check["relevant_result_count"] == 0:
             check["slot_state"] = "searched_no_results"
