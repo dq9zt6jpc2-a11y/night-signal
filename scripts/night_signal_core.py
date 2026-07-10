@@ -1986,8 +1986,6 @@ def fetch_news(category: dict[str, Any], issue_date: str) -> dict[str, Any]:
             for url in material_urls
             for record in [enriched_by_url.get(str(url))]
         )
-        if not resolved:
-            check["material_candidate_count"] = 0
         check["resolved_candidate_count"] = resolved
         if check["relevant_result_count"] == 0:
             check["slot_state"] = "searched_no_results"
@@ -3264,33 +3262,6 @@ def self_test() -> None:
         stale_pdf_record["excerpt"],
     ):
         fail("mismatched report month passed discovered-page validation")
-    title_only_check = {
-        "slot_state": "searched",
-        "relevant_result_count": 1,
-        "material_candidate_count": 1,
-        "resolved_candidate_count": 0,
-        "material_urls": ["https://news.google.com/rss/articles/title-only?oc=5"],
-    }
-    title_only_records = {
-        "https://news.google.com/rss/articles/title-only?oc=5": {
-            "observed": True,
-            "published_date": "2099-07-02",
-            "title": "Honda China sales slide as buyers shift to EVs",
-            "excerpt": "Honda China sales slide as buyers shift to EVs",
-            "url": "https://news.google.com/rss/articles/title-only?oc=5",
-        }
-    }
-    material_urls = title_only_check.pop("material_urls")
-    resolved = sum(
-        bool(record and record_has_material_body(record_public_title(record), record))
-        for url in material_urls
-        for record in [title_only_records.get(str(url))]
-    )
-    if not resolved:
-        title_only_check["material_candidate_count"] = 0
-    title_only_check["resolved_candidate_count"] = resolved
-    if title_only_check["material_candidate_count"]:
-        fail("title-only RSS discovery remained a material coverage candidate")
     fresh_pdf_record = {
         **stale_pdf_record,
         "published_date": "2099-07-02",
