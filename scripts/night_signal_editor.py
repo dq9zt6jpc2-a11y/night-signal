@@ -175,7 +175,7 @@ def publication_record_chunks(
     issue_date: str,
     records: list[dict[str, Any]],
     *,
-    max_records: int = 12,
+    max_records: int = 3,
 ) -> list[list[dict[str, Any]]]:
     selected = [
         record
