@@ -11,7 +11,7 @@ import re
 import sys
 import threading
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 import night_signal_models as models
 import night_signal_evidence as evidence_store
@@ -89,13 +89,10 @@ def quality_model_required(category_payload: dict[str, Any]) -> bool:
     for item in evidence:
         title = str(item.get("title", ""))
         body = str(item.get("body", ""))
-        sentence_count = len([part for part in re.split(r"(?<=[。！？.!?])", body) if part.strip()])
         if (
             state.analysis_headline(title)
-            or len(body) >= 1200
-            or sentence_count >= 6
             or bool(re.search(r"(?:\|\s*-{3,}\s*\||表\s*[:：]|グラフ|チャート|図\s*[:：]|chart|table|graph)", body, re.I))
-            or len(re.findall(r"\d+(?:\.\d+)?", body)) >= 12
+            or len(re.findall(r"\d+(?:\.\d+)?", body)) >= 18
         ):
             return True
     return False
@@ -170,13 +167,12 @@ def sanitize_model_result(raw: dict[str, Any]) -> dict[str, Any]:
     return sanitized
 
 
-def publication_record_chunks(
+def publication_candidate_groups(
     category: dict[str, Any],
     issue_date: str,
     records: list[dict[str, Any]],
-    *,
-    max_records: int = 3,
 ) -> list[list[dict[str, Any]]]:
+    """Build deterministic event groups without discarding a distinct candidate."""
     selected = [
         record
         for _, record in core.editor_evidence_records(category, issue_date, records)
@@ -202,16 +198,325 @@ def publication_record_chunks(
             event_groups.append([record])
         else:
             group.append(record)
-    chunks: list[list[dict[str, Any]]] = []
-    bounded_groups = [
-        group[index : index + max_records]
-        for group in event_groups
-        for index in range(0, len(group), max_records)
+    return event_groups
+
+
+def candidate_review_text(record: dict[str, Any], limit: int = 900) -> str:
+    text = core.reader_facing_text(
+        str(record.get("excerpt") or record.get("evidence") or ""),
+        8000,
+    )
+    if len(text) <= limit:
+        return text
+    head = max(1, limit * 2 // 3)
+    return compact_text(f"{text[:head]} {text[-(limit - head):]}", limit)
+
+
+def candidate_review_records(group: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Choose non-redundant review text; the full group remains available to summary."""
+    ranked = sorted(
+        group,
+        key=lambda record: (
+            core.record_evidence_depth(core.record_public_title(record), record) == "body",
+            record.get("source_class") != "discovered_media",
+            len(candidate_review_text(record)),
+        ),
+        reverse=True,
+    )
+    selected: list[dict[str, Any]] = []
+    seen_routes: set[tuple[str, str]] = set()
+    for record in ranked:
+        route = (
+            str(record.get("source_role", "")),
+            str(record.get("channel", "")),
+        )
+        if selected and route in seen_routes:
+            continue
+        selected.append(record)
+        seen_routes.add(route)
+    return selected
+
+
+def candidate_review_payload(
+    category: dict[str, Any],
+    issue_date: str,
+    candidates: list[tuple[str, list[dict[str, Any]]]],
+    previous_updates: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    current_titles = [
+        core.record_public_title(record)
+        for _, group in candidates
+        for record in group
     ]
-    for group in bounded_groups:
-        if not chunks or len(chunks[-1]) + len(group) > max_records:
-            chunks.append([])
-        chunks[-1].extend(group)
+    matching_previous = [
+        update
+        for update in previous_updates or []
+        if any(
+            core.same_material_event(title, str(update.get("title", "")))
+            for title in current_titles
+        )
+    ]
+    return {
+        "category": category["label"],
+        "issue_date": issue_date,
+        "watch_topics": [
+            {
+                "id": str(topic["id"]),
+                "terms": topic.get("terms", []),
+                "event_classes": topic.get("event_classes", []),
+            }
+            for topic in category.get("watch_topics", [])
+            if isinstance(topic, dict) and topic.get("id")
+        ],
+        "previous_updates": [
+            {
+                "date": update.get("date"),
+                "title": compact_text(update.get("title", ""), 180),
+                "summary": compact_text(update.get("summary", ""), 700),
+            }
+            for update in matching_previous
+        ],
+        "events": [
+            {
+                "id": event_id,
+                "watch_topic_ids": list(
+                    dict.fromkeys(
+                        str(topic_id)
+                        for record in group
+                        for topic_id in record.get("watch_topic_ids", [])
+                        if str(topic_id)
+                    )
+                ),
+                "title_variants": list(
+                    dict.fromkeys(
+                        core.record_public_title(record)
+                        for record in group
+                        if core.record_public_title(record)
+                    )
+                ),
+                "records": [
+                    {
+                        "date": record.get("published_date"),
+                        "source": record.get("label"),
+                        "title": core.record_public_title(record),
+                        "evidence_depth": core.record_evidence_depth(
+                            core.record_public_title(record),
+                            record,
+                        ),
+                        "text": candidate_review_text(record),
+                    }
+                    for record in candidate_review_records(group)
+                ],
+            }
+            for event_id, group in candidates
+        ],
+    }
+
+
+def candidate_review_chunks(
+    category: dict[str, Any],
+    issue_date: str,
+    event_groups: list[list[dict[str, Any]]],
+    *,
+    previous_updates: list[dict[str, Any]] | None = None,
+    max_events: int = 32,
+    max_bytes: int = 42_000,
+) -> list[list[tuple[str, list[dict[str, Any]]]]]:
+    candidates = [
+        (f"c{index:03d}", group)
+        for index, group in enumerate(event_groups, start=1)
+    ]
+    chunks: list[list[tuple[str, list[dict[str, Any]]]]] = []
+    current: list[tuple[str, list[dict[str, Any]]]] = []
+    for candidate in candidates:
+        proposed = [*current, candidate]
+        payload_size = len(
+            json.dumps(
+                candidate_review_payload(
+                    category,
+                    issue_date,
+                    proposed,
+                    previous_updates,
+                ),
+                ensure_ascii=False,
+                separators=(",", ":"),
+            ).encode("utf-8")
+        )
+        if current and (len(proposed) > max_events or payload_size > max_bytes):
+            chunks.append(current)
+            current = [candidate]
+        else:
+            current = proposed
+    if current:
+        chunks.append(current)
+    return chunks
+
+
+def previous_category_updates(
+    state_root: Path,
+    issue_date: str,
+    category_label: str,
+) -> list[dict[str, Any]]:
+    """Return the latest prior public issue as novelty context, never as Evidence."""
+    issue_paths = sorted(
+        (
+            path
+            for path in state_root.glob("20??-??-??/issue.json")
+            if path.parent.name < issue_date
+        ),
+        reverse=True,
+    )
+    for issue_path in issue_paths:
+        try:
+            issue = json.loads(issue_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        cards = issue.get("cards")
+        if not isinstance(cards, list):
+            continue
+        return [
+            {
+                "date": issue.get("issue_date"),
+                "title": card.get("title"),
+                "summary": card.get("summary"),
+            }
+            for card in cards
+            if isinstance(card, dict)
+            and str(card.get("category", "")) == category_label
+        ]
+    return []
+
+
+def normalize_candidate_review(
+    raw: dict[str, Any],
+    candidates: list[tuple[str, list[dict[str, Any]]]],
+) -> tuple[list[list[dict[str, Any]]], bool, dict[str, Any]]:
+    groups_by_id = dict(candidates)
+    expected_ids = set(groups_by_id)
+    used_ids: list[str] = []
+    selected: list[list[dict[str, Any]]] = []
+    invalid_groups = 0
+    for value in raw.get("publish_groups", []):
+        if not isinstance(value, dict):
+            invalid_groups += 1
+            continue
+        event_ids = [
+            str(event_id)
+            for event_id in value.get("event_ids", [])
+            if isinstance(event_id, str) and event_id
+        ]
+        if not event_ids or any(event_id not in groups_by_id for event_id in event_ids):
+            invalid_groups += 1
+            continue
+        used_ids.extend(event_ids)
+        records: list[dict[str, Any]] = []
+        seen_urls: set[str] = set()
+        for event_id in event_ids:
+            for record in groups_by_id[event_id]:
+                url = str(record.get("url", ""))
+                if url and url in seen_urls:
+                    continue
+                if url:
+                    seen_urls.add(url)
+                records.append(record)
+        if records:
+            selected.append(records)
+    excluded_ids = [
+        str(value.get("event_id"))
+        for value in raw.get("excluded_events", [])
+        if isinstance(value, dict) and isinstance(value.get("event_id"), str)
+    ]
+    accounted_ids = [*used_ids, *excluded_ids]
+    duplicate_ids = sorted(
+        event_id
+        for event_id in set(accounted_ids)
+        if accounted_ids.count(event_id) > 1
+    )
+    unknown_ids = sorted(set(accounted_ids) - expected_ids)
+    missing_ids = sorted(expected_ids - set(accounted_ids))
+    accepted = not (
+        invalid_groups
+        or duplicate_ids
+        or unknown_ids
+        or missing_ids
+    )
+    return selected, accepted, {
+        "invalid_groups": invalid_groups,
+        "duplicate_event_ids": duplicate_ids,
+        "unknown_event_ids": unknown_ids,
+        "missing_event_ids": missing_ids,
+    }
+
+
+def publication_record_chunks(
+    category: dict[str, Any],
+    issue_date: str,
+    records: list[dict[str, Any]],
+    *,
+    event_groups: list[list[dict[str, Any]]] | None = None,
+    max_records: int = 6,
+    max_payload_bytes: int = 42_000,
+) -> list[list[dict[str, Any]]]:
+    """Pack selected events by model payload size while preserving every record."""
+    groups = (
+        event_groups
+        if event_groups is not None
+        else publication_candidate_groups(category, issue_date, records)
+    )
+    chunks: list[list[dict[str, Any]]] = []
+    current: list[dict[str, Any]] = []
+    for group in groups:
+        group_payload_size = len(
+            json.dumps(
+                core.category_prompt(category, issue_date, group),
+                ensure_ascii=False,
+                separators=(",", ":"),
+            ).encode("utf-8")
+        )
+        if current:
+            combined = [*current, *group]
+            combined_size = len(
+                json.dumps(
+                    core.category_prompt(category, issue_date, combined),
+                    ensure_ascii=False,
+                    separators=(",", ":"),
+                ).encode("utf-8")
+            )
+            if len(combined) <= max_records and combined_size <= max_payload_bytes:
+                current = combined
+                continue
+            chunks.append(current)
+            current = []
+        if group_payload_size <= max_payload_bytes:
+            current = list(group)
+            if len(current) >= max_records:
+                chunks.append(current)
+                current = []
+            continue
+        for record in group:
+            proposed = [*current, record]
+            payload_size = len(
+                json.dumps(
+                    core.category_prompt(category, issue_date, proposed),
+                    ensure_ascii=False,
+                    separators=(",", ":"),
+                ).encode("utf-8")
+            )
+            if current and (
+                len(proposed) > max_records or payload_size > max_payload_bytes
+            ):
+                chunks.append(current)
+                current = [record]
+            else:
+                current = proposed
+            if len(current) >= max_records:
+                chunks.append(current)
+                current = []
+        if current:
+            chunks.append(current)
+            current = []
+    if current:
+        chunks.append(current)
     return [chunk for chunk in chunks if chunk]
 
 
@@ -423,6 +728,73 @@ def edit_evidence(
     degraded_models: set[str] = set()
     degraded_models_lock = threading.Lock()
 
+    def validated_model_result(
+        *,
+        messages: list[dict[str, str]],
+        model_chain: list[str],
+        request_label: str,
+        response_schema: dict[str, Any] | None,
+        response_schema_name: str,
+        max_output_tokens: int | None,
+        validate: Callable[[dict[str, Any]], tuple[Any, bool, dict[str, Any]]],
+        correction: Callable[[dict[str, Any]], str],
+        log_context: dict[str, Any],
+        log_fields: Callable[[Any], dict[str, Any]],
+    ) -> tuple[Any | None, dict[str, Any]]:
+        quality_model = str(
+            models.load_config().get("extraction", {}).get("quality_model", "")
+        )
+        feedback: dict[str, Any] = {}
+        for model_name in model_chain:
+            with degraded_models_lock:
+                if model_name in degraded_models:
+                    continue
+            attempt_messages = messages
+            max_attempts = 2 if model_name == quality_model else 1
+            for attempt in range(1, max_attempts + 1):
+                try:
+                    raw = models.request(
+                        token,
+                        attempt_messages,
+                        model_name=model_name,
+                        retry_wait_cap=90,
+                        request_label=request_label,
+                        response_schema=response_schema,
+                        response_schema_name=response_schema_name,
+                        max_output_tokens=max_output_tokens,
+                    )
+                except models.ModelRequestError as exc:
+                    if exc.rate_limited or model_name != model_chain[-1]:
+                        with degraded_models_lock:
+                            degraded_models.add(model_name)
+                        break
+                    raise
+                result, accepted, feedback = validate(raw)
+                print(
+                    json.dumps(
+                        {
+                            **log_context,
+                            "model": model_name,
+                            "attempt": attempt,
+                            **log_fields(result),
+                            "accepted": accepted,
+                        },
+                        ensure_ascii=False,
+                    ),
+                    flush=True,
+                )
+                if accepted:
+                    return result, feedback
+                attempt_messages = [
+                    *messages,
+                    {
+                        "role": "assistant",
+                        "content": "Previous JSON failed deterministic validation.",
+                    },
+                    {"role": "user", "content": correction(feedback)},
+                ]
+        return None, feedback
+
     def cards_from_raw(
         raw: dict[str, Any],
         category: dict[str, Any],
@@ -479,13 +851,93 @@ def edit_evidence(
         }
         return cards, failed, accepted, feedback
 
+    def select_candidate_groups(
+        category: dict[str, Any],
+        label: str,
+        records: list[dict[str, Any]],
+    ) -> list[list[dict[str, Any]]]:
+        event_groups = publication_candidate_groups(category, issue_date, records)
+        previous_updates = previous_category_updates(state_root, issue_date, label)
+        chunks = candidate_review_chunks(
+            category,
+            issue_date,
+            event_groups,
+            previous_updates=previous_updates,
+        )
+        selected_groups: list[list[dict[str, Any]]] = []
+        for chunk_index, candidates in enumerate(chunks, start=1):
+            payload = candidate_review_payload(
+                category,
+                issue_date,
+                candidates,
+                previous_updates,
+            )
+            messages = [
+                {"role": "system", "content": models.CANDIDATE_REVIEW_PROMPT},
+                {
+                    "role": "user",
+                    "content": json.dumps(
+                        payload,
+                        ensure_ascii=False,
+                        separators=(",", ":"),
+                    ),
+                },
+            ]
+            def validate_candidate(
+                raw: dict[str, Any],
+            ) -> tuple[Any, bool, dict[str, Any]]:
+                reviewed, accepted, feedback = normalize_candidate_review(
+                    raw,
+                    candidates,
+                )
+                return reviewed, accepted, feedback
+
+            selected_result, feedback = validated_model_result(
+                messages=messages,
+                model_chain=models.candidate_review_models(),
+                request_label=(
+                    f"{label} candidate review {chunk_index}/{len(chunks)}"
+                ),
+                response_schema=models.CANDIDATE_REVIEW_SCHEMA,
+                response_schema_name="night_signal_candidate_review",
+                max_output_tokens=4_000,
+                validate=validate_candidate,
+                correction=lambda value: (
+                    "Return the entire corrected JSON. Account for every event id "
+                    "exactly once. Validation feedback: "
+                    + json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+                ),
+                log_context={
+                    "phase": "candidate_review",
+                    "category": label,
+                    "chunk": chunk_index,
+                    "chunks": len(chunks),
+                    "events": len(candidates),
+                },
+                log_fields=lambda value: {"selected_groups": len(value)},
+            )
+            if selected_result is None:
+                fail(
+                    "Editor could not account for every discovery event: "
+                    f"{label} candidate review {chunk_index}/{len(chunks)}; "
+                    + json.dumps(feedback, ensure_ascii=False, separators=(",", ":"))
+                )
+            selected_groups.extend(selected_result)
+        return selected_groups
+
     def review_category(category: dict[str, Any]) -> tuple[str, list[dict[str, Any]]]:
         label = str(category["label"])
         entry = categories[label]
         if not isinstance(entry, dict) or not isinstance(entry.get("records"), list):
             fail(f"Evidence records are missing: {label}")
         records = [record for record in entry["records"] if isinstance(record, dict)]
-        chunks = publication_record_chunks(category, issue_date, records)
+        selected_event_groups = select_candidate_groups(category, label, records)
+        chunks = publication_record_chunks(
+            category,
+            issue_date,
+            records,
+            event_groups=selected_event_groups,
+        )
         category_cards: list[dict[str, Any]] = []
         for chunk_index, chunk_records in enumerate(chunks, start=1):
             category_payload = fit_model_payload(
@@ -504,86 +956,41 @@ def edit_evidence(
                     ),
                 },
             ]
-            selected_result: tuple[
-                list[dict[str, Any]], int, bool, dict[str, Any]
-            ] | None = None
-            quality_model_name = str(
-                models.load_config().get("extraction", {}).get("quality_model", "")
+            def validate_summary(
+                raw: dict[str, Any],
+            ) -> tuple[Any, bool, dict[str, Any]]:
+                result = cards_from_raw(raw, category, label, chunk_records)
+                return result, result[2], result[3]
+
+            selected_result, _ = validated_model_result(
+                messages=messages,
+                model_chain=model_chain,
+                request_label=f"{label} {chunk_index}/{len(chunks)}",
+                response_schema=None,
+                response_schema_name="night_signal_editor_result",
+                max_output_tokens=None,
+                validate=validate_summary,
+                correction=lambda value: (
+                    "The previous JSON failed deterministic evidence, repetition, or "
+                    "completeness checks. Return the entire corrected JSON. Keep every "
+                    "fact close to its cited source wording and exact numbers; do not add "
+                    "unsupported names or synthesis. Do not repeat the title. Evidence "
+                    "with no additional supported fact must be excluded as "
+                    "no_material_update. Validation feedback: "
+                    + json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+                ),
+                log_context={
+                    "phase": "model_route",
+                    "category": label,
+                    "route": "quality" if quality_required else "routine",
+                    "chunk": chunk_index,
+                    "chunks": len(chunks),
+                },
+                log_fields=lambda value: {
+                    "cards": len(value[0]),
+                    "rejected_items": value[1],
+                },
             )
-            for model_name in model_chain:
-                with degraded_models_lock:
-                    if model_name in degraded_models:
-                        continue
-                attempt_messages = messages
-                max_editorial_attempts = 2 if model_name == quality_model_name else 1
-                for editorial_attempt in range(1, max_editorial_attempts + 1):
-                    try:
-                        raw = models.request(
-                            token,
-                            attempt_messages,
-                            model_name=model_name,
-                            retry_wait_cap=90,
-                            request_label=f"{label} {chunk_index}/{len(chunks)}",
-                        )
-                    except models.ModelRequestError as exc:
-                        if exc.rate_limited or model_name != model_chain[-1]:
-                            with degraded_models_lock:
-                                degraded_models.add(model_name)
-                            break
-                        raise
-                    raw = sanitize_model_result(raw)
-                    result = cards_from_raw(
-                        raw,
-                        category,
-                        label,
-                        chunk_records,
-                    )
-                    print(
-                        json.dumps(
-                            {
-                                "phase": "model_route",
-                                "category": label,
-                                "model": model_name,
-                                "route": "quality" if quality_required else "routine",
-                                "chunk": chunk_index,
-                                "chunks": len(chunks),
-                                "attempt": editorial_attempt,
-                                "cards": len(result[0]),
-                                "rejected_items": result[1],
-                                "accepted": result[2],
-                            },
-                            ensure_ascii=False,
-                        ),
-                        flush=True,
-                    )
-                    if result[2]:
-                        selected_result = result
-                        break
-                    attempt_messages = [
-                        *messages,
-                        {
-                            "role": "assistant",
-                            "content": "Previous JSON failed deterministic validation.",
-                        },
-                        {
-                            "role": "user",
-                            "content": (
-                                "The previous JSON failed deterministic evidence, repetition, "
-                                "or completeness checks. Return the entire corrected JSON. "
-                                "Keep every fact close to its cited source wording and exact "
-                                "numbers; do not add unsupported names or synthesis. Do not "
-                                "repeat the title. Evidence with no additional supported fact "
-                                "must be excluded as no_material_update. Validation feedback: "
-                                + json.dumps(
-                                    result[3],
-                                    ensure_ascii=False,
-                                    separators=(",", ":"),
-                                )
-                            ),
-                        },
-                    ]
-                if selected_result is not None:
-                    break
             if selected_result is None:
                 fail(
                     "Editor could not produce complete summaries for every evidence item: "
@@ -713,10 +1120,121 @@ def self_test() -> None:
         {"evidence": [{"title": "Product update", "body": "The company released a major product update with new enterprise controls."}]}
     ):
         fail("Editor routed a short factual translation to the quality model")
-    if not quality_model_required(
+    if quality_model_required(
         {"evidence": [{"title": "詳細発表", "body": "具体的な変更内容。" * 100}]}
     ):
-        fail("Editor did not route body-rich synthesis to the quality model")
+        fail("Editor routed length alone to the quality model")
+    if not quality_model_required(
+        {
+            "evidence": [
+                {
+                    "title": "統計表を公表",
+                    "body": "| 指標 | 前月 | 今月 |\n| --- | --- | --- |\n| 生産 | 10 | 12 |",
+                }
+            ]
+        }
+    ):
+        fail("Editor did not route a table-dependent summary to the quality model")
+    review_category = {
+        "label": "OpenAI",
+        "watch_topics": [
+            {"id": "product_release", "terms": ["OpenAI", "release"]},
+            {"id": "ipo_financing", "terms": ["OpenAI", "IPO"]},
+        ],
+    }
+    review_records = [
+        {
+            "label": "OpenAI",
+            "url": "https://openai.com/release",
+            "source_role": "official_primary",
+            "channel": "web",
+            "source_class": "discovered_media",
+            "observed": True,
+            "published_date": "2099-01-02",
+            "title": "OpenAIが新モデルを公開",
+            "excerpt": "OpenAIは新モデルを公開し、企業向け制御を追加した。",
+            "watch_topic_ids": ["product_release"],
+        },
+        {
+            "label": "Market Data",
+            "url": "https://example.com/static-quote",
+            "source_role": "independent_media_or_data",
+            "channel": "web",
+            "source_class": "discovered_media",
+            "observed": True,
+            "published_date": "2099-01-02",
+            "title": "OpenAI IPOの価格情報",
+            "excerpt": "OpenAI IPOの価格情報を表示する静的ページ。",
+            "watch_topic_ids": ["ipo_financing"],
+        },
+    ]
+    review_candidates = [
+        ("c001", [review_records[0]]),
+        ("c002", [review_records[1]]),
+    ]
+    reviewed, accepted, feedback = normalize_candidate_review(
+        {
+            "publish_groups": [
+                {"event_ids": ["c001"]}
+            ],
+            "excluded_events": [
+                {"event_id": "c002", "reason": "no_material_update"}
+            ],
+        },
+        review_candidates,
+    )
+    if not accepted or len(reviewed) != 1 or feedback["missing_event_ids"]:
+        fail("Candidate review did not account for every event exactly once")
+    _, invalid_review, invalid_feedback = normalize_candidate_review(
+        {"publish_groups": [], "excluded_events": []},
+        review_candidates,
+    )
+    if invalid_review or invalid_feedback["missing_event_ids"] != ["c001", "c002"]:
+        fail("Candidate review accepted an unaccounted event")
+    review_chunks = candidate_review_chunks(
+        review_category,
+        "2099-01-02",
+        [[review_records[0]], [review_records[1]]],
+        max_events=1,
+    )
+    if [event_id for chunk in review_chunks for event_id, _ in chunk] != [
+        "c001",
+        "c002",
+    ]:
+        fail("Candidate review chunking dropped or repeated an event")
+    duplicate_report = {
+        **review_records[0],
+        "label": "Example News",
+        "url": "https://example.com/openai-release",
+        "title": "OpenAI、新モデルを一般公開",
+    }
+    duplicate_payload = candidate_review_payload(
+        review_category,
+        "2099-01-02",
+        [("c001", [review_records[0], duplicate_report])],
+    )["events"][0]
+    if len(duplicate_payload["title_variants"]) != 2 or len(
+        duplicate_payload["records"]
+    ) != 1:
+        fail("Candidate review repeated full text or lost a title variant")
+    grouped_summary_chunks = publication_record_chunks(
+        review_category,
+        "2099-01-02",
+        review_records,
+        event_groups=[[review_records[0], duplicate_report]],
+        max_records=1,
+    )
+    if len(grouped_summary_chunks) != 1 or len(grouped_summary_chunks[0]) != 2:
+        fail("Summary chunking split one event despite fitting the payload bound")
+    summary_chunks = publication_record_chunks(
+        review_category,
+        "2099-01-02",
+        review_records,
+        event_groups=reviewed,
+        max_records=1,
+    )
+    if len(summary_chunks) != 1 or summary_chunks[0][0]["url"] != review_records[0]["url"]:
+        fail("Summary chunking reintroduced an excluded event")
     item = {
         "evidence_ids": ["e001"],
         "watch_topic_id": "product_release",

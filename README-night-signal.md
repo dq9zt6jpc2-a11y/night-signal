@@ -9,7 +9,7 @@ evidence-backed important updates in the established format.
 GITHUB_TOKEN=... python3 scripts/night_signal_publish.py YYYY-MM-DD
 ```
 
-The 19:35 fallback may reuse a fresh same-date Evidence:
+The 17:15 fallback may reuse a fresh same-date Evidence:
 
 ```bash
 GITHUB_TOKEN=... python3 scripts/night_signal_publish.py YYYY-MM-DD --reuse-evidence
@@ -37,7 +37,7 @@ python3 scripts/night_signal_publish.py YYYY-MM-DD --public-audit
 6. Local audits pass before commit.
 7. `pages.yml` deploys committed state and the owner verifies public URLs.
 
-Scheduled attempts run at 19:05 and 19:35 JST for publication by 20:00. The second attempt exits when
+Scheduled attempts run at 15:35 and 17:15 JST for publication by 19:00. The second attempt exits when
 publication is already verified and reuses a fresh checkpoint after downstream
 failure.
 

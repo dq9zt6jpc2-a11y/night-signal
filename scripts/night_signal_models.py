@@ -127,6 +127,67 @@ EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
     "additionalProperties": False,
 }
 
+CANDIDATE_REVIEW_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "properties": {
+        "publish_groups": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "event_ids": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "minItems": 1,
+                    },
+                },
+                "required": ["event_ids"],
+                "additionalProperties": False,
+            },
+        },
+        "excluded_events": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "event_id": {"type": "string"},
+                    "reason": {
+                        "type": "string",
+                        "enum": [
+                            "background_or_navigation",
+                            "wrong_entity_or_category",
+                            "no_material_update",
+                        ],
+                    },
+                },
+                "required": ["event_id", "reason"],
+                "additionalProperties": False,
+            },
+        },
+    },
+    "required": ["publish_groups", "excluded_events"],
+    "additionalProperties": False,
+}
+
+CANDIDATE_REVIEW_PROMPT = """Review discovered NIGHT SIGNAL event candidates before summarization.
+Select every current, category-relevant new event, material update, result, decision, or
+new analysis that states its new question, evidence, and attributed conclusion. When a
+candidate contains a concrete change and is not clearly unusable, include it; broad recall
+is more important than aggressive filtering.
+
+Group reports of the same event in one publish_group. Keep distinct dates, milestones,
+decisions, results, products, people, or analytical conclusions separate.
+
+Exclude only navigation/background, the wrong entity or category, or content with no new
+material information such as a static quote/listing page, generic advice, an event teaser
+without a result, or speculation that reports no new attributed analysis. Do not exclude
+an unfamiliar company, a small event, a headline-only source, or an item merely because
+its importance is uncertain. previous_updates are context, not evidence: exclude a report
+that only repeats a previous update, but retain a new milestone, amount, date, result,
+decision, evidence, or attributed conclusion in the same continuing story. Every event id
+must appear exactly once, either in one
+publish_group or in excluded_events. Use only supplied evidence."""
+
 SYSTEM_PROMPT = """Turn supplied NIGHT SIGNAL evidence into Japanese important updates.
 Success means every evidence id is either used by a summary point or listed in
 excluded_evidence. Merge reports of the same event; keep distinct milestones and events.
@@ -200,6 +261,19 @@ def extraction_model() -> str:
     return extraction_models()[0]
 
 
+def candidate_review_models() -> list[str]:
+    config = load_config()["extraction"]
+    review = os.getenv("NIGHT_SIGNAL_REVIEW_MODEL") or config.get("review_model")
+    quality = config.get("quality_model")
+    if not isinstance(review, str) or not review:
+        raise ValueError("candidate review model is missing")
+    return list(
+        dict.fromkeys(
+            [review, *([quality] if isinstance(quality, str) and quality else [])]
+        )
+    )
+
+
 def routed_models(*, quality_required: bool) -> list[str]:
     config = load_config()["extraction"]
     routine = extraction_model()
@@ -225,13 +299,24 @@ def request(
     model_name: str | None = None,
     retry_wait_cap: int = 120,
     request_label: str = "",
+    response_schema: dict[str, Any] | None = None,
+    response_schema_name: str = "night_signal_editor_result",
+    max_output_tokens: int | None = None,
 ) -> dict[str, Any]:
     """Request one schema-constrained editorial result from GitHub Models."""
     errors: list[str] = []
     rate_limit_waits: list[int] = []
     timeout = int(os.getenv("NIGHT_SIGNAL_MODEL_TIMEOUT_SECONDS", DEFAULT_TIMEOUT_SECONDS))
     retries = int(os.getenv("NIGHT_SIGNAL_MODEL_RETRIES", DEFAULT_RETRIES))
-    max_tokens = int(os.getenv("NIGHT_SIGNAL_MODEL_MAX_TOKENS", DEFAULT_MAX_TOKENS))
+    configured_max_tokens = int(
+        os.getenv("NIGHT_SIGNAL_MODEL_MAX_TOKENS", DEFAULT_MAX_TOKENS)
+    )
+    max_tokens = (
+        min(configured_max_tokens, max_output_tokens)
+        if isinstance(max_output_tokens, int) and max_output_tokens > 0
+        else configured_max_tokens
+    )
+    schema = response_schema or EDITOR_RESPONSE_SCHEMA
     payload = {
         "model": model_name or extraction_model(),
         "messages": messages,
@@ -239,9 +324,9 @@ def request(
         "response_format": {
             "type": "json_schema",
             "json_schema": {
-                "name": "night_signal_editor_result",
+                "name": response_schema_name,
                 "strict": True,
-                "schema": EDITOR_RESPONSE_SCHEMA,
+                "schema": schema,
             },
         },
     }
@@ -291,8 +376,8 @@ def request(
             content = re.sub(r"^```(?:json)?\s*|\s*```$", "", content.strip())
             try:
                 result = json.loads(content)
-                if not isinstance(result, dict) or not isinstance(result.get("items"), list):
-                    raise ValueError("model result does not match the editor response shape")
+                if not isinstance(result, dict):
+                    raise ValueError("model result is not an object")
             except (json.JSONDecodeError, ValueError) as exc:
                 raise ModelRequestError(
                     "GitHub Models returned a response outside the strict editor schema"
@@ -351,6 +436,9 @@ def self_test() -> None:
         raise SystemExit("quality model must be an escalation, not the routine model")
     if routed_models(quality_required=False)[0] != chain[0]:
         raise SystemExit("routine routing must use the routine model first")
+    review_chain = candidate_review_models()
+    if not review_chain or review_chain[0] == chain[0]:
+        raise SystemExit("candidate review must use its explicit recall model")
     quality = config.get("quality_model")
     if quality and routed_models(quality_required=True)[0] != quality:
         raise SystemExit("quality routing must use the quality model first")
@@ -359,6 +447,11 @@ def self_test() -> None:
     item_schema = EDITOR_RESPONSE_SCHEMA["properties"]["items"]["items"]
     if "excluded_evidence" not in EDITOR_RESPONSE_SCHEMA["required"]:
         raise SystemExit("editor schema does not account for reviewed exclusions")
+    if set(CANDIDATE_REVIEW_SCHEMA["required"]) != {
+        "publish_groups",
+        "excluded_events",
+    }:
+        raise SystemExit("candidate review schema does not account for every event")
     required_fields = {"summary_points", "change_class"}
     if not required_fields <= set(item_schema["properties"]):
         raise SystemExit("editor response schema lacks the canonical summary contract")
