@@ -147,6 +147,82 @@ def sanitize_model_result(raw: dict[str, Any]) -> dict[str, Any]:
     return sanitized
 
 
+def flatten_event_response(
+    raw: dict[str, Any],
+    category: dict[str, Any],
+    issue_date: str,
+    records: list[dict[str, Any]],
+) -> tuple[dict[str, Any], bool, dict[str, Any]]:
+    evidence_entries = core.editor_evidence_records(category, issue_date, records)
+    event_evidence_ids: dict[str, set[str]] = {}
+    for evidence_id, record in evidence_entries:
+        event_id = str(record.get("_editor_event_id") or evidence_id)
+        event_evidence_ids.setdefault(event_id, set()).add(evidence_id)
+    expected_event_ids = set(event_evidence_ids)
+    seen_event_ids: list[str] = []
+    unknown_event_ids: set[str] = set()
+    cross_event_evidence_ids: set[str] = set()
+    cross_event_excluded_ids: set[str] = set()
+    malformed_event_results = 0
+    flattened = {"items": [], "excluded_evidence": []}
+    for event_result in raw.get("events", []):
+        if not isinstance(event_result, dict):
+            malformed_event_results += 1
+            continue
+        event_id = str(event_result.get("event_id", ""))
+        if event_id not in expected_event_ids:
+            unknown_event_ids.add(event_id)
+            continue
+        seen_event_ids.append(event_id)
+        allowed_ids = event_evidence_ids[event_id]
+        for item in event_result.get("items", []):
+            if not isinstance(item, dict):
+                malformed_event_results += 1
+                continue
+            flattened["items"].append({**item, "event_id": event_id})
+            cited_ids = {
+                str(evidence_id)
+                for point in item.get("summary_points", [])
+                if isinstance(point, dict)
+                for evidence_id in point.get("evidence_ids", [])
+                if isinstance(evidence_id, str)
+            }
+            cross_event_evidence_ids.update(cited_ids - allowed_ids)
+        for exclusion in event_result.get("excluded_evidence", []):
+            if not isinstance(exclusion, dict):
+                malformed_event_results += 1
+                continue
+            evidence_id = str(exclusion.get("evidence_id", ""))
+            if evidence_id not in allowed_ids:
+                cross_event_excluded_ids.add(evidence_id)
+            flattened["excluded_evidence"].append(exclusion)
+    duplicate_event_ids = sorted(
+        event_id
+        for event_id in set(seen_event_ids)
+        if seen_event_ids.count(event_id) > 1
+    )
+    missing_event_ids = sorted(expected_event_ids - set(seen_event_ids))
+    feedback = {
+        "missing_event_ids": missing_event_ids,
+        "duplicate_event_ids": duplicate_event_ids,
+        "unknown_event_ids": sorted(unknown_event_ids),
+        "cross_event_evidence_ids": sorted(cross_event_evidence_ids),
+        "cross_event_excluded_ids": sorted(cross_event_excluded_ids),
+        "malformed_event_results": malformed_event_results,
+    }
+    accepted = not any(
+        (
+            missing_event_ids,
+            duplicate_event_ids,
+            unknown_event_ids,
+            cross_event_evidence_ids,
+            cross_event_excluded_ids,
+            malformed_event_results,
+        )
+    )
+    return flattened, accepted, feedback
+
+
 def publication_candidate_groups(
     category: dict[str, Any],
     issue_date: str,
@@ -632,8 +708,16 @@ def edit_evidence(
         label: str,
         records: list[dict[str, Any]],
     ) -> tuple[list[dict[str, Any]], int, bool, dict[str, Any]]:
-        raw = sanitize_model_result(raw)
-        normalized = core.normalize_result(raw, category, issue_date, records)
+        flattened, event_response_accepted, event_response_feedback = (
+            flatten_event_response(raw, category, issue_date, records)
+        )
+        flattened = sanitize_model_result(flattened)
+        normalized = core.normalize_result(
+            flattened,
+            category,
+            issue_date,
+            records,
+        )
         cards: list[dict[str, Any]] = []
         failed = 0
         for item in normalized["items"]:
@@ -660,7 +744,11 @@ def edit_evidence(
                     ),
                     flush=True,
                 )
-        accepted = bool(normalized["coverage_complete"]) and failed == 0
+        accepted = (
+            event_response_accepted
+            and bool(normalized["coverage_complete"])
+            and failed == 0
+        )
         if not accepted:
             print(
                 json.dumps(
@@ -680,6 +768,7 @@ def edit_evidence(
             "unknown_excluded_ids": normalized["unknown_excluded_ids"],
             "unpublishable_items": failed,
             "rejected_items": normalized["rejected_items"],
+            "event_response": event_response_feedback,
         }
         return cards, failed, accepted, feedback
 
@@ -1045,6 +1134,44 @@ def self_test() -> None:
         "evidence"
     ]:
         fail("Editor prompt lost the deterministic event boundary")
+    event_result = {
+        "events": [
+            {
+                "event_id": grouped_payload["events"][0]["id"],
+                "items": [],
+                "excluded_evidence": [
+                    {
+                        "evidence_id": evidence["id"],
+                        "reason": "duplicate_or_same_event",
+                    }
+                    for evidence in grouped_payload["events"][0]["evidence"]
+                ],
+            }
+        ]
+    }
+    flattened, event_accepted, event_feedback = flatten_event_response(
+        event_result,
+        review_category,
+        "2099-01-02",
+        grouped_summary_chunks[0],
+    )
+    if (
+        not event_accepted
+        or event_feedback["missing_event_ids"]
+        or len(flattened["excluded_evidence"])
+        != len(grouped_payload["events"][0]["evidence"])
+    ):
+        fail("Editor did not account for one complete event response")
+    _, missing_event_accepted, missing_event_feedback = flatten_event_response(
+        {"events": []},
+        review_category,
+        "2099-01-02",
+        grouped_summary_chunks[0],
+    )
+    if missing_event_accepted or missing_event_feedback["missing_event_ids"] != [
+        grouped_payload["events"][0]["id"]
+    ]:
+        fail("Editor accepted a missing event result")
     summary_chunks = publication_record_chunks(
         review_category,
         "2099-01-02",

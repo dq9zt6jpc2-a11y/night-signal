@@ -34,95 +34,113 @@ TOPIC_VALUE_CLASSES = [
     "cultural_or_audience_signal",
 ]
 
+EDITOR_ITEM_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "properties": {
+        "summary_points": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "text": {"type": "string"},
+                    "evidence_ids": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "minItems": 1,
+                    },
+                },
+                "required": ["text", "evidence_ids"],
+                "additionalProperties": False,
+            },
+            "minItems": 1,
+        },
+        "watch_topic_id": {"type": "string"},
+        "title": {"type": "string"},
+        "topic_value_class": {
+            "type": "string",
+            "enum": TOPIC_VALUE_CLASSES,
+        },
+        "priority_class": {
+            "type": "string",
+            "enum": ["top", "priority", "standard"],
+        },
+        "change_class": {
+            "type": "string",
+            "enum": [
+                "new_event",
+                "material_update",
+                "new_analysis_of_existing_fact",
+            ],
+        },
+    },
+    "required": [
+        "summary_points",
+        "watch_topic_id",
+        "title",
+        "topic_value_class",
+        "priority_class",
+        "change_class",
+    ],
+    "additionalProperties": False,
+}
+
+EXCLUDED_EVIDENCE_SCHEMA: dict[str, Any] = {
+    "type": "object",
+    "properties": {
+        "evidence_id": {"type": "string"},
+        "reason": {
+            "type": "string",
+            "enum": [
+                "duplicate_or_same_event",
+                "background_or_navigation",
+                "wrong_entity_or_category",
+                "no_material_update",
+            ],
+        },
+    },
+    "required": ["evidence_id", "reason"],
+    "additionalProperties": False,
+}
+
 EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
     "type": "object",
     "properties": {
-        "items": {
+        "events": {
             "type": "array",
             "items": {
                 "type": "object",
                 "properties": {
                     "event_id": {"type": "string"},
-                    "summary_points": {
+                    "items": {
                         "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "text": {"type": "string"},
-                                "evidence_ids": {
-                                    "type": "array",
-                                    "items": {"type": "string"},
-                                    "minItems": 1,
-                                },
-                            },
-                            "required": ["text", "evidence_ids"],
-                            "additionalProperties": False,
-                        },
-                        "minItems": 1,
+                        "items": EDITOR_ITEM_SCHEMA,
                     },
-                    "watch_topic_id": {"type": "string"},
-                    "title": {"type": "string"},
-                    "topic_value_class": {
-                        "type": "string",
-                        "enum": TOPIC_VALUE_CLASSES,
-                    },
-                    "priority_class": {
-                        "type": "string",
-                        "enum": ["top", "priority", "standard"],
-                    },
-                    "change_class": {
-                        "type": "string",
-                        "enum": [
-                            "new_event",
-                            "material_update",
-                            "new_analysis_of_existing_fact"
-                        ],
+                    "excluded_evidence": {
+                        "type": "array",
+                        "items": EXCLUDED_EVIDENCE_SCHEMA,
                     },
                 },
                 "required": [
                     "event_id",
-                    "summary_points",
-                    "watch_topic_id",
-                    "title",
-                    "topic_value_class",
-                    "priority_class",
-                    "change_class",
+                    "items",
+                    "excluded_evidence",
                 ],
                 "additionalProperties": False,
             },
-        },
-        "excluded_evidence": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "evidence_id": {"type": "string"},
-                    "reason": {
-                        "type": "string",
-                        "enum": [
-                            "duplicate_or_same_event",
-                            "background_or_navigation",
-                            "wrong_entity_or_category",
-                            "no_material_update",
-                        ],
-                    },
-                },
-                "required": ["evidence_id", "reason"],
-                "additionalProperties": False,
-            },
+            "minItems": 1,
         }
     },
-    "required": ["items", "excluded_evidence"],
+    "required": ["events"],
     "additionalProperties": False,
 }
 
 SYSTEM_PROMPT = """Turn supplied NIGHT SIGNAL evidence into Japanese important updates.
-Success means every evidence id is either used by a summary point or listed in
-excluded_evidence. Each supplied event id is a hard boundary: never merge evidence from
-different event ids. Reports within one event may be split when they state distinct changes.
+Return exactly one event result for every supplied event id. Within each event, every
+evidence id must be either used by a summary point or listed in excluded_evidence. Event
+ids are hard boundaries: never merge or move evidence across them. Reports within one event
+may be split into multiple items when they state distinct changes.
 previous_updates are novelty context only, never Evidence: do not cite, summarize, or copy
 facts from them. Use them only to exclude a report that adds no new source-backed change.
-Set event_id on every item to the exact supplied event it summarizes.
 
 For each update, create one title and the ordered summary_points needed to understand it.
 Keep all source-backed material facts even when the result becomes longer: the subject
@@ -362,10 +380,15 @@ def self_test() -> None:
         raise SystemExit("quality routing must use the quality model first")
     if quality and extraction_model() in routed_models(quality_required=True)[1:]:
         raise SystemExit("quality routing must not downgrade to the routine model")
-    item_schema = EDITOR_RESPONSE_SCHEMA["properties"]["items"]["items"]
-    if "excluded_evidence" not in EDITOR_RESPONSE_SCHEMA["required"]:
-        raise SystemExit("editor schema does not account for reviewed exclusions")
-    required_fields = {"event_id", "summary_points", "change_class"}
+    event_schema = EDITOR_RESPONSE_SCHEMA["properties"]["events"]["items"]
+    item_schema = event_schema["properties"]["items"]["items"]
+    if set(event_schema["required"]) != {
+        "event_id",
+        "items",
+        "excluded_evidence",
+    }:
+        raise SystemExit("editor schema does not account for every event result")
+    required_fields = {"summary_points", "change_class"}
     if not required_fields <= set(item_schema["properties"]):
         raise SystemExit("editor response schema lacks the canonical summary contract")
     redundant_fields = {
