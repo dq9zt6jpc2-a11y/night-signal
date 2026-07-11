@@ -55,7 +55,6 @@ EDITOR_ITEM_SCHEMA: dict[str, Any] = {
             },
             "minItems": 1,
         },
-        "watch_topic_id": {"type": "string"},
         "title": {"type": "string"},
         "topic_value_class": {
             "type": "string",
@@ -76,7 +75,6 @@ EDITOR_ITEM_SCHEMA: dict[str, Any] = {
     },
     "required": [
         "summary_points",
-        "watch_topic_id",
         "title",
         "topic_value_class",
         "priority_class",

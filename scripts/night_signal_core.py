@@ -2255,6 +2255,51 @@ def sources_from_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return sources
 
 
+def derived_watch_topic(
+    category: dict[str, Any],
+    records: list[dict[str, Any]],
+    *texts: str,
+) -> str:
+    topics = [
+        topic
+        for topic in category.get("watch_topics", [])
+        if isinstance(topic, dict) and topic.get("id")
+    ]
+    valid_topic_ids = {str(topic["id"]) for topic in topics}
+    evidence_topics = [
+        str(topic_id)
+        for record in records
+        for topic_id in record.get("watch_topic_ids", [])
+        if str(topic_id) in valid_topic_ids
+    ]
+    if evidence_topics:
+        return min(
+            valid_topic_ids,
+            key=lambda topic_id: (
+                -evidence_topics.count(topic_id),
+                next(
+                    index
+                    for index, topic in enumerate(topics)
+                    if str(topic["id"]) == topic_id
+                ),
+            ),
+        )
+    haystack = " ".join(texts).lower()
+    ranked = [
+        (
+            sum(
+                1
+                for term in topic.get("terms", [])
+                if str(term).strip() and str(term).lower() in haystack
+            ),
+            -index,
+            str(topic["id"]),
+        )
+        for index, topic in enumerate(topics)
+    ]
+    return max(ranked, default=(0, 0, ""))[2]
+
+
 def normalize_result(
     raw: dict[str, Any],
     category: dict[str, Any],
@@ -2359,22 +2404,11 @@ def normalize_result(
             for record in records_by_id.values()
             if record.get("_editor_event_id")
         }
-        topic_order = {
-            topic_id: index for index, topic_id in enumerate(valid_topic_order)
-        }
-        evidence_topics = [
-            str(topic_id)
-            for record in source_records
-            for topic_id in record.get("watch_topic_ids", [])
-            if str(topic_id) in valid_topics
-        ]
-        topic = (
-            min(
-                set(evidence_topics),
-                key=lambda value: (-evidence_topics.count(value), topic_order[value]),
-            )
-            if evidence_topics
-            else str(item.get("watch_topic_id", ""))
+        topic = derived_watch_topic(
+            category,
+            source_records,
+            title,
+            *[text for text, _, _ in point_values],
         )
         point_texts = [text for text, _, _ in point_values]
         facts = point_texts
@@ -2956,6 +2990,19 @@ def self_test() -> None:
     }
     if not publication_evidence_record(openai_category, "2099-01-03", english_record):
         fail("English primary Evidence was filtered before translation")
+    topic_derivation_category = {
+        "label": "OpenAI",
+        "watch_topics": [
+            {"id": "ipo_financing", "terms": ["IPO", "上場"]},
+            {"id": "product_release", "terms": ["ChatGPT", "API"]},
+        ],
+    }
+    if derived_watch_topic(
+        topic_derivation_category,
+        [{**english_record, "watch_topic_ids": []}],
+        "ChatGPT広告への対応を開始",
+    ) != "product_release":
+        fail("horizon Evidence was not assigned to a deterministic watch topic")
     if not fact_supported_by_records(
         "OpenAIは企業向けに脆弱性の自動分類機能を追加した。",
         [english_record],
