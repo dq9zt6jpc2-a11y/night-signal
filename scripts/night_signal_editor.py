@@ -317,6 +317,57 @@ def previous_category_updates(
     return []
 
 
+def model_payload_bytes(
+    category: dict[str, Any],
+    issue_date: str,
+    records: list[dict[str, Any]],
+) -> int:
+    return len(
+        json.dumps(
+            core.category_prompt(category, issue_date, records),
+            ensure_ascii=False,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    )
+
+
+def representative_event_records(
+    category: dict[str, Any],
+    issue_date: str,
+    records: list[dict[str, Any]],
+    *,
+    max_payload_bytes: int = 20_000,
+    selection_limit: int = 8,
+) -> list[dict[str, Any]]:
+    """Bound a duplicate-heavy event without shortening any selected source."""
+    if len(records) == 1:
+        if model_payload_bytes(category, issue_date, records) <= 30_000:
+            return list(records)
+        raise ValueError("one complete Evidence record exceeds the event request limit")
+    if (
+        model_payload_bytes(category, issue_date, records) <= max_payload_bytes
+    ):
+        return list(records)
+
+    def rank(indexed: tuple[int, dict[str, Any]]) -> tuple[int, int, int]:
+        index, record = indexed
+        title = core.record_public_title(record)
+        body = str(record.get("excerpt") or record.get("evidence") or "")
+        japanese = len(re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", f"{title} {body}"))
+        return (int(japanese >= 12), min(len(body), 8000), -index)
+
+    selected: list[dict[str, Any]] = []
+    for _, record in sorted(enumerate(records), key=rank, reverse=True):
+        proposed = [*selected, record]
+        if len(proposed) > selection_limit:
+            continue
+        if model_payload_bytes(category, issue_date, proposed) <= max_payload_bytes:
+            selected = proposed
+    if not selected:
+        raise ValueError("no complete representative source fits the event request limit")
+    return selected
+
+
 def publication_record_chunks(
     category: dict[str, Any],
     issue_date: str,
@@ -325,9 +376,9 @@ def publication_record_chunks(
     event_groups: list[list[dict[str, Any]]] | None = None,
     previous_updates: list[dict[str, Any]] | None = None,
     max_records: int = 10,
-    max_payload_bytes: int = 30_000,
+    max_payload_bytes: int = 25_000,
 ) -> list[list[dict[str, Any]]]:
-    """Pack selected events by model payload size while preserving every record."""
+    """Pack complete events without splitting one event across requests."""
     raw_groups = (
         event_groups
         if event_groups is not None
@@ -348,35 +399,28 @@ def publication_record_chunks(
                 for title in titles
             )
         ]
+        decorated_group = [
+            {
+                **record,
+                "_editor_event_id": f"g{index:03d}",
+                "_editor_previous_updates": matching_previous,
+            }
+            for record in group
+        ]
         groups.append(
-            [
-                {
-                    **record,
-                    "_editor_event_id": f"g{index:03d}",
-                    "_editor_previous_updates": matching_previous,
-                }
-                for record in group
-            ]
+            representative_event_records(
+                category,
+                issue_date,
+                decorated_group,
+            )
         )
     chunks: list[list[dict[str, Any]]] = []
     current: list[dict[str, Any]] = []
     for group in groups:
-        group_payload_size = len(
-            json.dumps(
-                core.category_prompt(category, issue_date, group),
-                ensure_ascii=False,
-                separators=(",", ":"),
-            ).encode("utf-8")
-        )
+        group_payload_size = model_payload_bytes(category, issue_date, group)
         if current:
             combined = [*current, *group]
-            combined_size = len(
-                json.dumps(
-                    core.category_prompt(category, issue_date, combined),
-                    ensure_ascii=False,
-                    separators=(",", ":"),
-                ).encode("utf-8")
-            )
+            combined_size = model_payload_bytes(category, issue_date, combined)
             if len(combined) <= max_records and combined_size <= max_payload_bytes:
                 current = combined
                 continue
@@ -388,28 +432,7 @@ def publication_record_chunks(
                 chunks.append(current)
                 current = []
             continue
-        for record in group:
-            proposed = [*current, record]
-            payload_size = len(
-                json.dumps(
-                    core.category_prompt(category, issue_date, proposed),
-                    ensure_ascii=False,
-                    separators=(",", ":"),
-                ).encode("utf-8")
-            )
-            if current and (
-                len(proposed) > max_records or payload_size > max_payload_bytes
-            ):
-                chunks.append(current)
-                current = [record]
-            else:
-                current = proposed
-            if len(current) >= max_records:
-                chunks.append(current)
-                current = []
-        if current:
-            chunks.append(current)
-            current = []
+        raise ValueError("representative event payload still exceeds the chunk limit")
     if current:
         chunks.append(current)
     return [chunk for chunk in chunks if chunk]
@@ -418,7 +441,7 @@ def publication_record_chunks(
 def fit_model_payload(
     payload: dict[str, Any],
     *,
-    max_bytes: int = 32_000,
+    max_bytes: int = 26_000,
 ) -> dict[str, Any]:
     size = len(
         json.dumps(
@@ -1255,6 +1278,51 @@ def self_test() -> None:
     )
     if len(grouped_summary_chunks) != 1 or len(grouped_summary_chunks[0]) != 2:
         fail("Summary chunking split one event despite fitting the payload bound")
+    oversized_event = [
+        {
+            **review_records[0],
+            "url": f"https://example.com/large-duplicate-{index}",
+            "title": (
+                "OpenAIが新モデルを公開"
+                if index == 0
+                else f"OpenAI launches the model with enterprise feature {index}"
+            ),
+            "excerpt": (
+                "OpenAIは新モデルを公開し、企業向け制御を追加した。"
+                + " ".join(f"固有情報{number}" for number in range(500))
+                if index == 0
+                else " ".join(
+                    f"source{index}_detail{number}" for number in range(500)
+                )
+            ),
+        }
+        for index in range(12)
+    ]
+    oversized_chunks = publication_record_chunks(
+        review_category,
+        "2099-01-02",
+        oversized_event,
+        event_groups=[oversized_event],
+    )
+    if len(oversized_chunks) != 1:
+        fail("A duplicate-heavy event was split across model requests")
+    oversized_payload = core.category_prompt(
+        review_category,
+        "2099-01-02",
+        oversized_chunks[0],
+    )
+    if (
+        len(oversized_payload["events"]) != 1
+        or model_payload_bytes(
+            review_category,
+            "2099-01-02",
+            oversized_chunks[0],
+        )
+        > 20_000
+        or len(oversized_chunks[0]) >= len(oversized_event)
+        or not any("新モデル" in str(record.get("title")) for record in oversized_chunks[0])
+    ):
+        fail("Representative event selection lost its event boundary or strongest source")
     grouped_payload = core.category_prompt(
         review_category,
         "2099-01-02",

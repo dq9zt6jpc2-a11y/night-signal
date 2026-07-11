@@ -134,7 +134,9 @@ Editor前の決定的処理で、同一事象の複数記事だけを一つのev
 モデルへは、event ID、最大8,000字まで保持した本文、短いEvidence ID、Evidenceごとの
 watch topic IDだけを渡す。
 複数記事を一つのrequestへ詰めるために本文を再切詰めしない。request上限へ近づく時は、
-同一事象を分断しない単位でrequestを分ける。
+同一事象を分断しない単位でrequestを分ける。同一eventの重複報道だけで上限を超える場合は、
+日本語原文、本文量、取得順で決定的に代表ソースを選び、選んだ本文は切り詰めない。選外URLと
+本文もEvidenceには保持し、記事ごとのAI採否処理は追加しない。
 モデルはevent ID、題名、分類、重要度と、根拠ID付き`summary_points`だけを構造化出力し、
 各項目の根拠IDが同じevent境界内にあることを決定的に照合する。
 `summary_points`の同じ文列を公開要約、確認事実、事実とURLの対応へ再利用し、summary、
