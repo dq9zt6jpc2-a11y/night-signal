@@ -164,12 +164,10 @@ def publication_candidate_groups(
             (
                 candidate
                 for candidate in event_groups
-                if any(
-                    core.same_material_event(
-                        title,
-                        core.record_public_title(existing),
-                    )
-                    for existing in candidate
+                if candidate
+                and core.same_material_event(
+                    title,
+                    core.record_public_title(candidate[0]),
                 )
             ),
             None,
@@ -766,7 +764,8 @@ def edit_evidence(
                     "The previous JSON failed deterministic evidence, repetition, or "
                     "completeness checks. Return the entire corrected JSON. Keep every "
                     "fact close to its cited source wording and exact numbers; do not add "
-                    "unsupported names or synthesis. Do not repeat the title. Evidence "
+                    "unsupported names or synthesis. Keep each item inside its exact "
+                    "event_id and do not repeat the title. Evidence "
                     "with no additional supported fact must be excluded as "
                     "no_material_update. Validation feedback: "
                     + json.dumps(value, ensure_ascii=False, separators=(",", ":"))
@@ -990,6 +989,35 @@ def self_test() -> None:
             "watch_topic_ids": ["ipo_financing"],
         },
     ]
+    bridging_records = [
+        review_records[0],
+        {
+            **review_records[0],
+            "url": "https://example.com/openai-profile",
+            "title": "OpenAI",
+            "excerpt": "OpenAIの企業プロフィールとフォロワー数を掲載するページ。",
+        },
+        {
+            **review_records[0],
+            "url": "https://example.com/openai-lawsuit",
+            "title": "新聞社がOpenAI著作権訴訟で制裁を申し立て",
+            "excerpt": "新聞社は著作権訴訟でOpenAIへの制裁を裁判所に申し立てた。",
+        },
+    ]
+    bridging_groups = publication_candidate_groups(
+        review_category,
+        "2099-01-02",
+        bridging_records,
+    )
+    if any(
+        {record.get("url") for record in group}
+        >= {
+            "https://openai.com/release",
+            "https://example.com/openai-lawsuit",
+        }
+        for group in bridging_groups
+    ):
+        fail("Generic entity page bridged separate publication events")
     duplicate_report = {
         **review_records[0],
         "label": "Example News",

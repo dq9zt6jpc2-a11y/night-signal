@@ -42,6 +42,7 @@ EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
             "items": {
                 "type": "object",
                 "properties": {
+                    "event_id": {"type": "string"},
                     "summary_points": {
                         "type": "array",
                         "items": {
@@ -79,6 +80,7 @@ EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
                     },
                 },
                 "required": [
+                    "event_id",
                     "summary_points",
                     "watch_topic_id",
                     "title",
@@ -120,6 +122,7 @@ excluded_evidence. Each supplied event id is a hard boundary: never merge eviden
 different event ids. Reports within one event may be split when they state distinct changes.
 previous_updates are novelty context only, never Evidence: do not cite, summarize, or copy
 facts from them. Use them only to exclude a report that adds no new source-backed change.
+Set event_id on every item to the exact supplied event it summarizes.
 
 For each update, create one title and the ordered summary_points needed to understand it.
 Keep all source-backed material facts even when the result becomes longer: the subject
@@ -362,7 +365,7 @@ def self_test() -> None:
     item_schema = EDITOR_RESPONSE_SCHEMA["properties"]["items"]["items"]
     if "excluded_evidence" not in EDITOR_RESPONSE_SCHEMA["required"]:
         raise SystemExit("editor schema does not account for reviewed exclusions")
-    required_fields = {"summary_points", "change_class"}
+    required_fields = {"event_id", "summary_points", "change_class"}
     if not required_fields <= set(item_schema["properties"]):
         raise SystemExit("editor response schema lacks the canonical summary contract")
     redundant_fields = {

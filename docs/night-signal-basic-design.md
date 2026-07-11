@@ -135,7 +135,8 @@ Editor前の決定的処理で、同一事象の複数記事だけを一つのev
 watch topic IDだけを渡す。
 複数記事を一つのrequestへ詰めるために本文を再切詰めしない。request上限へ近づく時は、
 同一事象を分断しない単位でrequestを分ける。
-モデルは題名、分類、重要度と、根拠ID付き`summary_points`だけを構造化出力する。
+モデルはevent ID、題名、分類、重要度と、根拠ID付き`summary_points`だけを構造化出力し、
+各項目の根拠IDが同じevent境界内にあることを決定的に照合する。
 `summary_points`の同じ文列を公開要約、確認事実、事実とURLの対応へ再利用し、summary、
 detail summary、what changed、why it mattersを別々に生成しない。URLと掲載日はAIに
 書かせず、Evidence IDから決定的に復元する。同一事象を統合する場合も、計画、決定、

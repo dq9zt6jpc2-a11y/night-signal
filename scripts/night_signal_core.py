@@ -390,6 +390,14 @@ def cluster_seen(seen: set[str], key: str) -> bool:
 def same_material_event(left: Any, right: Any) -> bool:
     left_signature = state_contract.copy_signature(str(left))
     right_signature = state_contract.copy_signature(str(right))
+    if not left_signature or not right_signature:
+        return False
+    shorter, longer = sorted(
+        (left_signature, right_signature),
+        key=len,
+    )
+    if shorter != longer and len(shorter) < 12 and len(longer) >= len(shorter) * 2:
+        return False
     left_ngrams = {
         left_signature[index : index + 3]
         for index in range(max(0, len(left_signature) - 2))
@@ -2339,9 +2347,15 @@ def normalize_result(
             if evidence_id in records_by_id
         ]
         sources = sources_from_records(source_records)
+        item_event_id = compact_text(item.get("event_id", ""), 40)
         source_event_ids = {
             str(record.get("_editor_event_id"))
             for record in source_records
+            if record.get("_editor_event_id")
+        }
+        available_event_ids = {
+            str(record.get("_editor_event_id"))
+            for record in records_by_id.values()
             if record.get("_editor_event_id")
         }
         topic_order = {
@@ -2413,6 +2427,20 @@ def normalize_result(
             ("missing_evidence_id", not evidence_ids),
             ("unknown_evidence_id", bool(unknown_evidence_ids)),
             ("unknown_topic", topic not in valid_topics),
+            (
+                "missing_event_id",
+                bool(available_event_ids) and not item_event_id,
+            ),
+            (
+                "unknown_event_id",
+                bool(available_event_ids) and item_event_id not in available_event_ids,
+            ),
+            (
+                "event_evidence_mismatch",
+                bool(source_event_ids)
+                and bool(item_event_id)
+                and source_event_ids != {item_event_id},
+            ),
             ("mixed_event_boundary", len(source_event_ids) > 1),
             ("empty_title", not title),
             ("title_copy", not reader_public_copy_ok(title, kind="title")),
@@ -3021,6 +3049,7 @@ def self_test() -> None:
         },
     ]
     mixed_event_raw = json.loads(json.dumps(raw))
+    mixed_event_raw["items"][0]["event_id"] = "g001"
     mixed_event_raw["items"][0]["summary_points"] = [
         {
             "text": "対象機能と提供条件に加え、APIの新料金と適用日が公表された。",
@@ -3237,6 +3266,11 @@ def self_test() -> None:
         "ソフトバンクがフィジカルAIロボットの量産を開始",
     ):
         fail("semantic clustering merged distinct material events")
+    if same_material_event(
+        "OpenAI",
+        "New York Times-led group asks court to sanction OpenAI in copyright dispute",
+    ):
+        fail("generic entity title bridged a distinct material event")
     if category_identity_ok(
         "SoftBank",
         "ソフトバンク×阪神の試合速報・結果",
