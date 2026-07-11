@@ -596,6 +596,12 @@ def record_has_material_body(title: str, record: dict[str, Any]) -> bool:
     for sentence in sentence_parts(excerpt):
         if state_contract.title_repetition_score(title, sentence) >= 0.82:
             continue
+        visible_count = len(re.findall(r"\S", sentence))
+        letter_count = len(
+            re.findall(r"[A-Za-z\u3040-\u30ff\u3400-\u9fff]", sentence)
+        )
+        if not visible_count or letter_count / visible_count < 0.45:
+            continue
         japanese_count = len(re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", sentence))
         latin_words = re.findall(r"[A-Za-z][A-Za-z0-9'-]{2,}", sentence)
         if japanese_count >= 8 and useful_fact(sentence, ""):
@@ -2202,6 +2208,8 @@ def category_prompt(
         events: list[dict[str, Any]] = []
         events_by_id: dict[str, dict[str, Any]] = {}
         for evidence_id, record in selected:
+            title = record_public_title(record)
+            evidence_depth = record_evidence_depth(title, record)
             event_id = str(record.get("_editor_event_id") or evidence_id)
             event = events_by_id.get(event_id)
             if event is None:
@@ -2224,14 +2232,15 @@ def category_prompt(
                     ),
                     "date": record.get("published_date"),
                     "source": record.get("label"),
-                    "title": record_public_title(record),
-                    "evidence_depth": record_evidence_depth(
-                        record_public_title(record),
-                        record,
-                    ),
-                    "body": reader_facing_text(
-                        str(record.get("excerpt") or record.get("evidence") or ""),
-                        limit,
+                    "title": title,
+                    "evidence_depth": evidence_depth,
+                    "body": (
+                        reader_facing_text(
+                            str(record.get("excerpt") or record.get("evidence") or ""),
+                            limit,
+                        )
+                        if evidence_depth == "body"
+                        else ""
                     ),
                 }
             )
@@ -3005,6 +3014,8 @@ def self_test() -> None:
     )
     if headline_payload["events"][0]["evidence"][0].get("evidence_depth") != "headline":
         fail("Editor prompt lost headline Evidence depth")
+    if headline_payload["events"][0]["evidence"][0].get("body"):
+        fail("Editor prompt leaked unverified body text into headline Evidence")
     if not sources_from_records([headline_record]):
         fail("headline Evidence lost its clickable Google News source")
     headline_record["_editor_event_id"] = "g001"
@@ -3136,6 +3147,19 @@ def self_test() -> None:
     )
     if "SHOPPING CART" in parsed_body or "新曲を6月30日に発売" not in parsed_body:
         fail("HTML extraction did not separate navigation from article text")
+    corrupted_visual_record = {
+        **english_record,
+        "title": "Previewing a next-generation model",
+        "excerpt": (
+            "Title: Previewing a next-generation model URL Source: http://example.com "
+            "Markdown Content: Skip to main content Research Products Business "
+            + "0 . 5 6 . 55 0 . " * 180
+        ),
+    }
+    if record_has_material_body(
+        corrupted_visual_record["title"], corrupted_visual_record
+    ):
+        fail("numeric rendering noise was accepted as a material article body")
     category = {
         "label": "Test",
         "watch_topics": [
