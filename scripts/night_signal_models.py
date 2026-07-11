@@ -147,6 +147,8 @@ decision. Do not exclude an event merely because one of its reports is duplicate
 when another Evidence record supplies a material source-backed change.
 
 For each update, create one title and the ordered summary_points needed to understand it.
+Write every title and summary point in natural Japanese even when all Evidence is English.
+Never return English reader-facing text.
 Keep all source-backed material facts even when the result becomes longer: the subject
 and an unfamiliar subject's stated role, the concrete change, scope or mechanism, names,
 numbers, dates, conditions, reasons, and results when they matter. Each point must add
