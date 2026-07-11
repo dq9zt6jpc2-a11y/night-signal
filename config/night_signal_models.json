@@ -1,8 +1,9 @@
 {
   "extraction": {
-    "editor_contract_revision": "event-summary-v2",
+    "editor_contract_revision": "event-summary-v3",
     "compatible_checkpoint_contracts": [
-      "37e0a8d3352d9aca5ba6001d9ddd47a8d8786f5d301066f486ba0b4ea5d099b3"
+      "37e0a8d3352d9aca5ba6001d9ddd47a8d8786f5d301066f486ba0b4ea5d099b3",
+      "19ecb94aa46b8def0c471f1456a14e9f2dd97aad8c7e1d740b2dee06a18ef103"
     ],
     "model": "openai/gpt-4o-mini",
     "quality_model": "openai/gpt-4.1-mini",

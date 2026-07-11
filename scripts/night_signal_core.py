@@ -698,11 +698,72 @@ def editor_evidence_records(
     ]
 
 
+def normalized_financial_amounts(value: str) -> tuple[list[tuple[str, float]], str]:
+    amounts: list[tuple[str, float]] = []
+    spans: list[tuple[int, int]] = []
+    japanese = re.compile(
+        r"((?:\d[\d,]*(?:\.\d+)?\s*(?:兆|億|万)\s*){1,3})"
+        r"(ドル|円|ユーロ|ポンド)"
+    )
+    unit_scale = {"兆": 1e12, "億": 1e8, "万": 1e4}
+    currency_map = {"ドル": "USD", "円": "JPY", "ユーロ": "EUR", "ポンド": "GBP"}
+    for match in japanese.finditer(value):
+        total = sum(
+            float(number.replace(",", "")) * unit_scale[unit]
+            for number, unit in re.findall(
+                r"(\d[\d,]*(?:\.\d+)?)\s*(兆|億|万)", match.group(1)
+            )
+        )
+        amounts.append((currency_map[match.group(2)], total))
+        spans.append(match.span())
+    english = re.compile(
+        r"(?:(?P<symbol>[$€£])\s*)?"
+        r"(?P<number>\d[\d,]*(?:\.\d+)?)\s*"
+        r"(?P<unit>trillion|billion|million)"
+        r"(?:\s*(?P<word>dollars?|euros?|pounds?))?",
+        re.I,
+    )
+    english_scale = {"trillion": 1e12, "billion": 1e9, "million": 1e6}
+    english_currency = {
+        "$": "USD",
+        "€": "EUR",
+        "£": "GBP",
+        "dollar": "USD",
+        "dollars": "USD",
+        "euro": "EUR",
+        "euros": "EUR",
+        "pound": "GBP",
+        "pounds": "GBP",
+    }
+    for match in english.finditer(value):
+        marker = (match.group("symbol") or match.group("word") or "").lower()
+        amounts.append(
+            (
+                english_currency.get(marker, "UNSPECIFIED"),
+                float(match.group("number").replace(",", ""))
+                * english_scale[match.group("unit").lower()],
+            )
+        )
+        spans.append(match.span())
+    stripped = list(value)
+    for start, end in spans:
+        stripped[start:end] = " " * (end - start)
+    return amounts, "".join(stripped)
+
+
+def numeric_literals(value: str) -> set[float]:
+    return {
+        float(number.replace(",", ""))
+        for number in re.findall(r"\d[\d,]*(?:\.\d+)?", value)
+    }
+
+
 def fact_supported_by_records(
     fact: str,
     source_records: list[dict[str, Any]],
 ) -> bool:
-    fact_numbers = set(re.findall(r"\d+(?:\.\d+)?", fact))
+    fact_amounts, fact_without_amounts = normalized_financial_amounts(fact)
+    fact_numbers = numeric_literals(fact_without_amounts)
     for record in source_records:
         title = record_public_title(record)
         body = reader_facing_text(
@@ -713,27 +774,22 @@ def fact_supported_by_records(
             f"{record.get('title', '')} {body}",
             8500,
         )
-        evidence_numbers = set(re.findall(r"\d+(?:\.\d+)?", evidence))
+        evidence_amounts, evidence_without_amounts = normalized_financial_amounts(
+            evidence
+        )
+        evidence_numbers = numeric_literals(evidence_without_amounts)
         unsupported_numbers = fact_numbers - evidence_numbers
-        fact_billions = {
-            float(value)
-            for value in re.findall(r"(\d+(?:\.\d+)?)\s*億", fact)
-        }
-        evidence_billions = {
-            float(value) * 10
-            for value in re.findall(
-                r"\$?\s*(\d+(?:\.\d+)?)\s*billion",
-                evidence,
-                flags=re.I,
-            )
-        }
-        unsupported_numbers -= {
-            value
-            for value in unsupported_numbers
-            if any(abs(float(value) - converted) < 0.001 for converted in evidence_billions)
-            and any(abs(float(value) - amount) < 0.001 for amount in fact_billions)
-        }
         if unsupported_numbers:
+            continue
+        if any(
+            not any(
+                (fact_currency == evidence_currency or "UNSPECIFIED" in {fact_currency, evidence_currency})
+                and abs(fact_amount - evidence_amount)
+                <= max(1.0, abs(fact_amount) * 1e-9)
+                for evidence_currency, evidence_amount in evidence_amounts
+            )
+            for fact_currency, fact_amount in fact_amounts
+        ):
             continue
         body_japanese = len(re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", body))
         body_latin = len(re.findall(r"[A-Za-z]", body))
@@ -3054,6 +3110,21 @@ def self_test() -> None:
         [bilingual_record],
     ):
         fail("translated billion-to-億 amount lost source support")
+    million_record = {
+        **english_record,
+        "title": "Bank of America provides OpenAI a $520 million credit line",
+        "excerpt": "The bank provided OpenAI with a $520 million credit facility.",
+    }
+    if not fact_supported_by_records(
+        "バンク・オブ・アメリカはOpenAIに5億2,000万ドルの信用枠を提供した。",
+        [million_record],
+    ):
+        fail("translated million-to-億万 amount lost source support")
+    if fact_supported_by_records(
+        "バンク・オブ・アメリカはOpenAIに5億3,000万ドルの信用枠を提供した。",
+        [million_record],
+    ):
+        fail("financial amount normalization accepted a different amount")
     _, parsed_body = page_text(
         (
             "<html><head><title>Example</title></head><body>"
