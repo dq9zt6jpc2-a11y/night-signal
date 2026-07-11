@@ -764,12 +764,55 @@ def numeric_literals(value: str) -> set[float]:
     }
 
 
+def normalized_scaled_numbers(value: str) -> tuple[set[float], str]:
+    pattern = re.compile(
+        r"(?<![\d.])((?:\d[\d,]*(?:\.\d+)?\s*(?:兆|億|万|千)\s*)+)"
+    )
+    scale = {"兆": 1e12, "億": 1e8, "万": 1e4, "千": 1e3}
+    numbers: set[float] = set()
+    stripped = list(value)
+    for match in pattern.finditer(value):
+        numbers.add(
+            sum(
+                float(number.replace(",", "")) * scale[unit]
+                for number, unit in re.findall(
+                    r"(\d[\d,]*(?:\.\d+)?)\s*(兆|億|万|千)",
+                    match.group(1),
+                )
+            )
+        )
+        stripped[match.start() : match.end()] = " " * (match.end() - match.start())
+    return numbers, "".join(stripped)
+
+
+def numeric_claims(value: str) -> set[float]:
+    scaled, remainder = normalized_scaled_numbers(value)
+    return scaled | numeric_literals(remainder)
+
+
+def numeric_claim_supported(
+    claimed: float,
+    evidence_numbers: set[float],
+    *,
+    approximate: bool,
+) -> bool:
+    if claimed in evidence_numbers:
+        return True
+    if not approximate or claimed == 0:
+        return False
+    return any(
+        abs(claimed - observed) <= max(1.0, abs(observed) * 0.01)
+        for observed in evidence_numbers
+    )
+
+
 def fact_supported_by_records(
     fact: str,
     source_records: list[dict[str, Any]],
 ) -> bool:
     fact_amounts, fact_without_amounts = normalized_financial_amounts(fact)
-    fact_numbers = numeric_literals(fact_without_amounts)
+    fact_numbers = numeric_claims(fact_without_amounts)
+    approximate_numbers = bool(re.search(r"(?:約|およそ|ほぼ|程度|以上|超)", fact))
     for record in source_records:
         title = record_public_title(record)
         body = reader_facing_text(
@@ -783,9 +826,15 @@ def fact_supported_by_records(
         evidence_amounts, evidence_without_amounts = normalized_financial_amounts(
             evidence
         )
-        evidence_numbers = numeric_literals(evidence_without_amounts)
-        unsupported_numbers = fact_numbers - evidence_numbers
-        if unsupported_numbers:
+        evidence_numbers = numeric_claims(evidence_without_amounts)
+        if any(
+            not numeric_claim_supported(
+                number,
+                evidence_numbers,
+                approximate=approximate_numbers,
+            )
+            for number in fact_numbers
+        ):
             continue
         if any(
             not any(
@@ -3185,6 +3234,39 @@ def self_test() -> None:
         [million_record],
     ):
         fail("financial amount normalization accepted a different amount")
+    localized_count_record = {
+        **english_record,
+        "title": "Honda Pakistan offers Rs 200,000 off the HR-V VTI-S",
+        "excerpt": (
+            "Honda Pakistan launched a limited promotion with Rs 200,000 off "
+            "the HR-V VTI-S and free registration."
+        ),
+    }
+    if not fact_supported_by_records(
+        "ホンダパキスタンはHR-V VTI-Sを20万ルピー割り引き、無料登録も付ける。",
+        [localized_count_record],
+    ):
+        fail("Japanese ten-thousand notation lost source numeric support")
+    if fact_supported_by_records(
+        "ホンダパキスタンはHR-V VTI-Sを21万ルピー割り引く。",
+        [localized_count_record],
+    ):
+        fail("Japanese ten-thousand notation accepted a different amount")
+    rounded_count_record = {
+        **english_record,
+        "title": "Honda recalls 325,588 Odyssey minivans",
+        "excerpt": "Honda recalled 325,588 Odyssey minivans over a rear-camera fault.",
+    }
+    if not fact_supported_by_records(
+        "ホンダはオデッセイ約32万5千台を後方カメラ不具合でリコールした。",
+        [rounded_count_record],
+    ):
+        fail("Explicitly approximate Japanese count lost rounded source support")
+    if fact_supported_by_records(
+        "ホンダはオデッセイ30万台を後方カメラ不具合でリコールした。",
+        [rounded_count_record],
+    ):
+        fail("Exact Japanese count accepted a different source number")
     _, parsed_body = page_text(
         (
             "<html><head><title>Example</title></head><body>"
