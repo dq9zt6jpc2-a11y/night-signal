@@ -710,9 +710,9 @@ def edit_evidence(
             models.load_config().get("extraction", {}).get("quality_model", "")
         )
         feedback: dict[str, Any] = {}
-        for model_name in model_chain:
+        for model_index, model_name in enumerate(model_chain):
             attempt_messages = messages
-            max_attempts = 2 if model_name == quality_model else 1
+            max_attempts = 2 if model_index == 0 else 1
             for attempt in range(1, max_attempts + 1):
                 try:
                     raw = models.request(

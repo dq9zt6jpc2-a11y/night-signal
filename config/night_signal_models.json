@@ -1,8 +1,8 @@
 {
   "extraction": {
-    "review_model": "openai/gpt-4.1-mini",
+    "review_model": "openai/gpt-4o-mini",
     "model": "openai/gpt-4o-mini",
-    "quality_model": "openai/gpt-5-mini",
-    "fallback_models": ["openai/gpt-4.1-mini"]
+    "quality_model": "openai/gpt-4.1-mini",
+    "fallback_models": []
   }
 }

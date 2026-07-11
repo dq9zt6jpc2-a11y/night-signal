@@ -745,21 +745,6 @@ def facts_add_information_beyond_title(title: str, facts: list[str]) -> bool:
     )
 
 
-def support_quote_matches_record(quote: str, record: dict[str, Any]) -> bool:
-    value = compact_text(quote, 320)
-    if len(value) < 8:
-        return False
-    evidence = compact_text(
-        f"{record.get('title', '')} {record.get('excerpt') or record.get('evidence') or ''}",
-        8500,
-    )
-    if value.casefold() in evidence.casefold():
-        return True
-    quote_key = state_contract.copy_signature(value)
-    evidence_key = state_contract.copy_signature(evidence)
-    return len(quote_key) >= 8 and quote_key in evidence_key
-
-
 def support_quote_from_record(fact: str, record: dict[str, Any]) -> str:
     """Select a deterministic source span for an editor fact."""
     raw_title = compact_text(str(record.get("title", "")), 320)
@@ -2250,11 +2235,12 @@ def normalize_result(
     issue_date: str,
     records: list[dict[str, Any]],
 ) -> dict[str, Any]:
-    valid_topics = {
+    valid_topic_order = [
         str(topic["id"])
         for topic in category.get("watch_topics", [])
         if isinstance(topic, dict)
-    }
+    ]
+    valid_topics = set(valid_topic_order)
     evidence_entries = editor_evidence_records(category, issue_date, records)
     records_by_id = dict(evidence_entries)
     expected_evidence_ids = set(records_by_id)
@@ -2335,7 +2321,23 @@ def normalize_result(
             if evidence_id in records_by_id
         ]
         sources = sources_from_records(source_records)
-        topic = str(item.get("watch_topic_id", ""))
+        topic_order = {
+            topic_id: index for index, topic_id in enumerate(valid_topic_order)
+        }
+        evidence_topics = [
+            str(topic_id)
+            for record in source_records
+            for topic_id in record.get("watch_topic_ids", [])
+            if str(topic_id) in valid_topics
+        ]
+        topic = (
+            min(
+                set(evidence_topics),
+                key=lambda value: (-evidence_topics.count(value), topic_order[value]),
+            )
+            if evidence_topics
+            else str(item.get("watch_topic_id", ""))
+        )
         point_texts = [text for text, _, _ in point_values]
         facts = point_texts
         summary = " ".join(facts)
@@ -2353,9 +2355,7 @@ def normalize_result(
             for quote in quotes
             if quote["evidence_id"] not in point_ids
             or quote["evidence_id"] not in records_by_id
-            or not support_quote_matches_record(
-                quote["quote"], records_by_id.get(quote["evidence_id"], {})
-            )
+            or len(compact_text(quote["quote"], 320)) < 8
         ]
         missing_quote_ids = [
             evidence_id

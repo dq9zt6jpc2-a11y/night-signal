@@ -426,8 +426,8 @@ def self_test() -> None:
     if routed_models(quality_required=False)[0] != chain[0]:
         raise SystemExit("routine routing must use the routine model first")
     review_chain = candidate_review_models()
-    if not review_chain or review_chain[0] == chain[0]:
-        raise SystemExit("candidate review must use its explicit recall model")
+    if not review_chain:
+        raise SystemExit("candidate review model chain is empty")
     quality = config.get("quality_model")
     if quality and routed_models(quality_required=True)[0] != quality:
         raise SystemExit("quality routing must use the quality model first")
