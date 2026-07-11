@@ -2478,6 +2478,18 @@ def normalize_result(
                 for evidence_id in point_ids
             )
         )
+        if invalid_point_shape:
+            print(
+                json.dumps(
+                    {
+                        "phase": "invalid_summary_points_removed",
+                        "category": category.get("label"),
+                        "title": title,
+                    },
+                    ensure_ascii=False,
+                ),
+                flush=True,
+            )
         unknown_evidence_ids = [
             evidence_id
             for evidence_id in evidence_ids
@@ -2546,7 +2558,6 @@ def normalize_result(
             for fact, (_, point_ids, _) in zip(facts, point_values)
         ]
         rejection_checks = [
-            ("invalid_summary_point", invalid_point_shape),
             ("missing_evidence_id", not evidence_ids),
             ("unknown_evidence_id", bool(unknown_evidence_ids)),
             ("unknown_topic", topic not in valid_topics),
@@ -3287,8 +3298,13 @@ def self_test() -> None:
     repeated_raw["items"][0]["summary_points"].append(
         repeated_raw["items"][0]["summary_points"][0]
     )
-    if normalize_result(repeated_raw, category, "2099-01-03", records)["items"]:
-        fail("normalization accepted repeated summary points")
+    repeated_result = normalize_result(
+        repeated_raw, category, "2099-01-03", records
+    )
+    if len(repeated_result["items"]) != 1 or len(
+        repeated_result["items"][0]["confirmed_facts"]
+    ) != len(facts):
+        fail("normalization did not remove repeated summary points")
     long_record = {
         **records[0],
         "url": "https://example.com/long-item",
