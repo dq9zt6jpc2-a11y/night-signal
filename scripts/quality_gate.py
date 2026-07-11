@@ -27,20 +27,6 @@ MAX_DETAIL_SIMILARITY_VS_PREVIOUS = 0.95
 EXPECTED_HERO_TITLE = "NIGHT SIGNAL"
 EXPECTED_HERO_CONCEPT_TERMS = ["眠りにつく前に", "世界の輪郭", "次の朝"]
 LATEST_THREE_DAY_LABELS = {0: "今日", 1: "昨日", 2: "一昨日"}
-HERO_DAILY_TOPIC_TERMS = [
-    "OpenAI",
-    "SoftBank",
-    "Honda",
-    "SpaceX",
-    "TanStack",
-    "CRS-34",
-    "Starship",
-    "Dragon",
-    "Codex",
-    "ホンダ",
-    "ソフトバンク",
-]
-
 REQUIRED_CATEGORIES = [category["label"] for category in COVERAGE_CONTRACT["categories"]]
 REQUIRED_SECTIONS = {
     category["section_id"]: category["label"] for category in COVERAGE_CONTRACT["categories"]
@@ -120,64 +106,6 @@ PUBLIC_ABSTRACT_FRAMING_TERMS = [
 
 HEADLINE_FORBIDDEN_CHARS = ["→", "“", "”"]
 GENERIC_HEADLINE_STARTS = ["何が", "なぜ", "どう見る", "読み方", "ポイント"]
-DETAIL_ALIGNMENT_KEYWORDS = [
-    "ChatGPT",
-    "OpenAI",
-    "Dell",
-    "Codex",
-    "TanStack",
-    "証明書",
-    "家計",
-    "口座",
-    "安全",
-    "リスク",
-    "SoftBank",
-    "Arm",
-    "データセンター",
-    "バッテリー",
-    "電源",
-    "災害",
-    "Honda",
-    "EV",
-    "HV",
-    "赤字",
-    "関税",
-    "中国",
-    "販売",
-    "生産",
-    "ADUO",
-    "FIA",
-    "カナダ",
-    "Aston",
-    "PU",
-    "CRS-34",
-    "Falcon",
-    "Dragon",
-    "ISS",
-    "Starship",
-    "Flight 12",
-    "Starlink",
-    "ベトナム",
-    "IIP",
-    "インド",
-    "CPI",
-    "RBI",
-    "外貨準備",
-    "名古屋",
-    "ジェレット",
-    "ニュービル",
-    "D.J.",
-    "コロネル",
-    "スタッフ",
-    "米株",
-    "S&P",
-    "Nasdaq",
-    "Dow",
-    "ファンド",
-    "ETF",
-    "ICI",
-    "フロー",
-]
 DETAIL_FORBIDDEN_SECTION_HEADINGS = [
     "チェック観点",
     "次の確認",
@@ -474,9 +402,16 @@ def validate_stable_hero(context: str, html: str, issue_date: str) -> None:
     missing = [term for term in EXPECTED_HERO_CONCEPT_TERMS if term not in hero_text]
     if missing:
         fail(f"{context} hero concept copy missing terms: " + ", ".join(missing))
-    daily_terms = [term for term in HERO_DAILY_TOPIC_TERMS if term in hero_text]
-    if daily_terms:
-        fail(f"{context} hero must describe the product concept, not daily topics: " + ", ".join(daily_terms[:8]))
+    leaked_titles = [
+        card_title(card)
+        for card in card_blocks(html)
+        if card_title(card) and card_title(card) in hero_text
+    ]
+    if leaked_titles:
+        fail(
+            f"{context} hero must describe the product concept, not daily cards: "
+            + "; ".join(leaked_titles[:4])
+        )
 
 
 def validate_priority_has_no_selection_process(context: str, html: str) -> None:
@@ -561,10 +496,6 @@ def validate_reader_facing_headlines(context: str, headings: list[str]) -> None:
         fail(f"{context} headings are not reader-facing: " + "; ".join(failures[:8]))
 
 
-def alignment_keywords(title: str) -> list[str]:
-    return [keyword for keyword in DETAIL_ALIGNMENT_KEYWORDS if keyword in title]
-
-
 def validate_card_detail_alignment(issue_date: str, root_html: str, dated_html: str) -> None:
     cards = card_blocks(root_html) + card_blocks(dated_html)
     by_detail: dict[tuple[str, str], set[str]] = {}
@@ -586,15 +517,12 @@ def validate_card_detail_alignment(issue_date: str, root_html: str, dated_html: 
         if summary_match:
             body += " " + re.sub(r"<.*?>", "", summary_match.group(1))
         for title in sorted(titles):
-            keywords = alignment_keywords(title)
-            if not keywords:
-                continue
-            primary_hits = [keyword for keyword in keywords if keyword in primary]
-            body_hits = [keyword for keyword in keywords if keyword in body]
-            required_primary_hits = min(2, len(keywords))
-            if len(primary_hits) < required_primary_hits or len(body_hits) < required_primary_hits:
+            primary_alignment = state_contract.title_repetition_score(title, primary)
+            body_alignment = state_contract.title_repetition_score(title, body)
+            if primary_alignment < 0.6 or body_alignment < 0.6:
                 failures.append(
-                    f"{title} -> {name} (primary hits: {primary_hits or '-'}, expected: {keywords})"
+                    f"{title} -> {name} "
+                    f"(title alignment: {primary_alignment:.0%}, body alignment: {body_alignment:.0%})"
                 )
     if failures:
         fail("card/detail title mismatch: " + "; ".join(failures[:8]))

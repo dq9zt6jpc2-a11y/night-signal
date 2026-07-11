@@ -7,11 +7,6 @@ on:
         description: "JST issue date. Empty uses today's JST date."
         required: false
         type: string
-      force:
-        description: "Recollect even when an evening-fresh issue exists."
-        required: false
-        default: false
-        type: boolean
       reuse_evidence:
         description: "Resume the canonical pipeline from a valid saved Evidence checkpoint."
         required: false
@@ -44,7 +39,6 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ github.token }}
       NIGHT_SIGNAL_MODEL_CONCURRENCY: 2
-      NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE: ${{ inputs.issue_date != '' && '1' || '' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -73,13 +67,7 @@ jobs:
       - name: Detect an already verified publication
         id: current_publication
         if: ${{ steps.timing.outputs.action != 'wait' }}
-        env:
-          FORCE_COLLECTION: ${{ inputs.force || false }}
         run: |
-          if [[ "$FORCE_COLLECTION" == "true" ]]; then
-            echo "published=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
           if python3 scripts/publication_audit.py "$ISSUE_DATE"; then
             echo "published=true" >> "$GITHUB_OUTPUT"
           else

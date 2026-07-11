@@ -57,7 +57,7 @@ def main() -> int:
     ):
         fail("collection and job runtime must be bounded")
     if collection.count('python3 scripts/night_signal_publish.py "$ISSUE_DATE"') != 2:
-        fail("force and normal branches must both use the canonical pipeline")
+        fail("fresh and Evidence-reuse branches must both use the canonical pipeline")
     for direct_owner in (
         "python3 scripts/night_signal_collect.py",
         "python3 scripts/night_signal_editor.py",
@@ -80,14 +80,10 @@ def main() -> int:
         fail("collection, checkpoint, commit, and publication stages are out of order")
     if "steps.current_publication.outputs.published != 'true'" not in collection:
         fail("verified publication must short-circuit the fallback attempt")
-    if not ordered(
-        collection,
-        'FORCE_COLLECTION: ${{ inputs.force || false }}',
-        'if [[ "$FORCE_COLLECTION" == "true" ]]',
-        'echo "published=false" >> "$GITHUB_OUTPUT"',
-        'python3 scripts/publication_audit.py "$ISSUE_DATE"',
-    ):
-        fail("manual force must bypass only the verified-publication short circuit")
+    if "force:" in collection or "inputs.force" in collection:
+        fail("verified publication must not have a force-recollection bypass")
+    if "NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE" in collection or "NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE" in pages:
+        fail("production workflows must never publish a stale issue as latest")
     if "scripts/publication_timing.py --decision" not in collection:
         fail("scheduled work must use the actual-time publication window")
     if "steps.timing.outputs.action == 'run'" not in collection:

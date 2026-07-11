@@ -87,6 +87,17 @@ def required_discovery_channels(
     return {value for value in values if value}
 
 
+def category_identity_terms(category: dict[str, Any]) -> tuple[str, ...]:
+    values = category.get("identity_terms")
+    if not isinstance(values, list) or not values or any(
+        not isinstance(value, str) or not value.strip() for value in values
+    ):
+        raise EvidenceContractError(
+            f"{category.get('label', '<unknown>')} must define non-empty identity_terms"
+        )
+    return tuple(dict.fromkeys(value.strip() for value in values))
+
+
 def _require(condition: bool, message: str) -> None:
     if not condition:
         raise EvidenceContractError(message)
@@ -135,6 +146,11 @@ def validate_bundle(
     }
 
     for label, category in configured.items():
+        category_identity_terms(category)
+        _require(
+            isinstance(category.get("allow_sports_results", False), bool),
+            f"{label} allow_sports_results must be boolean",
+        )
         entry = categories[label]
         _require(isinstance(entry, dict), f"Evidence category must be an object: {label}")
         topics = {

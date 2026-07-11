@@ -1,5 +1,5 @@
 {
-  "contract_version": "2026-07-11.01",
+  "contract_version": "2026-07-11.02",
   "description": "NIGHT SIGNAL daily collection contract. A public issue must prove that every category and configured watch topic was searched through official/primary Web, independent media or data, X/SNS, and YouTube before publication. Economy coverage is regional: Japan, Asia ex-Japan focus, and North America; broad standalone investment sections are not allowed and country-specific official evidence must not be substituted from another country. IT/space topics must include official release plus X signals; YOASOBI/Ikuta coverage must include official HP plus staff/person social channels including X and Instagram.",
   "required_discovery_channels": [
     "web",
@@ -80,6 +80,7 @@
   "categories": [
     {
       "label": "OpenAI",
+      "identity_terms": ["OpenAI", "ChatGPT", "Codex", "Azure OpenAI"],
       "section_id": "openai",
       "axes": [
         {
@@ -287,6 +288,7 @@
     },
     {
       "label": "SoftBank",
+      "identity_terms": ["SoftBank", "ソフトバンク", "SBG", "Arm"],
       "section_id": "softbank",
       "axes": [
         {
@@ -457,6 +459,7 @@
     },
     {
       "label": "Honda",
+      "identity_terms": ["Honda", "ホンダ", "HRC", "Aston Martin", "Acura"],
       "section_id": "honda",
       "axes": [
         {
@@ -675,6 +678,8 @@
     },
     {
       "label": "F1",
+      "identity_terms": ["F1", "FIA", "Grand Prix", "グランプリ", "Formula 1", "ホンダ", "Honda", "ADUO", "PU", "レッドブル", "メルセデス", "フェラーリ", "マクラーレン", "Aston Martin"],
+      "allow_sports_results": true,
       "section_id": "f1",
       "axes": [
         {
@@ -788,6 +793,7 @@
     },
     {
       "label": "SpaceX",
+      "identity_terms": ["SpaceX", "Starship", "Starlink", "Crew Dragon", "Cargo Dragon", "Dragon spacecraft", "ドラゴン宇宙船", "Falcon"],
       "section_id": "spacex",
       "axes": [
         {
@@ -965,6 +971,7 @@
     },
     {
       "label": "日本経済",
+      "identity_terms": ["日本", "日銀", "財務省", "CPI", "GDP", "円", "JGB"],
       "section_id": "japan_economy",
       "required_watch_topic_channels": [
         "web",
@@ -1116,6 +1123,7 @@
     },
     {
       "label": "YOASOBI / 幾田りら",
+      "identity_terms": ["YOASOBI", "幾田りら", "ikura"],
       "section_id": "yoasobi_ikuta",
       "risk_classes": [
         "music_social_first"
@@ -1251,6 +1259,7 @@
     },
     {
       "label": "アジア経済",
+      "identity_terms": ["アジア", "中国", "インド", "台湾", "韓国", "ASEAN", "ベトナム"],
       "section_id": "asia",
       "required_watch_topic_channels": [
         "web",
@@ -1451,6 +1460,7 @@
     },
     {
       "label": "北米経済",
+      "identity_terms": ["米", "米国", "アメリカ", "Canada", "Fed", "FRB", "S&P", "Nasdaq"],
       "section_id": "north_america",
       "required_watch_topic_channels": [
         "web",
@@ -1594,6 +1604,8 @@
     },
     {
       "label": "宇都宮ブレックス",
+      "identity_terms": ["宇都宮ブレックス", "Utsunomiya Brex", "宇都宮 BREX"],
+      "allow_sports_results": true,
       "section_id": "brex",
       "axes": [
         {

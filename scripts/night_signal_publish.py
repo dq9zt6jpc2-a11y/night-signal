@@ -32,13 +32,9 @@ def jst_today() -> str:
     return datetime.now(ZoneInfo("Asia/Tokyo")).date().isoformat()
 
 
-def allow_explicit_stale_issue() -> bool:
-    return os.getenv("NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE") == "1"
-
-
 def require_jst_current_issue(issue_date: str) -> None:
     today = jst_today()
-    if issue_date != today and not allow_explicit_stale_issue():
+    if issue_date != today:
         fail(f"refusing to publish stale issue as latest: {issue_date} != JST today {today}")
 
 
@@ -126,14 +122,10 @@ def evidence_reusable(
         return False
     checked = checked.astimezone(ZoneInfo("Asia/Tokyo"))
     current = now.astimezone(ZoneInfo("Asia/Tokyo"))
-    explicit_stale_recovery = os.getenv("NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE") == "1"
     return (
         checked.date().isoformat() == issue_date
         and timedelta(0) <= current - checked
-        and (
-            current - checked <= timedelta(hours=4)
-            or explicit_stale_recovery
-        )
+        and current - checked <= timedelta(hours=4)
     )
 
 
@@ -241,21 +233,12 @@ def validate_collection_freshness(
 
 
 def self_test() -> None:
-    original_allow_stale = os.environ.pop("NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE", None)
     try:
-        try:
-            require_jst_current_issue("1900-01-01")
-        except SystemExit:
-            pass
-        else:
-            fail("stale issue date must not be publishable without explicit override")
-        os.environ["NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE"] = "1"
         require_jst_current_issue("1900-01-01")
-    finally:
-        if original_allow_stale is None:
-            os.environ.pop("NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE", None)
-        else:
-            os.environ["NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE"] = original_allow_stale
+    except SystemExit:
+        pass
+    else:
+        fail("stale issue date must never be publishable as latest")
     current = datetime.fromisoformat("2099-01-01T18:50:00+09:00")
     fresh = {
         "collection_completed_at_jst": "2099-01-01T17:20:00+09:00",
@@ -311,20 +294,6 @@ def self_test() -> None:
         now=datetime.fromisoformat("2099-01-01T17:20:00+09:00"),
     ):
         fail("same-day Evidence could not be reused before final publication validation")
-    original_allow_stale = os.getenv("NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE")
-    try:
-        os.environ["NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE"] = "1"
-        if not evidence_reusable(
-            reusable,
-            "2099-01-01",
-            now=datetime.fromisoformat("2099-01-02T03:00:00+09:00"),
-        ):
-            fail("explicit stale recovery could not resume valid evening Evidence")
-    finally:
-        if original_allow_stale is None:
-            os.environ.pop("NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE", None)
-        else:
-            os.environ["NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE"] = original_allow_stale
     print("NIGHT SIGNAL PUBLISH SELF-TEST PASSED")
 
 

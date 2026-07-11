@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import concurrent.futures
 import email.utils
+import functools
 import gzip
 import hashlib
 import html
@@ -81,27 +82,6 @@ PUBLICATION_EVENT_RE = re.compile(
     r"rose|fell|increase|decrease)",
     re.I,
 )
-CATEGORY_IDENTITY_TERMS = {
-    "OpenAI": ["OpenAI", "ChatGPT", "Codex", "Azure OpenAI"],
-    "SoftBank": ["SoftBank", "ソフトバンク", "SBG", "Arm"],
-    "Honda": ["Honda", "ホンダ", "HRC", "Aston Martin", "Acura"],
-    "F1": ["F1", "FIA", "Grand Prix", "グランプリ", "Formula 1", "ホンダ", "Honda", "ADUO", "PU", "レッドブル", "メルセデス", "フェラーリ", "マクラーレン", "Aston Martin"],
-    "SpaceX": [
-        "SpaceX",
-        "Starship",
-        "Starlink",
-        "Crew Dragon",
-        "Cargo Dragon",
-        "Dragon spacecraft",
-        "ドラゴン宇宙船",
-        "Falcon",
-    ],
-    "日本経済": ["日本", "日銀", "財務省", "CPI", "GDP", "円", "JGB"],
-    "YOASOBI / 幾田りら": ["YOASOBI", "幾田りら", "ikura"],
-    "アジア経済": ["アジア", "中国", "インド", "台湾", "韓国", "ASEAN", "ベトナム"],
-    "北米経済": ["米", "米国", "アメリカ", "Canada", "Fed", "FRB", "S&P", "Nasdaq"],
-    "宇都宮ブレックス": ["宇都宮ブレックス", "Utsunomiya Brex", "宇都宮 BREX"],
-}
 DISCOVERY_CHANGE_TERMS = [
     "partnership",
     "提携",
@@ -166,6 +146,32 @@ def load_object(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         fail(f"expected object: {path}")
     return value
+
+
+@functools.lru_cache(maxsize=1)
+def configured_category_contracts() -> dict[str, dict[str, Any]]:
+    coverage = load_object(COVERAGE_CONFIG)
+    return {
+        str(category["label"]): category
+        for category in coverage.get("categories", [])
+        if isinstance(category, dict) and isinstance(category.get("label"), str)
+    }
+
+
+@functools.lru_cache(maxsize=1)
+def configured_category_identity_terms() -> dict[str, tuple[str, ...]]:
+    configured: dict[str, tuple[str, ...]] = {}
+    for label, category in configured_category_contracts().items():
+        try:
+            terms = evidence_contract.category_identity_terms(category)
+        except evidence_contract.EvidenceContractError as exc:
+            fail(str(exc))
+        configured[label] = terms
+    return configured
+
+
+def category_identity_terms(category_label: str) -> tuple[str, ...]:
+    return configured_category_identity_terms().get(category_label, ())
 
 
 class VisibleTextParser(HTMLParser):
@@ -530,16 +536,23 @@ def reader_public_copy_ok(text: str, *, kind: str) -> bool:
 
 
 def category_identity_ok(category_label: str, title: str, summary: str) -> bool:
-    if category_label not in {"F1", "宇都宮ブレックス"} and SPORTS_RESULT_RE.search(title):
+    category = configured_category_contracts().get(category_label, {})
+    if not category.get("allow_sports_results", False) and SPORTS_RESULT_RE.search(title):
         return False
-    terms = CATEGORY_IDENTITY_TERMS.get(category_label)
+    terms = category_identity_terms(category_label)
     if not terms:
         return True
     text = f"{title} {summary}".lower()
     return any(term.lower() in text for term in terms)
 
 
-def editor_candidate_boundary(category_label: str, title: str, excerpt: str) -> bool:
+def editor_candidate_boundary(
+    category_label: str,
+    title: str,
+    excerpt: str,
+    *,
+    source_label: str = "",
+) -> bool:
     """Apply only structural eligibility before the Editor's semantic review."""
     text = f"{title} {excerpt}"
     return bool(
@@ -547,7 +560,7 @@ def editor_candidate_boundary(category_label: str, title: str, excerpt: str) -> 
         and excerpt
         and not state_contract.navigation_shell_text(text)
         and not state_contract.NO_UPDATE_ASSERTION_RE.search(text)
-        and category_identity_ok(category_label, title, excerpt)
+        and category_identity_ok(category_label, f"{source_label} {title}", excerpt)
     )
 
 
@@ -631,7 +644,12 @@ def publication_evidence_record(
     if (
         not title
         or not excerpt
-        or not editor_candidate_boundary(category_label, title, excerpt)
+        or not editor_candidate_boundary(
+            category_label,
+            title,
+            excerpt,
+            source_label=str(record.get("label", "")),
+        )
         or record_evidence_depth(title, record) == "none"
     ):
         return False
@@ -1100,7 +1118,7 @@ def discovery_identity_queries(
     extra_terms: list[str] | None = None,
 ) -> list[str]:
     label = str(category["label"])
-    terms = [*CATEGORY_IDENTITY_TERMS.get(label, [label]), *(extra_terms or [])]
+    terms = [*(category_identity_terms(label) or (label,)), *(extra_terms or [])]
     useful = list(dict.fromkeys(str(term) for term in terms if str(term).strip()))
     return [
         " OR ".join(f'"{term}"' if " " in term else term for term in group)
@@ -1820,7 +1838,12 @@ def enrichment_target_urls(
             and record.get("observed")
             and valid_date(record.get("published_date"), issue_date)
             and record_document_is_current(record, issue_date)
-            and editor_candidate_boundary(category_label, title, excerpt)
+            and editor_candidate_boundary(
+                category_label,
+                title,
+                excerpt,
+                source_label=str(record.get("label", "")),
+            )
             and not record_has_material_body(title, record)
         ):
             targets.add(url)
@@ -1855,6 +1878,7 @@ def discovery_record_is_relevant(
             str(category.get("label", "")),
             title,
             excerpt,
+            source_label=str(record.get("label", "")),
         )
     )
 
@@ -2070,12 +2094,7 @@ def fetch_news(category: dict[str, Any], issue_date: str) -> dict[str, Any]:
 
 
 def category_contracts() -> list[dict[str, Any]]:
-    coverage = load_object(COVERAGE_CONFIG)
-    return [
-        category
-        for category in coverage.get("categories", [])
-        if isinstance(category, dict)
-    ]
+    return list(configured_category_contracts().values())
 
 
 def collection_checked_at(issue_date: str) -> str:
@@ -2303,7 +2322,7 @@ def normalize_result(
                 quote["quote"], records_by_id.get(quote["evidence_id"], {})
             )
             or (
-                str(category.get("label", "")) in CATEGORY_IDENTITY_TERMS
+                str(category.get("label", "")) in configured_category_identity_terms()
                 and not category_identity_ok(
                     str(category.get("label", "")), quote["quote"], ""
                 )
@@ -2561,7 +2580,7 @@ def self_test() -> None:
     )
     if any(
         term not in split_identity_queries
-        for term in CATEGORY_IDENTITY_TERMS["F1"]
+        for term in category_identity_terms("F1")
     ):
         fail("bounded discovery queries dropped a later category identity")
     indexed_queries = " ".join(
@@ -3146,6 +3165,13 @@ def self_test() -> None:
         "Hondaは夏休み体験授業でF1を特別展示する。",
     ):
         fail("semantic value judgment ran before the Editor")
+    if not editor_candidate_boundary(
+        "Honda",
+        "2026年5月の生産・販売・輸出実績",
+        "世界生産と国内販売の地域別実績を公表した。",
+        source_label="Honda News",
+    ):
+        fail("configured official source identity did not preserve a generic title")
     duplicate_record = {
         "label": "Technology News",
         "url": "https://example.com/openai-codex",

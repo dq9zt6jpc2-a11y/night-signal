@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       issue_date:
-        description: "Explicit NIGHT SIGNAL issue date to publish, e.g. 2026-06-05. Empty publishes today's JST issue."
+        description: "Today's JST NIGHT SIGNAL issue date. Empty uses today's date."
         required: false
         type: string
 
@@ -20,8 +20,6 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    env:
-      NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE: ${{ inputs.issue_date != '' && '1' || '' }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
