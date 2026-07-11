@@ -8,7 +8,7 @@ import json
 import os
 import subprocess
 import sys
-from datetime import datetime, time, timedelta
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
@@ -16,13 +16,11 @@ from zoneinfo import ZoneInfo
 import night_signal_state as state
 import night_signal_runtime_audit as runtime
 import night_signal_evidence as evidence_store
+import publication_timing as timing
 
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE_ROOT = ROOT / "state"
-FINAL_COLLECTION_EARLIEST = time(hour=15, minute=30)
-
-
 def fail(message: str) -> None:
     print(f"NIGHT SIGNAL PUBLISH FAILED: {message}", file=sys.stderr)
     raise SystemExit(1)
@@ -222,7 +220,7 @@ def validate_collection_freshness(
         fail(f"collection is too old for publication: {completed.isoformat()}")
     final_cutoff = datetime.combine(
         completed.date(),
-        FINAL_COLLECTION_EARLIEST,
+        timing.load_policy().final_collection_not_before,
         tzinfo=ZoneInfo("Asia/Tokyo"),
     )
     if require_evening_refresh and completed < final_cutoff:
@@ -274,7 +272,7 @@ def self_test() -> None:
     if not result["evening_refresh"]:
         fail("fresh evening collection was rejected")
     stale = dict(fresh)
-    stale["collection_completed_at_jst"] = "2099-01-01T15:29:00+09:00"
+    stale["collection_completed_at_jst"] = "2099-01-01T16:44:00+09:00"
     try:
         validate_collection_freshness(
             stale,
@@ -346,6 +344,8 @@ def self_tests(profile: str) -> None:
     if profile != "full":
         fail(f"unknown verification profile: {profile}")
     run([sys.executable, "scripts/night_signal_models.py"])
+    run([sys.executable, "scripts/night_signal_model_audit.py", "--self-test"])
+    run([sys.executable, "scripts/publication_timing.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_runtime_audit.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_state.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_publish.py", "--self-test"])

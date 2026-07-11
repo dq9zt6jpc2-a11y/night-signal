@@ -162,6 +162,16 @@ Issue内部では同じ文列を検証と出典対応に使うが、詳細ペー
 - GitまたはPagesの失敗で収集やAI処理を繰り返さない。
 - 既公開なら即終了する。
 
+公開時刻は`config/night_signal_operations.json`だけが所有する。19:00から収集・編集・
+commit・Pages確認を含む105分の処理上限と30分の安全余裕を引き、16:45を最終収集の
+開始窓とする。GitHubのschedule予定時刻は実行保証ではないため、複数の低コストheartbeatを
+置き、実際のJST時刻が16:45より前なら収集もmodel callも行わない。16:45以降に最初に
+開始したownerだけが新規収集し、19:00以降は処理を始めず期限超過として扱う。heartbeatの
+先頭は、現行cronで確認した最大205分の遅延にend-to-end処理上限105分を加えた310分を
+吸収できる位置に置く。後続heartbeatは
+公開auditに合格済みなら即終了する。scheduleではEvidenceを再利用せず、再利用は同日失敗後の
+明示的な回復だけに限定する。
+
 Evidenceの構造、source check、discovery check、watch topic、取得チャネル、取得状態の
 検証規則は`night_signal_evidence.py`だけが所有する。Editor、Issue validator、coverage
 audit、runtime audit、evalは同じ検証結果を使い、各段階で別の解釈を実装しない。
@@ -188,12 +198,16 @@ Evidence網羅性、公開HTMLの各境界で一回ずつ検証し、同じ検�
 tokenのいずれかを品質低下なしで改善する場合だけ切り替える。切替後に旧方式を
 恒久的な第二経路として残さない。
 
-2026-07-11時点の日次経路は、認証不要の登録ソース確認、日英および地域現地語の
+日次経路は、認証不要の登録ソース確認、日英および地域現地語の
 topic別ニュース探索、bounded horizon探索、媒体別の公開index探索、重要候補だけの
 event probeを使う。
-OpenAI公式の最新案内ではGPT-5.6系、Programmatic Tool Calling、明示的prompt cacheが
-利用可能だが、追加費用なしの日次基盤であるGitHub ModelsのcatalogにはGPT-5.6系がなく、
-この時点では本番へ追加しない。Responses API `web_search`は全source metadata、domain filter、画像検索、長時間検索制御を
+`night_signal_model_audit.py`は日次処理の開始時にOpenAI公式latest-model文書とGitHub Models
+catalogをHTTPだけで照合し、設定modelの提供終了と、新しいmodel familyの提供開始を検知する。
+照合に推論tokenは使わない。新modelは本番から分離した代表評価で網羅性、事実精度、要約品質、
+処理時間、tokenを現行modelと比較し、品質非劣化を満たすまで自動切替しない。catalog取得不能は
+公開を止めず、設定済みmodelがcatalogから消えた場合だけmodel処理前に停止する。
+
+Responses API `web_search`は全source metadata、domain filter、画像検索、長時間検索制御を
 利用できるが追加費用が発生するため、現行の日次経路へは追加しない。探索仕様の定期評価と、
 将来費用条件が変わった時の置換候補とする。Deep Research、Programmatic Tool Calling、
 Multi-agentも同様に比較対象とし、日次へ並行経路として足さない。YouTube、X、Meta、

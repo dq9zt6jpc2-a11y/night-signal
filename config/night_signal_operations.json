@@ -1,0 +1,16 @@
+{
+  "timezone": "Asia/Tokyo",
+  "publication_deadline": "19:00",
+  "build_timeout_minutes": 70,
+  "pages_timeout_minutes": 20,
+  "workflow_overhead_budget_minutes": 15,
+  "deadline_safety_margin_minutes": 30,
+  "observed_schedule_delay_minutes": 205,
+  "schedule_delay_contingency_minutes": 105,
+  "schedule_heartbeats_jst": [
+    "11:27",
+    "14:27",
+    "16:17",
+    "16:47"
+  ]
+}

@@ -7,6 +7,8 @@ import re
 import sys
 from pathlib import Path
 
+import publication_timing as timing
+
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGES = ROOT / ".github" / "workflows" / "pages.yml"
@@ -33,15 +35,26 @@ def ordered(text: str, *labels: str) -> bool:
 def main() -> int:
     pages = PAGES.read_text(encoding="utf-8")
     collection = COLLECTION.read_text(encoding="utf-8")
+    policy = timing.load_policy()
     if cron_minutes(pages) or re.search(r"\n\s+push:", pages):
         fail("Pages must be dispatch-only")
     if "--deploy-existing" not in pages:
         fail("Pages may deploy only committed issue state")
-    if cron_minutes(collection) != [15 * 60 + 35, 17 * 60 + 15]:
-        fail(f"collection attempts must be 15:35 and 17:15 JST: {cron_minutes(collection)}")
+    expected_heartbeats = sorted(
+        timing.minutes(value) for value in policy.schedule_heartbeats_jst
+    )
+    if cron_minutes(collection) != expected_heartbeats:
+        fail(
+            "collection heartbeats do not match the timing policy: "
+            f"{cron_minutes(collection)} != {expected_heartbeats}"
+        )
     if "night-signal-unattended-collection" not in collection or "cancel-in-progress: false" not in collection:
         fail("collection needs one non-cancelling concurrency owner")
-    if "timeout-minutes: 105" not in collection or "timeout-minutes: 70" not in collection:
+    if (
+        f"timeout-minutes: {policy.runtime_budget_minutes}" not in collection
+        or f"timeout-minutes: {policy.build_timeout_minutes}" not in collection
+        or f"timeout-minutes: {policy.pages_timeout_minutes}" not in collection
+    ):
         fail("collection and job runtime must be bounded")
     if collection.count('python3 scripts/night_signal_publish.py "$ISSUE_DATE"') != 2:
         fail("force and normal branches must both use the canonical pipeline")
@@ -53,7 +66,10 @@ def main() -> int:
             fail(f"workflow bypasses the canonical pipeline: {direct_owner}")
     if not ordered(
         collection,
+        "Evaluate publication window",
         "Detect an already verified publication",
+        "Enforce publication deadline",
+        "Audit current model catalog",
         "Restore Evidence checkpoint",
         "Build audited issue",
         "Save Evidence checkpoint",
@@ -72,16 +88,22 @@ def main() -> int:
         'python3 scripts/publication_audit.py "$ISSUE_DATE"',
     ):
         fail("manual force must bypass only the verified-publication short circuit")
+    if "scripts/publication_timing.py --decision" not in collection:
+        fail("scheduled work must use the actual-time publication window")
+    if "steps.timing.outputs.action == 'run'" not in collection:
+        fail("model and publication work must be gated by the timing decision")
+    if "night_signal_model_audit.py" not in collection:
+        fail("daily publication must check current model availability without inference")
     if not ordered(
         collection,
         "reuse_evidence:",
         "Locate latest Evidence checkpoint",
-        "github.event_name == 'schedule' || inputs.reuse_evidence == true",
-        'REUSE_EVIDENCE: ${{ github.event_name == \'schedule\' || inputs.reuse_evidence || false }}',
+        "inputs.reuse_evidence == true",
+        "REUSE_EVIDENCE: ${{ inputs.reuse_evidence || false }}",
         'if [[ "$REUSE_EVIDENCE" == "true" ]]',
         'python3 scripts/night_signal_publish.py "$ISSUE_DATE" --reuse-evidence',
     ):
-        fail("Evidence reuse must follow the explicit input or scheduled fallback contract")
+        fail("Evidence reuse must be explicit recovery, never a scheduled freshness shortcut")
     if "actions/upload-artifact@v7.0.1" not in collection or "actions/download-artifact@v8.0.1" not in collection:
         fail("a failed first attempt must leave a reusable Evidence")
     if "models: read" not in collection or "contents: write" not in collection or "actions: write" not in collection:
@@ -90,7 +112,14 @@ def main() -> int:
         fail("audited state must be committed before Pages dispatch")
     if 'gh run watch "$RUN_ID" --exit-status' not in collection:
         fail("collection owner must wait for public deployment")
-    print("PUBLICATION SCHEDULE AUDIT PASSED: pages=dispatch-only, collection_jst=[15:35,17:15], deadline=19:00")
+    print(
+        "PUBLICATION SCHEDULE AUDIT PASSED: "
+        f"window={policy.final_collection_not_before.strftime('%H:%M')}-"
+        f"{policy.publication_deadline.strftime('%H:%M')}, "
+        f"runtime={policy.runtime_budget_minutes}m, "
+        f"safety={policy.deadline_safety_margin_minutes}m, "
+        "scheduled_collection=fresh"
+    )
     return 0
 
 

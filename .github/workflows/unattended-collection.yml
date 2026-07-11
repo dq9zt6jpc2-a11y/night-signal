@@ -23,8 +23,10 @@ on:
         default: false
         type: boolean
   schedule:
-    - cron: "35 06 * * *"
-    - cron: "15 08 * * *"
+    - cron: "27 02 * * *"
+    - cron: "27 05 * * *"
+    - cron: "17 07 * * *"
+    - cron: "47 07 * * *"
 
 permissions:
   contents: write
@@ -62,8 +64,15 @@ jobs:
           ISSUE_DATE="$(python3 scripts/night_signal_publish.py --resolve-issue-date --event-name "$GITHUB_EVENT_NAME" --requested-issue-date "${REQUESTED_ISSUE_DATE:-}")"
           echo "ISSUE_DATE=$ISSUE_DATE" >> "$GITHUB_ENV"
 
+      - name: Evaluate publication window
+        id: timing
+        run: |
+          ACTION="$(python3 scripts/publication_timing.py --decision --event-name "$GITHUB_EVENT_NAME")"
+          echo "action=$ACTION" >> "$GITHUB_OUTPUT"
+
       - name: Detect an already verified publication
         id: current_publication
+        if: ${{ steps.timing.outputs.action != 'wait' }}
         env:
           FORCE_COLLECTION: ${{ inputs.force || false }}
         run: |
@@ -77,9 +86,20 @@ jobs:
             echo "published=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Enforce publication deadline
+        if: ${{ steps.timing.outputs.action == 'missed' && steps.current_publication.outputs.published != 'true' }}
+        run: |
+          echo "The 19:00 JST publication deadline passed before an eligible run started." >&2
+          exit 1
+
+      - name: Audit current model catalog
+        if: ${{ steps.current_publication.outputs.published != 'true' && steps.timing.outputs.action == 'run' }}
+        run: |
+          python3 scripts/night_signal_model_audit.py --output "$RUNNER_TEMP/night-signal-model-audit.json"
+
       - name: Locate latest Evidence checkpoint
         id: checkpoint
-        if: ${{ steps.current_publication.outputs.published != 'true' && (github.event_name == 'schedule' || inputs.reuse_evidence == true) }}
+        if: ${{ steps.current_publication.outputs.published != 'true' && steps.timing.outputs.action == 'run' && inputs.reuse_evidence == true }}
         env:
           GH_TOKEN: ${{ github.token }}
           ARTIFACT_NAME: night-signal-state-${{ env.ISSUE_DATE }}
@@ -104,10 +124,10 @@ jobs:
           run-id: ${{ steps.checkpoint.outputs.run_id }}
 
       - name: Build audited issue
-        if: ${{ steps.current_publication.outputs.published != 'true' }}
+        if: ${{ steps.current_publication.outputs.published != 'true' && steps.timing.outputs.action == 'run' }}
         timeout-minutes: 70
         env:
-          REUSE_EVIDENCE: ${{ github.event_name == 'schedule' || inputs.reuse_evidence || false }}
+          REUSE_EVIDENCE: ${{ inputs.reuse_evidence || false }}
         run: |
           if [[ "$REUSE_EVIDENCE" == "true" ]]; then
             python3 scripts/night_signal_publish.py "$ISSUE_DATE" --reuse-evidence --verification-profile deploy
@@ -118,7 +138,7 @@ jobs:
           git diff --check
 
       - name: Save Evidence checkpoint
-        if: ${{ always() && steps.current_publication.outputs.published != 'true' }}
+        if: ${{ always() && steps.current_publication.outputs.published != 'true' && steps.timing.outputs.action == 'run' }}
         uses: actions/upload-artifact@v7.0.1
         with:
           name: night-signal-state-${{ env.ISSUE_DATE }}
@@ -130,7 +150,7 @@ jobs:
           compression-level: 6
 
       - name: Commit audited issue
-        if: ${{ inputs.dry_run != true && steps.current_publication.outputs.published != 'true' }}
+        if: ${{ inputs.dry_run != true && steps.current_publication.outputs.published != 'true' && steps.timing.outputs.action == 'run' }}
         run: |
           git config user.name "night-signal-bot"
           git config user.email "night-signal-bot@users.noreply.github.com"
@@ -146,7 +166,7 @@ jobs:
           git push origin HEAD:main
 
       - name: Dispatch Pages publication
-        if: ${{ inputs.dry_run != true && steps.current_publication.outputs.published != 'true' }}
+        if: ${{ inputs.dry_run != true && steps.current_publication.outputs.published != 'true' && steps.timing.outputs.action == 'run' }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -156,7 +176,7 @@ jobs:
             -f issue_date="$ISSUE_DATE"
 
       - name: Wait for Pages publication
-        if: ${{ inputs.dry_run != true && steps.current_publication.outputs.published != 'true' }}
+        if: ${{ inputs.dry_run != true && steps.current_publication.outputs.published != 'true' && steps.timing.outputs.action == 'run' }}
         timeout-minutes: 20
         env:
           GH_TOKEN: ${{ github.token }}
@@ -183,7 +203,7 @@ jobs:
           python3 scripts/publication_audit.py "$ISSUE_DATE"
 
       - name: Report dry run
-        if: ${{ inputs.dry_run == true && steps.current_publication.outputs.published != 'true' }}
+        if: ${{ inputs.dry_run == true && steps.current_publication.outputs.published != 'true' && steps.timing.outputs.action == 'run' }}
         run: |
           echo "Full unattended collection and all audits passed."
           git status --short

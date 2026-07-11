@@ -9,7 +9,7 @@ evidence-backed important updates in the established format.
 GITHUB_TOKEN=... python3 scripts/night_signal_publish.py YYYY-MM-DD
 ```
 
-The 17:15 fallback may reuse a fresh same-date Evidence:
+Recovery may explicitly reuse a fresh same-date Evidence:
 
 ```bash
 GITHUB_TOKEN=... python3 scripts/night_signal_publish.py YYYY-MM-DD --reuse-evidence
@@ -37,15 +37,19 @@ python3 scripts/night_signal_publish.py YYYY-MM-DD --public-audit
 6. Local audits pass before commit.
 7. `pages.yml` deploys committed state and the owner verifies public URLs.
 
-Scheduled attempts run at 15:35 and 17:15 JST for publication by 19:00. The second attempt exits when
-publication is already verified and reuses a fresh checkpoint after downstream
-failure.
+The timing policy derives the fresh-collection window from the 19:00 deadline,
+the 105-minute end-to-end runtime budget, and a 30-minute safety margin. Scheduled
+heartbeats may arrive early or late; only the first actual start from 16:45 through
+18:59 runs collection. Earlier starts exit without model calls, later starts fail
+without spending collection or model tokens, and later heartbeats exit after a
+verified publication. Scheduled publication always collects fresh Evidence.
 
 ## Configuration
 
 - `config/night_signal_coverage.json`: categories, topics, and coverage rules.
 - `config/night_signal_sources.json`: seed sources.
 - `config/night_signal_models.json`: bounded model route and effort settings.
+- `config/night_signal_operations.json`: deadline, runtime, safety, and scheduler policy.
 
 ## Verification
 
@@ -54,6 +58,8 @@ python3 scripts/night_signal_state.py --self-test
 python3 scripts/night_signal_publish.py --self-test
 python3 scripts/night_signal_collect.py --self-test
 python3 scripts/night_signal_editor.py --self-test
+python3 scripts/night_signal_model_audit.py --self-test
+python3 scripts/publication_timing.py --self-test
 python3 scripts/publication_schedule_audit.py
 python3 scripts/simulate_runtime_failures.py
 python3 scripts/simulate_quality_gate_failures.py
