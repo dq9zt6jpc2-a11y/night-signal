@@ -686,6 +686,8 @@ def edit_evidence(
     def save_checkpoint() -> None:
         write_json_atomic(checkpoint_path, checkpoint)
 
+    unavailable_models: set[str] = set()
+
     def validated_model_result(
         *,
         messages: list[dict[str, str]],
@@ -698,6 +700,7 @@ def edit_evidence(
         correction: Callable[[dict[str, Any]], str],
         log_context: dict[str, Any],
         log_fields: Callable[[Any], dict[str, Any]],
+        fallback_on_validation: bool,
     ) -> tuple[Any | None, dict[str, Any], bool]:
         quality_model = str(
             models.load_config().get("extraction", {}).get("quality_model", "")
@@ -705,8 +708,11 @@ def edit_evidence(
         feedback: dict[str, Any] = {}
         last_result: Any | None = None
         for model_index, model_name in enumerate(model_chain):
+            if model_name in unavailable_models:
+                continue
             attempt_messages = messages
             max_attempts = 2 if model_index == 0 else 1
+            request_failed = False
             for attempt in range(1, max_attempts + 1):
                 try:
                     raw = models.request(
@@ -720,6 +726,9 @@ def edit_evidence(
                         max_output_tokens=max_output_tokens,
                     )
                 except models.ModelRequestError as exc:
+                    request_failed = True
+                    if exc.rate_limited:
+                        unavailable_models.add(model_name)
                     print(
                         json.dumps(
                             {
@@ -762,6 +771,8 @@ def edit_evidence(
                     },
                     {"role": "user", "content": correction(feedback)},
                 ]
+            if not request_failed and not fallback_on_validation:
+                return last_result, feedback, False
         return last_result, feedback, False
 
     def cards_from_raw(
@@ -928,7 +939,6 @@ def edit_evidence(
                 )
                 if (
                     quality_required
-                    and len(request_payload.get("events", [])) == 1
                     and models.extraction_model() not in model_chain
                 ):
                     model_chain.append(models.extraction_model())
@@ -976,6 +986,7 @@ def edit_evidence(
                         "cards": len(value[0]),
                         "unpublishable_items": value[1],
                     },
+                    fallback_on_validation=not quality_required,
                 )
 
             chunk_cards: list[dict[str, Any]] = []
