@@ -43,7 +43,7 @@ EDITOR_ITEM_SCHEMA: dict[str, Any] = {
             "items": {
                 "type": "object",
                 "properties": {
-                    "text": {"type": "string"},
+                    "text": {"type": "string", "maxLength": 500},
                     "evidence_ids": {
                         "type": "array",
                         "items": {"type": "string"},
@@ -54,8 +54,9 @@ EDITOR_ITEM_SCHEMA: dict[str, Any] = {
                 "additionalProperties": False,
             },
             "minItems": 1,
+            "maxItems": 12,
         },
-        "title": {"type": "string"},
+        "title": {"type": "string", "maxLength": 180},
         "topic_value_class": {
             "type": "string",
             "enum": TOPIC_VALUE_CLASSES,
@@ -104,6 +105,7 @@ EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
                     "items": {
                         "type": "array",
                         "items": EDITOR_ITEM_SCHEMA,
+                        "maxItems": 2,
                     },
                 },
                 "required": [
