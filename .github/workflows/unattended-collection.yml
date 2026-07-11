@@ -200,7 +200,6 @@ jobs:
             exit 1
           fi
           gh run watch "$RUN_ID" --exit-status
-          python3 scripts/publication_audit.py "$ISSUE_DATE"
 
       - name: Report dry run
         if: ${{ inputs.dry_run == true && steps.current_publication.outputs.published != 'true' && steps.timing.outputs.action == 'run' }}

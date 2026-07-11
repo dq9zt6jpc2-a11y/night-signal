@@ -60,17 +60,10 @@ MATERIAL_SIGNAL_RE = re.compile(
     r"契約|受注|提携|合意|協議|共同開発|標準化|partnership|contract|"
     r"発売|リリース|提供開始|開始|公開|開催|参入|撤退|建設|計画|plans?|"
     r"生産|量産|出資|損失|再任|loss|reappoint|"
-    r"視察団|訪中|訪米|経済界|"
     r"アップグレード|資金流入|景気|物価|賃金|雇用|輸出|輸入|GDP|金利|"
     r"launch result|打ち上げ結果|docking|ドッキング|"
     r"policy|regulation|規制|安全|recall|リコール"
     r")",
-    re.I,
-)
-LOW_SIGNAL_VALUE_RE = re.compile(
-    r"噂|予想|予測|レンダリング|架空|ダイキャスト|ミニカー|プラモデル|"
-    r"完成品|1/24|おもちゃ|グッズ|セール|値引き|クーポン|"
-    r"Derivatives|価格・チャート・時価総額|体験授業|特別展示|夏休み",
     re.I,
 )
 SPORTS_RESULT_RE = re.compile(
@@ -80,7 +73,7 @@ SPORTS_RESULT_RE = re.compile(
 PUBLICATION_EVENT_RE = re.compile(
     r"(発表|公表|決定|合意|契約|提携|買収|統合|開始|提供開始|発売|公開|更新|"
     r"就任|退任|移籍|獲得|退団|採用|建設|着工|延期|中止|承認|規制|"
-    r"訪中|訪米|会談|協議|出資|資金調達|上場|申請|"
+    r"会談|協議|出資|資金調達|上場|申請|"
     r"上昇|下落|急落|増加|減少|改善|悪化|達成|突破|判明|結果|決算|"
     r"CPI|GDP|失業率|雇用統計|利益|売上|"
     r"announc|agree|sign|launch|release|update|acqui|merge|appoint|"
@@ -417,8 +410,6 @@ def cluster_priority(record: dict[str, Any], category: dict[str, Any]) -> tuple[
     score = 0
     if record.get("source_class") != "discovered_media":
         score += 4
-    if MATERIAL_SIGNAL_RE.search(text):
-        score += 6
     if any(
         str(term).lower() in text.lower()
         for topic in category.get("watch_topics", [])
@@ -451,20 +442,7 @@ def select_clustered_evidence(
         key=lambda record: cluster_priority(record, category),
         reverse=True,
     )
-    seed = [record for record in records_by_score if record.get("source_class") != "discovered_media"]
-    discovered = [record for record in records_by_score if record.get("source_class") == "discovered_media"]
-    selected: list[dict[str, Any]] = []
-    seen_routes: set[tuple[str, str]] = set()
-    for record in seed:
-        route = (str(record.get("source_role")), str(record.get("channel")))
-        if route in seen_routes and not MATERIAL_SIGNAL_RE.search(
-            f"{record.get('title', '')} {record.get('excerpt', '')}"
-        ):
-            continue
-        seen_routes.add(route)
-        selected.append(record)
-    selected.extend(discovered)
-    return selected
+    return records_by_score
 
 
 PUBLIC_COPY_REPLACEMENTS = [
@@ -561,34 +539,16 @@ def category_identity_ok(category_label: str, title: str, summary: str) -> bool:
     return any(term.lower() in text for term in terms)
 
 
-def material_event_candidate(title: str, *evidence_values: str) -> bool:
-    text = " ".join([str(title), *(str(value or "") for value in evidence_values)])
+def editor_candidate_boundary(category_label: str, title: str, excerpt: str) -> bool:
+    """Apply only structural eligibility before the Editor's semantic review."""
+    text = f"{title} {excerpt}"
     return bool(
-        state_contract.analysis_headline(title)
-        or PUBLICATION_EVENT_RE.search(title)
-        or MATERIAL_SIGNAL_RE.search(text)
+        title
+        and excerpt
+        and not state_contract.navigation_shell_text(text)
+        and not state_contract.NO_UPDATE_ASSERTION_RE.search(text)
+        and category_identity_ok(category_label, title, excerpt)
     )
-
-
-def low_signal_value(*values: str) -> bool:
-    text = " ".join(str(value or "") for value in values)
-    return bool(LOW_SIGNAL_VALUE_RE.search(text))
-
-
-def publication_item_supported(title: str, *evidence_values: str) -> bool:
-    evidence = " ".join(str(value or "") for value in evidence_values)
-    if state_contract.analysis_headline(title):
-        supporting_sentences = [
-            sentence
-            for sentence in sentence_parts(evidence)
-            if state_contract.title_repetition_score(title, sentence) < 0.82
-        ]
-        facts = state_contract.normalize_material_facts(
-            title,
-            supporting_sentences,
-        )
-        return bool(facts) and bool(state_contract.analysis_conclusion(facts))
-    return material_event_candidate(title, evidence)
 
 
 def record_has_only_headline(title: str, record: dict[str, Any]) -> bool:
@@ -646,7 +606,6 @@ def record_evidence_depth(title: str, record: dict[str, Any]) -> str:
     if (
         record.get("source_class") == "discovered_media"
         and record.get("observed")
-        and material_event_candidate(title, excerpt)
         and headline_supports_distinct_summary(title)
         and not state_contract.navigation_shell_text(f"{title} {excerpt}")
     ):
@@ -672,11 +631,7 @@ def publication_evidence_record(
     if (
         not title
         or not excerpt
-        or state_contract.navigation_shell_text(f"{title} {excerpt}")
-        or state_contract.NO_UPDATE_ASSERTION_RE.search(f"{title} {excerpt}")
-        or not category_identity_ok(category_label, title, excerpt)
-        or low_signal_value(title, excerpt)
-        or not publication_item_supported(title, excerpt)
+        or not editor_candidate_boundary(category_label, title, excerpt)
         or record_evidence_depth(title, record) == "none"
     ):
         return False
@@ -1865,9 +1820,7 @@ def enrichment_target_urls(
             and record.get("observed")
             and valid_date(record.get("published_date"), issue_date)
             and record_document_is_current(record, issue_date)
-            and category_identity_ok(category_label, title, excerpt)
-            and not low_signal_value(title, excerpt)
-            and discovery_record_is_material(record)
+            and editor_candidate_boundary(category_label, title, excerpt)
             and not record_has_material_body(title, record)
         ):
             targets.add(url)
@@ -1898,15 +1851,24 @@ def discovery_record_is_relevant(
     return bool(
         valid_date(record.get("published_date"), issue_date)
         and record_document_is_current(record, issue_date)
-        and category_identity_ok(str(category.get("label", "")), title, excerpt)
-        and not low_signal_value(title, excerpt)
+        and editor_candidate_boundary(
+            str(category.get("label", "")),
+            title,
+            excerpt,
+        )
     )
 
 
 def discovery_record_is_material(record: dict[str, Any]) -> bool:
     title = record_public_title(record)
     excerpt = str(record.get("excerpt") or "")
-    return material_event_candidate(title, excerpt)
+    text = f"{title} {excerpt}"
+    return bool(
+        title
+        and excerpt
+        and not state_contract.navigation_shell_text(text)
+        and not state_contract.NO_UPDATE_ASSERTION_RE.search(text)
+    )
 
 
 def fetch_discovery_spec(
@@ -3178,8 +3140,12 @@ def self_test() -> None:
         "Bリーグでの取り組みを開始する。",
     ):
         fail("Brex category accepted another B.LEAGUE club")
-    if not low_signal_value("Hondaの夏休み体験授業でF1を特別展示"):
-        fail("routine promotional events must not become important updates")
+    if not editor_candidate_boundary(
+        "Honda",
+        "Hondaの夏休み体験授業でF1を特別展示",
+        "Hondaは夏休み体験授業でF1を特別展示する。",
+    ):
+        fail("semantic value judgment ran before the Editor")
     duplicate_record = {
         "label": "Technology News",
         "url": "https://example.com/openai-codex",
@@ -3254,8 +3220,8 @@ def self_test() -> None:
             "三菱自動車の世界生産は前年同月比8.2%減となった。",
         ),
         (
-            "background-profile",
-            False,
+            "semantic-background-for-editor",
+            True,
             "Honda 株価履歴と過去データ",
             "Honda designs, manufactures and launches vehicles worldwide. Stock Price and News.",
         ),

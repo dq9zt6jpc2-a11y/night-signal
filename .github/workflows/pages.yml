@@ -58,22 +58,15 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v5
 
-      - name: Verify public page date
+      - name: Audit published issue content
         run: |
           ISSUE_DATE="${ISSUE_DATE:?missing ISSUE_DATE}"
-          DISPLAY_DATE="${ISSUE_DATE//-/.}"
           for attempt in 1 2 3 4 5 6 7 8 9 10; do
-            ROOT_HTML="$(curl -fsSL https://dq9zt6jpc2-a11y.github.io/night-signal/ || true)"
-            DATED_HTML="$(curl -fsSL "https://dq9zt6jpc2-a11y.github.io/night-signal/${ISSUE_DATE}/index.html" || true)"
-            if [[ "$ROOT_HTML" == *"NIGHT SIGNAL | ${ISSUE_DATE}"* && "$ROOT_HTML" == *"${DISPLAY_DATE}"* && "$ROOT_HTML" == *"<h1>NIGHT SIGNAL</h1>"* && "$DATED_HTML" == *"NIGHT SIGNAL | ${ISSUE_DATE}"* ]]; then
-              echo "Public page verified for ${ISSUE_DATE}"
+            if python3 scripts/night_signal_publish.py "$ISSUE_DATE" --public-audit; then
               exit 0
             fi
-            echo "Public page not current yet; retry ${attempt}/10"
+            echo "Public content not current yet; retry ${attempt}/10"
             sleep 15
           done
-          echo "Public page did not show ${ISSUE_DATE}" >&2
+          echo "Public content audit did not pass for ${ISSUE_DATE}" >&2
           exit 1
-
-      - name: Audit published issue content
-        run: python3 scripts/night_signal_publish.py "$ISSUE_DATE" --public-audit
