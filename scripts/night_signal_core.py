@@ -2152,18 +2152,16 @@ def category_prompt(
     def build_payload(limit: int) -> dict[str, Any]:
         return {
             "category": category["label"],
-            "watch_topics": [
-                {
-                    "id": topic["id"],
-                    "terms": topic.get("terms", []),
-                    "event_classes": topic.get("event_classes", []),
-                }
-                for topic in category.get("watch_topics", [])
-                if isinstance(topic, dict)
-            ],
             "evidence": [
                 {
                     "id": evidence_id,
+                    "watch_topic_ids": list(
+                        dict.fromkeys(
+                            str(value)
+                            for value in record.get("watch_topic_ids", [])
+                            if str(value)
+                        )
+                    ),
                     "date": record.get("published_date"),
                     "source": record.get("label"),
                     "title": record_public_title(record),
@@ -2279,7 +2277,9 @@ def normalize_result(
     for item in raw.get("items", []):
         if not isinstance(item, dict):
             continue
+        title = compact_text(str(item.get("title", "")), 180)
         point_values: list[tuple[str, list[str], list[dict[str, str]]]] = []
+        seen_point_texts: set[str] = set()
         invalid_point_shape = False
         for raw_point in item.get("summary_points", []):
             if not isinstance(raw_point, dict):
@@ -2293,21 +2293,30 @@ def normalize_result(
                     if isinstance(value, str) and value
                 )
             )
-            support_quotes = [
-                {
-                    "evidence_id": evidence_id,
-                    "quote": support_quote_from_record(
-                        text,
-                        records_by_id[evidence_id],
-                    ),
-                }
-                for evidence_id in point_ids
-                if evidence_id in records_by_id
-            ]
             if not text or not point_ids:
                 invalid_point_shape = True
                 continue
-            point_values.append((text, point_ids, support_quotes))
+            normalized_texts = state_contract.normalize_material_facts(title, [text])
+            if not normalized_texts:
+                invalid_point_shape = True
+                continue
+            for normalized_text in normalized_texts:
+                if normalized_text in seen_point_texts:
+                    invalid_point_shape = True
+                    continue
+                seen_point_texts.add(normalized_text)
+                support_quotes = [
+                    {
+                        "evidence_id": evidence_id,
+                        "quote": support_quote_from_record(
+                            normalized_text,
+                            records_by_id[evidence_id],
+                        ),
+                    }
+                    for evidence_id in point_ids
+                    if evidence_id in records_by_id
+                ]
+                point_values.append((normalized_text, point_ids, support_quotes))
         evidence_ids = list(
             dict.fromkeys(
                 evidence_id
@@ -2327,14 +2336,9 @@ def normalize_result(
         ]
         sources = sources_from_records(source_records)
         topic = str(item.get("watch_topic_id", ""))
-        title = compact_text(str(item.get("title", "")), 180)
         point_texts = [text for text, _, _ in point_values]
-        facts = state_contract.normalize_material_facts(
-            title,
-            point_texts,
-        )
+        facts = point_texts
         summary = " ".join(facts)
-        point_contract_broken = len(facts) != len(point_values)
         unsupported_facts = [
             text
             for text, point_ids, _ in point_values
@@ -2382,7 +2386,7 @@ def normalize_result(
             for fact, (_, point_ids, _) in zip(facts, point_values)
         ]
         rejection_checks = [
-            ("invalid_summary_point", invalid_point_shape or point_contract_broken),
+            ("invalid_summary_point", invalid_point_shape),
             ("missing_evidence_id", not evidence_ids),
             ("unknown_evidence_id", bool(unknown_evidence_ids)),
             ("unknown_topic", topic not in valid_topics),
@@ -3018,6 +3022,7 @@ def self_test() -> None:
         fail("editor prompt still truncates rich source material to a thin excerpt")
     if set(prompt_evidence) != {
         "id",
+        "watch_topic_ids",
         "date",
         "source",
         "title",

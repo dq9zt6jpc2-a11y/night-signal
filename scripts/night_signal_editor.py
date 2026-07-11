@@ -422,8 +422,8 @@ def publication_record_chunks(
     records: list[dict[str, Any]],
     *,
     event_groups: list[list[dict[str, Any]]] | None = None,
-    max_records: int = 6,
-    max_payload_bytes: int = 24_000,
+    max_records: int = 10,
+    max_payload_bytes: int = 30_000,
 ) -> list[list[dict[str, Any]]]:
     """Pack selected events by model payload size while preserving every record."""
     groups = (
