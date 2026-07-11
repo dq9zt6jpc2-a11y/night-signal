@@ -139,10 +139,20 @@ def evidence_reusable(
         return False
     checked = checked.astimezone(ZoneInfo("Asia/Tokyo"))
     current = now.astimezone(ZoneInfo("Asia/Tokyo"))
+    if checked.date().isoformat() != issue_date or current < checked:
+        return False
+    if current.date() == checked.date():
+        return current - checked <= timedelta(hours=4)
+    previous_date = current.date() - timedelta(days=1)
+    final_cutoff = datetime.combine(
+        checked.date(),
+        timing.load_policy().final_collection_not_before,
+        tzinfo=ZoneInfo("Asia/Tokyo"),
+    )
     return (
-        checked.date().isoformat() == issue_date
-        and timedelta(0) <= current - checked
-        and current - checked <= timedelta(hours=4)
+        checked.date() == previous_date
+        and current.time() < timing.load_policy().final_collection_not_before
+        and checked >= final_cutoff
     )
 
 
@@ -322,6 +332,24 @@ def self_test() -> None:
         now=datetime.fromisoformat("2099-01-01T17:20:00+09:00"),
     ):
         fail("same-day Evidence could not be reused before final publication validation")
+    if not evidence_reusable(
+        {
+            "checked_at_jst": "2099-01-01T22:45:00+09:00",
+            "collector_contract_version": evidence_store.collector_contract_version(),
+        },
+        "2099-01-01",
+        now=datetime.fromisoformat("2099-01-02T03:00:00+09:00"),
+    ):
+        fail("final previous-day Evidence could not be reused for overnight recovery")
+    if evidence_reusable(
+        {
+            "checked_at_jst": "2099-01-01T22:45:00+09:00",
+            "collector_contract_version": evidence_store.collector_contract_version(),
+        },
+        "2099-01-01",
+        now=datetime.fromisoformat("2099-01-02T16:45:00+09:00"),
+    ):
+        fail("previous-day Evidence overlapped the current collection window")
     print("NIGHT SIGNAL PUBLISH SELF-TEST PASSED")
 
 
