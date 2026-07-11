@@ -899,11 +899,18 @@ def edit_evidence(
                     )
                     return result, result[2], result[3]
 
+                model_chain = models.routed_models(
+                    quality_required=quality_required
+                )
+                if (
+                    quality_required
+                    and len(request_records_value) == 1
+                    and models.extraction_model() not in model_chain
+                ):
+                    model_chain.append(models.extraction_model())
                 return validated_model_result(
                     messages=messages,
-                    model_chain=models.routed_models(
-                        quality_required=quality_required
-                    ),
+                    model_chain=model_chain,
                     request_label=(
                         f"{label} {chunk_index}/{len(chunks)}{request_suffix}"
                     ),
@@ -999,6 +1006,20 @@ def edit_evidence(
                     or not next_pending
                     or len(next_pending) >= len(pending_records)
                 ):
+                    if (
+                        not unsafe_non_event_feedback
+                        and not invalid_event_response
+                        and len(pending_records) > 1
+                    ):
+                        isolated_evidence = [
+                            ([record], f" evidence-{index}")
+                            for index, record in enumerate(
+                                pending_records,
+                                start=1,
+                            )
+                        ]
+                        work_queue = [*isolated_evidence, *work_queue]
+                        continue
                     failed_scope = True
                     break
                 chunk_cards.extend(selected_result[0])
