@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import copy
 import json
 import os
 import re
@@ -133,6 +134,18 @@ EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
     "required": ["events"],
     "additionalProperties": False,
 }
+
+
+def editor_response_schema(event_ids: list[str]) -> dict[str, Any]:
+    if not event_ids or len(event_ids) != len(set(event_ids)):
+        raise ValueError("editor response schema requires unique event ids")
+    schema = copy.deepcopy(EDITOR_RESPONSE_SCHEMA)
+    events_schema = schema["properties"]["events"]
+    events_schema["minItems"] = len(event_ids)
+    events_schema["maxItems"] = len(event_ids)
+    events_schema["items"]["properties"]["event_id"]["enum"] = event_ids
+    return schema
+
 
 SYSTEM_PROMPT = """Turn supplied NIGHT SIGNAL evidence into Japanese important updates.
 Return exactly one event result for every supplied event id. Within each event, every
@@ -406,6 +419,15 @@ def self_test() -> None:
     point_schema = item_schema["properties"]["summary_points"]["items"]
     if "support_quotes" in point_schema.get("properties", {}):
         raise SystemExit("model schema must not duplicate source text as support quotes")
+    bounded_schema = editor_response_schema(["g001", "g002"])
+    bounded_events = bounded_schema["properties"]["events"]
+    if (
+        bounded_events["minItems"] != 2
+        or bounded_events["maxItems"] != 2
+        or bounded_events["items"]["properties"]["event_id"]["enum"]
+        != ["g001", "g002"]
+    ):
+        raise SystemExit("editor response schema did not bind the input event ids")
     encoded = json.dumps(
         {"text": "日本語の本文"},
         ensure_ascii=False,

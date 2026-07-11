@@ -846,7 +846,9 @@ def edit_evidence(
                 messages=messages,
                 model_chain=model_chain,
                 request_label=f"{label} {chunk_index}/{len(chunks)}",
-                response_schema=None,
+                response_schema=models.editor_response_schema(
+                    [str(event["id"]) for event in category_payload["events"]]
+                ),
                 response_schema_name="night_signal_editor_result",
                 max_output_tokens=None,
                 validate=validate_summary,
