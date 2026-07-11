@@ -223,10 +223,12 @@ class ModelRequestError(RuntimeError):
         *,
         rate_limited: bool = False,
         retry_after: int | None = None,
+        status_code: int | None = None,
     ) -> None:
         super().__init__(message)
         self.rate_limited = rate_limited
         self.retry_after = retry_after
+        self.status_code = status_code
 
 
 def load_config() -> dict[str, Any]:
@@ -386,7 +388,8 @@ def request(
         except urllib.error.HTTPError as exc:
             if exc.code != 429:
                 raise ModelRequestError(
-                    f"GitHub Models request failed with HTTP {exc.code}"
+                    f"GitHub Models request failed with HTTP {exc.code}",
+                    status_code=exc.code,
                 ) from exc
             retry_after = exc.headers.get("Retry-After")
             try:

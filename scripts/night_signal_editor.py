@@ -259,15 +259,6 @@ def candidate_review_payload(
     return {
         "category": category["label"],
         "issue_date": issue_date,
-        "watch_topics": [
-            {
-                "id": str(topic["id"]),
-                "terms": topic.get("terms", []),
-                "event_classes": topic.get("event_classes", []),
-            }
-            for topic in category.get("watch_topics", [])
-            if isinstance(topic, dict) and topic.get("id")
-        ],
         "previous_updates": [
             {
                 "date": update.get("date"),
@@ -319,8 +310,8 @@ def candidate_review_chunks(
     event_groups: list[list[dict[str, Any]]],
     *,
     previous_updates: list[dict[str, Any]] | None = None,
-    max_events: int = 32,
-    max_bytes: int = 42_000,
+    max_events: int = 16,
+    max_bytes: int = 24_000,
 ) -> list[list[tuple[str, list[dict[str, Any]]]]]:
     candidates = [
         (f"c{index:03d}", group)
@@ -455,7 +446,7 @@ def publication_record_chunks(
     *,
     event_groups: list[list[dict[str, Any]]] | None = None,
     max_records: int = 6,
-    max_payload_bytes: int = 42_000,
+    max_payload_bytes: int = 24_000,
 ) -> list[list[dict[str, Any]]]:
     """Pack selected events by model payload size while preserving every record."""
     groups = (
@@ -523,7 +514,7 @@ def publication_record_chunks(
 def fit_model_payload(
     payload: dict[str, Any],
     *,
-    max_bytes: int = 140_000,
+    max_bytes: int = 32_000,
 ) -> dict[str, Any]:
     size = len(
         json.dumps(
@@ -764,9 +755,24 @@ def edit_evidence(
                         max_output_tokens=max_output_tokens,
                     )
                 except models.ModelRequestError as exc:
-                    if exc.rate_limited or model_name != model_chain[-1]:
+                    print(
+                        json.dumps(
+                            {
+                                **log_context,
+                                "phase": "model_request_failed",
+                                "model": model_name,
+                                "status_code": exc.status_code,
+                                "rate_limited": exc.rate_limited,
+                                "error": str(exc),
+                            },
+                            ensure_ascii=False,
+                        ),
+                        flush=True,
+                    )
+                    if exc.rate_limited:
                         with degraded_models_lock:
                             degraded_models.add(model_name)
+                    if exc.rate_limited or model_name != model_chain[-1]:
                         break
                     raise
                 result, accepted, feedback = validate(raw)
@@ -1074,15 +1080,15 @@ def self_test() -> None:
         "e002",
     ]:
         fail("Editor did not merge repeated model points and their evidence ids")
-    oversized_payload = {
+    bounded_payload = {
         "category": "Test",
         "watch_topics": [],
         "evidence": [
-            {"id": f"e{index:03d}", "title": f"題名{index}", "body": "詳しい本文。" * 2000}
+            {"id": f"e{index:03d}", "title": f"題名{index}", "body": "詳しい本文。" * 400}
             for index in range(1, 4)
         ],
     }
-    fitted_payload = fit_model_payload(oversized_payload)
+    fitted_payload = fit_model_payload(bounded_payload)
     fitted_bytes = len(
         json.dumps(
             fitted_payload,
@@ -1090,16 +1096,17 @@ def self_test() -> None:
             separators=(",", ":"),
         ).encode("utf-8")
     )
-    if fitted_bytes > 140_000 or {
+    if fitted_bytes > 32_000 or {
         item["id"] for item in fitted_payload["evidence"]
     } != {"e001", "e002", "e003"}:
         fail("Editor payload fitting dropped evidence or exceeded the request bound")
-    if fitted_payload != oversized_payload:
+    if fitted_payload != bounded_payload:
         fail("Editor payload fitting altered source bodies")
     too_large = {
-        **oversized_payload,
+        **bounded_payload,
         "evidence": [
-            {"id": "e999", "title": "題名", "body": "詳しい本文。" * 30000}
+            {"id": f"e{index:03d}", "title": f"題名{index}", "body": "詳しい本文。" * 2000}
+            for index in range(1, 4)
         ],
     }
     try:
