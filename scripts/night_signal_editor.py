@@ -943,28 +943,43 @@ def edit_evidence(
                     },
                 )
 
-            pending_records = chunk_records
             chunk_cards: list[dict[str, Any]] = []
+            work_queue: list[tuple[list[dict[str, Any]], str]] = [
+                (chunk_records, "")
+            ]
+            failed_scope = False
             recovery_round = 0
-            while pending_records:
-                suffix = "" if recovery_round == 0 else f" recovery-{recovery_round}"
+            while work_queue:
+                pending_records, suffix = work_queue.pop(0)
                 selected_result, feedback, accepted = request_records(
                     pending_records,
                     suffix,
                 )
                 if selected_result is None:
+                    failed_scope = True
                     break
-                chunk_cards.extend(selected_result[0])
                 if accepted:
-                    pending_records = []
-                    break
+                    chunk_cards.extend(selected_result[0])
+                    continue
                 event_feedback = feedback.get("event_response", {})
-                unsafe_feedback = (
+                invalid_event_response = any(event_feedback.values())
+                unsafe_non_event_feedback = (
                     feedback.get("conflicting_evidence_ids")
                     or feedback.get("unknown_excluded_ids")
                     or feedback.get("unpublishable_items")
-                    or any(event_feedback.values())
                 )
+                if invalid_event_response and not unsafe_non_event_feedback:
+                    records_by_event: dict[str, list[dict[str, Any]]] = {}
+                    for record in pending_records:
+                        event_id = str(record.get("_editor_event_id", ""))
+                        records_by_event.setdefault(event_id, []).append(record)
+                    if len(records_by_event) > 1:
+                        isolated = [
+                            (records, f" event-{event_id}")
+                            for event_id, records in records_by_event.items()
+                        ]
+                        work_queue = [*isolated, *work_queue]
+                        continue
                 missing_ids = feedback.get("missing_evidence_ids", [])
                 evidence_by_id = dict(
                     core.editor_evidence_records(
@@ -979,14 +994,20 @@ def edit_evidence(
                     if evidence_id in evidence_by_id
                 ]
                 if (
-                    unsafe_feedback
+                    unsafe_non_event_feedback
+                    or invalid_event_response
                     or not next_pending
                     or len(next_pending) >= len(pending_records)
                 ):
+                    failed_scope = True
                     break
-                pending_records = next_pending
+                chunk_cards.extend(selected_result[0])
                 recovery_round += 1
-            if pending_records:
+                work_queue.insert(
+                    0,
+                    (next_pending, f" recovery-{recovery_round}"),
+                )
+            if failed_scope:
                 fail(
                     "Editor could not produce complete summaries for every evidence item: "
                     f"{label} chunk {chunk_index}/{len(chunks)}"
