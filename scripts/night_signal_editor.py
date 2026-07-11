@@ -163,6 +163,7 @@ def flatten_event_response(
     unknown_event_ids: set[str] = set()
     cross_event_evidence_ids: set[str] = set()
     cross_event_excluded_ids: set[str] = set()
+    invalid_event_evidence_ids: dict[str, dict[str, list[str]]] = {}
     malformed_event_results = 0
     flattened = {"items": [], "excluded_evidence": []}
     for event_result in raw.get("events", []):
@@ -175,6 +176,22 @@ def flatten_event_response(
             continue
         seen_event_ids.append(event_id)
         allowed_ids = event_evidence_ids[event_id]
+        declared_ids = [
+            str(evidence_id)
+            for evidence_id in event_result.get("evidence_ids", [])
+            if isinstance(evidence_id, str)
+        ]
+        declared_set = set(declared_ids)
+        if declared_set != allowed_ids or len(declared_ids) != len(declared_set):
+            invalid_event_evidence_ids[event_id] = {
+                "missing": sorted(allowed_ids - declared_set),
+                "unknown": sorted(declared_set - allowed_ids),
+                "duplicates": sorted(
+                    evidence_id
+                    for evidence_id in declared_set
+                    if declared_ids.count(evidence_id) > 1
+                ),
+            }
         for item in event_result.get("items", []):
             if not isinstance(item, dict):
                 malformed_event_results += 1
@@ -208,6 +225,7 @@ def flatten_event_response(
         "unknown_event_ids": sorted(unknown_event_ids),
         "cross_event_evidence_ids": sorted(cross_event_evidence_ids),
         "cross_event_excluded_ids": sorted(cross_event_excluded_ids),
+        "invalid_event_evidence_ids": invalid_event_evidence_ids,
         "malformed_event_results": malformed_event_results,
     }
     accepted = not any(
@@ -217,6 +235,7 @@ def flatten_event_response(
             unknown_event_ids,
             cross_event_evidence_ids,
             cross_event_excluded_ids,
+            invalid_event_evidence_ids,
             malformed_event_results,
         )
     )
@@ -1143,6 +1162,10 @@ def self_test() -> None:
         "events": [
             {
                 "event_id": grouped_payload["events"][0]["id"],
+                "evidence_ids": [
+                    evidence["id"]
+                    for evidence in grouped_payload["events"][0]["evidence"]
+                ],
                 "items": [],
                 "excluded_evidence": [
                     {

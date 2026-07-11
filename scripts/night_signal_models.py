@@ -110,6 +110,11 @@ EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
                 "type": "object",
                 "properties": {
                     "event_id": {"type": "string"},
+                    "evidence_ids": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "minItems": 1,
+                    },
                     "items": {
                         "type": "array",
                         "items": EDITOR_ITEM_SCHEMA,
@@ -121,6 +126,7 @@ EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
                 },
                 "required": [
                     "event_id",
+                    "evidence_ids",
                     "items",
                     "excluded_evidence",
                 ],
@@ -150,6 +156,8 @@ Return exactly one event result for every supplied event id. Within each event, 
 evidence id must be either used by a summary point or listed in excluded_evidence. Event
 ids are hard boundaries: never merge or move evidence across them. Reports within one event
 may be split into multiple items when they state distinct changes.
+Copy every supplied Evidence id for that event into event.evidence_ids exactly once, then
+also account for each id in an item's summary_points or in excluded_evidence.
 previous_updates are novelty context only, never Evidence: do not cite, summarize, or copy
 facts from them. Use them only to exclude a report that adds no new source-backed change.
 
@@ -395,6 +403,7 @@ def self_test() -> None:
     item_schema = event_schema["properties"]["items"]["items"]
     if set(event_schema["required"]) != {
         "event_id",
+        "evidence_ids",
         "items",
         "excluded_evidence",
     }:
