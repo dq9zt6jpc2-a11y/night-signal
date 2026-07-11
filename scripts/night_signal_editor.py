@@ -102,6 +102,7 @@ def quality_model_required(category_payload: dict[str, Any]) -> bool:
 
 def sanitize_editor_title(value: Any) -> str:
     title = core.reader_facing_text(value, 180)
+    title = re.split(r"[。！？!?](?:\s+|$)", title, maxsplit=1)[0]
     for character in state.TITLE_FORBIDDEN_CHARS:
         title = title.replace(character, " ")
     for phrase in state.VAGUE_TITLE_PHRASES:
@@ -1104,6 +1105,10 @@ def self_test() -> None:
         "OpenAIの政府株式提供提案とAI業界の最新動向"
     ) != "OpenAIの政府株式提供提案":
         fail("Editor did not remove a trailing vague title phrase")
+    if sanitize_editor_title(
+        "8歳の候補者が選出された。 今後の活躍に期待。 夢は続く。"
+    ) != "8歳の候補者が選出された":
+        fail("Editor did not remove sentence padding from a model title")
     with tempfile.TemporaryDirectory() as temporary_directory:
         sample_evidence = Path(temporary_directory) / "evidence.json"
         sample_evidence.write_bytes(b"canonical evidence")

@@ -1,6 +1,6 @@
 {
   "extraction": {
-    "editor_contract_revision": "event-summary-v12",
+    "editor_contract_revision": "event-summary-v13",
     "compatible_checkpoint_contracts": [
       "37e0a8d3352d9aca5ba6001d9ddd47a8d8786f5d301066f486ba0b4ea5d099b3",
       "19ecb94aa46b8def0c471f1456a14e9f2dd97aad8c7e1d740b2dee06a18ef103",
@@ -12,7 +12,8 @@
       "115bd1aadf02f65ff1d33266102e57e6b07d94d0ff09912e65c6628c4f2d729b",
       "47332b2f6d28702082c8514fd6db5379f0f76ca06b7c9b55abe87e56097e8e0f",
       "3aaf6ce4be8466fee38ab8c8b6526e6618f4e1b0c7c6308985425917f2b5c4cc",
-      "c47c742a7a22c174a151a23882151e81a9b3bd945f968513a831e726818a6955"
+      "c47c742a7a22c174a151a23882151e81a9b3bd945f968513a831e726818a6955",
+      "0989b04759d0a3d570b8ee4af7505658b6efcac1272c94783ddee48f9136dbfa"
     ],
     "model": "openai/gpt-4o-mini",
     "quality_model": "openai/gpt-4.1-mini",
