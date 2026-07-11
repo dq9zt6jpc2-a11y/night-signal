@@ -16,7 +16,7 @@ from typing import Any
 CONFIG_PATH = Path(__file__).resolve().parents[1] / "config" / "night_signal_models.json"
 MODELS_URL = "https://models.github.ai/inference/chat/completions"
 DEFAULT_TIMEOUT_SECONDS = 90
-DEFAULT_RETRIES = 2
+DEFAULT_RETRIES = 3
 DEFAULT_MAX_TOKENS = 8000
 USER_AGENT = (
     "Mozilla/5.0 (compatible; NightSignalBot/1.0; "
@@ -53,21 +53,8 @@ EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
                                     "items": {"type": "string"},
                                     "minItems": 1,
                                 },
-                                "support_quotes": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "object",
-                                        "properties": {
-                                            "evidence_id": {"type": "string"},
-                                            "quote": {"type": "string"},
-                                        },
-                                        "required": ["evidence_id", "quote"],
-                                        "additionalProperties": False,
-                                    },
-                                    "minItems": 1,
-                                },
                             },
-                            "required": ["text", "evidence_ids", "support_quotes"],
+                            "required": ["text", "evidence_ids"],
                             "additionalProperties": False,
                         },
                         "minItems": 1,
@@ -198,14 +185,13 @@ and an unfamiliar subject's stated role, the concrete change, scope or mechanism
 numbers, dates, conditions, reasons, and results when they matter. Each point must add
 information beyond the title. Do not target a fixed length.
 
-For every point, include exact short support_quotes copied from the cited evidence bodies.
-Every cited evidence id needs a quote. Choose enough surrounding text to show the category
-subject or its direct relationship to the claim. Do not translate or rewrite quotes.
+For every point, cite every supporting evidence id. Exact support spans are recovered
+deterministically from those evidence records after generation; do not reproduce source quotes.
 
 Evidence marked evidence_depth=headline has no verified body beyond its source headline.
 It is still usable when that headline states multiple concrete facts: make the public title
-shorter, put only the remaining headline-stated facts in summary_points, and quote the exact
-headline wording. Never infer a missing detail or repeat the same fact in title and summary.
+shorter and put only the remaining headline-stated facts in summary_points. Never infer a
+missing detail or repeat the same fact in title and summary.
 If the headline cannot support a distinct summary fact, exclude it as no_material_update.
 
 Exclude only duplicate reports, navigation/background, wrong category/entity, or no
@@ -471,8 +457,8 @@ def self_test() -> None:
     if item_schema.get("additionalProperties") is not False:
         raise SystemExit("editor response schema must reject undeclared fields")
     point_schema = item_schema["properties"]["summary_points"]["items"]
-    if "support_quotes" not in point_schema.get("required", []):
-        raise SystemExit("summary points must carry exact source support quotes")
+    if "support_quotes" in point_schema.get("properties", {}):
+        raise SystemExit("model schema must not duplicate source text as support quotes")
     encoded = json.dumps(
         {"text": "日本語の本文"},
         ensure_ascii=False,

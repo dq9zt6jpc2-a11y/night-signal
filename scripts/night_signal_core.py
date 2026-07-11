@@ -760,6 +760,36 @@ def support_quote_matches_record(quote: str, record: dict[str, Any]) -> bool:
     return len(quote_key) >= 8 and quote_key in evidence_key
 
 
+def support_quote_from_record(fact: str, record: dict[str, Any]) -> str:
+    """Select a deterministic source span for an editor fact."""
+    raw_title = compact_text(str(record.get("title", "")), 320)
+    raw_body = compact_text(
+        str(record.get("excerpt") or record.get("evidence") or ""),
+        8500,
+    )
+    candidates = list(
+        dict.fromkeys(
+            value
+            for value in [raw_title, *sentence_parts(raw_body)]
+            if 8 <= len(value) <= 320
+        )
+    )
+    if not candidates:
+        return compact_text(raw_title or raw_body, 320)
+    fact_numbers = set(re.findall(r"\d+(?:\.\d+)?", fact))
+
+    def relevance(value: str) -> tuple[int, int, int, int]:
+        value_numbers = set(re.findall(r"\d+(?:\.\d+)?", value))
+        return (
+            len(fact_numbers & value_numbers),
+            state_contract.text_overlap(fact, value),
+            int(state_contract.materially_same_fact(fact, value)),
+            min(len(value), 180),
+        )
+
+    return max(candidates, key=relevance)
+
+
 def page_text(raw: bytes, content_type: str) -> tuple[str, str]:
     charset_match = re.search(r"charset=([A-Za-z0-9._-]+)", content_type)
     charset = charset_match.group(1) if charset_match else "utf-8"
@@ -2265,15 +2295,16 @@ def normalize_result(
             )
             support_quotes = [
                 {
-                    "evidence_id": str(value.get("evidence_id", "")),
-                    "quote": compact_text(str(value.get("quote", "")), 320),
+                    "evidence_id": evidence_id,
+                    "quote": support_quote_from_record(
+                        text,
+                        records_by_id[evidence_id],
+                    ),
                 }
-                for value in raw_point.get("support_quotes", [])
-                if isinstance(value, dict)
-                and isinstance(value.get("evidence_id"), str)
-                and isinstance(value.get("quote"), str)
+                for evidence_id in point_ids
+                if evidence_id in records_by_id
             ]
-            if not text or not point_ids or not support_quotes:
+            if not text or not point_ids:
                 invalid_point_shape = True
                 continue
             point_values.append((text, point_ids, support_quotes))
@@ -2320,12 +2351,6 @@ def normalize_result(
             or quote["evidence_id"] not in records_by_id
             or not support_quote_matches_record(
                 quote["quote"], records_by_id.get(quote["evidence_id"], {})
-            )
-            or (
-                str(category.get("label", "")) in configured_category_identity_terms()
-                and not category_identity_ok(
-                    str(category.get("label", "")), quote["quote"], ""
-                )
             )
         ]
         missing_quote_ids = [

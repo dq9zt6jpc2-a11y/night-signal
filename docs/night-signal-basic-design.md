@@ -141,8 +141,8 @@ detail summary、what changed、why it mattersを別々に生成しない。URL�
 Issue内部では同じ文列を検証と出典対応に使うが、詳細ページには要約を一度だけ表示し、
 同じ文を要約と事実一覧へ二重表示しない。
 
-各要約文には、根拠本文からそのまま抜いた短いsupport quoteとEvidence IDを内部的に
-対応させる。support quoteは公開せず、翻訳要約や数値変換の根拠確認だけに使う。
+各要約文にはEvidence IDを対応させ、その取得済み本文から短いsupport quoteを決定的に
+復元する。support quoteは公開せず、翻訳要約や数値変換の根拠確認だけに使う。
 
 候補と掲載可能Evidenceには各段階の短い連番IDを付け、すべてのIDが掲載群または除外、
 その後は公開項目または除外へ一度だけ割り当てられたかを確認する。AIが項目を返さなかった

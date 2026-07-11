@@ -9,7 +9,6 @@ import json
 import os
 import re
 import sys
-import threading
 from pathlib import Path
 from typing import Any, Callable
 
@@ -118,17 +117,6 @@ def sanitize_model_result(raw: dict[str, Any]) -> dict[str, Any]:
                     if isinstance(value, str) and value
                 )
             )
-            support_quotes = [
-                {
-                    "evidence_id": str(value.get("evidence_id", "")),
-                    "quote": compact_text(value.get("quote", ""), 320),
-                }
-                for value in raw_point.get("support_quotes", [])
-                if isinstance(value, dict)
-                and isinstance(value.get("evidence_id"), str)
-                and value.get("evidence_id")
-                and compact_text(value.get("quote", ""), 320)
-            ]
             duplicate = next(
                 (
                     point
@@ -146,22 +134,11 @@ def sanitize_model_result(raw: dict[str, Any]) -> dict[str, Any]:
                     {
                         "text": text,
                         "evidence_ids": evidence_ids,
-                        "support_quotes": support_quotes,
                     }
                 )
             else:
                 duplicate["evidence_ids"] = list(
                     dict.fromkeys([*duplicate.get("evidence_ids", []), *evidence_ids])
-                )
-                duplicate["support_quotes"] = list(
-                    {
-                        (str(value.get("evidence_id")), str(value.get("quote"))): value
-                        for value in [
-                            *duplicate.get("support_quotes", []),
-                            *support_quotes,
-                        ]
-                        if isinstance(value, dict)
-                    }.values()
                 )
         sanitized["items"].append({**raw_item, "summary_points": points})
     return sanitized
@@ -716,9 +693,6 @@ def edit_evidence(
     configs = category_config()
 
     contracts = core.category_contracts()
-    degraded_models: set[str] = set()
-    degraded_models_lock = threading.Lock()
-
     def validated_model_result(
         *,
         messages: list[dict[str, str]],
@@ -737,9 +711,6 @@ def edit_evidence(
         )
         feedback: dict[str, Any] = {}
         for model_name in model_chain:
-            with degraded_models_lock:
-                if model_name in degraded_models:
-                    continue
             attempt_messages = messages
             max_attempts = 2 if model_name == quality_model else 1
             for attempt in range(1, max_attempts + 1):
@@ -769,9 +740,6 @@ def edit_evidence(
                         ),
                         flush=True,
                     )
-                    if exc.rate_limited:
-                        with degraded_models_lock:
-                            degraded_models.add(model_name)
                     if exc.rate_limited or model_name != model_chain[-1]:
                         break
                     raise

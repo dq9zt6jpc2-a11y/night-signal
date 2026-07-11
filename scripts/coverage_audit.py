@@ -107,6 +107,7 @@ def self_test() -> None:
         "categories": [
             {
                 "label": "Test",
+                "identity_terms": ["Test"],
                 "required_watch_topic_channels": ["web"],
                 "watch_topics": [{"id": "topic-one"}],
             }
