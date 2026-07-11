@@ -787,7 +787,38 @@ def normalized_scaled_numbers(value: str) -> tuple[set[float], str]:
 
 def numeric_claims(value: str) -> set[float]:
     scaled, remainder = normalized_scaled_numbers(value)
-    return scaled | numeric_literals(remainder)
+    word_values = {
+        "zero": 0,
+        "one": 1,
+        "two": 2,
+        "three": 3,
+        "four": 4,
+        "five": 5,
+        "six": 6,
+        "seven": 7,
+        "eight": 8,
+        "nine": 9,
+        "ten": 10,
+        "eleven": 11,
+        "twelve": 12,
+        "thirteen": 13,
+        "fourteen": 14,
+        "fifteen": 15,
+        "sixteen": 16,
+        "seventeen": 17,
+        "eighteen": 18,
+        "nineteen": 19,
+        "twenty": 20,
+    }
+    word_numbers = {
+        float(word_values[match.group(0).lower()])
+        for match in re.finditer(
+            r"\b(?:" + "|".join(word_values) + r")\b",
+            remainder,
+            flags=re.I,
+        )
+    }
+    return scaled | numeric_literals(remainder) | word_numbers
 
 
 def numeric_claim_supported(
@@ -3267,6 +3298,21 @@ def self_test() -> None:
         [rounded_count_record],
     ):
         fail("Exact Japanese count accepted a different source number")
+    number_word_record = {
+        **english_record,
+        "title": "How an eight-year-old became Formula 1's tiniest team principal",
+        "excerpt": "Eight-year-old George won the Formula 1 fan competition.",
+    }
+    if not fact_supported_by_records(
+        "8歳のジョージがF1ファン向けコンテストで選出された。",
+        [number_word_record],
+    ):
+        fail("English number word lost Japanese numeric support")
+    if fact_supported_by_records(
+        "9歳のジョージがF1ファン向けコンテストで選出された。",
+        [number_word_record],
+    ):
+        fail("English number word accepted a different Japanese number")
     _, parsed_body = page_text(
         (
             "<html><head><title>Example</title></head><body>"
