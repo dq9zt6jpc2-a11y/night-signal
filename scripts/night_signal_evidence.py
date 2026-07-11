@@ -3,7 +3,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
 import sys
 from datetime import datetime
@@ -14,13 +13,9 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_CONFIG = ROOT / "config" / "night_signal_sources.json"
 COVERAGE_CONFIG = ROOT / "config" / "night_signal_coverage.json"
-COLLECTOR_CONTRACT_PATHS = (
-    ROOT / "scripts" / "night_signal_collect.py",
-    ROOT / "scripts" / "night_signal_core.py",
-    ROOT / "scripts" / "night_signal_evidence.py",
-    SOURCE_CONFIG,
-    COVERAGE_CONFIG,
-)
+# Bump only when collection semantics or the Evidence schema changes. Editor and
+# renderer changes must not invalidate an already verified same-day collection.
+COLLECTOR_CONTRACT_REVISION = "2971bda468f60d99"
 SOURCE_CHECK_STATES = {"observed_live", "source_unavailable"}
 DISCOVERY_CHECK_STATES = {
     "searched_no_results",
@@ -51,13 +46,7 @@ def load_object(path: Path) -> dict[str, Any]:
 
 
 def collector_contract_version() -> str:
-    digest = hashlib.sha256()
-    for path in COLLECTOR_CONTRACT_PATHS:
-        digest.update(str(path.relative_to(ROOT)).encode("utf-8"))
-        digest.update(b"\0")
-        digest.update(path.read_bytes())
-        digest.update(b"\0")
-    return digest.hexdigest()[:16]
+    return COLLECTOR_CONTRACT_REVISION
 
 
 def required_channels(contract: dict[str, Any], category: dict[str, Any]) -> set[str]:
