@@ -52,7 +52,6 @@ def catalog_ids(value: Any) -> set[str]:
 def configured_model_ids() -> set[str]:
     config = models.load_config().get("extraction", {})
     values = [
-        config.get("review_model"),
         config.get("model"),
         config.get("quality_model"),
         *config.get("fallback_models", []),

@@ -4,11 +4,12 @@
 from __future__ import annotations
 
 import argparse
-import concurrent.futures
+import hashlib
 import json
 import os
 import re
 import sys
+import tempfile
 from pathlib import Path
 from typing import Any, Callable
 
@@ -82,7 +83,9 @@ def public_item_copy(item: dict[str, Any]) -> tuple[str, str]:
 def quality_model_required(category_payload: dict[str, Any]) -> bool:
     evidence = [
         item
-        for item in category_payload.get("evidence", [])
+        for event in category_payload.get("events", [])
+        if isinstance(event, dict)
+        for item in event.get("evidence", [])
         if isinstance(item, dict)
     ]
     for item in evidence:
@@ -178,148 +181,6 @@ def publication_candidate_groups(
     return event_groups
 
 
-def candidate_review_text(record: dict[str, Any], limit: int = 900) -> str:
-    text = core.reader_facing_text(
-        str(record.get("excerpt") or record.get("evidence") or ""),
-        8000,
-    )
-    if len(text) <= limit:
-        return text
-    head = max(1, limit * 2 // 3)
-    return compact_text(f"{text[:head]} {text[-(limit - head):]}", limit)
-
-
-def candidate_review_records(group: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """Choose non-redundant review text; the full group remains available to summary."""
-    ranked = sorted(
-        group,
-        key=lambda record: (
-            core.record_evidence_depth(core.record_public_title(record), record) == "body",
-            record.get("source_class") != "discovered_media",
-            len(candidate_review_text(record)),
-        ),
-        reverse=True,
-    )
-    selected: list[dict[str, Any]] = []
-    seen_routes: set[tuple[str, str]] = set()
-    for record in ranked:
-        route = (
-            str(record.get("source_role", "")),
-            str(record.get("channel", "")),
-        )
-        if selected and route in seen_routes:
-            continue
-        selected.append(record)
-        seen_routes.add(route)
-    return selected
-
-
-def candidate_review_payload(
-    category: dict[str, Any],
-    issue_date: str,
-    candidates: list[tuple[str, list[dict[str, Any]]]],
-    previous_updates: list[dict[str, Any]] | None = None,
-) -> dict[str, Any]:
-    current_titles = [
-        core.record_public_title(record)
-        for _, group in candidates
-        for record in group
-    ]
-    matching_previous = [
-        update
-        for update in previous_updates or []
-        if any(
-            core.same_material_event(title, str(update.get("title", "")))
-            for title in current_titles
-        )
-    ]
-    return {
-        "category": category["label"],
-        "issue_date": issue_date,
-        "previous_updates": [
-            {
-                "date": update.get("date"),
-                "title": compact_text(update.get("title", ""), 180),
-                "summary": compact_text(update.get("summary", ""), 700),
-            }
-            for update in matching_previous
-        ],
-        "events": [
-            {
-                "id": event_id,
-                "watch_topic_ids": list(
-                    dict.fromkeys(
-                        str(topic_id)
-                        for record in group
-                        for topic_id in record.get("watch_topic_ids", [])
-                        if str(topic_id)
-                    )
-                ),
-                "title_variants": list(
-                    dict.fromkeys(
-                        core.record_public_title(record)
-                        for record in group
-                        if core.record_public_title(record)
-                    )
-                ),
-                "records": [
-                    {
-                        "date": record.get("published_date"),
-                        "source": record.get("label"),
-                        "title": core.record_public_title(record),
-                        "evidence_depth": core.record_evidence_depth(
-                            core.record_public_title(record),
-                            record,
-                        ),
-                        "text": candidate_review_text(record),
-                    }
-                    for record in candidate_review_records(group)
-                ],
-            }
-            for event_id, group in candidates
-        ],
-    }
-
-
-def candidate_review_chunks(
-    category: dict[str, Any],
-    issue_date: str,
-    event_groups: list[list[dict[str, Any]]],
-    *,
-    previous_updates: list[dict[str, Any]] | None = None,
-    max_events: int = 16,
-    max_bytes: int = 24_000,
-) -> list[list[tuple[str, list[dict[str, Any]]]]]:
-    candidates = [
-        (f"c{index:03d}", group)
-        for index, group in enumerate(event_groups, start=1)
-    ]
-    chunks: list[list[tuple[str, list[dict[str, Any]]]]] = []
-    current: list[tuple[str, list[dict[str, Any]]]] = []
-    for candidate in candidates:
-        proposed = [*current, candidate]
-        payload_size = len(
-            json.dumps(
-                candidate_review_payload(
-                    category,
-                    issue_date,
-                    proposed,
-                    previous_updates,
-                ),
-                ensure_ascii=False,
-                separators=(",", ":"),
-            ).encode("utf-8")
-        )
-        if current and (len(proposed) > max_events or payload_size > max_bytes):
-            chunks.append(current)
-            current = [candidate]
-        else:
-            current = proposed
-    if current:
-        chunks.append(current)
-    return chunks
-
-
 def previous_category_updates(
     state_root: Path,
     issue_date: str,
@@ -355,82 +216,47 @@ def previous_category_updates(
     return []
 
 
-def normalize_candidate_review(
-    raw: dict[str, Any],
-    candidates: list[tuple[str, list[dict[str, Any]]]],
-) -> tuple[list[list[dict[str, Any]]], bool, dict[str, Any]]:
-    groups_by_id = dict(candidates)
-    expected_ids = set(groups_by_id)
-    used_ids: list[str] = []
-    selected: list[list[dict[str, Any]]] = []
-    invalid_groups = 0
-    for value in raw.get("publish_groups", []):
-        if not isinstance(value, dict):
-            invalid_groups += 1
-            continue
-        event_ids = [
-            str(event_id)
-            for event_id in value.get("event_ids", [])
-            if isinstance(event_id, str) and event_id
-        ]
-        if not event_ids or any(event_id not in groups_by_id for event_id in event_ids):
-            invalid_groups += 1
-            continue
-        used_ids.extend(event_ids)
-        records: list[dict[str, Any]] = []
-        seen_urls: set[str] = set()
-        for event_id in event_ids:
-            for record in groups_by_id[event_id]:
-                url = str(record.get("url", ""))
-                if url and url in seen_urls:
-                    continue
-                if url:
-                    seen_urls.add(url)
-                records.append(record)
-        if records:
-            selected.append(records)
-    excluded_ids = [
-        str(value.get("event_id"))
-        for value in raw.get("excluded_events", [])
-        if isinstance(value, dict) and isinstance(value.get("event_id"), str)
-    ]
-    accounted_ids = [*used_ids, *excluded_ids]
-    duplicate_ids = sorted(
-        event_id
-        for event_id in set(accounted_ids)
-        if accounted_ids.count(event_id) > 1
-    )
-    unknown_ids = sorted(set(accounted_ids) - expected_ids)
-    missing_ids = sorted(expected_ids - set(accounted_ids))
-    accepted = not (
-        invalid_groups
-        or duplicate_ids
-        or unknown_ids
-        or missing_ids
-    )
-    return selected, accepted, {
-        "invalid_groups": invalid_groups,
-        "duplicate_event_ids": duplicate_ids,
-        "unknown_event_ids": unknown_ids,
-        "missing_event_ids": missing_ids,
-    }
-
-
 def publication_record_chunks(
     category: dict[str, Any],
     issue_date: str,
     records: list[dict[str, Any]],
     *,
     event_groups: list[list[dict[str, Any]]] | None = None,
+    previous_updates: list[dict[str, Any]] | None = None,
     max_records: int = 10,
     max_payload_bytes: int = 30_000,
 ) -> list[list[dict[str, Any]]]:
     """Pack selected events by model payload size while preserving every record."""
-    groups = (
+    raw_groups = (
         event_groups
         if event_groups is not None
         else publication_candidate_groups(category, issue_date, records)
     )
+    groups: list[list[dict[str, Any]]] = []
+    for index, group in enumerate(raw_groups, start=1):
+        titles = [core.record_public_title(record) for record in group]
+        matching_previous = [
+            {
+                "date": update.get("date"),
+                "title": compact_text(update.get("title", ""), 180),
+                "summary": compact_text(update.get("summary", ""), 700),
+            }
+            for update in previous_updates or []
+            if any(
+                core.same_material_event(title, str(update.get("title", "")))
+                for title in titles
+            )
+        ]
+        groups.append(
+            [
+                {
+                    **record,
+                    "_editor_event_id": f"g{index:03d}",
+                    "_editor_previous_updates": matching_previous,
+                }
+                for record in group
+            ]
+        )
     chunks: list[list[dict[str, Any]]] = []
     current: list[dict[str, Any]] = []
     for group in groups:
@@ -517,6 +343,16 @@ def read_evidence(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         fail("research bundle must be an object")
     return value
+
+
+def write_json_atomic(path: Path, value: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(
+        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    temporary.replace(path)
 
 
 def category_config() -> dict[str, dict[str, Any]]:
@@ -693,6 +529,29 @@ def edit_evidence(
     configs = category_config()
 
     contracts = core.category_contracts()
+    evidence_hash = evidence_store.bundle_sha256(evidence_path)
+    editor_contract_hash = state.editor_contract_sha256()
+    checkpoint_path = state_root / issue_date / "editor_checkpoint.json"
+    checkpoint: dict[str, Any] = {
+        "evidence_sha256": evidence_hash,
+        "editor_contract_sha256": editor_contract_hash,
+        "chunks": {},
+    }
+    try:
+        stored_checkpoint = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        stored_checkpoint = None
+    if (
+        isinstance(stored_checkpoint, dict)
+        and stored_checkpoint.get("evidence_sha256") == evidence_hash
+        and stored_checkpoint.get("editor_contract_sha256") == editor_contract_hash
+        and isinstance(stored_checkpoint.get("chunks"), dict)
+    ):
+        checkpoint = stored_checkpoint
+
+    def save_checkpoint() -> None:
+        write_json_atomic(checkpoint_path, checkpoint)
+
     def validated_model_result(
         *,
         messages: list[dict[str, str]],
@@ -825,98 +684,57 @@ def edit_evidence(
         }
         return cards, failed, accepted, feedback
 
-    def select_candidate_groups(
-        category: dict[str, Any],
-        label: str,
-        records: list[dict[str, Any]],
-    ) -> list[list[dict[str, Any]]]:
-        event_groups = publication_candidate_groups(category, issue_date, records)
-        previous_updates = previous_category_updates(state_root, issue_date, label)
-        chunks = candidate_review_chunks(
-            category,
-            issue_date,
-            event_groups,
-            previous_updates=previous_updates,
-        )
-        selected_groups: list[list[dict[str, Any]]] = []
-        for chunk_index, candidates in enumerate(chunks, start=1):
-            payload = candidate_review_payload(
-                category,
-                issue_date,
-                candidates,
-                previous_updates,
-            )
-            messages = [
-                {"role": "system", "content": models.CANDIDATE_REVIEW_PROMPT},
-                {
-                    "role": "user",
-                    "content": json.dumps(
-                        payload,
-                        ensure_ascii=False,
-                        separators=(",", ":"),
-                    ),
-                },
-            ]
-            def validate_candidate(
-                raw: dict[str, Any],
-            ) -> tuple[Any, bool, dict[str, Any]]:
-                reviewed, accepted, feedback = normalize_candidate_review(
-                    raw,
-                    candidates,
-                )
-                return reviewed, accepted, feedback
-
-            selected_result, feedback = validated_model_result(
-                messages=messages,
-                model_chain=models.candidate_review_models(),
-                request_label=(
-                    f"{label} candidate review {chunk_index}/{len(chunks)}"
-                ),
-                response_schema=models.CANDIDATE_REVIEW_SCHEMA,
-                response_schema_name="night_signal_candidate_review",
-                max_output_tokens=4_000,
-                validate=validate_candidate,
-                correction=lambda value: (
-                    "Return the entire corrected JSON. Account for every event id "
-                    "exactly once. Validation feedback: "
-                    + json.dumps(value, ensure_ascii=False, separators=(",", ":"))
-                ),
-                log_context={
-                    "phase": "candidate_review",
-                    "category": label,
-                    "chunk": chunk_index,
-                    "chunks": len(chunks),
-                    "events": len(candidates),
-                },
-                log_fields=lambda value: {"selected_groups": len(value)},
-            )
-            if selected_result is None:
-                fail(
-                    "Editor could not account for every discovery event: "
-                    f"{label} candidate review {chunk_index}/{len(chunks)}; "
-                    + json.dumps(feedback, ensure_ascii=False, separators=(",", ":"))
-                )
-            selected_groups.extend(selected_result)
-        return selected_groups
-
     def review_category(category: dict[str, Any]) -> tuple[str, list[dict[str, Any]]]:
         label = str(category["label"])
         entry = categories[label]
         if not isinstance(entry, dict) or not isinstance(entry.get("records"), list):
             fail(f"Evidence records are missing: {label}")
         records = [record for record in entry["records"] if isinstance(record, dict)]
-        selected_event_groups = select_candidate_groups(category, label, records)
+        selected_event_groups = publication_candidate_groups(
+            category,
+            issue_date,
+            records,
+        )
+        previous_updates = previous_category_updates(state_root, issue_date, label)
         chunks = publication_record_chunks(
             category,
             issue_date,
             records,
             event_groups=selected_event_groups,
+            previous_updates=previous_updates,
         )
         category_cards: list[dict[str, Any]] = []
         for chunk_index, chunk_records in enumerate(chunks, start=1):
             category_payload = fit_model_payload(
                 core.category_prompt(category, issue_date, chunk_records)
             )
+            checkpoint_key = hashlib.sha256(
+                json.dumps(
+                    category_payload,
+                    ensure_ascii=False,
+                    sort_keys=True,
+                    separators=(",", ":"),
+                ).encode("utf-8")
+            ).hexdigest()
+            stored_cards = checkpoint["chunks"].get(checkpoint_key)
+            if isinstance(stored_cards, list) and all(
+                isinstance(card, dict) for card in stored_cards
+            ):
+                category_cards.extend(stored_cards)
+                print(
+                    json.dumps(
+                        {
+                            "phase": "editor_checkpoint_reused",
+                            "category": label,
+                            "chunk": chunk_index,
+                            "chunks": len(chunks),
+                            "cards": len(stored_cards),
+                        },
+                        ensure_ascii=False,
+                    ),
+                    flush=True,
+                )
+                continue
             quality_required = quality_model_required(category_payload)
             model_chain = models.routed_models(quality_required=quality_required)
             messages = [
@@ -970,16 +788,16 @@ def edit_evidence(
                     "Editor could not produce complete summaries for every evidence item: "
                     f"{label} chunk {chunk_index}/{len(chunks)}"
                 )
-            category_cards.extend(selected_result[0])
+            chunk_cards = selected_result[0]
+            checkpoint["chunks"][checkpoint_key] = chunk_cards
+            save_checkpoint()
+            category_cards.extend(chunk_cards)
         return label, merge_repeated_cards(category_cards)
 
     cards_by_category: dict[str, list[dict[str, Any]]] = {}
-    workers = max(1, int(os.getenv("NIGHT_SIGNAL_MODEL_CONCURRENCY", "1")))
-    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
-        futures = [executor.submit(review_category, category) for category in contracts]
-        for future in concurrent.futures.as_completed(futures):
-            label, cards = future.result()
-            cards_by_category[label] = cards
+    for category in contracts:
+        label, category_cards = review_category(category)
+        cards_by_category[label] = category_cards
     cards = [
         card
         for category in configs
@@ -992,7 +810,7 @@ def edit_evidence(
         issue_date,
         collection_mode=str(evidence.get("collection_mode")),
         collection_completed_at_jst=str(evidence.get("checked_at_jst")),
-        evidence_sha256=evidence_store.bundle_sha256(evidence_path),
+        evidence_sha256=evidence_hash,
     )
     issue = {
         "issue_date": issue_date,
@@ -1017,6 +835,12 @@ def edit_evidence(
 
 def self_test() -> None:
     core.self_test()
+    with tempfile.TemporaryDirectory() as temporary_directory:
+        sample_evidence = Path(temporary_directory) / "evidence.json"
+        sample_evidence.write_bytes(b"canonical evidence")
+        expected_hash = hashlib.sha256(b"canonical evidence").hexdigest()
+        if evidence_store.bundle_sha256(sample_evidence) != expected_hash:
+            fail("Evidence checkpoint hash is not reproducible")
     sanitized = sanitize_model_result(
         {
             "items": [
@@ -1050,10 +874,20 @@ def self_test() -> None:
         fail("Editor did not merge repeated model points and their evidence ids")
     bounded_payload = {
         "category": "Test",
-        "watch_topics": [],
-        "evidence": [
-            {"id": f"e{index:03d}", "title": f"題名{index}", "body": "詳しい本文。" * 400}
-            for index in range(1, 4)
+        "allowed_watch_topic_ids": [],
+        "events": [
+            {
+                "id": "g001",
+                "previous_updates": [],
+                "evidence": [
+                    {
+                        "id": f"e{index:03d}",
+                        "title": f"題名{index}",
+                        "body": "詳しい本文。" * 400,
+                    }
+                    for index in range(1, 4)
+                ],
+            }
         ],
     }
     fitted_payload = fit_model_payload(bounded_payload)
@@ -1065,16 +899,25 @@ def self_test() -> None:
         ).encode("utf-8")
     )
     if fitted_bytes > 32_000 or {
-        item["id"] for item in fitted_payload["evidence"]
+        item["id"] for item in fitted_payload["events"][0]["evidence"]
     } != {"e001", "e002", "e003"}:
         fail("Editor payload fitting dropped evidence or exceeded the request bound")
     if fitted_payload != bounded_payload:
         fail("Editor payload fitting altered source bodies")
     too_large = {
         **bounded_payload,
-        "evidence": [
-            {"id": f"e{index:03d}", "title": f"題名{index}", "body": "詳しい本文。" * 2000}
-            for index in range(1, 4)
+        "events": [
+            {
+                **bounded_payload["events"][0],
+                "evidence": [
+                    {
+                        "id": f"e{index:03d}",
+                        "title": f"題名{index}",
+                        "body": "詳しい本文。" * 2000,
+                    }
+                    for index in range(1, 4)
+                ],
+            }
         ],
     }
     try:
@@ -1084,27 +927,31 @@ def self_test() -> None:
     else:
         fail("Editor accepted a payload only by silently shortening its source body")
     if quality_model_required(
-        {"evidence": [{"title": "企業が新製品を発売", "body": "企業は新製品を7月に発売した。"}]}
+        {"events": [{"evidence": [{"title": "企業が新製品を発売", "body": "企業は新製品を7月に発売した。"}]}]}
     ):
         fail("Editor routed a routine factual extraction to the quality model")
     if not quality_model_required(
-        {"evidence": [{"title": "【分析】市場構造を検証", "body": "複数の数値から市場構造を分析した。"}]}
+        {"events": [{"evidence": [{"title": "【分析】市場構造を検証", "body": "複数の数値から市場構造を分析した。"}]}]}
     ):
         fail("Editor did not route analysis work to the quality model")
     if quality_model_required(
-        {"evidence": [{"title": "Product update", "body": "The company released a major product update with new enterprise controls."}]}
+        {"events": [{"evidence": [{"title": "Product update", "body": "The company released a major product update with new enterprise controls."}]}]}
     ):
         fail("Editor routed a short factual translation to the quality model")
     if quality_model_required(
-        {"evidence": [{"title": "詳細発表", "body": "具体的な変更内容。" * 100}]}
+        {"events": [{"evidence": [{"title": "詳細発表", "body": "具体的な変更内容。" * 100}]}]}
     ):
         fail("Editor routed length alone to the quality model")
     if not quality_model_required(
         {
-            "evidence": [
+            "events": [
                 {
-                    "title": "統計表を公表",
-                    "body": "| 指標 | 前月 | 今月 |\n| --- | --- | --- |\n| 生産 | 10 | 12 |",
+                    "evidence": [
+                        {
+                            "title": "統計表を公表",
+                            "body": "| 指標 | 前月 | 今月 |\n| --- | --- | --- |\n| 生産 | 10 | 12 |",
+                        }
+                    ]
                 }
             ]
         }
@@ -1143,55 +990,12 @@ def self_test() -> None:
             "watch_topic_ids": ["ipo_financing"],
         },
     ]
-    review_candidates = [
-        ("c001", [review_records[0]]),
-        ("c002", [review_records[1]]),
-    ]
-    reviewed, accepted, feedback = normalize_candidate_review(
-        {
-            "publish_groups": [
-                {"event_ids": ["c001"]}
-            ],
-            "excluded_events": [
-                {"event_id": "c002", "reason": "no_material_update"}
-            ],
-        },
-        review_candidates,
-    )
-    if not accepted or len(reviewed) != 1 or feedback["missing_event_ids"]:
-        fail("Candidate review did not account for every event exactly once")
-    _, invalid_review, invalid_feedback = normalize_candidate_review(
-        {"publish_groups": [], "excluded_events": []},
-        review_candidates,
-    )
-    if invalid_review or invalid_feedback["missing_event_ids"] != ["c001", "c002"]:
-        fail("Candidate review accepted an unaccounted event")
-    review_chunks = candidate_review_chunks(
-        review_category,
-        "2099-01-02",
-        [[review_records[0]], [review_records[1]]],
-        max_events=1,
-    )
-    if [event_id for chunk in review_chunks for event_id, _ in chunk] != [
-        "c001",
-        "c002",
-    ]:
-        fail("Candidate review chunking dropped or repeated an event")
     duplicate_report = {
         **review_records[0],
         "label": "Example News",
         "url": "https://example.com/openai-release",
         "title": "OpenAI、新モデルを一般公開",
     }
-    duplicate_payload = candidate_review_payload(
-        review_category,
-        "2099-01-02",
-        [("c001", [review_records[0], duplicate_report])],
-    )["events"][0]
-    if len(duplicate_payload["title_variants"]) != 2 or len(
-        duplicate_payload["records"]
-    ) != 1:
-        fail("Candidate review repeated full text or lost a title variant")
     grouped_summary_chunks = publication_record_chunks(
         review_category,
         "2099-01-02",
@@ -1201,11 +1005,20 @@ def self_test() -> None:
     )
     if len(grouped_summary_chunks) != 1 or len(grouped_summary_chunks[0]) != 2:
         fail("Summary chunking split one event despite fitting the payload bound")
+    grouped_payload = core.category_prompt(
+        review_category,
+        "2099-01-02",
+        grouped_summary_chunks[0],
+    )
+    if len(grouped_payload["events"]) != 1 or not grouped_payload["events"][0][
+        "evidence"
+    ]:
+        fail("Editor prompt lost the deterministic event boundary")
     summary_chunks = publication_record_chunks(
         review_category,
         "2099-01-02",
         review_records,
-        event_groups=reviewed,
+        event_groups=[[review_records[0]]],
         max_records=1,
     )
     if len(summary_chunks) != 1 or summary_chunks[0][0]["url"] != review_records[0]["url"]:

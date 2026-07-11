@@ -114,70 +114,12 @@ EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
     "additionalProperties": False,
 }
 
-CANDIDATE_REVIEW_SCHEMA: dict[str, Any] = {
-    "type": "object",
-    "properties": {
-        "publish_groups": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "event_ids": {
-                        "type": "array",
-                        "items": {"type": "string"},
-                        "minItems": 1,
-                    },
-                },
-                "required": ["event_ids"],
-                "additionalProperties": False,
-            },
-        },
-        "excluded_events": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "event_id": {"type": "string"},
-                    "reason": {
-                        "type": "string",
-                        "enum": [
-                            "background_or_navigation",
-                            "wrong_entity_or_category",
-                            "no_material_update",
-                        ],
-                    },
-                },
-                "required": ["event_id", "reason"],
-                "additionalProperties": False,
-            },
-        },
-    },
-    "required": ["publish_groups", "excluded_events"],
-    "additionalProperties": False,
-}
-
-CANDIDATE_REVIEW_PROMPT = """Review discovered NIGHT SIGNAL event candidates before summarization.
-Select every current, category-relevant new event, material update, result, decision, or
-new analysis that states its new question, evidence, and attributed conclusion. When a
-candidate contains a concrete change and is not clearly unusable, include it; broad recall
-is more important than aggressive filtering.
-
-Group reports of the same event in one publish_group. Keep distinct dates, milestones,
-decisions, results, products, people, or analytical conclusions separate.
-
-Exclude only navigation/background, the wrong entity or category, or content with no new
-material information such as a static quote/listing page, generic advice, an event teaser
-without a result, or speculation that reports no new attributed analysis. Do not exclude
-an unfamiliar company, a small event, a headline-only source, or an item merely because
-its importance is uncertain. previous_updates are context, not evidence: exclude a report
-that only repeats a previous update, but retain a new milestone, amount, date, result,
-decision, evidence, or attributed conclusion in the same continuing story. Every event id
-must appear exactly once, either in one
-publish_group or in excluded_events. Use only supplied evidence."""
-
 SYSTEM_PROMPT = """Turn supplied NIGHT SIGNAL evidence into Japanese important updates.
 Success means every evidence id is either used by a summary point or listed in
-excluded_evidence. Merge reports of the same event; keep distinct milestones and events.
+excluded_evidence. Each supplied event id is a hard boundary: never merge evidence from
+different event ids. Reports within one event may be split when they state distinct changes.
+previous_updates are novelty context only, never Evidence: do not cite, summarize, or copy
+facts from them. Use them only to exclude a report that adds no new source-backed change.
 
 For each update, create one title and the ordered summary_points needed to understand it.
 Keep all source-backed material facts even when the result becomes longer: the subject
@@ -247,19 +189,6 @@ def extraction_models() -> list[str]:
 
 def extraction_model() -> str:
     return extraction_models()[0]
-
-
-def candidate_review_models() -> list[str]:
-    config = load_config()["extraction"]
-    review = os.getenv("NIGHT_SIGNAL_REVIEW_MODEL") or config.get("review_model")
-    quality = config.get("quality_model")
-    if not isinstance(review, str) or not review:
-        raise ValueError("candidate review model is missing")
-    return list(
-        dict.fromkeys(
-            [review, *([quality] if isinstance(quality, str) and quality else [])]
-        )
-    )
 
 
 def routed_models(*, quality_required: bool) -> list[str]:
@@ -425,9 +354,6 @@ def self_test() -> None:
         raise SystemExit("quality model must be an escalation, not the routine model")
     if routed_models(quality_required=False)[0] != chain[0]:
         raise SystemExit("routine routing must use the routine model first")
-    review_chain = candidate_review_models()
-    if not review_chain:
-        raise SystemExit("candidate review model chain is empty")
     quality = config.get("quality_model")
     if quality and routed_models(quality_required=True)[0] != quality:
         raise SystemExit("quality routing must use the quality model first")
@@ -436,11 +362,6 @@ def self_test() -> None:
     item_schema = EDITOR_RESPONSE_SCHEMA["properties"]["items"]["items"]
     if "excluded_evidence" not in EDITOR_RESPONSE_SCHEMA["required"]:
         raise SystemExit("editor schema does not account for reviewed exclusions")
-    if set(CANDIDATE_REVIEW_SCHEMA["required"]) != {
-        "publish_groups",
-        "excluded_events",
-    }:
-        raise SystemExit("candidate review schema does not account for every event")
     required_fields = {"summary_points", "change_class"}
     if not required_fields <= set(item_schema["properties"]):
         raise SystemExit("editor response schema lacks the canonical summary contract")

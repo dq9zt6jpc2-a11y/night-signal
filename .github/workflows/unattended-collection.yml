@@ -38,7 +38,6 @@ jobs:
     timeout-minutes: 105
     env:
       GITHUB_TOKEN: ${{ github.token }}
-      NIGHT_SIGNAL_MODEL_CONCURRENCY: 1
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -132,6 +131,7 @@ jobs:
           name: night-signal-state-${{ env.ISSUE_DATE }}
           path: |
             state/${{ env.ISSUE_DATE }}/evidence.json
+            state/${{ env.ISSUE_DATE }}/editor_checkpoint.json
             state/${{ env.ISSUE_DATE }}/issue.json
           if-no-files-found: warn
           retention-days: 2

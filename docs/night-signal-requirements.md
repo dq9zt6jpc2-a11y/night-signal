@@ -73,9 +73,9 @@ Facebook、Instagram、TikTokを毎日巡回しなくても、設定テーマで
 
 - CollectorはEvidenceを取得し、Editorだけが事象統合、採否、要約を行う。
 - Validatorは拒否だけを行い、文章を後段で補修しない。
-- 全候補の変化点レビューにはrecall model、単純な事実要約にはroutine model、分析、
-  表・グラフ中心、高数値密度の情報にはquality modelを使う。本文の長さだけで
-  quality modelへ上げず、下位modelが契約を満たさない時だけ一度昇格する。
+- 同一事象の決定的なgrouping後、採否と要約を一回のAI処理で行う。単純な事実要約には
+  routine model、分析、表・グラフ中心、高数値密度の情報にはquality modelを使う。
+  本文の長さだけでquality modelへ上げず、下位modelが契約を満たさない時だけ一度昇格する。
 - 推論量、モデル、再検索、再検査は、代表評価で品質向上が確認できる時だけ増やす。
 - 日次は境界検査だけとし、全故障simulationとモデル比較は設計変更時に行う。
 - 新技術はEvidence取得手段またはEditorの置換候補として比較し、採用後に旧経路を

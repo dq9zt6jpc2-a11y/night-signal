@@ -2135,9 +2135,20 @@ def category_prompt(
     body_limit = 8000
 
     def build_payload(limit: int) -> dict[str, Any]:
-        return {
-            "category": category["label"],
-            "evidence": [
+        events: list[dict[str, Any]] = []
+        events_by_id: dict[str, dict[str, Any]] = {}
+        for evidence_id, record in selected:
+            event_id = str(record.get("_editor_event_id") or evidence_id)
+            event = events_by_id.get(event_id)
+            if event is None:
+                event = {
+                    "id": event_id,
+                    "previous_updates": record.get("_editor_previous_updates", []),
+                    "evidence": [],
+                }
+                events_by_id[event_id] = event
+                events.append(event)
+            event["evidence"].append(
                 {
                     "id": evidence_id,
                     "watch_topic_ids": list(
@@ -2159,8 +2170,15 @@ def category_prompt(
                         limit,
                     ),
                 }
-                for evidence_id, record in selected
+            )
+        return {
+            "category": category["label"],
+            "allowed_watch_topic_ids": [
+                str(topic["id"])
+                for topic in category.get("watch_topics", [])
+                if isinstance(topic, dict) and topic.get("id")
             ],
+            "events": events,
         }
 
     return build_payload(body_limit)
@@ -2321,6 +2339,11 @@ def normalize_result(
             if evidence_id in records_by_id
         ]
         sources = sources_from_records(source_records)
+        source_event_ids = {
+            str(record.get("_editor_event_id"))
+            for record in source_records
+            if record.get("_editor_event_id")
+        }
         topic_order = {
             topic_id: index for index, topic_id in enumerate(valid_topic_order)
         }
@@ -2390,6 +2413,7 @@ def normalize_result(
             ("missing_evidence_id", not evidence_ids),
             ("unknown_evidence_id", bool(unknown_evidence_ids)),
             ("unknown_topic", topic not in valid_topics),
+            ("mixed_event_boundary", len(source_event_ids) > 1),
             ("empty_title", not title),
             ("title_copy", not reader_public_copy_ok(title, kind="title")),
             ("empty_summary", not facts),
@@ -2774,7 +2798,12 @@ def self_test() -> None:
     }
     if publication_evidence_record(music_category, "2099-01-03", navigation_record):
         fail("navigation index was treated as publication Evidence")
-    if category_prompt(music_category, "2099-01-03", [navigation_record])["evidence"]:
+    navigation_prompt = category_prompt(
+        music_category,
+        "2099-01-03",
+        [navigation_record],
+    )
+    if any(event["evidence"] for event in navigation_prompt["events"]):
         fail("navigation index reached the Editor prompt")
     no_update_record = {
         **navigation_record,
@@ -2817,7 +2846,7 @@ def self_test() -> None:
         "2099-01-03",
         [headline_record],
     )
-    if headline_payload["evidence"][0].get("evidence_depth") != "headline":
+    if headline_payload["events"][0]["evidence"][0].get("evidence_depth") != "headline":
         fail("Editor prompt lost headline Evidence depth")
     if not sources_from_records([headline_record]):
         fail("headline Evidence lost its clickable Google News source")
@@ -2977,6 +3006,38 @@ def self_test() -> None:
         fail("normalization did not derive the source date from Evidence")
     if normalized_item["sources"][0]["url"] != "https://example.com/item":
         fail("normalization did not derive the source URL from Evidence")
+    separate_event_records = [
+        {**records[0], "_editor_event_id": "g001"},
+        {
+            **records[0],
+            "_editor_event_id": "g002",
+            "url": "https://example.com/pricing",
+            "title": "OpenAIがAPI価格を改定",
+            "excerpt": (
+                "OpenAIはAPI価格を改定し、新料金の適用日を公表した。"
+                "企業向けプランの対象範囲と移行手順も示した。"
+            ),
+            "watch_topic_ids": ["topic"],
+        },
+    ]
+    mixed_event_raw = json.loads(json.dumps(raw))
+    mixed_event_raw["items"][0]["summary_points"] = [
+        {
+            "text": "対象機能と提供条件に加え、APIの新料金と適用日が公表された。",
+            "evidence_ids": ["e001", "e002"],
+            "support_quotes": [
+                {"evidence_id": "e001", "quote": separate_event_records[0]["excerpt"]},
+                {"evidence_id": "e002", "quote": separate_event_records[1]["excerpt"]},
+            ],
+        }
+    ]
+    if normalize_result(
+        mixed_event_raw,
+        category,
+        "2099-01-03",
+        separate_event_records,
+    )["items"]:
+        fail("normalization accepted a summary spanning separate event boundaries")
     omitted = normalize_result({"items": []}, category, "2099-01-03", records)
     if omitted["coverage_complete"] or omitted["missing_evidence_ids"] != ["e001"]:
         fail("normalization accepted an omitted publishable evidence record")
@@ -3017,7 +3078,7 @@ def self_test() -> None:
         "excerpt": records[0]["excerpt"] + " 追加条件を説明した。" * 120,
     }
     prompt = category_prompt(category, "2099-01-03", [long_record])
-    prompt_evidence = prompt["evidence"][0]
+    prompt_evidence = prompt["events"][0]["evidence"][0]
     if len(prompt_evidence["body"]) <= 1000:
         fail("editor prompt still truncates rich source material to a thin excerpt")
     if set(prompt_evidence) != {
@@ -3044,9 +3105,14 @@ def self_test() -> None:
             "utf-8"
         )
     )
-    if large_prompt_size <= 64_000 or len(large_prompt["evidence"]) != 80:
+    large_prompt_evidence = [
+        item
+        for event in large_prompt["events"]
+        for item in event["evidence"]
+    ]
+    if large_prompt_size <= 64_000 or len(large_prompt_evidence) != 80:
         fail("editor prompt silently shortened rich Evidence instead of leaving chunking to Editor")
-    if any(len(item["body"]) != len(prompt_evidence["body"]) for item in large_prompt["evidence"]):
+    if any(len(item["body"]) != len(prompt_evidence["body"]) for item in large_prompt_evidence):
         fail("editor prompt applied unequal or lossy body truncation")
     summary_cases = [
         (
