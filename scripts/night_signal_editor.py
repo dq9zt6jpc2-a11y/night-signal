@@ -182,10 +182,9 @@ def flatten_event_response(
     seen_event_ids: list[str] = []
     unknown_event_ids: set[str] = set()
     cross_event_evidence_ids: set[str] = set()
-    cross_event_excluded_ids: set[str] = set()
-    invalid_event_evidence_ids: dict[str, dict[str, list[str]]] = {}
+    invalid_event_decisions: dict[str, str] = {}
     malformed_event_results = 0
-    flattened = {"items": [], "excluded_evidence": []}
+    flattened = {"items": [], "excluded_events": []}
     for event_result in raw.get("events", []):
         if not isinstance(event_result, dict):
             malformed_event_results += 1
@@ -196,23 +195,22 @@ def flatten_event_response(
             continue
         seen_event_ids.append(event_id)
         allowed_ids = event_evidence_ids[event_id]
-        declared_ids = [
-            str(evidence_id)
-            for evidence_id in event_result.get("evidence_ids", [])
-            if isinstance(evidence_id, str)
-        ]
-        declared_set = set(declared_ids)
-        if declared_set != allowed_ids or len(declared_ids) != len(declared_set):
-            invalid_event_evidence_ids[event_id] = {
-                "missing": sorted(allowed_ids - declared_set),
-                "unknown": sorted(declared_set - allowed_ids),
-                "duplicates": sorted(
-                    evidence_id
-                    for evidence_id in declared_set
-                    if declared_ids.count(evidence_id) > 1
-                ),
-            }
-        for item in event_result.get("items", []):
+        decision = str(event_result.get("decision", ""))
+        event_items = event_result.get("items", [])
+        if not isinstance(event_items, list):
+            malformed_event_results += 1
+            continue
+        if decision not in models.EVENT_DECISIONS:
+            invalid_event_decisions[event_id] = "unknown_decision"
+        elif decision == "publish" and not event_items:
+            invalid_event_decisions[event_id] = "publish_without_items"
+        elif decision != "publish" and event_items:
+            invalid_event_decisions[event_id] = "excluded_event_with_items"
+        elif decision != "publish":
+            flattened["excluded_events"].append(
+                {"event_id": event_id, "reason": decision}
+            )
+        for item in event_items:
             if not isinstance(item, dict):
                 malformed_event_results += 1
                 continue
@@ -225,14 +223,6 @@ def flatten_event_response(
                 if isinstance(evidence_id, str)
             }
             cross_event_evidence_ids.update(cited_ids - allowed_ids)
-        for exclusion in event_result.get("excluded_evidence", []):
-            if not isinstance(exclusion, dict):
-                malformed_event_results += 1
-                continue
-            evidence_id = str(exclusion.get("evidence_id", ""))
-            if evidence_id not in allowed_ids:
-                cross_event_excluded_ids.add(evidence_id)
-            flattened["excluded_evidence"].append(exclusion)
     duplicate_event_ids = sorted(
         event_id
         for event_id in set(seen_event_ids)
@@ -244,8 +234,7 @@ def flatten_event_response(
         "duplicate_event_ids": duplicate_event_ids,
         "unknown_event_ids": sorted(unknown_event_ids),
         "cross_event_evidence_ids": sorted(cross_event_evidence_ids),
-        "cross_event_excluded_ids": sorted(cross_event_excluded_ids),
-        "invalid_event_evidence_ids": invalid_event_evidence_ids,
+        "invalid_event_decisions": invalid_event_decisions,
         "malformed_event_results": malformed_event_results,
     }
     accepted = not any(
@@ -254,8 +243,7 @@ def flatten_event_response(
             duplicate_event_ids,
             unknown_event_ids,
             cross_event_evidence_ids,
-            cross_event_excluded_ids,
-            invalid_event_evidence_ids,
+            invalid_event_decisions,
             malformed_event_results,
         )
     )
@@ -788,6 +776,7 @@ def edit_evidence(
         accepted = (
             event_response_accepted
             and bool(normalized["coverage_complete"])
+            and not normalized["rejected_items"]
             and failed == 0
         )
         if not accepted:
@@ -796,7 +785,7 @@ def edit_evidence(
                     {
                         "phase": "editor_result_rejected",
                         "category": label,
-                        "missing_evidence_ids": normalized["missing_evidence_ids"],
+                        "missing_event_ids": normalized["missing_event_ids"],
                         "unpublishable_items": failed,
                     },
                     ensure_ascii=False,
@@ -804,9 +793,11 @@ def edit_evidence(
                 flush=True,
             )
         feedback = {
-            "missing_evidence_ids": normalized["missing_evidence_ids"],
-            "conflicting_evidence_ids": normalized["conflicting_evidence_ids"],
-            "unknown_excluded_ids": normalized["unknown_excluded_ids"],
+            "missing_event_ids": normalized["missing_event_ids"],
+            "conflicting_event_ids": normalized["conflicting_event_ids"],
+            "unknown_excluded_event_ids": normalized[
+                "unknown_excluded_event_ids"
+            ],
             "unpublishable_items": failed,
             "rejected_items": normalized["rejected_items"],
             "event_response": event_response_feedback,
@@ -904,7 +895,7 @@ def edit_evidence(
                 )
                 if (
                     quality_required
-                    and len(request_records_value) == 1
+                    and len(request_payload.get("events", [])) == 1
                     and models.extraction_model() not in model_chain
                 ):
                     model_chain.append(models.extraction_model())
@@ -930,9 +921,9 @@ def edit_evidence(
                         "while retaining every distinct source-backed fact. For each "
                         "unsupported_facts entry, rewrite it closely from the cited "
                         "Evidence or remove it; never expand the number of facts. Keep "
-                        "every item and exclusion inside its exact event_id, and account "
-                        "for every Evidence id exactly once. Evidence with no additional "
-                        "supported fact must be excluded as no_material_update. Validation "
+                        "every item inside its exact event_id. Set decision=publish only "
+                        "when at least one valid item remains; otherwise return no items "
+                        "and choose the applicable event exclusion decision. Validation "
                         "feedback: "
                         + json.dumps(value, ensure_ascii=False, separators=(",", ":"))
                     ),
@@ -971,8 +962,9 @@ def edit_evidence(
                 event_feedback = feedback.get("event_response", {})
                 invalid_event_response = any(event_feedback.values())
                 unsafe_non_event_feedback = (
-                    feedback.get("conflicting_evidence_ids")
-                    or feedback.get("unknown_excluded_ids")
+                    feedback.get("conflicting_event_ids")
+                    or feedback.get("unknown_excluded_event_ids")
+                    or feedback.get("rejected_items")
                     or feedback.get("unpublishable_items")
                 )
                 if invalid_event_response and not unsafe_non_event_feedback:
@@ -987,18 +979,11 @@ def edit_evidence(
                         ]
                         work_queue = [*isolated, *work_queue]
                         continue
-                missing_ids = feedback.get("missing_evidence_ids", [])
-                evidence_by_id = dict(
-                    core.editor_evidence_records(
-                        category,
-                        issue_date,
-                        pending_records,
-                    )
-                )
+                missing_ids = set(feedback.get("missing_event_ids", []))
                 next_pending = [
-                    evidence_by_id[evidence_id]
-                    for evidence_id in missing_ids
-                    if evidence_id in evidence_by_id
+                    record
+                    for record in pending_records
+                    if str(record.get("_editor_event_id", "")) in missing_ids
                 ]
                 if (
                     unsafe_non_event_feedback
@@ -1011,15 +996,18 @@ def edit_evidence(
                         and not invalid_event_response
                         and len(pending_records) > 1
                     ):
-                        isolated_evidence = [
-                            ([record], f" evidence-{index}")
-                            for index, record in enumerate(
-                                pending_records,
-                                start=1,
-                            )
+                        records_by_event: dict[str, list[dict[str, Any]]] = {}
+                        for record in pending_records:
+                            records_by_event.setdefault(
+                                str(record.get("_editor_event_id", "")), []
+                            ).append(record)
+                        isolated_events = [
+                            (event_records, f" event-{event_id}")
+                            for event_id, event_records in records_by_event.items()
                         ]
-                        work_queue = [*isolated_evidence, *work_queue]
-                        continue
+                        if len(isolated_events) > 1:
+                            work_queue = [*isolated_events, *work_queue]
+                            continue
                     failed_scope = True
                     break
                 chunk_cards.extend(selected_result[0])
@@ -1030,7 +1018,7 @@ def edit_evidence(
                 )
             if failed_scope:
                 fail(
-                    "Editor could not produce complete summaries for every evidence item: "
+                    "Editor could not produce a valid decision for every event: "
                     f"{label} chunk {chunk_index}/{len(chunks)}"
                 )
             chunk_cards = merge_repeated_cards(chunk_cards)
@@ -1112,7 +1100,7 @@ def self_test() -> None:
                     ]
                 }
             ],
-            "excluded_evidence": [],
+            "excluded_events": [],
         }
     )
     sanitized_points = sanitized["items"][0]["summary_points"]
@@ -1296,18 +1284,8 @@ def self_test() -> None:
         "events": [
             {
                 "event_id": grouped_payload["events"][0]["id"],
-                "evidence_ids": [
-                    evidence["id"]
-                    for evidence in grouped_payload["events"][0]["evidence"]
-                ],
+                "decision": "duplicate_previous_event",
                 "items": [],
-                "excluded_evidence": [
-                    {
-                        "evidence_id": evidence["id"],
-                        "reason": "duplicate_or_same_event",
-                    }
-                    for evidence in grouped_payload["events"][0]["evidence"]
-                ],
             }
         ]
     }
@@ -1320,8 +1298,7 @@ def self_test() -> None:
     if (
         not event_accepted
         or event_feedback["missing_event_ids"]
-        or len(flattened["excluded_evidence"])
-        != len(grouped_payload["events"][0]["evidence"])
+        or len(flattened["excluded_events"]) != 1
     ):
         fail("Editor did not account for one complete event response")
     _, missing_event_accepted, missing_event_feedback = flatten_event_response(

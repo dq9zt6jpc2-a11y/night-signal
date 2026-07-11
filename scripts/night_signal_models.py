@@ -83,23 +83,13 @@ EDITOR_ITEM_SCHEMA: dict[str, Any] = {
     "additionalProperties": False,
 }
 
-EXCLUDED_EVIDENCE_SCHEMA: dict[str, Any] = {
-    "type": "object",
-    "properties": {
-        "evidence_id": {"type": "string"},
-        "reason": {
-            "type": "string",
-            "enum": [
-                "duplicate_or_same_event",
-                "background_or_navigation",
-                "wrong_entity_or_category",
-                "no_material_update",
-            ],
-        },
-    },
-    "required": ["evidence_id", "reason"],
-    "additionalProperties": False,
-}
+EVENT_DECISIONS = [
+    "publish",
+    "duplicate_previous_event",
+    "background_or_navigation",
+    "wrong_entity_or_category",
+    "no_material_update",
+]
 
 EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
     "type": "object",
@@ -110,25 +100,16 @@ EDITOR_RESPONSE_SCHEMA: dict[str, Any] = {
                 "type": "object",
                 "properties": {
                     "event_id": {"type": "string"},
-                    "evidence_ids": {
-                        "type": "array",
-                        "items": {"type": "string"},
-                        "minItems": 1,
-                    },
+                    "decision": {"type": "string", "enum": EVENT_DECISIONS},
                     "items": {
                         "type": "array",
                         "items": EDITOR_ITEM_SCHEMA,
                     },
-                    "excluded_evidence": {
-                        "type": "array",
-                        "items": EXCLUDED_EVIDENCE_SCHEMA,
-                    },
                 },
                 "required": [
                     "event_id",
-                    "evidence_ids",
+                    "decision",
                     "items",
-                    "excluded_evidence",
                 ],
                 "additionalProperties": False,
             },
@@ -152,14 +133,18 @@ def editor_response_schema(event_ids: list[str]) -> dict[str, Any]:
 
 
 SYSTEM_PROMPT = """Turn supplied NIGHT SIGNAL evidence into Japanese important updates.
-Return exactly one event result for every supplied event id. Within each event, every
-evidence id must be either used by a summary point or listed in excluded_evidence. Event
-ids are hard boundaries: never merge or move evidence across them. Reports within one event
-may be split into multiple items when they state distinct changes.
-Copy every supplied Evidence id for that event into event.evidence_ids exactly once, then
-also account for each id in an item's summary_points or in excluded_evidence.
+Return exactly one result for every supplied event id. Event ids are hard boundaries:
+never merge or move evidence across them. Multiple Evidence records within one event are
+source reports about that event, not separate editorial obligations. Use them together to
+produce one necessary-and-sufficient account, or a few items only when the event contains
+genuinely distinct changes.
 previous_updates are novelty context only, never Evidence: do not cite, summarize, or copy
 facts from them. Use them only to exclude a report that adds no new source-backed change.
+
+Set decision=publish when the event contains a new or materially changed item and return at
+least one item. Otherwise return no items and choose the single applicable exclusion
+decision. Do not exclude an event merely because one of its reports is duplicate or noisy
+when another Evidence record supplies a material source-backed change.
 
 For each update, create one title and the ordered summary_points needed to understand it.
 Keep all source-backed material facts even when the result becomes longer: the subject
@@ -176,8 +161,9 @@ shorter and put only the remaining headline-stated facts in summary_points. Neve
 missing detail or repeat the same fact in title and summary.
 If the headline cannot support a distinct summary fact, exclude it as no_material_update.
 
-Exclude only duplicate reports, navigation/background, wrong category/entity, or no
-material update. A newly published analysis of an old fact is publishable only when the
+Exclude an event only when it duplicates a previous event, is navigation/background, is
+about the wrong category/entity, or has no material update. A newly published analysis of
+an old fact is publishable only when the
 new question, evidence, and attributed conclusion are stated; otherwise exclude it.
 Do not repeat the title or a point, and do not add publisher metadata, generic importance,
 common knowledge, unsupported impact or background, inferred unknowns, or follow-up
@@ -401,12 +387,7 @@ def self_test() -> None:
         raise SystemExit("quality routing must not downgrade to the routine model")
     event_schema = EDITOR_RESPONSE_SCHEMA["properties"]["events"]["items"]
     item_schema = event_schema["properties"]["items"]["items"]
-    if set(event_schema["required"]) != {
-        "event_id",
-        "evidence_ids",
-        "items",
-        "excluded_evidence",
-    }:
+    if set(event_schema["required"]) != {"event_id", "decision", "items"}:
         raise SystemExit("editor schema does not account for every event result")
     required_fields = {"summary_points", "change_class"}
     if not required_fields <= set(item_schema["properties"]):

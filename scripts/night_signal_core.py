@@ -2314,23 +2314,26 @@ def normalize_result(
     valid_topics = set(valid_topic_order)
     evidence_entries = editor_evidence_records(category, issue_date, records)
     records_by_id = dict(evidence_entries)
-    expected_evidence_ids = set(records_by_id)
+    expected_event_ids = {
+        str(record.get("_editor_event_id") or evidence_id)
+        for evidence_id, record in evidence_entries
+    }
     items: list[dict[str, Any]] = []
     rejected_items: list[dict[str, Any]] = []
     seen_titles: set[str] = set()
     seen_clusters: set[str] = set()
-    used_evidence_ids: set[str] = set()
-    excluded_evidence_ids = {
-        str(value.get("evidence_id"))
-        for value in raw.get("excluded_evidence", [])
+    published_event_ids: set[str] = set()
+    excluded_event_ids = {
+        str(value.get("event_id"))
+        for value in raw.get("excluded_events", [])
         if isinstance(value, dict)
-        and str(value.get("evidence_id", "")) in records_by_id
+        and str(value.get("event_id", "")) in expected_event_ids
     }
-    unknown_excluded_ids = {
-        str(value.get("evidence_id"))
-        for value in raw.get("excluded_evidence", [])
+    unknown_excluded_event_ids = {
+        str(value.get("event_id"))
+        for value in raw.get("excluded_events", [])
         if isinstance(value, dict)
-        and str(value.get("evidence_id", "")) not in records_by_id
+        and str(value.get("event_id", "")) not in expected_event_ids
     }
     for item in raw.get("items", []):
         if not isinstance(item, dict):
@@ -2375,6 +2378,34 @@ def normalize_result(
                     if evidence_id in records_by_id
                 ]
                 point_values.append((normalized_text, point_ids, support_quotes))
+        unsupported_facts: list[str] = []
+        supported_point_values: list[
+            tuple[str, list[str], list[dict[str, str]]]
+        ] = []
+        for text, point_ids, support_quotes in point_values:
+            if any(evidence_id not in records_by_id for evidence_id in point_ids):
+                supported_point_values.append((text, point_ids, support_quotes))
+                continue
+            if fact_supported_by_records(
+                text,
+                [records_by_id[evidence_id] for evidence_id in point_ids],
+            ):
+                supported_point_values.append((text, point_ids, support_quotes))
+            else:
+                unsupported_facts.append(text)
+        point_values = supported_point_values
+        if unsupported_facts:
+            print(
+                json.dumps(
+                    {
+                        "phase": "unsupported_summary_points_removed",
+                        "category": category.get("label"),
+                        "facts": unsupported_facts,
+                    },
+                    ensure_ascii=False,
+                ),
+                flush=True,
+            )
         evidence_ids = list(
             dict.fromkeys(
                 evidence_id
@@ -2413,14 +2444,6 @@ def normalize_result(
         point_texts = [text for text, _, _ in point_values]
         facts = point_texts
         summary = " ".join(facts)
-        unsupported_facts = [
-            text
-            for text, point_ids, _ in point_values
-            if not fact_supported_by_records(
-                text,
-                [records_by_id[value] for value in point_ids if value in records_by_id],
-            )
-        ]
         invalid_support_quotes = [
             quote
             for _, point_ids, quotes in point_values
@@ -2482,6 +2505,11 @@ def normalize_result(
             ("empty_summary", not facts),
             ("summary_copy", not reader_public_copy_ok(summary, kind="summary")),
             (
+                "unsupported_title",
+                bool(source_records)
+                and not fact_supported_by_records(title, source_records),
+            ),
+            (
                 "summary_repetition",
                 bool(state_contract.reader_summary_violations(title, summary)),
             ),
@@ -2498,7 +2526,6 @@ def normalize_result(
                 "generic_padding",
                 any(not useful_fact(fact, str(category.get("label", ""))) for fact in facts),
             ),
-            ("unsupported_fact", bool(unsupported_facts)),
             ("unsupported_quote", bool(invalid_support_quotes)),
             ("missing_support_quote", bool(missing_quote_ids)),
             ("missing_source", not sources),
@@ -2541,7 +2568,7 @@ def normalize_result(
             continue
         seen_titles.add(title)
         seen_clusters.add(item_cluster)
-        used_evidence_ids.update(evidence_ids)
+        published_event_ids.add(item_event_id)
         first_source = sources[0]
         items.append(
             {
@@ -2569,18 +2596,20 @@ def normalize_result(
                 "observation_channel": first_source["channel"],
             }
         )
-    conflicting_evidence_ids = sorted(used_evidence_ids & excluded_evidence_ids)
-    accounted_evidence_ids = used_evidence_ids | excluded_evidence_ids
-    missing_evidence_ids = sorted(expected_evidence_ids - accounted_evidence_ids)
+    conflicting_event_ids = sorted(published_event_ids & excluded_event_ids)
+    accounted_event_ids = published_event_ids | excluded_event_ids
+    missing_event_ids = sorted(expected_event_ids - accounted_event_ids)
     return {
         "items": items,
         "coverage_complete": not (
-            missing_evidence_ids or conflicting_evidence_ids or unknown_excluded_ids
+            missing_event_ids
+            or conflicting_event_ids
+            or unknown_excluded_event_ids
         ),
-        "missing_evidence_ids": missing_evidence_ids,
-        "conflicting_evidence_ids": conflicting_evidence_ids,
-        "unknown_excluded_ids": sorted(unknown_excluded_ids),
-        "expected_evidence_ids": sorted(expected_evidence_ids),
+        "missing_event_ids": missing_event_ids,
+        "conflicting_event_ids": conflicting_event_ids,
+        "unknown_excluded_event_ids": sorted(unknown_excluded_event_ids),
+        "expected_event_ids": sorted(expected_event_ids),
         "rejected_items": rejected_items,
     }
 
@@ -2922,6 +2951,7 @@ def self_test() -> None:
         fail("Editor prompt lost headline Evidence depth")
     if not sources_from_records([headline_record]):
         fail("headline Evidence lost its clickable Google News source")
+    headline_record["_editor_event_id"] = "g001"
     headline_normalized = normalize_result(
         {
             "items": [
@@ -2945,13 +2975,14 @@ def self_test() -> None:
                         }
                     ],
                     "watch_topic_id": "music_release_chart_tieup",
+                    "event_id": "g001",
                     "title": "YOASOBI「THE BOOK for.」がDLアルバム首位を維持",
                     "topic_value_class": "cultural_or_audience_signal",
                     "priority_class": "standard",
                     "change_class": "material_update",
                 }
             ],
-            "excluded_evidence": [],
+            "excluded_events": [],
         },
         music_category,
         "2099-01-03",
@@ -3054,6 +3085,7 @@ def self_test() -> None:
                 "既存サービスからの移行手順と利用開始日も示した。"
             ),
             "evidence": "verified",
+            "_editor_event_id": "g001",
         }
     ]
     facts = [
@@ -3064,6 +3096,7 @@ def self_test() -> None:
         "items": [
             {
                 "watch_topic_id": "topic",
+                "event_id": "g001",
                 "title": "OpenAIが開発者向け機能を更新",
                 "topic_value_class": "decision_or_policy",
                 "priority_class": "priority",
@@ -3125,13 +3158,13 @@ def self_test() -> None:
     )["items"]:
         fail("normalization accepted a summary spanning separate event boundaries")
     omitted = normalize_result({"items": []}, category, "2099-01-03", records)
-    if omitted["coverage_complete"] or omitted["missing_evidence_ids"] != ["e001"]:
-        fail("normalization accepted an omitted publishable evidence record")
+    if omitted["coverage_complete"] or omitted["missing_event_ids"] != ["g001"]:
+        fail("normalization accepted an omitted publishable event")
     excluded = normalize_result(
         {
             "items": [],
-            "excluded_evidence": [
-                {"evidence_id": "e001", "reason": "wrong_entity_or_category"}
+            "excluded_events": [
+                {"event_id": "g001", "reason": "wrong_entity_or_category"}
             ],
         },
         category,
@@ -3139,7 +3172,7 @@ def self_test() -> None:
         records,
     )
     if not excluded["coverage_complete"]:
-        fail("normalization rejected an explicitly reviewed evidence exclusion")
+        fail("normalization rejected an explicitly reviewed event exclusion")
     padded_raw = json.loads(json.dumps(raw))
     padded_raw["items"][0]["summary_points"].append(
         {
@@ -3151,12 +3184,10 @@ def self_test() -> None:
         }
     )
     padded_result = normalize_result(padded_raw, category, "2099-01-03", records)
-    if padded_result["items"]:
-        fail("normalization accepted an unsupported padding claim")
-    if padded_result["rejected_items"][0]["unsupported_facts"] != [
-        "市場全体の競争が激化するとみられる。"
+    if len(padded_result["items"]) != 1 or "競争が激化" in padded_result["items"][0][
+        "summary"
     ]:
-        fail("normalization did not return actionable unsupported-fact feedback")
+        fail("normalization did not remove an unsupported padding claim")
     repeated_raw = json.loads(json.dumps(raw))
     repeated_raw["items"][0]["summary_points"].append(
         repeated_raw["items"][0]["summary_points"][0]
@@ -3253,6 +3284,7 @@ def self_test() -> None:
     ):
         case_record = {
             **records[0],
+            "_editor_event_id": "g001",
             "url": f"https://example.com/summary-case-{case_index}",
             "title": case_title,
             "excerpt": case_body,
@@ -3261,6 +3293,7 @@ def self_test() -> None:
             "items": [
                 {
                     "watch_topic_id": "topic",
+                    "event_id": "g001",
                     "title": case_title,
                     "topic_value_class": "decision_or_policy",
                     "priority_class": "priority",

@@ -32,10 +32,27 @@ def jst_today() -> str:
     return datetime.now(ZoneInfo("Asia/Tokyo")).date().isoformat()
 
 
-def require_jst_current_issue(issue_date: str) -> None:
-    today = jst_today()
-    if issue_date != today:
-        fail(f"refusing to publish stale issue as latest: {issue_date} != JST today {today}")
+def eligible_latest_issue_dates(now: datetime | None = None) -> set[str]:
+    current = (now or datetime.now(ZoneInfo("Asia/Tokyo"))).astimezone(
+        ZoneInfo("Asia/Tokyo")
+    )
+    dates = {current.date().isoformat()}
+    if current.time() < timing.load_policy().final_collection_not_before:
+        dates.add((current.date() - timedelta(days=1)).isoformat())
+    return dates
+
+
+def require_jst_current_issue(
+    issue_date: str,
+    *,
+    now: datetime | None = None,
+) -> None:
+    eligible = eligible_latest_issue_dates(now)
+    if issue_date not in eligible:
+        fail(
+            "refusing to publish an ineligible issue as latest: "
+            f"{issue_date} not in {sorted(eligible)}"
+        )
 
 
 def validate_issue_date(issue_date: str) -> str:
@@ -239,6 +256,17 @@ def self_test() -> None:
         pass
     else:
         fail("stale issue date must never be publishable as latest")
+    recovery_now = datetime.fromisoformat("2099-01-02T02:00:00+09:00")
+    require_jst_current_issue("2099-01-01", now=recovery_now)
+    try:
+        require_jst_current_issue(
+            "2099-01-01",
+            now=datetime.fromisoformat("2099-01-02T16:45:00+09:00"),
+        )
+    except SystemExit:
+        pass
+    else:
+        fail("previous issue recovery overlapped the current collection window")
     current = datetime.fromisoformat("2099-01-01T18:50:00+09:00")
     fresh = {
         "collection_completed_at_jst": "2099-01-01T17:20:00+09:00",
