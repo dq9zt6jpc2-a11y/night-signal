@@ -2672,6 +2672,41 @@ def normalize_result(
                 "observation_channel": first_source["channel"],
             }
         )
+    rejected_by_event: dict[str, list[dict[str, Any]]] = {}
+    for rejected in rejected_items:
+        event_id = str(rejected.get("event_id", ""))
+        if event_id in expected_event_ids:
+            rejected_by_event.setdefault(event_id, []).append(rejected)
+    deterministic_wrong_category_ids = {
+        event_id
+        for event_id, event_rejections in rejected_by_event.items()
+        if event_id not in published_event_ids
+        and event_id not in excluded_event_ids
+        and event_rejections
+        and all(
+            "category_identity" in rejection.get("reasons", [])
+            for rejection in event_rejections
+        )
+    }
+    if deterministic_wrong_category_ids:
+        print(
+            json.dumps(
+                {
+                    "phase": "wrong_category_events_excluded",
+                    "category": category.get("label"),
+                    "event_ids": sorted(deterministic_wrong_category_ids),
+                },
+                ensure_ascii=False,
+            ),
+            flush=True,
+        )
+        excluded_event_ids.update(deterministic_wrong_category_ids)
+        rejected_items = [
+            rejected
+            for rejected in rejected_items
+            if str(rejected.get("event_id", ""))
+            not in deterministic_wrong_category_ids
+        ]
     conflicting_event_ids = sorted(published_event_ids & excluded_event_ids)
     accounted_event_ids = published_event_ids | excluded_event_ids
     missing_event_ids = sorted(expected_event_ids - accounted_event_ids)
@@ -2685,6 +2720,9 @@ def normalize_result(
         "missing_event_ids": missing_event_ids,
         "conflicting_event_ids": conflicting_event_ids,
         "unknown_excluded_event_ids": sorted(unknown_excluded_event_ids),
+        "deterministic_wrong_category_ids": sorted(
+            deterministic_wrong_category_ids
+        ),
         "expected_event_ids": sorted(expected_event_ids),
         "rejected_items": rejected_items,
     }
@@ -3279,6 +3317,36 @@ def self_test() -> None:
     )
     if not excluded["coverage_complete"]:
         fail("normalization rejected an explicitly reviewed event exclusion")
+    wrong_category_record = {
+        **records[0],
+        "title": "NBCC子会社が教育インフラ契約を獲得",
+        "excerpt": (
+            "NBCC子会社が教育インフラの管理契約4件を獲得した。"
+            "契約総額は約159億ルピーとなる。"
+            "関連記事一覧にはSoftBank Groupの株価情報も掲載されている。"
+        ),
+    }
+    wrong_category_raw = json.loads(json.dumps(raw))
+    wrong_category_raw["items"][0]["title"] = wrong_category_record["title"]
+    wrong_category_raw["items"][0]["summary_points"] = [
+        {
+            "text": "契約は4件で、総額は約159億ルピーとなる。",
+            "evidence_ids": ["e001"],
+        }
+    ]
+    wrong_category = normalize_result(
+        wrong_category_raw,
+        {**category, "label": "SoftBank"},
+        "2099-01-03",
+        [wrong_category_record],
+    )
+    if (
+        not wrong_category["coverage_complete"]
+        or wrong_category["items"]
+        or wrong_category["rejected_items"]
+        or wrong_category["deterministic_wrong_category_ids"] != ["g001"]
+    ):
+        fail("normalization retried an event that deterministically missed category identity")
     padded_raw = json.loads(json.dumps(raw))
     padded_raw["items"][0]["summary_points"].append(
         {
