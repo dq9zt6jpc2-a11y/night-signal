@@ -28,12 +28,6 @@ TOPIC_VALUE_CLASS_MAP = {
     "roster_change": "operational_status_change",
 }
 SUMMARY_LABEL_RE = re.compile(r"(?:変更点|重要性|確認事実|未確定点)\s*[:：]")
-EVENT_BOUNDARY_REJECTION_REASONS = {
-    "missing_event_id",
-    "unknown_event_id",
-    "event_evidence_mismatch",
-    "mixed_event_boundary",
-}
 
 
 class UnpublishableItem(RuntimeError):
@@ -104,14 +98,6 @@ def quality_model_required(category_payload: dict[str, Any]) -> bool:
         ):
             return True
     return False
-
-
-def has_non_boundary_rejection(items: Any) -> bool:
-    return any(
-        set(item.get("reasons", [])) - EVENT_BOUNDARY_REJECTION_REASONS
-        for item in items or []
-        if isinstance(item, dict)
-    )
 
 
 def sanitize_editor_title(value: Any) -> str:
@@ -656,13 +642,23 @@ def edit_evidence(
         stored_checkpoint = json.loads(checkpoint_path.read_text(encoding="utf-8"))
     except (FileNotFoundError, json.JSONDecodeError):
         stored_checkpoint = None
+    model_config = models.load_config().get("extraction", {})
+    compatible_contracts = {
+        editor_contract_hash,
+        *(
+            str(value)
+            for value in model_config.get("compatible_checkpoint_contracts", [])
+            if isinstance(value, str)
+        ),
+    }
     if (
         isinstance(stored_checkpoint, dict)
         and stored_checkpoint.get("evidence_sha256") == evidence_hash
-        and stored_checkpoint.get("editor_contract_sha256") == editor_contract_hash
+        and stored_checkpoint.get("editor_contract_sha256") in compatible_contracts
         and isinstance(stored_checkpoint.get("chunks"), dict)
     ):
         checkpoint = stored_checkpoint
+        checkpoint["editor_contract_sha256"] = editor_contract_hash
 
     def save_checkpoint() -> None:
         write_json_atomic(checkpoint_path, checkpoint)
@@ -973,63 +969,33 @@ def edit_evidence(
                 if accepted:
                     chunk_cards.extend(selected_result[0])
                     continue
-                event_feedback = feedback.get("event_response", {})
-                invalid_event_response = any(event_feedback.values())
-                unsafe_non_event_feedback = (
-                    feedback.get("conflicting_event_ids")
-                    or feedback.get("unknown_excluded_event_ids")
-                    or has_non_boundary_rejection(feedback.get("rejected_items"))
-                    or feedback.get("unpublishable_items")
-                )
-                if invalid_event_response and not unsafe_non_event_feedback:
-                    records_by_event: dict[str, list[dict[str, Any]]] = {}
-                    for record in pending_records:
-                        event_id = str(record.get("_editor_event_id", ""))
-                        records_by_event.setdefault(event_id, []).append(record)
-                    if len(records_by_event) > 1:
-                        isolated = [
-                            (records, f" event-{event_id}")
-                            for event_id, records in records_by_event.items()
-                        ]
-                        work_queue = [*isolated, *work_queue]
-                        continue
                 missing_ids = set(feedback.get("missing_event_ids", []))
                 next_pending = [
                     record
                     for record in pending_records
                     if str(record.get("_editor_event_id", "")) in missing_ids
                 ]
-                if (
-                    unsafe_non_event_feedback
-                    or invalid_event_response
-                    or not next_pending
-                    or len(next_pending) >= len(pending_records)
-                ):
-                    if (
-                        not unsafe_non_event_feedback
-                        and not invalid_event_response
-                        and len(pending_records) > 1
-                    ):
-                        records_by_event: dict[str, list[dict[str, Any]]] = {}
-                        for record in pending_records:
-                            records_by_event.setdefault(
-                                str(record.get("_editor_event_id", "")), []
-                            ).append(record)
-                        isolated_events = [
-                            (event_records, f" event-{event_id}")
-                            for event_id, event_records in records_by_event.items()
-                        ]
-                        if len(isolated_events) > 1:
-                            work_queue = [*isolated_events, *work_queue]
-                            continue
-                    failed_scope = True
-                    break
-                chunk_cards.extend(selected_result[0])
-                recovery_round += 1
-                work_queue.insert(
-                    0,
-                    (next_pending, f" recovery-{recovery_round}"),
-                )
+                if next_pending and len(next_pending) < len(pending_records):
+                    chunk_cards.extend(selected_result[0])
+                    recovery_round += 1
+                    work_queue.insert(
+                        0,
+                        (next_pending, f" recovery-{recovery_round}"),
+                    )
+                    continue
+                records_by_event: dict[str, list[dict[str, Any]]] = {}
+                for record in pending_records:
+                    records_by_event.setdefault(
+                        str(record.get("_editor_event_id", "")), []
+                    ).append(record)
+                if len(records_by_event) > 1:
+                    work_queue = [
+                        (event_records, f" event-{event_id}")
+                        for event_id, event_records in records_by_event.items()
+                    ] + work_queue
+                    continue
+                failed_scope = True
+                break
             if failed_scope:
                 fail(
                     "Editor could not produce a valid decision for every event: "
@@ -1208,14 +1174,6 @@ def self_test() -> None:
         }
     ):
         fail("Editor did not route a table-dependent summary to the quality model")
-    if has_non_boundary_rejection(
-        [{"reasons": ["event_evidence_mismatch", "mixed_event_boundary"]}]
-    ):
-        fail("Event-boundary recovery was blocked by its own rejection reason")
-    if not has_non_boundary_rejection(
-        [{"reasons": ["mixed_event_boundary", "unsupported_title"]}]
-    ):
-        fail("Event-boundary recovery ignored a real content rejection")
     review_category = {
         "label": "OpenAI",
         "watch_topics": [

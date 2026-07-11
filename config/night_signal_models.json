@@ -1,5 +1,9 @@
 {
   "extraction": {
+    "editor_contract_revision": "event-summary-v2",
+    "compatible_checkpoint_contracts": [
+      "37e0a8d3352d9aca5ba6001d9ddd47a8d8786f5d301066f486ba0b4ea5d099b3"
+    ],
     "model": "openai/gpt-4o-mini",
     "quality_model": "openai/gpt-4.1-mini",
     "fallback_models": []

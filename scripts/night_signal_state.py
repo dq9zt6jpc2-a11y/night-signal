@@ -23,15 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = ROOT / "config" / "night_signal_coverage.json"
 MARKER_PATH = ROOT / ".night-signal-issue-date"
 DEFAULT_STATE_ROOT = ROOT / "state"
-EDITOR_CONTRACT_PATHS = (
-    ROOT / "scripts" / "night_signal_core.py",
-    ROOT / "scripts" / "night_signal_evidence.py",
-    ROOT / "scripts" / "night_signal_editor.py",
-    ROOT / "scripts" / "night_signal_models.py",
-    ROOT / "scripts" / "night_signal_state.py",
-    ROOT / "config" / "night_signal_coverage.json",
-    ROOT / "config" / "night_signal_models.json",
-)
+MODEL_CONFIG_PATH = ROOT / "config" / "night_signal_models.json"
 
 PUBLIC_COPY_FORBIDDEN_TERMS = sorted(
     set(
@@ -1253,13 +1245,11 @@ def build_coverage_manifest(
 
 
 def editor_contract_sha256() -> str:
-    digest = hashlib.sha256()
-    for path in EDITOR_CONTRACT_PATHS:
-        digest.update(str(path.relative_to(ROOT)).encode("utf-8"))
-        digest.update(b"\0")
-        digest.update(path.read_bytes())
-        digest.update(b"\0")
-    return digest.hexdigest()
+    config = read_json(MODEL_CONFIG_PATH).get("extraction", {})
+    revision = config.get("editor_contract_revision")
+    if not isinstance(revision, str) or not revision:
+        fail("night_signal_models is missing editor_contract_revision")
+    return hashlib.sha256(revision.encode("utf-8")).hexdigest()
 
 
 def generate_issue(issue_path: Path, output_root: Path, *, write_marker: bool) -> dict[str, Any]:

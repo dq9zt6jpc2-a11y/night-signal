@@ -174,7 +174,8 @@ API障害時のfallbackも同じ決定的検証を通過した出力だけを採
 
 - 取得後の失敗ではEvidenceを再利用する。
 - 編集途中の失敗では、Evidence、Editor契約、event payloadの全hashが一致する成功済み
-  chunkだけを再利用する。入力または契約が変わればcheckpoint全体を無効化する。
+  chunkだけを再利用する。Editor契約は明示revisionで管理し、prompt、schema、正規化契約を
+  変えた時だけ更新する。制御フローだけの変更で成功済みAI出力を全無効化しない。
 - 編集後の失敗ではIssueを再利用する。
 - GitまたはPagesの失敗で収集やAI処理を繰り返さない。
 - 既公開なら即終了する。
