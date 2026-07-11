@@ -735,14 +735,17 @@ def edit_evidence(
                                 **log_context,
                                 "phase": "model_request_failed",
                                 "model": model_name,
-                                "status_code": exc.status_code,
-                                "rate_limited": exc.rate_limited,
-                                "error": str(exc),
+                            "status_code": exc.status_code,
+                            "rate_limited": exc.rate_limited,
+                            "schema_invalid": exc.schema_invalid,
+                            "error": str(exc),
                             },
                             ensure_ascii=False,
                         ),
                         flush=True,
                     )
+                    if exc.schema_invalid:
+                        return None, feedback, False
                     if exc.rate_limited or model_name != model_chain[-1]:
                         break
                     raise
@@ -1002,6 +1005,17 @@ def edit_evidence(
                     suffix,
                 )
                 if selected_result is None:
+                    records_by_event: dict[str, list[dict[str, Any]]] = {}
+                    for record in pending_records:
+                        records_by_event.setdefault(
+                            str(record.get("_editor_event_id", "")), []
+                        ).append(record)
+                    if len(records_by_event) > 1:
+                        work_queue = [
+                            (event_records, f" event-{event_id}")
+                            for event_id, event_records in records_by_event.items()
+                        ] + work_queue
+                        continue
                     failed_scope = True
                     break
                 if accepted:

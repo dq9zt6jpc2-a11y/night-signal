@@ -180,11 +180,13 @@ class ModelRequestError(RuntimeError):
         rate_limited: bool = False,
         retry_after: int | None = None,
         status_code: int | None = None,
+        schema_invalid: bool = False,
     ) -> None:
         super().__init__(message)
         self.rate_limited = rate_limited
         self.retry_after = retry_after
         self.status_code = status_code
+        self.schema_invalid = schema_invalid
 
 
 def load_config() -> dict[str, Any]:
@@ -325,7 +327,8 @@ def request(
                     raise ValueError("model result is not an object")
             except (json.JSONDecodeError, ValueError) as exc:
                 raise ModelRequestError(
-                    "GitHub Models returned a response outside the strict editor schema"
+                    "GitHub Models returned a response outside the strict editor schema",
+                    schema_invalid=True,
                 ) from exc
             return result
         except urllib.error.HTTPError as exc:
