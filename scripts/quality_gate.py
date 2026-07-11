@@ -12,7 +12,7 @@ from urllib.parse import unquote
 from datetime import datetime
 from pathlib import Path
 
-from coverage_audit import effective_on_or_after, load_contract, max_adopted_source_age_days
+from coverage_audit import load_contract, max_adopted_source_age_days
 import night_signal_state as state_contract
 
 
@@ -26,10 +26,6 @@ MAX_ISSUE_SIMILARITY_VS_PREVIOUS = 0.94
 MAX_DETAIL_SIMILARITY_VS_PREVIOUS = 0.95
 EXPECTED_HERO_TITLE = "NIGHT SIGNAL"
 EXPECTED_HERO_CONCEPT_TERMS = ["眠りにつく前に", "世界の輪郭", "次の朝"]
-LEGACY_HERO_CONCEPT_TERMS = ["一次情報", "変化点", "判断"]
-HERO_COPY_EFFECTIVE_DATE = "2026-05-25"
-PUBLIC_SELECTION_RATIONALE_BAN_EFFECTIVE_DATE = "2026-05-25"
-PUBLIC_ABSTRACT_FRAMING_BAN_EFFECTIVE_DATE = "2026-06-01"
 LATEST_THREE_DAY_LABELS = {0: "今日", 1: "昨日", 2: "一昨日"}
 HERO_DAILY_TOPIC_TERMS = [
     "OpenAI",
@@ -51,8 +47,6 @@ REQUIRED_SECTIONS = {
 }
 
 MIN_CARDS_PER_SECTION = int(COVERAGE_CONTRACT.get("minimum_published_cards_per_category", 0))
-MIN_DETAIL_TEXT_CHARS = 300
-MAX_SOURCE_LINKS_PER_DETAIL = 3
 
 TITLE_POLICY_LEAK_TERMS = [
     "一次で固定",
@@ -192,8 +186,6 @@ DETAIL_FORBIDDEN_SECTION_HEADINGS = [
     "今回の要点",
     "一次で押さえる点",
 ]
-LEGACY_MIN_SUMMARY_LEAD_CHARS = 180
-LEGACY_DETAIL_SUMMARY_HEADING = "30秒概要"
 DEFAULT_DETAIL_SUMMARY_HEADING = "概要"
 
 READER_PROCESS_LEAK_TERMS = [
@@ -270,30 +262,12 @@ def read(path: Path) -> str:
     return path.read_text(encoding="utf-8")
 
 
-def section_before_history(html: str) -> str:
-    return html.split('<section class="section" id="history">', 1)[0]
-
-
 def card_blocks(html: str) -> list[str]:
-    body = section_before_history(html)
-    return re.findall(r"<article class=\"(?:card|priority-card)[^\"]*\">.*?</article>", body, flags=re.S)
+    return re.findall(r"<article class=\"(?:card|priority-card)[^\"]*\">.*?</article>", html, flags=re.S)
 
 
 def normal_card_blocks(html: str) -> list[str]:
     return [card for card in card_blocks(html) if "priority-card" not in card]
-
-
-def retained_card(card: str) -> bool:
-    match = re.search(r'<article class="([^"]*)"', card)
-    return bool(match and "retained" in match.group(1).split())
-
-
-def current_card_blocks(html: str) -> list[str]:
-    return [card for card in card_blocks(html) if not retained_card(card)]
-
-
-def without_retained_cards(html: str) -> str:
-    return re.sub(r'<article class="[^"]*\bretained\b[^"]*">.*?</article>', "", html, flags=re.S)
 
 
 def card_dates(card: str) -> list[str]:
@@ -353,7 +327,7 @@ def card_detail_target(issue_date: str, card: str) -> tuple[str, str] | None:
 
 def page_titles(html: str) -> list[str]:
     titles = []
-    for match in re.finditer(r"<h3>(.*?)</h3>", section_before_history(html), flags=re.S):
+    for match in re.finditer(r"<h3>(.*?)</h3>", html, flags=re.S):
         text = html_lib.unescape(re.sub(r"<.*?>", "", match.group(1)))
         titles.append(re.sub(r"\s+", " ", text).strip())
     return titles
@@ -426,7 +400,7 @@ def validate_reader_process_language(context: str, html: str) -> None:
 
 
 def validate_no_confirmation_layer(context: str, html: str) -> None:
-    text = visible_text(section_before_history(html))
+    text = visible_text(html)
     leaks = [term for term in FORBIDDEN_PUBLIC_CONFIRMATION_LAYER_TERMS if term in text]
     if leaks:
         fail(f"{context} still exposes deprecated confirmation information: " + ", ".join(leaks))
@@ -464,10 +438,9 @@ def validate_public_summary_language(context: str, text: str, issue_date: str) -
     ]
     if violations:
         fail(f"{context} contains editorial/research procedure wording: " + ", ".join(violations))
-    if issue_date >= PUBLIC_ABSTRACT_FRAMING_BAN_EFFECTIVE_DATE:
-        abstract_terms = [term for term in PUBLIC_ABSTRACT_FRAMING_TERMS if term in text]
-        if abstract_terms:
-            fail(f"{context} contains abstract/editorial framing wording: " + ", ".join(abstract_terms[:8]))
+    abstract_terms = [term for term in PUBLIC_ABSTRACT_FRAMING_TERMS if term in text]
+    if abstract_terms:
+        fail(f"{context} contains abstract/editorial framing wording: " + ", ".join(abstract_terms[:8]))
 
 
 def validate_public_title_language(context: str, text: str) -> None:
@@ -481,23 +454,9 @@ def validate_public_title_language(context: str, text: str) -> None:
         fail(f"{context} contains publisher/domain name")
 
 
-def detail_summary_heading(issue_dt) -> str:
-    if effective_on_or_after(COVERAGE_CONTRACT, "detail_summary_heading_effective_date", issue_dt):
-        heading = COVERAGE_CONTRACT.get("detail_summary_heading", DEFAULT_DETAIL_SUMMARY_HEADING)
-        if isinstance(heading, str) and heading.strip():
-            return heading.strip()
-        return DEFAULT_DETAIL_SUMMARY_HEADING
-    return LEGACY_DETAIL_SUMMARY_HEADING
-
-
-def detail_min_summary_chars(issue_dt) -> int:
-    if effective_on_or_after(COVERAGE_CONTRACT, "summary_quality_effective_date", issue_dt):
-        return int(COVERAGE_CONTRACT.get("minimum_detail_summary_chars", 240))
-    return LEGACY_MIN_SUMMARY_LEAD_CHARS
-
-
-def detail_information_required(issue_dt) -> bool:
-    return effective_on_or_after(COVERAGE_CONTRACT, "detail_information_contract_effective_date", issue_dt)
+def detail_summary_heading() -> str:
+    heading = COVERAGE_CONTRACT.get("detail_summary_heading", DEFAULT_DETAIL_SUMMARY_HEADING)
+    return heading.strip() if isinstance(heading, str) and heading.strip() else DEFAULT_DETAIL_SUMMARY_HEADING
 
 
 def validate_stable_hero(context: str, html: str, issue_date: str) -> None:
@@ -512,12 +471,7 @@ def validate_stable_hero(context: str, html: str, issue_date: str) -> None:
     if hero_title != EXPECTED_HERO_TITLE:
         fail(f"{context} hero h1 must be stable concept title '{EXPECTED_HERO_TITLE}', not daily news: {hero_title}")
     hero_text = visible_text(hero)
-    concept_terms = (
-        EXPECTED_HERO_CONCEPT_TERMS
-        if issue_date >= HERO_COPY_EFFECTIVE_DATE
-        else LEGACY_HERO_CONCEPT_TERMS
-    )
-    missing = [term for term in concept_terms if term not in hero_text]
+    missing = [term for term in EXPECTED_HERO_CONCEPT_TERMS if term not in hero_text]
     if missing:
         fail(f"{context} hero concept copy missing terms: " + ", ".join(missing))
     daily_terms = [term for term in HERO_DAILY_TOPIC_TERMS if term in hero_text]
@@ -525,12 +479,10 @@ def validate_stable_hero(context: str, html: str, issue_date: str) -> None:
         fail(f"{context} hero must describe the product concept, not daily topics: " + ", ".join(daily_terms[:8]))
 
 
-def validate_priority_has_no_selection_process(context: str, html: str, issue_date: str) -> None:
-    if issue_date < PUBLIC_SELECTION_RATIONALE_BAN_EFFECTIVE_DATE:
-        return
+def validate_priority_has_no_selection_process(context: str, html: str) -> None:
     match = re.search(
         r'<section class="section" id="priority">(.*?)(?=<section class="section" id=|\Z)',
-        section_before_history(html),
+        html,
         flags=re.S,
     )
     if not match:
@@ -545,8 +497,8 @@ def validate_daily_delta(issue_date: str, sample_html: str) -> None:
     if not previous_path:
         return
     previous_html = read(previous_path)
-    current_cards = [card_signature(card) for card in current_card_blocks(sample_html)]
-    previous_cards = set(card_signature(card) for card in current_card_blocks(previous_html))
+    current_cards = [card_signature(card) for card in card_blocks(sample_html)]
+    previous_cards = set(card_signature(card) for card in card_blocks(previous_html))
     if not current_cards or not previous_cards:
         return
     unchanged = sum(1 for signature in current_cards if signature in previous_cards)
@@ -560,8 +512,8 @@ def validate_daily_delta(issue_date: str, sample_html: str) -> None:
             f"against {previous_path.name}"
         )
 
-    current_body = normalize_for_similarity(without_retained_cards(section_before_history(sample_html)))
-    previous_body = normalize_for_similarity(without_retained_cards(section_before_history(previous_html)))
+    current_body = normalize_for_similarity(sample_html)
+    previous_body = normalize_for_similarity(previous_html)
     similarity = difflib.SequenceMatcher(None, current_body, previous_body).ratio()
     if similarity > MAX_ISSUE_SIMILARITY_VS_PREVIOUS:
         fail(f"issue body too similar to previous day ({similarity:.1%}) against {previous_path.name}")
@@ -729,39 +681,25 @@ def validate_detail_scope(issue_date: str, root_html: str, dated_html: str) -> N
 
 
 def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) -> None:
-    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
-    filename_date_required = effective_on_or_after(COVERAGE_CONTRACT, "article_summary_effective_date", issue_dt)
-    # Legacy details use one overview block. Current details use a compact,
-    # reader-facing structure: summary, confirmed facts, limits, and sources.
-    article_summary_required = filename_date_required
-    information_required = detail_information_required(issue_dt)
-    min_summary_chars = detail_min_summary_chars(issue_dt)
     linked = linked_detail_names(issue_date, root_html, dated_html)
     excluded = {"policy.html"}
-    if filename_date_required:
-        wrong_issue_details = [
-            name for name in sorted(linked - excluded) if not name.endswith(f"-{issue_date}.html")
-        ]
-        if wrong_issue_details:
-            fail(
-                "current issue detail filenames must include issue date: "
-                + ", ".join(wrong_issue_details[:8])
-            )
-    weak = []
+    wrong_issue_details = [
+        name for name in sorted(linked - excluded) if not name.endswith(f"-{issue_date}.html")
+    ]
+    if wrong_issue_details:
+        fail(
+            "current issue detail filenames must include issue date: "
+            + ", ".join(wrong_issue_details[:8])
+        )
     leaked = []
     checklist_headings = []
     article_structure_failures = []
     weak_summaries = []
     missing_source = []
-    too_many_sources = []
     missing_back = []
     for name in sorted(linked - excluded):
         path = SITE_ROOT / issue_date / "details" / name
         html = read(path)
-        plain = re.sub(r"<[^>]+>", "", html)
-        plain = re.sub(r"\s+", "", plain)
-        if not information_required and len(plain) < MIN_DETAIL_TEXT_CHARS:
-            weak.append(f"{name}: {len(plain)} chars")
         headings = " ".join(re.findall(r"<(?:title|h1|h2)[^>]*>(.*?)</(?:title|h1|h2)>", html, flags=re.S))
         heading_text = re.sub(r"<[^>]+>", "", headings)
         if any(term in heading_text for term in DETAIL_POLICY_LEAK_TERMS):
@@ -769,41 +707,15 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
         h2_texts = heading_texts(html, ("h2",))
         if any(any(term in heading for term in DETAIL_FORBIDDEN_SECTION_HEADINGS) for heading in h2_texts):
             checklist_headings.append(name)
-        if information_required:
-            required_h2_variants = [[detail_summary_heading(issue_dt)]]
-        else:
-            required_h2_variants = [[detail_summary_heading(issue_dt)]]
-        if h2_texts not in required_h2_variants:
+        if h2_texts != [detail_summary_heading()]:
             article_structure_failures.append(f"{name}: h2={h2_texts or '-'}")
-        summary_class = "article-summary" if article_summary_required else "summary-lead"
-        summary_match = re.search(rf'<div class="{summary_class}">(.*?)</div>', html, flags=re.S)
+        summary_match = re.search(r'<div class="article-summary">(.*?)</div>', html, flags=re.S)
         if not summary_match:
             weak_summaries.append(f"{name}: missing summary")
         else:
             summary_text = visible_text(summary_match.group(1))
             validate_public_summary_language(f"detail page {name} summary", summary_text, issue_date)
-            summary_text = re.sub(r"\s+", "", summary_text)
-            if not information_required and len(summary_text) < min_summary_chars:
-                weak_summaries.append(f"{name}: {len(summary_text)} chars")
-        if information_required:
-            fact_match = re.search(r'<ul class="fact-list">(.*?)</ul>', html, flags=re.S)
-            if fact_match:
-                facts = [visible_text(item) for item in re.findall(r"<li[^>]*>(.*?)</li>", fact_match.group(1), flags=re.S)]
-                if not any(facts):
-                    article_structure_failures.append(f"{name}: not enough confirmed facts")
-                for fact in facts:
-                    validate_public_summary_language(f"detail page {name} fact", fact, issue_date)
-            limits_match = re.search(r'<p class="limits">(.*?)</p>', html, flags=re.S)
-            if limits_match and "確認して" in visible_text(limits_match.group(1)):
-                article_structure_failures.append(f"{name}: limits read like an instruction")
         source_match = re.search(r'<div class="source">(.*?)</div>', html, flags=re.S)
-        if summary_match and source_match:
-            between = html[summary_match.end() : source_match.start()]
-            if not information_required and visible_text(between):
-                article_structure_failures.append(f"{name}: body exists outside article summary")
-            source_links = re.findall(r"<a\b", source_match.group(1), flags=re.I)
-            if not article_summary_required and len(source_links) > MAX_SOURCE_LINKS_PER_DETAIL:
-                too_many_sources.append(f"{name}: {len(source_links)} links")
         validate_reader_facing_headlines(
             f"detail page {name}",
             heading_texts(html, ("title", "h1")),
@@ -813,8 +725,6 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
             missing_source.append(name)
         if 'class="back"' not in html or "../index.html" not in html:
             missing_back.append(name)
-    if weak:
-        fail("detail pages too thin: " + "; ".join(weak[:8]))
     if leaked:
         fail("detail headings contain policy/checklist wording: " + ", ".join(leaked[:8]))
     if checklist_headings:
@@ -823,19 +733,15 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
         expected_structure = "information-complete detail"
         fail(f"detail pages must use {expected_structure} structure: " + "; ".join(article_structure_failures[:8]))
     if weak_summaries:
-        if information_required:
-            fail("detail summaries are incomplete: " + "; ".join(weak_summaries[:8]))
-        fail("detail summaries are too thin: " + "; ".join(weak_summaries[:8]))
+        fail("detail summaries are incomplete: " + "; ".join(weak_summaries[:8]))
     if missing_source:
         fail("detail pages missing source block: " + ", ".join(missing_source[:8]))
-    if too_many_sources:
-        fail("legacy detail pages have too many source links: " + "; ".join(too_many_sources[:8]))
     if missing_back:
         fail("detail pages missing back link: " + ", ".join(missing_back[:8]))
 
 
 def validate_category_sections(root_html: str) -> None:
-    body = section_before_history(root_html)
+    body = root_html
     missing = []
     too_thin = []
     for section_id, label in REQUIRED_SECTIONS.items():
@@ -878,10 +784,10 @@ def validate(issue_date: str) -> None:
     validate_stable_hero("sample page", sample_html, issue_date)
     validate_stable_hero("root page", root_html, issue_date)
     validate_stable_hero("dated issue page", dated_html, issue_date)
-    validate_priority_has_no_selection_process("root page", root_html, issue_date)
-    validate_priority_has_no_selection_process("dated issue page", dated_html, issue_date)
-    validate_reader_process_language("root page", section_before_history(root_html))
-    validate_reader_process_language("dated issue page", section_before_history(dated_html))
+    validate_priority_has_no_selection_process("root page", root_html)
+    validate_priority_has_no_selection_process("dated issue page", dated_html)
+    validate_reader_process_language("root page", root_html)
+    validate_reader_process_language("dated issue page", dated_html)
     validate_no_confirmation_layer("root page", root_html)
     validate_no_confirmation_layer("dated issue page", dated_html)
     for context, html in [("root page", root_html), ("dated issue page", dated_html)]:
@@ -901,17 +807,14 @@ def validate(issue_date: str) -> None:
 
     validate_reader_facing_headlines(
         "root page",
-        heading_texts(section_before_history(root_html), ("h1", "h3")),
+        heading_texts(root_html, ("h1", "h3")),
     )
 
     stale: list[str] = []
     label_failures: list[str] = []
     fresh_count = 0
     undated: list[str] = []
-    max_card_age_days = max_adopted_source_age_days(COVERAGE_CONTRACT, issue_dt)
-    freshness_label_required = effective_on_or_after(
-        COVERAGE_CONTRACT, "latest_three_calendar_days_effective_date", issue_dt
-    )
+    max_card_age_days = max_adopted_source_age_days(COVERAGE_CONTRACT)
     for card in cards:
         dates = card_dates(card)
         if not dates:
@@ -928,7 +831,7 @@ def validate(issue_date: str) -> None:
             continue
         if age > max_card_age_days:
             stale.append(f"{card_title(card)} ({newest}, {age} days old)")
-        if freshness_label_required and 0 <= age <= 2 and LATEST_THREE_DAY_LABELS[age] not in visible_text(card):
+        if 0 <= age <= 2 and LATEST_THREE_DAY_LABELS[age] not in visible_text(card):
             label_failures.append(f"{card_title(card)} needs {LATEST_THREE_DAY_LABELS[age]} label")
         if age <= 1:
             fresh_count += 1

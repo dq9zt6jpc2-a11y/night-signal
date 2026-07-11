@@ -6,7 +6,7 @@ from __future__ import annotations
 import hashlib
 import json
 import sys
-from datetime import date, datetime
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -58,16 +58,6 @@ def collector_contract_version() -> str:
         digest.update(path.read_bytes())
         digest.update(b"\0")
     return digest.hexdigest()[:16]
-
-
-def effective_on_or_after(contract: dict[str, Any], key: str, issue_date: str) -> bool:
-    value = contract.get(key)
-    if not isinstance(value, str):
-        return False
-    try:
-        return date.fromisoformat(issue_date) >= date.fromisoformat(value)
-    except ValueError:
-        return False
 
 
 def required_channels(contract: dict[str, Any], category: dict[str, Any]) -> set[str]:
@@ -135,11 +125,6 @@ def validate_bundle(
         isinstance(categories, dict) and set(categories) == set(configured),
         "Evidence must cover every configured category exactly once",
     )
-    strict_discovery = effective_on_or_after(
-        coverage,
-        "topic_discovery_contract_effective_date",
-        issue_date,
-    )
     category_reports: dict[str, Any] = {}
     totals = {
         "source_checks": 0,
@@ -196,19 +181,16 @@ def validate_bundle(
                 (check_state == "source_unavailable") == (method == "unavailable"),
                 f"{label} source_checks[{index}] has an inconsistent verification result",
             )
-            if not strict_discovery:
-                checked_topics.update(str(topic) for topic in check_topics)
             checked_channels.add(channel)
             checked_seed_urls.add(url)
             if check_state == "observed_live":
                 observed_urls.add(url)
 
         discovery_checks = entry.get("discovery_checks", [])
-        if strict_discovery:
-            _require(
-                isinstance(discovery_checks, list) and bool(discovery_checks),
-                f"{label} has no discovery checks",
-            )
+        _require(
+            isinstance(discovery_checks, list) and bool(discovery_checks),
+            f"{label} has no discovery checks",
+        )
         horizon_searched = False
         unresolved_queries: list[str] = []
         topic_resolution = {
@@ -292,8 +274,7 @@ def validate_bundle(
         }
         _require(seed_urls <= checked_seed_urls, f"{label} has seed sources without explicit result states")
         _require(topics <= checked_topics, f"{label} has unchecked watch topics")
-        if strict_discovery:
-            _require(horizon_searched, f"{label} has no completed horizon search")
+        _require(horizon_searched, f"{label} has no completed horizon search")
         _require(
             required_channels(coverage, category) <= checked_channels,
             f"{label} has unchecked channels",

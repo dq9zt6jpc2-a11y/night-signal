@@ -37,6 +37,11 @@ python3 scripts/night_signal_publish.py YYYY-MM-DD --public-audit
 6. Local audits pass before commit.
 7. `pages.yml` deploys committed state and the owner verifies public URLs.
 
+The repository retains one published issue only: its Evidence/Issue state, sample
+HTML, linked detail pages, root page, and dated page. The prior issue remains just
+long enough to check novelty and copied output; it is deleted only after the new
+issue passes every local gate.
+
 The timing policy derives the fresh-collection window from the 19:00 deadline,
 the 105-minute end-to-end runtime budget, and a 30-minute safety margin. Scheduled
 heartbeats may arrive early or late; only the first actual start from 16:45 through

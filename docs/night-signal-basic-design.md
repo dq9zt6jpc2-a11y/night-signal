@@ -188,6 +188,11 @@ version更新忘れや、検証失敗後の不要な再収集・AI再実行を�
 同じIssue契約を同一段階で繰り返し検証しない。Editorの出力境界、Rendererの入力境界、
 Evidence網羅性、公開HTMLの各境界で一回ずつ検証し、同じ検証関数を連続実行しない。
 
+永続化する公開状態は現在号1件だけとする。次号生成中は現在号を新規性比較に使い、次号が
+全local gateに合格した後で、旧state、旧sample、未使用detail、旧dated siteを削除する。
+失敗途中では現在号を削除しない。過去号の表示、旧形式のvalidation、日付別contract分岐、
+旧collection modeは持たない。
+
 ## 8. 拡張と新技術
 
 新しい検索、Web agent、RSS、SNS API、動画字幕、OCR、画像理解、表抽出は、

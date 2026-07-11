@@ -6,6 +6,8 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
+import shutil
 import subprocess
 import sys
 from datetime import datetime, timedelta
@@ -229,11 +231,7 @@ def validate_collection_freshness(
             f"{final_cutoff.isoformat()}; got {completed.isoformat()}"
         )
     mode = manifest.get("collection_mode")
-    if mode not in {
-        "responses_web_search",
-        "reviewed_live_web",
-        "github_models_unattended",
-    }:
+    if mode != "github_models_unattended":
         fail(f"unsupported collection_mode for publication: {mode}")
     return {
         "collection_completed_at_jst": completed.isoformat(),
@@ -261,7 +259,7 @@ def self_test() -> None:
     current = datetime.fromisoformat("2099-01-01T18:50:00+09:00")
     fresh = {
         "collection_completed_at_jst": "2099-01-01T17:20:00+09:00",
-        "collection_mode": "reviewed_live_web",
+        "collection_mode": "github_models_unattended",
     }
     result = validate_collection_freshness(
         fresh,
@@ -338,6 +336,28 @@ def sync_and_audit(issue_date: str) -> None:
     run([sys.executable, "scripts/quality_gate.py", issue_date])
 
 
+def prune_published_history(issue_date: str) -> None:
+    """Keep only the current issue and its directly published artifacts."""
+    current_sample = ROOT / f"night-brief-web-sample-{issue_date}.html"
+    sample_html = current_sample.read_text(encoding="utf-8")
+    linked_details = {
+        match.group(1)
+        for match in re.finditer(r'href="details/([^"#?]+\.html)', sample_html)
+    }
+    linked_details.update({"policy.html", "_style.css"})
+
+    for path in ROOT.glob("night-brief-web-sample-*.html"):
+        if path != current_sample:
+            path.unlink()
+    for path in STATE_ROOT.iterdir():
+        if path.is_dir() and path.name != issue_date:
+            shutil.rmtree(path)
+    details_dir = ROOT / "details"
+    for path in details_dir.iterdir():
+        if path.is_file() and path.name not in linked_details:
+            path.unlink()
+
+
 def self_tests(profile: str) -> None:
     if profile == "deploy":
         return
@@ -403,6 +423,7 @@ def prepare(
         status = readiness(issue_date, check=True)
         if status.get("blockers"):
             fail("readiness still has blockers: " + "; ".join(str(item) for item in status["blockers"]))
+        prune_published_history(issue_date)
         runtime.write_checkpoint(issue_date, current_stage, "completed", "all local publication gates passed", STATE_ROOT)
         return {
             "issue_date": issue_date,

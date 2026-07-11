@@ -124,9 +124,8 @@ def visible_text(html: str) -> str:
 
 def local_card_titles(issue_date: str) -> list[str]:
     html = read_local(ROOT / "site" / "index.html")
-    body = html.split('<section class="section" id="history">', 1)[0]
     titles = []
-    for match in re.finditer(r"<h3>(.*?)</h3>", body, flags=re.S):
+    for match in re.finditer(r"<h3>(.*?)</h3>", html, flags=re.S):
         title = visible_text(match.group(1))
         if title and title not in titles:
             titles.append(title)

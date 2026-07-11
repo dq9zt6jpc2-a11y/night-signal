@@ -107,12 +107,7 @@ def manifest_state(issue_date: str, state_root: Path, now: datetime) -> dict[str
                     and completed.timetz().replace(tzinfo=None) >= time(15, 30)
                     and current - completed <= timedelta(hours=4)
                     and completed <= current + timedelta(minutes=5)
-                    and manifest.get("collection_mode")
-                    in {
-                        "responses_web_search",
-                        "reviewed_live_web",
-                        "github_models_unattended",
-                    }
+                    and manifest.get("collection_mode") == "github_models_unattended"
                 ),
             }
         )

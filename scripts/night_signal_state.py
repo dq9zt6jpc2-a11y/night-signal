@@ -400,40 +400,6 @@ def compact_text(text: str) -> str:
     return re.sub(r"\s+", "", text)
 
 
-def display_text(value: Any, limit: int) -> str:
-    text = re.sub(r"\s+", " ", str(value or "")).strip()
-    if len(text) <= limit:
-        return text
-    return text[: max(0, limit - 1)].rstrip() + "…"
-
-
-def effective_on_or_after(contract: dict[str, Any], key: str, issue_date: str) -> bool:
-    value = contract.get(key)
-    if not isinstance(value, str):
-        return False
-    try:
-        issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
-        effective_dt = datetime.strptime(value, "%Y-%m-%d").date()
-    except ValueError:
-        return False
-    return issue_dt >= effective_dt
-
-
-def expected_contract_version(contract: dict[str, Any], issue_date: str) -> str | None:
-    issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
-    for legacy in contract.get("legacy_contract_versions", []):
-        if not isinstance(legacy, dict):
-            continue
-        try:
-            through = datetime.strptime(str(legacy.get("through_date")), "%Y-%m-%d").date()
-        except ValueError:
-            continue
-        if issue_dt <= through:
-            return str(legacy.get("version"))
-    value = contract.get("contract_version")
-    return str(value) if value is not None else None
-
-
 def public_copy_violations(text: str, *, kind: str) -> list[str]:
     stripped = text.strip()
     compact = compact_text(stripped)
@@ -730,16 +696,6 @@ def normalize_material_facts(
     return facts
 
 
-def normalize_analysis_facts(
-    title: str,
-    values: list[Any],
-    limit: int | None = None,
-) -> list[str]:
-    facts = normalize_material_facts(title, values)
-    kept = [fact for fact in facts if fact_adds_information(title, fact)]
-    return kept[:limit] if limit is not None else kept
-
-
 def summary_covers_material_facts(summary: str, facts: list[Any]) -> bool:
     material_facts = normalize_material_facts("", facts)
     summary_sentences = [
@@ -794,9 +750,6 @@ def validate_summary_basis(
     source_date: str,
     card_index: int,
 ) -> None:
-    contract = read_json(CONFIG_PATH)
-    if not effective_on_or_after(contract, "detail_information_contract_effective_date", issue_date):
-        return
     basis = detail.get("summary_basis")
     if not isinstance(basis, dict):
         fail(f"cards[{card_index}].detail.summary_basis is required for information-complete detail pages")
@@ -851,43 +804,41 @@ def validate_summary_basis(
     unique_facts = {copy_signature(fact) for fact in facts if isinstance(fact, str) and copy_signature(fact)}
     if not unique_facts:
         fail(f"cards[{card_index}].detail.summary_basis.confirmed_facts are repetitive")
-    if effective_on_or_after(contract, "material_fact_semantics_effective_date", issue_date):
-        material_facts = normalize_material_facts("", facts, limit=len(facts))
-        if not material_facts:
-            fail(
-                f"cards[{card_index}].detail.summary_basis.confirmed_facts "
-                "must be independent event facts, not source metadata or analysis"
-            )
-        if not any(fact_adds_information(title, fact) for fact in material_facts):
-            fail(
-                f"cards[{card_index}].detail.summary_basis.confirmed_facts "
-                "must add source-backed information beyond the title"
-            )
+    material_facts = normalize_material_facts("", facts, limit=len(facts))
+    if not material_facts:
+        fail(
+            f"cards[{card_index}].detail.summary_basis.confirmed_facts "
+            "must be independent event facts, not source metadata or analysis"
+        )
+    if not any(fact_adds_information(title, fact) for fact in material_facts):
+        fail(
+            f"cards[{card_index}].detail.summary_basis.confirmed_facts "
+            "must add source-backed information beyond the title"
+        )
 
-    if effective_on_or_after(contract, "claim_source_linkage_effective_date", issue_date):
-        fact_sources = basis.get("fact_sources")
-        if not isinstance(fact_sources, list) or len(fact_sources) != len(facts):
-            fail(f"cards[{card_index}].detail.summary_basis.fact_sources must cover every confirmed fact")
-        detail_source_urls = {
-            str(source.get("url"))
-            for source in detail.get("sources", [])
-            if isinstance(source, dict)
-        }
-        mapped_facts: set[str] = set()
-        for mapping_index, mapping in enumerate(fact_sources, start=1):
-            if not isinstance(mapping, dict):
-                fail(f"cards[{card_index}].detail.summary_basis.fact_sources[{mapping_index}] must be an object")
-            fact = require_str(mapping, "fact")
-            source_urls = mapping.get("source_urls")
-            if fact not in facts or fact in mapped_facts:
-                fail(f"cards[{card_index}].detail.summary_basis.fact_sources[{mapping_index}] must map one unique confirmed fact")
-            if (
-                not isinstance(source_urls, list)
-                or not source_urls
-                or any(not isinstance(url, str) or url not in detail_source_urls for url in source_urls)
-            ):
-                fail(f"cards[{card_index}].detail.summary_basis.fact_sources[{mapping_index}] must use detail source URLs")
-            mapped_facts.add(fact)
+    fact_sources = basis.get("fact_sources")
+    if not isinstance(fact_sources, list) or len(fact_sources) != len(facts):
+        fail(f"cards[{card_index}].detail.summary_basis.fact_sources must cover every confirmed fact")
+    detail_source_urls = {
+        str(source.get("url"))
+        for source in detail.get("sources", [])
+        if isinstance(source, dict)
+    }
+    mapped_facts: set[str] = set()
+    for mapping_index, mapping in enumerate(fact_sources, start=1):
+        if not isinstance(mapping, dict):
+            fail(f"cards[{card_index}].detail.summary_basis.fact_sources[{mapping_index}] must be an object")
+        fact = require_str(mapping, "fact")
+        source_urls = mapping.get("source_urls")
+        if fact not in facts or fact in mapped_facts:
+            fail(f"cards[{card_index}].detail.summary_basis.fact_sources[{mapping_index}] must map one unique confirmed fact")
+        if (
+            not isinstance(source_urls, list)
+            or not source_urls
+            or any(not isinstance(url, str) or url not in detail_source_urls for url in source_urls)
+        ):
+            fail(f"cards[{card_index}].detail.summary_basis.fact_sources[{mapping_index}] must use detail source URLs")
+        mapped_facts.add(fact)
 
     source_dates = basis.get("source_dates")
     if not isinstance(source_dates, list) or not source_dates:
@@ -937,7 +888,6 @@ def validate_public_card_copy(raw: dict[str, Any], detail: dict[str, Any], *, is
     validate_reader_summary(f"cards[{card_index}].summary", title, summary)
     validate_reader_summary(f"cards[{card_index}].detail.summary", title, detail_summary)
 
-    contract = read_json(CONFIG_PATH)
     if any(term in title for term in SCHEDULE_ONLY_TERMS) and not any(term in title + summary for term in SCHEDULE_MATERIAL_TERMS):
         fail(f"cards[{card_index}] looks schedule-only; routine dates must stay out of published topics")
 
@@ -949,13 +899,12 @@ def validate_public_card_copy(raw: dict[str, Any], detail: dict[str, Any], *, is
         source_date=source_date,
         card_index=card_index,
     )
-    if effective_on_or_after(contract, "complete_fact_summary_effective_date", issue_date):
-        basis = detail.get("summary_basis")
-        facts = basis.get("confirmed_facts", []) if isinstance(basis, dict) else []
-        if not summary_covers_material_facts(f"{title}。 {summary}", facts):
-            fail(f"cards[{card_index}].summary dropped a distinct confirmed fact")
-        if not summary_covers_material_facts(f"{title}。 {detail_summary}", facts):
-            fail(f"cards[{card_index}].detail.summary dropped a distinct confirmed fact")
+    basis = detail.get("summary_basis")
+    facts = basis.get("confirmed_facts", []) if isinstance(basis, dict) else []
+    if not summary_covers_material_facts(f"{title}。 {summary}", facts):
+        fail(f"cards[{card_index}].summary dropped a distinct confirmed fact")
+    if not summary_covers_material_facts(f"{title}。 {detail_summary}", facts):
+        fail(f"cards[{card_index}].detail.summary dropped a distinct confirmed fact")
 
 
 def relative_day_label(issue_date: str, source_date: str) -> str:
@@ -1183,21 +1132,14 @@ def validate_manifest_alignment(issue: dict[str, Any], cards: list[dict[str, Any
         fail("coverage_manifest collection_completed_at_jst must be ISO-8601")
     if completed.strftime("%Y-%m-%d") != issue_date:
         fail("coverage_manifest collection_completed_at_jst date mismatch")
-    if manifest.get("collection_mode") not in {
-        "responses_web_search",
-        "reviewed_live_web",
-        "github_models_unattended",
-    }:
-        fail("coverage_manifest collection_mode must describe a live research path")
-    if effective_on_or_after(contract, "detail_information_contract_effective_date", issue_date):
-        expected_version = expected_contract_version(contract, issue_date)
-        if manifest.get("contract_version") != expected_version:
-            fail(f"coverage_manifest contract_version must be {expected_version}")
-        evidence_hash = manifest.get("evidence_sha256")
-        current_contract = expected_version == contract.get("contract_version")
-        if evidence_hash is not None or current_contract:
-            if not isinstance(evidence_hash, str) or not re.fullmatch(r"[0-9a-f]{64}", evidence_hash):
-                fail("coverage_manifest evidence_sha256 must be a SHA-256 hex digest")
+    if manifest.get("collection_mode") != "github_models_unattended":
+        fail("coverage_manifest collection_mode must use the canonical collector")
+    expected_version = str(contract.get("contract_version"))
+    if manifest.get("contract_version") != expected_version:
+        fail(f"coverage_manifest contract_version must be {expected_version}")
+    evidence_hash = manifest.get("evidence_sha256")
+    if not isinstance(evidence_hash, str) or not re.fullmatch(r"[0-9a-f]{64}", evidence_hash):
+        fail("coverage_manifest evidence_sha256 must be a SHA-256 hex digest")
     public_titles = [str(card.get("title")) for card in cards]
     if len(public_titles) != len(set(public_titles)):
         fail("cards must have unique public titles")
@@ -1226,11 +1168,6 @@ def validate_issue_evidence(
         evidence_report = evidence_store.validate_bundle(bundle, issue_date)
     except evidence_store.EvidenceContractError as exc:
         fail(str(exc))
-    evidence_contract_active = effective_on_or_after(
-        read_json(CONFIG_PATH),
-        "publication_evidence_contract_effective_date",
-        issue_date,
-    )
     cards_by_category: dict[str, list[dict[str, Any]]] = {}
     for card in cards:
         cards_by_category.setdefault(str(card.get("category")), []).append(card)
@@ -1254,17 +1191,14 @@ def validate_issue_evidence(
             }
             if not detail_urls or not detail_urls <= observed_record_urls:
                 fail(f"{label} public update cites unobserved evidence")
-            if evidence_contract_active:
-                source_date = str(card.get("source_published_date", ""))
-                evidence_dates = {
-                    str(record.get("published_date") or "")
-                    for url in detail_urls
-                    for record in records_by_url.get(url, [])
-                }
-                if not source_date or source_date not in evidence_dates:
-                    fail(
-                        f"{label} public update source date is not present in its Evidence"
-                    )
+            source_date = str(card.get("source_published_date", ""))
+            evidence_dates = {
+                str(record.get("published_date") or "")
+                for url in detail_urls
+                for record in records_by_url.get(url, [])
+            }
+            if not source_date or source_date not in evidence_dates:
+                fail(f"{label} public update source date is not present in its Evidence")
             basis = detail.get("summary_basis")
             if not isinstance(basis, dict):
                 fail(f"{label} public update has no summary basis")
@@ -1410,7 +1344,7 @@ def self_test() -> None:
         "cards": [card],
         "coverage_manifest": build_coverage_manifest(
             issue_date,
-            collection_mode="reviewed_live_web",
+            collection_mode="github_models_unattended",
             collection_completed_at_jst=f"{issue_date}T19:30:00+09:00",
             evidence_sha256="0" * 64,
         ),

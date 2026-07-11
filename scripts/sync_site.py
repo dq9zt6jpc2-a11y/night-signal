@@ -2,11 +2,10 @@
 """Sync the working NIGHT SIGNAL files into the published site folder.
 
 The working detail pages link back to the editable sample page. The published
-site pages must link back to the dated issue index instead, otherwise Safari
-opens a broken path from site/2026-05-10/details/.
+site pages must link back to the dated issue index.
 
 The root site/index.html is the stable URL to bookmark. It always shows the
-latest issue while dated folders keep the latest seven published issues.
+latest issue; only that issue's dated URL is retained.
 """
 
 from __future__ import annotations
@@ -21,7 +20,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DETAILS = ROOT / "details"
 SITE_ROOT = ROOT / "site"
-RETENTION_ISSUES = 7
 
 
 def detect_issue_date() -> str:
@@ -66,19 +64,6 @@ def linked_detail_names(html: str) -> set[str]:
     return names
 
 
-def issue_dirs() -> list[Path]:
-    dated = []
-    for path in SITE_ROOT.iterdir():
-        if not path.is_dir():
-            continue
-        try:
-            datetime.strptime(path.name, "%Y-%m-%d")
-        except ValueError:
-            continue
-        dated.append(path)
-    return sorted(dated, reverse=True)
-
-
 def dated_samples() -> list[datetime.date]:
     dates = []
     for path in ROOT.glob("night-brief-web-sample-*.html"):
@@ -101,35 +86,22 @@ def ensure_issue_is_latest() -> None:
 
 
 def prune_old_issues() -> None:
-    for path in issue_dirs()[RETENTION_ISSUES:]:
+    for path in SITE_ROOT.iterdir():
+        if not path.is_dir() or path == SITE_ISSUE:
+            continue
+        try:
+            datetime.strptime(path.name, "%Y-%m-%d")
+        except ValueError:
+            continue
         shutil.rmtree(path)
-
-
-def archive_section() -> str:
-    cards = []
-    for path in issue_dirs():
-        cards.append(
-            f"""        <article class="card">
-          <div class="meta"><span class="pill">履歴</span><span class="pill">{path.name}</span></div>
-          <h3>{path.name}</h3>
-          <p>直近7号の履歴。後から読み返すための保存版です。</p>
-          <a class="link" href="{path.name}/index.html">この日を開く</a>
-        </article>"""
-        )
-    return f"""
-    <section class="section" id="history">
-      <div class="section-head"><h2>History</h2><p>直近7号</p></div>
-      <div class="cards">
-{chr(10).join(cards)}
-      </div>
-    </section>
-"""
 
 
 def write_root_latest() -> None:
     html = rewrite_root_links(SAMPLE.read_text(encoding="utf-8"))
-    html = html.replace('<a href="details/policy.html">方針</a>', f'<a href="{ISSUE_DATE}/details/policy.html">方針</a><a href="#history">履歴</a>')
-    html = html.replace("  </main>\n</body>", f"{archive_section()}  </main>\n</body>")
+    html = html.replace(
+        '<a href="details/policy.html">方針</a>',
+        f'<a href="{ISSUE_DATE}/details/policy.html">方針</a>',
+    )
     (SITE_ROOT / "index.html").write_text(html, encoding="utf-8")
 
 

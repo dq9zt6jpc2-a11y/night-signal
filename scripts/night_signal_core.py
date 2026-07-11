@@ -561,11 +561,6 @@ def category_identity_ok(category_label: str, title: str, summary: str) -> bool:
     return any(term.lower() in text for term in terms)
 
 
-def contains_material_signal(*values: str) -> bool:
-    text = " ".join(str(value or "") for value in values)
-    return bool(MATERIAL_SIGNAL_RE.search(text))
-
-
 def material_event_candidate(title: str, *evidence_values: str) -> bool:
     text = " ".join([str(title), *(str(value or "") for value in evidence_values)])
     return bool(
@@ -1288,10 +1283,6 @@ def discovery_queries(category: dict[str, Any], issue_date: str) -> list[dict[st
 
 def news_queries(category: dict[str, Any], issue_date: str) -> list[str]:
     return [str(spec["query"]) for spec in discovery_queries(category, issue_date)]
-
-
-def news_query(category: dict[str, Any], issue_date: str) -> str:
-    return news_queries(category, issue_date)[0]
 
 
 def canonical_article_match_text(value: str) -> str:

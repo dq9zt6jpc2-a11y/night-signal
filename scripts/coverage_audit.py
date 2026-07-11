@@ -7,7 +7,7 @@ import html
 import json
 import re
 import sys
-from datetime import date, datetime
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -40,20 +40,8 @@ def load_contract() -> dict[str, Any]:
     return load_object(CONFIG_PATH)
 
 
-def effective_on_or_after(contract: dict[str, Any], key: str, issue_dt: date) -> bool:
-    value = contract.get(key)
-    if not isinstance(value, str):
-        return False
-    try:
-        return issue_dt >= datetime.strptime(value, "%Y-%m-%d").date()
-    except ValueError:
-        return False
-
-
-def max_adopted_source_age_days(contract: dict[str, Any], issue_dt: date) -> int:
-    if effective_on_or_after(contract, "strict_adopted_candidate_source_age_effective_date", issue_dt):
-        return int(contract.get("maximum_adopted_candidate_source_age_days", 3))
-    return 7
+def max_adopted_source_age_days(contract: dict[str, Any]) -> int:
+    return int(contract.get("maximum_adopted_candidate_source_age_days", 3))
 
 
 def visible_text(value: str) -> str:
@@ -115,7 +103,6 @@ def self_test() -> None:
     issue_date = "2099-01-02"
     source_url = "https://example.com/news"
     coverage = {
-        "topic_discovery_contract_effective_date": "2099-01-01",
         "required_watch_topic_channels": ["web"],
         "categories": [
             {

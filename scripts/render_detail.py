@@ -11,21 +11,9 @@ Authoring checklist sections are never published.
 from __future__ import annotations
 
 import html
-import json
 import re
-import sys
-from datetime import datetime
-from pathlib import Path
 from typing import Any
 
-
-ROOT = Path(__file__).resolve().parents[1]
-DETAILS = ROOT / "details"
-CONFIG_PATH = ROOT / "config" / "night_signal_coverage.json"
-LEGACY_MIN_SUMMARY_CHARS = 180
-MAX_SOURCE_LINKS = 3
-LEGACY_SUMMARY_HEADING = "30秒概要"
-DEFAULT_SUMMARY_HEADING = "概要"
 FORBIDDEN_TEXT = [
     "30秒概要",
     "チェック観点",
@@ -74,84 +62,6 @@ FORBIDDEN_PATTERNS = [
 def fail(message: str) -> None:
     print(f"DETAIL RENDER FAILED: {message}", file=sys.stderr)
     raise SystemExit(1)
-
-
-def minimum_summary_chars(issue_date: str) -> int:
-    try:
-        contract = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return LEGACY_MIN_SUMMARY_CHARS
-
-    effective_value = contract.get("summary_quality_effective_date")
-    if not isinstance(effective_value, str):
-        return LEGACY_MIN_SUMMARY_CHARS
-    try:
-        issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
-        effective_dt = datetime.strptime(effective_value, "%Y-%m-%d").date()
-    except ValueError:
-        return LEGACY_MIN_SUMMARY_CHARS
-    if issue_dt < effective_dt:
-        return LEGACY_MIN_SUMMARY_CHARS
-    return int(contract.get("minimum_detail_summary_chars", LEGACY_MIN_SUMMARY_CHARS))
-
-
-def effective_on_or_after(issue_date: str, key: str) -> bool:
-    try:
-        contract = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return False
-    effective_value = contract.get(key)
-    if not isinstance(effective_value, str):
-        return False
-    try:
-        issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
-        effective_dt = datetime.strptime(effective_value, "%Y-%m-%d").date()
-    except ValueError:
-        return False
-    return issue_dt >= effective_dt
-
-
-def detail_information_contract_required(issue_date: str) -> bool:
-    return effective_on_or_after(issue_date, "detail_information_contract_effective_date")
-
-
-def summary_heading(issue_date: str) -> str:
-    try:
-        contract = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return LEGACY_SUMMARY_HEADING
-
-    effective_value = contract.get("detail_summary_heading_effective_date")
-    if not isinstance(effective_value, str):
-        return LEGACY_SUMMARY_HEADING
-    try:
-        issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
-        effective_dt = datetime.strptime(effective_value, "%Y-%m-%d").date()
-    except ValueError:
-        return LEGACY_SUMMARY_HEADING
-    if issue_dt < effective_dt:
-        return LEGACY_SUMMARY_HEADING
-    heading = contract.get("detail_summary_heading", DEFAULT_SUMMARY_HEADING)
-    if isinstance(heading, str) and heading.strip():
-        return heading.strip()
-    return DEFAULT_SUMMARY_HEADING
-
-
-def article_summary_required(issue_date: str) -> bool:
-    try:
-        contract = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return False
-
-    effective_value = contract.get("article_summary_effective_date")
-    if not isinstance(effective_value, str):
-        return False
-    try:
-        issue_dt = datetime.strptime(issue_date, "%Y-%m-%d").date()
-        effective_dt = datetime.strptime(effective_value, "%Y-%m-%d").date()
-    except ValueError:
-        return False
-    return issue_dt >= effective_dt
 
 
 def required_str(data: dict[str, Any], key: str) -> str:
@@ -217,9 +127,7 @@ def reject_basis_forbidden(basis: dict[str, Any]) -> None:
         reject_forbidden(f"summary_basis.confirmed_facts[{index}]", str(fact))
 
 
-def render_sources(sources: list[Any], allow_multiple: bool) -> str:
-    if not allow_multiple and len(sources) > MAX_SOURCE_LINKS:
-        fail(f"sources must be narrowed to {MAX_SOURCE_LINKS} links or fewer")
+def render_sources(sources: list[Any]) -> str:
     links = []
     for item in sources:
         if not isinstance(item, dict):
@@ -258,26 +166,13 @@ def render(data: dict[str, Any]) -> str:
     ]:
         reject_forbidden(label, text)
 
-    use_article_summary = article_summary_required(issue_date)
-    source_links = render_sources(sources, allow_multiple=use_article_summary)
+    source_links = render_sources(sources)
     escaped_title = html.escape(title)
     escaped_kicker = html.escape(kicker)
     escaped_h1 = html.escape(h1)
-    if detail_information_contract_required(issue_date):
-        basis = required_summary_basis(data)
-        reject_basis_forbidden(basis)
-        summary_block = render_information_basis(summary, basis)
-    else:
-        min_summary_chars = minimum_summary_chars(issue_date)
-        if len(summary.replace(" ", "").replace("\n", "")) < min_summary_chars:
-            fail(f"summary is too thin: {len(summary)} chars")
-        heading = html.escape(summary_heading(issue_date))
-        if use_article_summary:
-            summary_block = f"""      <h2>{heading}</h2>
-      <div class="article-summary">{html.escape(summary)}</div>"""
-        else:
-            summary_block = f"""      <h2>{heading}</h2>
-      <div class="summary-lead">{html.escape(summary)}</div>"""
+    basis = required_summary_basis(data)
+    reject_basis_forbidden(basis)
+    summary_block = render_information_basis(summary, basis)
     escaped_issue = html.escape(issue_date, quote=True)
     escaped_section = html.escape(section_id, quote=True)
 
@@ -308,23 +203,3 @@ def render(data: dict[str, Any]) -> str:
 </body>
 </html>
 """
-
-
-def main() -> int:
-    if len(sys.argv) != 2:
-        fail("usage: render_detail.py path/to/detail.json")
-    source = Path(sys.argv[1])
-    data = json.loads(source.read_text(encoding="utf-8"))
-    if not isinstance(data, dict):
-        fail("input JSON must be an object")
-    slug = required_str(data, "slug")
-    if "/" in slug or not slug.endswith(".html"):
-        fail("slug must be a detail html filename, e.g. openai-YYYY-MM-DD.html")
-    output = DETAILS / slug
-    output.write_text(render(data), encoding="utf-8")
-    print(output)
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
