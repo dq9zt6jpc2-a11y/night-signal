@@ -100,6 +100,20 @@ def quality_model_required(category_payload: dict[str, Any]) -> bool:
     return False
 
 
+def sanitize_editor_title(value: Any) -> str:
+    title = core.reader_facing_text(value, 180)
+    for character in state.TITLE_FORBIDDEN_CHARS:
+        title = title.replace(character, " ")
+    for phrase in state.VAGUE_TITLE_PHRASES:
+        title = re.sub(
+            rf"(?:と|、|・)\s*[^、。]{{0,24}}{re.escape(phrase)}\s*$",
+            "",
+            title,
+        )
+        title = title.replace(phrase, "")
+    return compact_text(title.strip(" 、・"), 180)
+
+
 def sanitize_model_result(raw: dict[str, Any]) -> dict[str, Any]:
     """Merge repeated model points without changing their supported wording."""
     sanitized = {**raw, "items": []}
@@ -143,7 +157,13 @@ def sanitize_model_result(raw: dict[str, Any]) -> dict[str, Any]:
                 duplicate["evidence_ids"] = list(
                     dict.fromkeys([*duplicate.get("evidence_ids", []), *evidence_ids])
                 )
-        sanitized["items"].append({**raw_item, "summary_points": points})
+        sanitized["items"].append(
+            {
+                **raw_item,
+                "title": sanitize_editor_title(raw_item.get("title", "")),
+                "summary_points": points,
+            }
+        )
     return sanitized
 
 
@@ -1018,6 +1038,10 @@ def edit_evidence(
 
 def self_test() -> None:
     core.self_test()
+    if sanitize_editor_title(
+        "OpenAIの政府株式提供提案とAI業界の最新動向"
+    ) != "OpenAIの政府株式提供提案":
+        fail("Editor did not remove a trailing vague title phrase")
     with tempfile.TemporaryDirectory() as temporary_directory:
         sample_evidence = Path(temporary_directory) / "evidence.json"
         sample_evidence.write_bytes(b"canonical evidence")
