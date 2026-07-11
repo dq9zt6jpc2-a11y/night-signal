@@ -853,15 +853,18 @@ def edit_evidence(
                 max_output_tokens=None,
                 validate=validate_summary,
                 correction=lambda value: (
-                    "The previous JSON failed deterministic evidence, repetition, or "
-                    "completeness checks. Return the entire corrected JSON. Keep every "
-                    "fact close to its cited source wording and exact numbers; do not add "
-                    "unsupported names or synthesis. Keep each item inside its exact "
-                    "event_id and do not repeat the title. Evidence "
-                    "with no additional supported fact must be excluded as "
-                    "no_material_update. For each unsupported_facts entry, either "
-                    "rewrite it closely from the cited Evidence or remove it; do not "
-                    "expand the number of facts. Validation feedback: "
+                    "Return the entire corrected JSON for the supplied events. Apply only "
+                    "the fixes named by validation. For title_copy, use a concise concrete "
+                    "reader title without a colon, pipe, brackets, publisher wording, or "
+                    "vague phrases such as latest developments. For summary_copy, "
+                    "summary_repetition, insufficient_facts, or generic_padding, remove "
+                    "title restatements and generic context while retaining every distinct "
+                    "source-backed fact. For each unsupported_facts entry, rewrite it "
+                    "closely from the cited Evidence or remove it; never expand the number "
+                    "of facts. Keep every item and exclusion inside its exact event_id, "
+                    "and account for every Evidence id exactly once. Evidence with no "
+                    "additional supported fact must be excluded as no_material_update. "
+                    "Validation feedback: "
                     + json.dumps(value, ensure_ascii=False, separators=(",", ":"))
                 ),
                 log_context={
