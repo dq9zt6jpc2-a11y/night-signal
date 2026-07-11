@@ -657,11 +657,12 @@ def edit_evidence(
         correction: Callable[[dict[str, Any]], str],
         log_context: dict[str, Any],
         log_fields: Callable[[Any], dict[str, Any]],
-    ) -> tuple[Any | None, dict[str, Any]]:
+    ) -> tuple[Any | None, dict[str, Any], bool]:
         quality_model = str(
             models.load_config().get("extraction", {}).get("quality_model", "")
         )
         feedback: dict[str, Any] = {}
+        last_result: Any | None = None
         for model_index, model_name in enumerate(model_chain):
             attempt_messages = messages
             max_attempts = 2 if model_index == 0 else 1
@@ -696,6 +697,7 @@ def edit_evidence(
                         break
                     raise
                 result, accepted, feedback = validate(raw)
+                last_result = result
                 print(
                     json.dumps(
                         {
@@ -710,7 +712,7 @@ def edit_evidence(
                     flush=True,
                 )
                 if accepted:
-                    return result, feedback
+                    return result, feedback, True
                 attempt_messages = [
                     *messages,
                     {
@@ -719,7 +721,7 @@ def edit_evidence(
                     },
                     {"role": "user", "content": correction(feedback)},
                 ]
-        return None, feedback
+        return last_result, feedback, False
 
     def cards_from_raw(
         raw: dict[str, Any],
@@ -842,68 +844,134 @@ def edit_evidence(
                     flush=True,
                 )
                 continue
-            quality_required = quality_model_required(category_payload)
-            model_chain = models.routed_models(quality_required=quality_required)
-            messages = [
-                {"role": "system", "content": models.SYSTEM_PROMPT},
-                {
-                    "role": "user",
-                    "content": json.dumps(
-                        category_payload,
-                        ensure_ascii=False,
-                        separators=(",", ":"),
-                    ),
-                },
-            ]
-            def validate_summary(
-                raw: dict[str, Any],
-            ) -> tuple[Any, bool, dict[str, Any]]:
-                result = cards_from_raw(raw, category, label, chunk_records)
-                return result, result[2], result[3]
+            def request_records(
+                request_records_value: list[dict[str, Any]],
+                request_suffix: str,
+            ) -> tuple[Any | None, dict[str, Any], bool]:
+                request_payload = fit_model_payload(
+                    core.category_prompt(
+                        category,
+                        issue_date,
+                        request_records_value,
+                    )
+                )
+                quality_required = quality_model_required(request_payload)
+                messages = [
+                    {"role": "system", "content": models.SYSTEM_PROMPT},
+                    {
+                        "role": "user",
+                        "content": json.dumps(
+                            request_payload,
+                            ensure_ascii=False,
+                            separators=(",", ":"),
+                        ),
+                    },
+                ]
 
-            selected_result, _ = validated_model_result(
-                messages=messages,
-                model_chain=model_chain,
-                request_label=f"{label} {chunk_index}/{len(chunks)}",
-                response_schema=models.editor_response_schema(
-                    [str(event["id"]) for event in category_payload["events"]]
-                ),
-                response_schema_name="night_signal_editor_result",
-                max_output_tokens=None,
-                validate=validate_summary,
-                correction=lambda value: (
-                    "Return the entire corrected JSON for the supplied events. Apply only "
-                    "the fixes named by validation. For title_copy, use a concise concrete "
-                    "reader title without a colon, pipe, brackets, publisher wording, or "
-                    "vague phrases such as latest developments. For summary_copy, "
-                    "summary_repetition, insufficient_facts, or generic_padding, remove "
-                    "title restatements and generic context while retaining every distinct "
-                    "source-backed fact. For each unsupported_facts entry, rewrite it "
-                    "closely from the cited Evidence or remove it; never expand the number "
-                    "of facts. Keep every item and exclusion inside its exact event_id, "
-                    "and account for every Evidence id exactly once. Evidence with no "
-                    "additional supported fact must be excluded as no_material_update. "
-                    "Validation feedback: "
-                    + json.dumps(value, ensure_ascii=False, separators=(",", ":"))
-                ),
-                log_context={
-                    "phase": "model_route",
-                    "category": label,
-                    "route": "quality" if quality_required else "routine",
-                    "chunk": chunk_index,
-                    "chunks": len(chunks),
-                },
-                log_fields=lambda value: {
-                    "cards": len(value[0]),
-                    "rejected_items": value[1],
-                },
-            )
-            if selected_result is None:
+                def validate_summary(
+                    raw: dict[str, Any],
+                ) -> tuple[Any, bool, dict[str, Any]]:
+                    result = cards_from_raw(
+                        raw,
+                        category,
+                        label,
+                        request_records_value,
+                    )
+                    return result, result[2], result[3]
+
+                return validated_model_result(
+                    messages=messages,
+                    model_chain=models.routed_models(
+                        quality_required=quality_required
+                    ),
+                    request_label=(
+                        f"{label} {chunk_index}/{len(chunks)}{request_suffix}"
+                    ),
+                    response_schema=models.editor_response_schema(
+                        [str(event["id"]) for event in request_payload["events"]]
+                    ),
+                    response_schema_name="night_signal_editor_result",
+                    max_output_tokens=None,
+                    validate=validate_summary,
+                    correction=lambda value: (
+                        "Return the entire corrected JSON for the supplied events. Apply "
+                        "only the fixes named by validation. For title_copy, use a concise "
+                        "concrete reader title without a colon, pipe, brackets, publisher "
+                        "wording, or vague phrases such as latest developments. For "
+                        "summary_copy, summary_repetition, insufficient_facts, or "
+                        "generic_padding, remove title restatements and generic context "
+                        "while retaining every distinct source-backed fact. For each "
+                        "unsupported_facts entry, rewrite it closely from the cited "
+                        "Evidence or remove it; never expand the number of facts. Keep "
+                        "every item and exclusion inside its exact event_id, and account "
+                        "for every Evidence id exactly once. Evidence with no additional "
+                        "supported fact must be excluded as no_material_update. Validation "
+                        "feedback: "
+                        + json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+                    ),
+                    log_context={
+                        "phase": "model_route",
+                        "category": label,
+                        "route": "quality" if quality_required else "routine",
+                        "chunk": chunk_index,
+                        "chunks": len(chunks),
+                        "scope": request_suffix.strip() or "full",
+                    },
+                    log_fields=lambda value: {
+                        "cards": len(value[0]),
+                        "unpublishable_items": value[1],
+                    },
+                )
+
+            pending_records = chunk_records
+            chunk_cards: list[dict[str, Any]] = []
+            recovery_round = 0
+            while pending_records:
+                suffix = "" if recovery_round == 0 else f" recovery-{recovery_round}"
+                selected_result, feedback, accepted = request_records(
+                    pending_records,
+                    suffix,
+                )
+                if selected_result is None:
+                    break
+                chunk_cards.extend(selected_result[0])
+                if accepted:
+                    pending_records = []
+                    break
+                event_feedback = feedback.get("event_response", {})
+                unsafe_feedback = (
+                    feedback.get("conflicting_evidence_ids")
+                    or feedback.get("unknown_excluded_ids")
+                    or feedback.get("unpublishable_items")
+                    or any(event_feedback.values())
+                )
+                missing_ids = feedback.get("missing_evidence_ids", [])
+                evidence_by_id = dict(
+                    core.editor_evidence_records(
+                        category,
+                        issue_date,
+                        pending_records,
+                    )
+                )
+                next_pending = [
+                    evidence_by_id[evidence_id]
+                    for evidence_id in missing_ids
+                    if evidence_id in evidence_by_id
+                ]
+                if (
+                    unsafe_feedback
+                    or not next_pending
+                    or len(next_pending) >= len(pending_records)
+                ):
+                    break
+                pending_records = next_pending
+                recovery_round += 1
+            if pending_records:
                 fail(
                     "Editor could not produce complete summaries for every evidence item: "
                     f"{label} chunk {chunk_index}/{len(chunks)}"
                 )
-            chunk_cards = selected_result[0]
+            chunk_cards = merge_repeated_cards(chunk_cards)
             checkpoint["chunks"][checkpoint_key] = chunk_cards
             save_checkpoint()
             category_cards.extend(chunk_cards)
