@@ -38,7 +38,7 @@ jobs:
     timeout-minutes: 105
     env:
       GITHUB_TOKEN: ${{ github.token }}
-      NIGHT_SIGNAL_MODEL_CONCURRENCY: 2
+      NIGHT_SIGNAL_MODEL_CONCURRENCY: 1
     steps:
       - name: Checkout
         uses: actions/checkout@v5
