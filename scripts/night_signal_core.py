@@ -2271,6 +2271,7 @@ def normalize_result(
     records_by_id = dict(evidence_entries)
     expected_evidence_ids = set(records_by_id)
     items: list[dict[str, Any]] = []
+    rejected_items: list[dict[str, Any]] = []
     seen_titles: set[str] = set()
     seen_clusters: set[str] = set()
     used_evidence_ids: set[str] = set()
@@ -2482,6 +2483,14 @@ def normalize_result(
         ]
         rejection_reasons = [reason for reason, rejected in rejection_checks if rejected]
         if rejection_reasons:
+            rejected_items.append(
+                {
+                    "event_id": item_event_id,
+                    "title": title,
+                    "reasons": rejection_reasons,
+                    "unsupported_facts": unsupported_facts,
+                }
+            )
             print(
                 json.dumps(
                     {
@@ -2538,6 +2547,7 @@ def normalize_result(
         "conflicting_evidence_ids": conflicting_evidence_ids,
         "unknown_excluded_ids": sorted(unknown_excluded_ids),
         "expected_evidence_ids": sorted(expected_evidence_ids),
+        "rejected_items": rejected_items,
     }
 
 
@@ -3093,8 +3103,13 @@ def self_test() -> None:
             ],
         }
     )
-    if normalize_result(padded_raw, category, "2099-01-03", records)["items"]:
+    padded_result = normalize_result(padded_raw, category, "2099-01-03", records)
+    if padded_result["items"]:
         fail("normalization accepted an unsupported padding claim")
+    if padded_result["rejected_items"][0]["unsupported_facts"] != [
+        "市場全体の競争が激化するとみられる。"
+    ]:
+        fail("normalization did not return actionable unsupported-fact feedback")
     repeated_raw = json.loads(json.dumps(raw))
     repeated_raw["items"][0]["summary_points"].append(
         repeated_raw["items"][0]["summary_points"][0]

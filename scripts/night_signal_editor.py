@@ -679,6 +679,7 @@ def edit_evidence(
             "conflicting_evidence_ids": normalized["conflicting_evidence_ids"],
             "unknown_excluded_ids": normalized["unknown_excluded_ids"],
             "unpublishable_items": failed,
+            "rejected_items": normalized["rejected_items"],
         }
         return cards, failed, accepted, feedback
 
@@ -767,7 +768,9 @@ def edit_evidence(
                     "unsupported names or synthesis. Keep each item inside its exact "
                     "event_id and do not repeat the title. Evidence "
                     "with no additional supported fact must be excluded as "
-                    "no_material_update. Validation feedback: "
+                    "no_material_update. For each unsupported_facts entry, either "
+                    "rewrite it closely from the cited Evidence or remove it; do not "
+                    "expand the number of facts. Validation feedback: "
                     + json.dumps(value, ensure_ascii=False, separators=(",", ":"))
                 ),
                 log_context={
