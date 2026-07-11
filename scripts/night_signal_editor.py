@@ -28,6 +28,12 @@ TOPIC_VALUE_CLASS_MAP = {
     "roster_change": "operational_status_change",
 }
 SUMMARY_LABEL_RE = re.compile(r"(?:変更点|重要性|確認事実|未確定点)\s*[:：]")
+EVENT_BOUNDARY_REJECTION_REASONS = {
+    "missing_event_id",
+    "unknown_event_id",
+    "event_evidence_mismatch",
+    "mixed_event_boundary",
+}
 
 
 class UnpublishableItem(RuntimeError):
@@ -98,6 +104,14 @@ def quality_model_required(category_payload: dict[str, Any]) -> bool:
         ):
             return True
     return False
+
+
+def has_non_boundary_rejection(items: Any) -> bool:
+    return any(
+        set(item.get("reasons", [])) - EVENT_BOUNDARY_REJECTION_REASONS
+        for item in items or []
+        if isinstance(item, dict)
+    )
 
 
 def sanitize_editor_title(value: Any) -> str:
@@ -964,7 +978,7 @@ def edit_evidence(
                 unsafe_non_event_feedback = (
                     feedback.get("conflicting_event_ids")
                     or feedback.get("unknown_excluded_event_ids")
-                    or feedback.get("rejected_items")
+                    or has_non_boundary_rejection(feedback.get("rejected_items"))
                     or feedback.get("unpublishable_items")
                 )
                 if invalid_event_response and not unsafe_non_event_feedback:
@@ -1194,6 +1208,14 @@ def self_test() -> None:
         }
     ):
         fail("Editor did not route a table-dependent summary to the quality model")
+    if has_non_boundary_rejection(
+        [{"reasons": ["event_evidence_mismatch", "mixed_event_boundary"]}]
+    ):
+        fail("Event-boundary recovery was blocked by its own rejection reason")
+    if not has_non_boundary_rejection(
+        [{"reasons": ["mixed_event_boundary", "unsupported_title"]}]
+    ):
+        fail("Event-boundary recovery ignored a real content rejection")
     review_category = {
         "label": "OpenAI",
         "watch_topics": [
