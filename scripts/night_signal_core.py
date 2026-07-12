@@ -809,6 +809,26 @@ def numeric_claims(value: str) -> set[float]:
         "eighteen": 18,
         "nineteen": 19,
         "twenty": 20,
+        "first": 1,
+        "second": 2,
+        "third": 3,
+        "fourth": 4,
+        "fifth": 5,
+        "sixth": 6,
+        "seventh": 7,
+        "eighth": 8,
+        "ninth": 9,
+        "tenth": 10,
+        "eleventh": 11,
+        "twelfth": 12,
+        "thirteenth": 13,
+        "fourteenth": 14,
+        "fifteenth": 15,
+        "sixteenth": 16,
+        "seventeenth": 17,
+        "eighteenth": 18,
+        "nineteenth": 19,
+        "twentieth": 20,
     }
     word_numbers = {
         float(word_values[match.group(0).lower()])
@@ -3313,6 +3333,21 @@ def self_test() -> None:
         [number_word_record],
     ):
         fail("English number word accepted a different Japanese number")
+    ordinal_record = {
+        **english_record,
+        "title": "Genesis leads at the fourth FIA WEC race weekend",
+        "excerpt": "Genesis set the pace during the fourth race weekend.",
+    }
+    if not fact_supported_by_records(
+        "ジェネシスがFIA WEC第4戦で先頭に立った。",
+        [ordinal_record],
+    ):
+        fail("English ordinal lost Japanese numeric support")
+    if fact_supported_by_records(
+        "ジェネシスがFIA WEC第5戦で先頭に立った。",
+        [ordinal_record],
+    ):
+        fail("English ordinal accepted a different Japanese number")
     _, parsed_body = page_text(
         (
             "<html><head><title>Example</title></head><body>"
