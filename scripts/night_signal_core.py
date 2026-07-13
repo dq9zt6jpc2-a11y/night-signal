@@ -114,6 +114,16 @@ SPORTS_RESULT_RE = re.compile(
     r"試合(?:速報|結果)|対戦結果|\d+回戦|スコア速報",
     re.I,
 )
+SPORTS_SCHEDULE_RE = re.compile(
+    r"\b(?:schedule|timetable)\b|スケジュール|開催日程|試合日程",
+    re.I,
+)
+SPORTS_SCHEDULE_CHANGE_RE = re.compile(
+    r"変更|延期|中止|前倒し|追加|会場移転|"
+    r"reschedul|postpon|cancel|moved|revised|added",
+    re.I,
+)
+SPORTS_SCHEDULE_TIME_RE = re.compile(r"(?<!\d)\d{1,2}:\d{2}(?!\d)")
 PUBLICATION_EVENT_RE = re.compile(
     r"(発表|公表|決定|合意|契約|提携|買収|統合|開始|提供開始|発売|公開|更新|"
     r"就任|退任|移籍|獲得|退団|採用|建設|着工|延期|中止|承認|規制|"
@@ -782,6 +792,23 @@ def record_is_aggregate_digest(title: str, record: dict[str, Any]) -> bool:
     return source_markers >= 3 and digest_title
 
 
+def record_is_routine_sports_schedule(
+    category: dict[str, Any],
+    title: str,
+    record: dict[str, Any],
+) -> bool:
+    """Reject timetable-only sports pages while retaining material schedule changes."""
+    if not category.get("allow_sports_results", False):
+        return False
+    excerpt = str(record.get("excerpt") or record.get("evidence") or "")
+    text = f"{title} {excerpt[:5000]}"
+    return bool(
+        SPORTS_SCHEDULE_RE.search(text)
+        and len(SPORTS_SCHEDULE_TIME_RE.findall(text)) >= 3
+        and not SPORTS_SCHEDULE_CHANGE_RE.search(text)
+    )
+
+
 def headline_supports_distinct_summary(title: str) -> bool:
     """Return whether a headline states detail that can sit outside a shorter title."""
     text = canonical_article_match_text(title)
@@ -848,6 +875,7 @@ def publication_evidence_record(
             source_label=str(record.get("label", "")),
         )
         or record_is_aggregate_digest(title, record)
+        or record_is_routine_sports_schedule(category, title, record)
         or record_evidence_depth(title, record) == "none"
     ):
         return False
@@ -3322,6 +3350,56 @@ def self_test() -> None:
             }
         ],
     }
+    sports_category = {
+        "label": "F1",
+        "allow_sports_results": True,
+        "watch_topics": [],
+    }
+    routine_schedule_record = {
+        "label": "Racing News",
+        "url": "https://example.com/f1-race-schedule",
+        "source_role": "independent_media_or_data",
+        "channel": "web",
+        "source_class": "discovered_media",
+        "observed": True,
+        "published_date": "2099-01-02",
+        "title": "2099 F1 Belgian Grand Prix",
+        "excerpt": (
+            "The 2099 F1 Belgian Grand Prix timetable lists practice at 13:30, "
+            "qualifying at 16:00, and the race at 15:00 local time."
+        ),
+    }
+    if not record_is_routine_sports_schedule(
+        sports_category,
+        routine_schedule_record["title"],
+        routine_schedule_record,
+    ):
+        fail("routine sports timetable was not recognized before editing")
+    if publication_evidence_record(
+        sports_category, "2099-01-03", routine_schedule_record
+    ):
+        fail("routine sports timetable reached the Editor")
+    changed_schedule_record = {
+        **routine_schedule_record,
+        "url": "https://example.com/f1-race-postponed",
+        "title": "F1 Belgian Grand Prix timetable postponed",
+        "excerpt": (
+            "The F1 Belgian Grand Prix timetable was postponed after a safety review; "
+            "practice had been set for 13:30, qualifying for 16:00, and the race for 15:00."
+        ),
+    }
+    if record_is_routine_sports_schedule(
+        sports_category,
+        changed_schedule_record["title"],
+        changed_schedule_record,
+    ):
+        fail("material sports schedule change was treated as a routine timetable")
+    if record_is_routine_sports_schedule(
+        music_category,
+        routine_schedule_record["title"],
+        routine_schedule_record,
+    ):
+        fail("sports timetable filter leaked into a non-sports category")
     navigation_record = {
         "label": "Music chart index",
         "url": "https://example.com/charts/",
