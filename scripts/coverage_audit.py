@@ -13,6 +13,7 @@ from typing import Any
 
 import night_signal_state as state
 import night_signal_evidence as evidence_store
+import night_signal_core as core
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -63,10 +64,14 @@ def validate(issue_date: str) -> dict[str, int]:
         evidence_report = evidence_store.validate_bundle(bundle, issue_date)
     except evidence_store.EvidenceContractError as exc:
         fail(str(exc))
-    if evidence_report["editor_coverage_gaps"]:
+    editor_coverage_gaps = core.remaining_editor_coverage_gaps(
+        bundle,
+        evidence_report,
+    )
+    if editor_coverage_gaps:
         fail(
             "material watch topics lack resolved source content: "
-            + ", ".join(evidence_report["editor_coverage_gaps"])
+            + ", ".join(editor_coverage_gaps)
         )
     configured = {
         str(category["label"]): category

@@ -14,6 +14,7 @@ from zoneinfo import ZoneInfo
 
 import night_signal_state as state
 import night_signal_evidence as evidence_store
+import night_signal_core as core
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -69,7 +70,10 @@ def evaluate(issue_date: str, state_root: Path) -> dict[str, Any]:
     material_candidates = 0
     resolved_candidates = 0
     unresolved_queries = list(evidence_report["unresolved_queries"])
-    editor_coverage_gaps = list(evidence_report["editor_coverage_gaps"])
+    editor_coverage_gaps = core.remaining_editor_coverage_gaps(
+        bundle,
+        evidence_report,
+    )
     observed_urls = set(evidence_report["observed_urls"])
     unavailable_urls: set[str] = set()
     reviewed_topics = {

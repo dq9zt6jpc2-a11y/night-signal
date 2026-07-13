@@ -18,6 +18,7 @@ from zoneinfo import ZoneInfo
 import night_signal_state as state
 import night_signal_runtime_audit as runtime
 import night_signal_evidence as evidence_store
+import night_signal_core as core
 import publication_timing as timing
 
 
@@ -114,7 +115,7 @@ def fresh_evidence(issue_date: str) -> bool:
         report = evidence_store.validate_bundle(bundle, issue_date)
     except evidence_store.EvidenceContractError:
         return False
-    if report["editor_coverage_gaps"]:
+    if core.remaining_editor_coverage_gaps(bundle, report):
         return False
     return evidence_reusable(
         bundle,

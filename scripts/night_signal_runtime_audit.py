@@ -15,6 +15,7 @@ from typing import Any
 from zoneinfo import ZoneInfo
 
 import night_signal_evidence as evidence_store
+import night_signal_core as core
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE_ROOT = ROOT / "state"
@@ -124,13 +125,17 @@ def evidence_state(issue_date: str, state_root: Path) -> dict[str, Any]:
     try:
         bundle = json.loads(path.read_text(encoding="utf-8"))
         report = evidence_store.validate_bundle(bundle, issue_date)
+        editor_coverage_gaps = core.remaining_editor_coverage_gaps(
+            bundle,
+            report,
+        )
         result.update(
             {
-                "usable": not report["editor_coverage_gaps"],
+                "usable": not editor_coverage_gaps,
                 "source_checks": report["source_checks"],
                 "discovery_checks": report["discovery_checks"],
                 "unresolved_queries": report["unresolved_queries"],
-                "editor_coverage_gaps": report["editor_coverage_gaps"],
+                "editor_coverage_gaps": editor_coverage_gaps,
             }
         )
     except (

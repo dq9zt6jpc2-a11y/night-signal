@@ -47,6 +47,49 @@ ALLOWED_TOPIC_VALUES = {
     "risk_or_safety_signal",
     "cultural_or_audience_signal",
 }
+ENGLISH_NUMBER_WORD_VALUES = {
+    "zero": 0,
+    "one": 1,
+    "two": 2,
+    "three": 3,
+    "four": 4,
+    "five": 5,
+    "six": 6,
+    "seven": 7,
+    "eight": 8,
+    "nine": 9,
+    "ten": 10,
+    "eleven": 11,
+    "twelve": 12,
+    "thirteen": 13,
+    "fourteen": 14,
+    "fifteen": 15,
+    "sixteen": 16,
+    "seventeen": 17,
+    "eighteen": 18,
+    "nineteen": 19,
+    "twenty": 20,
+    "first": 1,
+    "second": 2,
+    "third": 3,
+    "fourth": 4,
+    "fifth": 5,
+    "sixth": 6,
+    "seventh": 7,
+    "eighth": 8,
+    "ninth": 9,
+    "tenth": 10,
+    "eleventh": 11,
+    "twelfth": 12,
+    "thirteenth": 13,
+    "fourteenth": 14,
+    "fifteenth": 15,
+    "sixteenth": 16,
+    "seventeenth": 17,
+    "eighteenth": 18,
+    "nineteenth": 19,
+    "twentieth": 20,
+}
 MATERIAL_SIGNAL_RE = re.compile(
     r"("
     r"\d+(?:\.\d+)?\s*(?:%|％|億|兆|万|ドル|円|bps|bp)|"
@@ -388,8 +431,20 @@ def cluster_seen(seen: set[str], key: str) -> bool:
 
 
 def same_material_event(left: Any, right: Any) -> bool:
-    left_signature = state_contract.copy_signature(str(left))
-    right_signature = state_contract.copy_signature(str(right))
+    def normalize_number_words(value: Any) -> str:
+        return re.sub(
+            r"\b(?:" + "|".join(ENGLISH_NUMBER_WORD_VALUES) + r")\b",
+            lambda match: str(
+                ENGLISH_NUMBER_WORD_VALUES[match.group(0).lower()]
+            ),
+            str(value),
+            flags=re.I,
+        )
+
+    normalized_left = normalize_number_words(left)
+    normalized_right = normalize_number_words(right)
+    left_signature = state_contract.copy_signature(normalized_left)
+    right_signature = state_contract.copy_signature(normalized_right)
     if not left_signature or not right_signature:
         return False
     shorter, longer = sorted(
@@ -411,8 +466,8 @@ def same_material_event(left: Any, right: Any) -> bool:
         if left_ngrams and right_ngrams
         else 0.0
     )
-    return state_contract.materially_same_fact(str(left), str(right)) or (
-        state_contract.text_overlap(str(left), str(right)) >= 2
+    return state_contract.materially_same_fact(normalized_left, normalized_right) or (
+        state_contract.text_overlap(normalized_left, normalized_right) >= 2
         and similarity >= 0.4
     )
 
@@ -808,53 +863,10 @@ def normalized_scaled_numbers(value: str) -> tuple[set[float], str]:
 
 def numeric_claims(value: str) -> set[float]:
     scaled, remainder = normalized_scaled_numbers(value)
-    word_values = {
-        "zero": 0,
-        "one": 1,
-        "two": 2,
-        "three": 3,
-        "four": 4,
-        "five": 5,
-        "six": 6,
-        "seven": 7,
-        "eight": 8,
-        "nine": 9,
-        "ten": 10,
-        "eleven": 11,
-        "twelve": 12,
-        "thirteen": 13,
-        "fourteen": 14,
-        "fifteen": 15,
-        "sixteen": 16,
-        "seventeen": 17,
-        "eighteen": 18,
-        "nineteen": 19,
-        "twenty": 20,
-        "first": 1,
-        "second": 2,
-        "third": 3,
-        "fourth": 4,
-        "fifth": 5,
-        "sixth": 6,
-        "seventh": 7,
-        "eighth": 8,
-        "ninth": 9,
-        "tenth": 10,
-        "eleventh": 11,
-        "twelfth": 12,
-        "thirteenth": 13,
-        "fourteenth": 14,
-        "fifteenth": 15,
-        "sixteenth": 16,
-        "seventeenth": 17,
-        "eighteenth": 18,
-        "nineteenth": 19,
-        "twentieth": 20,
-    }
     word_numbers = {
-        float(word_values[match.group(0).lower()])
+        float(ENGLISH_NUMBER_WORD_VALUES[match.group(0).lower()])
         for match in re.finditer(
-            r"\b(?:" + "|".join(word_values) + r")\b",
+            r"\b(?:" + "|".join(ENGLISH_NUMBER_WORD_VALUES) + r")\b",
             remainder,
             flags=re.I,
         )
@@ -2099,6 +2111,66 @@ def discovery_record_is_material(record: dict[str, Any]) -> bool:
         and not state_contract.navigation_shell_text(text)
         and not state_contract.NO_UPDATE_ASSERTION_RE.search(text)
     )
+
+
+def material_candidate_has_resolved_peer(
+    candidate: dict[str, Any],
+    records: list[dict[str, Any]],
+) -> bool:
+    """Resolve one search candidate by event, not only by its discovery URL."""
+    candidate_title = record_public_title(candidate)
+    if not candidate_title:
+        return False
+    return any(
+        record.get("observed")
+        and record_evidence_depth(record_public_title(record), record) != "none"
+        and same_material_event(candidate_title, record_public_title(record))
+        for record in records
+    )
+
+
+def remaining_editor_coverage_gaps(
+    bundle: dict[str, Any],
+    report: dict[str, Any],
+) -> list[str]:
+    """Keep only material topic gaps that lack a body-rich peer for every event."""
+    remaining: list[str] = []
+    categories = bundle.get("categories", {})
+    for gap in report.get("editor_coverage_gaps", []):
+        label, separator, topic = str(gap).partition("/")
+        entry = categories.get(label) if isinstance(categories, dict) else None
+        if not separator or not isinstance(entry, dict):
+            remaining.append(str(gap))
+            continue
+        records = [
+            record
+            for record in entry.get("records", [])
+            if isinstance(record, dict)
+        ]
+        unresolved_query_ids = {
+            str(check.get("query_id"))
+            for check in entry.get("discovery_checks", [])
+            if isinstance(check, dict)
+            and topic in check.get("watch_topic_ids", [])
+            and int(check.get("material_candidate_count", 0)) > 0
+            and int(check.get("resolved_candidate_count", 0)) == 0
+        }
+        candidates = [
+            record
+            for record in records
+            if unresolved_query_ids
+            & {
+                str(query_id)
+                for query_id in record.get("discovery_query_ids", [])
+            }
+            and discovery_record_is_material(record)
+        ]
+        if not candidates or not all(
+            material_candidate_has_resolved_peer(candidate, records)
+            for candidate in candidates
+        ):
+            remaining.append(str(gap))
+    return remaining
 
 
 def fetch_discovery_spec(
@@ -3729,6 +3801,40 @@ def self_test() -> None:
         "New York Times-led group asks court to sanction OpenAI in copyright dispute",
     ):
         fail("generic entity title bridged a distinct material event")
+    if not same_material_event(
+        "Starship's Thirteenth Flight Test",
+        "SpaceX targets July 16 for Starship Flight 13",
+    ):
+        fail("English ordinal and numeric event titles did not cluster")
+    title_only_candidate = {
+        "observed": True,
+        "source_class": "discovered_media",
+        "title": "Starship's Thirteenth Flight Test",
+        "excerpt": "Starship's Thirteenth Flight Test",
+    }
+    body_peer = {
+        "observed": True,
+        "source_class": "discovered_media",
+        "title": "SpaceX targets July 16 for Starship Flight 13",
+        "excerpt": (
+            "SpaceX set July 16 as the target and plans to deploy "
+            "20 Starlink V3 satellites during the test."
+        ),
+    }
+    if not material_candidate_has_resolved_peer(
+        title_only_candidate,
+        [title_only_candidate, body_peer],
+    ):
+        fail("body-rich peer did not resolve a title-only discovery URL")
+    unrelated_peer = {
+        **body_peer,
+        "title": "SpaceX expands a ground-station network in South Africa",
+    }
+    if material_candidate_has_resolved_peer(
+        title_only_candidate,
+        [title_only_candidate, unrelated_peer],
+    ):
+        fail("unrelated body source resolved a distinct discovery event")
     if category_identity_ok(
         "SoftBank",
         "ソフトバンク×阪神の試合速報・結果",
