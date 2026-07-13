@@ -988,6 +988,11 @@ def normalized_financial_amounts(value: str) -> tuple[list[tuple[str, float]], s
 
 
 def numeric_literals(value: str) -> set[float]:
+    value = re.sub(
+        r"(?<![\d,])(\d{1,3}),(\d{1,2})(?![\d,])",
+        lambda match: f"{match.group(1)}.{match.group(2)}",
+        value,
+    )
     return {
         float(number.replace(",", ""))
         for number in re.findall(r"\d[\d,]*(?:\.\d+)?", value)
@@ -3605,6 +3610,23 @@ def self_test() -> None:
         [korean_record],
     ):
         fail("translated fact invented a number absent from Korean Evidence")
+    localized_decimal_record = {
+        **english_record,
+        "title": "IMF nâng dự báo GDP Việt Nam năm 2026 lên 7,5%",
+        "excerpt": "Dự báo tăng từ 7,1% thêm 0,4 điểm phần trăm.",
+    }
+    if not fact_supported_by_records(
+        "IMFはベトナムの2026年GDP成長率予測を7.1%から0.4ポイント引き上げ、7.5%とした。",
+        [localized_decimal_record],
+    ):
+        fail("localized decimal commas lost translated numeric support")
+    if fact_supported_by_records(
+        "IMFはベトナムの2026年GDP成長率予測を7.6%とした。",
+        [localized_decimal_record],
+    ):
+        fail("localized decimal commas accepted a different number")
+    if numeric_claims("7,5%と1,491,932件") != {7.5, 1491932.0}:
+        fail("decimal-comma normalization altered a thousands separator")
     bilingual_record = {
         **english_record,
         "title": "SpaceXがIPOを計画",
