@@ -1,7 +1,8 @@
 {
   "extraction": {
-    "editor_contract_revision": "event-summary-v22",
+    "editor_contract_revision": "event-summary-v23",
     "compatible_checkpoint_contracts": [
+      "33ee7687d582a0660d24aa5717036aa4487bda83d1126fa7db22fe9e1887a4c1",
       "944714c7f2f76825d52ea6183b0cf0ded1002c179b478b1377c1e766863c01ca",
       "f4156ec7ace380515a0e00610fef471124009ecbb3645cf1249e2c767caed146",
       "93083f08d483c94c2204cdd5aaedf792ead24913d9021e429e3710aec7438af8",

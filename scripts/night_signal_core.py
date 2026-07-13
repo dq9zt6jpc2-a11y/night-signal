@@ -691,7 +691,18 @@ def record_has_material_body(title: str, record: dict[str, Any]) -> bool:
         title_japanese[index : index + 4]
         for index in range(max(0, len(title_japanese) - 3))
     }
-    for sentence in sentence_parts(excerpt):
+    for raw_sentence in sentence_parts(excerpt):
+        sentence = raw_sentence
+        markdown_marker = re.search(r"markdown content\s*:\s*", sentence, re.I)
+        if markdown_marker:
+            sentence = sentence[markdown_marker.end() :].strip()
+        if not sentence:
+            continue
+        if (
+            state_contract.DOCUMENT_EXTRACTION_NOISE_RE.search(sentence)
+            or state_contract.SOURCE_CHROME_RE.search(sentence)
+        ):
+            continue
         repetition_score = state_contract.title_repetition_score(title, sentence)
         if repetition_score >= 0.82:
             canonical_sentence = canonical_article_match_text(sentence)
@@ -3618,6 +3629,19 @@ def self_test() -> None:
         corrupted_visual_record["title"], corrupted_visual_record
     ):
         fail("numeric rendering noise was accepted as a material article body")
+    metadata_only_record = {
+        **english_record,
+        "title": "Publishers seek sanctions over OpenAI evidence dispute",
+        "excerpt": (
+            "Title: Publishers seek sanctions over OpenAI evidence dispute "
+            "URL Source: http:// Published Time: 2099-01-02 "
+            "Warning: This page may not yet be fully loaded. Markdown Content:"
+        ),
+    }
+    if record_has_material_body(
+        metadata_only_record["title"], metadata_only_record
+    ):
+        fail("extraction metadata was accepted as a material article body")
     category = {
         "label": "Test",
         "watch_topics": [

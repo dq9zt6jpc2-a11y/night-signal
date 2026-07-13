@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import json
 import os
@@ -634,6 +635,61 @@ def merge_repeated_cards(cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return merged
 
 
+def checkpoint_cards(checkpoint: dict[str, Any]) -> list[dict[str, Any]]:
+    """Return each previously validated card once, independent of old chunking."""
+    chunks = checkpoint.get("chunks", {})
+    if not isinstance(chunks, dict):
+        return []
+    unique: dict[str, dict[str, Any]] = {}
+    for cards in chunks.values():
+        if not isinstance(cards, list):
+            continue
+        for card in cards:
+            if not isinstance(card, dict):
+                continue
+            fingerprint = hashlib.sha256(
+                json.dumps(
+                    card,
+                    ensure_ascii=False,
+                    sort_keys=True,
+                    separators=(",", ":"),
+                ).encode("utf-8")
+            ).hexdigest()
+            unique.setdefault(fingerprint, card)
+    return list(unique.values())
+
+
+def reusable_cards_for_event(
+    cards: list[dict[str, Any]],
+    category_label: str,
+    event_records: list[dict[str, Any]],
+) -> list[dict[str, Any]] | None:
+    """Reuse validated output only when every cited source belongs to this event."""
+    event_urls = {
+        str(record.get("url"))
+        for record in event_records
+        if record.get("url")
+    }
+    matched: list[dict[str, Any]] = []
+    for card in cards:
+        if str(card.get("category", "")) != category_label:
+            continue
+        detail = card.get("detail")
+        if not isinstance(detail, dict):
+            continue
+        sources = detail.get("sources", [])
+        if not isinstance(sources, list):
+            continue
+        source_urls = {
+            str(source.get("url"))
+            for source in sources
+            if isinstance(source, dict) and source.get("url")
+        }
+        if source_urls and source_urls == event_urls:
+            matched.append(copy.deepcopy(card))
+    return merge_repeated_cards(matched) if matched else None
+
+
 def edit_evidence(
     issue_date: str,
     evidence_path: Path,
@@ -687,6 +743,7 @@ def edit_evidence(
     ):
         checkpoint = stored_checkpoint
         checkpoint["editor_contract_sha256"] = editor_contract_hash
+    reusable_checkpoint_cards = checkpoint_cards(checkpoint)
 
     def save_checkpoint() -> None:
         write_json_atomic(checkpoint_path, checkpoint)
@@ -907,6 +964,41 @@ def edit_evidence(
                     flush=True,
                 )
                 continue
+            records_by_event: dict[str, list[dict[str, Any]]] = {}
+            for record in chunk_records:
+                records_by_event.setdefault(
+                    str(record.get("_editor_event_id", "")), []
+                ).append(record)
+            reused_chunk_cards: list[dict[str, Any]] = []
+            pending_chunk_records: list[dict[str, Any]] = []
+            reused_events = 0
+            for event_records in records_by_event.values():
+                event_cards = reusable_cards_for_event(
+                    reusable_checkpoint_cards,
+                    label,
+                    event_records,
+                )
+                if event_cards is None:
+                    pending_chunk_records.extend(event_records)
+                    continue
+                reused_chunk_cards.extend(event_cards)
+                reused_events += 1
+            if reused_events:
+                print(
+                    json.dumps(
+                        {
+                            "phase": "editor_event_checkpoint_reused",
+                            "category": label,
+                            "chunk": chunk_index,
+                            "chunks": len(chunks),
+                            "events": reused_events,
+                            "cards": len(reused_chunk_cards),
+                        },
+                        ensure_ascii=False,
+                    ),
+                    flush=True,
+                )
+
             def request_records(
                 request_records_value: list[dict[str, Any]],
                 request_suffix: str,
@@ -997,10 +1089,12 @@ def edit_evidence(
                     fallback_on_validation=not quality_required,
                 )
 
-            chunk_cards: list[dict[str, Any]] = []
-            work_queue: list[tuple[list[dict[str, Any]], str]] = [
-                (chunk_records, "")
-            ]
+            chunk_cards = reused_chunk_cards
+            work_queue: list[tuple[list[dict[str, Any]], str]] = (
+                [(pending_chunk_records, "")]
+                if pending_chunk_records
+                else []
+            )
             failed_scope = False
             recovery_round = 0
             while work_queue:
@@ -1456,6 +1550,46 @@ def self_test() -> None:
         fail("Editor emitted fields outside the minimal public update contract")
     if not summary_is_reader_facing(card["title"], card["summary"]):
         fail("Editor emitted a title-only or repetitive summary")
+    cached_cards = checkpoint_cards(
+        {"chunks": {"old-a": [card], "old-b": [copy.deepcopy(card)]}}
+    )
+    if len(cached_cards) != 1:
+        fail("Editor event checkpoint did not deduplicate validated cards")
+    matching_event = [
+        {
+            "title": card["title"],
+            "url": "https://openai.com/example",
+            "_editor_event_id": "g001",
+        }
+    ]
+    if reusable_cards_for_event(cached_cards, "OpenAI", matching_event) != [card]:
+        fail("Editor did not reuse a validated card for its exact source event")
+    if reusable_cards_for_event(
+        cached_cards,
+        "OpenAI",
+        [{**matching_event[0], "url": "https://example.com/unrelated"}],
+    ) is not None:
+        fail("Editor reused a validated card for an unrelated source event")
+    if reusable_cards_for_event(
+        cached_cards,
+        "OpenAI",
+        [
+            *matching_event,
+            {
+                **matching_event[0],
+                "url": "https://example.com/additional-source",
+            },
+        ],
+    ) is not None:
+        fail("Editor reused a card after its source event expanded")
+    mixed_source_card = copy.deepcopy(card)
+    mixed_source_card["detail"]["sources"].append(
+        {"label": "Unrelated", "url": "https://example.com/unrelated"}
+    )
+    if reusable_cards_for_event(
+        [mixed_source_card], "OpenAI", matching_event
+    ) is not None:
+        fail("Editor reused a card whose sources cross an event boundary")
     basis = card["detail"]["summary_basis"]
     if set(basis["confirmed_facts"]) != {
         mapping["fact"] for mapping in basis["fact_sources"]
