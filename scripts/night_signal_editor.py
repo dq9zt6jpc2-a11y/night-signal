@@ -554,10 +554,43 @@ def item_card(
     }
 
 
+def synchronize_card_source_links(card: dict[str, Any]) -> dict[str, Any]:
+    """Expose every validated fact-source URL in the card's clickable sources."""
+    detail = card.get("detail")
+    if not isinstance(detail, dict):
+        return card
+    sources = detail.get("sources")
+    basis = detail.get("summary_basis")
+    if not isinstance(sources, list) or not isinstance(basis, dict):
+        return card
+    by_url = {
+        str(source.get("url")): source
+        for source in sources
+        if isinstance(source, dict) and source.get("url")
+    }
+    for mapping in basis.get("fact_sources", []):
+        if not isinstance(mapping, dict):
+            continue
+        for value in mapping.get("source_urls", []):
+            url = str(value)
+            if not url.startswith(("http://", "https://")):
+                continue
+            by_url.setdefault(
+                url,
+                {
+                    "label": core.reader_facing_source_label("", url),
+                    "url": url,
+                },
+            )
+    detail["sources"] = list(by_url.values())
+    return card
+
+
 def merge_repeated_cards(cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
     merged: list[dict[str, Any]] = []
     priority_rank = {"top": 0, "priority": 1, "standard": 2}
     for card in cards:
+        card = synchronize_card_source_links(card)
         existing = next(
             (
                 candidate
@@ -1699,6 +1732,18 @@ def self_test() -> None:
         fail("Editor emitted fields outside the minimal public update contract")
     if not summary_is_reader_facing(card["title"], card["summary"]):
         fail("Editor emitted a title-only or repetitive summary")
+    stale_source_card = copy.deepcopy(card)
+    relay_url = "https://news.google.com/rss/articles/example"
+    stale_source_card["detail"]["summary_basis"]["fact_sources"][0][
+        "source_urls"
+    ] = [relay_url]
+    synchronized_card = merge_repeated_cards([stale_source_card])[0]
+    if relay_url not in {
+        source.get("url")
+        for source in synchronized_card["detail"]["sources"]
+        if isinstance(source, dict)
+    }:
+        fail("Editor did not expose a validated relay URL from an old checkpoint")
     cached_cards = checkpoint_cards(
         {"chunks": {"old-a": [card], "old-b": [copy.deepcopy(card)]}}
     )
