@@ -563,6 +563,31 @@ def synchronize_card_source_links(card: dict[str, Any]) -> dict[str, Any]:
     basis = detail.get("summary_basis")
     if not isinstance(sources, list) or not isinstance(basis, dict):
         return card
+    facts = [
+        str(value)
+        for value in basis.get("confirmed_facts", [])
+        if isinstance(value, str) and value.strip()
+    ]
+    mappings = [
+        mapping
+        for mapping in basis.get("fact_sources", [])
+        if isinstance(mapping, dict)
+    ]
+    aligned_mappings: list[dict[str, Any]] = []
+    for fact in facts:
+        urls = list(
+            dict.fromkeys(
+                str(url)
+                for mapping in mappings
+                if state.materially_same_fact(fact, str(mapping.get("fact", "")))
+                for url in mapping.get("source_urls", [])
+                if isinstance(url, str) and url
+            )
+        )
+        if urls:
+            aligned_mappings.append({"fact": fact, "source_urls": urls})
+    if len(aligned_mappings) == len(facts):
+        basis["fact_sources"] = aligned_mappings
     by_url = {
         str(source.get("url")): source
         for source in sources
@@ -583,6 +608,17 @@ def synchronize_card_source_links(card: dict[str, Any]) -> dict[str, Any]:
                 },
             )
     detail["sources"] = list(by_url.values())
+    source_dates = [
+        str(value)
+        for value in basis.get("source_dates", [])
+        if str(value).strip()
+    ]
+    card_source_date = str(card.get("source_published_date", "")).strip()
+    basis["source_dates"] = list(
+        dict.fromkeys(
+            [*source_dates, *([card_source_date] if card_source_date else [])]
+        )
+    )
     return card
 
 
@@ -1737,6 +1773,7 @@ def self_test() -> None:
     stale_source_card["detail"]["summary_basis"]["fact_sources"][0][
         "source_urls"
     ] = [relay_url]
+    stale_source_card["detail"]["summary_basis"]["source_dates"] = []
     synchronized_card = merge_repeated_cards([stale_source_card])[0]
     if relay_url not in {
         source.get("url")
@@ -1744,6 +1781,20 @@ def self_test() -> None:
         if isinstance(source, dict)
     }:
         fail("Editor did not expose a validated relay URL from an old checkpoint")
+    if synchronized_card["source_published_date"] not in synchronized_card[
+        "detail"
+    ]["summary_basis"]["source_dates"]:
+        fail("Editor did not restore a card source date in an old checkpoint")
+    extra_mapping_card = copy.deepcopy(card)
+    extra_mapping_card["detail"]["summary_basis"]["fact_sources"].append(
+        copy.deepcopy(
+            extra_mapping_card["detail"]["summary_basis"]["fact_sources"][0]
+        )
+    )
+    aligned_card = merge_repeated_cards([extra_mapping_card])[0]
+    aligned_basis = aligned_card["detail"]["summary_basis"]
+    if len(aligned_basis["fact_sources"]) != len(aligned_basis["confirmed_facts"]):
+        fail("Editor retained duplicate fact-source mappings from an old checkpoint")
     cached_cards = checkpoint_cards(
         {"chunks": {"old-a": [card], "old-b": [copy.deepcopy(card)]}}
     )
