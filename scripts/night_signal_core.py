@@ -575,13 +575,22 @@ def editor_candidate_boundary(
 def record_has_only_headline(title: str, record: dict[str, Any]) -> bool:
     """Identify feeds whose excerpt is only the headline plus publisher credit."""
     excerpt = reader_facing_text(record.get("excerpt") or record.get("evidence") or "", 2400)
-    cleaned = excerpt.rstrip("。.!！ ")
+    canonical_title = canonical_article_match_text(title)
+    canonical_excerpt = canonical_article_match_text(excerpt)
+    residual = canonical_excerpt.replace(canonical_title, " ")
     labels = [
         str(record.get("label") or "").strip(),
         urllib.parse.urlparse(str(record.get("publisher_url") or "")).netloc
         .lower()
         .removeprefix("www."),
     ]
+    for label in labels:
+        canonical_label = canonical_article_match_text(label)
+        if canonical_label:
+            residual = residual.replace(canonical_label, " ")
+    if canonical_title and not re.sub(r"[^a-z0-9\u3040-\u30ff\u3400-\u9fff]+", "", residual):
+        return True
+    cleaned = excerpt.rstrip("。.!！ ")
     for label in labels:
         if label and cleaned.lower().endswith(label.lower()):
             cleaned = cleaned[: -len(label)].rstrip(" -–—|｜。.!！ ")
@@ -614,7 +623,13 @@ def record_has_material_body(title: str, record: dict[str, Any]) -> bool:
 def headline_supports_distinct_summary(title: str) -> bool:
     """Return whether a headline states detail that can sit outside a shorter title."""
     text = canonical_article_match_text(title)
-    if re.search(r"\d+(?:\.\d+)?", text):
+    numbers = re.findall(r"(?<![a-z])\d+(?:\.\d+)?(?![a-z])", text)
+    material_numbers = [
+        value
+        for value in numbers
+        if not re.fullmatch(r"(?:19|20)\d{2}", value)
+    ]
+    if material_numbers:
         return True
     if re.search(
         r"[、;；]|(?:ため|目的|向け|分野|領域|対象|条件|理由|背景|結果|"
@@ -622,7 +637,13 @@ def headline_supports_distinct_summary(title: str) -> bool:
         text,
     ):
         return True
-    return len(re.findall(r"\b(?:with|to|for|after|while|across|using)\b", text)) >= 2
+    connectors = re.findall(
+        r"\b(?:with|to|for|after|while|across|using)\b",
+        text,
+    )
+    return len(connectors) >= 2 and bool(
+        {"with", "for", "while", "across", "using"} & set(connectors)
+    )
 
 
 def record_evidence_depth(title: str, record: dict[str, Any]) -> str:
@@ -3762,6 +3783,20 @@ def self_test() -> None:
     }
     if publication_evidence_record(openai_category, "2099-01-03", duplicate_record):
         fail("headline-only record was accepted as publication Evidence")
+    duplicated_feed_headline = {
+        **duplicate_record,
+        "label": "Example News",
+        "publisher_url": "https://example.com",
+        "excerpt": (
+            "OpenAIがCodex Securityのアップグレードを公開 Example News "
+            "OpenAIがCodex Securityのアップグレードを公開"
+        ),
+    }
+    if not record_has_only_headline(
+        duplicated_feed_headline["title"],
+        duplicated_feed_headline,
+    ):
+        fail("duplicated feed headline was mistaken for article body")
     body_rich_record = {
         **duplicate_record,
         "excerpt": (
@@ -3771,6 +3806,18 @@ def self_test() -> None:
     }
     if not publication_evidence_record(openai_category, "2099-01-03", body_rich_record):
         fail("body-rich record was rejected as publication Evidence")
+    year_only_headline = {
+        **duplicate_record,
+        "title": "OpenAI explains strategy after tough start to 2026 campaign",
+        "excerpt": "OpenAI explains strategy after tough start to 2026 campaign",
+    }
+    if headline_supports_distinct_summary(year_only_headline["title"]):
+        fail("calendar year alone made a headline look summary-rich")
+    if publication_evidence_record(openai_category, "2099-01-03", year_only_headline):
+        fail("year-only headline repetition was accepted as publication Evidence")
+    relational_headline = "OpenAI partners with Example Corp to launch a service"
+    if not headline_supports_distinct_summary(relational_headline):
+        fail("multi-party headline lost its distinct summary detail")
     honda_category = {
         "label": "Honda",
         "watch_topics": [
