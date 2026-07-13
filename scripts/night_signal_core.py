@@ -695,6 +695,33 @@ def record_has_material_body(title: str, record: dict[str, Any]) -> bool:
     return False
 
 
+def record_is_aggregate_digest(title: str, record: dict[str, Any]) -> bool:
+    """Reject navigation-led pages that combine several linked events as one item."""
+    excerpt = reader_facing_text(
+        record.get("excerpt") or record.get("evidence") or "",
+        8000,
+    )
+    source_markers = sum(
+        excerpt.lower().count(marker)
+        for marker in (
+            "情報源を見る",
+            "ニュース -",
+            "view source",
+            "read source",
+            "source:",
+        )
+    )
+    digest_title = bool(
+        re.search(
+            r"(?:AI.{0,12}解説|値動きの背景|今の株価の理由|"
+            r"news roundup|latest news|all the news|market summary)",
+            title,
+            flags=re.I,
+        )
+    )
+    return source_markers >= 3 and digest_title
+
+
 def headline_supports_distinct_summary(title: str) -> bool:
     """Return whether a headline states detail that can sit outside a shorter title."""
     text = canonical_article_match_text(title)
@@ -760,6 +787,7 @@ def publication_evidence_record(
             excerpt,
             source_label=str(record.get("label", "")),
         )
+        or record_is_aggregate_digest(title, record)
         or record_evidence_depth(title, record) == "none"
     ):
         return False
@@ -3928,6 +3956,19 @@ def self_test() -> None:
         duplicated_feed_headline,
     ):
         fail("duplicated feed headline was mistaken for article body")
+    aggregate_digest = {
+        **duplicate_record,
+        "title": "Example社：今の株価の理由は？値動きの背景をAIが解説",
+        "excerpt": (
+            "株価動向をまとめる。情報源を見る ニュース - 製品更新。"
+            "情報源を見る ニュース - 人事変更。情報源を見る ニュース - 決算発表。"
+        ),
+    }
+    if not record_is_aggregate_digest(
+        aggregate_digest["title"],
+        aggregate_digest,
+    ):
+        fail("multi-event digest page was accepted as one publication event")
     body_rich_record = {
         **duplicate_record,
         "excerpt": (
