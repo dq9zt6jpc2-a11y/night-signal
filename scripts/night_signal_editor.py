@@ -664,6 +664,65 @@ def checkpoint_cards(checkpoint: dict[str, Any]) -> list[dict[str, Any]]:
     return list(unique.values())
 
 
+def event_checkpoint_key(
+    category_label: str,
+    event_records: list[dict[str, Any]],
+) -> str:
+    """Bind one decision to its complete Evidence and novelty context."""
+    payload = {
+        "category": category_label,
+        "records": [
+            {
+                key: value
+                for key, value in record.items()
+                if key != "_editor_event_id"
+            }
+            for record in event_records
+        ],
+    }
+    return hashlib.sha256(
+        json.dumps(
+            payload,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    ).hexdigest()
+
+
+def reusable_event_decision(
+    decisions: dict[str, Any],
+    category_label: str,
+    event_records: list[dict[str, Any]],
+) -> list[dict[str, Any]] | None:
+    """Return a validated publish or exclusion decision for this exact event."""
+    value = decisions.get(event_checkpoint_key(category_label, event_records))
+    if not isinstance(value, list) or not all(isinstance(card, dict) for card in value):
+        return None
+    event_urls = {
+        str(record.get("url"))
+        for record in event_records
+        if record.get("url")
+    }
+    for card in value:
+        if str(card.get("category", "")) != category_label:
+            return None
+        detail = card.get("detail")
+        if not isinstance(detail, dict):
+            return None
+        sources = detail.get("sources", [])
+        if not isinstance(sources, list):
+            return None
+        source_urls = {
+            str(source.get("url"))
+            for source in sources
+            if isinstance(source, dict) and source.get("url")
+        }
+        if not source_urls or not source_urls <= event_urls:
+            return None
+    return copy.deepcopy(value)
+
+
 def reusable_cards_for_event(
     cards: list[dict[str, Any]],
     category_label: str,
@@ -726,6 +785,7 @@ def edit_evidence(
         "evidence_sha256": evidence_hash,
         "editor_contract_sha256": editor_contract_hash,
         "chunks": {},
+        "events": {},
     }
     try:
         stored_checkpoint = json.loads(checkpoint_path.read_text(encoding="utf-8"))
@@ -748,6 +808,9 @@ def edit_evidence(
     ):
         checkpoint = stored_checkpoint
         checkpoint["editor_contract_sha256"] = editor_contract_hash
+        checkpoint.setdefault("events", {})
+    if not isinstance(checkpoint.get("events"), dict):
+        checkpoint["events"] = {}
     reusable_checkpoint_cards = checkpoint_cards(checkpoint)
 
     def save_checkpoint() -> None:
@@ -853,7 +916,13 @@ def edit_evidence(
         category: dict[str, Any],
         label: str,
         records: list[dict[str, Any]],
-    ) -> tuple[list[dict[str, Any]], int, bool, dict[str, Any]]:
+    ) -> tuple[
+        list[dict[str, Any]],
+        int,
+        bool,
+        dict[str, Any],
+        dict[str, list[dict[str, Any]]],
+    ]:
         flattened, event_response_accepted, event_response_feedback = (
             flatten_event_response(raw, category, issue_date, records)
         )
@@ -865,19 +934,23 @@ def edit_evidence(
             records,
         )
         cards: list[dict[str, Any]] = []
+        cards_by_event: dict[str, list[dict[str, Any]]] = {}
+        failed_event_ids: set[str] = set()
         failed = 0
         for item in normalized["items"]:
+            event_id = str(item.get("event_id", ""))
             try:
-                cards.append(
-                    item_card(
-                        label,
-                        str(configs[label]["section_id"]),
-                        item,
-                        issue_date,
-                    )
+                card = item_card(
+                    label,
+                    str(configs[label]["section_id"]),
+                    item,
+                    issue_date,
                 )
+                cards.append(card)
+                cards_by_event.setdefault(event_id, []).append(card)
             except UnpublishableItem as exc:
                 failed += 1
+                failed_event_ids.add(event_id)
                 print(
                     json.dumps(
                         {
@@ -919,7 +992,26 @@ def edit_evidence(
             "rejected_items": normalized["rejected_items"],
             "event_response": event_response_feedback,
         }
-        return cards, failed, accepted, feedback
+        invalid_event_ids = {
+            *normalized["missing_event_ids"],
+            *normalized["conflicting_event_ids"],
+            *failed_event_ids,
+            *(
+                str(rejected.get("event_id", ""))
+                for rejected in normalized["rejected_items"]
+                if isinstance(rejected, dict)
+            ),
+        }
+        event_decisions = (
+            {
+                event_id: copy.deepcopy(cards_by_event.get(event_id, []))
+                for event_id in normalized["expected_event_ids"]
+                if event_id not in invalid_event_ids
+            }
+            if event_response_accepted
+            else {}
+        )
+        return cards, failed, accepted, feedback, event_decisions
 
     def review_category(category: dict[str, Any]) -> tuple[str, list[dict[str, Any]]]:
         label = str(category["label"])
@@ -981,6 +1073,15 @@ def edit_evidence(
             pending_chunk_records: list[dict[str, Any]] = []
             reused_events = 0
             for event_records in records_by_event.values():
+                event_decision = reusable_event_decision(
+                    checkpoint["events"],
+                    label,
+                    event_records,
+                )
+                if event_decision is not None:
+                    reused_chunk_cards.extend(event_decision)
+                    reused_events += 1
+                    continue
                 event_cards = reusable_cards_for_event(
                     reusable_checkpoint_cards,
                     label,
@@ -1125,6 +1226,35 @@ def edit_evidence(
                         continue
                     failed_scope = True
                     break
+                event_records_by_id: dict[str, list[dict[str, Any]]] = {}
+                for record in pending_records:
+                    event_records_by_id.setdefault(
+                        str(record.get("_editor_event_id", "")), []
+                    ).append(record)
+                stored_event_count = 0
+                for event_id, event_cards in selected_result[4].items():
+                    event_records = event_records_by_id.get(event_id)
+                    if event_records is None:
+                        continue
+                    checkpoint["events"][
+                        event_checkpoint_key(label, event_records)
+                    ] = copy.deepcopy(event_cards)
+                    stored_event_count += 1
+                if stored_event_count:
+                    save_checkpoint()
+                    print(
+                        json.dumps(
+                            {
+                                "phase": "editor_event_checkpoint_saved",
+                                "category": label,
+                                "chunk": chunk_index,
+                                "chunks": len(chunks),
+                                "events": stored_event_count,
+                            },
+                            ensure_ascii=False,
+                        ),
+                        flush=True,
+                    )
                 if accepted:
                     chunk_cards.extend(selected_result[0])
                     continue
@@ -1581,6 +1711,30 @@ def self_test() -> None:
             "_editor_event_id": "g001",
         }
     ]
+    exclusion_decisions = {
+        event_checkpoint_key("OpenAI", matching_event): []
+    }
+    if reusable_event_decision(
+        exclusion_decisions,
+        "OpenAI",
+        [{**matching_event[0], "_editor_event_id": "g099"}],
+    ) != []:
+        fail("Editor did not reuse an exact validated exclusion decision")
+    if reusable_event_decision(
+        exclusion_decisions,
+        "OpenAI",
+        [{**matching_event[0], "title": "OpenAIが別製品を公開"}],
+    ) is not None:
+        fail("Editor reused an exclusion after its Evidence changed")
+    publish_decisions = {
+        event_checkpoint_key("OpenAI", matching_event): [card]
+    }
+    if reusable_event_decision(
+        publish_decisions,
+        "OpenAI",
+        matching_event,
+    ) != [card]:
+        fail("Editor did not reuse an exact validated publish decision")
     if reusable_cards_for_event(cached_cards, "OpenAI", matching_event) != [card]:
         fail("Editor did not reuse a validated card for its exact source event")
     if reusable_cards_for_event(

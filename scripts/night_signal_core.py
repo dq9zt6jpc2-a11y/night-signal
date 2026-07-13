@@ -1052,6 +1052,17 @@ def numeric_claim_supported(
     )
 
 
+def source_requires_japanese_translation(value: str) -> bool:
+    """Recognize source prose that cannot be lexically compared with Japanese copy."""
+    kana = len(re.findall(r"[\u3040-\u30ff]", value))
+    if kana >= 6:
+        return False
+    latin = len(re.findall(r"[A-Za-z]", value))
+    hangul = len(re.findall(r"[\uac00-\ud7af]", value))
+    han = len(re.findall(r"[\u3400-\u9fff]", value))
+    return latin >= 24 or hangul >= 12 or (kana == 0 and han >= 18)
+
+
 def fact_supported_by_records(
     fact: str,
     source_records: list[dict[str, Any]],
@@ -1092,9 +1103,7 @@ def fact_supported_by_records(
             for fact_currency, fact_amount in fact_amounts
         ):
             continue
-        body_japanese = len(re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", body))
-        body_latin = len(re.findall(r"[A-Za-z]", body))
-        if body_latin >= 24 and body_japanese < 6:
+        if source_requires_japanese_translation(evidence):
             return True
         if (
             state_contract.materially_same_fact(fact, title)
@@ -3003,6 +3012,7 @@ def normalize_result(
         first_source = sources[0]
         items.append(
             {
+                "event_id": item_event_id,
                 "evidence_ids": evidence_ids,
                 "watch_topic_id": topic,
                 "title": title,
@@ -3565,6 +3575,36 @@ def self_test() -> None:
         [english_record],
     ):
         fail("translated fact invented a number absent from English Evidence")
+    chinese_record = {
+        **english_record,
+        "title": "中国新能源汽车出口量大幅增加",
+        "excerpt": "中国新能源汽车出口量同比增长40%，海外市场需求持续扩大。",
+    }
+    if not fact_supported_by_records(
+        "中国の新エネルギー車輸出は前年比40%増加し、海外需要も拡大した。",
+        [chinese_record],
+    ):
+        fail("translated fact lost its Chinese Evidence support")
+    if fact_supported_by_records(
+        "中国の新エネルギー車輸出は前年比50%増加した。",
+        [chinese_record],
+    ):
+        fail("translated fact invented a number absent from Chinese Evidence")
+    korean_record = {
+        **english_record,
+        "title": "한국 반도체 기업이 신규 공장을 발표",
+        "excerpt": "한국 반도체 기업은 부산에 신규 공장을 건설하고 2028년에 가동할 계획이다.",
+    }
+    if not fact_supported_by_records(
+        "韓国の半導体企業は釜山に新工場を建設し、2028年の稼働を計画する。",
+        [korean_record],
+    ):
+        fail("translated fact lost its Korean Evidence support")
+    if fact_supported_by_records(
+        "韓国の半導体企業は釜山に新工場を建設し、2029年の稼働を計画する。",
+        [korean_record],
+    ):
+        fail("translated fact invented a number absent from Korean Evidence")
     bilingual_record = {
         **english_record,
         "title": "SpaceXがIPOを計画",
@@ -3773,6 +3813,8 @@ def self_test() -> None:
     if len(normalized["items"]) != 1 or not normalized["coverage_complete"]:
         fail("canonical normalization lost a valid evidence-backed summary")
     normalized_item = normalized["items"][0]
+    if normalized_item["event_id"] != "g001":
+        fail("normalization lost the event boundary needed for checkpointing")
     if normalized_item["summary"] != " ".join(facts):
         fail("normalization did not reuse the canonical summary points")
     if normalized_item["source_published_date"] != "2099-01-02":
