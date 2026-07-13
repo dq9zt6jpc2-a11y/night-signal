@@ -101,6 +101,11 @@ def quality_model_required(category_payload: dict[str, Any]) -> bool:
     return False
 
 
+def validation_attempt_limit(successful_response_seen: bool) -> int:
+    """Allow one correction on the first model that actually returns a response."""
+    return 1 if successful_response_seen else 2
+
+
 def sanitize_editor_title(value: Any) -> str:
     title = core.reader_facing_text(value, 180)
     title = re.split(r"[。！？!?](?:\s+|$)", title, maxsplit=1)[0]
@@ -769,11 +774,12 @@ def edit_evidence(
         )
         feedback: dict[str, Any] = {}
         last_result: Any | None = None
-        for model_index, model_name in enumerate(model_chain):
+        successful_response_seen = False
+        for model_name in model_chain:
             if model_name in unavailable_models:
                 continue
             attempt_messages = messages
-            max_attempts = 2 if model_index == 0 else 1
+            max_attempts = validation_attempt_limit(successful_response_seen)
             request_failed = False
             for attempt in range(1, max_attempts + 1):
                 try:
@@ -811,6 +817,7 @@ def edit_evidence(
                     if exc.rate_limited or model_name != model_chain[-1]:
                         break
                     raise
+                successful_response_seen = True
                 result, accepted, feedback = validate(raw)
                 last_result = result
                 print(
@@ -1314,6 +1321,8 @@ def self_test() -> None:
         {"events": [{"evidence": [{"title": "詳細発表", "body": "具体的な変更内容。" * 100}]}]}
     ):
         fail("Editor routed length alone to the quality model")
+    if validation_attempt_limit(False) != 2 or validation_attempt_limit(True) != 1:
+        fail("Editor did not preserve one correction for the first responding model")
     if not quality_model_required(
         {
             "events": [
