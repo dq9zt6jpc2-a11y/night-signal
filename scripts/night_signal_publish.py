@@ -34,13 +34,7 @@ def jst_today() -> str:
 
 
 def eligible_latest_issue_dates(now: datetime | None = None) -> set[str]:
-    current = (now or datetime.now(ZoneInfo("Asia/Tokyo"))).astimezone(
-        ZoneInfo("Asia/Tokyo")
-    )
-    dates = {current.date().isoformat()}
-    if current.time() < timing.load_policy().final_collection_not_before:
-        dates.add((current.date() - timedelta(days=1)).isoformat())
-    return dates
+    return timing.eligible_latest_issue_dates(now)
 
 
 def require_jst_current_issue(

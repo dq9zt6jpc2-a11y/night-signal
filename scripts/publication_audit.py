@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify that today's NIGHT SIGNAL committed issue is actually published.
+"""Verify that an eligible NIGHT SIGNAL committed issue is actually published.
 
 Generation quality is rejected before commit by the publication driver. This
 boundary checks only the external publication state: clean/pushed git state and
@@ -16,6 +16,8 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+import publication_timing as timing
+
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC_ROOT = "https://dq9zt6jpc2-a11y.github.io/night-signal/"
@@ -26,7 +28,7 @@ def issue_date_from_args() -> str:
     args = [arg for arg in sys.argv[1:] if arg != PUBLIC_CONTENT_ONLY_FLAG]
     if args:
         return args[0]
-    return datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d")
+    return jst_today()
 
 
 def jst_today() -> str:
@@ -146,9 +148,12 @@ def ensure_public_url(issue_date: str) -> None:
 
 def main() -> int:
     issue_date = issue_date_from_args()
-    today = jst_today()
-    if issue_date != today:
-        fail(f"refusing stale publication audit: {issue_date} != JST today {today}")
+    eligible_dates = timing.eligible_latest_issue_dates()
+    if issue_date not in eligible_dates:
+        fail(
+            "refusing ineligible publication audit: "
+            f"{issue_date} not in {sorted(eligible_dates)}"
+        )
     latest_issue = latest_available_issue_date()
     if latest_issue and issue_date != latest_issue:
         fail(f"{issue_date} is not the latest local issue; latest is {latest_issue}")

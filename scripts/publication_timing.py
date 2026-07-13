@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 from dataclasses import dataclass
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
@@ -120,6 +120,20 @@ def load_policy(path: Path = CONFIG_PATH) -> TimingPolicy:
     ) > 180:
         raise ValueError("schedule heartbeat gap exceeds three hours")
     return policy
+
+
+def eligible_latest_issue_dates(
+    now: datetime | None = None,
+    policy: TimingPolicy | None = None,
+) -> set[str]:
+    active_policy = policy or load_policy()
+    current = (now or datetime.now(ZoneInfo(active_policy.timezone))).astimezone(
+        ZoneInfo(active_policy.timezone)
+    )
+    dates = {current.date().isoformat()}
+    if current.time() < active_policy.final_collection_not_before:
+        dates.add((current.date() - timedelta(days=1)).isoformat())
+    return dates
 
 
 def scheduled_decision(now: datetime, policy: TimingPolicy) -> str:
