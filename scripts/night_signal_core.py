@@ -929,6 +929,14 @@ def normalized_scaled_numbers(value: str) -> tuple[set[float], str]:
 
 def numeric_claims(value: str) -> set[float]:
     scaled, remainder = normalized_scaled_numbers(value)
+    period_components = {
+        float(component)
+        for match in re.finditer(
+            r"(?<!\d)((?:19|20)\d{2})[./-](0?[1-9]|1[0-2])(?=$|[./\-\s])",
+            remainder,
+        )
+        for component in match.groups()
+    }
     word_numbers = {
         float(ENGLISH_NUMBER_WORD_VALUES[match.group(0).lower()])
         for match in re.finditer(
@@ -937,7 +945,7 @@ def numeric_claims(value: str) -> set[float]:
             flags=re.I,
         )
     }
-    return scaled | numeric_literals(remainder) | word_numbers
+    return scaled | numeric_literals(remainder) | word_numbers | period_components
 
 
 def numeric_claim_supported(
@@ -3459,6 +3467,21 @@ def self_test() -> None:
         [plain_currency_record],
     ):
         fail("plain currency normalization accepted a different amount")
+    fiscal_period_record = {
+        **english_record,
+        "title": "Ｓａｎｓａｎ、今期経常は125億～145億円、2.5円増配へ",
+        "excerpt": "今期予想 2027.05 経常利益125億～145億円、年間配当5円。",
+    }
+    if not fact_supported_by_records(
+        "Ｓａｎｓａｎ、2027年5月期に経常利益125億～145億円、配当を2.5円増配へ",
+        [fiscal_period_record],
+    ):
+        fail("numeric period notation lost Japanese fiscal-year support")
+    if fact_supported_by_records(
+        "Ｓａｎｓａｎ、2028年5月期に経常利益125億～145億円、配当を2.5円増配へ",
+        [fiscal_period_record],
+    ):
+        fail("numeric period notation accepted a different fiscal year")
     localized_count_record = {
         **english_record,
         "title": "Honda Pakistan offers Rs 200,000 off the HR-V VTI-S",
