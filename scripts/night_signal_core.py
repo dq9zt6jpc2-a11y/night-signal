@@ -443,6 +443,26 @@ def same_material_event(left: Any, right: Any) -> bool:
 
     normalized_left = normalize_number_words(left)
     normalized_right = normalize_number_words(right)
+    explainer_pattern = re.compile(
+        r"(?:とは|使い方|料金|違い|徹底解説|\bwhat is\b|\bhow to\b|"
+        r"\bexplained\b|\bguide\b)",
+        re.I,
+    )
+    left_explainer = explainer_pattern.search(normalized_left)
+    right_explainer = explainer_pattern.search(normalized_right)
+    if left_explainer and right_explainer:
+        left_subject = normalized_left[: left_explainer.start()]
+        right_subject = normalized_right[: right_explainer.start()]
+        if (
+            left_subject.strip()
+            and right_subject.strip()
+            and not state_contract.materially_same_fact(
+                left_subject,
+                right_subject,
+            )
+            and state_contract.text_overlap(left_subject, right_subject) == 0
+        ):
+            return False
     left_signature = state_contract.copy_signature(normalized_left)
     right_signature = state_contract.copy_signature(normalized_right)
     if not left_signature or not right_signature:
@@ -3801,6 +3821,11 @@ def self_test() -> None:
         "New York Times-led group asks court to sanction OpenAI in copyright dispute",
     ):
         fail("generic entity title bridged a distinct material event")
+    if same_material_event(
+        "Claude（クロード）とは？料金や使い方、ChatGPTとの違いを徹底解説",
+        "ChatGPT Workとは？機能・料金・使い方、Codexとの違いを徹底解説",
+    ):
+        fail("shared explainer boilerplate merged different subjects")
     if not same_material_event(
         "Starship's Thirteenth Flight Test",
         "SpaceX targets July 16 for Starship Flight 13",
