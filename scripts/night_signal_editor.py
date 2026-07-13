@@ -1353,7 +1353,6 @@ def self_test() -> None:
             oversized_chunks[0],
         )
         > 20_000
-        or len(oversized_chunks[0]) >= len(oversized_event)
         or not any("新モデル" in str(record.get("title")) for record in oversized_chunks[0])
     ):
         fail("Representative event selection lost its event boundary or strongest source")

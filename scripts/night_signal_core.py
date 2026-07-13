@@ -677,8 +677,57 @@ def record_has_material_body(title: str, record: dict[str, Any]) -> bool:
     if record_has_only_headline(title, record):
         return False
     excerpt = str(record.get("excerpt") or "")
+    canonical_title = canonical_article_match_text(title)
+    headline_core = re.sub(
+        r"\s*[（(][^()（）]{2,60}[）)]$",
+        "",
+        canonical_title,
+    ).strip()
+    title_for_anchor = headline_core or canonical_title
+    title_japanese = "".join(
+        re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", title_for_anchor)
+    )
+    title_ngrams = {
+        title_japanese[index : index + 4]
+        for index in range(max(0, len(title_japanese) - 3))
+    }
     for sentence in sentence_parts(excerpt):
-        if state_contract.title_repetition_score(title, sentence) >= 0.82:
+        repetition_score = state_contract.title_repetition_score(title, sentence)
+        if repetition_score >= 0.82:
+            canonical_sentence = canonical_article_match_text(sentence)
+            added_terms = state_contract.content_terms(
+                sentence
+            ) - state_contract.content_terms(title)
+            added_numbers = numeric_claims(sentence) - numeric_claims(title)
+            adds_substance = bool(
+                len(added_terms) >= 2
+                or added_numbers
+                or PUBLICATION_EVENT_RE.search(" ".join(added_terms))
+            )
+            if (
+                not adds_substance
+                or (
+                    headline_core
+                    and canonical_sentence.count(headline_core) >= 2
+                )
+            ):
+                continue
+        sentence_japanese = "".join(
+            re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", sentence)
+        )
+        sentence_ngrams = {
+            sentence_japanese[index : index + 4]
+            for index in range(max(0, len(sentence_japanese) - 3))
+        }
+        anchored = (
+            state_contract.text_overlap(
+                title_for_anchor,
+                canonical_article_match_text(sentence),
+            )
+            >= 1
+            or len(title_ngrams & sentence_ngrams) >= 2
+        )
+        if state_contract.navigation_shell_text(sentence) or not anchored:
             continue
         visible_count = len(re.findall(r"\S", sentence))
         letter_count = len(
@@ -732,7 +781,7 @@ def headline_supports_distinct_summary(title: str) -> bool:
         if not re.fullmatch(r"(?:19|20)\d{2}", value)
     ]
     if material_numbers:
-        return True
+        return bool(PUBLICATION_EVENT_RE.search(text))
     if re.search(
         r"[、;；]|(?:ため|目的|向け|分野|領域|対象|条件|理由|背景|結果|"
         r"が続く|に続く|へ展開|まで拡大|を通じて)",
@@ -4012,6 +4061,23 @@ def self_test() -> None:
         duplicated_feed_headline,
     ):
         fail("duplicated feed headline was mistaken for article body")
+    listing_shell_record = {
+        **duplicate_record,
+        "label": "Finance News",
+        "title": "225オプション・プット（期近・7月13日・権利行使価格6万6500円）",
+        "excerpt": (
+            "225オプション・プット（期近・7月13日・権利行使価格6万6500円）。"
+            "ニューストップ ヘッドライン 新着 市況・概況 関連ニュース。"
+            "情報提供会社のリンクは外部サイトへ移動します。"
+            "投資判断はご自身の判断で行ってください。"
+        ),
+    }
+    if publication_evidence_record(
+        {"label": "日本経済", "watch_topics": []},
+        "2099-01-03",
+        listing_shell_record,
+    ):
+        fail("headline plus page shell was accepted as substantive Evidence")
     aggregate_digest = {
         **duplicate_record,
         "title": "Example社：今の株価の理由は？値動きの背景をAIが解説",
