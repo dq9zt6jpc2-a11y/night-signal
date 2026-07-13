@@ -875,6 +875,24 @@ def normalized_financial_amounts(value: str) -> tuple[list[tuple[str, float]], s
             )
         )
         spans.append(match.span())
+    plain_english = re.compile(
+        r"(?:(?P<symbol>[$€£])\s*(?P<symbol_number>\d[\d,]*(?:\.\d+)?)|"
+        r"(?P<word_number>\d[\d,]*(?:\.\d+)?)\s*"
+        r"(?P<word>dollars?|euros?|pounds?))",
+        re.I,
+    )
+    for match in plain_english.finditer(value):
+        if any(match.start() < end and match.end() > start for start, end in spans):
+            continue
+        marker = (match.group("symbol") or match.group("word") or "").lower()
+        number = match.group("symbol_number") or match.group("word_number") or "0"
+        amounts.append(
+            (
+                english_currency[marker],
+                float(number.replace(",", "")),
+            )
+        )
+        spans.append(match.span())
     stripped = list(value)
     for start, end in spans:
         stripped[start:end] = " " * (end - start)
@@ -3426,6 +3444,21 @@ def self_test() -> None:
         [million_record],
     ):
         fail("financial amount normalization accepted a different amount")
+    plain_currency_record = {
+        **english_record,
+        "title": "America stopped selling new cars under $20,000",
+        "excerpt": "Every new vehicle sold in the US now starts above $20,000.",
+    }
+    if not fact_supported_by_records(
+        "米国では2万ドル未満の新車がなくなった。",
+        [plain_currency_record],
+    ):
+        fail("plain dollar amount lost Japanese ten-thousand support")
+    if fact_supported_by_records(
+        "米国では2万1,000ドル未満の新車がなくなった。",
+        [plain_currency_record],
+    ):
+        fail("plain currency normalization accepted a different amount")
     localized_count_record = {
         **english_record,
         "title": "Honda Pakistan offers Rs 200,000 off the HR-V VTI-S",
