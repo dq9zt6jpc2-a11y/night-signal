@@ -754,6 +754,7 @@ def edit_evidence(
         write_json_atomic(checkpoint_path, checkpoint)
 
     unavailable_models: set[str] = set()
+    editor_failures: list[str] = []
 
     def validated_model_result(
         *,
@@ -1155,10 +1156,10 @@ def edit_evidence(
                 failed_scope = True
                 break
             if failed_scope:
-                fail(
-                    "Editor could not produce a valid decision for every event: "
+                editor_failures.append(
                     f"{label} chunk {chunk_index}/{len(chunks)}"
                 )
+                continue
             chunk_cards = merge_repeated_cards(chunk_cards)
             checkpoint["chunks"][checkpoint_key] = chunk_cards
             save_checkpoint()
@@ -1169,6 +1170,15 @@ def edit_evidence(
     for category in contracts:
         label, category_cards = review_category(category)
         cards_by_category[label] = category_cards
+    if editor_failures:
+        displayed = "; ".join(editor_failures[:12])
+        remaining = len(editor_failures) - 12
+        if remaining > 0:
+            displayed += f"; and {remaining} more"
+        fail(
+            "Editor could not produce a valid decision for every event: "
+            + displayed
+        )
     cards = [
         card
         for category in configs
