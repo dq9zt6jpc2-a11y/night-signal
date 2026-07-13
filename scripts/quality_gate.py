@@ -8,6 +8,7 @@ import sys
 import json
 import difflib
 import html as html_lib
+from html.parser import HTMLParser
 from urllib.parse import unquote
 from datetime import datetime
 from pathlib import Path
@@ -319,8 +320,46 @@ def previous_issue_date(issue_date: str) -> str | None:
     return match.group(1)
 
 
+class ReaderChromeTextParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.in_body = False
+        self.article_depth = 0
+        self.ignored_depth = 0
+        self.parts: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        tag = tag.lower()
+        if tag == "body":
+            self.in_body = True
+        elif tag == "article":
+            self.article_depth += 1
+        elif tag in {"script", "style"}:
+            self.ignored_depth += 1
+
+    def handle_endtag(self, tag: str) -> None:
+        tag = tag.lower()
+        if tag == "article" and self.article_depth:
+            self.article_depth -= 1
+        elif tag in {"script", "style"} and self.ignored_depth:
+            self.ignored_depth -= 1
+        elif tag == "body":
+            self.in_body = False
+
+    def handle_data(self, data: str) -> None:
+        if self.in_body and not self.article_depth and not self.ignored_depth:
+            self.parts.append(data)
+
+
+def reader_chrome_text(html: str) -> str:
+    parser = ReaderChromeTextParser()
+    parser.feed(html)
+    parser.close()
+    return re.sub(r"\s+", " ", " ".join(parser.parts)).strip()
+
+
 def validate_reader_process_language(context: str, html: str) -> None:
-    text = visible_text(html)
+    text = reader_chrome_text(html)
     leaks = [term for term in READER_PROCESS_LEAK_TERMS if term in text]
     pattern_leaks = [label for pattern, label in READER_PROCESS_LEAK_PATTERNS if re.search(pattern, text)]
     if leaks or pattern_leaks:
