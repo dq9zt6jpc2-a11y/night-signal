@@ -147,9 +147,7 @@ jobs:
           fi
           git config user.name "night-signal-bot"
           git config user.email "night-signal-bot@users.noreply.github.com"
-          git add .night-signal-issue-date
-          git add "night-brief-web-sample-$ISSUE_DATE.html"
-          git add details site "state/$ISSUE_DATE"
+          git add -A -- .night-signal-issue-date 'night-brief-web-sample-*.html' details site state
           if git diff --cached --quiet; then
             echo "No audited issue changes to commit."
             exit 0
