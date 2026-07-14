@@ -53,81 +53,9 @@
       }
     },
     {
-      "watch_topic_id": "enterprise_infrastructure",
-      "title": "Microsoft Edge 150がGoogleアカウント対応に、OpenAIが最新AIモデルGPT-5.6を一般公開",
-      "summary": "Microsoft Edgeの最新バージョン150がリリースされ、WindowsとmacOSでGoogleアカウントによるサインインに対応した。 OpenAIは最新AIモデル「GPT-5.6」を一般公開し、フラグシップのSol、日常業務向けのTerra、低コストのLunaの3階層で展開している。 GPT-5.6はコーディングやナレッジワーク、サイバーセキュリティ、科学分野で最高水準の性能を示し、競合モデルを上回ったとされる。 安全性対策として、自傷や情緒的依存リスクに対応した音声特化の保護策や10代ユーザー向けの保護策が追加された。 2026年第2四半期の世界PC出荷台数は前年同期比4.9%減の6820万台となり、9四半期連続の成長から減少に転じたが、売上高は値上げにより増加している。",
-      "section_id": "openai",
-      "category": "OpenAI",
-      "source_published_date": "2026-07-12",
-      "topic_value_class": "technical_or_product_shift",
-      "priority_class": "priority",
-      "change_class": "material_update",
-      "detail": {
-        "slug": "auto-05b1431b376a-2026-07-14.html",
-        "sources": [
-          {
-            "label": "itmedia.co.jp",
-            "url": "https://www.itmedia.co.jp/pcuser/amp/2607/12/news007_3.html"
-          },
-          {
-            "label": "news.yahoo.co.jp",
-            "url": "https://news.yahoo.co.jp/articles/fe49519231413ac139801ba89487389f02083c4a"
-          }
-        ],
-        "summary": "Microsoft Edgeの最新バージョン150がリリースされ、WindowsとmacOSでGoogleアカウントによるサインインに対応した。 OpenAIは最新AIモデル「GPT-5.6」を一般公開し、フラグシップのSol、日常業務向けのTerra、低コストのLunaの3階層で展開している。 GPT-5.6はコーディングやナレッジワーク、サイバーセキュリティ、科学分野で最高水準の性能を示し、競合モデルを上回ったとされる。 安全性対策として、自傷や情緒的依存リスクに対応した音声特化の保護策や10代ユーザー向けの保護策が追加された。 2026年第2四半期の世界PC出荷台数は前年同期比4.9%減の6820万台となり、9四半期連続の成長から減少に転じたが、売上高は値上げにより増加している。",
-        "summary_basis": {
-          "confirmed_facts": [
-            "Microsoft Edgeの最新バージョン150がリリースされ、WindowsとmacOSでGoogleアカウントによるサインインに対応した。",
-            "OpenAIは最新AIモデル「GPT-5.6」を一般公開し、フラグシップのSol、日常業務向けのTerra、低コストのLunaの3階層で展開している。",
-            "GPT-5.6はコーディングやナレッジワーク、サイバーセキュリティ、科学分野で最高水準の性能を示し、競合モデルを上回ったとされる。",
-            "安全性対策として、自傷や情緒的依存リスクに対応した音声特化の保護策や10代ユーザー向けの保護策が追加された。",
-            "2026年第2四半期の世界PC出荷台数は前年同期比4.9%減の6820万台となり、9四半期連続の成長から減少に転じたが、売上高は値上げにより増加している。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "Microsoft Edgeの最新バージョン150がリリースされ、WindowsとmacOSでGoogleアカウントによるサインインに対応した。",
-              "source_urls": [
-                "https://www.itmedia.co.jp/pcuser/amp/2607/12/news007_3.html",
-                "https://news.yahoo.co.jp/articles/fe49519231413ac139801ba89487389f02083c4a"
-              ]
-            },
-            {
-              "fact": "OpenAIは最新AIモデル「GPT-5.6」を一般公開し、フラグシップのSol、日常業務向けのTerra、低コストのLunaの3階層で展開している。",
-              "source_urls": [
-                "https://www.itmedia.co.jp/pcuser/amp/2607/12/news007_3.html",
-                "https://news.yahoo.co.jp/articles/fe49519231413ac139801ba89487389f02083c4a"
-              ]
-            },
-            {
-              "fact": "GPT-5.6はコーディングやナレッジワーク、サイバーセキュリティ、科学分野で最高水準の性能を示し、競合モデルを上回ったとされる。",
-              "source_urls": [
-                "https://www.itmedia.co.jp/pcuser/amp/2607/12/news007_3.html",
-                "https://news.yahoo.co.jp/articles/fe49519231413ac139801ba89487389f02083c4a"
-              ]
-            },
-            {
-              "fact": "安全性対策として、自傷や情緒的依存リスクに対応した音声特化の保護策や10代ユーザー向けの保護策が追加された。",
-              "source_urls": [
-                "https://www.itmedia.co.jp/pcuser/amp/2607/12/news007_3.html"
-              ]
-            },
-            {
-              "fact": "2026年第2四半期の世界PC出荷台数は前年同期比4.9%減の6820万台となり、9四半期連続の成長から減少に転じたが、売上高は値上げにより増加している。",
-              "source_urls": [
-                "https://www.itmedia.co.jp/pcuser/amp/2607/12/news007_3.html"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-07-12"
-          ]
-        }
-      }
-    },
-    {
       "watch_topic_id": "ipo_financing",
       "title": "OpenAI、ホワイトハウスの安全審査を経てGPT-5.6 Solを一般公開開始",
-      "summary": "OpenAIはホワイトハウスの関与を経て、最も強力なAIモデル「GPT-5.6 Sol」を2026年7月9日から段階的に一般公開を開始した。 GPT-5.6シリーズはフラグシップのSolに加え、日常利用向けのTerra、低コストのLunaの3モデルで構成されている。",
+      "summary": "OpenAIはホワイトハウスの関与を経て、最も強力なAIモデル「GPT-5.6 Sol」を2026年7月9日から段階的に一般公開を開始した。 GPT-5.6シリーズはフラグシップのSolに加え、日常利用向けのTerra、低コストのLunaの3モデルで構成されている。 ChatGPT 5.6は推論能力や安全機能が強化され、企業向けアプリケーションにも対応し、GoogleやMicrosoft、AnthropicなどとのAI競争が激化する中での投入となった。",
       "section_id": "openai",
       "category": "OpenAI",
       "source_published_date": "2026-07-14",
@@ -140,13 +68,22 @@
           {
             "label": "mashable.com",
             "url": "https://mashable.com/tech/openai-gpt-5-6-sol-public-release"
+          },
+          {
+            "label": "thehindu.com",
+            "url": "https://www.thehindu.com/business/openai-launches-chatgpt-work-introduces-gpt-56-model-family/article71218095.ece"
+          },
+          {
+            "label": "boldnewsonline.com",
+            "url": "https://boldnewsonline.com/openai-launches-advanced-ai-model-chatgpt-5-6-after-security-review-delays/"
           }
         ],
-        "summary": "OpenAIはホワイトハウスの関与を経て、最も強力なAIモデル「GPT-5.6 Sol」を2026年7月9日から段階的に一般公開を開始した。 GPT-5.6シリーズはフラグシップのSolに加え、日常利用向けのTerra、低コストのLunaの3モデルで構成されている。",
+        "summary": "OpenAIはホワイトハウスの関与を経て、最も強力なAIモデル「GPT-5.6 Sol」を2026年7月9日から段階的に一般公開を開始した。 GPT-5.6シリーズはフラグシップのSolに加え、日常利用向けのTerra、低コストのLunaの3モデルで構成されている。 ChatGPT 5.6は推論能力や安全機能が強化され、企業向けアプリケーションにも対応し、GoogleやMicrosoft、AnthropicなどとのAI競争が激化する中での投入となった。",
         "summary_basis": {
           "confirmed_facts": [
             "OpenAIはホワイトハウスの関与を経て、最も強力なAIモデル「GPT-5.6 Sol」を2026年7月9日から段階的に一般公開を開始した。",
-            "GPT-5.6シリーズはフラグシップのSolに加え、日常利用向けのTerra、低コストのLunaの3モデルで構成されている。"
+            "GPT-5.6シリーズはフラグシップのSolに加え、日常利用向けのTerra、低コストのLunaの3モデルで構成されている。",
+            "ChatGPT 5.6は推論能力や安全機能が強化され、企業向けアプリケーションにも対応し、GoogleやMicrosoft、AnthropicなどとのAI競争が激化する中での投入となった。"
           ],
           "fact_sources": [
             {
@@ -160,42 +97,7 @@
               "source_urls": [
                 "https://mashable.com/tech/openai-gpt-5-6-sol-public-release"
               ]
-            }
-          ],
-          "source_dates": [
-            "2026-07-14"
-          ]
-        }
-      }
-    },
-    {
-      "watch_topic_id": "math_research",
-      "title": "OpenAI、セキュリティ評価を経て高度AIモデルChatGPT 5.6を正式リリース",
-      "summary": "ChatGPT 5.6は推論能力や安全機能が強化され、企業向けアプリケーションにも対応し、GoogleやMicrosoft、AnthropicなどとのAI競争が激化する中での投入となった。",
-      "section_id": "openai",
-      "category": "OpenAI",
-      "source_published_date": "2026-07-14",
-      "topic_value_class": "technical_or_product_shift",
-      "priority_class": "priority",
-      "change_class": "material_update",
-      "detail": {
-        "slug": "auto-e9b66133c527-2026-07-14.html",
-        "sources": [
-          {
-            "label": "thehindu.com",
-            "url": "https://www.thehindu.com/business/openai-launches-chatgpt-work-introduces-gpt-56-model-family/article71218095.ece"
-          },
-          {
-            "label": "boldnewsonline.com",
-            "url": "https://boldnewsonline.com/openai-launches-advanced-ai-model-chatgpt-5-6-after-security-review-delays/"
-          }
-        ],
-        "summary": "ChatGPT 5.6は推論能力や安全機能が強化され、企業向けアプリケーションにも対応し、GoogleやMicrosoft、AnthropicなどとのAI競争が激化する中での投入となった。",
-        "summary_basis": {
-          "confirmed_facts": [
-            "ChatGPT 5.6は推論能力や安全機能が強化され、企業向けアプリケーションにも対応し、GoogleやMicrosoft、AnthropicなどとのAI競争が激化する中での投入となった。"
-          ],
-          "fact_sources": [
+            },
             {
               "fact": "ChatGPT 5.6は推論能力や安全機能が強化され、企業向けアプリケーションにも対応し、GoogleやMicrosoft、AnthropicなどとのAI競争が激化する中での投入となった。",
               "source_urls": [
@@ -283,50 +185,6 @@
               "source_urls": [
                 "https://www.thenews.com.pk/latest/1409082-softbanks-masayoshi-son-predicts-ai-will-generate-20-of-global-gdp-by-2040",
                 "https://news.google.com/rss/articles/CBMi2wFBVV95cUxPYUtJZmJXbTA0R3lnT2JReU4tN01DdkZUcnVTZ0RhVUR6a25xOXVUSDJJdFBsY245S3kzUWhtVVpoWWdOYUZ4bGVfMkhXaElmNG1rbURWejlLLTNKZ1NEa1pLdjQwRkxDUHNaOFUxYUI5dGhNeEhMSHJfUUZ6MXBxNkJaZjJON2lCcTRiLWo5T0g5T1hSRUhkX2E3emU4c3NLdHFBLWlwY200WVVTMFhnX2hrQ29MOXVvdnJaSm93M3Jyb0FkM20zNGYxdkZFZG9SdXRsQURfdFB3c1E?oc=5"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-07-14"
-          ]
-        }
-      }
-    },
-    {
-      "watch_topic_id": "domestic_services",
-      "title": "孫正義氏、2040年に世界GDPの20％がAI関連に達するとSoftBank Worldで発表",
-      "summary": "ソフトバンクグループの孫正義会長はSoftBank World 2026で、2040年に世界GDPの20％がAI関連になると語った。 孫氏は日本の経営者に対し、AIを活用する企業に仕事を奪われるリスクを強調し、AI導入の重要性を訴えた。",
-      "section_id": "softbank",
-      "category": "SoftBank",
-      "source_published_date": "2026-07-14",
-      "topic_value_class": "market_or_financial_impact",
-      "priority_class": "priority",
-      "change_class": "new_event",
-      "detail": {
-        "slug": "auto-02c40b8150c0-2026-07-14.html",
-        "sources": [
-          {
-            "label": "news.livedoor.com",
-            "url": "https://news.livedoor.com/topics/detail/31824554/"
-          }
-        ],
-        "summary": "ソフトバンクグループの孫正義会長はSoftBank World 2026で、2040年に世界GDPの20％がAI関連になると語った。 孫氏は日本の経営者に対し、AIを活用する企業に仕事を奪われるリスクを強調し、AI導入の重要性を訴えた。",
-        "summary_basis": {
-          "confirmed_facts": [
-            "ソフトバンクグループの孫正義会長はSoftBank World 2026で、2040年に世界GDPの20％がAI関連になると語った。",
-            "孫氏は日本の経営者に対し、AIを活用する企業に仕事を奪われるリスクを強調し、AI導入の重要性を訴えた。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "ソフトバンクグループの孫正義会長はSoftBank World 2026で、2040年に世界GDPの20％がAI関連になると語った。",
-              "source_urls": [
-                "https://news.livedoor.com/topics/detail/31824554/"
-              ]
-            },
-            {
-              "fact": "孫氏は日本の経営者に対し、AIを活用する企業に仕事を奪われるリスクを強調し、AI導入の重要性を訴えた。",
-              "source_urls": [
-                "https://news.livedoor.com/topics/detail/31824554/"
               ]
             }
           ],
@@ -872,64 +730,6 @@
               "fact": "この結果、FRBの利上げの可能性が低下するとの見方が広がっています。",
               "source_urls": [
                 "https://www.coindesk.com/ja/markets/2026/07/14/u-s-june-cpi-fell-0-4-likely-cooling-move-toward-fed-rate-hikes"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-07-14"
-          ]
-        }
-      }
-    },
-    {
-      "watch_topic_id": "employment_consumption",
-      "title": "米国6月CPI発表を控えたドル円相場の見通し",
-      "summary": "米国6月の消費者物価指数（CPI）の発表が予定されており、前年比+3.8%と予想されています。 コアCPIは前年比+2.8%と予想されており、前月からの鈍化が見込まれています。 CPIの結果次第でドル円相場が変動する可能性があり、特に163円または161円の範囲での動きが予想されています。",
-      "section_id": "japan_economy",
-      "category": "日本経済",
-      "source_published_date": "2026-07-14",
-      "topic_value_class": "market_or_financial_impact",
-      "priority_class": "standard",
-      "change_class": "material_update",
-      "detail": {
-        "slug": "auto-fbe39ac64882-2026-07-14.html",
-        "sources": [
-          {
-            "label": "gaitame.com",
-            "url": "https://www.gaitame.com/media/entry/2026/07/14/160246"
-          },
-          {
-            "label": "finance.yahoo.co.jp",
-            "url": "https://finance.yahoo.co.jp/news/detail/30d9c7cdfdb2533bbf4dc925fcd3fddf9bf58a15"
-          }
-        ],
-        "summary": "米国6月の消費者物価指数（CPI）の発表が予定されており、前年比+3.8%と予想されています。 コアCPIは前年比+2.8%と予想されており、前月からの鈍化が見込まれています。 CPIの結果次第でドル円相場が変動する可能性があり、特に163円または161円の範囲での動きが予想されています。",
-        "summary_basis": {
-          "confirmed_facts": [
-            "米国6月の消費者物価指数（CPI）の発表が予定されており、前年比+3.8%と予想されています。",
-            "コアCPIは前年比+2.8%と予想されており、前月からの鈍化が見込まれています。",
-            "CPIの結果次第でドル円相場が変動する可能性があり、特に163円または161円の範囲での動きが予想されています。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "米国6月の消費者物価指数（CPI）の発表が予定されており、前年比+3.8%と予想されています。",
-              "source_urls": [
-                "https://www.gaitame.com/media/entry/2026/07/14/160246",
-                "https://finance.yahoo.co.jp/news/detail/30d9c7cdfdb2533bbf4dc925fcd3fddf9bf58a15"
-              ]
-            },
-            {
-              "fact": "コアCPIは前年比+2.8%と予想されており、前月からの鈍化が見込まれています。",
-              "source_urls": [
-                "https://www.gaitame.com/media/entry/2026/07/14/160246",
-                "https://finance.yahoo.co.jp/news/detail/30d9c7cdfdb2533bbf4dc925fcd3fddf9bf58a15"
-              ]
-            },
-            {
-              "fact": "CPIの結果次第でドル円相場が変動する可能性があり、特に163円または161円の範囲での動きが予想されています。",
-              "source_urls": [
-                "https://www.gaitame.com/media/entry/2026/07/14/160246",
-                "https://finance.yahoo.co.jp/news/detail/30d9c7cdfdb2533bbf4dc925fcd3fddf9bf58a15"
               ]
             }
           ],
