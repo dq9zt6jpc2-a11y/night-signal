@@ -924,7 +924,17 @@ def cards_describe_same_information(
 ) -> bool:
     if core.same_material_event(left.get("title"), right.get("title")):
         return True
-    if state.text_overlap(str(left.get("title", "")), str(right.get("title", ""))) < 2:
+    left_title = str(left.get("title", ""))
+    right_title = str(right.get("title", ""))
+    overlap = state.text_overlap(left_title, right_title)
+    if preview_result_pair(left, right) or shared_version_tokens(
+        left_title, right_title
+    ):
+        return True
+    shared_numbers = novelty_numbers(left_title) & novelty_numbers(right_title)
+    if overlap >= 4 and shared_numbers:
+        return True
+    if overlap < 2:
         return False
     left_facts = (
         left.get("detail", {}).get("summary_basis", {}).get("confirmed_facts", [])
@@ -939,6 +949,77 @@ def cards_describe_same_information(
         for fact in left_facts
     )
     return matching >= min(len(left_facts), len(right_facts))
+
+
+PREVIEW_CARD_RE = re.compile(
+    r"(発表を控え|発表予定|予定され|予想|見通し|プレビュー|"
+    r"ahead\s+of|preview|expected)",
+    re.I,
+)
+REALIZED_CARD_RE = re.compile(
+    r"(結果|発表|公表|決定|判明|達成|低下|上昇|減少|増加|"
+    r"reported|released|fell|rose|declined|increased)",
+    re.I,
+)
+EVENT_SUBJECT_RE = re.compile(
+    r"(CPI|GDP|雇用統計|失業率|決算|会談|投票|試合|グランプリ)",
+    re.I,
+)
+
+
+def shared_version_tokens(left: str, right: str) -> bool:
+    def tokens(value: str) -> set[str]:
+        return {
+            match.casefold()
+            for match in re.findall(
+                r"(?:chatgpt|gpt|version|ver\.?|v)\s*[- ]?"
+                r"(\d+(?:\.\d+){1,3})(?!\d)",
+                value,
+                flags=re.I,
+            )
+        }
+
+    return bool(tokens(left) & tokens(right))
+
+
+def preview_result_pair(left: dict[str, Any], right: dict[str, Any]) -> bool:
+    left_title = str(left.get("title", ""))
+    right_title = str(right.get("title", ""))
+    left_preview = bool(PREVIEW_CARD_RE.search(left_title))
+    right_preview = bool(PREVIEW_CARD_RE.search(right_title))
+    if left_preview == right_preview:
+        return False
+    realized_title = right_title if left_preview else left_title
+    if not REALIZED_CARD_RE.search(realized_title):
+        return False
+    left_subjects = {
+        value.casefold() for value in EVENT_SUBJECT_RE.findall(left_title)
+    }
+    right_subjects = {
+        value.casefold() for value in EVENT_SUBJECT_RE.findall(right_title)
+    }
+    return bool(
+        left_subjects & right_subjects
+        and state.text_overlap(left_title, right_title) >= 2
+    )
+
+
+def card_focus_score(card: dict[str, Any]) -> int:
+    title = str(card.get("title", ""))
+    category = str(card.get("category", ""))
+    position = title.casefold().find(category.casefold()) if category else -1
+    if position == 0:
+        identity_score = 4
+    elif 0 < position <= 15:
+        identity_score = 1
+    elif position > 15:
+        identity_score = -2
+    else:
+        identity_score = 0
+    facts = card.get("detail", {}).get("summary_basis", {}).get(
+        "confirmed_facts", []
+    )
+    return identity_score + min(5, len(facts) if isinstance(facts, list) else 0)
 
 
 def merge_repeated_cards(cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -957,6 +1038,17 @@ def merge_repeated_cards(cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
         )
         if existing is None:
             merged.append(card)
+            continue
+
+        if preview_result_pair(existing, card):
+            if PREVIEW_CARD_RE.search(str(existing.get("title", ""))):
+                merged[merged.index(existing)] = card
+            continue
+        existing_focus = card_focus_score(existing)
+        incoming_focus = card_focus_score(card)
+        if abs(existing_focus - incoming_focus) >= 2:
+            if incoming_focus > existing_focus:
+                merged[merged.index(existing)] = card
             continue
 
         existing_basis = existing["detail"]["summary_basis"]
@@ -2152,6 +2244,84 @@ def self_test() -> None:
         fail("Editor emitted fields outside the minimal public update contract")
     if not summary_is_reader_facing(card["title"], card["summary"]):
         fail("Editor emitted a title-only or repetitive summary")
+
+    def duplicate_test_card(
+        category: str,
+        title: str,
+        facts: list[str],
+    ) -> dict[str, Any]:
+        candidate = copy.deepcopy(card)
+        candidate["category"] = category
+        candidate["title"] = title
+        candidate["summary"] = " ".join(facts)
+        candidate["detail"]["summary"] = candidate["summary"]
+        basis = candidate["detail"]["summary_basis"]
+        basis["confirmed_facts"] = facts
+        basis["fact_sources"] = [
+            {
+                "fact": fact,
+                "source_urls": ["https://openai.com/example"],
+            }
+            for fact in facts
+        ]
+        return candidate
+
+    if not shared_version_tokens(
+        "OpenAIがGPT-5.6を公開",
+        "OpenAIがChatGPT 5.6を正式リリース",
+    ):
+        fail("Editor did not recognize equivalent product version tokens")
+    if shared_version_tokens("CPIは3.8%", "GDPは3.8%"):
+        fail("Editor treated an ordinary decimal as a product version")
+
+    generic_roundup = duplicate_test_card(
+        "OpenAI",
+        "Microsoft Edge更新とOpenAIのGPT-5.6公開",
+        [f"関連情報{index}が確認された。" for index in range(1, 6)],
+    )
+    focused_release = duplicate_test_card(
+        "OpenAI",
+        "OpenAIが安全審査後にGPT-5.6を一般公開",
+        ["安全審査を経て一般公開された。", "公開対象が明らかになった。"],
+    )
+    focused_cards = merge_repeated_cards([generic_roundup, focused_release])
+    if (
+        len(focused_cards) != 1
+        or focused_cards[0]["title"] != focused_release["title"]
+    ):
+        fail("Editor retained a generic roundup over the focused product update")
+
+    softbank_rich = duplicate_test_card(
+        "SoftBank",
+        "孫正義氏、2040年にAIが世界GDPの20％、7,000兆円規模に成長と予測",
+        [f"予測の具体情報{index}が確認された。" for index in range(1, 6)],
+    )
+    softbank_repeat = duplicate_test_card(
+        "SoftBank",
+        "孫正義氏、2040年に世界GDPの20％がAI関連に達すると発表",
+        ["2040年の予測が発表された。", "世界GDP比率が示された。"],
+    )
+    softbank_cards = merge_repeated_cards([softbank_rich, softbank_repeat])
+    if (
+        len(softbank_cards) != 1
+        or softbank_cards[0]["title"] != softbank_rich["title"]
+    ):
+        fail("Editor retained repeated information with the same subject and figures")
+
+    cpi_preview = duplicate_test_card(
+        "日本経済",
+        "米国6月CPI発表を控えたドル円相場の見通し",
+        ["CPI発表前の市場見通しが示された。"],
+    )
+    cpi_result = duplicate_test_card(
+        "日本経済",
+        "米国6月CPIが0.4%低下、FRBの政策観測に影響",
+        ["米国6月CPIが0.4%低下した。"],
+    )
+    cpi_cards = merge_repeated_cards([cpi_preview, cpi_result])
+    if len(cpi_cards) != 1 or cpi_cards[0]["title"] != cpi_result["title"]:
+        fail("Editor retained a preview after the corresponding result was available")
+
     stale_source_card = copy.deepcopy(card)
     relay_url = "https://news.google.com/rss/articles/example"
     stale_source_card["detail"]["summary_basis"]["fact_sources"][0][
