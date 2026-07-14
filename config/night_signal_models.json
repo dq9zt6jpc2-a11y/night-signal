@@ -1,6 +1,6 @@
 {
   "extraction": {
-    "editor_contract_revision": "event-summary-v23",
+    "editor_contract_revision": "event-summary-v24-token-efficient-novelty",
     "compatible_checkpoint_contracts": [
       "33ee7687d582a0660d24aa5717036aa4487bda83d1126fa7db22fe9e1887a4c1",
       "944714c7f2f76825d52ea6183b0cf0ded1002c179b478b1377c1e766863c01ca",

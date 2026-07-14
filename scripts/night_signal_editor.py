@@ -11,6 +11,7 @@ import os
 import re
 import sys
 import tempfile
+from datetime import date
 from pathlib import Path
 from typing import Any, Callable
 
@@ -29,6 +30,19 @@ TOPIC_VALUE_CLASS_MAP = {
     "roster_change": "operational_status_change",
 }
 SUMMARY_LABEL_RE = re.compile(r"(?:変更点|重要性|確認事実|未確定点)\s*[:：]")
+MAX_EDITOR_EVENT_CANDIDATES_PER_CATEGORY = 4
+MAX_EDITOR_RECORDS_PER_EVENT = 2
+EXTRA_EDITOR_EVENTS_PER_CATEGORY = 1
+MAX_SEMANTIC_DEDUP_EVENTS_PER_CATEGORY = 12
+MAX_MODEL_RESPONSES_PER_SCOPE = 2
+NOVELTY_CHANGE_RE = re.compile(
+    r"(延期|中止|承認|却下|開始|終了|発売|提供開始|公開|更新|"
+    r"増加|減少|上昇|下落|急落|契約|提携|買収|出資|資金調達|"
+    r"就任|退任|移籍|獲得|勝利|敗北|達成|突破|"
+    r"delay|cancel|approve|reject|launch|release|update|"
+    r"increase|decrease|rise|fall|sign|acquire|invest|raise)",
+    re.I,
+)
 
 
 class UnpublishableItem(RuntimeError):
@@ -257,44 +271,313 @@ def flatten_event_response(
     return flattened, accepted, feedback
 
 
-def publication_candidate_groups(
-    category: dict[str, Any],
-    issue_date: str,
-    records: list[dict[str, Any]],
-) -> list[list[dict[str, Any]]]:
-    """Build deterministic event groups without discarding a distinct candidate."""
-    selected = [
-        record
-        for _, record in core.editor_evidence_records(category, issue_date, records)
+def record_material_sentences(record: dict[str, Any]) -> list[str]:
+    return [
+        sentence
+        for sentence in core.sentence_parts(core.editor_source_text(record, 2400))
+        if len(state.copy_signature(sentence)) >= 18
+        and not state.material_fact_violations(sentence)
+        and not state.GENERIC_ENTITY_OVERVIEW_RE.search(sentence)
+        and not core.INVESTMENT_GUIDE_RE.search(sentence)
+        and not core.NON_NEWS_GUIDE_RE.search(sentence)
     ]
-    event_groups: list[list[dict[str, Any]]] = []
-    for record in selected:
+
+
+def novelty_numbers(text: str) -> set[str]:
+    without_dates = re.sub(
+        r"20\d{2}(?:年|[-/.])\d{1,2}(?:月|[-/.])\d{1,2}日?|"
+        r"(?<!\d)\d{1,2}(?:月|/)\d{1,2}日?",
+        " ",
+        str(text),
+    )
+    return set(re.findall(r"\d+(?:\.\d+)?", without_dates))
+
+
+def summary_output_budget(record_count: int) -> int:
+    """Bound generated JSON to the number of Evidence records in one request."""
+    return min(4_000, max(1_600, 700 + 550 * max(1, record_count)))
+
+
+def records_describe_same_information(
+    left: dict[str, Any],
+    right: dict[str, Any],
+) -> bool:
+    left_title = core.record_public_title(left)
+    right_title = core.record_public_title(right)
+    if core.same_material_event(left_title, right_title):
+        return True
+    left_body = core.editor_source_text(left, 2400)
+    right_body = core.editor_source_text(right, 2400)
+    if state.materially_same_fact(left_body, right_body):
+        return True
+    if state.text_overlap(left_title, right_title) < 2:
+        return False
+    return any(
+        state.materially_same_fact(left_fact, right_fact)
+        for left_fact in record_material_sentences(left)
+        for right_fact in record_material_sentences(right)
+    )
+
+
+def event_group_has_new_information(
+    group: list[dict[str, Any]],
+    previous_updates: list[dict[str, Any]],
+    issue_date: str,
+) -> bool:
+    """Conservatively reject an event already covered by the prior public issue."""
+    if not previous_updates:
+        return True
+    issue_day = date.fromisoformat(issue_date)
+    for record in group:
         title = core.record_public_title(record)
+        matches = [
+            update
+            for update in previous_updates
+            if core.same_material_event(title, str(update.get("title", "")))
+        ]
+        if not matches:
+            return True
+        prior_facts = [
+            sentence
+            for update in matches
+            for sentence in core.sentence_parts(
+                f"{update.get('title', '')}。 {update.get('summary', '')}"
+            )
+        ]
+        title_numbers = novelty_numbers(title)
+        prior_numbers = novelty_numbers(" ".join(prior_facts))
+        title_changes = {
+            value.casefold() for value in NOVELTY_CHANGE_RE.findall(title)
+        }
+        prior_changes = {
+            value.casefold()
+            for value in NOVELTY_CHANGE_RE.findall(" ".join(prior_facts))
+        }
+        if (title_changes - prior_changes) or (title_numbers - prior_numbers):
+            return True
+        for fact in record_material_sentences(record):
+            if re.search(r"20\d{2}年.{0,30}(?:設立|創業|移行)", fact):
+                continue
+            fact_dates = core.explicit_title_event_dates(fact, issue_day)
+            if fact_dates and all(
+                event_date <= issue_day and (issue_day - event_date).days > 7
+                for event_date in fact_dates
+            ):
+                continue
+            if not any(
+                state.materially_same_fact(fact, prior_fact)
+                for prior_fact in prior_facts
+            ):
+                return True
+    return False
+
+
+def event_record_priority(record: dict[str, Any]) -> tuple[int, int, int, int, str]:
+    title = core.record_public_title(record)
+    role_score = {
+        "official_primary": 4,
+        "primary_or_official": 4,
+        "independent_media_or_data": 3,
+        "social_or_video_signal": 2,
+    }.get(str(record.get("source_role", "")), 1)
+    return (
+        role_score,
+        int(core.record_evidence_depth(title, record) == "body"),
+        int(bool(core.PUBLICATION_EVENT_RE.search(title))),
+        int(bool(re.search(r"\d+(?:\.\d+)?", title))),
+        compact_text(title, 180),
+    )
+
+
+def bounded_event_records(
+    group: list[dict[str, Any]],
+    *,
+    max_records: int = MAX_EDITOR_RECORDS_PER_EVENT,
+) -> list[dict[str, Any]]:
+    """Keep a small, source-diverse evidence set for one material event."""
+    ranked = sorted(group, key=event_record_priority, reverse=True)
+    selected: list[dict[str, Any]] = []
+    seen_routes: set[tuple[str, str, str]] = set()
+    for record in ranked:
+        route = (
+            str(record.get("source_role", "")),
+            str(record.get("channel", "")),
+            str(record.get("label", "")),
+        )
+        if route in seen_routes:
+            continue
+        selected.append(record)
+        seen_routes.add(route)
+        if len(selected) >= max_records:
+            return selected
+    for record in ranked:
+        if record in selected:
+            continue
+        selected.append(record)
+        if len(selected) >= max_records:
+            break
+    return selected
+
+
+def event_group_priority(
+    category: dict[str, Any],
+    group: list[dict[str, Any]],
+) -> tuple[int, int, int, int, int, int, str]:
+    topics = {
+        str(topic_id)
+        for record in group
+        for topic_id in record.get("watch_topic_ids", [])
+        if str(topic_id)
+    }
+    titles = " ".join(core.record_public_title(record) for record in group)
+    roles = {str(record.get("source_role", "")) for record in group}
+    configured_topics = {
+        str(topic.get("id"))
+        for topic in category.get("watch_topics", [])
+        if isinstance(topic, dict) and topic.get("id")
+    }
+    return (
+        int(bool({"official_primary", "primary_or_official"} & roles)),
+        int(bool(core.PUBLICATION_EVENT_RE.search(titles))),
+        int(bool(core.MATERIAL_SIGNAL_RE.search(titles))),
+        int(bool(re.search(r"\d+(?:\.\d+)?", titles))),
+        sum(
+            core.record_evidence_depth(core.record_public_title(record), record)
+            == "body"
+            for record in group
+        ),
+        len(topics & configured_topics),
+        compact_text(titles, 300),
+    )
+
+
+def bounded_candidate_groups(
+    category: dict[str, Any],
+    event_groups: list[list[dict[str, Any]]],
+    *,
+    max_events: int | None = None,
+) -> list[list[dict[str, Any]]]:
+    """Preserve watch-topic breadth, then keep only the strongest events."""
+    if max_events is None:
+        topic_count = sum(
+            isinstance(topic, dict) and bool(topic.get("id"))
+            for topic in category.get("watch_topics", [])
+        )
+        max_events = min(
+            MAX_EDITOR_EVENT_CANDIDATES_PER_CATEGORY,
+            max(2, topic_count + EXTRA_EDITOR_EVENTS_PER_CATEGORY),
+        )
+    ranked = sorted(
+        event_groups,
+        key=lambda group: event_group_priority(category, group),
+        reverse=True,
+    )
+    selected: list[list[dict[str, Any]]] = []
+    for topic in category.get("watch_topics", []):
+        if not isinstance(topic, dict) or not topic.get("id"):
+            continue
+        topic_id = str(topic["id"])
         group = next(
             (
                 candidate
-                for candidate in event_groups
-                if candidate
-                and core.same_material_event(
-                    title,
-                    core.record_public_title(candidate[0]),
+                for candidate in ranked
+                if candidate not in selected
+                and any(
+                    topic_id in {
+                        str(value) for value in record.get("watch_topic_ids", [])
+                    }
+                    for record in candidate
                 )
             ),
             None,
         )
-        if group is None:
-            event_groups.append([record])
+        if group is not None:
+            selected.append(group)
+        if len(selected) >= max_events:
+            break
+    for group in ranked:
+        if len(selected) >= max_events:
+            break
+        if group not in selected:
+            selected.append(group)
+    return [bounded_event_records(group) for group in selected]
+
+
+def publication_candidate_groups(
+    category: dict[str, Any],
+    issue_date: str,
+    records: list[dict[str, Any]],
+    *,
+    previous_updates: list[dict[str, Any]] | None = None,
+) -> list[list[dict[str, Any]]]:
+    """Deduplicate, suppress unchanged prior events, and bound model candidates."""
+    selected = [
+        record
+        for _, record in core.editor_evidence_records(category, issue_date, records)
+    ]
+    exact_groups: dict[str, list[dict[str, Any]]] = {}
+    for record in selected:
+        key = core.record_cluster_key(record) or str(record.get("url", ""))
+        exact_groups.setdefault(key, []).append(record)
+    event_groups = list(exact_groups.values())
+    grouped_events = len(event_groups)
+    if previous_updates:
+        event_groups = [
+            group
+            for group in event_groups
+            if event_group_has_new_information(group, previous_updates, issue_date)
+        ]
+    novel_events = len(event_groups)
+    preselected = bounded_candidate_groups(
+        category,
+        event_groups,
+        max_events=MAX_SEMANTIC_DEDUP_EVENTS_PER_CATEGORY,
+    )
+    semantically_merged: list[list[dict[str, Any]]] = []
+    for group in preselected:
+        matching = next(
+            (
+                candidate
+                for candidate in semantically_merged
+                if any(
+                    records_describe_same_information(record, existing)
+                    for record in group
+                    for existing in candidate
+                )
+            ),
+            None,
+        )
+        if matching is None:
+            semantically_merged.append(list(group))
         else:
-            group.append(record)
-    return event_groups
+            matching.extend(group)
+    bounded = bounded_candidate_groups(category, semantically_merged)
+    print(
+        json.dumps(
+            {
+                "phase": "deterministic_candidate_filter",
+                "category": str(category.get("label", "")),
+                "evidence_records": len(selected),
+                "grouped_events": grouped_events,
+                "novel_events": novel_events,
+                "semantic_dedup_pool": len(preselected),
+                "model_candidates": len(bounded),
+            },
+            ensure_ascii=False,
+        ),
+        flush=True,
+    )
+    return bounded
 
 
 def previous_category_updates(
     state_root: Path,
     issue_date: str,
     category_label: str,
+    *,
+    max_updates: int = 20,
 ) -> list[dict[str, Any]]:
-    """Return the latest prior public issue as novelty context, never as Evidence."""
+    """Return bounded prior public updates as novelty context, never as Evidence."""
     issue_paths = sorted(
         (
             path
@@ -303,6 +586,8 @@ def previous_category_updates(
         ),
         reverse=True,
     )
+    updates: list[dict[str, Any]] = []
+    seen: set[str] = set()
     for issue_path in issue_paths:
         try:
             issue = json.loads(issue_path.read_text(encoding="utf-8"))
@@ -311,17 +596,28 @@ def previous_category_updates(
         cards = issue.get("cards")
         if not isinstance(cards, list):
             continue
-        return [
-            {
-                "date": issue.get("issue_date"),
-                "title": card.get("title"),
-                "summary": card.get("summary"),
-            }
-            for card in cards
-            if isinstance(card, dict)
-            and str(card.get("category", "")) == category_label
-        ]
-    return []
+        for card in cards:
+            if (
+                not isinstance(card, dict)
+                or str(card.get("category", "")) != category_label
+            ):
+                continue
+            title = compact_text(card.get("title", ""), 180)
+            summary = compact_text(card.get("summary", ""), 700)
+            signature = state.copy_signature(f"{title} {summary}")
+            if not title or signature in seen:
+                continue
+            updates.append(
+                {
+                    "date": issue.get("issue_date"),
+                    "title": title,
+                    "summary": summary,
+                }
+            )
+            seen.add(signature)
+            if len(updates) >= max_updates:
+                return updates
+    return updates
 
 
 def model_payload_bytes(
@@ -622,6 +918,29 @@ def synchronize_card_source_links(card: dict[str, Any]) -> dict[str, Any]:
     return card
 
 
+def cards_describe_same_information(
+    left: dict[str, Any],
+    right: dict[str, Any],
+) -> bool:
+    if core.same_material_event(left.get("title"), right.get("title")):
+        return True
+    if state.text_overlap(str(left.get("title", "")), str(right.get("title", ""))) < 2:
+        return False
+    left_facts = (
+        left.get("detail", {}).get("summary_basis", {}).get("confirmed_facts", [])
+    )
+    right_facts = (
+        right.get("detail", {}).get("summary_basis", {}).get("confirmed_facts", [])
+    )
+    if not left_facts or not right_facts:
+        return False
+    matching = sum(
+        any(state.materially_same_fact(str(fact), str(other)) for other in right_facts)
+        for fact in left_facts
+    )
+    return matching >= min(len(left_facts), len(right_facts))
+
+
 def merge_repeated_cards(cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
     merged: list[dict[str, Any]] = []
     priority_rank = {"top": 0, "priority": 1, "standard": 2}
@@ -632,7 +951,7 @@ def merge_repeated_cards(cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 candidate
                 for candidate in merged
                 if candidate.get("category") == card.get("category")
-                and core.same_material_event(candidate.get("title"), card.get("title"))
+                and cards_describe_same_information(candidate, card)
             ),
             None,
         )
@@ -902,17 +1221,20 @@ def edit_evidence(
         log_fields: Callable[[Any], dict[str, Any]],
         fallback_on_validation: bool,
     ) -> tuple[Any | None, dict[str, Any], bool]:
-        quality_model = str(
-            models.load_config().get("extraction", {}).get("quality_model", "")
-        )
         feedback: dict[str, Any] = {}
         last_result: Any | None = None
         successful_response_seen = False
+        response_count = 0
         for model_name in model_chain:
+            if response_count >= MAX_MODEL_RESPONSES_PER_SCOPE:
+                break
             if model_name in unavailable_models:
                 continue
             attempt_messages = messages
-            max_attempts = validation_attempt_limit(successful_response_seen)
+            max_attempts = min(
+                validation_attempt_limit(successful_response_seen),
+                MAX_MODEL_RESPONSES_PER_SCOPE - response_count,
+            )
             request_failed = False
             for attempt in range(1, max_attempts + 1):
                 try:
@@ -951,6 +1273,7 @@ def edit_evidence(
                         break
                     raise
                 successful_response_seen = True
+                response_count += 1
                 result, accepted, feedback = validate(raw)
                 last_result = result
                 print(
@@ -1088,12 +1411,13 @@ def edit_evidence(
         if not isinstance(entry, dict) or not isinstance(entry.get("records"), list):
             fail(f"Evidence records are missing: {label}")
         records = [record for record in entry["records"] if isinstance(record, dict)]
+        previous_updates = previous_category_updates(state_root, issue_date, label)
         selected_event_groups = publication_candidate_groups(
             category,
             issue_date,
             records,
+            previous_updates=previous_updates,
         )
-        previous_updates = previous_category_updates(state_root, issue_date, label)
         chunks = publication_record_chunks(
             category,
             issue_date,
@@ -1230,7 +1554,9 @@ def edit_evidence(
                         [str(event["id"]) for event in request_payload["events"]]
                     ),
                     response_schema_name="night_signal_editor_result",
-                    max_output_tokens=None,
+                    max_output_tokens=summary_output_budget(
+                        len(request_records_value)
+                    ),
                     validate=validate_summary,
                     correction=lambda value: (
                         "Return the entire corrected JSON for the supplied events. Apply "
@@ -1580,6 +1906,64 @@ def self_test() -> None:
             "watch_topic_ids": ["ipo_financing"],
         },
     ]
+    if novelty_numbers("2099年1月2日更新、利用上限は2倍") != {"2"}:
+        fail("Editor novelty comparison treated a date stamp as new information")
+    if summary_output_budget(1) != 1_600 or summary_output_budget(6) != 4_000:
+        fail("Editor summary output budget is outside its bounded range")
+    previous_openai_update = [
+        {
+            "date": "2099-01-01",
+            "title": "OpenAIが新モデルを公開",
+            "summary": "OpenAIは新モデルを公開し、企業向け制御を追加した。",
+        }
+    ]
+    if publication_candidate_groups(
+        review_category,
+        "2099-01-02",
+        [review_records[0]],
+        previous_updates=previous_openai_update,
+    ):
+        fail("Editor sent an unchanged prior update back to the model")
+    novel_limit_update = {
+        **review_records[0],
+        "url": "https://openai.com/release-limit-update",
+        "title": "OpenAIが新モデルを更新、利用上限を2倍に拡大",
+        "excerpt": "OpenAIは新モデルの利用上限を2倍に拡大した。",
+    }
+    if not publication_candidate_groups(
+        review_category,
+        "2099-01-02",
+        [novel_limit_update],
+        previous_updates=previous_openai_update,
+    ):
+        fail("Editor removed a prior event that contained a new material number")
+    duplicate_sources = [
+        {
+            **review_records[0],
+            "url": f"https://example.com/openai-release-{index}",
+            "label": f"Release Source {index}",
+        }
+        for index in range(5)
+    ]
+    if len(bounded_event_records(duplicate_sources)) != MAX_EDITOR_RECORDS_PER_EVENT:
+        fail("Editor retained too many duplicate source records for one event")
+    budget_groups = [
+        [
+            {
+                **review_records[0],
+                "url": f"https://example.com/openai-event-{index}",
+                "label": f"Source {index}",
+                "title": f"OpenAIが製品機能{index}を公開",
+                "excerpt": f"OpenAIは製品機能{index}を公開し、対象条件を発表した。",
+                "watch_topic_ids": [
+                    "product_release" if index % 2 == 0 else "ipo_financing"
+                ],
+            }
+        ]
+        for index in range(20)
+    ]
+    if len(bounded_candidate_groups(review_category, budget_groups)) != 3:
+        fail("Editor dynamic candidate budget did not stay at watch topics plus one")
     bridging_records = [
         review_records[0],
         {

@@ -17,7 +17,7 @@ from typing import Any
 CONFIG_PATH = Path(__file__).resolve().parents[1] / "config" / "night_signal_models.json"
 MODELS_URL = "https://models.github.ai/inference/chat/completions"
 DEFAULT_TIMEOUT_SECONDS = 90
-DEFAULT_RETRIES = 3
+DEFAULT_RETRIES = 2
 DEFAULT_MAX_TOKENS = 8000
 USER_AGENT = (
     "Mozilla/5.0 (compatible; NightSignalBot/1.0; "
@@ -169,6 +169,9 @@ Exclude an event only when it duplicates a previous event, is navigation/backgro
 about the wrong category/entity, or has no material update. A newly published analysis of
 an old fact is publishable only when the
 new question, evidence, and attributed conclusion are stated; otherwise exclude it.
+Company overviews, investment/how-to guides, viewing guides, and freshly indexed recaps
+that add no new decision, result, amount, date, milestone, or attributed conclusion are
+background_or_navigation or no_material_update, not important updates.
 Do not repeat the title or a point, and do not add publisher metadata, generic importance,
 common knowledge, unsupported impact or background, inferred unknowns, or follow-up
 boilerplate. Use only supplied evidence."""
@@ -256,7 +259,10 @@ def request(
     errors: list[str] = []
     rate_limit_waits: list[int] = []
     timeout = int(os.getenv("NIGHT_SIGNAL_MODEL_TIMEOUT_SECONDS", DEFAULT_TIMEOUT_SECONDS))
-    retries = int(os.getenv("NIGHT_SIGNAL_MODEL_RETRIES", DEFAULT_RETRIES))
+    retries = max(
+        1,
+        min(2, int(os.getenv("NIGHT_SIGNAL_MODEL_RETRIES", DEFAULT_RETRIES))),
+    )
     configured_max_tokens = int(
         os.getenv("NIGHT_SIGNAL_MODEL_MAX_TOKENS", DEFAULT_MAX_TOKENS)
     )
@@ -373,6 +379,8 @@ def request(
 
 
 def self_test() -> None:
+    if DEFAULT_RETRIES != 2:
+        raise SystemExit("model transport retries must be limited to one retry")
     chain = extraction_models()
     if not chain:
         raise SystemExit("extraction model chain is empty")

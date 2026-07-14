@@ -130,9 +130,16 @@ PUBLICATION_EVENT_RE = re.compile(
     r"会談|協議|出資|資金調達|上場|申請|"
     r"上昇|下落|急落|増加|減少|改善|悪化|達成|突破|判明|結果|決算|"
     r"CPI|GDP|失業率|雇用統計|利益|売上|"
-    r"announc|agree|sign|launch|release|update|acqui|merge|appoint|"
+    r"\b(?:announc|agree|sign|launch|release|update|acqui|merge|appoint|"
     r"resign|join|leave|delay|cancel|approve|invest|raise|filed|"
-    r"rose|fell|increase|decrease)",
+    r"rose|fell|increase|decrease)[A-Za-z]*\b)",
+    re.I,
+)
+INVESTMENT_GUIDE_RE = state_contract.INVESTMENT_GUIDE_RE
+NON_NEWS_GUIDE_RE = state_contract.NON_NEWS_GUIDE_RE
+RECAP_EXPLAINER_RE = re.compile(
+    r"(最新動向|見通し|まとめ|解説|基本情報|沿革|ガイド|"
+    r"what\s+to\s+know|explainer|overview|history|outlook)",
     re.I,
 )
 DISCOVERY_CHANGE_TERMS = [
@@ -646,15 +653,91 @@ def editor_candidate_boundary(
     *,
     source_label: str = "",
 ) -> bool:
-    """Apply only structural eligibility before the Editor's semantic review."""
+    """Apply the shared material-event boundary before model review."""
     text = f"{title} {excerpt}"
     return bool(
         title
         and excerpt
         and not state_contract.navigation_shell_text(text)
         and not state_contract.NO_UPDATE_ASSERTION_RE.search(text)
+        and material_event_candidate(title, excerpt)
         and category_identity_ok(category_label, f"{source_label} {title}", excerpt)
     )
+
+
+def material_event_candidate(title: str, excerpt: str) -> bool:
+    """Reject generic descriptions while preserving concrete changes and analysis."""
+    title_text = reader_facing_text(title, 500)
+    body_text = reader_facing_text(excerpt, 2400)
+    if state_contract.GENERIC_ENTITY_OVERVIEW_RE.search(title_text):
+        return False
+    combined = f"{title_text} {body_text}"
+    if INVESTMENT_GUIDE_RE.search(combined) or NON_NEWS_GUIDE_RE.search(combined):
+        return False
+    return bool(
+        PUBLICATION_EVENT_RE.search(combined)
+        or MATERIAL_SIGNAL_RE.search(combined)
+        or SPORTS_RESULT_RE.search(combined)
+        or (
+            state_contract.ANALYSIS_HEADLINE_RE.search(title_text)
+            and state_contract.ANALYSIS_REASONING_RE.search(body_text)
+        )
+    )
+
+
+def editor_source_text(record: dict[str, Any], limit: int) -> str:
+    """Select a bounded set of material sentences for the Editor."""
+    text = reader_facing_text(
+        str(record.get("excerpt") or record.get("evidence") or ""),
+        8000,
+    )
+    text = compact_text(
+        state_contract.GENERIC_ENTITY_OVERVIEW_RE.sub(" ", text).strip(
+            " 。.!?！？"
+        ),
+        8000,
+    )
+    if len(text) <= limit:
+        return text
+    title = record_public_title(record)
+    sentences = [
+        sentence.strip()
+        for sentence in sentence_parts(text)
+        if sentence.strip()
+        and not state_contract.navigation_shell_text(sentence)
+    ]
+    if not sentences:
+        return compact_text(text, limit)
+
+    def sentence_score(indexed: tuple[int, str]) -> tuple[int, int]:
+        index, sentence = indexed
+        score = (
+            5 * bool(PUBLICATION_EVENT_RE.search(sentence))
+            + 4 * bool(MATERIAL_SIGNAL_RE.search(sentence))
+            + 3 * bool(SPORTS_RESULT_RE.search(sentence))
+            + 2 * bool(state_contract.ANALYSIS_REASONING_RE.search(sentence))
+            + 2 * min(2, state_contract.text_overlap(title, sentence))
+            + min(3, len(re.findall(r"\d+(?:\.\d+)?", sentence)))
+            + int(index < 2)
+        )
+        return score, -index
+
+    chosen: dict[int, str] = {}
+    used = 0
+    for index, sentence in sorted(
+        enumerate(sentences),
+        key=sentence_score,
+        reverse=True,
+    ):
+        remaining = limit - used - int(bool(chosen))
+        if remaining < 80:
+            break
+        if len(sentence) > remaining:
+            head = max(1, remaining * 2 // 3)
+            sentence = f"{sentence[:head]} {sentence[-(remaining - head):]}"
+        chosen[index] = compact_text(sentence, remaining)
+        used += len(chosen[index])
+    return compact_text(" ".join(chosen[index] for index in sorted(chosen)), limit)
 
 
 def record_has_only_headline(title: str, record: dict[str, Any]) -> bool:
@@ -1960,6 +2043,18 @@ def record_document_is_current(record: dict[str, Any], issue_date: str) -> bool:
         for event_date in title_dates
     ):
         return False
+    lead = reader_facing_text(str(record.get("excerpt", "")), 520)
+    lead_dates = explicit_title_event_dates(lead, issue_day)
+    if (
+        not title_dates
+        and RECAP_EXPLAINER_RE.search(str(record.get("title", "")))
+        and lead_dates
+        and all(
+            event_date <= issue_day and (issue_day - event_date).days > 7
+            for event_date in lead_dates
+        )
+    ):
+        return False
     document_date = embedded_document_date(text)
     url_date = url_document_date(str(record.get("url", "")))
     if document_date and not 0 <= (issue_day - document_date).days <= 7:
@@ -2286,6 +2381,7 @@ def discovery_record_is_material(record: dict[str, Any]) -> bool:
         and excerpt
         and not state_contract.navigation_shell_text(text)
         and not state_contract.NO_UPDATE_ASSERTION_RE.search(text)
+        and material_event_candidate(title, excerpt)
     )
 
 
@@ -2312,6 +2408,7 @@ def remaining_editor_coverage_gaps(
     """Keep only material topic gaps that lack a body-rich peer for every event."""
     remaining: list[str] = []
     categories = bundle.get("categories", {})
+    issue_date = str(bundle.get("issue_date", ""))
     for gap in report.get("editor_coverage_gaps", []):
         label, separator, topic = str(gap).partition("/")
         entry = categories.get(label) if isinstance(categories, dict) else None
@@ -2340,8 +2437,20 @@ def remaining_editor_coverage_gaps(
                 for query_id in record.get("discovery_query_ids", [])
             }
             and discovery_record_is_material(record)
+            and bool(issue_date)
+            and valid_date(record.get("published_date"), issue_date)
+            and record_document_is_current(record, issue_date)
+            and editor_candidate_boundary(
+                label,
+                record_public_title(record),
+                str(record.get("excerpt") or ""),
+                source_label=str(record.get("label", "")),
+            )
         ]
-        if not candidates or not all(
+        # Discovery counters are historical collection metadata. If every URL
+        # they counted now fails the current material boundary, the Editor has
+        # no honest coverage obligation and should not trigger recollection.
+        if candidates and not all(
             material_candidate_has_resolved_peer(candidate, records)
             for candidate in candidates
         ):
@@ -2571,7 +2680,7 @@ def category_prompt(
     records: list[dict[str, Any]],
 ) -> dict[str, Any]:
     selected = editor_evidence_records(category, issue_date, records)
-    body_limit = 8000
+    body_limit = 1200
 
     def build_payload(limit: int) -> dict[str, Any]:
         events: list[dict[str, Any]] = []
@@ -2603,14 +2712,9 @@ def category_prompt(
                     "source": record.get("label"),
                     "title": title,
                     "evidence_depth": evidence_depth,
-                    "body": (
-                        reader_facing_text(
-                            str(record.get("excerpt") or record.get("evidence") or ""),
-                            limit,
-                        )
-                        if evidence_depth == "body"
-                        else ""
-                    ),
+                    "body": editor_source_text(record, limit)
+                    if evidence_depth == "body"
+                    else "",
                 }
             )
         return {
@@ -3170,6 +3274,10 @@ def collect_evidence(issue_date: str) -> dict[str, Any]:
 
 
 def self_test() -> None:
+    if PUBLICATION_EVENT_RE.search("Emergency Alert Today"):
+        fail("English event matching treated Emergency as a merger")
+    if not PUBLICATION_EVENT_RE.search("SpaceX launches a new vehicle"):
+        fail("English event matching lost a real launch")
     wide_category = {
         "label": "CoverageTest",
         "axes": [{"id": "adjacent", "terms": ["axis-only-term"]}],
@@ -3451,6 +3559,59 @@ def self_test() -> None:
     }
     if publication_evidence_record(music_category, "2099-01-03", no_update_record):
         fail("a no-update statement was treated as an important update")
+    openai_category = configured_category_contracts()["OpenAI"]
+    generic_overview_record = {
+        **navigation_record,
+        "label": "OpenAI Guide",
+        "url": "https://example.com/openai-overview",
+        "source_class": "discovered_media",
+        "title": "OpenAIの基本情報と提供サービス",
+        "excerpt": (
+            "OpenAIは人工知能研究会社であり、"
+            "ChatGPTなどのサービスを提供している。"
+        ),
+    }
+    if publication_evidence_record(
+        openai_category,
+        "2099-01-03",
+        generic_overview_record,
+    ):
+        fail("a generic entity overview reached publication Evidence")
+    ipo_investment_guide = {
+        **generic_overview_record,
+        "url": "https://example.com/how-to-invest-openai-ipo",
+        "title": "OpenAI IPOへの参加方法と上場見通し",
+        "excerpt": (
+            "OpenAIは2098年12月8日にIPO申請を行った。"
+            "プレIPOのセカンダリーマーケット、AIテーマ型ETF、"
+            "IPO後の直接買い付けを解説する。"
+        ),
+    }
+    if publication_evidence_record(
+        openai_category,
+        "2099-01-03",
+        ipo_investment_guide,
+    ):
+        fail("an IPO investment guide reached publication Evidence")
+    viewing_guide = {
+        **generic_overview_record,
+        "url": "https://example.com/how-to-watch-launch",
+        "title": "SpaceX launch: how to watch live",
+        "excerpt": "SpaceX will livestream its next launch; here is where to watch.",
+    }
+    if discovery_record_is_material(viewing_guide):
+        fail("a viewing guide was treated as a material discovery event")
+    long_update = {
+        **generic_overview_record,
+        "title": "OpenAIが監査機能を提供開始",
+        "excerpt": (
+            "一般的な背景説明が続く。" * 120
+            + "OpenAIは監査機能を提供開始し、対象を42社に拡大した。"
+        ),
+    }
+    bounded_update = editor_source_text(long_update, 420)
+    if "監査機能" not in bounded_update or "42社" not in bounded_update:
+        fail("bounded Editor input lost a material sentence near the end")
     headline_record = {
         **navigation_record,
         "label": "音楽情報サイト",
@@ -4177,12 +4338,12 @@ def self_test() -> None:
         "Bリーグでの取り組みを開始する。",
     ):
         fail("Brex category accepted another B.LEAGUE club")
-    if not editor_candidate_boundary(
+    if editor_candidate_boundary(
         "Honda",
         "Hondaの夏休み体験授業でF1を特別展示",
         "Hondaは夏休み体験授業でF1を特別展示する。",
     ):
-        fail("semantic value judgment ran before the Editor")
+        fail("a non-material activity announcement reached the Editor")
     if not editor_candidate_boundary(
         "Honda",
         "2026年5月の生産・販売・輸出実績",
@@ -4321,7 +4482,7 @@ def self_test() -> None:
         ),
         (
             "semantic-background-for-editor",
-            True,
+            False,
             "Honda 株価履歴と過去データ",
             "Honda designs, manufactures and launches vehicles worldwide. Stock Price and News.",
         ),

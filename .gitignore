@@ -4,6 +4,7 @@ safari_export/
 .DS_Store
 __pycache__/
 *.pyc
+state/*/editor_checkpoint.json
 
 # Private Safari export artifacts. Never publish these.
 **/パスワード.csv
@@ -11,4 +12,3 @@ __pycache__/
 **/支払い用カード.json
 **/支払い用カード.json
 **/履歴.json
-

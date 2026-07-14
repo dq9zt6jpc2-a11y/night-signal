@@ -10,7 +10,7 @@ on:
       reuse_evidence:
         description: "Resume the canonical pipeline from a valid saved Evidence checkpoint."
         required: false
-        default: false
+        default: true
         type: boolean
       dry_run:
         description: "Run collection and audits without committing."
@@ -33,7 +33,35 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  owner_guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      proceed: ${{ steps.guard.outputs.proceed }}
+      duplicate_of: ${{ steps.guard.outputs.duplicate_of }}
+    steps:
+      - name: Checkout owner guard
+        uses: actions/checkout@v5
+
+      - name: Guard against a queued duplicate owner
+        id: guard
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python3 scripts/night_signal_run_guard.py \
+            --repository "$GITHUB_REPOSITORY" \
+            --workflow unattended-collection.yml \
+            --run-id "$GITHUB_RUN_ID" \
+            --github-output "$GITHUB_OUTPUT"
+
+      - name: Report duplicate owner skip
+        if: ${{ steps.guard.outputs.proceed != 'true' }}
+        run: |
+          echo "Skipped queued duplicate of owner run ${{ steps.guard.outputs.duplicate_of }}."
+
   collect:
+    needs: owner_guard
+    if: ${{ needs.owner_guard.outputs.proceed == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 105
     env:
@@ -56,6 +84,19 @@ jobs:
         run: |
           ISSUE_DATE="$(python3 scripts/night_signal_publish.py --resolve-issue-date --event-name "$GITHUB_EVENT_NAME" --requested-issue-date "${REQUESTED_ISSUE_DATE:-}")"
           echo "ISSUE_DATE=$ISSUE_DATE" >> "$GITHUB_ENV"
+
+      - name: Resolve recovery mode
+        id: recovery
+        env:
+          REQUESTED_REUSE: ${{ inputs.reuse_evidence }}
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == "schedule" ]]; then
+            echo "reuse=false" >> "$GITHUB_OUTPUT"
+          elif [[ "${REQUESTED_REUSE:-true}" == "false" ]]; then
+            echo "reuse=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "reuse=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Evaluate publication window
         id: timing
@@ -86,7 +127,7 @@ jobs:
 
       - name: Locate latest Evidence checkpoint
         id: checkpoint
-        if: ${{ steps.current_publication.outputs.published != 'true' && steps.timing.outputs.action == 'run' && inputs.reuse_evidence == true }}
+        if: ${{ steps.current_publication.outputs.published != 'true' && steps.timing.outputs.action == 'run' && steps.recovery.outputs.reuse == 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
           ARTIFACT_NAME: night-signal-state-${{ env.ISSUE_DATE }}
@@ -114,7 +155,7 @@ jobs:
         if: ${{ steps.current_publication.outputs.published != 'true' && steps.timing.outputs.action == 'run' }}
         timeout-minutes: 70
         env:
-          REUSE_EVIDENCE: ${{ inputs.reuse_evidence || false }}
+          REUSE_EVIDENCE: ${{ steps.recovery.outputs.reuse }}
         run: |
           if [[ "$REUSE_EVIDENCE" == "true" ]]; then
             python3 scripts/night_signal_publish.py "$ISSUE_DATE" --reuse-evidence --verification-profile deploy
@@ -133,6 +174,7 @@ jobs:
             state/${{ env.ISSUE_DATE }}/evidence.json
             state/${{ env.ISSUE_DATE }}/editor_checkpoint.json
             state/${{ env.ISSUE_DATE }}/issue.json
+            state/${{ env.ISSUE_DATE }}/runtime_checkpoint.json
           if-no-files-found: warn
           retention-days: 2
           compression-level: 6

@@ -66,6 +66,7 @@ def main() -> int:
             fail(f"workflow bypasses the canonical pipeline: {direct_owner}")
     if not ordered(
         collection,
+        "Guard against a queued duplicate owner",
         "Evaluate publication window",
         "Detect an already verified publication",
         "Enforce publication deadline",
@@ -93,15 +94,29 @@ def main() -> int:
     if not ordered(
         collection,
         "reuse_evidence:",
+        "default: true",
+        "Resolve recovery mode",
+        'if [[ "$GITHUB_EVENT_NAME" == "schedule" ]]',
+        'echo "reuse=false"',
         "Locate latest Evidence checkpoint",
-        "inputs.reuse_evidence == true",
-        "REUSE_EVIDENCE: ${{ inputs.reuse_evidence || false }}",
+        "steps.recovery.outputs.reuse == 'true'",
+        "REUSE_EVIDENCE: ${{ steps.recovery.outputs.reuse }}",
         'if [[ "$REUSE_EVIDENCE" == "true" ]]',
         'python3 scripts/night_signal_publish.py "$ISSUE_DATE" --reuse-evidence',
     ):
-        fail("Evidence reuse must be explicit recovery, never a scheduled freshness shortcut")
+        fail("manual recovery must reuse checkpoints while scheduled collection stays fresh")
+    if (
+        "scripts/night_signal_run_guard.py" not in collection
+        or "needs: owner_guard" not in collection
+        or "needs.owner_guard.outputs.proceed == 'true'" not in collection
+        or "Report duplicate owner skip" not in collection
+    ):
+        fail("queued duplicate owner runs must stop before model work")
     if "actions/upload-artifact@v7.0.1" not in collection or "actions/download-artifact@v8.0.1" not in collection:
         fail("a failed first attempt must leave a reusable Evidence")
+    for checkpoint_name in ("editor_checkpoint.json", "runtime_checkpoint.json"):
+        if checkpoint_name not in collection:
+            fail(f"recovery artifact is missing {checkpoint_name}")
     if "models: read" not in collection or "contents: write" not in collection or "actions: write" not in collection:
         fail("workflow permissions do not match collection and publication duties")
     if "git push origin HEAD:main" not in collection or "gh workflow run pages.yml" not in collection:

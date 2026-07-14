@@ -172,6 +172,33 @@ GENERIC_CONTEXT_RE = re.compile(
     r"対象範囲、実施時期と継続性"
     r").{0,120}判断する材料になる"
 )
+GENERIC_ENTITY_OVERVIEW_RE = re.compile(
+    r"(?:会社概要|企業プロフィール|組織概要|株価履歴|過去データ|価格情報|"
+    r"company\s+profile|stock\s+price(?:\s+and\s+news)?|price\s+history)|"
+    r"(?:^|[。.!?！？]\s*)[^。.!?！？]{1,80}(?:は|とは)"
+    r"[^。.!?！？]{0,100}(?:会社|企業|組織|研究機関)"
+    r"(?:であり|で、|であって)[^。.!?！？]{0,100}"
+    r"(?:サービス|製品|事業)[^。.!?！？]{0,50}"
+    r"(?:提供|展開|開発)している|"
+    r"\b[A-Z][A-Za-z0-9 .&'-]{1,80}\s+(?:is|are)\s+"
+    r"(?:an?\s+|the\s+)?[^.!?]{0,80}\b"
+    r"(?:company|organization|research lab|provider)\b[^.!?]{0,120}"
+    r"\b(?:provides?|offers?|develops?|operates?)\b",
+    re.I,
+)
+INVESTMENT_GUIDE_RE = re.compile(
+    r"(IPO(?:への)?参加方法|IPOに参加|投資(?:する)?方法|買い方|購入方法|"
+    r"プレIPO|プレ・IPO|セカンダリー(?:マーケット|市場)|"
+    r"テーマ型ETF|IPO後の直接買い付け|"
+    r"how\s+to\s+(?:buy|invest)|ways?\s+to\s+invest|"
+    r"pre[- ]?IPO|secondary\s+market)",
+    re.I,
+)
+NON_NEWS_GUIDE_RE = re.compile(
+    r"(how\s+to\s+watch|where\s+to\s+watch|watch\s+live|"
+    r"live\s*stream|livestream|視聴方法|視聴する方法|ライブ配信予定|放送予定)",
+    re.I,
+)
 ANALYSIS_HEADLINE_RE = re.compile(
     r"(^|[【\[])(?:解説|分析|検証|日経平均の正体)|"
     r"(?:正体|裏側|バブルの危険|なぜ|どう見る|読み解く|徹底解説)",
@@ -444,6 +471,12 @@ def public_render_copy_violations(text: str, *, kind: str) -> list[str]:
         violations.append("no-update statement exposed as an important update")
     if kind == "summary" and GENERIC_CONTEXT_RE.search(stripped):
         violations.append("generic context template exposed as article substance")
+    if kind == "summary" and GENERIC_ENTITY_OVERVIEW_RE.search(stripped):
+        violations.append("generic entity overview exposed as article substance")
+    if INVESTMENT_GUIDE_RE.search(stripped):
+        violations.append("investment guide exposed as an important update")
+    if NON_NEWS_GUIDE_RE.search(stripped):
+        violations.append("viewing guide exposed as an important update")
     return violations
 
 
@@ -1410,6 +1443,21 @@ def self_test() -> None:
         kind="summary",
     ):
         fail("public-copy validation accepted a no-update summary")
+    if not public_render_copy_violations(
+        "OpenAIは人工知能研究会社であり、ChatGPTなどのサービスを提供している。",
+        kind="summary",
+    ):
+        fail("public-copy validation accepted a generic entity overview")
+    if not public_render_copy_violations(
+        "OpenAI IPOへの参加方法としてプレIPO市場とETFを紹介する。",
+        kind="summary",
+    ):
+        fail("public-copy validation accepted an investment guide")
+    if not public_render_copy_violations(
+        "SpaceXの次回打ち上げをライブ視聴する方法を紹介する。",
+        kind="summary",
+    ):
+        fail("public-copy validation accepted a viewing guide")
     if not public_render_copy_violations("ホンダEV事業再編の分析（）", kind="title"):
         fail("public-copy validation accepted empty source brackets")
     if not navigation_shell_text(
