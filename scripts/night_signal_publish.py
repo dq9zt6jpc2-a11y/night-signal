@@ -172,8 +172,28 @@ def issue_matches_evidence(issue_date: str) -> bool:
     return True
 
 
-def collect_and_build(issue_date: str, *, reuse_evidence: bool) -> None:
+def collect_and_build(
+    issue_date: str,
+    *,
+    reuse_evidence: bool,
+    reprocess_existing: bool = False,
+) -> None:
     evidence_is_reusable = reuse_evidence and fresh_evidence(issue_date)
+    if reprocess_existing:
+        if not evidence_is_reusable or not issue_matches_evidence(issue_date):
+            fail(
+                "deterministic reprocessing requires a validated issue and fresh "
+                "reusable Evidence"
+            )
+        run(
+            [
+                sys.executable,
+                "scripts/night_signal_editor.py",
+                issue_date,
+                "--postprocess-existing",
+            ]
+        )
+        return
     if evidence_is_reusable and issue_matches_evidence(issue_date):
         return
     if not (os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")):
@@ -412,6 +432,7 @@ def prepare(
     issue_date: str,
     *,
     reuse_evidence: bool,
+    reprocess_existing: bool,
     deploy_existing: bool,
     verification_profile: str,
 ) -> dict[str, Any]:
@@ -428,7 +449,11 @@ def prepare(
             current_stage = "plan_written"
             runtime.write_checkpoint(issue_date, current_stage, "completed", "current collection contract loaded", STATE_ROOT)
             current_stage = "collection_complete"
-            collect_and_build(issue_date, reuse_evidence=reuse_evidence)
+            collect_and_build(
+                issue_date,
+                reuse_evidence=reuse_evidence,
+                reprocess_existing=reprocess_existing,
+            )
             runtime.write_checkpoint(issue_date, current_stage, "completed", "Evidence written", STATE_ROOT)
             current_stage = "story_build_complete"
             runtime.write_checkpoint(issue_date, current_stage, "completed", "important updates and manifest written", STATE_ROOT)
@@ -479,6 +504,11 @@ def main() -> int:
     parser.add_argument("--event-name", default="")
     parser.add_argument("--requested-issue-date", default="")
     parser.add_argument("--reuse-evidence", action="store_true")
+    parser.add_argument(
+        "--reprocess-existing",
+        action="store_true",
+        help="re-edit reusable Evidence with checkpoints only and make no model request",
+    )
     parser.add_argument("--deploy-existing", action="store_true")
     parser.add_argument("--public-audit", action="store_true")
     parser.add_argument("--self-test", action="store_true")
@@ -499,6 +529,10 @@ def main() -> int:
         return 0
     if args.reuse_evidence and args.deploy_existing:
         fail("--reuse-evidence and --deploy-existing are mutually exclusive")
+    if args.reprocess_existing and not args.reuse_evidence:
+        fail("--reprocess-existing requires --reuse-evidence")
+    if args.reprocess_existing and args.deploy_existing:
+        fail("--reprocess-existing and --deploy-existing are mutually exclusive")
     if args.public_audit:
         result = public_audit(args.issue_date)
     else:
@@ -506,6 +540,7 @@ def main() -> int:
         result = prepare(
             args.issue_date,
             reuse_evidence=args.reuse_evidence,
+            reprocess_existing=args.reprocess_existing,
             deploy_existing=args.deploy_existing,
             verification_profile=verification_profile,
         )

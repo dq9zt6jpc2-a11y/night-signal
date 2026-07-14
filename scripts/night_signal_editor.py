@@ -1120,6 +1120,57 @@ def merge_repeated_cards(cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return merged
 
 
+def postprocess_existing_issue(
+    issue_date: str,
+    state_root: Path,
+) -> dict[str, Any]:
+    """Reapply deterministic public-copy rules without entering a model path."""
+    issue_path = state_root / issue_date / "issue.json"
+    evidence_path = state_root / issue_date / "evidence.json"
+    try:
+        evidence = read_evidence(evidence_path)
+        evidence_store.validate_bundle(evidence, issue_date)
+        issue = json.loads(issue_path.read_text(encoding="utf-8"))
+        state.validate_issue_state(issue, issue_path, evidence)
+    except evidence_store.EvidenceContractError as exc:
+        fail(f"cannot postprocess an invalid Evidence checkpoint: {exc}")
+    except (FileNotFoundError, json.JSONDecodeError) as exc:
+        fail(f"cannot postprocess an invalid issue checkpoint: {exc}")
+
+    cards = issue.get("cards")
+    if not isinstance(cards, list) or not all(
+        isinstance(card, dict) for card in cards
+    ):
+        fail("cannot postprocess an issue without validated cards")
+    before = len(cards)
+    ordered_categories = list(category_config())
+    rebuilt = [
+        card
+        for category in ordered_categories
+        for card in merge_repeated_cards(
+            [
+                candidate
+                for candidate in cards
+                if candidate.get("category") == category
+            ]
+        )
+    ]
+    unexpected = [
+        card for card in cards if card.get("category") not in ordered_categories
+    ]
+    if unexpected:
+        fail("cannot postprocess cards outside the configured category contract")
+    issue["cards"] = rebuilt
+    state.validate_issue_state(issue, issue_path, evidence)
+    write_json_atomic(issue_path, issue)
+    return {
+        "issue_date": issue_date,
+        "cards_before": before,
+        "cards_after": len(rebuilt),
+        "model_requests": 0,
+    }
+
+
 def checkpoint_cards(checkpoint: dict[str, Any]) -> list[dict[str, Any]]:
     """Return each previously validated card once, independent of old chunking."""
     chunks = checkpoint.get("chunks", {})
@@ -2489,10 +2540,24 @@ def main() -> int:
         help="defaults to state/YYYY-MM-DD/evidence.json",
     )
     parser.add_argument("--state-root", type=Path, default=STATE_ROOT)
+    parser.add_argument(
+        "--postprocess-existing",
+        action="store_true",
+        help="reapply deterministic card rules to a validated issue without models",
+    )
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
     if args.self_test:
         self_test()
+        return 0
+    if args.postprocess_existing:
+        print(
+            json.dumps(
+                postprocess_existing_issue(args.issue_date, args.state_root),
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
         return 0
     token = os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")
     if not token:
@@ -2500,7 +2565,12 @@ def main() -> int:
     evidence = args.evidence or args.state_root / args.issue_date / "evidence.json"
     print(
         json.dumps(
-            edit_evidence(args.issue_date, evidence, args.state_root, token),
+            edit_evidence(
+                args.issue_date,
+                evidence,
+                args.state_root,
+                token,
+            ),
             ensure_ascii=False,
             indent=2,
         )

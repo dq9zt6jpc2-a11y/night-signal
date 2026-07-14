@@ -13,6 +13,8 @@ import publication_timing as timing
 ROOT = Path(__file__).resolve().parents[1]
 PAGES = ROOT / ".github" / "workflows" / "pages.yml"
 COLLECTION = ROOT / ".github" / "workflows" / "unattended-collection.yml"
+PUBLISH_DRIVER = ROOT / "scripts" / "night_signal_publish.py"
+EDITOR = ROOT / "scripts" / "night_signal_editor.py"
 
 
 def fail(message: str) -> None:
@@ -35,6 +37,8 @@ def ordered(text: str, *labels: str) -> bool:
 def main() -> int:
     pages = PAGES.read_text(encoding="utf-8")
     collection = COLLECTION.read_text(encoding="utf-8")
+    publish_driver = PUBLISH_DRIVER.read_text(encoding="utf-8")
+    editor = EDITOR.read_text(encoding="utf-8")
     policy = timing.load_policy()
     if cron_minutes(pages) or re.search(r"\n\s+push:", pages):
         fail("Pages must be dispatch-only")
@@ -56,8 +60,11 @@ def main() -> int:
         or f"timeout-minutes: {policy.pages_timeout_minutes}" not in collection
     ):
         fail("collection and job runtime must be bounded")
-    if collection.count('python3 scripts/night_signal_publish.py "$ISSUE_DATE"') != 2:
-        fail("fresh and Evidence-reuse branches must both use the canonical pipeline")
+    if collection.count('python3 scripts/night_signal_publish.py "$ISSUE_DATE"') != 3:
+        fail(
+            "fresh, Evidence-reuse, and checkpoint-only reprocessing must use "
+            "the canonical pipeline"
+        )
     for direct_owner in (
         "python3 scripts/night_signal_collect.py",
         "python3 scripts/night_signal_editor.py",
@@ -70,6 +77,7 @@ def main() -> int:
         "Evaluate publication window",
         "Detect an already verified publication",
         "Enforce publication deadline",
+        "Resolve build decision",
         "Audit current model catalog",
         "Restore Evidence checkpoint",
         "Build audited issue",
@@ -79,15 +87,23 @@ def main() -> int:
         "Wait for Pages publication",
     ):
         fail("collection, checkpoint, commit, and publication stages are out of order")
-    if "steps.current_publication.outputs.published != 'true'" not in collection:
-        fail("verified publication must short-circuit the fallback attempt")
+    if (
+        'ALREADY_PUBLISHED: ${{ steps.current_publication.outputs.published }}'
+        not in collection
+        or 'echo "run=false" >> "$GITHUB_OUTPUT"' not in collection
+        or "steps.operation.outputs.run == 'true'" not in collection
+    ):
+        fail("verified publication must short-circuit ordinary fallback attempts")
     if "force:" in collection or "inputs.force" in collection:
         fail("verified publication must not have a force-recollection bypass")
     if "NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE" in collection or "NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE" in pages:
         fail("production workflows must never publish a stale issue as latest")
     if "scripts/publication_timing.py --decision" not in collection:
         fail("scheduled work must use the actual-time publication window")
-    if "steps.timing.outputs.action == 'run'" not in collection:
+    if (
+        "TIMING_ACTION: ${{ steps.timing.outputs.action }}" not in collection
+        or '"$TIMING_ACTION" == "run"' not in collection
+    ):
         fail("model and publication work must be gated by the timing decision")
     if "night_signal_model_audit.py" not in collection:
         fail("daily publication must check current model availability without inference")
@@ -95,16 +111,39 @@ def main() -> int:
         collection,
         "reuse_evidence:",
         "default: true",
+        "reprocess_existing:",
+        "default: false",
         "Resolve recovery mode",
         'if [[ "$GITHUB_EVENT_NAME" == "schedule" ]]',
         'echo "reuse=false"',
+        'echo "reprocess=false"',
         "Locate latest Evidence checkpoint",
         "steps.recovery.outputs.reuse == 'true'",
         "REUSE_EVIDENCE: ${{ steps.recovery.outputs.reuse }}",
-        'if [[ "$REUSE_EVIDENCE" == "true" ]]',
-        'python3 scripts/night_signal_publish.py "$ISSUE_DATE" --reuse-evidence',
+        "--reuse-evidence --reprocess-existing",
+        'elif [[ "$REUSE_EVIDENCE" == "true" ]]',
+        'python3 scripts/night_signal_publish.py "$ISSUE_DATE" '
+        "--reuse-evidence --verification-profile deploy",
     ):
-        fail("manual recovery must reuse checkpoints while scheduled collection stays fresh")
+        fail(
+            "manual recovery must reuse checkpoints, checkpoint-only reprocessing "
+            "must be explicit, and scheduled collection must stay fresh"
+        )
+    if (
+        "Checkpoint-only reprocessing requires an already audited publication."
+        not in collection
+        or "Checkpoint-only reprocessing cannot run without a saved artifact."
+        not in collection
+    ):
+        fail("reprocessing must fail closed before any model request")
+    if (
+        '"--postprocess-existing"' not in publish_driver
+        or '"--postprocess-existing"' not in editor
+        or '"model_requests": 0' not in editor
+        or publish_driver.find('"--postprocess-existing"')
+        > publish_driver.find("GITHUB_TOKEN is required for Editor model access")
+    ):
+        fail("reprocessing must use a deterministic path that cannot enter a model call")
     if (
         "scripts/night_signal_run_guard.py" not in collection
         or "needs: owner_guard" not in collection
