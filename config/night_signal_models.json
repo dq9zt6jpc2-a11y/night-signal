@@ -28,8 +28,8 @@
     "model": "openai/gpt-4o-mini",
     "quality_model": "openai/gpt-4.1-mini",
     "fallback_models": [
-      "openai/gpt-4.1",
-      "openai/gpt-4o"
+      "openai/gpt-4o",
+      "openai/gpt-4.1"
     ]
   }
 }

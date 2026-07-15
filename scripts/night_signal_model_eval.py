@@ -193,6 +193,11 @@ def numeric_metric(result: dict[str, Any], name: str, default: int) -> int:
     return value if isinstance(value, int) and value >= 0 else default
 
 
+def model_generation(model_id: str) -> tuple[int, int] | None:
+    key = model_audit.compatible_model_key(model_id)
+    return (key[0], key[1]) if key is not None else None
+
+
 def recommend_route(
     results: list[dict[str, Any]],
     *,
@@ -249,12 +254,23 @@ def recommend_route(
         if quality is not None
         else 10**9
     )
-    quality_pool = [
+    baseline_generation = model_generation(quality_baseline)
+    quality_pool = [quality] if quality is not None else []
+    quality_pool.extend(
         result
         for result in quality_passed
-        if model_tier(str(result.get("model"))) == "quality"
+        if str(result.get("model")) != quality_baseline
+        and model_tier(str(result.get("model"))) == "quality"
         and numeric_metric(result, "total_tokens", 10**9) <= quality_limit
-    ]
+        and (
+            baseline_generation is None
+            or (
+                model_generation(str(result.get("model"))) is not None
+                and model_generation(str(result.get("model")))
+                > baseline_generation
+            )
+        )
+    )
     if quality_pool:
         quality = max(
             quality_pool,
@@ -403,6 +419,28 @@ def self_test() -> None:
         raise SystemExit("efficient passing routine model was not recommended")
     if route["quality_model"] != "openai/gpt-5":
         raise SystemExit("newer passing quality model was not recommended")
+    conservative_route = recommend_route(
+        [
+            {
+                "model": "openai/gpt-4.1-mini",
+                "routine_passed": True,
+                "quality_passed": True,
+                "total_tokens": 900,
+                "latency_ms": 700,
+            },
+            {
+                "model": "openai/gpt-4o",
+                "routine_passed": True,
+                "quality_passed": True,
+                "total_tokens": 800,
+                "latency_ms": 600,
+            },
+        ],
+        routine_baseline="openai/gpt-4o-mini",
+        quality_baseline="openai/gpt-4.1-mini",
+    )
+    if conservative_route["quality_model"] != "openai/gpt-4.1-mini":
+        raise SystemExit("legacy model replaced the newer quality baseline")
     if route["production_change_authorized"]:
         raise SystemExit("model evaluation authorized an automatic production change")
     print("NIGHT SIGNAL MODEL EVALUATION SELF-TEST PASSED")
