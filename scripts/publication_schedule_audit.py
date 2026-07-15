@@ -13,6 +13,7 @@ import publication_timing as timing
 ROOT = Path(__file__).resolve().parents[1]
 PAGES = ROOT / ".github" / "workflows" / "pages.yml"
 COLLECTION = ROOT / ".github" / "workflows" / "unattended-collection.yml"
+MODEL_EVALUATION = ROOT / ".github" / "workflows" / "model-catalog-evaluation.yml"
 PUBLISH_DRIVER = ROOT / "scripts" / "night_signal_publish.py"
 EDITOR = ROOT / "scripts" / "night_signal_editor.py"
 
@@ -37,6 +38,7 @@ def ordered(text: str, *labels: str) -> bool:
 def main() -> int:
     pages = PAGES.read_text(encoding="utf-8")
     collection = COLLECTION.read_text(encoding="utf-8")
+    model_evaluation = MODEL_EVALUATION.read_text(encoding="utf-8")
     publish_driver = PUBLISH_DRIVER.read_text(encoding="utf-8")
     editor = EDITOR.read_text(encoding="utf-8")
     policy = timing.load_policy()
@@ -186,6 +188,31 @@ def main() -> int:
         fail("audited state must be committed before Pages dispatch")
     if 'gh run watch "$RUN_ID" --exit-status' not in collection:
         fail("collection owner must wait for public deployment")
+    if not ordered(
+        model_evaluation,
+        "Verify model selection contracts",
+        "Audit current catalogs without inference",
+        "Restore evaluation result for this exact candidate set",
+        "Evaluate new candidates once",
+        "Cache the bounded evaluation",
+        "Upload model audit and new evaluation",
+    ):
+        fail("model catalog audit and isolated evaluation stages are out of order")
+    for required in (
+        'cron: "15 00 * * *"',
+        "models: read",
+        "night_signal_model_audit.py",
+        "--github-output",
+        "steps.audit.outputs.evaluation_required == 'true'",
+        "steps.evaluation_cache.outputs.cache-hit != 'true'",
+        "night_signal_model_eval.py",
+        "actions/cache/restore@v4",
+        "actions/cache/save@v4",
+    ):
+        if required not in model_evaluation:
+            fail(f"model evaluation workflow is missing {required}")
+    if "contents: write" in model_evaluation or "git push" in model_evaluation:
+        fail("model evaluation must never change the production route")
     print(
         "PUBLICATION SCHEDULE AUDIT PASSED: "
         f"window={policy.final_collection_not_before.strftime('%H:%M')}-"

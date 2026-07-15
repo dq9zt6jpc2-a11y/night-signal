@@ -11,7 +11,7 @@ import time
 import urllib.error
 import urllib.request
 from pathlib import Path
-from typing import Any
+from typing import Any, MutableMapping
 
 
 CONFIG_PATH = Path(__file__).resolve().parents[1] / "config" / "night_signal_models.json"
@@ -266,6 +266,7 @@ def request(
     response_schema: dict[str, Any] | None = None,
     response_schema_name: str = "night_signal_editor_result",
     max_output_tokens: int | None = None,
+    usage_metrics: MutableMapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Request one schema-constrained editorial result from GitHub Models."""
     errors: list[str] = []
@@ -322,6 +323,15 @@ def request(
                 value = json.loads(response.read().decode("utf-8"))
             usage = value.get("usage", {})
             if isinstance(usage, dict):
+                if usage_metrics is not None:
+                    usage_metrics.update(
+                        {
+                            "model": payload["model"],
+                            "prompt_tokens": usage.get("prompt_tokens"),
+                            "completion_tokens": usage.get("completion_tokens"),
+                            "total_tokens": usage.get("total_tokens"),
+                        }
+                    )
                 print(
                     json.dumps(
                         {

@@ -160,9 +160,10 @@ eventとし、すべてのeventが公開項目または限定された除外理�
 だけを公開側の根拠対応へ使い、event内の全URLはEvidenceに保持する。AIがeventの判断を返さなかった
 時に薄い文章を機械生成せず、その編集結果を不合格にする。根拠のない要約文だけを除去した
 後も必要十分な根拠付き要約が残る場合はevent全体を再生成しない。単純な事実要約は
-`GPT-4o mini`を使う。
-分析、表・グラフ中心、高数値密度の本文は
-`GPT-4.1 mini`へ最初から送り、通常modelの出力が契約を満たさない場合だけ一度昇格する。
+`config/night_signal_models.json`のroutine modelを使う。分析、表・グラフ中心、
+高数値密度の本文は同設定のquality modelへ最初から送り、通常modelの出力が契約を
+満たさない場合だけ一度昇格する。model名は設計文書へ固定せず、隔離評価に合格した
+稼働確認済みmodelだけを設定へ反映する。
 本番でHTTP 413/400を返すmodelは提供中でも日次経路に使わず、同一契約を安定して満たす
 最上位の稼働確認済みmodelをquality modelとする。
 本文が長いだけでは昇格しない。quality modelが単一eventでも内容契約を満たせない時だけ、
@@ -242,10 +243,12 @@ tokenのいずれかを品質低下なしで改善する場合だけ切り替え
 topic別ニュース探索、bounded horizon探索、媒体別の公開index探索、重要候補だけの
 event probeを使う。
 `night_signal_model_audit.py`は日次処理の開始時にOpenAI公式latest-model文書とGitHub Models
-catalogをHTTPだけで照合し、設定modelの提供終了と、新しいmodel familyの提供開始を検知する。
-照合に推論tokenは使わない。新modelは本番から分離した代表評価で網羅性、事実精度、要約品質、
-処理時間、tokenを現行modelと比較し、品質非劣化を満たすまで自動切替しない。catalog取得不能は
-公開を止めず、設定済みmodelがcatalogから消えた場合だけmodel処理前に停止する。
+catalogをHTTPだけで照合し、設定modelの提供終了と、公式最新familyに限定しないGitHub上の
+新しい互換世代・tierを検知する。照合に推論tokenは使わない。候補集合または評価契約が変わった
+時だけ、独立workflowが固定ケースで事実精度、除外精度、event完全性、処理時間、tokenを現行の
+routine/quality modelと各1回比較する。同じ候補と評価契約の結果はcacheから再利用し、日次公開へ
+評価tokenや遅延を足さない。品質非劣化を満たしても本番設定は自動変更せず、評価結果を確認して
+反映する。catalog取得不能は公開を止めず、設定済みmodelがcatalogから消えた場合だけmodel処理前に停止する。
 
 Responses API `web_search`は全source metadata、domain filter、画像検索、長時間検索制御を
 利用できるが追加費用が発生するため、現行の日次経路へは追加しない。探索仕様の定期評価と、

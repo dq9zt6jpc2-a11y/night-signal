@@ -1,0 +1,95 @@
+name: NIGHT SIGNAL Model Catalog Evaluation
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/model-catalog-evaluation.yml"
+      - "config/night_signal_models.json"
+      - "scripts/night_signal_model_audit.py"
+      - "scripts/night_signal_model_eval.py"
+      - "scripts/night_signal_models.py"
+  schedule:
+    - cron: "15 00 * * *"
+
+permissions:
+  contents: read
+  models: read
+
+concurrency:
+  group: night-signal-model-catalog-evaluation
+  cancel-in-progress: false
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Verify model selection contracts
+        run: |
+          python3 scripts/night_signal_models.py --self-test
+          python3 scripts/night_signal_model_audit.py --self-test
+          python3 scripts/night_signal_model_eval.py --self-test
+
+      - name: Audit current catalogs without inference
+        id: audit
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python3 scripts/night_signal_model_audit.py \
+            --output "$RUNNER_TEMP/night-signal-model-audit.json" \
+            --github-output "$GITHUB_OUTPUT"
+
+      - name: Restore evaluation result for this exact candidate set
+        if: ${{ steps.audit.outputs.evaluation_required == 'true' }}
+        id: evaluation_cache
+        uses: actions/cache/restore@v4
+        with:
+          path: tmp/model-evaluation
+          key: >-
+            night-signal-model-eval-${{ steps.audit.outputs.candidate_fingerprint }}-${{
+            hashFiles('scripts/night_signal_model_eval.py',
+            'scripts/night_signal_models.py', 'config/night_signal_models.json') }}
+
+      - name: Evaluate new candidates once
+        if: >-
+          ${{ steps.audit.outputs.evaluation_required == 'true' &&
+          steps.evaluation_cache.outputs.cache-hit != 'true' }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          NIGHT_SIGNAL_MODEL_RETRIES: "1"
+          CANDIDATE_MODELS: ${{ steps.audit.outputs.candidate_models }}
+        run: |
+          mkdir -p tmp/model-evaluation
+          python3 scripts/night_signal_model_eval.py \
+            --candidate-models "$CANDIDATE_MODELS" \
+            --output tmp/model-evaluation/report.json
+
+      - name: Cache the bounded evaluation
+        if: >-
+          ${{ success() && steps.audit.outputs.evaluation_required == 'true' &&
+          steps.evaluation_cache.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@v4
+        with:
+          path: tmp/model-evaluation
+          key: >-
+            night-signal-model-eval-${{ steps.audit.outputs.candidate_fingerprint }}-${{
+            hashFiles('scripts/night_signal_model_eval.py',
+            'scripts/night_signal_models.py', 'config/night_signal_models.json') }}
+
+      - name: Upload model audit and new evaluation
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: night-signal-model-evaluation-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/night-signal-model-audit.json
+            tmp/model-evaluation/report.json
+          if-no-files-found: warn
+          retention-days: 30
+          compression-level: 6

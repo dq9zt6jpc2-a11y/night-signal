@@ -79,11 +79,17 @@ python3 scripts/night_signal_collect.py --self-test
 python3 scripts/night_signal_editor.py --self-test
 python3 scripts/quality_gate.py --self-test
 python3 scripts/night_signal_model_audit.py --self-test
+python3 scripts/night_signal_model_eval.py --self-test
 python3 scripts/publication_timing.py --self-test
 python3 scripts/publication_schedule_audit.py
 python3 scripts/simulate_runtime_failures.py
 python3 scripts/simulate_consecutive_days.py
 python3 scripts/simulate_quality_gate_failures.py
 ```
+
+Model availability is checked daily without inference. A separate workflow evaluates
+only a new compatible candidate set, compares it with the current routine and quality
+models on fixed editorial cases, caches the result by candidate and evaluator hashes,
+and emits a recommendation. It never changes the production route automatically.
 
 The complete design contract is in `docs/night-signal-basic-design.md`.
