@@ -256,6 +256,14 @@ def routed_models(*, quality_required: bool) -> list[str]:
     )
 
 
+def completion_token_parameter(model_id: str) -> str:
+    return (
+        "max_completion_tokens"
+        if model_id.startswith("openai/gpt-5")
+        else "max_tokens"
+    )
+
+
 def request(
     token: str,
     messages: list[dict[str, str]],
@@ -285,10 +293,10 @@ def request(
         else configured_max_tokens
     )
     schema = response_schema or EDITOR_RESPONSE_SCHEMA
+    selected_model = model_name or extraction_model()
     payload = {
-        "model": model_name or extraction_model(),
+        "model": selected_model,
         "messages": messages,
-        "max_tokens": max_tokens,
         "response_format": {
             "type": "json_schema",
             "json_schema": {
@@ -298,7 +306,10 @@ def request(
             },
         },
     }
-    if not str(payload["model"]).startswith("openai/gpt-5"):
+    payload[completion_token_parameter(str(selected_model))] = max_tokens
+    if str(selected_model).startswith("openai/gpt-5"):
+        payload["reasoning_effort"] = "low"
+    else:
         payload["temperature"] = 0.1
     encoded_payload = json.dumps(
         payload,
@@ -362,9 +373,15 @@ def request(
                 ) from exc
             return result
         except urllib.error.HTTPError as exc:
+            detail = re.sub(
+                r"\s+",
+                " ",
+                exc.read(2000).decode("utf-8", errors="replace"),
+            ).strip()
             if exc.code != 429:
                 raise ModelRequestError(
-                    f"GitHub Models request failed with HTTP {exc.code}",
+                    f"GitHub Models request failed with HTTP {exc.code}"
+                    + (f": {detail}" if detail else ""),
                     status_code=exc.code,
                 ) from exc
             retry_after = exc.headers.get("Retry-After")
@@ -422,6 +439,10 @@ def self_test() -> None:
         raise SystemExit("quality routing must use the quality model first")
     if quality and extraction_model() in routed_models(quality_required=True)[1:]:
         raise SystemExit("quality routing must not downgrade to the routine model")
+    if completion_token_parameter("openai/gpt-5-mini") != "max_completion_tokens":
+        raise SystemExit("GPT-5 must use the reasoning-model completion budget")
+    if completion_token_parameter("openai/gpt-4.1-mini") != "max_tokens":
+        raise SystemExit("non-reasoning model completion budget changed")
     event_schema = EDITOR_RESPONSE_SCHEMA["properties"]["events"]["items"]
     item_schema = event_schema["properties"]["items"]["items"]
     if set(event_schema["required"]) != {"event_id", "decision", "items"}:

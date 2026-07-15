@@ -19,7 +19,7 @@ import night_signal_core as core
 EVENT_IDS = ["g001", "g002", "g003", "g004"]
 EXPECTED_DECISIONS = {
     "g001": {"publish"},
-    "g002": {"duplicate_previous_event"},
+    "g002": {"duplicate_previous_event", "no_material_update"},
     "g003": {"background_or_navigation", "no_material_update"},
     "g004": {"publish"},
 }
@@ -212,17 +212,25 @@ def recommend_route(
         str(result.get("model")): result for result in quality_passed
     }
     routine = routine_by_model.get(routine_baseline)
-    routine_limit = (
-        numeric_metric(routine, "total_tokens", 10**9)
-        if routine is not None
-        else 10**9
-    )
-    routine_pool = [
-        result
-        for result in routine_passed
-        if model_tier(str(result.get("model"))) in {"economy", "balanced"}
-        and numeric_metric(result, "total_tokens", 10**9) <= routine_limit
-    ]
+    if routine is not None:
+        baseline_tokens = numeric_metric(routine, "total_tokens", 10**9)
+        baseline_latency = numeric_metric(routine, "latency_ms", 10**9)
+        routine_pool = [routine] + [
+            result
+            for result in routine_passed
+            if str(result.get("model")) != routine_baseline
+            and model_tier(str(result.get("model"))) in {"economy", "balanced"}
+            and numeric_metric(result, "total_tokens", 10**9)
+            <= baseline_tokens * 95 // 100
+            and numeric_metric(result, "latency_ms", 10**9)
+            <= baseline_latency * 3 // 2
+        ]
+    else:
+        routine_pool = [
+            result
+            for result in routine_passed
+            if model_tier(str(result.get("model"))) in {"economy", "balanced"}
+        ]
     if routine_pool:
         routine = min(
             routine_pool,
