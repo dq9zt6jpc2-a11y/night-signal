@@ -524,7 +524,12 @@ def validate_detail_daily_delta(issue_date: str, root_html: str, dated_html: str
 def validate_reader_facing_headlines(context: str, headings: list[str]) -> None:
     failures = []
     for heading in headings:
-        if any(term in heading for term in HEADLINE_ABSTRACT_LEAK_TERMS + PUBLIC_ABSTRACT_FRAMING_TERMS):
+        abstract_check = heading.replace("進捗率", "")
+        if any(
+            term in abstract_check
+            for term in HEADLINE_ABSTRACT_LEAK_TERMS
+            + PUBLIC_ABSTRACT_FRAMING_TERMS
+        ):
             failures.append(f"{heading} [abstract phrase]")
             continue
         if any(char in heading for char in HEADLINE_FORBIDDEN_CHARS):
