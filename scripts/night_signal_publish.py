@@ -24,9 +24,24 @@ import publication_timing as timing
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE_ROOT = ROOT / "state"
+ARCHIVED_PREVIOUS_ISSUES = 3
+
+
 def fail(message: str) -> None:
     print(f"NIGHT SIGNAL PUBLISH FAILED: {message}", file=sys.stderr)
     raise SystemExit(1)
+
+
+def retained_history_dates(
+    available_dates: set[str],
+    issue_date: str,
+) -> set[str]:
+    """Return the current issue and its three most recent predecessors."""
+    prior_dates = sorted(
+        (value for value in available_dates if value < issue_date),
+        reverse=True,
+    )[:ARCHIVED_PREVIOUS_ISSUES]
+    return {issue_date, *prior_dates}
 
 
 def jst_today() -> str:
@@ -275,6 +290,11 @@ def validate_collection_freshness(
 
 
 def self_test() -> None:
+    if retained_history_dates(
+        {"2098-12-31", "2099-01-01", "2099-01-02", "2099-01-03", "2099-01-04"},
+        "2099-01-04",
+    ) != {"2099-01-01", "2099-01-02", "2099-01-03", "2099-01-04"}:
+        fail("publication history did not retain current plus three prior issues")
     try:
         require_jst_current_issue("1900-01-01")
     except SystemExit:
@@ -377,7 +397,7 @@ def sync_and_audit(issue_date: str) -> None:
 
 
 def prune_published_history(issue_date: str) -> None:
-    """Keep only the current issue and its directly published artifacts."""
+    """Keep the current issue plus three prior issues for novelty and readers."""
     current_sample = ROOT / f"night-brief-web-sample-{issue_date}.html"
     sample_html = current_sample.read_text(encoding="utf-8")
     linked_details = {
@@ -386,11 +406,30 @@ def prune_published_history(issue_date: str) -> None:
     }
     linked_details.update({"policy.html", "_style.css"})
 
+    available_dates = {
+        path.parent.name
+        for path in STATE_ROOT.glob("20??-??-??/issue.json")
+    }
+    available_dates.update(
+        match.group(1)
+        for path in ROOT.glob("night-brief-web-sample-*.html")
+        if (
+            match := re.fullmatch(
+                r"night-brief-web-sample-(\d{4}-\d{2}-\d{2})\.html",
+                path.name,
+            )
+        )
+    )
+    retained_dates = retained_history_dates(available_dates, issue_date)
     for path in ROOT.glob("night-brief-web-sample-*.html"):
-        if path != current_sample:
+        match = re.fullmatch(
+            r"night-brief-web-sample-(\d{4}-\d{2}-\d{2})\.html",
+            path.name,
+        )
+        if match and match.group(1) not in retained_dates:
             path.unlink()
     for path in STATE_ROOT.iterdir():
-        if path.is_dir() and path.name != issue_date:
+        if path.is_dir() and path.name not in retained_dates:
             shutil.rmtree(path)
     details_dir = ROOT / "details"
     for path in details_dir.iterdir():

@@ -148,6 +148,18 @@ least one item. Otherwise return no items and choose the single applicable exclu
 decision. Do not exclude an event merely because one of its reports is duplicate or noisy
 when another Evidence record supplies a material source-backed change.
 
+There is no publication quota. Publish every important delta, but exclude routine or
+low-impact activity as no_material_update: recurring metrics or schedules without a
+surprise, threshold, reversal, record, policy consequence, or operational consequence;
+minor workshops and seminars; stock-price or technical-investment commentary; market and
+earnings previews; product or company overviews; single-fund paperwork; rumors about a
+future announcement; and recaps that merely repackage a known event. A new URL, headline,
+publication date, or additional background wording is not new information by itself.
+Actual quarterly, annual, and final earnings results are events: do not exclude them
+solely because earnings recur on a schedule. Keep the reported result and its material
+change from the recent issue history. Likewise, keep material market moves; exclude only
+preview-only coverage and routine small market ticks without a meaningful change.
+
 For each update, create one title and the ordered summary_points needed to understand it.
 Write every title and summary point in natural Japanese even when all Evidence is English.
 Never return English reader-facing text.

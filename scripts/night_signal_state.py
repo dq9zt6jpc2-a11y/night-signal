@@ -1076,6 +1076,7 @@ def render_issue_html(issue: dict[str, Any], cards: list[dict[str, Any]], *, roo
     }
     for section_id, label in section_labels.items():
         nav_links.append(f'<a href="#{html.escape(section_id, quote=True)}">{html.escape(label)}</a>')
+    nav_links.append('<a href="../archive.html">アーカイブ</a>')
     nav_links.append('<a href="details/policy.html">方針</a>')
 
     priority = "\n".join(

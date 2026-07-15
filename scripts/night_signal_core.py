@@ -14,6 +14,7 @@ import os
 import re
 import sys
 import threading
+import unicodedata
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -135,6 +136,228 @@ PUBLICATION_EVENT_RE = re.compile(
     r"rose|fell|increase|decrease)[A-Za-z]*\b)",
     re.I,
 )
+REALIZED_MATERIAL_CHANGE_RE = re.compile(
+    r"(発表|公表|決定|合意|契約|提携|買収|統合|開始|提供開始|発売|公開|更新|強化|拡大|"
+    r"就任|退任|移籍|獲得|退団|採用|着工|延期|中止|承認|規制|出資|資金調達|"
+    r"上場|申請|成立|提訴|訴訟|結果|決算|着地|達成|突破|上方修正|下方修正|"
+    r"過去最高|過去最低|最高値|最低値|急増|急減|急騰|急落|"
+    r"予想(?:を|より)(?:上回|下回)|"
+    r"\b(?:announc|decid|agree|sign|acquir|merge|launch|release|update|expand|strengthen|"
+    r"appoint|resign|hire|delay|cancel|approve|invest|raise|filed|sues?|lawsuit|"
+    r"record high|record low|"
+    r"beat expectations|missed expectations)[A-Za-z]*\b)",
+    re.I,
+)
+ROUTINE_INVESTMENT_COMMENTARY_RE = re.compile(
+    r"(株価評価|株価予想|株価見通し|テクニカル(?:分析|動向)|"
+    r"買い時|売り時|投資妙味|投資家にとって(?:好機|魅力)|"
+    r"目標株価|投資判断|チャート分析|MACD|RSI|"
+    r"\b(?:technical analysis|price target|buy rating|sell rating|"
+    r"buying opportunity|stock outlook|stock rating|valuation shifts?|price attractiveness|"
+    r"time to sell|stock investors?|investment will be worth)\b)",
+    re.I,
+)
+ROUTINE_PREVIEW_RE = re.compile(
+    r"(決算発表(?:を)?控え|発表を控え|開催を控え|今後の注目点|何に注目|に注目|"
+    r"プレビュー|見どころ|近く発表予定|まもなく発表|"
+    r"\b(?:ahead of earnings|earnings preview|event preview|what to expect|"
+    r"set to report earnings)\b)",
+    re.I,
+)
+ROUTINE_MINOR_EVENT_RE = re.compile(
+    r"(ワークショップ|勉強会|セミナー|交流会|説明会を開催|"
+    r"\b(?:workshop|seminar|meetup)\b)",
+    re.I,
+)
+ROUTINE_PERIODIC_UPDATE_RE = re.compile(
+    r"(月例|週次|定例|感染者.{0,12}(?:数|増加|減少|状況)|約款|"
+    r"株先物|市場は.*(?:上昇|下落)|本日の値動き|"
+    r"\b(?:monthly update|weekly update|market preview|stock futures)\b)",
+    re.I,
+)
+ROUTINE_STRATEGY_OVERVIEW_RE = re.compile(
+    r"(市場戦略|成長戦略|事業戦略|製品ラインアップ|価格動向|性能と価格|"
+    r"企業概要|製品概要|基本情報|"
+    r"\b(?:market strategy|growth strategy|product lineup|price trends|"
+    r"company overview|product overview|model overview|members? profile)\b)",
+    re.I,
+)
+ENTERTAINMENT_ARTIFACT_RE = re.compile(
+    r"(アルバム|楽曲|シングル|歌手|シンガー|リイシュー|映画|ドラマ|"
+    r"\b(?:album|song|singer|reissue|music video)\b)",
+    re.I,
+)
+SPACE_CONTEXT_RE = re.compile(
+    r"(SpaceX|宇宙|ロケット|衛星|打ち上げ|軌道|Starlink|Dragon|"
+    r"Starship.{0,20}(?:flight|launch|test|rocket)|"
+    r"\b(?:spacecraft|rocket|satellite|launch|orbit)\b)",
+    re.I,
+)
+MATERIAL_RESULT_TITLE_RE = re.compile(
+    r"((?:\d[\d,.]*|[０-９][０-９，．]*)\s*(?:%|％|億|兆|万|ドル|円|人|件)?.{0,24}"
+    r"(?:増|減|上昇|下落|伸び|低下|成長|縮小|改善|悪化|黒字|赤字|突破|上回|下回|修正)|"
+    r"(?:過去|史上|上場来|調査開始以来).{0,16}(?:最高|最低|最大|最小)|"
+    r"(?:最高値|最安値|急騰|急落|暴落|急反発|大幅続伸|予想外))",
+    re.I,
+)
+UNCONFIRMED_FUTURE_RE = re.compile(
+    r"(見通し|予想|観測|可能性|検討|計画|予定|見込み|候補|噂|憶測|導入案|"
+    r"まもなく|近く発表|発売へ$|"
+    r"(?:か|のか)[？?]|[？?]$|"
+    r"\b(?:rumou?r|reportedly|in talks|plans?|planning|prepping|could|may|might|"
+    r"expected to|set to|to launch|eyes? an? IPO|what to expect)\b)",
+    re.I,
+)
+CONFIRMED_FUTURE_OVERRIDE_RE = re.compile(
+    r"(正式発表|決定|承認|申請|契約|合意|受注|提供開始|発売開始|"
+    r"\b(?:officially announced|approved|filed|signed|launched|released)\b)",
+    re.I,
+)
+ROUTINE_MARKET_TICK_RE = re.compile(
+    r"(寄り付き|前引け|後場|大引け|概況|清算値|オプション|先物|"
+    r"(?:\d{1,2}|[０-９]{1,2})時(?:点|の)|ドル[・/]?円.{0,24}推移|小動き|"
+    r"\b(?:pre-market|market today|market preview|futures?|intraday|"
+    r"opening bell|midday trading)\b)",
+    re.I,
+)
+ROUTINE_MARKET_EXCEPTION_RE = re.compile(
+    r"(過去最高|過去最低|史上最高|史上最低|最高値|最安値|急騰|急落|暴落|"
+    r"急反発|大幅続伸|(?:1000|１[０0]{3})円超|\b(?:record high|record low|crash)\b)",
+    re.I,
+)
+ROUTINE_PERSONAL_LIFESTYLE_RE = re.compile(
+    r"(早期退職|FIRE|お小遣い|家計事情|貯蓄.*(?:平均|リアル)|"
+    r"キャッシュバック|購入レビュー|買うべき|徹底解説|ランキング|ベスト\d+|"
+    r"いくら必要|可能[？?]|普通なのでしょうか|やるべきこと|"
+    r"\b(?:how to|should you buy|best .* to buy|personal finance)\b)",
+    re.I,
+)
+ACTUAL_EARNINGS_EVENT_RE = re.compile(
+    r"(決算(?:発表|速報|[:：])|四半期.{0,20}(?:決算|業績|実績)|"
+    r"(?:通期|本決算|最終決算|[1-4１-４]Q|[1-9１-９][－ー-][0-9０-９]+月期).{0,24}"
+    r"(?:決算|業績|実績|売上|利益|経常|最終|着地)|"
+    r"\b(?:quarterly|annual|full-year|final|Q[1-4]|FY\d{2,4}).{0,20}"
+    r"(?:earnings|results?)\b|\bearnings results?\b)",
+    re.I,
+)
+MATERIAL_EARNINGS_EXCEPTION_RE = re.compile(
+    r"(上方修正|下方修正|上場来初|初配当|増配|減配|復配|黒字転換|赤字転落|"
+    r"過去最高|過去最低|最高益|最大赤字|予想(?:を|より)(?:上回|下回)|"
+    r"\b(?:raises? guidance|cuts? guidance|beats? expectations|misses? expectations|"
+    r"record profit|record loss|first dividend|dividend increase|dividend cut)\b)",
+    re.I,
+)
+PHOTO_OR_MEDIA_VARIANT_RE = re.compile(
+    r"^(?:\[?写真\]?|【写真(?:・画像)?】|写真・画像|動画)|(?:\s|^)\d+枚目(?:の写真・画像)?$",
+    re.I,
+)
+ROUTINE_RECAP_OR_COMMENTARY_RE = re.compile(
+    r"(ニュース\d+選|最新ハイライト|まとめ|ケーススタディ|ロードマップ|"
+    r"シーズンメモリーズ|移籍市場.{0,8}契約状況|"
+    r"と語る|と主張|疑問を呈|徹底分析|投資家は.*べき|協業で狙う|"
+    r"\b(?:roundup|highlights?|implications|case study|what investors should|"
+    r"should investors|raises doubts|signals a new|accuses|explained|says?|"
+    r"history smiles|market doubt)\b)",
+    re.I,
+)
+ROUTINE_COMMERCIAL_OR_ADJACENT_RE = re.compile(
+    r"(限定発売|限定コラボ|キャンペーン|割引|円引き|サービスエリアマップ更新|チャリティ|寄付|"
+    r"ボディキット|カスタム(?:車|パーツ)|興行収入|"
+    r"\b(?:dealer|dealership|local charities|body kit|aftermarket|"
+    r"sponsorships?|special edition label)\b)",
+    re.I,
+)
+ROUTINE_SPACEX_LAUNCH_RE = re.compile(
+    r"(launch schedule|mission details|SpaceX launches? (?:a )?Falcon 9.{0,80}Starlink|"
+    r"Starlink mission.{0,40}(?:schedule|launch window))",
+    re.I,
+)
+SPACEX_LAUNCH_EXCEPTION_RE = re.compile(
+    r"(Starship|Dragon|有人|crew|初|milestone|\d+(?:st|nd|rd|th)|600th|record|"
+    r"failure|anomaly|test flight|飛行試験)",
+    re.I,
+)
+ENTITY_SCOPE_NOISE_RE = {
+    "SoftBank": re.compile(r"\b(?:reliance|grasim).{0,24}\barm\b", re.I),
+    "Honda": re.compile(
+        r"\b(?:dealer|dealership|charit|body kit|aftermarket|deserves you)\b|"
+        r"(?:販売店|ディーラー|チャリティ|ボディキット)",
+        re.I,
+    ),
+    "F1": re.compile(
+        r"(Formula [23]|(?<![A-Za-z0-9])F[23](?![A-Za-z0-9])|"
+        r"(?<![A-Za-z0-9])TCR(?![A-Za-z0-9])|Sクラス|限定発売|ニコチン|nicotine|"
+        r"brand new website)",
+        re.I,
+    ),
+    "SpaceX": re.compile(
+        r"(^Ex-SpaceX|flight surgeon|we.re all SpaceX investors|"
+        r"fantastic news for SpaceX stock|should investors be worried)",
+        re.I,
+    ),
+}
+HISTORICAL_REVIEW_RE = re.compile(
+    r"((?:\d+年前|20\d{2}年.{0,8})(?:会合|政策|議事録|振り返)|"
+    r"マイナス金利.{0,24}(?:元日銀|当時|議事録))",
+    re.I,
+)
+SUSPICIOUS_MEDIA_TITLE_RE = re.compile(
+    r"(?:Slide\s*)?\([A-Za-z0-9_-]{8,}\)$|\bThe Young And The Restless\b|"
+    r"\bOsasuna Vs\b",
+    re.I,
+)
+MACRO_CATEGORY_SCOPE_RE = {
+    "日本経済": re.compile(
+        r"(日本(?!テレビ)(?:政府|経済|企業|市場|株)?|日銀|BOJ|財務省|経産省|厚生労働省|厚労省|"
+        r"総務省|内閣府|東京|東証|日経平均|JGB|円相場|ドル[・/]?円|国民生活基礎調査|"
+        r"\bJapan(?:ese)?\b)",
+        re.I,
+    ),
+    "アジア経済": re.compile(
+        r"(アジア|中国|台湾|香港|韓国|インド|ベトナム|タイ|マレーシア|"
+        r"シンガポール|インドネシア|フィリピン|ASEAN|RBI|PBOC|"
+        r"\b(?:Asia|Asian|China|Chinese|Taiwan|Korea|Korean|India|Indian|"
+        r"Vietnam|Vietnamese|Thailand|Thai|Malaysia|Singapore|Indonesia|"
+        r"Philippines)\b)",
+        re.I,
+    ),
+    "北米経済": re.compile(
+        r"(米国|アメリカ|カナダ|メキシコ|FRB|連邦準備|ウォール街|"
+        r"\b(?:U\.S\.|United States|American|America|Canada|Canadian|Mexico|"
+        r"Mexican|Federal Reserve|Fed|Wall Street|S&P|Nasdaq|Dow Jones)\b)",
+        re.I,
+    ),
+}
+MACRO_BODY_SCOPE_RE = {
+    "日本経済": re.compile(
+        r"(日銀|財務省|経産省|厚生労働省|厚労省|総務省|内閣府|東証|"
+        r"国民生活基礎調査|\bBOJ\b)",
+        re.I,
+    ),
+}
+MACRO_TOPIC_SCOPE_RE = {
+    "日本経済": re.compile(
+        r"(物価|CPI|賃金|所得|雇用|失業|消費|GDP|景気|日銀|金利|国債|JGB|"
+        r"為替|円相場|ドル[・/]?円|日経平均|TOPIX|株式市場|政府方針|予算|税|"
+        r"半導体.{0,30}(?:投資|助成|生産|拠点)|設備投資)",
+        re.I,
+    ),
+    "アジア経済": re.compile(
+        r"(CPI|GDP|PMI|物価|賃金|雇用|失業|消費|小売|成長率|中央銀行|金利|"
+        r"輸出|輸入|貿易|関税|FDI|投資|製造業|生産|景気|為替|株式市場|"
+        r"\b(?:inflation|employment|jobs|retail sales|growth|central bank|"
+        r"interest rates?|exports?|imports?|trade|tariffs?|investment|manufacturing)\b)",
+        re.I,
+    ),
+    "北米経済": re.compile(
+        r"(CPI|PCE|GDP|物価|賃金|雇用|失業|消費|小売|FRB|連邦準備|金利|"
+        r"米国債|Treasur|S&P|Nasdaq|Dow Jones|NYダウ|米国株式市場|"
+        r"関税|貿易|産業政策|原油|エネルギー|停戦|"
+        r"\b(?:inflation|employment|jobs|retail sales|Federal Reserve|Fed|"
+        r"interest rates?|yields?|tariffs?|trade|industrial policy|oil|energy|ceasefire)\b)",
+        re.I,
+    ),
+}
 INVESTMENT_GUIDE_RE = state_contract.INVESTMENT_GUIDE_RE
 NON_NEWS_GUIDE_RE = state_contract.NON_NEWS_GUIDE_RE
 RECAP_EXPLAINER_RE = re.compile(
@@ -458,8 +681,8 @@ def same_material_event(left: Any, right: Any) -> bool:
             flags=re.I,
         )
 
-    normalized_left = normalize_number_words(left)
-    normalized_right = normalize_number_words(right)
+    normalized_left = unicodedata.normalize("NFKC", normalize_number_words(left))
+    normalized_right = unicodedata.normalize("NFKC", normalize_number_words(right))
     explainer_pattern = re.compile(
         r"(?:とは|使い方|料金|違い|徹底解説|\bwhat is\b|\bhow to\b|"
         r"\bexplained\b|\bguide\b)",
@@ -503,9 +726,39 @@ def same_material_event(left: Any, right: Any) -> bool:
         if left_ngrams and right_ngrams
         else 0.0
     )
-    return state_contract.materially_same_fact(normalized_left, normalized_right) or (
-        state_contract.text_overlap(normalized_left, normalized_right) >= 2
-        and similarity >= 0.4
+    shared_ngrams = left_ngrams & right_ngrams
+    shared_numbers = {
+        value
+        for value in numeric_claims(normalized_left) & numeric_claims(normalized_right)
+        if not 1900 <= value <= 2100
+    }
+    left_ascii_terms = {
+        term.casefold()
+        for term in re.findall(r"[A-Za-z][A-Za-z0-9.-]{2,}", normalized_left)
+    }
+    right_ascii_terms = {
+        term.casefold()
+        for term in re.findall(r"[A-Za-z][A-Za-z0-9.-]{2,}", normalized_right)
+    }
+    shared_ascii_terms = left_ascii_terms & right_ascii_terms
+    return (
+        state_contract.materially_same_fact(normalized_left, normalized_right)
+        or (
+            state_contract.text_overlap(normalized_left, normalized_right) >= 2
+            and similarity >= 0.4
+        )
+        or (bool(shared_numbers) and len(shared_ngrams) >= 4)
+        or (
+            len(shared_ascii_terms) >= 3
+            and bool(PUBLICATION_EVENT_RE.search(normalized_left))
+            and bool(PUBLICATION_EVENT_RE.search(normalized_right))
+        )
+        or (
+            similarity >= 0.62
+            and len(shared_ngrams) >= 8
+            and bool(PUBLICATION_EVENT_RE.search(normalized_left))
+            and bool(PUBLICATION_EVENT_RE.search(normalized_right))
+        )
     )
 
 
@@ -892,6 +1145,158 @@ def record_is_routine_sports_schedule(
     )
 
 
+def record_is_low_importance_routine(
+    category: dict[str, Any],
+    title: str,
+    record: dict[str, Any],
+    issue_date: str,
+) -> bool:
+    """Reject clear recurring or low-value items before any model request."""
+    excerpt = reader_facing_text(
+        record.get("excerpt") or record.get("evidence") or "",
+        2400,
+    )
+    text = f"{title} {excerpt}"
+    if PHOTO_OR_MEDIA_VARIANT_RE.search(title) or SUSPICIOUS_MEDIA_TITLE_RE.search(
+        title
+    ):
+        return True
+    if (
+        UNCONFIRMED_FUTURE_RE.search(title)
+        and not CONFIRMED_FUTURE_OVERRIDE_RE.search(title)
+    ):
+        return True
+    if ROUTINE_INVESTMENT_COMMENTARY_RE.search(text):
+        return True
+    if ROUTINE_RECAP_OR_COMMENTARY_RE.search(title):
+        return True
+    if ROUTINE_COMMERCIAL_OR_ADJACENT_RE.search(title):
+        return True
+    if HISTORICAL_REVIEW_RE.search(title):
+        return True
+    if ROUTINE_PREVIEW_RE.search(title):
+        return True
+    if (
+        ROUTINE_MINOR_EVENT_RE.search(title)
+        and not REALIZED_MATERIAL_CHANGE_RE.search(title)
+    ):
+        return True
+    if ROUTINE_PERIODIC_UPDATE_RE.search(title):
+        if re.search(r"約款|感染者", title) or not REALIZED_MATERIAL_CHANGE_RE.search(
+            title
+        ):
+            return True
+    if (
+        ROUTINE_STRATEGY_OVERVIEW_RE.search(title)
+        and not REALIZED_MATERIAL_CHANGE_RE.search(title)
+    ):
+        return True
+    if re.search(r"\bmembers? profile\b|メンバー紹介", title, re.I):
+        return True
+    if ROUTINE_PERSONAL_LIFESTYLE_RE.search(title):
+        return True
+    if (
+        ROUTINE_MARKET_TICK_RE.search(title)
+        and not ROUTINE_MARKET_EXCEPTION_RE.search(title)
+    ):
+        return True
+    category_label = str(category.get("label", ""))
+    if (
+        category_label == "SpaceX"
+        and ROUTINE_SPACEX_LAUNCH_RE.search(title)
+        and not SPACEX_LAUNCH_EXCEPTION_RE.search(title)
+    ):
+        return True
+    entity_noise = ENTITY_SCOPE_NOISE_RE.get(category_label)
+    if entity_noise is not None and entity_noise.search(title):
+        return True
+    if (
+        category_label == "SoftBank"
+        and record.get("source_class") == "discovered_media"
+        and not re.search(
+            r"(SoftBank|ソフトバンク|SBG|孫正義|Masayoshi Son|"
+            r"\bArm (?:Holdings|CEO|chips?|shares?|stock|earnings|processors?)\b)",
+            title,
+            re.I,
+        )
+    ):
+        return True
+    try:
+        issue_year = date.fromisoformat(issue_date).year
+    except ValueError:
+        issue_year = 0
+    stale_years = {
+        int(value)
+        for value in re.findall(r"(?<!\d)(20\d{2})(?!\d)", title)
+        if issue_year and int(value) < issue_year - 1
+    }
+    if stale_years and not REALIZED_MATERIAL_CHANGE_RE.search(title):
+        return True
+    if (
+        str(category.get("label", "")) == "SpaceX"
+        and ENTERTAINMENT_ARTIFACT_RE.search(text)
+        and not SPACE_CONTEXT_RE.search(text)
+    ):
+        return True
+    return False
+
+
+def record_title_has_material_change(
+    category: dict[str, Any],
+    title: str,
+    record: dict[str, Any],
+) -> bool:
+    """Require the headline itself to identify a realized update or result."""
+    excerpt = reader_facing_text(
+        record.get("excerpt") or record.get("evidence") or "",
+        2400,
+    )
+    return bool(
+        REALIZED_MATERIAL_CHANGE_RE.search(title)
+        or MATERIAL_RESULT_TITLE_RE.search(title)
+        or ACTUAL_EARNINGS_EVENT_RE.search(title)
+        or (
+            category.get("allow_sports_results", False)
+            and SPORTS_RESULT_RE.search(title)
+        )
+        or (
+            state_contract.ANALYSIS_HEADLINE_RE.search(title)
+            and state_contract.ANALYSIS_REASONING_RE.search(excerpt)
+        )
+    )
+
+
+def record_matches_macro_scope(
+    category: dict[str, Any],
+    title: str,
+    record: dict[str, Any],
+) -> bool:
+    """Keep geographic macro items inside their configured region."""
+    scope_re = MACRO_CATEGORY_SCOPE_RE.get(str(category.get("label", "")))
+    if scope_re is None:
+        return True
+    material_text = editor_source_text(record, 1600)
+    body_scope_re = MACRO_BODY_SCOPE_RE.get(str(category.get("label", "")))
+    region_match = bool(
+        scope_re.search(title)
+        or (body_scope_re is not None and body_scope_re.search(material_text))
+    )
+    topic_re = MACRO_TOPIC_SCOPE_RE.get(str(category.get("label", "")))
+    if ACTUAL_EARNINGS_EVENT_RE.search(title):
+        return True
+    if (
+        str(category.get("label", "")) == "日本経済"
+        and MATERIAL_EARNINGS_EXCEPTION_RE.search(title)
+        and re.search(r"[一-龯ぁ-んァ-ヶ]", title)
+    ):
+        return True
+    return bool(
+        region_match
+        and topic_re is not None
+        and topic_re.search(f"{title} {material_text}")
+    )
+
+
 def headline_supports_distinct_summary(title: str) -> bool:
     """Return whether a headline states detail that can sit outside a shorter title."""
     text = canonical_article_match_text(title)
@@ -959,6 +1364,9 @@ def publication_evidence_record(
         )
         or record_is_aggregate_digest(title, record)
         or record_is_routine_sports_schedule(category, title, record)
+        or record_is_low_importance_routine(category, title, record, issue_date)
+        or not record_title_has_material_change(category, title, record)
+        or not record_matches_macro_scope(category, title, record)
         or record_evidence_depth(title, record) == "none"
     ):
         return False
@@ -3279,6 +3687,99 @@ def self_test() -> None:
         fail("English event matching treated Emergency as a merger")
     if not PUBLICATION_EVENT_RE.search("SpaceX launches a new vehicle"):
         fail("English event matching lost a real launch")
+    routine_category = {"label": "Honda"}
+    if not record_is_low_importance_routine(
+        routine_category,
+        "Honda株のテクニカル分析、RSIから買い時を検討",
+        {"excerpt": "株価チャートと目標株価を解説する。"},
+        "2099-01-02",
+    ):
+        fail("routine investment commentary reached the Editor")
+    if not record_is_low_importance_routine(
+        routine_category,
+        "Honda 2097年モデルの性能と価格",
+        {"excerpt": "過去モデルの製品概要を紹介する。"},
+        "2099-01-02",
+    ):
+        fail("stale product overview reached the Editor")
+    if record_is_low_importance_routine(
+        routine_category,
+        "Hondaが新工場建設を決定、2097年計画を更新",
+        {"excerpt": "投資額と稼働時期を正式決定した。"},
+        "2099-01-02",
+    ):
+        fail("a realized material change was rejected as stale background")
+    if not record_is_low_importance_routine(
+        {"label": "SpaceX"},
+        "STARSHIPが新アルバムを発売",
+        {"excerpt": "ロックバンドが楽曲を公開した。"},
+        "2099-01-02",
+    ):
+        fail("SpaceX entertainment-name collision reached the Editor")
+    if record_is_low_importance_routine(
+        {"label": "SpaceX"},
+        "SpaceXがStarshipの飛行試験を開始",
+        {"excerpt": "大型ロケットを打ち上げ、軌道投入手順を確認した。"},
+        "2099-01-02",
+    ):
+        fail("a SpaceX flight update was rejected as entertainment")
+    macro_category = {"label": "日本経済"}
+    if record_is_low_importance_routine(
+        macro_category,
+        "Example社、4〜6月期の四半期決算を発表",
+        {"excerpt": "売上高と営業利益の実績を公表した。"},
+        "2099-01-02",
+    ):
+        fail("an actual quarterly result was rejected as routine")
+    for earnings_title in (
+        "Example社、2098年12月期の通期決算を発表",
+        "Example社、本決算を発表",
+        "Example社、最終決算を発表",
+    ):
+        earnings_record = {
+            "excerpt": "売上高、営業利益、最終利益の実績を公表した。"
+        }
+        if record_is_low_importance_routine(
+            macro_category,
+            earnings_title,
+            earnings_record,
+            "2099-01-02",
+        ):
+            fail(f"an actual annual or final result was rejected: {earnings_title}")
+        if not record_title_has_material_change(
+            macro_category,
+            earnings_title,
+            earnings_record,
+        ):
+            fail(f"an actual annual or final result lost materiality: {earnings_title}")
+    if not record_is_low_importance_routine(
+        macro_category,
+        "Example社、四半期決算発表を控え今後の注目点",
+        {"excerpt": "発表前に市場予想と注目点を整理した。"},
+        "2099-01-02",
+    ):
+        fail("an earnings preview reached the Editor")
+    if record_is_low_importance_routine(
+        macro_category,
+        "Example社、今期経常を30%上方修正",
+        {"excerpt": "需要増を受けて通期業績予想を引き上げた。"},
+        "2099-01-02",
+    ):
+        fail("a material earnings revision was rejected as routine")
+    if not record_is_low_importance_routine(
+        macro_category,
+        "13時の日経平均は20円高",
+        {"excerpt": "前場から小幅な値動きが続いた。"},
+        "2099-01-02",
+    ):
+        fail("routine intraday market tick reached the Editor")
+    if record_is_low_importance_routine(
+        macro_category,
+        "日経平均が急反発、一時1000円超高",
+        {"excerpt": "半導体株主導で大幅に反発した。"},
+        "2099-01-02",
+    ):
+        fail("a material market move was rejected as routine")
     wide_category = {
         "label": "CoverageTest",
         "axes": [{"id": "adjacent", "terms": ["axis-only-term"]}],

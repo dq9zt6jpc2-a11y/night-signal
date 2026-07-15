@@ -37,9 +37,10 @@ python3 scripts/night_signal_publish.py YYYY-MM-DD --public-audit
 6. Local audits pass before commit.
 7. `pages.yml` deploys committed state and the owner verifies public URLs.
 
-The repository retains one published issue only: its Evidence/Issue state, sample
-HTML, linked detail pages, root page, and dated page. The prior issue remains just
-long enough to check novelty and copied output; it is deleted only after the new
+The repository retains the current published issue plus its three most recent
+predecessors: their Evidence/Issue state, sample HTML, linked detail pages, and
+dated pages. The Editor uses those prior issues for novelty comparison, and the
+public archive lets readers catch up. Older issues are deleted only after the new
 issue passes every local gate.
 
 The timing policy derives the fresh-collection window from the 19:00 deadline,

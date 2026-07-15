@@ -30,17 +30,16 @@ TOPIC_VALUE_CLASS_MAP = {
     "roster_change": "operational_status_change",
 }
 SUMMARY_LABEL_RE = re.compile(r"(?:変更点|重要性|確認事実|未確定点)\s*[:：]")
-MAX_EDITOR_EVENT_CANDIDATES_PER_CATEGORY = 4
 MAX_EDITOR_RECORDS_PER_EVENT = 2
-EXTRA_EDITOR_EVENTS_PER_CATEGORY = 1
-MAX_SEMANTIC_DEDUP_EVENTS_PER_CATEGORY = 12
 MAX_MODEL_RESPONSES_PER_SCOPE = 2
+NOVELTY_HISTORY_ISSUES = 3
 NOVELTY_CHANGE_RE = re.compile(
-    r"(延期|中止|承認|却下|開始|終了|発売|提供開始|公開|更新|"
+    r"(決定|合意|契約|申請|成立|結果|延期|中止|承認|却下|開始|終了|発売|提供開始|公開|更新|"
     r"増加|減少|上昇|下落|急落|契約|提携|買収|出資|資金調達|"
-    r"就任|退任|移籍|獲得|勝利|敗北|達成|突破|"
-    r"delay|cancel|approve|reject|launch|release|update|"
-    r"increase|decrease|rise|fall|sign|acquire|invest|raise)",
+    r"就任|退任|移籍|獲得|勝利|敗北|達成|突破|過去最高|過去最低|"
+    r"decide|agree|sign|file|complete|result|delay|cancel|approve|reject|"
+    r"launch|release|update|appoint|resign|increase|decrease|rise|fall|"
+    r"acquire|invest|raise|record high|record low)",
     re.I,
 )
 
@@ -298,6 +297,40 @@ def summary_output_budget(record_count: int) -> int:
     return min(4_000, max(1_600, 700 + 550 * max(1, record_count)))
 
 
+def matching_previous_updates(
+    titles: list[str],
+    previous_updates: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Keep only the strongest matching update from each recent issue."""
+    best_by_issue: dict[str, tuple[tuple[int, int, int, int], int, dict[str, Any]]] = {}
+    for position, update in enumerate(previous_updates):
+        previous_title = str(update.get("title", ""))
+        matching_titles = [
+            title for title in titles if core.same_material_event(title, previous_title)
+        ]
+        if not matching_titles:
+            continue
+        score = max(
+            (
+                int(state.materially_same_fact(title, previous_title)),
+                len(novelty_numbers(title) & novelty_numbers(previous_title)),
+                round(100 * state.title_repetition_score(title, previous_title)),
+                state.text_overlap(title, previous_title),
+            )
+            for title in matching_titles
+        )
+        issue_key = str(update.get("date") or f"unknown-{position}")
+        current = best_by_issue.get(issue_key)
+        if current is None or score > current[0]:
+            best_by_issue[issue_key] = (score, position, update)
+    return [
+        value[2]
+        for value in sorted(best_by_issue.values(), key=lambda value: value[1])[
+            :NOVELTY_HISTORY_ISSUES
+        ]
+    ]
+
+
 def records_describe_same_information(
     left: dict[str, Any],
     right: dict[str, Any],
@@ -324,17 +357,23 @@ def event_group_has_new_information(
     previous_updates: list[dict[str, Any]],
     issue_date: str,
 ) -> bool:
-    """Conservatively reject an event already covered by the prior public issue."""
+    """Reject an event unless it adds a concrete delta to the recent archive."""
     if not previous_updates:
         return True
     issue_day = date.fromisoformat(issue_date)
     for record in group:
         title = core.record_public_title(record)
-        matches = [
-            update
-            for update in previous_updates
-            if core.same_material_event(title, str(update.get("title", "")))
-        ]
+        record_text = f"{title}。 {core.editor_source_text(record, 1600)}"
+        matches = matching_previous_updates([title], previous_updates)
+        if not matches:
+            matches = [
+                update
+                for update in previous_updates
+                if core.same_material_event(
+                    record_text,
+                    f"{update.get('title', '')}。 {update.get('summary', '')}",
+                )
+            ][:NOVELTY_HISTORY_ISSUES]
         if not matches:
             return True
         prior_facts = [
@@ -364,9 +403,21 @@ def event_group_has_new_information(
                 for event_date in fact_dates
             ):
                 continue
-            if not any(
+            if any(
                 state.materially_same_fact(fact, prior_fact)
                 for prior_fact in prior_facts
+            ):
+                continue
+            fact_numbers = novelty_numbers(fact)
+            fact_changes = {
+                value.casefold() for value in NOVELTY_CHANGE_RE.findall(fact)
+            }
+            if (
+                (fact_numbers - prior_numbers or fact_changes - prior_changes)
+                and (
+                    core.same_material_event(title, fact)
+                    or core.same_material_event(record_text, fact)
+                )
             ):
                 return True
     return False
@@ -457,21 +508,13 @@ def bounded_candidate_groups(
     *,
     max_events: int | None = None,
 ) -> list[list[dict[str, Any]]]:
-    """Preserve watch-topic breadth, then keep only the strongest events."""
-    if max_events is None:
-        topic_count = sum(
-            isinstance(topic, dict) and bool(topic.get("id"))
-            for topic in category.get("watch_topics", [])
-        )
-        max_events = min(
-            MAX_EDITOR_EVENT_CANDIDATES_PER_CATEGORY,
-            max(2, topic_count + EXTRA_EDITOR_EVENTS_PER_CATEGORY),
-        )
+    """Preserve watch-topic breadth and order every qualifying event."""
     ranked = sorted(
         event_groups,
         key=lambda group: event_group_priority(category, group),
         reverse=True,
     )
+    selection_limit = len(ranked) if max_events is None else max_events
     selected: list[list[dict[str, Any]]] = []
     for topic in category.get("watch_topics", []):
         if not isinstance(topic, dict) or not topic.get("id"):
@@ -493,14 +536,62 @@ def bounded_candidate_groups(
         )
         if group is not None:
             selected.append(group)
-        if len(selected) >= max_events:
+        if len(selected) >= selection_limit:
             break
     for group in ranked:
-        if len(selected) >= max_events:
+        if len(selected) >= selection_limit:
             break
         if group not in selected:
             selected.append(group)
     return [bounded_event_records(group) for group in selected]
+
+
+def semantically_merge_event_groups(
+    category: dict[str, Any],
+    event_groups: list[list[dict[str, Any]]],
+) -> list[list[dict[str, Any]]]:
+    """Merge similar events without an item cap or an all-pairs comparison."""
+    ordered = sorted(
+        event_groups,
+        key=lambda group: event_group_priority(category, group),
+        reverse=True,
+    )
+    merged: list[list[dict[str, Any]]] = []
+    topic_index: dict[str, set[int]] = {}
+    for group in ordered:
+        topics = {
+            str(topic_id)
+            for record in group
+            for topic_id in record.get("watch_topic_ids", [])
+            if str(topic_id)
+        } or {"__unmapped__"}
+        candidate_indexes = sorted(
+            {
+                index
+                for topic in topics
+                for index in topic_index.get(topic, set())
+            }
+        )
+        matching_index = next(
+            (
+                index
+                for index in candidate_indexes
+                if any(
+                    records_describe_same_information(record, existing)
+                    for record in group
+                    for existing in merged[index]
+                )
+            ),
+            None,
+        )
+        if matching_index is None:
+            matching_index = len(merged)
+            merged.append(list(group))
+        else:
+            merged[matching_index].extend(group)
+        for topic in topics:
+            topic_index.setdefault(topic, set()).add(matching_index)
+    return merged
 
 
 def publication_candidate_groups(
@@ -510,7 +601,7 @@ def publication_candidate_groups(
     *,
     previous_updates: list[dict[str, Any]] | None = None,
 ) -> list[list[dict[str, Any]]]:
-    """Deduplicate, suppress unchanged prior events, and bound model candidates."""
+    """Deduplicate and suppress unchanged prior events without an item cap."""
     selected = [
         record
         for _, record in core.editor_evidence_records(category, issue_date, records)
@@ -528,29 +619,7 @@ def publication_candidate_groups(
             if event_group_has_new_information(group, previous_updates, issue_date)
         ]
     novel_events = len(event_groups)
-    preselected = bounded_candidate_groups(
-        category,
-        event_groups,
-        max_events=MAX_SEMANTIC_DEDUP_EVENTS_PER_CATEGORY,
-    )
-    semantically_merged: list[list[dict[str, Any]]] = []
-    for group in preselected:
-        matching = next(
-            (
-                candidate
-                for candidate in semantically_merged
-                if any(
-                    records_describe_same_information(record, existing)
-                    for record in group
-                    for existing in candidate
-                )
-            ),
-            None,
-        )
-        if matching is None:
-            semantically_merged.append(list(group))
-        else:
-            matching.extend(group)
+    semantically_merged = semantically_merge_event_groups(category, event_groups)
     bounded = bounded_candidate_groups(category, semantically_merged)
     print(
         json.dumps(
@@ -560,7 +629,7 @@ def publication_candidate_groups(
                 "evidence_records": len(selected),
                 "grouped_events": grouped_events,
                 "novel_events": novel_events,
-                "semantic_dedup_pool": len(preselected),
+                "semantic_dedup_pool": len(event_groups),
                 "model_candidates": len(bounded),
             },
             ensure_ascii=False,
@@ -575,9 +644,9 @@ def previous_category_updates(
     issue_date: str,
     category_label: str,
     *,
-    max_updates: int = 20,
+    history_issues: int = NOVELTY_HISTORY_ISSUES,
 ) -> list[dict[str, Any]]:
-    """Return bounded prior public updates as novelty context, never as Evidence."""
+    """Return the latest three prior issues as novelty context, never Evidence."""
     issue_paths = sorted(
         (
             path
@@ -585,7 +654,7 @@ def previous_category_updates(
             if path.parent.name < issue_date
         ),
         reverse=True,
-    )
+    )[:history_issues]
     updates: list[dict[str, Any]] = []
     seen: set[str] = set()
     for issue_path in issue_paths:
@@ -615,8 +684,6 @@ def previous_category_updates(
                 }
             )
             seen.add(signature)
-            if len(updates) >= max_updates:
-                return updates
     return updates
 
 
@@ -696,11 +763,7 @@ def publication_record_chunks(
                 "title": compact_text(update.get("title", ""), 180),
                 "summary": compact_text(update.get("summary", ""), 700),
             }
-            for update in previous_updates or []
-            if any(
-                core.same_material_event(title, str(update.get("title", "")))
-                for title in titles
-            )
+            for update in matching_previous_updates(titles, previous_updates or [])
         ]
         decorated_group = [
             {
@@ -2105,8 +2168,80 @@ def self_test() -> None:
         ]
         for index in range(20)
     ]
-    if len(bounded_candidate_groups(review_category, budget_groups)) != 3:
-        fail("Editor dynamic candidate budget did not stay at watch topics plus one")
+    if len(bounded_candidate_groups(review_category, budget_groups)) != len(
+        budget_groups
+    ):
+        fail("Editor imposed a publication candidate count limit")
+    merged_budget_groups = semantically_merge_event_groups(
+        review_category,
+        [budget_groups[0], [{**budget_groups[0][0], "url": "https://mirror.example/release"}]],
+    )
+    if len(merged_budget_groups) != 1:
+        fail("Editor retained semantically repeated candidate groups")
+    with tempfile.TemporaryDirectory() as temporary_directory:
+        history_root = Path(temporary_directory)
+        for offset in range(1, 5):
+            history_date = f"2099-01-0{offset}"
+            history_dir = history_root / history_date
+            history_dir.mkdir()
+            (history_dir / "issue.json").write_text(
+                json.dumps(
+                    {
+                        "issue_date": history_date,
+                        "cards": [
+                            {
+                                "category": "OpenAI",
+                                "title": f"OpenAI履歴{offset}",
+                                "summary": f"OpenAIの更新{offset}。",
+                            }
+                        ],
+                    },
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+        history_updates = previous_category_updates(
+            history_root,
+            "2099-01-05",
+            "OpenAI",
+        )
+    if (
+        not history_updates
+        or history_updates[0]["date"] != "2099-01-04"
+        or {update["date"] for update in history_updates} != {
+        "2099-01-02",
+        "2099-01-03",
+        "2099-01-04",
+        }
+    ):
+        fail("Editor novelty context did not retain exactly the latest three issues")
+    matched_history = matching_previous_updates(
+        ["OpenAIが新モデルを公開、利用上限を2倍に拡大"],
+        [
+            {
+                "date": "2099-01-04",
+                "title": "OpenAIが新モデルを公開、利用上限を拡大",
+                "summary": "利用上限を2倍にした。",
+            },
+            {
+                "date": "2099-01-04",
+                "title": "OpenAIが別の製品を公開",
+                "summary": "別製品の更新。",
+            },
+            {
+                "date": "2099-01-03",
+                "title": "OpenAIが新モデルを公開",
+                "summary": "新モデルを公開した。",
+            },
+            {
+                "date": "2099-01-02",
+                "title": "OpenAIが新モデルを発表",
+                "summary": "新モデルを発表した。",
+            },
+        ],
+    )
+    if len(matched_history) != 3 or matched_history[0]["date"] != "2099-01-04":
+        fail("Editor did not keep one strongest comparison from each recent issue")
     bridging_records = [
         review_records[0],
         {

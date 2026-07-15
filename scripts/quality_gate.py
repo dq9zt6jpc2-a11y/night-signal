@@ -28,6 +28,7 @@ MAX_DETAIL_SIMILARITY_VS_PREVIOUS = 0.95
 EXPECTED_HERO_TITLE = "NIGHT SIGNAL"
 EXPECTED_HERO_CONCEPT_TERMS = ["眠りにつく前に", "世界の輪郭", "次の朝"]
 LATEST_THREE_DAY_LABELS = {0: "今日", 1: "昨日", 2: "一昨日"}
+ARCHIVED_PREVIOUS_ISSUES = 3
 REQUIRED_CATEGORIES = [category["label"] for category in COVERAGE_CONTRACT["categories"]]
 REQUIRED_SECTIONS = {
     category["section_id"]: category["label"] for category in COVERAGE_CONTRACT["categories"]
@@ -619,8 +620,12 @@ def local_href_targets(html: str, base: Path) -> list[Path]:
 
 
 def validate_local_links(issue_date: str) -> None:
-    html_files = [SITE_ROOT / "index.html", SITE_ROOT / issue_date / "index.html"]
-    html_files.extend(sorted((SITE_ROOT / issue_date / "details").glob("*.html")))
+    html_files = [SITE_ROOT / "index.html", SITE_ROOT / "archive.html"]
+    for dated_issue in sorted(SITE_ROOT.glob("20??-??-??")):
+        if not dated_issue.is_dir():
+            continue
+        html_files.append(dated_issue / "index.html")
+        html_files.extend(sorted((dated_issue / "details").glob("*.html")))
     missing = []
     for html_file in html_files:
         html = read(html_file)
@@ -633,6 +638,31 @@ def validate_local_links(issue_date: str) -> None:
                 missing.append(f"{html_file.relative_to(ROOT)} -> {target.relative_to(ROOT)}")
     if missing:
         fail("broken local links: " + "; ".join(missing[:12]))
+
+
+def validate_archive(issue_date: str, root_html: str, dated_html: str) -> None:
+    archive_path = SITE_ROOT / "archive.html"
+    archive_html = read(archive_path)
+    dated_issues = sorted(
+        path.name
+        for path in SITE_ROOT.glob("20??-??-??")
+        if path.is_dir() and (path / "index.html").exists()
+    )
+    if issue_date not in dated_issues:
+        fail(f"archive is missing the current issue: {issue_date}")
+    if len(dated_issues) > ARCHIVED_PREVIOUS_ISSUES + 1:
+        fail(f"archive retained too many issues: {len(dated_issues)}")
+    if 'href="archive.html"' not in root_html:
+        fail("root page is missing the archive link")
+    if 'href="../archive.html"' not in dated_html:
+        fail("dated issue is missing the archive link")
+    missing_links = [
+        issue
+        for issue in dated_issues
+        if f'href="{issue}/index.html"' not in archive_html
+    ]
+    if missing_links:
+        fail("archive index is missing retained issues: " + ", ".join(missing_links))
 
 
 def validate_detail_scope(issue_date: str, root_html: str, dated_html: str) -> None:
@@ -824,6 +854,7 @@ def validate(issue_date: str) -> None:
             fail(f"missing required root link: {link}")
 
     validate_detail_scope(issue_date, root_html, dated_html)
+    validate_archive(issue_date, root_html, dated_html)
     validate_local_links(issue_date)
 
     print(f"QUALITY GATE PASSED: {issue_date}, cards={len(cards)}, fresh={fresh_count}")
