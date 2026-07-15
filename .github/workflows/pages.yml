@@ -7,6 +7,11 @@ on:
         description: "Today's JST NIGHT SIGNAL issue date. Empty uses today's date."
         required: false
         type: string
+      redeploy_published:
+        description: "Redeploy the already-public matching issue without recollection."
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -33,12 +38,17 @@ jobs:
         env:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
           REQUESTED_ISSUE_DATE: ${{ inputs.issue_date || '' }}
+          REDEPLOY_PUBLISHED: ${{ inputs.redeploy_published || 'false' }}
         run: |
           ISSUE_DATE="$(python3 scripts/night_signal_publish.py --resolve-issue-date --event-name "$GITHUB_EVENT_NAME" --requested-issue-date "${REQUESTED_ISSUE_DATE:-}")"
-          # GitHub Pages deploys only a committed, evening-fresh issue. The
-          # unattended collector owns live research and commits audited state;
-          # this workflow remains a deterministic publication boundary.
-          python3 scripts/night_signal_publish.py "$ISSUE_DATE" --deploy-existing --verification-profile deploy
+          # Initial publication requires committed evening-fresh state. An
+          # explicit static redeploy first proves that the same issue is already
+          # public, then reuses it without collection or model work.
+          REDEPLOY_ARGS=()
+          if [[ "$REDEPLOY_PUBLISHED" == "true" ]]; then
+            REDEPLOY_ARGS+=(--redeploy-published)
+          fi
+          python3 scripts/night_signal_publish.py "$ISSUE_DATE" --deploy-existing "${REDEPLOY_ARGS[@]}" --verification-profile deploy
           cp .nojekyll site/.nojekyll
           echo "ISSUE_DATE=$ISSUE_DATE" >> "$GITHUB_ENV"
 

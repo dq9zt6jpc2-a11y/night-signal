@@ -232,6 +232,7 @@ def collection_freshness(
     *,
     now: datetime | None = None,
     require_evening_refresh: bool,
+    allow_expired_current: bool = False,
 ) -> dict[str, Any]:
     issue = json.loads((state_dir(issue_date) / "issue.json").read_text(encoding="utf-8"))
     manifest = issue.get("coverage_manifest")
@@ -242,6 +243,7 @@ def collection_freshness(
         issue_date,
         now=now or datetime.now(ZoneInfo("Asia/Tokyo")),
         require_evening_refresh=require_evening_refresh,
+        allow_expired_current=allow_expired_current,
     )
 
 
@@ -251,6 +253,7 @@ def validate_collection_freshness(
     *,
     now: datetime,
     require_evening_refresh: bool,
+    allow_expired_current: bool = False,
 ) -> dict[str, Any]:
     value = manifest.get("collection_completed_at_jst")
     if not isinstance(value, str):
@@ -267,7 +270,11 @@ def validate_collection_freshness(
         fail(f"collection date mismatch: {completed.isoformat()} != {issue_date}")
     if completed > current + timedelta(minutes=5):
         fail(f"collection completion is in the future: {completed.isoformat()}")
-    if issue_date == current.date().isoformat() and current - completed > timedelta(hours=4):
+    if (
+        issue_date == current.date().isoformat()
+        and current - completed > timedelta(hours=4)
+        and not allow_expired_current
+    ):
         fail(f"collection is too old for publication: {completed.isoformat()}")
     final_cutoff = datetime.combine(
         completed.date(),
@@ -325,6 +332,31 @@ def self_test() -> None:
     )
     if not result["evening_refresh"]:
         fail("fresh evening collection was rejected")
+    expired_evening = {
+        "collection_completed_at_jst": "2099-01-01T17:20:00+09:00",
+        "collection_mode": "github_models_unattended",
+    }
+    expired_now = datetime.fromisoformat("2099-01-01T22:30:00+09:00")
+    try:
+        validate_collection_freshness(
+            expired_evening,
+            "2099-01-01",
+            now=expired_now,
+            require_evening_refresh=True,
+        )
+    except SystemExit:
+        pass
+    else:
+        fail("an expired collection passed without a published-issue redeploy gate")
+    redeploy_result = validate_collection_freshness(
+        expired_evening,
+        "2099-01-01",
+        now=expired_now,
+        require_evening_refresh=True,
+        allow_expired_current=True,
+    )
+    if not redeploy_result["evening_refresh"]:
+        fail("a verified published issue could not be redeployed")
     stale = dict(fresh)
     stale["collection_completed_at_jst"] = "2099-01-01T16:44:00+09:00"
     try:
@@ -473,6 +505,7 @@ def prepare(
     reuse_evidence: bool,
     reprocess_existing: bool,
     deploy_existing: bool,
+    redeploy_published: bool,
     verification_profile: str,
 ) -> dict[str, Any]:
     require_jst_current_issue(issue_date)
@@ -484,6 +517,15 @@ def prepare(
         if deploy_existing:
             if not (state_dir(issue_date) / "issue.json").exists():
                 fail(f"{issue_date} has no committed issue state to deploy")
+            if redeploy_published:
+                run(
+                    [
+                        sys.executable,
+                        "scripts/publication_audit.py",
+                        issue_date,
+                        "--public-content-only",
+                    ]
+                )
         else:
             current_stage = "plan_written"
             runtime.write_checkpoint(issue_date, current_stage, "completed", "current collection contract loaded", STATE_ROOT)
@@ -499,6 +541,7 @@ def prepare(
         freshness = collection_freshness(
             issue_date,
             require_evening_refresh=deploy_existing,
+            allow_expired_current=redeploy_published,
         )
         current_stage = "render_complete"
         assemble_and_render(issue_date)
@@ -549,6 +592,14 @@ def main() -> int:
         help="re-edit reusable Evidence with checkpoints only and make no model request",
     )
     parser.add_argument("--deploy-existing", action="store_true")
+    parser.add_argument(
+        "--redeploy-published",
+        action="store_true",
+        help=(
+            "redeploy an already-public matching issue without recollection; requires "
+            "--deploy-existing and a passing public-content audit"
+        ),
+    )
     parser.add_argument("--public-audit", action="store_true")
     parser.add_argument("--self-test", action="store_true")
     parser.add_argument("--verification-profile", choices=["deploy", "full"], default="")
@@ -572,6 +623,8 @@ def main() -> int:
         fail("--reprocess-existing requires --reuse-evidence")
     if args.reprocess_existing and args.deploy_existing:
         fail("--reprocess-existing and --deploy-existing are mutually exclusive")
+    if args.redeploy_published and not args.deploy_existing:
+        fail("--redeploy-published requires --deploy-existing")
     if args.public_audit:
         result = public_audit(args.issue_date)
     else:
@@ -581,6 +634,7 @@ def main() -> int:
             reuse_evidence=args.reuse_evidence,
             reprocess_existing=args.reprocess_existing,
             deploy_existing=args.deploy_existing,
+            redeploy_published=args.redeploy_published,
             verification_profile=verification_profile,
         )
     print(json.dumps(result, ensure_ascii=False, indent=2))

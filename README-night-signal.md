@@ -21,6 +21,10 @@ Deploy committed state without collecting:
 python3 scripts/night_signal_publish.py YYYY-MM-DD --deploy-existing
 ```
 
+公開済みの同一号について、コードや静的ナビゲーションだけを再配信する場合は
+`--deploy-existing --redeploy-published` を使う。この経路は公開中の号とローカル号の
+内容一致を先に監査し、再収集やAI編集を行わない。初回公開には使用しない。
+
 Verify public root and dated pages:
 
 ```bash
