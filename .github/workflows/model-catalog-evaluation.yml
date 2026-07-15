@@ -41,8 +41,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
+          mkdir -p tmp
           python3 scripts/night_signal_model_audit.py \
-            --output "$RUNNER_TEMP/night-signal-model-audit.json" \
+            --output tmp/model-audit.json \
             --github-output "$GITHUB_OUTPUT"
 
       - name: Restore evaluation result for this exact candidate set
@@ -88,7 +89,7 @@ jobs:
         with:
           name: night-signal-model-evaluation-${{ github.run_id }}
           path: |
-            ${{ runner.temp }}/night-signal-model-audit.json
+            tmp/model-audit.json
             tmp/model-evaluation/report.json
           if-no-files-found: warn
           retention-days: 30
