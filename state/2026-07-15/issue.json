@@ -2,98 +2,133 @@
   "issue_date": "2026-07-15",
   "cards": [
     {
-      "watch_topic_id": "ipo_financing",
-      "title": "OpenAIとセレブラスが200億ドルのハードウェア提携を発表、NVIDIAへの強力な代替候補に浮上",
-      "summary": "セレブラスのアンドリュー・フェルドマンCEOは、OpenAIとの200億ドルのハードウェア提携を「シリコンバレー史上最大級の契約」と表現し、同社がNVIDIAの最も有力な代替候補であると述べた。 この提携は共同設計を基盤としており、OpenAIのモデルの進化がセレブラスの次世代チップの仕様に直接影響を与える。 フェルドマン氏は、AI需要が予想を上回り、半導体やメモリ、データセンターにおける供給逼迫が数年続くと警告した。 彼は、NVIDIAが競争を排除するリスクを警告し、AIインフラ構築の競争力学が未解決であることを指摘した。",
+      "watch_topic_id": "strategic_talent_japan_gtm",
+      "title": "アクセンチュアとOpenAIが日本で提携拡大しAI開発期間を大幅短縮",
+      "summary": "アクセンチュアは2026年7月9日、OpenAIとのグローバル戦略的パートナーシップを日本国内で拡大し、AIエージェントを活用して部門横断型の業務モデルを推進することを発表した。 一部企業では非定型業務にAIエージェントを適用し、業務工数を最大90%削減する成果を上げている。 製造業では設計や生産、保全、ロボティクスの高度化を進め、金融業では顧客体験やリスク管理、システム開発をAIネイティブに再設計する。 AI活用の安全性を高めるため、データ、セキュリティ、ガバナンスを統合した環境構築支援も行う。 AIエージェントを活用した開発では設計から保守までの工程を再設計し、開発期間を最大6分の1に短縮する取り組みを進めている。 サイバーセキュリティ分野ではGPT-5.5を活用し、脆弱性検知やリスク分析の高度化を図る。",
       "section_id": "openai",
       "category": "OpenAI",
-      "source_published_date": "2026-07-14",
-      "topic_value_class": "market_or_financial_impact",
-      "priority_class": "top",
-      "change_class": "material_update",
-      "detail": {
-        "slug": "auto-4cc5f9b87baf-2026-07-15.html",
-        "sources": [
-          {
-            "label": "finance.biggo.jp",
-            "url": "https://finance.biggo.jp/news/08d8813e421a43cf"
-          }
-        ],
-        "summary": "セレブラスのアンドリュー・フェルドマンCEOは、OpenAIとの200億ドルのハードウェア提携を「シリコンバレー史上最大級の契約」と表現し、同社がNVIDIAの最も有力な代替候補であると述べた。 この提携は共同設計を基盤としており、OpenAIのモデルの進化がセレブラスの次世代チップの仕様に直接影響を与える。 フェルドマン氏は、AI需要が予想を上回り、半導体やメモリ、データセンターにおける供給逼迫が数年続くと警告した。 彼は、NVIDIAが競争を排除するリスクを警告し、AIインフラ構築の競争力学が未解決であることを指摘した。",
-        "summary_basis": {
-          "confirmed_facts": [
-            "セレブラスのアンドリュー・フェルドマンCEOは、OpenAIとの200億ドルのハードウェア提携を「シリコンバレー史上最大級の契約」と表現し、同社がNVIDIAの最も有力な代替候補であると述べた。",
-            "この提携は共同設計を基盤としており、OpenAIのモデルの進化がセレブラスの次世代チップの仕様に直接影響を与える。",
-            "フェルドマン氏は、AI需要が予想を上回り、半導体やメモリ、データセンターにおける供給逼迫が数年続くと警告した。",
-            "彼は、NVIDIAが競争を排除するリスクを警告し、AIインフラ構築の競争力学が未解決であることを指摘した。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "セレブラスのアンドリュー・フェルドマンCEOは、OpenAIとの200億ドルのハードウェア提携を「シリコンバレー史上最大級の契約」と表現し、同社がNVIDIAの最も有力な代替候補であると述べた。",
-              "source_urls": [
-                "https://finance.biggo.jp/news/08d8813e421a43cf"
-              ]
-            },
-            {
-              "fact": "この提携は共同設計を基盤としており、OpenAIのモデルの進化がセレブラスの次世代チップの仕様に直接影響を与える。",
-              "source_urls": [
-                "https://finance.biggo.jp/news/08d8813e421a43cf"
-              ]
-            },
-            {
-              "fact": "フェルドマン氏は、AI需要が予想を上回り、半導体やメモリ、データセンターにおける供給逼迫が数年続くと警告した。",
-              "source_urls": [
-                "https://finance.biggo.jp/news/08d8813e421a43cf"
-              ]
-            },
-            {
-              "fact": "彼は、NVIDIAが競争を排除するリスクを警告し、AIインフラ構築の競争力学が未解決であることを指摘した。",
-              "source_urls": [
-                "https://finance.biggo.jp/news/08d8813e421a43cf"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-07-14"
-          ]
-        }
-      }
-    },
-    {
-      "watch_topic_id": "enterprise_infrastructure",
-      "title": "OpenAIがPowerPoint用ChatGPTを正式公開、8月6日から課金開始",
-      "summary": "OpenAIはPowerPoint用のChatGPTを正式に公開し、8月6日から従量課金に移行することを発表した。 企業は共通クレジットの消費を抑制するため、コスト監査を急ぐ必要がある。",
-      "section_id": "openai",
-      "category": "OpenAI",
-      "source_published_date": "2026-07-13",
+      "source_published_date": "2026-07-15",
       "topic_value_class": "operational_status_change",
-      "priority_class": "standard",
+      "priority_class": "priority",
       "change_class": "new_event",
       "detail": {
-        "slug": "auto-a45b320abe9c-2026-07-15.html",
+        "slug": "auto-0f52833c7265-2026-07-15.html",
         "sources": [
           {
-            "label": "zaikei.co.jp",
-            "url": "https://www.zaikei.co.jp/amp/article/20260713/860918.html"
+            "label": "robotstart.info",
+            "url": "https://robotstart.info/article/2026/07/15/382148.html"
           }
         ],
-        "summary": "OpenAIはPowerPoint用のChatGPTを正式に公開し、8月6日から従量課金に移行することを発表した。 企業は共通クレジットの消費を抑制するため、コスト監査を急ぐ必要がある。",
+        "summary": "アクセンチュアは2026年7月9日、OpenAIとのグローバル戦略的パートナーシップを日本国内で拡大し、AIエージェントを活用して部門横断型の業務モデルを推進することを発表した。 一部企業では非定型業務にAIエージェントを適用し、業務工数を最大90%削減する成果を上げている。 製造業では設計や生産、保全、ロボティクスの高度化を進め、金融業では顧客体験やリスク管理、システム開発をAIネイティブに再設計する。 AI活用の安全性を高めるため、データ、セキュリティ、ガバナンスを統合した環境構築支援も行う。 AIエージェントを活用した開発では設計から保守までの工程を再設計し、開発期間を最大6分の1に短縮する取り組みを進めている。 サイバーセキュリティ分野ではGPT-5.5を活用し、脆弱性検知やリスク分析の高度化を図る。",
         "summary_basis": {
           "confirmed_facts": [
-            "OpenAIはPowerPoint用のChatGPTを正式に公開し、8月6日から従量課金に移行することを発表した。",
-            "企業は共通クレジットの消費を抑制するため、コスト監査を急ぐ必要がある。"
+            "アクセンチュアは2026年7月9日、OpenAIとのグローバル戦略的パートナーシップを日本国内で拡大し、AIエージェントを活用して部門横断型の業務モデルを推進することを発表した。",
+            "一部企業では非定型業務にAIエージェントを適用し、業務工数を最大90%削減する成果を上げている。",
+            "製造業では設計や生産、保全、ロボティクスの高度化を進め、金融業では顧客体験やリスク管理、システム開発をAIネイティブに再設計する。",
+            "AI活用の安全性を高めるため、データ、セキュリティ、ガバナンスを統合した環境構築支援も行う。",
+            "AIエージェントを活用した開発では設計から保守までの工程を再設計し、開発期間を最大6分の1に短縮する取り組みを進めている。",
+            "サイバーセキュリティ分野ではGPT-5.5を活用し、脆弱性検知やリスク分析の高度化を図る。"
           ],
           "fact_sources": [
             {
-              "fact": "OpenAIはPowerPoint用のChatGPTを正式に公開し、8月6日から従量課金に移行することを発表した。",
+              "fact": "アクセンチュアは2026年7月9日、OpenAIとのグローバル戦略的パートナーシップを日本国内で拡大し、AIエージェントを活用して部門横断型の業務モデルを推進することを発表した。",
               "source_urls": [
-                "https://www.zaikei.co.jp/amp/article/20260713/860918.html"
+                "https://robotstart.info/article/2026/07/15/382148.html"
               ]
             },
             {
-              "fact": "企業は共通クレジットの消費を抑制するため、コスト監査を急ぐ必要がある。",
+              "fact": "一部企業では非定型業務にAIエージェントを適用し、業務工数を最大90%削減する成果を上げている。",
               "source_urls": [
-                "https://www.zaikei.co.jp/amp/article/20260713/860918.html"
+                "https://robotstart.info/article/2026/07/15/382148.html"
+              ]
+            },
+            {
+              "fact": "製造業では設計や生産、保全、ロボティクスの高度化を進め、金融業では顧客体験やリスク管理、システム開発をAIネイティブに再設計する。",
+              "source_urls": [
+                "https://robotstart.info/article/2026/07/15/382148.html"
+              ]
+            },
+            {
+              "fact": "AI活用の安全性を高めるため、データ、セキュリティ、ガバナンスを統合した環境構築支援も行う。",
+              "source_urls": [
+                "https://robotstart.info/article/2026/07/15/382148.html"
+              ]
+            },
+            {
+              "fact": "AIエージェントを活用した開発では設計から保守までの工程を再設計し、開発期間を最大6分の1に短縮する取り組みを進めている。",
+              "source_urls": [
+                "https://robotstart.info/article/2026/07/15/382148.html"
+              ]
+            },
+            {
+              "fact": "サイバーセキュリティ分野ではGPT-5.5を活用し、脆弱性検知やリスク分析の高度化を図る。",
+              "source_urls": [
+                "https://robotstart.info/article/2026/07/15/382148.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-15"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "ipo_financing",
+      "title": "AppleがOpenAIと元社員2名を営業秘密不正取得で提訴",
+      "summary": "Appleは2026年7月10日、OpenAIと元Apple社員2名を営業秘密の不正取得と契約違反で米カリフォルニア州北部地区連邦地方裁判所へ提訴した。 被告のTang Tan氏はAppleで24年間プロダクトデザイン担当副社長を務めた後、OpenAIのハードウェア部門Chief Hardware Officerに就任。 Chang Liu氏はAppleで8年間システム電気技術者として勤務し、2026年1月にOpenAIへ転職。 Appleは、OpenAIの採用面接でApple製品の実物部品持参や非公開プロジェクトのコードネーム使用、セキュリティ手続き回避の助言など組織的な情報流出を主張している。 AppleはOpenAIに在籍する元Apple社員が400人超と主張し、営業秘密の使用・開示差し止めや機密資料返還、損害賠償などを求めている。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-13",
+      "topic_value_class": "risk_or_safety_signal",
+      "priority_class": "top",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-98f18e0f9a48-2026-07-15.html",
+        "sources": [
+          {
+            "label": "rocket-boys.co.jp",
+            "url": "https://rocket-boys.co.jp/security-measures-lab/apple-v-openai-trade-secret-lawsuit/"
+          }
+        ],
+        "summary": "Appleは2026年7月10日、OpenAIと元Apple社員2名を営業秘密の不正取得と契約違反で米カリフォルニア州北部地区連邦地方裁判所へ提訴した。 被告のTang Tan氏はAppleで24年間プロダクトデザイン担当副社長を務めた後、OpenAIのハードウェア部門Chief Hardware Officerに就任。 Chang Liu氏はAppleで8年間システム電気技術者として勤務し、2026年1月にOpenAIへ転職。 Appleは、OpenAIの採用面接でApple製品の実物部品持参や非公開プロジェクトのコードネーム使用、セキュリティ手続き回避の助言など組織的な情報流出を主張している。 AppleはOpenAIに在籍する元Apple社員が400人超と主張し、営業秘密の使用・開示差し止めや機密資料返還、損害賠償などを求めている。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Appleは2026年7月10日、OpenAIと元Apple社員2名を営業秘密の不正取得と契約違反で米カリフォルニア州北部地区連邦地方裁判所へ提訴した。",
+            "被告のTang Tan氏はAppleで24年間プロダクトデザイン担当副社長を務めた後、OpenAIのハードウェア部門Chief Hardware Officerに就任。",
+            "Chang Liu氏はAppleで8年間システム電気技術者として勤務し、2026年1月にOpenAIへ転職。",
+            "Appleは、OpenAIの採用面接でApple製品の実物部品持参や非公開プロジェクトのコードネーム使用、セキュリティ手続き回避の助言など組織的な情報流出を主張している。",
+            "AppleはOpenAIに在籍する元Apple社員が400人超と主張し、営業秘密の使用・開示差し止めや機密資料返還、損害賠償などを求めている。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Appleは2026年7月10日、OpenAIと元Apple社員2名を営業秘密の不正取得と契約違反で米カリフォルニア州北部地区連邦地方裁判所へ提訴した。",
+              "source_urls": [
+                "https://rocket-boys.co.jp/security-measures-lab/apple-v-openai-trade-secret-lawsuit/"
+              ]
+            },
+            {
+              "fact": "被告のTang Tan氏はAppleで24年間プロダクトデザイン担当副社長を務めた後、OpenAIのハードウェア部門Chief Hardware Officerに就任。",
+              "source_urls": [
+                "https://rocket-boys.co.jp/security-measures-lab/apple-v-openai-trade-secret-lawsuit/"
+              ]
+            },
+            {
+              "fact": "Chang Liu氏はAppleで8年間システム電気技術者として勤務し、2026年1月にOpenAIへ転職。",
+              "source_urls": [
+                "https://rocket-boys.co.jp/security-measures-lab/apple-v-openai-trade-secret-lawsuit/"
+              ]
+            },
+            {
+              "fact": "Appleは、OpenAIの採用面接でApple製品の実物部品持参や非公開プロジェクトのコードネーム使用、セキュリティ手続き回避の助言など組織的な情報流出を主張している。",
+              "source_urls": [
+                "https://rocket-boys.co.jp/security-measures-lab/apple-v-openai-trade-secret-lawsuit/"
+              ]
+            },
+            {
+              "fact": "AppleはOpenAIに在籍する元Apple社員が400人超と主張し、営業秘密の使用・開示差し止めや機密資料返還、損害賠償などを求めている。",
+              "source_urls": [
+                "https://rocket-boys.co.jp/security-measures-lab/apple-v-openai-trade-secret-lawsuit/"
               ]
             }
           ],
@@ -104,327 +139,281 @@
       }
     },
     {
-      "watch_topic_id": "safety_security_regulation",
-      "title": "OpenAIがキャンベラで公務員向けAIワークショップを開催",
-      "summary": "OpenAIはキャンベラで公務員向けのAIワークショップを開催し、60人の公務員がChatGPTやCodexを使用して日常業務へのAIの適用をテストした。 参加者は自分の役割から問題を特定し、ドラフト作成や研究、調整、サービス提供のための初期プロトタイプを構築した。",
+      "watch_topic_id": "product_release",
+      "title": "OpenAIのCodexとChatGPT Workが800万人ユーザー突破し利用制限を再リセット",
+      "summary": "OpenAIのCodexとChatGPT Workの合算アクティブユーザー数が2026年7月中旬に700万人を突破し、その後800万人に達した。 急成長の背景には新モデルGPT-5.6 Solの効率化と5時間ごとの利用制限の一時解除がある。 OpenAIは全ユーザーの利用制限を再リセットし、5時間ごとのアクセス制限を継続しない方針を示した。 これによりユーザーは上限を気にせずGPT-5.6 Solの性能を試せるようになった。 OpenAIの推論チームは需要増に対応するため尽力しており、今後一部不具合が発生する可能性もあるとされる。 OpenAIは2026年7月9日に業務向けAIエージェント「ChatGPT Work」とCodexを統合した新しいChatGPTデスクトップアプリを発表した。 ChatGPT Workは複数のアプリやファイルを横断して情報を収集し、資料作成や分析、定期更新などの業務を自律的に遂行する。 新アプリは内蔵ブラウザを備え、オンライン情報収集やWebツールの利用、Google WorkspaceやMicrosoft 365のファイル編集を一元化できる。 Codexは新アプリに統合され、差分内でのインライン編集やプルリクエストレビューなど開発ワークフローの強化が図られている。 OpenAIは企業向けに利用者管理や承認フロー、監査体制の整備を求めている。 ChatGPT WorkはSlackやGoogle Driveなどの業務アプリやファイルを横断して自律的に作業し、目的を入力するだけで必要なタスクを分解・実行する。 外部サービス連携用の「Unified Plugins Directory」も新設され、アプリ名指定や自動データソース選択が可能となった。 ウェブサイトやウェブアプリを生成する「Sites」機能がパブリックベータとして公開され、社内ポータルやダッシュボードなどを作成・共有できる。 MacとWindows向けに新しいChatGPTデスクトップアプリが公開され、従来のCodexアプリは統合された。 既存のChatGPTデスクトップアプリは「ChatGPT Classic」に改称され、当面併存する。",
       "section_id": "openai",
       "category": "OpenAI",
-      "source_published_date": "2026-07-13",
-      "topic_value_class": "technical_or_product_shift",
-      "priority_class": "standard",
+      "source_published_date": "2026-07-15",
+      "topic_value_class": "operational_status_change",
+      "priority_class": "priority",
       "change_class": "new_event",
       "detail": {
-        "slug": "auto-306725aee7f0-2026-07-15.html",
+        "slug": "auto-dd8dd94d6499-2026-07-15.html",
         "sources": [
           {
-            "label": "securitybrief.com.au",
-            "url": "https://securitybrief.com.au/story/openai-runs-ai-workshop-for-public-servants-in-canberra"
+            "label": "hashout.jp",
+            "url": "https://hashout.jp/ai/3412/"
+          },
+          {
+            "label": "pc.watch.impress.co.jp",
+            "url": "https://pc.watch.impress.co.jp/docs/news/2125166.html"
+          },
+          {
+            "label": "plus-web3.com",
+            "url": "https://plus-web3.com/media/latestnews_1000_9838/"
+          },
+          {
+            "label": "dime.jp",
+            "url": "https://dime.jp/genre/2134606/"
+          },
+          {
+            "label": "japan.cnet.com",
+            "url": "https://japan.cnet.com/article/35250485/"
           }
         ],
-        "summary": "OpenAIはキャンベラで公務員向けのAIワークショップを開催し、60人の公務員がChatGPTやCodexを使用して日常業務へのAIの適用をテストした。 参加者は自分の役割から問題を特定し、ドラフト作成や研究、調整、サービス提供のための初期プロトタイプを構築した。",
+        "summary": "OpenAIのCodexとChatGPT Workの合算アクティブユーザー数が2026年7月中旬に700万人を突破し、その後800万人に達した。 急成長の背景には新モデルGPT-5.6 Solの効率化と5時間ごとの利用制限の一時解除がある。 OpenAIは全ユーザーの利用制限を再リセットし、5時間ごとのアクセス制限を継続しない方針を示した。 これによりユーザーは上限を気にせずGPT-5.6 Solの性能を試せるようになった。 OpenAIの推論チームは需要増に対応するため尽力しており、今後一部不具合が発生する可能性もあるとされる。 OpenAIは2026年7月9日に業務向けAIエージェント「ChatGPT Work」とCodexを統合した新しいChatGPTデスクトップアプリを発表した。 ChatGPT Workは複数のアプリやファイルを横断して情報を収集し、資料作成や分析、定期更新などの業務を自律的に遂行する。 新アプリは内蔵ブラウザを備え、オンライン情報収集やWebツールの利用、Google WorkspaceやMicrosoft 365のファイル編集を一元化できる。 Codexは新アプリに統合され、差分内でのインライン編集やプルリクエストレビューなど開発ワークフローの強化が図られている。 OpenAIは企業向けに利用者管理や承認フロー、監査体制の整備を求めている。 ChatGPT WorkはSlackやGoogle Driveなどの業務アプリやファイルを横断して自律的に作業し、目的を入力するだけで必要なタスクを分解・実行する。 外部サービス連携用の「Unified Plugins Directory」も新設され、アプリ名指定や自動データソース選択が可能となった。 ウェブサイトやウェブアプリを生成する「Sites」機能がパブリックベータとして公開され、社内ポータルやダッシュボードなどを作成・共有できる。 MacとWindows向けに新しいChatGPTデスクトップアプリが公開され、従来のCodexアプリは統合された。 既存のChatGPTデスクトップアプリは「ChatGPT Classic」に改称され、当面併存する。",
         "summary_basis": {
           "confirmed_facts": [
-            "OpenAIはキャンベラで公務員向けのAIワークショップを開催し、60人の公務員がChatGPTやCodexを使用して日常業務へのAIの適用をテストした。",
-            "参加者は自分の役割から問題を特定し、ドラフト作成や研究、調整、サービス提供のための初期プロトタイプを構築した。"
+            "OpenAIのCodexとChatGPT Workの合算アクティブユーザー数が2026年7月中旬に700万人を突破し、その後800万人に達した。",
+            "急成長の背景には新モデルGPT-5.6 Solの効率化と5時間ごとの利用制限の一時解除がある。",
+            "OpenAIは全ユーザーの利用制限を再リセットし、5時間ごとのアクセス制限を継続しない方針を示した。",
+            "これによりユーザーは上限を気にせずGPT-5.6 Solの性能を試せるようになった。",
+            "OpenAIの推論チームは需要増に対応するため尽力しており、今後一部不具合が発生する可能性もあるとされる。",
+            "OpenAIは2026年7月9日に業務向けAIエージェント「ChatGPT Work」とCodexを統合した新しいChatGPTデスクトップアプリを発表した。",
+            "ChatGPT Workは複数のアプリやファイルを横断して情報を収集し、資料作成や分析、定期更新などの業務を自律的に遂行する。",
+            "新アプリは内蔵ブラウザを備え、オンライン情報収集やWebツールの利用、Google WorkspaceやMicrosoft 365のファイル編集を一元化できる。",
+            "Codexは新アプリに統合され、差分内でのインライン編集やプルリクエストレビューなど開発ワークフローの強化が図られている。",
+            "OpenAIは企業向けに利用者管理や承認フロー、監査体制の整備を求めている。",
+            "ChatGPT WorkはSlackやGoogle Driveなどの業務アプリやファイルを横断して自律的に作業し、目的を入力するだけで必要なタスクを分解・実行する。",
+            "外部サービス連携用の「Unified Plugins Directory」も新設され、アプリ名指定や自動データソース選択が可能となった。",
+            "ウェブサイトやウェブアプリを生成する「Sites」機能がパブリックベータとして公開され、社内ポータルやダッシュボードなどを作成・共有できる。",
+            "MacとWindows向けに新しいChatGPTデスクトップアプリが公開され、従来のCodexアプリは統合された。",
+            "既存のChatGPTデスクトップアプリは「ChatGPT Classic」に改称され、当面併存する。"
           ],
           "fact_sources": [
             {
-              "fact": "OpenAIはキャンベラで公務員向けのAIワークショップを開催し、60人の公務員がChatGPTやCodexを使用して日常業務へのAIの適用をテストした。",
+              "fact": "OpenAIのCodexとChatGPT Workの合算アクティブユーザー数が2026年7月中旬に700万人を突破し、その後800万人に達した。",
               "source_urls": [
-                "https://securitybrief.com.au/story/openai-runs-ai-workshop-for-public-servants-in-canberra"
+                "https://hashout.jp/ai/3412/",
+                "https://pc.watch.impress.co.jp/docs/news/2125166.html"
               ]
             },
             {
-              "fact": "参加者は自分の役割から問題を特定し、ドラフト作成や研究、調整、サービス提供のための初期プロトタイプを構築した。",
+              "fact": "急成長の背景には新モデルGPT-5.6 Solの効率化と5時間ごとの利用制限の一時解除がある。",
               "source_urls": [
-                "https://securitybrief.com.au/story/openai-runs-ai-workshop-for-public-servants-in-canberra"
+                "https://hashout.jp/ai/3412/",
+                "https://pc.watch.impress.co.jp/docs/news/2125166.html"
+              ]
+            },
+            {
+              "fact": "OpenAIは全ユーザーの利用制限を再リセットし、5時間ごとのアクセス制限を継続しない方針を示した。",
+              "source_urls": [
+                "https://pc.watch.impress.co.jp/docs/news/2125166.html"
+              ]
+            },
+            {
+              "fact": "これによりユーザーは上限を気にせずGPT-5.6 Solの性能を試せるようになった。",
+              "source_urls": [
+                "https://pc.watch.impress.co.jp/docs/news/2125166.html"
+              ]
+            },
+            {
+              "fact": "OpenAIの推論チームは需要増に対応するため尽力しており、今後一部不具合が発生する可能性もあるとされる。",
+              "source_urls": [
+                "https://pc.watch.impress.co.jp/docs/news/2125166.html"
+              ]
+            },
+            {
+              "fact": "OpenAIは2026年7月9日に業務向けAIエージェント「ChatGPT Work」とCodexを統合した新しいChatGPTデスクトップアプリを発表した。",
+              "source_urls": [
+                "https://plus-web3.com/media/latestnews_1000_9838/",
+                "https://dime.jp/genre/2134606/"
+              ]
+            },
+            {
+              "fact": "ChatGPT Workは複数のアプリやファイルを横断して情報を収集し、資料作成や分析、定期更新などの業務を自律的に遂行する。",
+              "source_urls": [
+                "https://plus-web3.com/media/latestnews_1000_9838/",
+                "https://dime.jp/genre/2134606/"
+              ]
+            },
+            {
+              "fact": "新アプリは内蔵ブラウザを備え、オンライン情報収集やWebツールの利用、Google WorkspaceやMicrosoft 365のファイル編集を一元化できる。",
+              "source_urls": [
+                "https://dime.jp/genre/2134606/"
+              ]
+            },
+            {
+              "fact": "Codexは新アプリに統合され、差分内でのインライン編集やプルリクエストレビューなど開発ワークフローの強化が図られている。",
+              "source_urls": [
+                "https://dime.jp/genre/2134606/"
+              ]
+            },
+            {
+              "fact": "OpenAIは企業向けに利用者管理や承認フロー、監査体制の整備を求めている。",
+              "source_urls": [
+                "https://plus-web3.com/media/latestnews_1000_9838/",
+                "https://dime.jp/genre/2134606/"
+              ]
+            },
+            {
+              "fact": "ChatGPT WorkはSlackやGoogle Driveなどの業務アプリやファイルを横断して自律的に作業し、目的を入力するだけで必要なタスクを分解・実行する。",
+              "source_urls": [
+                "https://japan.cnet.com/article/35250485/"
+              ]
+            },
+            {
+              "fact": "外部サービス連携用の「Unified Plugins Directory」も新設され、アプリ名指定や自動データソース選択が可能となった。",
+              "source_urls": [
+                "https://japan.cnet.com/article/35250485/"
+              ]
+            },
+            {
+              "fact": "ウェブサイトやウェブアプリを生成する「Sites」機能がパブリックベータとして公開され、社内ポータルやダッシュボードなどを作成・共有できる。",
+              "source_urls": [
+                "https://japan.cnet.com/article/35250485/"
+              ]
+            },
+            {
+              "fact": "MacとWindows向けに新しいChatGPTデスクトップアプリが公開され、従来のCodexアプリは統合された。",
+              "source_urls": [
+                "https://japan.cnet.com/article/35250485/"
+              ]
+            },
+            {
+              "fact": "既存のChatGPTデスクトップアプリは「ChatGPT Classic」に改称され、当面併存する。",
+              "source_urls": [
+                "https://japan.cnet.com/article/35250485/"
               ]
             }
           ],
           "source_dates": [
-            "2026-07-13"
+            "2026-07-13",
+            "2026-07-14",
+            "2026-07-15"
           ]
         }
       }
     },
     {
       "watch_topic_id": "math_research",
-      "title": "OpenAIがxAIに対して訴訟を提起、商業秘密の盗用を巡る争い",
-      "summary": "OpenAIは、Elon Muskが率いるxAIに対し、100万ドル以上の支払いを求める訴訟を起こした。 xAIは、OpenAIの商業秘密の盗用を証明できなかった。 Appleも最近、OpenAIに対して訴訟を提起した。",
+      "title": "AppleがOpenAIを企業秘密盗用で提訴、OpenAIはxAIに法的費用請求",
+      "summary": "AppleはOpenAIに対し、元幹部が重要なハードウェアの企業秘密を盗用して競合AIハードウェアを開発したとして大規模な訴訟を起こした。 この訴訟はティム・クックCEOの後継者への権限移譲前の重要な決断であり、iPhoneの市場支配を脅かす直接的な脅威を封じる狙いがある。",
       "section_id": "openai",
       "category": "OpenAI",
-      "source_published_date": "2026-07-14",
+      "source_published_date": "2026-07-13",
       "topic_value_class": "risk_or_safety_signal",
-      "priority_class": "top",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-2c85d3b614f8-2026-07-15.html",
+        "sources": [
+          {
+            "label": "streamlinefeed.co.ke",
+            "url": "https://streamlinefeed.co.ke/news/apple-launches-thermonuclear-lawsuit-against-openai-over-secrets"
+          }
+        ],
+        "summary": "AppleはOpenAIに対し、元幹部が重要なハードウェアの企業秘密を盗用して競合AIハードウェアを開発したとして大規模な訴訟を起こした。 この訴訟はティム・クックCEOの後継者への権限移譲前の重要な決断であり、iPhoneの市場支配を脅かす直接的な脅威を封じる狙いがある。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "AppleはOpenAIに対し、元幹部が重要なハードウェアの企業秘密を盗用して競合AIハードウェアを開発したとして大規模な訴訟を起こした。",
+            "この訴訟はティム・クックCEOの後継者への権限移譲前の重要な決断であり、iPhoneの市場支配を脅かす直接的な脅威を封じる狙いがある。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "AppleはOpenAIに対し、元幹部が重要なハードウェアの企業秘密を盗用して競合AIハードウェアを開発したとして大規模な訴訟を起こした。",
+              "source_urls": [
+                "https://streamlinefeed.co.ke/news/apple-launches-thermonuclear-lawsuit-against-openai-over-secrets"
+              ]
+            },
+            {
+              "fact": "この訴訟はティム・クックCEOの後継者への権限移譲前の重要な決断であり、iPhoneの市場支配を脅かす直接的な脅威を封じる狙いがある。",
+              "source_urls": [
+                "https://streamlinefeed.co.ke/news/apple-launches-thermonuclear-lawsuit-against-openai-over-secrets"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-13"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "strategic_talent_japan_gtm",
+      "title": "ソフトバンクとSB OAI JapanがOpenAI技術活用のセキュリティサービスを3,000社へ拡大・本格提供開始",
+      "summary": "ソフトバンクとSB OAI Japanは2026年7月14日、OpenAIの技術を活用した「Patching as a Service」の提供対象を3,000社に拡大し、本格的な提供を開始した。 同サービスはソースコード診断（静的・動的）、攻撃診断、レポート作成、パッチ適用までを一気通貫で支援する。 先行診断では、ソースコード1,000万行あたり平均約280件の潜在的脆弱性を検出し、そのうち25%が高リスクと判定された。 ソフトバンクは2026年6月16日に「AIサイバー防衛室」を設置し、SB OAI Japanと合わせて約1,000人体制でサービス提供とコンサルティングを進める。 今後は対策強化オプションや、言語刷新・クラウド移行支援などのモダナイゼーションサービスも順次追加予定。 ソフトバンクはOpenAIのAI技術を活用したサイバーセキュリティパッチングサービスの提供範囲を日本国内の重要インフラ企業などに拡大した。 このサービスは、脆弱性診断や攻撃シミュレーション、修正提案、パッチ適用までを一括で支援する。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-15",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
       "change_class": "material_update",
       "detail": {
-        "slug": "auto-5cdf7db1c44e-2026-07-15.html",
+        "slug": "auto-7b61697b57a9-2026-07-15.html",
         "sources": [
           {
-            "label": "inshorts.com",
-            "url": "https://inshorts.com/en/amp_news/openai-seeks--9-6-cr-from-musk-as-xai-fails-to-prove-trade-secret-theft-1784008594016"
-          }
-        ],
-        "summary": "OpenAIは、Elon Muskが率いるxAIに対し、100万ドル以上の支払いを求める訴訟を起こした。 xAIは、OpenAIの商業秘密の盗用を証明できなかった。 Appleも最近、OpenAIに対して訴訟を提起した。",
-        "summary_basis": {
-          "confirmed_facts": [
-            "OpenAIは、Elon Muskが率いるxAIに対し、100万ドル以上の支払いを求める訴訟を起こした。",
-            "xAIは、OpenAIの商業秘密の盗用を証明できなかった。",
-            "Appleも最近、OpenAIに対して訴訟を提起した。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "OpenAIは、Elon Muskが率いるxAIに対し、100万ドル以上の支払いを求める訴訟を起こした。",
-              "source_urls": [
-                "https://inshorts.com/en/amp_news/openai-seeks--9-6-cr-from-musk-as-xai-fails-to-prove-trade-secret-theft-1784008594016"
-              ]
-            },
-            {
-              "fact": "xAIは、OpenAIの商業秘密の盗用を証明できなかった。",
-              "source_urls": [
-                "https://inshorts.com/en/amp_news/openai-seeks--9-6-cr-from-musk-as-xai-fails-to-prove-trade-secret-theft-1784008594016"
-              ]
-            },
-            {
-              "fact": "Appleも最近、OpenAIに対して訴訟を提起した。",
-              "source_urls": [
-                "https://inshorts.com/en/amp_news/openai-seeks--9-6-cr-from-musk-as-xai-fails-to-prove-trade-secret-theft-1784008594016"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-07-14"
-          ]
-        }
-      }
-    },
-    {
-      "watch_topic_id": "domestic_services",
-      "title": "孫正義氏、2040年のAIインフラ投資800兆円予測とソフトバンクのAIサイバーセキュリティ新サービス開始",
-      "summary": "孫正義氏は2040年に世界のAIインフラ投資額が年間約800兆円に達し、AIエージェントの数は100兆個を超えると予測した。 ソフトバンクはOpenAIの最新モデルを中核とするAIサイバーセキュリティサービスを正式に開始し、日本企業137社から高い関心を集めている。 ソフトバンクは2027年度に新クラウド事業『NeoCloud』を開始予定で、44社が出資し日本国産AIモデル構築を目指している。 孫正義氏は2040年までに核融合発電が主力エネルギー源になると予測し、AIと共に人類が進化する必要性を強調した。",
-      "section_id": "softbank",
-      "category": "SoftBank",
-      "source_published_date": "2026-07-14",
-      "topic_value_class": "market_or_financial_impact",
-      "priority_class": "top",
-      "change_class": "new_event",
-      "detail": {
-        "slug": "auto-229dcca921c8-2026-07-15.html",
-        "sources": [
-          {
-            "label": "finance.biggo.jp",
-            "url": "https://finance.biggo.jp/news/4f54e039-29f8-42fa-9e62-2ec1502a85eb"
-          }
-        ],
-        "summary": "孫正義氏は2040年に世界のAIインフラ投資額が年間約800兆円に達し、AIエージェントの数は100兆個を超えると予測した。 ソフトバンクはOpenAIの最新モデルを中核とするAIサイバーセキュリティサービスを正式に開始し、日本企業137社から高い関心を集めている。 ソフトバンクは2027年度に新クラウド事業『NeoCloud』を開始予定で、44社が出資し日本国産AIモデル構築を目指している。 孫正義氏は2040年までに核融合発電が主力エネルギー源になると予測し、AIと共に人類が進化する必要性を強調した。",
-        "summary_basis": {
-          "confirmed_facts": [
-            "孫正義氏は2040年に世界のAIインフラ投資額が年間約800兆円に達し、AIエージェントの数は100兆個を超えると予測した。",
-            "ソフトバンクはOpenAIの最新モデルを中核とするAIサイバーセキュリティサービスを正式に開始し、日本企業137社から高い関心を集めている。",
-            "ソフトバンクは2027年度に新クラウド事業『NeoCloud』を開始予定で、44社が出資し日本国産AIモデル構築を目指している。",
-            "孫正義氏は2040年までに核融合発電が主力エネルギー源になると予測し、AIと共に人類が進化する必要性を強調した。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "孫正義氏は2040年に世界のAIインフラ投資額が年間約800兆円に達し、AIエージェントの数は100兆個を超えると予測した。",
-              "source_urls": [
-                "https://finance.biggo.jp/news/4f54e039-29f8-42fa-9e62-2ec1502a85eb"
-              ]
-            },
-            {
-              "fact": "ソフトバンクはOpenAIの最新モデルを中核とするAIサイバーセキュリティサービスを正式に開始し、日本企業137社から高い関心を集めている。",
-              "source_urls": [
-                "https://finance.biggo.jp/news/4f54e039-29f8-42fa-9e62-2ec1502a85eb"
-              ]
-            },
-            {
-              "fact": "ソフトバンクは2027年度に新クラウド事業『NeoCloud』を開始予定で、44社が出資し日本国産AIモデル構築を目指している。",
-              "source_urls": [
-                "https://finance.biggo.jp/news/4f54e039-29f8-42fa-9e62-2ec1502a85eb"
-              ]
-            },
-            {
-              "fact": "孫正義氏は2040年までに核融合発電が主力エネルギー源になると予測し、AIと共に人類が進化する必要性を強調した。",
-              "source_urls": [
-                "https://finance.biggo.jp/news/4f54e039-29f8-42fa-9e62-2ec1502a85eb"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-07-14"
-          ]
-        }
-      }
-    },
-    {
-      "watch_topic_id": "domestic_services",
-      "title": "孫正義氏、2040年にAIが世界GDPの20％を占めると予測",
-      "summary": "ソフトバンクの孫正義氏は2040年にAIが世界のGDPの20％を占めると予測し、AIの経済的なプラス面を強調した。",
-      "section_id": "softbank",
-      "category": "SoftBank",
-      "source_published_date": "2026-07-14",
-      "topic_value_class": "market_or_financial_impact",
-      "priority_class": "standard",
-      "change_class": "new_event",
-      "detail": {
-        "slug": "auto-146e13317edd-2026-07-15.html",
-        "sources": [
-          {
-            "label": "thenews.com.pk",
-            "url": "https://www.thenews.com.pk/latest/1409082-softbanks-masayoshi-son-predicts-ai-will-generate-20-of-global-gdp-by-2040"
+            "label": "rocket-boys.co.jp",
+            "url": "https://rocket-boys.co.jp/security-measures-lab/softbank-openai-patching-as-a-service-launch/"
           },
           {
-            "label": "MSN",
-            "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQUmRPYnVXSVFMb1IyRWR4dDJBZ0tab2VOc0EwNUJxX3NfUzdTbWt4M0Nwd2FtUUw3dktXcGdjMFlhVk9NeVd3YlFsOGhiSm1tQkhYejZQN3pXQjdqRVZhV2d3UUF6SjNxLU5nMFZON2tta0NieHBqdGFkSkdTRnlwNmNEOExOdmFPR0wyX1ZjLWJBNlkxSlF4alBuMnh5elBiRWYySzVxZmhvODNsUHRIN0kzazZSR0xC?oc=5"
+            "label": "telecompaper.com",
+            "url": "https://www.telecompaper.com/news/softbank-expands-openai-powered-cybersecurity-patching-service--1576912"
           }
         ],
-        "summary": "ソフトバンクの孫正義氏は2040年にAIが世界のGDPの20％を占めると予測し、AIの経済的なプラス面を強調した。",
+        "summary": "ソフトバンクとSB OAI Japanは2026年7月14日、OpenAIの技術を活用した「Patching as a Service」の提供対象を3,000社に拡大し、本格的な提供を開始した。 同サービスはソースコード診断（静的・動的）、攻撃診断、レポート作成、パッチ適用までを一気通貫で支援する。 先行診断では、ソースコード1,000万行あたり平均約280件の潜在的脆弱性を検出し、そのうち25%が高リスクと判定された。 ソフトバンクは2026年6月16日に「AIサイバー防衛室」を設置し、SB OAI Japanと合わせて約1,000人体制でサービス提供とコンサルティングを進める。 今後は対策強化オプションや、言語刷新・クラウド移行支援などのモダナイゼーションサービスも順次追加予定。 ソフトバンクはOpenAIのAI技術を活用したサイバーセキュリティパッチングサービスの提供範囲を日本国内の重要インフラ企業などに拡大した。 このサービスは、脆弱性診断や攻撃シミュレーション、修正提案、パッチ適用までを一括で支援する。",
         "summary_basis": {
           "confirmed_facts": [
-            "ソフトバンクの孫正義氏は2040年にAIが世界のGDPの20％を占めると予測し、AIの経済的なプラス面を強調した。"
+            "ソフトバンクとSB OAI Japanは2026年7月14日、OpenAIの技術を活用した「Patching as a Service」の提供対象を3,000社に拡大し、本格的な提供を開始した。",
+            "同サービスはソースコード診断（静的・動的）、攻撃診断、レポート作成、パッチ適用までを一気通貫で支援する。",
+            "先行診断では、ソースコード1,000万行あたり平均約280件の潜在的脆弱性を検出し、そのうち25%が高リスクと判定された。",
+            "ソフトバンクは2026年6月16日に「AIサイバー防衛室」を設置し、SB OAI Japanと合わせて約1,000人体制でサービス提供とコンサルティングを進める。",
+            "今後は対策強化オプションや、言語刷新・クラウド移行支援などのモダナイゼーションサービスも順次追加予定。",
+            "ソフトバンクはOpenAIのAI技術を活用したサイバーセキュリティパッチングサービスの提供範囲を日本国内の重要インフラ企業などに拡大した。",
+            "このサービスは、脆弱性診断や攻撃シミュレーション、修正提案、パッチ適用までを一括で支援する。"
           ],
           "fact_sources": [
             {
-              "fact": "ソフトバンクの孫正義氏は2040年にAIが世界のGDPの20％を占めると予測し、AIの経済的なプラス面を強調した。",
+              "fact": "ソフトバンクとSB OAI Japanは2026年7月14日、OpenAIの技術を活用した「Patching as a Service」の提供対象を3,000社に拡大し、本格的な提供を開始した。",
               "source_urls": [
-                "https://www.thenews.com.pk/latest/1409082-softbanks-masayoshi-son-predicts-ai-will-generate-20-of-global-gdp-by-2040",
-                "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQUmRPYnVXSVFMb1IyRWR4dDJBZ0tab2VOc0EwNUJxX3NfUzdTbWt4M0Nwd2FtUUw3dktXcGdjMFlhVk9NeVd3YlFsOGhiSm1tQkhYejZQN3pXQjdqRVZhV2d3UUF6SjNxLU5nMFZON2tta0NieHBqdGFkSkdTRnlwNmNEOExOdmFPR0wyX1ZjLWJBNlkxSlF4alBuMnh5elBiRWYySzVxZmhvODNsUHRIN0kzazZSR0xC?oc=5"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-07-14"
-          ]
-        }
-      }
-    },
-    {
-      "watch_topic_id": "ai_infrastructure",
-      "title": "Arm Holdings、2026年第1四半期決算発表控えデータセンター事業好調と競争力強化を示唆",
-      "summary": "Arm Holdingsは2026年7月29日に2027年第1四半期決算を発表予定で、データセンター向けロイヤリティ収入が前年同期比で倍増している。 GoogleやAWS、MicrosoftがArmベースのCPUを採用し、Armの競争力が高まっている。",
-      "section_id": "softbank",
-      "category": "SoftBank",
-      "source_published_date": "2026-07-14",
-      "topic_value_class": "market_or_financial_impact",
-      "priority_class": "standard",
-      "change_class": "new_event",
-      "detail": {
-        "slug": "auto-828608598400-2026-07-15.html",
-        "sources": [
-          {
-            "label": "tikr.com",
-            "url": "https://www.tikr.com/blog/arm-holdings-reports-earnings-july-29-heres-what-investors-should-watch"
-          }
-        ],
-        "summary": "Arm Holdingsは2026年7月29日に2027年第1四半期決算を発表予定で、データセンター向けロイヤリティ収入が前年同期比で倍増している。 GoogleやAWS、MicrosoftがArmベースのCPUを採用し、Armの競争力が高まっている。",
-        "summary_basis": {
-          "confirmed_facts": [
-            "Arm Holdingsは2026年7月29日に2027年第1四半期決算を発表予定で、データセンター向けロイヤリティ収入が前年同期比で倍増している。",
-            "GoogleやAWS、MicrosoftがArmベースのCPUを採用し、Armの競争力が高まっている。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "Arm Holdingsは2026年7月29日に2027年第1四半期決算を発表予定で、データセンター向けロイヤリティ収入が前年同期比で倍増している。",
-              "source_urls": [
-                "https://www.tikr.com/blog/arm-holdings-reports-earnings-july-29-heres-what-investors-should-watch"
+                "https://rocket-boys.co.jp/security-measures-lab/softbank-openai-patching-as-a-service-launch/"
               ]
             },
             {
-              "fact": "GoogleやAWS、MicrosoftがArmベースのCPUを採用し、Armの競争力が高まっている。",
+              "fact": "同サービスはソースコード診断（静的・動的）、攻撃診断、レポート作成、パッチ適用までを一気通貫で支援する。",
               "source_urls": [
-                "https://www.tikr.com/blog/arm-holdings-reports-earnings-july-29-heres-what-investors-should-watch"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-07-14"
-          ]
-        }
-      }
-    },
-    {
-      "watch_topic_id": "earnings_guidance",
-      "title": "2023年ホンダシビックハイブリッドの性能と価格動向",
-      "summary": "2023年モデルのホンダシビックハイブリッドは、203馬力のハイブリッドシステムを搭載し、燃費は最大18.3km/lである。",
-      "section_id": "honda",
-      "category": "Honda",
-      "source_published_date": "2026-07-14",
-      "topic_value_class": "market_or_financial_impact",
-      "priority_class": "standard",
-      "change_class": "new_event",
-      "detail": {
-        "slug": "auto-ddaea9b40f7e-2026-07-15.html",
-        "sources": [
-          {
-            "label": "CPG Click Oil and Gas",
-            "url": "https://news.google.com/rss/articles/CBMijwJBVV95cUxObnJjXzd4RTRSVU9lcmZNV0VhRTJDMXcxQlFmbzBiUHFqRzF3Q1djbEhFR1Z6bzRWZDI1MHlsdHIwMGNqeUNyWDJpVU8wOUlERFQzZ2VweVYzZUY4dUk1SjFHMHhkcEM5VXlrNkZrajVQNUZTWnVoYTVac1hBeGM4TkZSVmQwUS1fTmY2Y20xOXM5SjB2eW4xZzdKektVbzBkeWNUSGR2cjJiR0F5cGczb2pFQjU5N3pDU3BOOUxGVm1UYkdPWENvdE9MRVlvS1FCTVVlVEh5eXJiWjctcmdkSzlwWkEzeVZZa1ZsZUstYzl4YTdmeFUxZTJ6YmJJbGFPN21yMmNfQmFFQzRPSUk0?oc=5"
-          }
-        ],
-        "summary": "2023年モデルのホンダシビックハイブリッドは、203馬力のハイブリッドシステムを搭載し、燃費は最大18.3km/lである。",
-        "summary_basis": {
-          "confirmed_facts": [
-            "2023年モデルのホンダシビックハイブリッドは、203馬力のハイブリッドシステムを搭載し、燃費は最大18.3km/lである。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "2023年モデルのホンダシビックハイブリッドは、203馬力のハイブリッドシステムを搭載し、燃費は最大18.3km/lである。",
-              "source_urls": [
-                "https://news.google.com/rss/articles/CBMijwJBVV95cUxObnJjXzd4RTRSVU9lcmZNV0VhRTJDMXcxQlFmbzBiUHFqRzF3Q1djbEhFR1Z6bzRWZDI1MHlsdHIwMGNqeUNyWDJpVU8wOUlERFQzZ2VweVYzZUY4dUk1SjFHMHhkcEM5VXlrNkZrajVQNUZTWnVoYTVac1hBeGM4TkZSVmQwUS1fTmY2Y20xOXM5SjB2eW4xZzdKektVbzBkeWNUSGR2cjJiR0F5cGczb2pFQjU5N3pDU3BOOUxGVm1UYkdPWENvdE9MRVlvS1FCTVVlVEh5eXJiWjctcmdkSzlwWkEzeVZZa1ZsZUstYzl4YTdmeFUxZTJ6YmJJbGFPN21yMmNfQmFFQzRPSUk0?oc=5"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-07-14"
-          ]
-        }
-      }
-    },
-    {
-      "watch_topic_id": "market_price_reaction",
-      "title": "ホンダインディアパワープロダクツの株価評価と技術的動向",
-      "summary": "ホンダインディアパワープロダクツは、株価の下落にもかかわらず、株価収益率（PE）と株価純資産倍率（PBV）が歴史的平均や同業他社と比較して非常に魅力的な水準に改善し、投資家にとって好機となっている。 技術的には、ホンダインディアパワープロダクツの株価は弱気からやや弱気のトレンドに変化し、MACDやRSIなどの指標は混在したシグナルを示している。 RSIは中立的で、短期的には下落傾向が続いている。",
-      "section_id": "honda",
-      "category": "Honda",
-      "source_published_date": "2026-07-15",
-      "topic_value_class": "market_or_financial_impact",
-      "priority_class": "priority",
-      "change_class": "new_event",
-      "detail": {
-        "slug": "auto-c090741c65e3-2026-07-15.html",
-        "sources": [
-          {
-            "label": "marketsmojo.com",
-            "url": "https://www.marketsmojo.com/news/stocks-in-action/honda-india-power-products-ltd-valuation-shifts-signal-renewed-price-attractiveness-4102952"
-          },
-          {
-            "label": "marketsmojo.com",
-            "url": "https://www.marketsmojo.com/news/stocks-in-action/honda-india-power-products-ltd-technical-momentum-shifts-amid-mixed-market-signals-4099977"
-          }
-        ],
-        "summary": "ホンダインディアパワープロダクツは、株価の下落にもかかわらず、株価収益率（PE）と株価純資産倍率（PBV）が歴史的平均や同業他社と比較して非常に魅力的な水準に改善し、投資家にとって好機となっている。 技術的には、ホンダインディアパワープロダクツの株価は弱気からやや弱気のトレンドに変化し、MACDやRSIなどの指標は混在したシグナルを示している。 RSIは中立的で、短期的には下落傾向が続いている。",
-        "summary_basis": {
-          "confirmed_facts": [
-            "ホンダインディアパワープロダクツは、株価の下落にもかかわらず、株価収益率（PE）と株価純資産倍率（PBV）が歴史的平均や同業他社と比較して非常に魅力的な水準に改善し、投資家にとって好機となっている。",
-            "技術的には、ホンダインディアパワープロダクツの株価は弱気からやや弱気のトレンドに変化し、MACDやRSIなどの指標は混在したシグナルを示している。",
-            "RSIは中立的で、短期的には下落傾向が続いている。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "ホンダインディアパワープロダクツは、株価の下落にもかかわらず、株価収益率（PE）と株価純資産倍率（PBV）が歴史的平均や同業他社と比較して非常に魅力的な水準に改善し、投資家にとって好機となっている。",
-              "source_urls": [
-                "https://www.marketsmojo.com/news/stocks-in-action/honda-india-power-products-ltd-valuation-shifts-signal-renewed-price-attractiveness-4102952"
+                "https://rocket-boys.co.jp/security-measures-lab/softbank-openai-patching-as-a-service-launch/"
               ]
             },
             {
-              "fact": "技術的には、ホンダインディアパワープロダクツの株価は弱気からやや弱気のトレンドに変化し、MACDやRSIなどの指標は混在したシグナルを示している。",
+              "fact": "先行診断では、ソースコード1,000万行あたり平均約280件の潜在的脆弱性を検出し、そのうち25%が高リスクと判定された。",
               "source_urls": [
-                "https://www.marketsmojo.com/news/stocks-in-action/honda-india-power-products-ltd-technical-momentum-shifts-amid-mixed-market-signals-4099977"
+                "https://rocket-boys.co.jp/security-measures-lab/softbank-openai-patching-as-a-service-launch/"
               ]
             },
             {
-              "fact": "RSIは中立的で、短期的には下落傾向が続いている。",
+              "fact": "ソフトバンクは2026年6月16日に「AIサイバー防衛室」を設置し、SB OAI Japanと合わせて約1,000人体制でサービス提供とコンサルティングを進める。",
               "source_urls": [
-                "https://www.marketsmojo.com/news/stocks-in-action/honda-india-power-products-ltd-technical-momentum-shifts-amid-mixed-market-signals-4099977"
+                "https://rocket-boys.co.jp/security-measures-lab/softbank-openai-patching-as-a-service-launch/"
+              ]
+            },
+            {
+              "fact": "今後は対策強化オプションや、言語刷新・クラウド移行支援などのモダナイゼーションサービスも順次追加予定。",
+              "source_urls": [
+                "https://rocket-boys.co.jp/security-measures-lab/softbank-openai-patching-as-a-service-launch/"
+              ]
+            },
+            {
+              "fact": "ソフトバンクはOpenAIのAI技術を活用したサイバーセキュリティパッチングサービスの提供範囲を日本国内の重要インフラ企業などに拡大した。",
+              "source_urls": [
+                "https://www.telecompaper.com/news/softbank-expands-openai-powered-cybersecurity-patching-service--1576912"
+              ]
+            },
+            {
+              "fact": "このサービスは、脆弱性診断や攻撃シミュレーション、修正提案、パッチ適用までを一括で支援する。",
+              "source_urls": [
+                "https://www.telecompaper.com/news/softbank-expands-openai-powered-cybersecurity-patching-service--1576912"
               ]
             }
           ],
@@ -436,54 +425,54 @@
       }
     },
     {
-      "watch_topic_id": "market_price_reaction",
-      "title": "ホンダカーズインディアのタミル・ナードゥ市場戦略と新型車展開",
-      "summary": "ホンダカーズインディアリミテッド（HCIL）のクナル・ベール副社長は、タミル・ナードゥ州がインド国内販売の約12%を占める重要市場であると述べた。 タミル・ナードゥ州はホンダの成長の重要な柱であり、強固で忠実な顧客基盤が同社の製品と技術を支持している。 新型ホンダシティはスポーティなデザイン、高級感のある機能、先進の安全技術、ガソリン車と強力なハイブリッドパワートレインの選択肢を備えている。 また、グローバルプレミアムハイブリッドSUVの新型ホンダZR-Vも紹介された。",
-      "section_id": "honda",
-      "category": "Honda",
+      "watch_topic_id": "product_release",
+      "title": "OpenAIがChatGPT検索にカラシのワールドカップ賭けオッズを統合",
+      "summary": "OpenAIは予測市場カラシ（Kalshi）のデータをChatGPTに統合し、FIFAワールドカップの賭けオッズを検索結果に直接表示し始めた。 この統合は公式発表されていないが、ユーザーが特定の試合を検索するとカラシのオッズが表示される。 OpenAIによると、カラシのデータは「2026年ワールドカップ関連クエリ」に利用可能で、情報提供のみを目的としている。 カラシの月間取引高は330億ドルを超え、規制当局の監視が強まる中での動きとなった。",
+      "section_id": "openai",
+      "category": "OpenAI",
       "source_published_date": "2026-07-14",
-      "topic_value_class": "market_or_financial_impact",
+      "topic_value_class": "technical_or_product_shift",
       "priority_class": "priority",
-      "change_class": "new_event",
+      "change_class": "material_update",
       "detail": {
-        "slug": "auto-df2bb4080253-2026-07-15.html",
+        "slug": "auto-79cc41b44a86-2026-07-15.html",
         "sources": [
           {
-            "label": "dtnext.in",
-            "url": "https://www.dtnext.in/news/business/around-12-of-sales-from-tamil-nadu-says-honda-cars"
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/14501905-3a37-40de-8fbc-929b9a504d10"
           }
         ],
-        "summary": "ホンダカーズインディアリミテッド（HCIL）のクナル・ベール副社長は、タミル・ナードゥ州がインド国内販売の約12%を占める重要市場であると述べた。 タミル・ナードゥ州はホンダの成長の重要な柱であり、強固で忠実な顧客基盤が同社の製品と技術を支持している。 新型ホンダシティはスポーティなデザイン、高級感のある機能、先進の安全技術、ガソリン車と強力なハイブリッドパワートレインの選択肢を備えている。 また、グローバルプレミアムハイブリッドSUVの新型ホンダZR-Vも紹介された。",
+        "summary": "OpenAIは予測市場カラシ（Kalshi）のデータをChatGPTに統合し、FIFAワールドカップの賭けオッズを検索結果に直接表示し始めた。 この統合は公式発表されていないが、ユーザーが特定の試合を検索するとカラシのオッズが表示される。 OpenAIによると、カラシのデータは「2026年ワールドカップ関連クエリ」に利用可能で、情報提供のみを目的としている。 カラシの月間取引高は330億ドルを超え、規制当局の監視が強まる中での動きとなった。",
         "summary_basis": {
           "confirmed_facts": [
-            "ホンダカーズインディアリミテッド（HCIL）のクナル・ベール副社長は、タミル・ナードゥ州がインド国内販売の約12%を占める重要市場であると述べた。",
-            "タミル・ナードゥ州はホンダの成長の重要な柱であり、強固で忠実な顧客基盤が同社の製品と技術を支持している。",
-            "新型ホンダシティはスポーティなデザイン、高級感のある機能、先進の安全技術、ガソリン車と強力なハイブリッドパワートレインの選択肢を備えている。",
-            "また、グローバルプレミアムハイブリッドSUVの新型ホンダZR-Vも紹介された。"
+            "OpenAIは予測市場カラシ（Kalshi）のデータをChatGPTに統合し、FIFAワールドカップの賭けオッズを検索結果に直接表示し始めた。",
+            "この統合は公式発表されていないが、ユーザーが特定の試合を検索するとカラシのオッズが表示される。",
+            "OpenAIによると、カラシのデータは「2026年ワールドカップ関連クエリ」に利用可能で、情報提供のみを目的としている。",
+            "カラシの月間取引高は330億ドルを超え、規制当局の監視が強まる中での動きとなった。"
           ],
           "fact_sources": [
             {
-              "fact": "ホンダカーズインディアリミテッド（HCIL）のクナル・ベール副社長は、タミル・ナードゥ州がインド国内販売の約12%を占める重要市場であると述べた。",
+              "fact": "OpenAIは予測市場カラシ（Kalshi）のデータをChatGPTに統合し、FIFAワールドカップの賭けオッズを検索結果に直接表示し始めた。",
               "source_urls": [
-                "https://www.dtnext.in/news/business/around-12-of-sales-from-tamil-nadu-says-honda-cars"
+                "https://finance.biggo.jp/news/14501905-3a37-40de-8fbc-929b9a504d10"
               ]
             },
             {
-              "fact": "タミル・ナードゥ州はホンダの成長の重要な柱であり、強固で忠実な顧客基盤が同社の製品と技術を支持している。",
+              "fact": "この統合は公式発表されていないが、ユーザーが特定の試合を検索するとカラシのオッズが表示される。",
               "source_urls": [
-                "https://www.dtnext.in/news/business/around-12-of-sales-from-tamil-nadu-says-honda-cars"
+                "https://finance.biggo.jp/news/14501905-3a37-40de-8fbc-929b9a504d10"
               ]
             },
             {
-              "fact": "新型ホンダシティはスポーティなデザイン、高級感のある機能、先進の安全技術、ガソリン車と強力なハイブリッドパワートレインの選択肢を備えている。",
+              "fact": "OpenAIによると、カラシのデータは「2026年ワールドカップ関連クエリ」に利用可能で、情報提供のみを目的としている。",
               "source_urls": [
-                "https://www.dtnext.in/news/business/around-12-of-sales-from-tamil-nadu-says-honda-cars"
+                "https://finance.biggo.jp/news/14501905-3a37-40de-8fbc-929b9a504d10"
               ]
             },
             {
-              "fact": "また、グローバルプレミアムハイブリッドSUVの新型ホンダZR-Vも紹介された。",
+              "fact": "カラシの月間取引高は330億ドルを超え、規制当局の監視が強まる中での動きとなった。",
               "source_urls": [
-                "https://www.dtnext.in/news/business/around-12-of-sales-from-tamil-nadu-says-honda-cars"
+                "https://finance.biggo.jp/news/14501905-3a37-40de-8fbc-929b9a504d10"
               ]
             }
           ],
@@ -494,45 +483,437 @@
       }
     },
     {
+      "watch_topic_id": "enterprise_infrastructure",
+      "title": "OpenAIがCloudflare出身エンジニアを採用しウェブインフラチームを強化",
+      "summary": "OpenAIはCloudflareのエンジニアリングマネージャーKate Reznykova氏を採用し、ウェブインフラチームを強化した。 Reznykova氏はAIインフラやエージェント開発の経験を持ち、OpenAIでは「member of technical staff」として活動する。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-15",
+      "topic_value_class": "operational_status_change",
+      "priority_class": "standard",
+      "change_class": "material_update",
+      "detail": {
+        "slug": "auto-a9fd5e597e56-2026-07-15.html",
+        "sources": [
+          {
+            "label": "sdxcentral.com",
+            "url": "https://www.sdxcentral.com/news/openai-strengthens-web-infrastructure-team-with-cloudflare-hire/"
+          }
+        ],
+        "summary": "OpenAIはCloudflareのエンジニアリングマネージャーKate Reznykova氏を採用し、ウェブインフラチームを強化した。 Reznykova氏はAIインフラやエージェント開発の経験を持ち、OpenAIでは「member of technical staff」として活動する。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "OpenAIはCloudflareのエンジニアリングマネージャーKate Reznykova氏を採用し、ウェブインフラチームを強化した。",
+            "Reznykova氏はAIインフラやエージェント開発の経験を持ち、OpenAIでは「member of technical staff」として活動する。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "OpenAIはCloudflareのエンジニアリングマネージャーKate Reznykova氏を採用し、ウェブインフラチームを強化した。",
+              "source_urls": [
+                "https://www.sdxcentral.com/news/openai-strengthens-web-infrastructure-team-with-cloudflare-hire/"
+              ]
+            },
+            {
+              "fact": "Reznykova氏はAIインフラやエージェント開発の経験を持ち、OpenAIでは「member of technical staff」として活動する。",
+              "source_urls": [
+                "https://www.sdxcentral.com/news/openai-strengthens-web-infrastructure-team-with-cloudflare-hire/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-15"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "ipo_financing",
+      "title": "インテルファウンドリーがOpenAIを含む18A/14Aノードのデザインウィン獲得",
+      "summary": "インテルファウンドリーがAMD、エヌビディア、OpenAIを18Aおよび14Aノードのデザインウィンとして獲得し、EMIBで98%の歩留まりを達成した。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-15",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "standard",
+      "change_class": "material_update",
+      "detail": {
+        "slug": "auto-488f2bdb2304-2026-07-15.html",
+        "sources": [
+          {
+            "label": "moomoo.com",
+            "url": "https://www.moomoo.com/ja/community/feed/intel-intc-us-intel-foundry-snags-amd-nvidia-and-openai-116922209075206"
+          }
+        ],
+        "summary": "インテルファウンドリーがAMD、エヌビディア、OpenAIを18Aおよび14Aノードのデザインウィンとして獲得し、EMIBで98%の歩留まりを達成した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "インテルファウンドリーがAMD、エヌビディア、OpenAIを18Aおよび14Aノードのデザインウィンとして獲得し、EMIBで98%の歩留まりを達成した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "インテルファウンドリーがAMD、エヌビディア、OpenAIを18Aおよび14Aノードのデザインウィンとして獲得し、EMIBで98%の歩留まりを達成した。",
+              "source_urls": [
+                "https://www.moomoo.com/ja/community/feed/intel-intc-us-intel-foundry-snags-amd-nvidia-and-openai-116922209075206"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-15"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "ipo_financing",
+      "title": "OpenAIがGPT-5.6 Solを公開、アンソロピックはFableへのプロモーションアクセスを延長へ",
+      "summary": "OpenAIは新しいAIモデル「GPT-5.6 Sol」を公開した。 アンソロピックはOpenAIのGPT-5.6 Sol公開後、Fableへのプロモーションアクセスを再び延長した。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-14",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-a2cd6f367f6d-2026-07-15.html",
+        "sources": [
+          {
+            "label": "news.yahoo.co.jp",
+            "url": "https://news.yahoo.co.jp/articles/e2e8e5d6e3b5649c42ab41cfa76360771741c6b6/images/000"
+          }
+        ],
+        "summary": "OpenAIは新しいAIモデル「GPT-5.6 Sol」を公開した。 アンソロピックはOpenAIのGPT-5.6 Sol公開後、Fableへのプロモーションアクセスを再び延長した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "OpenAIは新しいAIモデル「GPT-5.6 Sol」を公開した。",
+            "アンソロピックはOpenAIのGPT-5.6 Sol公開後、Fableへのプロモーションアクセスを再び延長した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "OpenAIは新しいAIモデル「GPT-5.6 Sol」を公開した。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/e2e8e5d6e3b5649c42ab41cfa76360771741c6b6/images/000"
+              ]
+            },
+            {
+              "fact": "アンソロピックはOpenAIのGPT-5.6 Sol公開後、Fableへのプロモーションアクセスを再び延長した。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/e2e8e5d6e3b5649c42ab41cfa76360771741c6b6/images/000"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-14"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "domestic_services",
+      "title": "孫正義氏が2040年のAI未来予測とソフトバンクのAIサイバーセキュリティ新サービス開始を発表しました",
+      "summary": "孫正義氏は2040年に世界のAIインフラ投資が年間約800兆円に達し、AIエージェントが100兆個を超えると予測し、人類はAIと共に進化する必要があると述べた。 ソフトバンクはOpenAIの最新モデル「GPT-5.5-Cyber」を中核とするAIサイバーセキュリティサービスを正式に開始し、日本企業137社から高い関心を集めている。 ソフトバンクのコールセンターでの実証では、AI導入後に問題解決率が83%から97%に向上した。 2027年度開始を目指す新クラウド事業『NeoCloud』のため、ソフトバンクグループとソフトバンクが合弁で新会社『SB Neo』を設立し、44社が出資して日本国産AIモデル構築を目指している。 孫氏は2040年までに核融合発電が主力エネルギー源となり、データセンターや人型ロボットの膨大な消費電力を支えると予測した。",
+      "section_id": "softbank",
+      "category": "SoftBank",
+      "source_published_date": "2026-07-14",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "top",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-9586e9e17f8c-2026-07-15.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/4f54e039-29f8-42fa-9e62-2ec1502a85eb"
+          }
+        ],
+        "summary": "孫正義氏は2040年に世界のAIインフラ投資が年間約800兆円に達し、AIエージェントが100兆個を超えると予測し、人類はAIと共に進化する必要があると述べた。 ソフトバンクはOpenAIの最新モデル「GPT-5.5-Cyber」を中核とするAIサイバーセキュリティサービスを正式に開始し、日本企業137社から高い関心を集めている。 ソフトバンクのコールセンターでの実証では、AI導入後に問題解決率が83%から97%に向上した。 2027年度開始を目指す新クラウド事業『NeoCloud』のため、ソフトバンクグループとソフトバンクが合弁で新会社『SB Neo』を設立し、44社が出資して日本国産AIモデル構築を目指している。 孫氏は2040年までに核融合発電が主力エネルギー源となり、データセンターや人型ロボットの膨大な消費電力を支えると予測した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "孫正義氏は2040年に世界のAIインフラ投資が年間約800兆円に達し、AIエージェントが100兆個を超えると予測し、人類はAIと共に進化する必要があると述べた。",
+            "ソフトバンクはOpenAIの最新モデル「GPT-5.5-Cyber」を中核とするAIサイバーセキュリティサービスを正式に開始し、日本企業137社から高い関心を集めている。",
+            "ソフトバンクのコールセンターでの実証では、AI導入後に問題解決率が83%から97%に向上した。",
+            "2027年度開始を目指す新クラウド事業『NeoCloud』のため、ソフトバンクグループとソフトバンクが合弁で新会社『SB Neo』を設立し、44社が出資して日本国産AIモデル構築を目指している。",
+            "孫氏は2040年までに核融合発電が主力エネルギー源となり、データセンターや人型ロボットの膨大な消費電力を支えると予測した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "孫正義氏は2040年に世界のAIインフラ投資が年間約800兆円に達し、AIエージェントが100兆個を超えると予測し、人類はAIと共に進化する必要があると述べた。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/4f54e039-29f8-42fa-9e62-2ec1502a85eb"
+              ]
+            },
+            {
+              "fact": "ソフトバンクはOpenAIの最新モデル「GPT-5.5-Cyber」を中核とするAIサイバーセキュリティサービスを正式に開始し、日本企業137社から高い関心を集めている。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/4f54e039-29f8-42fa-9e62-2ec1502a85eb"
+              ]
+            },
+            {
+              "fact": "ソフトバンクのコールセンターでの実証では、AI導入後に問題解決率が83%から97%に向上した。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/4f54e039-29f8-42fa-9e62-2ec1502a85eb"
+              ]
+            },
+            {
+              "fact": "2027年度開始を目指す新クラウド事業『NeoCloud』のため、ソフトバンクグループとソフトバンクが合弁で新会社『SB Neo』を設立し、44社が出資して日本国産AIモデル構築を目指している。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/4f54e039-29f8-42fa-9e62-2ec1502a85eb"
+              ]
+            },
+            {
+              "fact": "孫氏は2040年までに核融合発電が主力エネルギー源となり、データセンターや人型ロボットの膨大な消費電力を支えると予測した。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/4f54e039-29f8-42fa-9e62-2ec1502a85eb"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-14"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "domestic_services",
+      "title": "ソフトバンクが企業向けAIガバナンス策定支援サービスを開始",
+      "summary": "ソフトバンクは企業向けに生成AIを安全に活用するための「AIガバナンス策定支援サービス」の提供を開始した。 同サービスはソフトバンクのAIガバナンス知見をテンプレート化し、規程やガイドラインの策定から運用まで一気通貫で支援する。 インキュデータのコンサルティング力を活用し、企業ごとにカスタマイズした実効性の高いAIガバナンス体制構築を支援する。 法規制の変化にも対応可能な生きたガバナンスの構築を目指し、継続的なドキュメント更新支援も行う。",
+      "section_id": "softbank",
+      "category": "SoftBank",
+      "source_published_date": "2026-07-13",
+      "topic_value_class": "operational_status_change",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-40a993ed730c-2026-07-15.html",
+        "sources": [
+          {
+            "label": "ai.watch.impress.co.jp",
+            "url": "https://ai.watch.impress.co.jp/docs/news/2124596.html"
+          }
+        ],
+        "summary": "ソフトバンクは企業向けに生成AIを安全に活用するための「AIガバナンス策定支援サービス」の提供を開始した。 同サービスはソフトバンクのAIガバナンス知見をテンプレート化し、規程やガイドラインの策定から運用まで一気通貫で支援する。 インキュデータのコンサルティング力を活用し、企業ごとにカスタマイズした実効性の高いAIガバナンス体制構築を支援する。 法規制の変化にも対応可能な生きたガバナンスの構築を目指し、継続的なドキュメント更新支援も行う。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "ソフトバンクは企業向けに生成AIを安全に活用するための「AIガバナンス策定支援サービス」の提供を開始した。",
+            "同サービスはソフトバンクのAIガバナンス知見をテンプレート化し、規程やガイドラインの策定から運用まで一気通貫で支援する。",
+            "インキュデータのコンサルティング力を活用し、企業ごとにカスタマイズした実効性の高いAIガバナンス体制構築を支援する。",
+            "法規制の変化にも対応可能な生きたガバナンスの構築を目指し、継続的なドキュメント更新支援も行う。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "ソフトバンクは企業向けに生成AIを安全に活用するための「AIガバナンス策定支援サービス」の提供を開始した。",
+              "source_urls": [
+                "https://ai.watch.impress.co.jp/docs/news/2124596.html"
+              ]
+            },
+            {
+              "fact": "同サービスはソフトバンクのAIガバナンス知見をテンプレート化し、規程やガイドラインの策定から運用まで一気通貫で支援する。",
+              "source_urls": [
+                "https://ai.watch.impress.co.jp/docs/news/2124596.html"
+              ]
+            },
+            {
+              "fact": "インキュデータのコンサルティング力を活用し、企業ごとにカスタマイズした実効性の高いAIガバナンス体制構築を支援する。",
+              "source_urls": [
+                "https://ai.watch.impress.co.jp/docs/news/2124596.html"
+              ]
+            },
+            {
+              "fact": "法規制の変化にも対応可能な生きたガバナンスの構築を目指し、継続的なドキュメント更新支援も行う。",
+              "source_urls": [
+                "https://ai.watch.impress.co.jp/docs/news/2124596.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-13"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "domestic_services",
+      "title": "ソフトバンクグループが生成AI特許公開件数で世界首位に",
+      "summary": "ソフトバンクグループは世界知的所有権機関（WIPO）の報告書で、生成AI関連の特許公開件数で世界首位となった。",
+      "section_id": "softbank",
+      "category": "SoftBank",
+      "source_published_date": "2026-07-14",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-46edb5e3e5ba-2026-07-15.html",
+        "sources": [
+          {
+            "label": "Traders Union",
+            "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQMURudnJQNGU4Y1ZRcXdsS0ZYUE41MWp3RDhhYklWUUtwdi1FcnppOTFYMU53V0JKblJmNGJLclI3d3ljSVl3UFFCTVZoTU9obDRmblNwODBQc016TnRTMEJLakY1NWh4OTVzNklHcDlTOVZWVWNpdFl2ZkJKOHBQbkZtaWFhblZzYkNBY3Q0UW03RUNvVGM0MVFQaEo?oc=5"
+          }
+        ],
+        "summary": "ソフトバンクグループは世界知的所有権機関（WIPO）の報告書で、生成AI関連の特許公開件数で世界首位となった。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "ソフトバンクグループは世界知的所有権機関（WIPO）の報告書で、生成AI関連の特許公開件数で世界首位となった。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "ソフトバンクグループは世界知的所有権機関（WIPO）の報告書で、生成AI関連の特許公開件数で世界首位となった。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMinAFBVV95cUxQMURudnJQNGU4Y1ZRcXdsS0ZYUE41MWp3RDhhYklWUUtwdi1FcnppOTFYMU53V0JKblJmNGJLclI3d3ljSVl3UFFCTVZoTU9obDRmblNwODBQc016TnRTMEJLakY1NWh4OTVzNklHcDlTOVZWVWNpdFl2ZkJKOHBQbkZtaWFhblZzYkNBY3Q0UW03RUNvVGM0MVFQaEo?oc=5"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-14"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "power_battery",
+      "title": "ソフトバンクの周東佑京選手が通算250盗塁を達成",
+      "summary": "ソフトバンクの周東佑京選手がNPB史上49人目となる通算250盗塁を達成した。",
+      "section_id": "softbank",
+      "category": "SoftBank",
+      "source_published_date": "2026-07-15",
+      "topic_value_class": "cultural_or_audience_signal",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-8b42e1e489be-2026-07-15.html",
+        "sources": [
+          {
+            "label": "ｄメニューニュース",
+            "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPdS1vRF9WRmpjOWFiN2k0bWRlSERtUUpoaEJ2RVprSTZ4bWt4U1l4Nk1pMi1Ya1Q3NXZBSE8tQ1RwZ0I1czZzTUI2YzBJNHR2TW5TSlZ2SVVmMkRJQ1NMdVE0cFhPbnVsU0ctVkxCWkVLVmROSVJlNlNoamNJUUFOYmJBd1lJVHhJbU5VU0w2bXhINWZ3My1GVlZsSWdCanlpNmdDdW9xZTl0c2s3d25GNUFGem1TTVZCandpZWQ3U0ljRjhSclFQaE93amQ0V2ZoMXc?oc=5"
+          }
+        ],
+        "summary": "ソフトバンクの周東佑京選手がNPB史上49人目となる通算250盗塁を達成した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "ソフトバンクの周東佑京選手がNPB史上49人目となる通算250盗塁を達成した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "ソフトバンクの周東佑京選手がNPB史上49人目となる通算250盗塁を達成した。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPdS1vRF9WRmpjOWFiN2k0bWRlSERtUUpoaEJ2RVprSTZ4bWt4U1l4Nk1pMi1Ya1Q3NXZBSE8tQ1RwZ0I1czZzTUI2YzBJNHR2TW5TSlZ2SVVmMkRJQ1NMdVE0cFhPbnVsU0ctVkxCWkVLVmROSVJlNlNoamNJUUFOYmJBd1lJVHhJbU5VU0w2bXhINWZ3My1GVlZsSWdCanlpNmdDdW9xZTl0c2s3d25GNUFGem1TTVZCandpZWQ3U0ljRjhSclFQaE93amQ0V2ZoMXc?oc=5"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-15"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "domestic_services",
+      "title": "ソフトバンク、OpenAI活用のAIサイバー防衛サービスを3,000社に拡大し本格提供開始",
+      "summary": "ソフトバンクとSB OAI Japan合同会社は2026年7月14日、OpenAI技術を活用したAI駆動型サイバー防衛サービス「Patching as a Service」の提供対象を3,000社に拡大し、本格提供を開始した。 同サービスはソースコードの静的・動的診断、攻撃診断、レポート作成、パッチ適用までを一気通貫で支援し、先行診断ではソースコード1,000万行あたり平均約280件の潜在的脆弱性を検出、そのうち25%が高リスクと判明した。 2026年6月16日に設置された「AIサイバー防衛室」とSB OAI Japanの約1,000人体制で提供・コンサルティングを行い、今後は対策強化オプションやモダナイゼーションサービス（言語刷新・クラウド移行支援）も順次追加予定である。 同日、ソフトバンクはOpenAI最新モデルを活用したAIサイバー防衛サービスを正式に開始し、すでに137社の日本企業が関心を示している。 約1,000人のチームが3,000の重要インフラ企業を守る体制を整えている。 NvidiaのCEOジェンセン・ファン氏は非公開会議で、収益成長が加速しており、大手クラウドサービスプロバイダーからの大型受注を確保したと述べ、台湾のAIハードウェア供給チェーンの見通しを強化した。",
+      "section_id": "softbank",
+      "category": "SoftBank",
+      "source_published_date": "2026-07-15",
+      "topic_value_class": "operational_status_change",
+      "priority_class": "top",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-b062eb5bc4db-2026-07-15.html",
+        "sources": [
+          {
+            "label": "rocket-boys.co.jp",
+            "url": "https://rocket-boys.co.jp/security-measures-lab/softbank-openai-patching-as-a-service-launch/"
+          },
+          {
+            "label": "finance.biggo.com",
+            "url": "https://finance.biggo.com/news/4f54e039-29f8-42fa-9e62-2ec1502a85eb"
+          }
+        ],
+        "summary": "ソフトバンクとSB OAI Japan合同会社は2026年7月14日、OpenAI技術を活用したAI駆動型サイバー防衛サービス「Patching as a Service」の提供対象を3,000社に拡大し、本格提供を開始した。 同サービスはソースコードの静的・動的診断、攻撃診断、レポート作成、パッチ適用までを一気通貫で支援し、先行診断ではソースコード1,000万行あたり平均約280件の潜在的脆弱性を検出、そのうち25%が高リスクと判明した。 2026年6月16日に設置された「AIサイバー防衛室」とSB OAI Japanの約1,000人体制で提供・コンサルティングを行い、今後は対策強化オプションやモダナイゼーションサービス（言語刷新・クラウド移行支援）も順次追加予定である。 同日、ソフトバンクはOpenAI最新モデルを活用したAIサイバー防衛サービスを正式に開始し、すでに137社の日本企業が関心を示している。 約1,000人のチームが3,000の重要インフラ企業を守る体制を整えている。 NvidiaのCEOジェンセン・ファン氏は非公開会議で、収益成長が加速しており、大手クラウドサービスプロバイダーからの大型受注を確保したと述べ、台湾のAIハードウェア供給チェーンの見通しを強化した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "ソフトバンクとSB OAI Japan合同会社は2026年7月14日、OpenAI技術を活用したAI駆動型サイバー防衛サービス「Patching as a Service」の提供対象を3,000社に拡大し、本格提供を開始した。",
+            "同サービスはソースコードの静的・動的診断、攻撃診断、レポート作成、パッチ適用までを一気通貫で支援し、先行診断ではソースコード1,000万行あたり平均約280件の潜在的脆弱性を検出、そのうち25%が高リスクと判明した。",
+            "2026年6月16日に設置された「AIサイバー防衛室」とSB OAI Japanの約1,000人体制で提供・コンサルティングを行い、今後は対策強化オプションやモダナイゼーションサービス（言語刷新・クラウド移行支援）も順次追加予定である。",
+            "同日、ソフトバンクはOpenAI最新モデルを活用したAIサイバー防衛サービスを正式に開始し、すでに137社の日本企業が関心を示している。",
+            "約1,000人のチームが3,000の重要インフラ企業を守る体制を整えている。",
+            "NvidiaのCEOジェンセン・ファン氏は非公開会議で、収益成長が加速しており、大手クラウドサービスプロバイダーからの大型受注を確保したと述べ、台湾のAIハードウェア供給チェーンの見通しを強化した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "ソフトバンクとSB OAI Japan合同会社は2026年7月14日、OpenAI技術を活用したAI駆動型サイバー防衛サービス「Patching as a Service」の提供対象を3,000社に拡大し、本格提供を開始した。",
+              "source_urls": [
+                "https://rocket-boys.co.jp/security-measures-lab/softbank-openai-patching-as-a-service-launch/"
+              ]
+            },
+            {
+              "fact": "同サービスはソースコードの静的・動的診断、攻撃診断、レポート作成、パッチ適用までを一気通貫で支援し、先行診断ではソースコード1,000万行あたり平均約280件の潜在的脆弱性を検出、そのうち25%が高リスクと判明した。",
+              "source_urls": [
+                "https://rocket-boys.co.jp/security-measures-lab/softbank-openai-patching-as-a-service-launch/"
+              ]
+            },
+            {
+              "fact": "2026年6月16日に設置された「AIサイバー防衛室」とSB OAI Japanの約1,000人体制で提供・コンサルティングを行い、今後は対策強化オプションやモダナイゼーションサービス（言語刷新・クラウド移行支援）も順次追加予定である。",
+              "source_urls": [
+                "https://rocket-boys.co.jp/security-measures-lab/softbank-openai-patching-as-a-service-launch/"
+              ]
+            },
+            {
+              "fact": "同日、ソフトバンクはOpenAI最新モデルを活用したAIサイバー防衛サービスを正式に開始し、すでに137社の日本企業が関心を示している。",
+              "source_urls": [
+                "https://finance.biggo.com/news/4f54e039-29f8-42fa-9e62-2ec1502a85eb"
+              ]
+            },
+            {
+              "fact": "約1,000人のチームが3,000の重要インフラ企業を守る体制を整えている。",
+              "source_urls": [
+                "https://finance.biggo.com/news/4f54e039-29f8-42fa-9e62-2ec1502a85eb"
+              ]
+            },
+            {
+              "fact": "NvidiaのCEOジェンセン・ファン氏は非公開会議で、収益成長が加速しており、大手クラウドサービスプロバイダーからの大型受注を確保したと述べ、台湾のAIハードウェア供給チェーンの見通しを強化した。",
+              "source_urls": [
+                "https://finance.biggo.com/news/4f54e039-29f8-42fa-9e62-2ec1502a85eb"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-14",
+            "2026-07-15"
+          ]
+        }
+      }
+    },
+    {
       "watch_topic_id": "fia_regulation_development",
-      "title": "フェラーリ、新設マドリングF1サーキットで初走行映像を公開し準備進展を示す",
-      "summary": "フェラーリは新設のマドリングF1サーキットでの初走行映像を公開し、9月のスペインGPに向けた準備が進んでいることを示した。 マドリングサーキットは現在も建設中で、FIAの最終公認検査を控えている。 マクラーレンはメルセデスのアップグレードを受けることが報じられている。",
+      "title": "フェラーリがマドリード新サーキットで初ラップ映像公開、マクラーレンはメルセデスPUアップグレード受領",
+      "summary": "フェラーリが新設のマドリードF1サーキットでの最初のラップ映像を公開し、9月のF1開催に向けて注目を集めている。 マクラーレンはメルセデス製パワーユニットのアップグレードを受けることが明らかになった。",
       "section_id": "f1",
       "category": "F1",
       "source_published_date": "2026-07-14",
       "topic_value_class": "technical_or_product_shift",
       "priority_class": "priority",
-      "change_class": "material_update",
+      "change_class": "new_event",
       "detail": {
-        "slug": "auto-fbac992e007f-2026-07-15.html",
+        "slug": "auto-02df8078f178-2026-07-15.html",
         "sources": [
           {
             "label": "motorcyclesports.net",
             "url": "https://motorcyclesports.net/ja/ferrari-reveals-first-lap-at-new-madring-f1-circuit-as-mclaren-gets-mercedes-upgrade-ja/"
           }
         ],
-        "summary": "フェラーリは新設のマドリングF1サーキットでの初走行映像を公開し、9月のスペインGPに向けた準備が進んでいることを示した。 マドリングサーキットは現在も建設中で、FIAの最終公認検査を控えている。 マクラーレンはメルセデスのアップグレードを受けることが報じられている。",
+        "summary": "フェラーリが新設のマドリードF1サーキットでの最初のラップ映像を公開し、9月のF1開催に向けて注目を集めている。 マクラーレンはメルセデス製パワーユニットのアップグレードを受けることが明らかになった。",
         "summary_basis": {
           "confirmed_facts": [
-            "フェラーリは新設のマドリングF1サーキットでの初走行映像を公開し、9月のスペインGPに向けた準備が進んでいることを示した。",
-            "マドリングサーキットは現在も建設中で、FIAの最終公認検査を控えている。",
-            "マクラーレンはメルセデスのアップグレードを受けることが報じられている。"
+            "フェラーリが新設のマドリードF1サーキットでの最初のラップ映像を公開し、9月のF1開催に向けて注目を集めている。",
+            "マクラーレンはメルセデス製パワーユニットのアップグレードを受けることが明らかになった。"
           ],
           "fact_sources": [
             {
-              "fact": "フェラーリは新設のマドリングF1サーキットでの初走行映像を公開し、9月のスペインGPに向けた準備が進んでいることを示した。",
+              "fact": "フェラーリが新設のマドリードF1サーキットでの最初のラップ映像を公開し、9月のF1開催に向けて注目を集めている。",
               "source_urls": [
                 "https://motorcyclesports.net/ja/ferrari-reveals-first-lap-at-new-madring-f1-circuit-as-mclaren-gets-mercedes-upgrade-ja/"
               ]
             },
             {
-              "fact": "マドリングサーキットは現在も建設中で、FIAの最終公認検査を控えている。",
-              "source_urls": [
-                "https://motorcyclesports.net/ja/ferrari-reveals-first-lap-at-new-madring-f1-circuit-as-mclaren-gets-mercedes-upgrade-ja/"
-              ]
-            },
-            {
-              "fact": "マクラーレンはメルセデスのアップグレードを受けることが報じられている。",
+              "fact": "マクラーレンはメルセデス製パワーユニットのアップグレードを受けることが明らかになった。",
               "source_urls": [
                 "https://motorcyclesports.net/ja/ferrari-reveals-first-lap-at-new-madring-f1-circuit-as-mclaren-gets-mercedes-upgrade-ja/"
               ]
@@ -546,8 +927,8 @@
     },
     {
       "watch_topic_id": "honda_aston_pu",
-      "title": "アストンマーティン、ベルギーGP FP1でアロンソに代わりジャック・クロフォードを起用",
-      "summary": "アストンマーティンはベルギーGPのFP1でフェルナンド・アロンソに代わりジャック・クロフォードがドライブすることを発表した。 クロフォードは2026年シーズンに3回目のFP1出走となり、2025年F2チャンピオンシップ2位の実績を持つ。 F1のルールにより、ルーキードライバーはシーズン中最低12戦で出走義務がある。",
+      "title": "アストンマーティン、ベルギーGP FP1でアロンソに代わり新人クロフォード起用を発表",
+      "summary": "アストンマーティンはベルギーGPのFP1でフェルナンド・アロンソに代わり、ジャック・クロフォードがドライブすることを発表した。 クロフォードは2026年シーズンで3度目のFP1出走となり、2025年F2チャンピオンシップ2位の実績を持つ新人ドライバーである。 アロンソは2026年シーズンに苦戦しており、信頼性とパフォーマンスの問題でポイント獲得が限られている。 F1のルールにより、チームは新人ドライバーを最低12戦で起用する義務があり、今回の起用はその一環と見られる。",
       "section_id": "f1",
       "category": "F1",
       "source_published_date": "2026-07-14",
@@ -555,157 +936,51 @@
       "priority_class": "priority",
       "change_class": "new_event",
       "detail": {
-        "slug": "auto-a37992126ba4-2026-07-15.html",
+        "slug": "auto-d1ae3820e5fb-2026-07-15.html",
         "sources": [
           {
             "label": "planetf1.com",
             "url": "https://www.planetf1.com/news/fernando-alonso-aston-martin-belgian-grand-prix-2026-fp1"
-          }
-        ],
-        "summary": "アストンマーティンはベルギーGPのFP1でフェルナンド・アロンソに代わりジャック・クロフォードがドライブすることを発表した。 クロフォードは2026年シーズンに3回目のFP1出走となり、2025年F2チャンピオンシップ2位の実績を持つ。 F1のルールにより、ルーキードライバーはシーズン中最低12戦で出走義務がある。",
-        "summary_basis": {
-          "confirmed_facts": [
-            "アストンマーティンはベルギーGPのFP1でフェルナンド・アロンソに代わりジャック・クロフォードがドライブすることを発表した。",
-            "クロフォードは2026年シーズンに3回目のFP1出走となり、2025年F2チャンピオンシップ2位の実績を持つ。",
-            "F1のルールにより、ルーキードライバーはシーズン中最低12戦で出走義務がある。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "アストンマーティンはベルギーGPのFP1でフェルナンド・アロンソに代わりジャック・クロフォードがドライブすることを発表した。",
-              "source_urls": [
-                "https://www.planetf1.com/news/fernando-alonso-aston-martin-belgian-grand-prix-2026-fp1"
-              ]
-            },
-            {
-              "fact": "クロフォードは2026年シーズンに3回目のFP1出走となり、2025年F2チャンピオンシップ2位の実績を持つ。",
-              "source_urls": [
-                "https://www.planetf1.com/news/fernando-alonso-aston-martin-belgian-grand-prix-2026-fp1"
-              ]
-            },
-            {
-              "fact": "F1のルールにより、ルーキードライバーはシーズン中最低12戦で出走義務がある。",
-              "source_urls": [
-                "https://www.planetf1.com/news/fernando-alonso-aston-martin-belgian-grand-prix-2026-fp1"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-07-14"
-          ]
-        }
-      }
-    },
-    {
-      "watch_topic_id": "race_schedule_results",
-      "title": "ベルギーGPでアクティブエアロの使用が特定区間で認められる",
-      "summary": "2026年F1シーズンから導入されたアクティブエアロシステムは、ベルギーGPでのスパ・フランコルシャン・サーキットの特定区間で使用が認められた。 アクティブエアロはDRSに代わるシステムで、直線で空力抵抗を減らし速度を上げ、コーナーではダウンフォースを最大化する。 ベルギーGPではラ・ソースからオー・ルージュ、ケメルストレート、スタヴロール出口の4つのゾーンでアクティブエアロの使用が許可されている。",
-      "section_id": "f1",
-      "category": "F1",
-      "source_published_date": "2026-07-14",
-      "topic_value_class": "technical_or_product_shift",
-      "priority_class": "priority",
-      "change_class": "material_update",
-      "detail": {
-        "slug": "auto-fe6b8fc3fe1d-2026-07-15.html",
-        "sources": [
-          {
-            "label": "planetf1.com",
-            "url": "https://www.planetf1.com/news/fia-belgian-grand-prix-2026-spa-active-aero"
-          }
-        ],
-        "summary": "2026年F1シーズンから導入されたアクティブエアロシステムは、ベルギーGPでのスパ・フランコルシャン・サーキットの特定区間で使用が認められた。 アクティブエアロはDRSに代わるシステムで、直線で空力抵抗を減らし速度を上げ、コーナーではダウンフォースを最大化する。 ベルギーGPではラ・ソースからオー・ルージュ、ケメルストレート、スタヴロール出口の4つのゾーンでアクティブエアロの使用が許可されている。",
-        "summary_basis": {
-          "confirmed_facts": [
-            "2026年F1シーズンから導入されたアクティブエアロシステムは、ベルギーGPでのスパ・フランコルシャン・サーキットの特定区間で使用が認められた。",
-            "アクティブエアロはDRSに代わるシステムで、直線で空力抵抗を減らし速度を上げ、コーナーではダウンフォースを最大化する。",
-            "ベルギーGPではラ・ソースからオー・ルージュ、ケメルストレート、スタヴロール出口の4つのゾーンでアクティブエアロの使用が許可されている。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "2026年F1シーズンから導入されたアクティブエアロシステムは、ベルギーGPでのスパ・フランコルシャン・サーキットの特定区間で使用が認められた。",
-              "source_urls": [
-                "https://www.planetf1.com/news/fia-belgian-grand-prix-2026-spa-active-aero"
-              ]
-            },
-            {
-              "fact": "アクティブエアロはDRSに代わるシステムで、直線で空力抵抗を減らし速度を上げ、コーナーではダウンフォースを最大化する。",
-              "source_urls": [
-                "https://www.planetf1.com/news/fia-belgian-grand-prix-2026-spa-active-aero"
-              ]
-            },
-            {
-              "fact": "ベルギーGPではラ・ソースからオー・ルージュ、ケメルストレート、スタヴロール出口の4つのゾーンでアクティブエアロの使用が許可されている。",
-              "source_urls": [
-                "https://www.planetf1.com/news/fia-belgian-grand-prix-2026-spa-active-aero"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-07-14"
-          ]
-        }
-      }
-    },
-    {
-      "watch_topic_id": "business_contracts",
-      "title": "NTTドコモの衛星通信サービス「docomo Starlink Direct」が接続者数500万人を突破",
-      "summary": "NTTドコモは、2026年4月27日に開始した衛星通信サービス「docomo Starlink Direct」の接続者数が、7月9日時点で500万人を突破したと発表した。 「docomo Starlink Direct」はSpaceXの低軌道衛星を利用し、スマートフォンと衛星を直接接続するサービスである。 NTTドコモはこのサービスを一律無料で提供し、対応機種は89機種、2500万台以上に達している。 KDDIの同様サービスは90機種1100万台超の対応端末数であり、単純比較は難しい。 Starlink Directは「圏外時につながる」というイメージで提供されており、接続者数の多さは必ずしも利用頻度や継続的な需要を示すものではない。",
-      "section_id": "spacex",
-      "category": "SpaceX",
-      "source_published_date": "2026-07-14",
-      "topic_value_class": "market_or_financial_impact",
-      "priority_class": "priority",
-      "change_class": "material_update",
-      "detail": {
-        "slug": "auto-3dfc3d393aca-2026-07-15.html",
-        "sources": [
-          {
-            "label": "plus-web3.com",
-            "url": "https://plus-web3.com/media/latestnews_1002_9840-2/"
           },
           {
-            "label": "mag2.com",
-            "url": "https://www.mag2.com/p/news/680838/2"
+            "label": "gpfans.com",
+            "url": "https://www.gpfans.com/en/f1-news/1087664/aston-martin-f1-announce-fernando-alonso-replacement-belgian-grand-prix-fp1/"
           }
         ],
-        "summary": "NTTドコモは、2026年4月27日に開始した衛星通信サービス「docomo Starlink Direct」の接続者数が、7月9日時点で500万人を突破したと発表した。 「docomo Starlink Direct」はSpaceXの低軌道衛星を利用し、スマートフォンと衛星を直接接続するサービスである。 NTTドコモはこのサービスを一律無料で提供し、対応機種は89機種、2500万台以上に達している。 KDDIの同様サービスは90機種1100万台超の対応端末数であり、単純比較は難しい。 Starlink Directは「圏外時につながる」というイメージで提供されており、接続者数の多さは必ずしも利用頻度や継続的な需要を示すものではない。",
+        "summary": "アストンマーティンはベルギーGPのFP1でフェルナンド・アロンソに代わり、ジャック・クロフォードがドライブすることを発表した。 クロフォードは2026年シーズンで3度目のFP1出走となり、2025年F2チャンピオンシップ2位の実績を持つ新人ドライバーである。 アロンソは2026年シーズンに苦戦しており、信頼性とパフォーマンスの問題でポイント獲得が限られている。 F1のルールにより、チームは新人ドライバーを最低12戦で起用する義務があり、今回の起用はその一環と見られる。",
         "summary_basis": {
           "confirmed_facts": [
-            "NTTドコモは、2026年4月27日に開始した衛星通信サービス「docomo Starlink Direct」の接続者数が、7月9日時点で500万人を突破したと発表した。",
-            "「docomo Starlink Direct」はSpaceXの低軌道衛星を利用し、スマートフォンと衛星を直接接続するサービスである。",
-            "NTTドコモはこのサービスを一律無料で提供し、対応機種は89機種、2500万台以上に達している。",
-            "KDDIの同様サービスは90機種1100万台超の対応端末数であり、単純比較は難しい。",
-            "Starlink Directは「圏外時につながる」というイメージで提供されており、接続者数の多さは必ずしも利用頻度や継続的な需要を示すものではない。"
+            "アストンマーティンはベルギーGPのFP1でフェルナンド・アロンソに代わり、ジャック・クロフォードがドライブすることを発表した。",
+            "クロフォードは2026年シーズンで3度目のFP1出走となり、2025年F2チャンピオンシップ2位の実績を持つ新人ドライバーである。",
+            "アロンソは2026年シーズンに苦戦しており、信頼性とパフォーマンスの問題でポイント獲得が限られている。",
+            "F1のルールにより、チームは新人ドライバーを最低12戦で起用する義務があり、今回の起用はその一環と見られる。"
           ],
           "fact_sources": [
             {
-              "fact": "NTTドコモは、2026年4月27日に開始した衛星通信サービス「docomo Starlink Direct」の接続者数が、7月9日時点で500万人を突破したと発表した。",
+              "fact": "アストンマーティンはベルギーGPのFP1でフェルナンド・アロンソに代わり、ジャック・クロフォードがドライブすることを発表した。",
               "source_urls": [
-                "https://plus-web3.com/media/latestnews_1002_9840-2/"
+                "https://www.planetf1.com/news/fernando-alonso-aston-martin-belgian-grand-prix-2026-fp1",
+                "https://www.gpfans.com/en/f1-news/1087664/aston-martin-f1-announce-fernando-alonso-replacement-belgian-grand-prix-fp1/"
               ]
             },
             {
-              "fact": "「docomo Starlink Direct」はSpaceXの低軌道衛星を利用し、スマートフォンと衛星を直接接続するサービスである。",
+              "fact": "クロフォードは2026年シーズンで3度目のFP1出走となり、2025年F2チャンピオンシップ2位の実績を持つ新人ドライバーである。",
               "source_urls": [
-                "https://plus-web3.com/media/latestnews_1002_9840-2/"
+                "https://www.planetf1.com/news/fernando-alonso-aston-martin-belgian-grand-prix-2026-fp1",
+                "https://www.gpfans.com/en/f1-news/1087664/aston-martin-f1-announce-fernando-alonso-replacement-belgian-grand-prix-fp1/"
               ]
             },
             {
-              "fact": "NTTドコモはこのサービスを一律無料で提供し、対応機種は89機種、2500万台以上に達している。",
+              "fact": "アロンソは2026年シーズンに苦戦しており、信頼性とパフォーマンスの問題でポイント獲得が限られている。",
               "source_urls": [
-                "https://www.mag2.com/p/news/680838/2"
+                "https://www.gpfans.com/en/f1-news/1087664/aston-martin-f1-announce-fernando-alonso-replacement-belgian-grand-prix-fp1/"
               ]
             },
             {
-              "fact": "KDDIの同様サービスは90機種1100万台超の対応端末数であり、単純比較は難しい。",
+              "fact": "F1のルールにより、チームは新人ドライバーを最低12戦で起用する義務があり、今回の起用はその一環と見られる。",
               "source_urls": [
-                "https://www.mag2.com/p/news/680838/2"
-              ]
-            },
-            {
-              "fact": "Starlink Directは「圏外時につながる」というイメージで提供されており、接続者数の多さは必ずしも利用頻度や継続的な需要を示すものではない。",
-              "source_urls": [
-                "https://www.mag2.com/p/news/680838/2"
+                "https://www.planetf1.com/news/fernando-alonso-aston-martin-belgian-grand-prix-2026-fp1",
+                "https://www.gpfans.com/en/f1-news/1087664/aston-martin-f1-announce-fernando-alonso-replacement-belgian-grand-prix-fp1/"
               ]
             }
           ],
@@ -717,40 +992,40 @@
       }
     },
     {
-      "watch_topic_id": "ai_mna_compute",
-      "title": "SpaceXとCursorが共同開発したAIモデルが近く発表予定",
-      "summary": "この新AIモデルはOpenAIのGPT-5.5に匹敵する性能を持つとされ、業界の注目を集めている。 SpaceXAIとCursorの協業は、AIコーディングモデルの強化を中心とする可能性があるが、具体的な用途は明示されていない。",
+      "watch_topic_id": "business_contracts",
+      "title": "ドコモの衛星通信サービス接続者数が500万人突破",
+      "summary": "NTTドコモが提供する衛星直接通信サービス「docomo Starlink Direct」の接続者数が、開始から約2カ月で500万人を突破した。 これはSpaceXの低軌道衛星を活用したサービスであり、衛星通信の一般化に向けた大きな進展を示す。",
       "section_id": "spacex",
       "category": "SpaceX",
       "source_published_date": "2026-07-13",
-      "topic_value_class": "technical_or_product_shift",
-      "priority_class": "priority",
-      "change_class": "material_update",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "standard",
+      "change_class": "new_event",
       "detail": {
-        "slug": "auto-c0f4fa9fe3e9-2026-07-15.html",
+        "slug": "auto-9751092443db-2026-07-15.html",
         "sources": [
           {
-            "label": "thelec.net",
-            "url": "https://www.thelec.net/news/articleView.html?idxno=12109"
+            "label": "plus-web3.com",
+            "url": "https://plus-web3.com/media/latestnews_1002_9840-2/"
           }
         ],
-        "summary": "この新AIモデルはOpenAIのGPT-5.5に匹敵する性能を持つとされ、業界の注目を集めている。 SpaceXAIとCursorの協業は、AIコーディングモデルの強化を中心とする可能性があるが、具体的な用途は明示されていない。",
+        "summary": "NTTドコモが提供する衛星直接通信サービス「docomo Starlink Direct」の接続者数が、開始から約2カ月で500万人を突破した。 これはSpaceXの低軌道衛星を活用したサービスであり、衛星通信の一般化に向けた大きな進展を示す。",
         "summary_basis": {
           "confirmed_facts": [
-            "この新AIモデルはOpenAIのGPT-5.5に匹敵する性能を持つとされ、業界の注目を集めている。",
-            "SpaceXAIとCursorの協業は、AIコーディングモデルの強化を中心とする可能性があるが、具体的な用途は明示されていない。"
+            "NTTドコモが提供する衛星直接通信サービス「docomo Starlink Direct」の接続者数が、開始から約2カ月で500万人を突破した。",
+            "これはSpaceXの低軌道衛星を活用したサービスであり、衛星通信の一般化に向けた大きな進展を示す。"
           ],
           "fact_sources": [
             {
-              "fact": "この新AIモデルはOpenAIのGPT-5.5に匹敵する性能を持つとされ、業界の注目を集めている。",
+              "fact": "NTTドコモが提供する衛星直接通信サービス「docomo Starlink Direct」の接続者数が、開始から約2カ月で500万人を突破した。",
               "source_urls": [
-                "https://www.thelec.net/news/articleView.html?idxno=12109"
+                "https://plus-web3.com/media/latestnews_1002_9840-2/"
               ]
             },
             {
-              "fact": "SpaceXAIとCursorの協業は、AIコーディングモデルの強化を中心とする可能性があるが、具体的な用途は明示されていない。",
+              "fact": "これはSpaceXの低軌道衛星を活用したサービスであり、衛星通信の一般化に向けた大きな進展を示す。",
               "source_urls": [
-                "https://www.thelec.net/news/articleView.html?idxno=12109"
+                "https://plus-web3.com/media/latestnews_1002_9840-2/"
               ]
             }
           ],
@@ -761,60 +1036,299 @@
       }
     },
     {
-      "watch_topic_id": "starship_status",
-      "title": "STARSHIPのミッキー・トーマス参加アルバム「OVER THE EDGE」が22年ぶりにリイシュー",
-      "summary": "STARSHIPのシンガー、ミッキー・トーマスをフィーチャーしたメロディアス・ハードのアルバム「OVER THE EDGE」が22年ぶりにリイシューされる。 このアルバムは2004年に発表され、リイシューは2026年8月21日にFrontiers Musicより発売される。 ニール・ショーンが参加した楽曲“Surrender”のヴィジュアライザーも公開された。",
+      "watch_topic_id": "business_contracts",
+      "title": "SpaceXのIPOがウォール街の投資銀行収入を押し上げる",
+      "summary": "SpaceXの新規株式公開（IPO）により、ウォール街の大手投資銀行5行の2026年第2四半期の投資銀行手数料収入が前年同期比27%増の約1.8兆円に達し、2021年以来の高水準となった。 SpaceXのIPO引受団は約810億円の手数料を得ており、ゴールドマン・サックスとモルガン・スタンレーはそれぞれ約160億円を獲得した。 大型M&A取引も回復し、ウォール街の投資銀行のM&A手数料収入は前年同期比約30%増の約6,500億円を超え、3四半期連続で高水準を維持している。 市場では、SpaceXのIPO成功に加え、オープンAIやアンソロピックなどの大型テクノロジー企業の上場動向にも注目が集まっている。",
       "section_id": "spacex",
       "category": "SpaceX",
       "source_published_date": "2026-07-13",
-      "topic_value_class": "cultural_or_audience_signal",
-      "priority_class": "standard",
-      "change_class": "material_update",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
       "detail": {
-        "slug": "auto-354532239393-2026-07-15.html",
+        "slug": "auto-32ea7dfb13be-2026-07-15.html",
         "sources": [
           {
-            "label": "burrn.online",
-            "url": "https://burrn.online/news/20260713.html"
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/8365afb2-82f3-4cd4-b425-b5068ee47210"
           }
         ],
-        "summary": "STARSHIPのシンガー、ミッキー・トーマスをフィーチャーしたメロディアス・ハードのアルバム「OVER THE EDGE」が22年ぶりにリイシューされる。 このアルバムは2004年に発表され、リイシューは2026年8月21日にFrontiers Musicより発売される。 ニール・ショーンが参加した楽曲“Surrender”のヴィジュアライザーも公開された。",
+        "summary": "SpaceXの新規株式公開（IPO）により、ウォール街の大手投資銀行5行の2026年第2四半期の投資銀行手数料収入が前年同期比27%増の約1.8兆円に達し、2021年以来の高水準となった。 SpaceXのIPO引受団は約810億円の手数料を得ており、ゴールドマン・サックスとモルガン・スタンレーはそれぞれ約160億円を獲得した。 大型M&A取引も回復し、ウォール街の投資銀行のM&A手数料収入は前年同期比約30%増の約6,500億円を超え、3四半期連続で高水準を維持している。 市場では、SpaceXのIPO成功に加え、オープンAIやアンソロピックなどの大型テクノロジー企業の上場動向にも注目が集まっている。",
         "summary_basis": {
           "confirmed_facts": [
-            "STARSHIPのシンガー、ミッキー・トーマスをフィーチャーしたメロディアス・ハードのアルバム「OVER THE EDGE」が22年ぶりにリイシューされる。",
-            "このアルバムは2004年に発表され、リイシューは2026年8月21日にFrontiers Musicより発売される。",
-            "ニール・ショーンが参加した楽曲“Surrender”のヴィジュアライザーも公開された。"
+            "SpaceXの新規株式公開（IPO）により、ウォール街の大手投資銀行5行の2026年第2四半期の投資銀行手数料収入が前年同期比27%増の約1.8兆円に達し、2021年以来の高水準となった。",
+            "SpaceXのIPO引受団は約810億円の手数料を得ており、ゴールドマン・サックスとモルガン・スタンレーはそれぞれ約160億円を獲得した。",
+            "大型M&A取引も回復し、ウォール街の投資銀行のM&A手数料収入は前年同期比約30%増の約6,500億円を超え、3四半期連続で高水準を維持している。",
+            "市場では、SpaceXのIPO成功に加え、オープンAIやアンソロピックなどの大型テクノロジー企業の上場動向にも注目が集まっている。"
           ],
           "fact_sources": [
             {
-              "fact": "STARSHIPのシンガー、ミッキー・トーマスをフィーチャーしたメロディアス・ハードのアルバム「OVER THE EDGE」が22年ぶりにリイシューされる。",
+              "fact": "SpaceXの新規株式公開（IPO）により、ウォール街の大手投資銀行5行の2026年第2四半期の投資銀行手数料収入が前年同期比27%増の約1.8兆円に達し、2021年以来の高水準となった。",
               "source_urls": [
-                "https://burrn.online/news/20260713.html"
+                "https://finance.biggo.jp/news/8365afb2-82f3-4cd4-b425-b5068ee47210"
               ]
             },
             {
-              "fact": "このアルバムは2004年に発表され、リイシューは2026年8月21日にFrontiers Musicより発売される。",
+              "fact": "SpaceXのIPO引受団は約810億円の手数料を得ており、ゴールドマン・サックスとモルガン・スタンレーはそれぞれ約160億円を獲得した。",
               "source_urls": [
-                "https://burrn.online/news/20260713.html"
+                "https://finance.biggo.jp/news/8365afb2-82f3-4cd4-b425-b5068ee47210"
               ]
             },
             {
-              "fact": "ニール・ショーンが参加した楽曲“Surrender”のヴィジュアライザーも公開された。",
+              "fact": "大型M&A取引も回復し、ウォール街の投資銀行のM&A手数料収入は前年同期比約30%増の約6,500億円を超え、3四半期連続で高水準を維持している。",
               "source_urls": [
-                "https://burrn.online/news/20260713.html"
+                "https://finance.biggo.jp/news/8365afb2-82f3-4cd4-b425-b5068ee47210"
+              ]
+            },
+            {
+              "fact": "市場では、SpaceXのIPO成功に加え、オープンAIやアンソロピックなどの大型テクノロジー企業の上場動向にも注目が集まっている。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/8365afb2-82f3-4cd4-b425-b5068ee47210"
               ]
             }
           ],
           "source_dates": [
             "2026-07-13"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "business_contracts",
+      "title": "SpaceXが第3世代Starlink衛星10万基のFCC認可を申請",
+      "summary": "SpaceXは米連邦通信委員会（FCC）に最大10万基の第3世代Starlink衛星の認可を申請した。 第3世代衛星は第2世代衛星と比べて10倍の性能向上を目指し、AIのリアルタイム意思決定や産業オートメーションに必要な大容量アップリンクを支えることを目的としている。 BNPパリバは第3世代衛星が完成すれば世界で2億人の加入者にサービス提供可能と試算し、そのうち約1,500万～2,000万人が米国利用者になると見込んでいる。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-07-13",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-0ccfc160f588-2026-07-15.html",
+        "sources": [
+          {
+            "label": "cafe-dc.com",
+            "url": "https://cafe-dc.com/network/spacex-files-fcc-application-for-100000-gen3-starlink-satellites/"
+          }
+        ],
+        "summary": "SpaceXは米連邦通信委員会（FCC）に最大10万基の第3世代Starlink衛星の認可を申請した。 第3世代衛星は第2世代衛星と比べて10倍の性能向上を目指し、AIのリアルタイム意思決定や産業オートメーションに必要な大容量アップリンクを支えることを目的としている。 BNPパリバは第3世代衛星が完成すれば世界で2億人の加入者にサービス提供可能と試算し、そのうち約1,500万～2,000万人が米国利用者になると見込んでいる。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "SpaceXは米連邦通信委員会（FCC）に最大10万基の第3世代Starlink衛星の認可を申請した。",
+            "第3世代衛星は第2世代衛星と比べて10倍の性能向上を目指し、AIのリアルタイム意思決定や産業オートメーションに必要な大容量アップリンクを支えることを目的としている。",
+            "BNPパリバは第3世代衛星が完成すれば世界で2億人の加入者にサービス提供可能と試算し、そのうち約1,500万～2,000万人が米国利用者になると見込んでいる。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "SpaceXは米連邦通信委員会（FCC）に最大10万基の第3世代Starlink衛星の認可を申請した。",
+              "source_urls": [
+                "https://cafe-dc.com/network/spacex-files-fcc-application-for-100000-gen3-starlink-satellites/"
+              ]
+            },
+            {
+              "fact": "第3世代衛星は第2世代衛星と比べて10倍の性能向上を目指し、AIのリアルタイム意思決定や産業オートメーションに必要な大容量アップリンクを支えることを目的としている。",
+              "source_urls": [
+                "https://cafe-dc.com/network/spacex-files-fcc-application-for-100000-gen3-starlink-satellites/"
+              ]
+            },
+            {
+              "fact": "BNPパリバは第3世代衛星が完成すれば世界で2億人の加入者にサービス提供可能と試算し、そのうち約1,500万～2,000万人が米国利用者になると見込んでいる。",
+              "source_urls": [
+                "https://cafe-dc.com/network/spacex-files-fcc-application-for-100000-gen3-starlink-satellites/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-13"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "business_contracts",
+      "title": "Frontier Airlinesなど複数航空会社がStarlink機内インターネットサービス導入で契約締結",
+      "summary": "Frontier Airlinesは2027年初頭に導入予定の機体にStarlinkの機内インターネットサービスを搭載することを含む、1000機以上の航空機を対象とした複数航空会社との契約を締結した。 この契約はIndigo Partnersが主導し、Wizz Air、Volaris、JetSMART、Cebu PacificなどもStarlinkサービス導入を表明している。 Frontierが米国初のStarlink搭載航空会社となる見込みで、航空会社グループはCopa航空の先例に続く形となる。 契約の詳細な構造は明らかにされていない。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-07-15",
+      "topic_value_class": "material_schedule_change",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-0cd0e51a4b9c-2026-07-15.html",
+        "sources": [
+          {
+            "label": "paxex.aero",
+            "url": "https://paxex.aero/frontier-airlines-starlink-inflight-internet-indigo-partners-jetsmart-volaris-cebu-pacific/"
+          }
+        ],
+        "summary": "Frontier Airlinesは2027年初頭に導入予定の機体にStarlinkの機内インターネットサービスを搭載することを含む、1000機以上の航空機を対象とした複数航空会社との契約を締結した。 この契約はIndigo Partnersが主導し、Wizz Air、Volaris、JetSMART、Cebu PacificなどもStarlinkサービス導入を表明している。 Frontierが米国初のStarlink搭載航空会社となる見込みで、航空会社グループはCopa航空の先例に続く形となる。 契約の詳細な構造は明らかにされていない。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Frontier Airlinesは2027年初頭に導入予定の機体にStarlinkの機内インターネットサービスを搭載することを含む、1000機以上の航空機を対象とした複数航空会社との契約を締結した。",
+            "この契約はIndigo Partnersが主導し、Wizz Air、Volaris、JetSMART、Cebu PacificなどもStarlinkサービス導入を表明している。",
+            "Frontierが米国初のStarlink搭載航空会社となる見込みで、航空会社グループはCopa航空の先例に続く形となる。",
+            "契約の詳細な構造は明らかにされていない。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Frontier Airlinesは2027年初頭に導入予定の機体にStarlinkの機内インターネットサービスを搭載することを含む、1000機以上の航空機を対象とした複数航空会社との契約を締結した。",
+              "source_urls": [
+                "https://paxex.aero/frontier-airlines-starlink-inflight-internet-indigo-partners-jetsmart-volaris-cebu-pacific/"
+              ]
+            },
+            {
+              "fact": "この契約はIndigo Partnersが主導し、Wizz Air、Volaris、JetSMART、Cebu PacificなどもStarlinkサービス導入を表明している。",
+              "source_urls": [
+                "https://paxex.aero/frontier-airlines-starlink-inflight-internet-indigo-partners-jetsmart-volaris-cebu-pacific/"
+              ]
+            },
+            {
+              "fact": "Frontierが米国初のStarlink搭載航空会社となる見込みで、航空会社グループはCopa航空の先例に続く形となる。",
+              "source_urls": [
+                "https://paxex.aero/frontier-airlines-starlink-inflight-internet-indigo-partners-jetsmart-volaris-cebu-pacific/"
+              ]
+            },
+            {
+              "fact": "契約の詳細な構造は明らかにされていない。",
+              "source_urls": [
+                "https://paxex.aero/frontier-airlines-starlink-inflight-internet-indigo-partners-jetsmart-volaris-cebu-pacific/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-15"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "business_contracts",
+      "title": "デジタル省がStarlink端末登録ルールを更新し認証強化と新サービス導入",
+      "summary": "デジタル変革省はStarlink端末の登録ルールを更新し、KIT番号とUTIDの記載を必須化した。 これにより認証要件が厳格化され、端末の登録や削除手続きが透明かつ簡素化された。 法人向けにはStarlink端末の登録数が最大10台までに制限されるが、重要企業は制限対象外。 個人や個人事業主は行政サービスセンターで認証可能となり、外国人も申請できる。 新たに法人向けに登録済み端末情報の取得サービスや端末削除サービスが導入され、機器管理の透明性と利便性が向上した。 これらのサービスは行政サービスセンターや郵便支店でも利用可能となった。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-07-14",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-036fa510d96d-2026-07-15.html",
+        "sources": [
+          {
+            "label": "mezha.net",
+            "url": "https://mezha.net/jp/bukvy/96f95988_ukraine_updates_starlink/"
+          }
+        ],
+        "summary": "デジタル変革省はStarlink端末の登録ルールを更新し、KIT番号とUTIDの記載を必須化した。 これにより認証要件が厳格化され、端末の登録や削除手続きが透明かつ簡素化された。 法人向けにはStarlink端末の登録数が最大10台までに制限されるが、重要企業は制限対象外。 個人や個人事業主は行政サービスセンターで認証可能となり、外国人も申請できる。 新たに法人向けに登録済み端末情報の取得サービスや端末削除サービスが導入され、機器管理の透明性と利便性が向上した。 これらのサービスは行政サービスセンターや郵便支店でも利用可能となった。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "デジタル変革省はStarlink端末の登録ルールを更新し、KIT番号とUTIDの記載を必須化した。",
+            "これにより認証要件が厳格化され、端末の登録や削除手続きが透明かつ簡素化された。",
+            "法人向けにはStarlink端末の登録数が最大10台までに制限されるが、重要企業は制限対象外。",
+            "個人や個人事業主は行政サービスセンターで認証可能となり、外国人も申請できる。",
+            "新たに法人向けに登録済み端末情報の取得サービスや端末削除サービスが導入され、機器管理の透明性と利便性が向上した。",
+            "これらのサービスは行政サービスセンターや郵便支店でも利用可能となった。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "デジタル変革省はStarlink端末の登録ルールを更新し、KIT番号とUTIDの記載を必須化した。",
+              "source_urls": [
+                "https://mezha.net/jp/bukvy/96f95988_ukraine_updates_starlink/"
+              ]
+            },
+            {
+              "fact": "これにより認証要件が厳格化され、端末の登録や削除手続きが透明かつ簡素化された。",
+              "source_urls": [
+                "https://mezha.net/jp/bukvy/96f95988_ukraine_updates_starlink/"
+              ]
+            },
+            {
+              "fact": "法人向けにはStarlink端末の登録数が最大10台までに制限されるが、重要企業は制限対象外。",
+              "source_urls": [
+                "https://mezha.net/jp/bukvy/96f95988_ukraine_updates_starlink/"
+              ]
+            },
+            {
+              "fact": "個人や個人事業主は行政サービスセンターで認証可能となり、外国人も申請できる。",
+              "source_urls": [
+                "https://mezha.net/jp/bukvy/96f95988_ukraine_updates_starlink/"
+              ]
+            },
+            {
+              "fact": "新たに法人向けに登録済み端末情報の取得サービスや端末削除サービスが導入され、機器管理の透明性と利便性が向上した。",
+              "source_urls": [
+                "https://mezha.net/jp/bukvy/96f95988_ukraine_updates_starlink/"
+              ]
+            },
+            {
+              "fact": "これらのサービスは行政サービスセンターや郵便支店でも利用可能となった。",
+              "source_urls": [
+                "https://mezha.net/jp/bukvy/96f95988_ukraine_updates_starlink/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-14"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "official_launch_manifest",
+      "title": "SpaceX、バンデンバーグからFalcon 9で27基のStarlink衛星を打ち上げ成功",
+      "summary": "2026年7月13日、SpaceXのFalcon 9ロケットがバンデンバーグ宇宙軍基地から27基のStarlink衛星を低軌道に打ち上げた。 このミッションで使用されたファーストステージブースターは15回目の飛行であり、過去に複数のミッションに使用されている。 バンデンバーグ宇宙軍基地は、衛星通信技術が災害対応において重要な役割を果たしていることを強調し、最近のベネズエラ地震救援活動での活用例を紹介した。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-07-14",
+      "topic_value_class": "operational_status_change",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-3cd55b827f24-2026-07-15.html",
+        "sources": [
+          {
+            "label": "edhat.com",
+            "url": "https://www.edhat.com/news/spacex-falcon-9-rocket-launch-from-vandenberg-scheduled-for-monday-evening/"
+          }
+        ],
+        "summary": "2026年7月13日、SpaceXのFalcon 9ロケットがバンデンバーグ宇宙軍基地から27基のStarlink衛星を低軌道に打ち上げた。 このミッションで使用されたファーストステージブースターは15回目の飛行であり、過去に複数のミッションに使用されている。 バンデンバーグ宇宙軍基地は、衛星通信技術が災害対応において重要な役割を果たしていることを強調し、最近のベネズエラ地震救援活動での活用例を紹介した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "2026年7月13日、SpaceXのFalcon 9ロケットがバンデンバーグ宇宙軍基地から27基のStarlink衛星を低軌道に打ち上げた。",
+            "このミッションで使用されたファーストステージブースターは15回目の飛行であり、過去に複数のミッションに使用されている。",
+            "バンデンバーグ宇宙軍基地は、衛星通信技術が災害対応において重要な役割を果たしていることを強調し、最近のベネズエラ地震救援活動での活用例を紹介した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "2026年7月13日、SpaceXのFalcon 9ロケットがバンデンバーグ宇宙軍基地から27基のStarlink衛星を低軌道に打ち上げた。",
+              "source_urls": [
+                "https://www.edhat.com/news/spacex-falcon-9-rocket-launch-from-vandenberg-scheduled-for-monday-evening/"
+              ]
+            },
+            {
+              "fact": "このミッションで使用されたファーストステージブースターは15回目の飛行であり、過去に複数のミッションに使用されている。",
+              "source_urls": [
+                "https://www.edhat.com/news/spacex-falcon-9-rocket-launch-from-vandenberg-scheduled-for-monday-evening/"
+              ]
+            },
+            {
+              "fact": "バンデンバーグ宇宙軍基地は、衛星通信技術が災害対応において重要な役割を果たしていることを強調し、最近のベネズエラ地震救援活動での活用例を紹介した。",
+              "source_urls": [
+                "https://www.edhat.com/news/spacex-falcon-9-rocket-launch-from-vandenberg-scheduled-for-monday-evening/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-14"
           ]
         }
       }
     },
     {
       "watch_topic_id": "investment_policy_markets",
-      "title": "NEXT FUNDSの日本株高配当キャッシュフロー50指数連動型ETFの約款公表",
-      "summary": "野村アセットマネジメントが運用するNEXT FUNDS FTSE日本株高配当キャッシュフロー50指数連動型上場投信（銘柄コード518A）の約款が2026年7月15日に公表された。",
+      "title": "SHIFTが上場来初の配当を実施、利益予想は減少も売上高は増加へ",
+      "summary": "ソフトウエアテスト大手のSHIFTは2026年8月期に上場以来初の配当を実施し、年間4.1円と発表した。 同時に2026年8月期の連結調整後純利益予想を前期比17%減の90億円に引き下げたが、売上高は23%増の1600億円に上方修正した。",
       "section_id": "japan_economy",
       "category": "日本経済",
       "source_published_date": "2026-07-15",
@@ -822,23 +1336,201 @@
       "priority_class": "standard",
       "change_class": "new_event",
       "detail": {
-        "slug": "auto-4fe7bc876f2d-2026-07-15.html",
+        "slug": "auto-a7943297637f-2026-07-15.html",
         "sources": [
           {
             "label": "nikkei.com",
-            "url": "https://www.nikkei.com/nkd/disclosure/tdnr/20260715594135/"
+            "url": "https://www.nikkei.com/article/DGXZQOUC156OA0V10C26A7000000/"
           }
         ],
-        "summary": "野村アセットマネジメントが運用するNEXT FUNDS FTSE日本株高配当キャッシュフロー50指数連動型上場投信（銘柄コード518A）の約款が2026年7月15日に公表された。",
+        "summary": "ソフトウエアテスト大手のSHIFTは2026年8月期に上場以来初の配当を実施し、年間4.1円と発表した。 同時に2026年8月期の連結調整後純利益予想を前期比17%減の90億円に引き下げたが、売上高は23%増の1600億円に上方修正した。",
         "summary_basis": {
           "confirmed_facts": [
-            "野村アセットマネジメントが運用するNEXT FUNDS FTSE日本株高配当キャッシュフロー50指数連動型上場投信（銘柄コード518A）の約款が2026年7月15日に公表された。"
+            "ソフトウエアテスト大手のSHIFTは2026年8月期に上場以来初の配当を実施し、年間4.1円と発表した。",
+            "同時に2026年8月期の連結調整後純利益予想を前期比17%減の90億円に引き下げたが、売上高は23%増の1600億円に上方修正した。"
           ],
           "fact_sources": [
             {
-              "fact": "野村アセットマネジメントが運用するNEXT FUNDS FTSE日本株高配当キャッシュフロー50指数連動型上場投信（銘柄コード518A）の約款が2026年7月15日に公表された。",
+              "fact": "ソフトウエアテスト大手のSHIFTは2026年8月期に上場以来初の配当を実施し、年間4.1円と発表した。",
               "source_urls": [
-                "https://www.nikkei.com/nkd/disclosure/tdnr/20260715594135/"
+                "https://www.nikkei.com/article/DGXZQOUC156OA0V10C26A7000000/"
+              ]
+            },
+            {
+              "fact": "同時に2026年8月期の連結調整後純利益予想を前期比17%減の90億円に引き下げたが、売上高は23%増の1600億円に上方修正した。",
+              "source_urls": [
+                "https://www.nikkei.com/article/DGXZQOUC156OA0V10C26A7000000/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-15"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "investment_policy_markets",
+      "title": "東京の月収は世界39位、円安で物価の割安感が強まる",
+      "summary": "ドイツ銀行リサーチ・インスティチュートの調査で、東京の月収は世界39位であることが判明した。 円安の進行により、iPhoneなどの物価の割安感が加速している。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-07-15",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-e63fd8eb281d-2026-07-15.html",
+        "sources": [
+          {
+            "label": "nikkei.com",
+            "url": "https://www.nikkei.com/article/DGXZQOGR14BTS0U6A710C2000000/"
+          }
+        ],
+        "summary": "ドイツ銀行リサーチ・インスティチュートの調査で、東京の月収は世界39位であることが判明した。 円安の進行により、iPhoneなどの物価の割安感が加速している。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "ドイツ銀行リサーチ・インスティチュートの調査で、東京の月収は世界39位であることが判明した。",
+            "円安の進行により、iPhoneなどの物価の割安感が加速している。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "ドイツ銀行リサーチ・インスティチュートの調査で、東京の月収は世界39位であることが判明した。",
+              "source_urls": [
+                "https://www.nikkei.com/article/DGXZQOGR14BTS0U6A710C2000000/"
+              ]
+            },
+            {
+              "fact": "円安の進行により、iPhoneなどの物価の割安感が加速している。",
+              "source_urls": [
+                "https://www.nikkei.com/article/DGXZQOGR14BTS0U6A710C2000000/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-15"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "investment_policy_markets",
+      "title": "東京株式市場は半導体関連株の買いで日経平均が1,000円超上昇",
+      "summary": "2026年7月15日の東京株式市場は米国のハイテク株高やアジア市場の堅調を背景に日経平均が大幅続伸し、前日比1,008.01円高の68,751.51円で取引を終えた。 オランダの半導体製造装置大手ASMLの売上高見通し上方修正を受け、東京市場でもAI・半導体関連株に買いが波及した。 日経平均の寄与度上位銘柄はアドバンテスト、東京エレクトロン、キオクシアホールディングスなどで、相場を押し上げた。 東証プライム市場の売買高は21億1,800万株、売買代金は9兆5,675.12億円で前日より減少した。 業種別では非鉄金属、証券業、ガラス・土石製品、電気機器、卸売業が上昇し、鉱業、情報通信業、小売業などが下落した。 東証プライム市場の個別銘柄上昇率1位は三光合成で19.38％上昇、下落率1位はプラスアルファ・コンサルティングで16.18％下落した。 年初来高値更新銘柄は77銘柄、年初来安値更新銘柄は4銘柄だった。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-07-15",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-673d53824a78-2026-07-15.html",
+        "sources": [
+          {
+            "label": "gentosha-go.com",
+            "url": "https://gentosha-go.com/articles/-/80143"
+          }
+        ],
+        "summary": "2026年7月15日の東京株式市場は米国のハイテク株高やアジア市場の堅調を背景に日経平均が大幅続伸し、前日比1,008.01円高の68,751.51円で取引を終えた。 オランダの半導体製造装置大手ASMLの売上高見通し上方修正を受け、東京市場でもAI・半導体関連株に買いが波及した。 日経平均の寄与度上位銘柄はアドバンテスト、東京エレクトロン、キオクシアホールディングスなどで、相場を押し上げた。 東証プライム市場の売買高は21億1,800万株、売買代金は9兆5,675.12億円で前日より減少した。 業種別では非鉄金属、証券業、ガラス・土石製品、電気機器、卸売業が上昇し、鉱業、情報通信業、小売業などが下落した。 東証プライム市場の個別銘柄上昇率1位は三光合成で19.38％上昇、下落率1位はプラスアルファ・コンサルティングで16.18％下落した。 年初来高値更新銘柄は77銘柄、年初来安値更新銘柄は4銘柄だった。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "2026年7月15日の東京株式市場は米国のハイテク株高やアジア市場の堅調を背景に日経平均が大幅続伸し、前日比1,008.01円高の68,751.51円で取引を終えた。",
+            "オランダの半導体製造装置大手ASMLの売上高見通し上方修正を受け、東京市場でもAI・半導体関連株に買いが波及した。",
+            "日経平均の寄与度上位銘柄はアドバンテスト、東京エレクトロン、キオクシアホールディングスなどで、相場を押し上げた。",
+            "東証プライム市場の売買高は21億1,800万株、売買代金は9兆5,675.12億円で前日より減少した。",
+            "業種別では非鉄金属、証券業、ガラス・土石製品、電気機器、卸売業が上昇し、鉱業、情報通信業、小売業などが下落した。",
+            "東証プライム市場の個別銘柄上昇率1位は三光合成で19.38％上昇、下落率1位はプラスアルファ・コンサルティングで16.18％下落した。",
+            "年初来高値更新銘柄は77銘柄、年初来安値更新銘柄は4銘柄だった。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "2026年7月15日の東京株式市場は米国のハイテク株高やアジア市場の堅調を背景に日経平均が大幅続伸し、前日比1,008.01円高の68,751.51円で取引を終えた。",
+              "source_urls": [
+                "https://gentosha-go.com/articles/-/80143"
+              ]
+            },
+            {
+              "fact": "オランダの半導体製造装置大手ASMLの売上高見通し上方修正を受け、東京市場でもAI・半導体関連株に買いが波及した。",
+              "source_urls": [
+                "https://gentosha-go.com/articles/-/80143"
+              ]
+            },
+            {
+              "fact": "日経平均の寄与度上位銘柄はアドバンテスト、東京エレクトロン、キオクシアホールディングスなどで、相場を押し上げた。",
+              "source_urls": [
+                "https://gentosha-go.com/articles/-/80143"
+              ]
+            },
+            {
+              "fact": "東証プライム市場の売買高は21億1,800万株、売買代金は9兆5,675.12億円で前日より減少した。",
+              "source_urls": [
+                "https://gentosha-go.com/articles/-/80143"
+              ]
+            },
+            {
+              "fact": "業種別では非鉄金属、証券業、ガラス・土石製品、電気機器、卸売業が上昇し、鉱業、情報通信業、小売業などが下落した。",
+              "source_urls": [
+                "https://gentosha-go.com/articles/-/80143"
+              ]
+            },
+            {
+              "fact": "東証プライム市場の個別銘柄上昇率1位は三光合成で19.38％上昇、下落率1位はプラスアルファ・コンサルティングで16.18％下落した。",
+              "source_urls": [
+                "https://gentosha-go.com/articles/-/80143"
+              ]
+            },
+            {
+              "fact": "年初来高値更新銘柄は77銘柄、年初来安値更新銘柄は4銘柄だった。",
+              "source_urls": [
+                "https://gentosha-go.com/articles/-/80143"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-15"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "investment_policy_markets",
+      "title": "シーラHDは経常利益急拡大で増配へ、abcは営業赤字予想を下方修正",
+      "summary": "シーラホールディングスは2026年5月期の連結経常利益が前期比9.3倍の20.6億円に急拡大し、2027年5月期は23.7億～25億円の見通しと発表した。 第3四半期累計でも18.8億円の赤字となっている。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-07-15",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-8749dd86f502-2026-07-15.html",
+        "sources": [
+          {
+            "label": "s.kabutan.jp",
+            "url": "https://s.kabutan.jp/news/k202607150085/"
+          },
+          {
+            "label": "finance.yahoo.co.jp",
+            "url": "https://finance.yahoo.co.jp/news/detail/bf109a44209a53a6ea0c4307be508f26dfbd583c"
+          }
+        ],
+        "summary": "シーラホールディングスは2026年5月期の連結経常利益が前期比9.3倍の20.6億円に急拡大し、2027年5月期は23.7億～25億円の見通しと発表した。 第3四半期累計でも18.8億円の赤字となっている。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "シーラホールディングスは2026年5月期の連結経常利益が前期比9.3倍の20.6億円に急拡大し、2027年5月期は23.7億～25億円の見通しと発表した。",
+            "第3四半期累計でも18.8億円の赤字となっている。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "シーラホールディングスは2026年5月期の連結経常利益が前期比9.3倍の20.6億円に急拡大し、2027年5月期は23.7億～25億円の見通しと発表した。",
+              "source_urls": [
+                "https://s.kabutan.jp/news/k202607150085/"
+              ]
+            },
+            {
+              "fact": "第3四半期累計でも18.8億円の赤字となっている。",
+              "source_urls": [
+                "https://finance.yahoo.co.jp/news/detail/bf109a44209a53a6ea0c4307be508f26dfbd583c"
               ]
             }
           ],
@@ -850,39 +1542,46 @@
     },
     {
       "watch_topic_id": "employment_consumption",
-      "title": "米国6月CPIの低下でFRBの利上げ観測が後退",
-      "summary": "2026年6月の米国消費者物価指数（CPI）が前月比0.4％低下し、インフレ圧力の緩和が示された。 この結果、米連邦準備制度理事会（FRB）が7月下旬の会合で利上げを行う可能性が低下し、市場の利上げ観測が後退した。",
+      "title": "政府の骨太方針最終案、日銀自主性尊重を明記し安全保障・社会保障の具体化進む",
+      "summary": "政府は2026年7月21日に閣議決定予定の「骨太の方針」最終案で、日銀の金融政策の自主性尊重を明記し、政府の金融政策介入の意図がないことを明確化した。 安全保障面では中国の軍事力強化や北朝鮮の核・ミサイル開発、ロシアのウクライナ侵略を具体的な脅威として明記した。 社会保障では2027年度の負担率が2025年度と比較して上昇しないよう取り組む数値目標を設定し、70歳以上の医療窓口負担の見直しも示した。",
       "section_id": "japan_economy",
       "category": "日本経済",
       "source_published_date": "2026-07-14",
-      "topic_value_class": "risk_or_safety_signal",
-      "priority_class": "standard",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
       "change_class": "new_event",
       "detail": {
-        "slug": "auto-466f0b6feea8-2026-07-15.html",
+        "slug": "auto-d6352d130880-2026-07-15.html",
         "sources": [
           {
-            "label": "coindesk.com",
-            "url": "https://www.coindesk.com/ja/markets/2026/07/14/u-s-june-cpi-fell-0-4-likely-cooling-move-toward-fed-rate-hikes"
+            "label": "news.yahoo.co.jp",
+            "url": "https://news.yahoo.co.jp/articles/5166940dfc913ca3b4e28acc23a4c7d65e4dc338"
           }
         ],
-        "summary": "2026年6月の米国消費者物価指数（CPI）が前月比0.4％低下し、インフレ圧力の緩和が示された。 この結果、米連邦準備制度理事会（FRB）が7月下旬の会合で利上げを行う可能性が低下し、市場の利上げ観測が後退した。",
+        "summary": "政府は2026年7月21日に閣議決定予定の「骨太の方針」最終案で、日銀の金融政策の自主性尊重を明記し、政府の金融政策介入の意図がないことを明確化した。 安全保障面では中国の軍事力強化や北朝鮮の核・ミサイル開発、ロシアのウクライナ侵略を具体的な脅威として明記した。 社会保障では2027年度の負担率が2025年度と比較して上昇しないよう取り組む数値目標を設定し、70歳以上の医療窓口負担の見直しも示した。",
         "summary_basis": {
           "confirmed_facts": [
-            "2026年6月の米国消費者物価指数（CPI）が前月比0.4％低下し、インフレ圧力の緩和が示された。",
-            "この結果、米連邦準備制度理事会（FRB）が7月下旬の会合で利上げを行う可能性が低下し、市場の利上げ観測が後退した。"
+            "政府は2026年7月21日に閣議決定予定の「骨太の方針」最終案で、日銀の金融政策の自主性尊重を明記し、政府の金融政策介入の意図がないことを明確化した。",
+            "安全保障面では中国の軍事力強化や北朝鮮の核・ミサイル開発、ロシアのウクライナ侵略を具体的な脅威として明記した。",
+            "社会保障では2027年度の負担率が2025年度と比較して上昇しないよう取り組む数値目標を設定し、70歳以上の医療窓口負担の見直しも示した。"
           ],
           "fact_sources": [
             {
-              "fact": "2026年6月の米国消費者物価指数（CPI）が前月比0.4％低下し、インフレ圧力の緩和が示された。",
+              "fact": "政府は2026年7月21日に閣議決定予定の「骨太の方針」最終案で、日銀の金融政策の自主性尊重を明記し、政府の金融政策介入の意図がないことを明確化した。",
               "source_urls": [
-                "https://www.coindesk.com/ja/markets/2026/07/14/u-s-june-cpi-fell-0-4-likely-cooling-move-toward-fed-rate-hikes"
+                "https://news.yahoo.co.jp/articles/5166940dfc913ca3b4e28acc23a4c7d65e4dc338"
               ]
             },
             {
-              "fact": "この結果、米連邦準備制度理事会（FRB）が7月下旬の会合で利上げを行う可能性が低下し、市場の利上げ観測が後退した。",
+              "fact": "安全保障面では中国の軍事力強化や北朝鮮の核・ミサイル開発、ロシアのウクライナ侵略を具体的な脅威として明記した。",
               "source_urls": [
-                "https://www.coindesk.com/ja/markets/2026/07/14/u-s-june-cpi-fell-0-4-likely-cooling-move-toward-fed-rate-hikes"
+                "https://news.yahoo.co.jp/articles/5166940dfc913ca3b4e28acc23a4c7d65e4dc338"
+              ]
+            },
+            {
+              "fact": "社会保障では2027年度の負担率が2025年度と比較して上昇しないよう取り組む数値目標を設定し、70歳以上の医療窓口負担の見直しも示した。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/5166940dfc913ca3b4e28acc23a4c7d65e4dc338"
               ]
             }
           ],
@@ -894,53 +1593,46 @@
     },
     {
       "watch_topic_id": "investment_policy_markets",
-      "title": "日経平均が2日連続で1000円超上昇、半導体関連株が牽引",
-      "summary": "米国の6月消費者物価指数の上昇率が市場予想を下回り、FRBの早期利上げ観測が後退したことを好感し、半導体関連株を中心に幅広い銘柄が買われた。 東証プライム銘柄の7割超が値上がりし、東証株価指数（TOPIX）は49.14ポイント（1.22％）高の4088.12となった。 半導体関連株の寄与度が大きい韓国の株価指数の大幅上昇も日本株の追い風となった。",
+      "title": "経産省、妙高市の半導体企業に最大1600億円支援を発表",
+      "summary": "経済産業省は妙高市に工場を持つイスラエル本社の半導体企業タワーセミコンダクターに最大1600億円の支援を決定した。 同社は光通信用半導体の世界シェア約8割を占め、妙高市と富山県魚津市で約6000億円を投資して量産を開始する計画。 支援の条件として、投資完了後10年間の生産継続と国内供給不足時の政府増産要請への対応が求められている。",
       "section_id": "japan_economy",
       "category": "日本経済",
       "source_published_date": "2026-07-15",
       "topic_value_class": "market_or_financial_impact",
-      "priority_class": "priority",
+      "priority_class": "standard",
       "change_class": "new_event",
       "detail": {
-        "slug": "auto-313590705263-2026-07-15.html",
+        "slug": "auto-76f8e68c36ce-2026-07-15.html",
         "sources": [
           {
             "label": "news.yahoo.co.jp",
-            "url": "https://news.yahoo.co.jp/articles/608ee32df2eaf2ce798f0e198fffd0bac81a6a8b"
-          },
-          {
-            "label": "yomiuri.co.jp",
-            "url": "https://www.yomiuri.co.jp/economy/20260715-GYT1T00293/"
+            "url": "https://news.yahoo.co.jp/articles/576e67b358b2d1de6eeb2cfbccad794716d382a0"
           }
         ],
-        "summary": "米国の6月消費者物価指数の上昇率が市場予想を下回り、FRBの早期利上げ観測が後退したことを好感し、半導体関連株を中心に幅広い銘柄が買われた。 東証プライム銘柄の7割超が値上がりし、東証株価指数（TOPIX）は49.14ポイント（1.22％）高の4088.12となった。 半導体関連株の寄与度が大きい韓国の株価指数の大幅上昇も日本株の追い風となった。",
+        "summary": "経済産業省は妙高市に工場を持つイスラエル本社の半導体企業タワーセミコンダクターに最大1600億円の支援を決定した。 同社は光通信用半導体の世界シェア約8割を占め、妙高市と富山県魚津市で約6000億円を投資して量産を開始する計画。 支援の条件として、投資完了後10年間の生産継続と国内供給不足時の政府増産要請への対応が求められている。",
         "summary_basis": {
           "confirmed_facts": [
-            "米国の6月消費者物価指数の上昇率が市場予想を下回り、FRBの早期利上げ観測が後退したことを好感し、半導体関連株を中心に幅広い銘柄が買われた。",
-            "東証プライム銘柄の7割超が値上がりし、東証株価指数（TOPIX）は49.14ポイント（1.22％）高の4088.12となった。",
-            "半導体関連株の寄与度が大きい韓国の株価指数の大幅上昇も日本株の追い風となった。"
+            "経済産業省は妙高市に工場を持つイスラエル本社の半導体企業タワーセミコンダクターに最大1600億円の支援を決定した。",
+            "同社は光通信用半導体の世界シェア約8割を占め、妙高市と富山県魚津市で約6000億円を投資して量産を開始する計画。",
+            "支援の条件として、投資完了後10年間の生産継続と国内供給不足時の政府増産要請への対応が求められている。"
           ],
           "fact_sources": [
             {
-              "fact": "米国の6月消費者物価指数の上昇率が市場予想を下回り、FRBの早期利上げ観測が後退したことを好感し、半導体関連株を中心に幅広い銘柄が買われた。",
+              "fact": "経済産業省は妙高市に工場を持つイスラエル本社の半導体企業タワーセミコンダクターに最大1600億円の支援を決定した。",
               "source_urls": [
-                "https://news.yahoo.co.jp/articles/608ee32df2eaf2ce798f0e198fffd0bac81a6a8b",
-                "https://www.yomiuri.co.jp/economy/20260715-GYT1T00293/"
+                "https://news.yahoo.co.jp/articles/576e67b358b2d1de6eeb2cfbccad794716d382a0"
               ]
             },
             {
-              "fact": "東証プライム銘柄の7割超が値上がりし、東証株価指数（TOPIX）は49.14ポイント（1.22％）高の4088.12となった。",
+              "fact": "同社は光通信用半導体の世界シェア約8割を占め、妙高市と富山県魚津市で約6000億円を投資して量産を開始する計画。",
               "source_urls": [
-                "https://news.yahoo.co.jp/articles/608ee32df2eaf2ce798f0e198fffd0bac81a6a8b",
-                "https://www.yomiuri.co.jp/economy/20260715-GYT1T00293/"
+                "https://news.yahoo.co.jp/articles/576e67b358b2d1de6eeb2cfbccad794716d382a0"
               ]
             },
             {
-              "fact": "半導体関連株の寄与度が大きい韓国の株価指数の大幅上昇も日本株の追い風となった。",
+              "fact": "支援の条件として、投資完了後10年間の生産継続と国内供給不足時の政府増産要請への対応が求められている。",
               "source_urls": [
-                "https://news.yahoo.co.jp/articles/608ee32df2eaf2ce798f0e198fffd0bac81a6a8b",
-                "https://www.yomiuri.co.jp/economy/20260715-GYT1T00293/"
+                "https://news.yahoo.co.jp/articles/576e67b358b2d1de6eeb2cfbccad794716d382a0"
               ]
             }
           ],
@@ -951,73 +1643,428 @@
       }
     },
     {
-      "watch_topic_id": "india_macro_policy",
-      "title": "2026年上半期の中国経済成長と政策動向",
-      "summary": "2026年上半期の中国GDPは前年同期比4.7%増加し、新たな成長動力が急速に成長している。 2026年第二四半期の中国経済は外需が強く内需が弱い構造的な分化が見られ、新旧の成長動力に差がある。 2026年下半期は前年同期の基数が低いため、GDPの前年比上昇率は高まりやすい見込み。 製造業投資の年間成長率は約2%で推移し、内部の構造的な分化が顕著になると予想されている。 2026年上半期の不動産市場では、開発企業の定金および預売金の減少幅が4ヶ月連続で縮小し、供給と需要の関係が徐々に改善している。 2026年第三四半期は利下げや準備率引き下げの重要な時期となり、貸出市場の基準金利（LPR）は5～10ベーシスポイント低下し、準備率は50ベーシスポイント引き下げられる見込み。",
-      "section_id": "asia",
-      "category": "アジア経済",
-      "source_published_date": "2026-07-15",
+      "watch_topic_id": "investment_policy_markets",
+      "title": "日本株式市場は半導体急落でも市場全体の影響は限定的",
+      "summary": "日本の時価総額上位3社は業種が分散しており、日経平均構成銘柄の上位3銘柄の時価総額比率は約9％であるのに対し、韓国の上位3銘柄は約53％を占めている。 日本市場では銀行など15業種が上昇し、市場全体の下落幅を抑えた。 韓国では個別銘柄の1日の騰落率を2倍で追随するレバレッジETFが存在するが、日本にはない。 金融監督院長は韓国の単一銘柄レバレッジETFの副作用を指摘している。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-07-14",
       "topic_value_class": "market_or_financial_impact",
-      "priority_class": "top",
+      "priority_class": "standard",
       "change_class": "new_event",
       "detail": {
-        "slug": "auto-da4d8ca15b4c-2026-07-15.html",
+        "slug": "auto-0409e975dd03-2026-07-15.html",
         "sources": [
           {
-            "label": "jiemian.com",
-            "url": "https://www.jiemian.com/article/14763573.html"
-          },
-          {
-            "label": "chinanews.com.cn",
-            "url": "https://www.chinanews.com.cn/cj/2026/07-15/10659640.shtml"
+            "label": "news.yahoo.co.jp",
+            "url": "https://news.yahoo.co.jp/articles/1c1fd4127799a69987e7717f83d098361fdf343f"
           }
         ],
-        "summary": "2026年上半期の中国GDPは前年同期比4.7%増加し、新たな成長動力が急速に成長している。 2026年第二四半期の中国経済は外需が強く内需が弱い構造的な分化が見られ、新旧の成長動力に差がある。 2026年下半期は前年同期の基数が低いため、GDPの前年比上昇率は高まりやすい見込み。 製造業投資の年間成長率は約2%で推移し、内部の構造的な分化が顕著になると予想されている。 2026年上半期の不動産市場では、開発企業の定金および預売金の減少幅が4ヶ月連続で縮小し、供給と需要の関係が徐々に改善している。 2026年第三四半期は利下げや準備率引き下げの重要な時期となり、貸出市場の基準金利（LPR）は5～10ベーシスポイント低下し、準備率は50ベーシスポイント引き下げられる見込み。",
+        "summary": "日本の時価総額上位3社は業種が分散しており、日経平均構成銘柄の上位3銘柄の時価総額比率は約9％であるのに対し、韓国の上位3銘柄は約53％を占めている。 日本市場では銀行など15業種が上昇し、市場全体の下落幅を抑えた。 韓国では個別銘柄の1日の騰落率を2倍で追随するレバレッジETFが存在するが、日本にはない。 金融監督院長は韓国の単一銘柄レバレッジETFの副作用を指摘している。",
         "summary_basis": {
           "confirmed_facts": [
-            "2026年上半期の中国GDPは前年同期比4.7%増加し、新たな成長動力が急速に成長している。",
-            "2026年第二四半期の中国経済は外需が強く内需が弱い構造的な分化が見られ、新旧の成長動力に差がある。",
-            "2026年下半期は前年同期の基数が低いため、GDPの前年比上昇率は高まりやすい見込み。",
-            "製造業投資の年間成長率は約2%で推移し、内部の構造的な分化が顕著になると予想されている。",
-            "2026年上半期の不動産市場では、開発企業の定金および預売金の減少幅が4ヶ月連続で縮小し、供給と需要の関係が徐々に改善している。",
-            "2026年第三四半期は利下げや準備率引き下げの重要な時期となり、貸出市場の基準金利（LPR）は5～10ベーシスポイント低下し、準備率は50ベーシスポイント引き下げられる見込み。"
+            "日本の時価総額上位3社は業種が分散しており、日経平均構成銘柄の上位3銘柄の時価総額比率は約9％であるのに対し、韓国の上位3銘柄は約53％を占めている。",
+            "日本市場では銀行など15業種が上昇し、市場全体の下落幅を抑えた。",
+            "韓国では個別銘柄の1日の騰落率を2倍で追随するレバレッジETFが存在するが、日本にはない。",
+            "金融監督院長は韓国の単一銘柄レバレッジETFの副作用を指摘している。"
           ],
           "fact_sources": [
             {
-              "fact": "2026年上半期の中国GDPは前年同期比4.7%増加し、新たな成長動力が急速に成長している。",
+              "fact": "日本の時価総額上位3社は業種が分散しており、日経平均構成銘柄の上位3銘柄の時価総額比率は約9％であるのに対し、韓国の上位3銘柄は約53％を占めている。",
               "source_urls": [
-                "https://www.jiemian.com/article/14763573.html",
-                "https://www.chinanews.com.cn/cj/2026/07-15/10659640.shtml"
+                "https://news.yahoo.co.jp/articles/1c1fd4127799a69987e7717f83d098361fdf343f"
               ]
             },
             {
-              "fact": "2026年第二四半期の中国経済は外需が強く内需が弱い構造的な分化が見られ、新旧の成長動力に差がある。",
+              "fact": "日本市場では銀行など15業種が上昇し、市場全体の下落幅を抑えた。",
               "source_urls": [
-                "https://www.jiemian.com/article/14763573.html"
+                "https://news.yahoo.co.jp/articles/1c1fd4127799a69987e7717f83d098361fdf343f"
               ]
             },
             {
-              "fact": "2026年下半期は前年同期の基数が低いため、GDPの前年比上昇率は高まりやすい見込み。",
+              "fact": "韓国では個別銘柄の1日の騰落率を2倍で追随するレバレッジETFが存在するが、日本にはない。",
               "source_urls": [
-                "https://www.jiemian.com/article/14763573.html"
+                "https://news.yahoo.co.jp/articles/1c1fd4127799a69987e7717f83d098361fdf343f"
               ]
             },
             {
-              "fact": "製造業投資の年間成長率は約2%で推移し、内部の構造的な分化が顕著になると予想されている。",
+              "fact": "金融監督院長は韓国の単一銘柄レバレッジETFの副作用を指摘している。",
               "source_urls": [
-                "https://www.jiemian.com/article/14763573.html"
+                "https://news.yahoo.co.jp/articles/1c1fd4127799a69987e7717f83d098361fdf343f"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-14"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "investment_policy_markets",
+      "title": "東洋電機製造、今期経常利益は減益見通しも増配を発表",
+      "summary": "東洋電機製造は2026年5月期の連結経常利益が前期比36.2％増の35.2億円となったが、2027年5月期は20.5％減の28億円に減益見通し。 前期の年間配当を75円から100円に増額し、今期も16円増配の116円を予定している。 2026年3-5月期の連結経常利益は前年同期比44.5％増の12.7億円に拡大し、売上営業利益率も9.5％から10.6％に改善した。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-07-15",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-684856594d6e-2026-07-15.html",
+        "sources": [
+          {
+            "label": "kabutan.jp",
+            "url": "https://kabutan.jp/news/?&b=k202607150113"
+          }
+        ],
+        "summary": "東洋電機製造は2026年5月期の連結経常利益が前期比36.2％増の35.2億円となったが、2027年5月期は20.5％減の28億円に減益見通し。 前期の年間配当を75円から100円に増額し、今期も16円増配の116円を予定している。 2026年3-5月期の連結経常利益は前年同期比44.5％増の12.7億円に拡大し、売上営業利益率も9.5％から10.6％に改善した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "東洋電機製造は2026年5月期の連結経常利益が前期比36.2％増の35.2億円となったが、2027年5月期は20.5％減の28億円に減益見通し。",
+            "前期の年間配当を75円から100円に増額し、今期も16円増配の116円を予定している。",
+            "2026年3-5月期の連結経常利益は前年同期比44.5％増の12.7億円に拡大し、売上営業利益率も9.5％から10.6％に改善した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "東洋電機製造は2026年5月期の連結経常利益が前期比36.2％増の35.2億円となったが、2027年5月期は20.5％減の28億円に減益見通し。",
+              "source_urls": [
+                "https://kabutan.jp/news/?&b=k202607150113"
               ]
             },
             {
-              "fact": "2026年上半期の不動産市場では、開発企業の定金および預売金の減少幅が4ヶ月連続で縮小し、供給と需要の関係が徐々に改善している。",
+              "fact": "前期の年間配当を75円から100円に増額し、今期も16円増配の116円を予定している。",
               "source_urls": [
-                "https://www.jiemian.com/article/14763573.html"
+                "https://kabutan.jp/news/?&b=k202607150113"
               ]
             },
             {
-              "fact": "2026年第三四半期は利下げや準備率引き下げの重要な時期となり、貸出市場の基準金利（LPR）は5～10ベーシスポイント低下し、準備率は50ベーシスポイント引き下げられる見込み。",
+              "fact": "2026年3-5月期の連結経常利益は前年同期比44.5％増の12.7億円に拡大し、売上営業利益率も9.5％から10.6％に改善した。",
               "source_urls": [
-                "https://www.jiemian.com/article/14763573.html"
+                "https://kabutan.jp/news/?&b=k202607150113"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-15"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "investment_policy_markets",
+      "title": "テンシャル、2026年8月期第3四半期累計経常利益は26.8億円で進捗率70.9％",
+      "summary": "テンシャルは2026年8月期第3四半期累計の経常利益が26.8億円となり、通期計画の37.9億円に対する進捗率は70.9％となった。 直近3ヵ月の経常利益は5億円であった。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-07-15",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-647d75b2b173-2026-07-15.html",
+        "sources": [
+          {
+            "label": "s.kabutan.jp",
+            "url": "https://s.kabutan.jp/news/k202607150068/"
+          }
+        ],
+        "summary": "テンシャルは2026年8月期第3四半期累計の経常利益が26.8億円となり、通期計画の37.9億円に対する進捗率は70.9％となった。 直近3ヵ月の経常利益は5億円であった。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "テンシャルは2026年8月期第3四半期累計の経常利益が26.8億円となり、通期計画の37.9億円に対する進捗率は70.9％となった。",
+            "直近3ヵ月の経常利益は5億円であった。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "テンシャルは2026年8月期第3四半期累計の経常利益が26.8億円となり、通期計画の37.9億円に対する進捗率は70.9％となった。",
+              "source_urls": [
+                "https://s.kabutan.jp/news/k202607150068/"
+              ]
+            },
+            {
+              "fact": "直近3ヵ月の経常利益は5億円であった。",
+              "source_urls": [
+                "https://s.kabutan.jp/news/k202607150068/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-15"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "employment_consumption",
+      "title": "北海道でブランド米「ななつぼし」が559円の大幅値下げ、コメの在庫過多が背景",
+      "summary": "北海道札幌市のスーパーでブランド米「ななつぼし」5キロが559円の大幅値下げで3218円で販売されている。 「ふっくりんこ」や「おぼろづき」も500円から600円ほど値下げされた。 値下げの背景にはコメの在庫過多による危機感がある。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-07-13",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-9bd2cb954a4f-2026-07-15.html",
+        "sources": [
+          {
+            "label": "uhb.jp",
+            "url": "https://www.uhb.jp/news/single.html?id=60280"
+          }
+        ],
+        "summary": "北海道札幌市のスーパーでブランド米「ななつぼし」5キロが559円の大幅値下げで3218円で販売されている。 「ふっくりんこ」や「おぼろづき」も500円から600円ほど値下げされた。 値下げの背景にはコメの在庫過多による危機感がある。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "北海道札幌市のスーパーでブランド米「ななつぼし」5キロが559円の大幅値下げで3218円で販売されている。",
+            "「ふっくりんこ」や「おぼろづき」も500円から600円ほど値下げされた。",
+            "値下げの背景にはコメの在庫過多による危機感がある。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "北海道札幌市のスーパーでブランド米「ななつぼし」5キロが559円の大幅値下げで3218円で販売されている。",
+              "source_urls": [
+                "https://www.uhb.jp/news/single.html?id=60280"
+              ]
+            },
+            {
+              "fact": "「ふっくりんこ」や「おぼろづき」も500円から600円ほど値下げされた。",
+              "source_urls": [
+                "https://www.uhb.jp/news/single.html?id=60280"
+              ]
+            },
+            {
+              "fact": "値下げの背景にはコメの在庫過多による危機感がある。",
+              "source_urls": [
+                "https://www.uhb.jp/news/single.html?id=60280"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-13"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "investment_policy_markets",
+      "title": "2024年の日本の世帯平均所得は7.3%増加も生活苦は増加、単身世帯は過去最高に",
+      "summary": "2024年の日本の世帯平均所得は前年比7.3%増の575万2000円となり、1990年代のピークには届かなかったものの大幅な増加を示した。 世帯所得の中央値も410万円から451万円に上昇したが、生活が「苦しい」と感じる割合は55.4%で、2022年調査から4.1ポイント増加した。 単身世帯の数は1947万7000世帯で全体の35.4%を占め、いずれも過去最高を更新した。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-07-15",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-2cc90b476998-2026-07-15.html",
+        "sources": [
+          {
+            "label": "nikkei.com",
+            "url": "https://www.nikkei.com/article/DGXZQOUA1485P0U6A710C2000000/"
+          }
+        ],
+        "summary": "2024年の日本の世帯平均所得は前年比7.3%増の575万2000円となり、1990年代のピークには届かなかったものの大幅な増加を示した。 世帯所得の中央値も410万円から451万円に上昇したが、生活が「苦しい」と感じる割合は55.4%で、2022年調査から4.1ポイント増加した。 単身世帯の数は1947万7000世帯で全体の35.4%を占め、いずれも過去最高を更新した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "2024年の日本の世帯平均所得は前年比7.3%増の575万2000円となり、1990年代のピークには届かなかったものの大幅な増加を示した。",
+            "世帯所得の中央値も410万円から451万円に上昇したが、生活が「苦しい」と感じる割合は55.4%で、2022年調査から4.1ポイント増加した。",
+            "単身世帯の数は1947万7000世帯で全体の35.4%を占め、いずれも過去最高を更新した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "2024年の日本の世帯平均所得は前年比7.3%増の575万2000円となり、1990年代のピークには届かなかったものの大幅な増加を示した。",
+              "source_urls": [
+                "https://www.nikkei.com/article/DGXZQOUA1485P0U6A710C2000000/"
+              ]
+            },
+            {
+              "fact": "世帯所得の中央値も410万円から451万円に上昇したが、生活が「苦しい」と感じる割合は55.4%で、2022年調査から4.1ポイント増加した。",
+              "source_urls": [
+                "https://www.nikkei.com/article/DGXZQOUA1485P0U6A710C2000000/"
+              ]
+            },
+            {
+              "fact": "単身世帯の数は1947万7000世帯で全体の35.4%を占め、いずれも過去最高を更新した。",
+              "source_urls": [
+                "https://www.nikkei.com/article/DGXZQOUA1485P0U6A710C2000000/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-15"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "staff_social_x_instagram",
+      "title": "YOASOBI、国内ストリーミング累計再生100億回突破 ユニット史上初の快挙達成",
+      "summary": "YOASOBIがBillboard JAPANの集計で国内ストリーミング累計再生回数100億回を突破し、ユニットとして史上初の快挙を達成した。 2019年11月リリースのデビュー曲「夜に駆ける」は国内外でバイラルヒットとなり、2020年のBillboard JAPAN総合ソングチャート『JAPAN Hot 100』でCDリリースなしの楽曲として初の年間首位を獲得した。 2023年リリースの「アイドル」は米ビルボードのグローバルチャート『Global Excl. U.S.』で日本語楽曲として史上初の首位を獲得した。 「夜に駆ける」「アイドル」「群青」「怪物」「祝福」「勇者」など計21曲がストリーミング累計1億回再生を突破している。",
+      "section_id": "yoasobi_ikuta",
+      "category": "YOASOBI / 幾田りら",
+      "source_published_date": "2026-07-14",
+      "topic_value_class": "operational_status_change",
+      "priority_class": "top",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-f53fa498a560-2026-07-15.html",
+        "sources": [
+          {
+            "label": "prtimes.jp",
+            "url": "https://prtimes.jp/main/html/rd/p/000001825.000055377.html"
+          },
+          {
+            "label": "realsound.jp",
+            "url": "https://realsound.jp/2026/07/post-2460268.html"
+          }
+        ],
+        "summary": "YOASOBIがBillboard JAPANの集計で国内ストリーミング累計再生回数100億回を突破し、ユニットとして史上初の快挙を達成した。 2019年11月リリースのデビュー曲「夜に駆ける」は国内外でバイラルヒットとなり、2020年のBillboard JAPAN総合ソングチャート『JAPAN Hot 100』でCDリリースなしの楽曲として初の年間首位を獲得した。 2023年リリースの「アイドル」は米ビルボードのグローバルチャート『Global Excl. U.S.』で日本語楽曲として史上初の首位を獲得した。 「夜に駆ける」「アイドル」「群青」「怪物」「祝福」「勇者」など計21曲がストリーミング累計1億回再生を突破している。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "YOASOBIがBillboard JAPANの集計で国内ストリーミング累計再生回数100億回を突破し、ユニットとして史上初の快挙を達成した。",
+            "2019年11月リリースのデビュー曲「夜に駆ける」は国内外でバイラルヒットとなり、2020年のBillboard JAPAN総合ソングチャート『JAPAN Hot 100』でCDリリースなしの楽曲として初の年間首位を獲得した。",
+            "2023年リリースの「アイドル」は米ビルボードのグローバルチャート『Global Excl. U.S.』で日本語楽曲として史上初の首位を獲得した。",
+            "「夜に駆ける」「アイドル」「群青」「怪物」「祝福」「勇者」など計21曲がストリーミング累計1億回再生を突破している。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "YOASOBIがBillboard JAPANの集計で国内ストリーミング累計再生回数100億回を突破し、ユニットとして史上初の快挙を達成した。",
+              "source_urls": [
+                "https://prtimes.jp/main/html/rd/p/000001825.000055377.html",
+                "https://realsound.jp/2026/07/post-2460268.html"
+              ]
+            },
+            {
+              "fact": "2019年11月リリースのデビュー曲「夜に駆ける」は国内外でバイラルヒットとなり、2020年のBillboard JAPAN総合ソングチャート『JAPAN Hot 100』でCDリリースなしの楽曲として初の年間首位を獲得した。",
+              "source_urls": [
+                "https://prtimes.jp/main/html/rd/p/000001825.000055377.html",
+                "https://realsound.jp/2026/07/post-2460268.html"
+              ]
+            },
+            {
+              "fact": "2023年リリースの「アイドル」は米ビルボードのグローバルチャート『Global Excl. U.S.』で日本語楽曲として史上初の首位を獲得した。",
+              "source_urls": [
+                "https://prtimes.jp/main/html/rd/p/000001825.000055377.html",
+                "https://realsound.jp/2026/07/post-2460268.html"
+              ]
+            },
+            {
+              "fact": "「夜に駆ける」「アイドル」「群青」「怪物」「祝福」「勇者」など計21曲がストリーミング累計1億回再生を突破している。",
+              "source_urls": [
+                "https://prtimes.jp/main/html/rd/p/000001825.000055377.html",
+                "https://realsound.jp/2026/07/post-2460268.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-14"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_macro_policy",
+      "title": "中国製新エネルギー大型トラックの輸出が拡大",
+      "summary": "中国製の新エネルギー大型トラックの海外向け輸出が本格化し、受注量が過去最高を更新した。",
+      "section_id": "asia",
+      "category": "アジア経済",
+      "source_published_date": "2026-07-13",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-306b3cc5d4de-2026-07-15.html",
+        "sources": [
+          {
+            "label": "Record China",
+            "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1MSXl3RjNMMHhKdU4wNHA2VHFQOVNmT24zWnBSU1dCV3RKWnlwTUx1Y3lzRFVZRE1qSDB1RmlHQlZ1VWJzelF0Q0pEeU5lUm1EamlZR0wtNG15a240WXd4Nw?oc=5"
+          }
+        ],
+        "summary": "中国製の新エネルギー大型トラックの海外向け輸出が本格化し、受注量が過去最高を更新した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "中国製の新エネルギー大型トラックの海外向け輸出が本格化し、受注量が過去最高を更新した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "中国製の新エネルギー大型トラックの海外向け輸出が本格化し、受注量が過去最高を更新した。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1MSXl3RjNMMHhKdU4wNHA2VHFQOVNmT24zWnBSU1dCV3RKWnlwTUx1Y3lzRFVZRE1qSDB1RmlHQlZ1VWJzelF0Q0pEeU5lUm1EamlZR0wtNG15a240WXd4Nw?oc=5"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-13"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_macro_policy",
+      "title": "中国宏橋の株価上昇と収益拡大の加速",
+      "summary": "中国宏橋（Hongqiao China）の株価上昇幅が拡大しており、中東地域でのアルミニウム生産再開への期待がやや後退する中でも、同社の収益拡大の勢いは四半期ごとに加速している。",
+      "section_id": "asia",
+      "category": "アジア経済",
+      "source_published_date": "2026-07-14",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-9d00039c97ab-2026-07-15.html",
+        "sources": [
+          {
+            "label": "Moomoo",
+            "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOU0QzMDZGeXJWbDhqWkFqZTFuT2xBdlFSNTFpRm1SNlVGbmYyQUY3Sl9xNDlYTDBDVWZMUWFJQm5OYTl6XzBmLUlaeWcyQTFrWFRQXzBWcUpOaTBKbm90RXg2bmhKX09hT0ZYWmhiaWhFLW80dzVtUlYxZ25CcTVlRlEyMXBVRGdXUkFqdzd5STlIN2dETjRIN3NEUjFzcm1pRFdpSkMyQVpVSlZhVUE?oc=5"
+          }
+        ],
+        "summary": "中国宏橋（Hongqiao China）の株価上昇幅が拡大しており、中東地域でのアルミニウム生産再開への期待がやや後退する中でも、同社の収益拡大の勢いは四半期ごとに加速している。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "中国宏橋（Hongqiao China）の株価上昇幅が拡大しており、中東地域でのアルミニウム生産再開への期待がやや後退する中でも、同社の収益拡大の勢いは四半期ごとに加速している。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "中国宏橋（Hongqiao China）の株価上昇幅が拡大しており、中東地域でのアルミニウム生産再開への期待がやや後退する中でも、同社の収益拡大の勢いは四半期ごとに加速している。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMirgFBVV95cUxOU0QzMDZGeXJWbDhqWkFqZTFuT2xBdlFSNTFpRm1SNlVGbmYyQUY3Sl9xNDlYTDBDVWZMUWFJQm5OYTl6XzBmLUlaeWcyQTFrWFRQXzBWcUpOaTBKbm90RXg2bmhKX09hT0ZYWmhiaWhFLW80dzVtUlYxZ25CcTVlRlEyMXBVRGdXUkFqdzd5STlIN2dETjRIN3NEUjFzcm1pRFdpSkMyQVpVSlZhVUE?oc=5"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-14"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_macro_policy",
+      "title": "米上院がロシア制裁法案を公表、中国・インドに輸入関税提案",
+      "summary": "アメリカ上院の超党派議員がロシア制裁法案を公表し、中国やインドなどロシア産石油・ガスの主要輸入国からの輸入品に100％の関税を課すことを提案している。",
+      "section_id": "asia",
+      "category": "アジア経済",
+      "source_published_date": "2026-07-15",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-947fea3bd406-2026-07-15.html",
+        "sources": [
+          {
+            "label": "news.livedoor.com",
+            "url": "https://news.livedoor.com/topics/detail/31828389/"
+          }
+        ],
+        "summary": "アメリカ上院の超党派議員がロシア制裁法案を公表し、中国やインドなどロシア産石油・ガスの主要輸入国からの輸入品に100％の関税を課すことを提案している。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "アメリカ上院の超党派議員がロシア制裁法案を公表し、中国やインドなどロシア産石油・ガスの主要輸入国からの輸入品に100％の関税を課すことを提案している。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "アメリカ上院の超党派議員がロシア制裁法案を公表し、中国やインドなどロシア産石油・ガスの主要輸入国からの輸入品に100％の関税を課すことを提案している。",
+              "source_urls": [
+                "https://news.livedoor.com/topics/detail/31828389/"
               ]
             }
           ],
@@ -1029,32 +2076,32 @@
     },
     {
       "watch_topic_id": "china_macro_policy",
-      "title": "2026年6月の中国における新型コロナ感染者増加状況",
-      "summary": "2026年6月の中国における新型コロナウイルス感染者数は増加し、全国で7万9000件の感染が確認された。",
+      "title": "中国DeepSeekのIPO計画と乗用車価格の上昇動向",
+      "summary": "2026年6月の中国における乗用車の平均小売価格は約416万円で、前年同月比2.4％上昇した。",
       "section_id": "asia",
       "category": "アジア経済",
       "source_published_date": "2026-07-14",
-      "topic_value_class": "risk_or_safety_signal",
-      "priority_class": "standard",
-      "change_class": "new_event",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "material_update",
       "detail": {
-        "slug": "auto-2b5654481985-2026-07-15.html",
+        "slug": "auto-37b059feea0f-2026-07-15.html",
         "sources": [
           {
-            "label": "recordchina.co.jp",
-            "url": "https://www.recordchina.co.jp/b984880-s25-c30-d0052.html"
+            "label": "ashu-chinastatistics.com",
+            "url": "https://ashu-chinastatistics.com/news/308047-241050811330"
           }
         ],
-        "summary": "2026年6月の中国における新型コロナウイルス感染者数は増加し、全国で7万9000件の感染が確認された。",
+        "summary": "2026年6月の中国における乗用車の平均小売価格は約416万円で、前年同月比2.4％上昇した。",
         "summary_basis": {
           "confirmed_facts": [
-            "2026年6月の中国における新型コロナウイルス感染者数は増加し、全国で7万9000件の感染が確認された。"
+            "2026年6月の中国における乗用車の平均小売価格は約416万円で、前年同月比2.4％上昇した。"
           ],
           "fact_sources": [
             {
-              "fact": "2026年6月の中国における新型コロナウイルス感染者数は増加し、全国で7万9000件の感染が確認された。",
+              "fact": "2026年6月の中国における乗用車の平均小売価格は約416万円で、前年同月比2.4％上昇した。",
               "source_urls": [
-                "https://www.recordchina.co.jp/b984880-s25-c30-d0052.html"
+                "https://ashu-chinastatistics.com/news/308047-241050811330"
               ]
             }
           ],
@@ -1065,229 +2112,117 @@
       }
     },
     {
+      "watch_topic_id": "china_macro_policy",
+      "title": "中国の2026年6月小売売上高がプラス成長に回復",
+      "summary": "中国国家統計局は2026年6月の小売売上高が前年同月比1.0％増の4兆2691億人民元（約102兆2022億円）となり、プラス成長に回復したと発表した。",
+      "section_id": "asia",
+      "category": "アジア経済",
+      "source_published_date": "2026-07-15",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-d3549f41e610-2026-07-15.html",
+        "sources": [
+          {
+            "label": "ashu-chinastatistics.com",
+            "url": "https://ashu-chinastatistics.com/news/301847-641250812330"
+          }
+        ],
+        "summary": "中国国家統計局は2026年6月の小売売上高が前年同月比1.0％増の4兆2691億人民元（約102兆2022億円）となり、プラス成長に回復したと発表した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "中国国家統計局は2026年6月の小売売上高が前年同月比1.0％増の4兆2691億人民元（約102兆2022億円）となり、プラス成長に回復したと発表した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "中国国家統計局は2026年6月の小売売上高が前年同月比1.0％増の4兆2691億人民元（約102兆2022億円）となり、プラス成長に回復したと発表した。",
+              "source_urls": [
+                "https://ashu-chinastatistics.com/news/301847-641250812330"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-15"
+          ]
+        }
+      }
+    },
+    {
       "watch_topic_id": "us_prices_jobs_fed",
-      "title": "米CPI鈍化で長期金利低下、FRBの早期利上げ観測後退",
-      "summary": "6月の米消費者物価指数（CPI）が市場予想を下回ったことで、米連邦準備理事会（FRB）が7月のFOMCで利上げに踏み切るとの観測が後退した。 米長期金利の低下が国内債券市場に買いを誘い、午前中には利回りが2.680%まで低下したが、超長期ゾーンでは売りが優勢となるなど年限によって値動きが異なった。 市場関係者は米国のインフレ指標がピークアウトの兆しを見せており、FRBの金融引き締めペースが緩やかになる可能性を意識しているが、今後の金融政策や経済指標次第で金利が再び上昇に転じる可能性も指摘されている。",
+      "title": "米6月CPIが6年ぶりに前月比マイナス、FRB議長はインフレ抑制継続を強調し市場は利上げ先送りを織り込む状況に変化（2026年7月）",
+      "summary": "これを受けてナスダック指数が急騰し、金先物価格は1オンスあたり4000ドルを突破した。 FRBのウォッシュ議長は議会公聴会で、6月のCPI鈍化はインフレ抑制の「任務完了」を意味しないと述べ、引き続き高インフレ対策に注力する姿勢を示した。 市場はFRBの利上げ開始時期を10月に先送りする見方を強め、米国債利回りは急低下、ドル指数は下落した。 半導体株はAI需要を背景に急伸し、エヌビディア株は4%以上上昇した一方、IBMは第2四半期の業績が市場予想を大幅に下回り、株価が25%急落した。 トランプ前大統領がホルムズ海峡の船舶通航料徴収計画を撤回し、これにより国際原油価格が急落したが、タンカー襲撃事件による供給懸念は依然として残っている。 中国経済では6月の輸出が前年同月比27%増加し、演算処理関連の輸出入が56.6%増加した。 長鑫科技のIPO価格が決定し、A株市場に大口資金流入の兆しが見られる。",
       "section_id": "north_america",
       "category": "北米経済",
       "source_published_date": "2026-07-15",
-      "topic_value_class": "market_or_financial_impact",
-      "priority_class": "priority",
-      "change_class": "new_event",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "top",
+      "change_class": "material_update",
       "detail": {
-        "slug": "auto-cfe350c16513-2026-07-15.html",
+        "slug": "auto-6794f5d0763c-2026-07-15.html",
         "sources": [
           {
             "label": "finance.biggo.jp",
-            "url": "https://finance.biggo.jp/news/ec573b6d-f140-4a77-8696-a8f2578308eb"
-          }
-        ],
-        "summary": "6月の米消費者物価指数（CPI）が市場予想を下回ったことで、米連邦準備理事会（FRB）が7月のFOMCで利上げに踏み切るとの観測が後退した。 米長期金利の低下が国内債券市場に買いを誘い、午前中には利回りが2.680%まで低下したが、超長期ゾーンでは売りが優勢となるなど年限によって値動きが異なった。 市場関係者は米国のインフレ指標がピークアウトの兆しを見せており、FRBの金融引き締めペースが緩やかになる可能性を意識しているが、今後の金融政策や経済指標次第で金利が再び上昇に転じる可能性も指摘されている。",
-        "summary_basis": {
-          "confirmed_facts": [
-            "6月の米消費者物価指数（CPI）が市場予想を下回ったことで、米連邦準備理事会（FRB）が7月のFOMCで利上げに踏み切るとの観測が後退した。",
-            "米長期金利の低下が国内債券市場に買いを誘い、午前中には利回りが2.680%まで低下したが、超長期ゾーンでは売りが優勢となるなど年限によって値動きが異なった。",
-            "市場関係者は米国のインフレ指標がピークアウトの兆しを見せており、FRBの金融引き締めペースが緩やかになる可能性を意識しているが、今後の金融政策や経済指標次第で金利が再び上昇に転じる可能性も指摘されている。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "6月の米消費者物価指数（CPI）が市場予想を下回ったことで、米連邦準備理事会（FRB）が7月のFOMCで利上げに踏み切るとの観測が後退した。",
-              "source_urls": [
-                "https://finance.biggo.jp/news/ec573b6d-f140-4a77-8696-a8f2578308eb"
-              ]
-            },
-            {
-              "fact": "米長期金利の低下が国内債券市場に買いを誘い、午前中には利回りが2.680%まで低下したが、超長期ゾーンでは売りが優勢となるなど年限によって値動きが異なった。",
-              "source_urls": [
-                "https://finance.biggo.jp/news/ec573b6d-f140-4a77-8696-a8f2578308eb"
-              ]
-            },
-            {
-              "fact": "市場関係者は米国のインフレ指標がピークアウトの兆しを見せており、FRBの金融引き締めペースが緩やかになる可能性を意識しているが、今後の金融政策や経済指標次第で金利が再び上昇に転じる可能性も指摘されている。",
-              "source_urls": [
-                "https://finance.biggo.jp/news/ec573b6d-f140-4a77-8696-a8f2578308eb"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-07-15"
-          ]
-        }
-      }
-    },
-    {
-      "watch_topic_id": "us_prices_jobs_fed",
-      "title": "6月の米消費者物価指数、前年比3.5%上昇で大幅鈍化",
-      "summary": "2026年6月の米消費者物価指数（CPI）は前年同月比3.5%上昇し、ガソリン価格の高騰が一服したことで前月比では下落した。 原油価格の下落によりインフレ率の伸びが3年ぶりに大幅に鈍化し、市場にインフレのピークアウト期待が広がっている。",
-      "section_id": "north_america",
-      "category": "北米経済",
-      "source_published_date": "2026-07-14",
-      "topic_value_class": "market_or_financial_impact",
-      "priority_class": "priority",
-      "change_class": "new_event",
-      "detail": {
-        "slug": "auto-3a88dc985b9d-2026-07-15.html",
-        "sources": [
-          {
-            "label": "nikkei.com",
-            "url": "https://www.nikkei.com/article/DGXZQOGN07BVT0X00C26A7000000/"
+            "url": "https://finance.biggo.jp/news/67452006-b78e-4a58-a744-d5af7dd252f5"
           },
           {
-            "label": "news.yahoo.co.jp",
-            "url": "https://news.yahoo.co.jp/pickup/6587963"
+            "label": "nikkei.com",
+            "url": "https://www.nikkei.com/article/DGXZQOGN14CG70U6A710C2000000/"
           }
         ],
-        "summary": "2026年6月の米消費者物価指数（CPI）は前年同月比3.5%上昇し、ガソリン価格の高騰が一服したことで前月比では下落した。 原油価格の下落によりインフレ率の伸びが3年ぶりに大幅に鈍化し、市場にインフレのピークアウト期待が広がっている。",
+        "summary": "これを受けてナスダック指数が急騰し、金先物価格は1オンスあたり4000ドルを突破した。 FRBのウォッシュ議長は議会公聴会で、6月のCPI鈍化はインフレ抑制の「任務完了」を意味しないと述べ、引き続き高インフレ対策に注力する姿勢を示した。 市場はFRBの利上げ開始時期を10月に先送りする見方を強め、米国債利回りは急低下、ドル指数は下落した。 半導体株はAI需要を背景に急伸し、エヌビディア株は4%以上上昇した一方、IBMは第2四半期の業績が市場予想を大幅に下回り、株価が25%急落した。 トランプ前大統領がホルムズ海峡の船舶通航料徴収計画を撤回し、これにより国際原油価格が急落したが、タンカー襲撃事件による供給懸念は依然として残っている。 中国経済では6月の輸出が前年同月比27%増加し、演算処理関連の輸出入が56.6%増加した。 長鑫科技のIPO価格が決定し、A株市場に大口資金流入の兆しが見られる。",
         "summary_basis": {
           "confirmed_facts": [
-            "2026年6月の米消費者物価指数（CPI）は前年同月比3.5%上昇し、ガソリン価格の高騰が一服したことで前月比では下落した。",
-            "原油価格の下落によりインフレ率の伸びが3年ぶりに大幅に鈍化し、市場にインフレのピークアウト期待が広がっている。"
+            "これを受けてナスダック指数が急騰し、金先物価格は1オンスあたり4000ドルを突破した。",
+            "FRBのウォッシュ議長は議会公聴会で、6月のCPI鈍化はインフレ抑制の「任務完了」を意味しないと述べ、引き続き高インフレ対策に注力する姿勢を示した。",
+            "市場はFRBの利上げ開始時期を10月に先送りする見方を強め、米国債利回りは急低下、ドル指数は下落した。",
+            "半導体株はAI需要を背景に急伸し、エヌビディア株は4%以上上昇した一方、IBMは第2四半期の業績が市場予想を大幅に下回り、株価が25%急落した。",
+            "トランプ前大統領がホルムズ海峡の船舶通航料徴収計画を撤回し、これにより国際原油価格が急落したが、タンカー襲撃事件による供給懸念は依然として残っている。",
+            "中国経済では6月の輸出が前年同月比27%増加し、演算処理関連の輸出入が56.6%増加した。",
+            "長鑫科技のIPO価格が決定し、A株市場に大口資金流入の兆しが見られる。"
           ],
           "fact_sources": [
             {
-              "fact": "2026年6月の米消費者物価指数（CPI）は前年同月比3.5%上昇し、ガソリン価格の高騰が一服したことで前月比では下落した。",
+              "fact": "これを受けてナスダック指数が急騰し、金先物価格は1オンスあたり4000ドルを突破した。",
               "source_urls": [
-                "https://www.nikkei.com/article/DGXZQOGN07BVT0X00C26A7000000/",
-                "https://news.yahoo.co.jp/pickup/6587963"
+                "https://finance.biggo.jp/news/67452006-b78e-4a58-a744-d5af7dd252f5"
               ]
             },
             {
-              "fact": "原油価格の下落によりインフレ率の伸びが3年ぶりに大幅に鈍化し、市場にインフレのピークアウト期待が広がっている。",
+              "fact": "FRBのウォッシュ議長は議会公聴会で、6月のCPI鈍化はインフレ抑制の「任務完了」を意味しないと述べ、引き続き高インフレ対策に注力する姿勢を示した。",
               "source_urls": [
-                "https://www.nikkei.com/article/DGXZQOGN07BVT0X00C26A7000000/",
-                "https://news.yahoo.co.jp/pickup/6587963"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-07-14"
-          ]
-        }
-      }
-    },
-    {
-      "watch_topic_id": "north_america_investment_policy",
-      "title": "TaviaとVita、4億5,000万ドルのNASDAQ上場に向けLOI締結",
-      "summary": "TaviaとVitaが4億5,000万ドル規模のNASDAQ上場に向けた意向表明書（LOI）に署名した。",
-      "section_id": "north_america",
-      "category": "北米経済",
-      "source_published_date": "2026-07-14",
-      "topic_value_class": "market_or_financial_impact",
-      "priority_class": "standard",
-      "change_class": "new_event",
-      "detail": {
-        "slug": "auto-849deaed3051-2026-07-15.html",
-        "sources": [
-          {
-            "label": "scanx.trade",
-            "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQNlVXRHZ4cHVFRXdsRmc3eWp1VGRTRDlmZUZsQTVmQWI1Q09VTjNnY1pVZWdlTlRkNzNsVUxnZGU2X0xCQ0MtVGdXUzRxb0RrNkNSOEQxUXgxdlhhQ2FoSm9iR25wNXdwUXpBWHRlbXBJVS12dEY1Y2pDMENIUjhhRTZiQVJRNjRCMG1mNm93Z0RLNmVJNjc2Z3oxWnFkVGFiZi1iOVlCc04?oc=5"
-          }
-        ],
-        "summary": "TaviaとVitaが4億5,000万ドル規模のNASDAQ上場に向けた意向表明書（LOI）に署名した。",
-        "summary_basis": {
-          "confirmed_facts": [
-            "TaviaとVitaが4億5,000万ドル規模のNASDAQ上場に向けた意向表明書（LOI）に署名した。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "TaviaとVitaが4億5,000万ドル規模のNASDAQ上場に向けた意向表明書（LOI）に署名した。",
-              "source_urls": [
-                "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQNlVXRHZ4cHVFRXdsRmc3eWp1VGRTRDlmZUZsQTVmQWI1Q09VTjNnY1pVZWdlTlRkNzNsVUxnZGU2X0xCQ0MtVGdXUzRxb0RrNkNSOEQxUXgxdlhhQ2FoSm9iR25wNXdwUXpBWHRlbXBJVS12dEY1Y2pDMENIUjhhRTZiQVJRNjRCMG1mNm93Z0RLNmVJNjc2Z3oxWnFkVGFiZi1iOVlCc04?oc=5"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-07-14"
-          ]
-        }
-      }
-    },
-    {
-      "watch_topic_id": "us_prices_jobs_fed",
-      "title": "米株先物はインフレ鈍化受け上昇、投資家はPPIとFRB議長証言に注目",
-      "summary": "投資家は今後の生産者物価指数（PPI）発表やFRB議長ケビン・ウォーシュの上院銀行委員会証言に注目している。 一方で、中東の地政学的緊張や原油価格の上昇が投資家心理に影響を与えている。",
-      "section_id": "north_america",
-      "category": "北米経済",
-      "source_published_date": "2026-07-15",
-      "topic_value_class": "market_or_financial_impact",
-      "priority_class": "priority",
-      "change_class": "new_event",
-      "detail": {
-        "slug": "auto-f2bd3418c156-2026-07-15.html",
-        "sources": [
-          {
-            "label": "stocktwits.com",
-            "url": "https://stocktwits.com/news-articles/markets/equity/stock-market-today-nasdaq-sp500-futures-rise-wall-street-eyes-ppi-after-cpi-surprise-why-pypl-orcl-asml-nok-lcid-tsla-stocks-focus/cZZ2UawR7Af"
-          }
-        ],
-        "summary": "投資家は今後の生産者物価指数（PPI）発表やFRB議長ケビン・ウォーシュの上院銀行委員会証言に注目している。 一方で、中東の地政学的緊張や原油価格の上昇が投資家心理に影響を与えている。",
-        "summary_basis": {
-          "confirmed_facts": [
-            "投資家は今後の生産者物価指数（PPI）発表やFRB議長ケビン・ウォーシュの上院銀行委員会証言に注目している。",
-            "一方で、中東の地政学的緊張や原油価格の上昇が投資家心理に影響を与えている。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "投資家は今後の生産者物価指数（PPI）発表やFRB議長ケビン・ウォーシュの上院銀行委員会証言に注目している。",
-              "source_urls": [
-                "https://stocktwits.com/news-articles/markets/equity/stock-market-today-nasdaq-sp500-futures-rise-wall-street-eyes-ppi-after-cpi-surprise-why-pypl-orcl-asml-nok-lcid-tsla-stocks-focus/cZZ2UawR7Af"
+                "https://finance.biggo.jp/news/67452006-b78e-4a58-a744-d5af7dd252f5"
               ]
             },
             {
-              "fact": "一方で、中東の地政学的緊張や原油価格の上昇が投資家心理に影響を与えている。",
+              "fact": "市場はFRBの利上げ開始時期を10月に先送りする見方を強め、米国債利回りは急低下、ドル指数は下落した。",
               "source_urls": [
-                "https://stocktwits.com/news-articles/markets/equity/stock-market-today-nasdaq-sp500-futures-rise-wall-street-eyes-ppi-after-cpi-surprise-why-pypl-orcl-asml-nok-lcid-tsla-stocks-focus/cZZ2UawR7Af"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-07-15"
-          ]
-        }
-      }
-    },
-    {
-      "watch_topic_id": "club_roster_staff",
-      "title": "宇都宮ブレックスの2025-26シーズン特別号が発売開始",
-      "summary": "2025-26シーズンの宇都宮ブレックスの詳細をまとめた特別号『宇都宮ブレックス シーズンメモリーズ 2025-26 Transcend』が発売された。 この特別号には全選手のインタビューや各種レポートが収録されており、迫力ある写真と読み応えのある記事でシーズンの戦いの軌跡を伝えている。 県内の書店やAmazon、ブレックスのオンラインショップで購入可能で、発売は7月11日頃から順次店頭に並んでいる。",
-      "section_id": "brex",
-      "category": "宇都宮ブレックス",
-      "source_published_date": "2026-07-15",
-      "topic_value_class": "market_or_financial_impact",
-      "priority_class": "standard",
-      "change_class": "new_event",
-      "detail": {
-        "slug": "auto-cf640c4049fa-2026-07-15.html",
-        "sources": [
-          {
-            "label": "www7.targma.jp",
-            "url": "https://www7.targma.jp/b-clutch/2026/07/15/post9380/"
-          }
-        ],
-        "summary": "2025-26シーズンの宇都宮ブレックスの詳細をまとめた特別号『宇都宮ブレックス シーズンメモリーズ 2025-26 Transcend』が発売された。 この特別号には全選手のインタビューや各種レポートが収録されており、迫力ある写真と読み応えのある記事でシーズンの戦いの軌跡を伝えている。 県内の書店やAmazon、ブレックスのオンラインショップで購入可能で、発売は7月11日頃から順次店頭に並んでいる。",
-        "summary_basis": {
-          "confirmed_facts": [
-            "2025-26シーズンの宇都宮ブレックスの詳細をまとめた特別号『宇都宮ブレックス シーズンメモリーズ 2025-26 Transcend』が発売された。",
-            "この特別号には全選手のインタビューや各種レポートが収録されており、迫力ある写真と読み応えのある記事でシーズンの戦いの軌跡を伝えている。",
-            "県内の書店やAmazon、ブレックスのオンラインショップで購入可能で、発売は7月11日頃から順次店頭に並んでいる。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "2025-26シーズンの宇都宮ブレックスの詳細をまとめた特別号『宇都宮ブレックス シーズンメモリーズ 2025-26 Transcend』が発売された。",
-              "source_urls": [
-                "https://www7.targma.jp/b-clutch/2026/07/15/post9380/"
+                "https://finance.biggo.jp/news/67452006-b78e-4a58-a744-d5af7dd252f5",
+                "https://www.nikkei.com/article/DGXZQOGN14CG70U6A710C2000000/"
               ]
             },
             {
-              "fact": "この特別号には全選手のインタビューや各種レポートが収録されており、迫力ある写真と読み応えのある記事でシーズンの戦いの軌跡を伝えている。",
+              "fact": "半導体株はAI需要を背景に急伸し、エヌビディア株は4%以上上昇した一方、IBMは第2四半期の業績が市場予想を大幅に下回り、株価が25%急落した。",
               "source_urls": [
-                "https://www7.targma.jp/b-clutch/2026/07/15/post9380/"
+                "https://finance.biggo.jp/news/67452006-b78e-4a58-a744-d5af7dd252f5"
               ]
             },
             {
-              "fact": "県内の書店やAmazon、ブレックスのオンラインショップで購入可能で、発売は7月11日頃から順次店頭に並んでいる。",
+              "fact": "トランプ前大統領がホルムズ海峡の船舶通航料徴収計画を撤回し、これにより国際原油価格が急落したが、タンカー襲撃事件による供給懸念は依然として残っている。",
               "source_urls": [
-                "https://www7.targma.jp/b-clutch/2026/07/15/post9380/"
+                "https://finance.biggo.jp/news/67452006-b78e-4a58-a744-d5af7dd252f5"
+              ]
+            },
+            {
+              "fact": "中国経済では6月の輸出が前年同月比27%増加し、演算処理関連の輸出入が56.6%増加した。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/67452006-b78e-4a58-a744-d5af7dd252f5"
+              ]
+            },
+            {
+              "fact": "長鑫科技のIPO価格が決定し、A株市場に大口資金流入の兆しが見られる。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/67452006-b78e-4a58-a744-d5af7dd252f5"
               ]
             }
           ],
@@ -1304,6 +2239,6 @@
     "collection_completed_at_jst": "2026-07-15T18:51:32+09:00",
     "collection_mode": "github_models_unattended",
     "evidence_sha256": "75b43802e5a42c9dc65d0ca051fba310957a253a5d3f6be6dd335d05745b36d0",
-    "editor_contract_sha256": "90ef7d51da5cbc39c3fee090fc670f0f44d81d33c775823d9b35805b97362d87"
+    "editor_contract_sha256": "45a4cf815d0ac95a71c0023d576c56d6d39d8ab5345e9ab71aa49cafd32b5df1"
   }
 }
