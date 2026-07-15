@@ -612,6 +612,10 @@ def publication_candidate_groups(
         exact_groups.setdefault(key, []).append(record)
     event_groups = list(exact_groups.values())
     grouped_events = len(event_groups)
+    event_groups = [
+        group for group in event_groups if core.sources_from_records(group)
+    ]
+    publishable_source_events = len(event_groups)
     if previous_updates:
         event_groups = [
             group
@@ -628,6 +632,7 @@ def publication_candidate_groups(
                 "category": str(category.get("label", "")),
                 "evidence_records": len(selected),
                 "grouped_events": grouped_events,
+                "publishable_source_events": publishable_source_events,
                 "novel_events": novel_events,
                 "semantic_dedup_pool": len(event_groups),
                 "model_candidates": len(bounded),
@@ -2143,6 +2148,23 @@ def self_test() -> None:
         previous_updates=previous_openai_update,
     ):
         fail("Editor removed a prior event that contained a new material number")
+    unresolved_body_relay = {
+        **review_records[0],
+        "url": "https://news.google.com/rss/articles/unresolved-body?oc=5",
+        "publisher_url": "https://example.com",
+        "title": "OpenAI、今期売上高を10％上方修正",
+        "excerpt": (
+            "OpenAIは2099年1月2日に決算を発表した。通期売上高予想を"
+            "従来の100億ドルから110億ドルに10％上方修正し、営業利益予想も"
+            "20億ドルから24億ドルへ引き上げた。年間配当は2ドル増額した。"
+        ),
+    }
+    if publication_candidate_groups(
+        review_category,
+        "2099-01-02",
+        [unresolved_body_relay],
+    ):
+        fail("Editor sent an unresolved body-rich relay source to the model")
     duplicate_sources = [
         {
             **review_records[0],

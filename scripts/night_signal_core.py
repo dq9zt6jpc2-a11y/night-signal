@@ -1513,6 +1513,17 @@ def normalized_scaled_numbers(value: str) -> tuple[set[float], str]:
 
 def numeric_claims(value: str) -> set[float]:
     scaled, remainder = normalized_scaled_numbers(value)
+    short_years: set[float] = set()
+    short_year_spans: list[tuple[int, int]] = []
+    for match in re.finditer(r"(?<!\d)(\d{2})年(?!間)", remainder):
+        year = int(match.group(1))
+        short_years.add(float((2000 if year <= 49 else 1900) + year))
+        short_year_spans.append(match.span())
+    if short_year_spans:
+        stripped = list(remainder)
+        for start, end in short_year_spans:
+            stripped[start:end] = " " * (end - start)
+        remainder = "".join(stripped)
     period_components = {
         float(component)
         for match in re.finditer(
@@ -1529,7 +1540,13 @@ def numeric_claims(value: str) -> set[float]:
             flags=re.I,
         )
     }
-    return scaled | numeric_literals(remainder) | word_numbers | period_components
+    return (
+        scaled
+        | short_years
+        | numeric_literals(remainder)
+        | word_numbers
+        | period_components
+    )
 
 
 def numeric_claim_supported(
@@ -4305,6 +4322,24 @@ def self_test() -> None:
         fail("localized decimal commas accepted a different number")
     if numeric_claims("7,5%と1,491,932件") != {7.5, 1491932.0}:
         fail("decimal-comma normalization altered a thousands separator")
+    short_year_record = {
+        **english_record,
+        "title": "世帯平均所得は25年調査で増加",
+        "excerpt": (
+            "厚生労働省が公表した2025年調査によると、24年の世帯平均所得は"
+            "前年比7.3%増の575万2000円だった。額は94年のピークを下回る。"
+        ),
+    }
+    if not fact_supported_by_records(
+        "2024年の世帯平均所得は前年比7.3%増の575万2000円だった。",
+        [short_year_record],
+    ):
+        fail("two-digit Japanese source years lost full-year fact support")
+    if fact_supported_by_records(
+        "2023年の世帯平均所得は前年比7.3%増の575万2000円だった。",
+        [short_year_record],
+    ):
+        fail("two-digit Japanese source years supported a different year")
     bilingual_record = {
         **english_record,
         "title": "SpaceXがIPOを計画",
