@@ -2379,6 +2379,7 @@ def discovery_record_is_material(record: dict[str, Any]) -> bool:
     return bool(
         title
         and excerpt
+        and not record_has_only_headline(title, record)
         and not state_contract.navigation_shell_text(text)
         and not state_contract.NO_UPDATE_ASSERTION_RE.search(text)
         and material_event_candidate(title, excerpt)
@@ -3601,6 +3602,21 @@ def self_test() -> None:
     }
     if discovery_record_is_material(viewing_guide):
         fail("a viewing guide was treated as a material discovery event")
+    headline_only_discovery = {
+        **generic_overview_record,
+        "label": "Top Gear Philippines",
+        "publisher_url": "https://www.topgear.com.ph",
+        "source_class": "discovered_media",
+        "observed": True,
+        "published_date": "2099-01-03",
+        "title": "Is this a sign that we could soon get an S+ Shift-equipped Honda Civic?",
+        "excerpt": (
+            "Is this a sign that we could soon get an S+ Shift-equipped Honda Civic? "
+            "Top Gear Philippines"
+        ),
+    }
+    if discovery_record_is_material(headline_only_discovery):
+        fail("headline-only RSS discovery was treated as material coverage")
     long_update = {
         **generic_overview_record,
         "title": "OpenAIが監査機能を提供開始",
