@@ -56,6 +56,13 @@ class TimingPolicy:
         return time(hour=value // 60, minute=value % 60)
 
     @property
+    def latest_full_collection_start(self) -> time:
+        value = minutes(self.publication_deadline) - self.runtime_budget_minutes
+        if value < 0:
+            raise ValueError("publication runtime budget crosses the previous day")
+        return time(hour=value // 60, minute=value % 60)
+
+    @property
     def schedule_delay_absorption_minutes(self) -> int:
         return (
             self.observed_schedule_delay_minutes
@@ -152,6 +159,16 @@ def decision(now: datetime, event_name: str, policy: TimingPolicy) -> str:
     return scheduled_decision(now, policy)
 
 
+def scheduled_fresh_collection_allowed(
+    now: datetime,
+    policy: TimingPolicy | None = None,
+) -> bool:
+    """Reserve late scheduled heartbeats for checkpoint-only recovery."""
+    active_policy = policy or load_policy()
+    current = now.astimezone(ZoneInfo(active_policy.timezone))
+    return current.time() <= active_policy.latest_full_collection_start
+
+
 def self_test() -> None:
     policy = load_policy()
     if policy.runtime_budget_minutes != 105:
@@ -160,6 +177,13 @@ def self_test() -> None:
         raise SystemExit("schedule delay contingency must cover one full runtime budget")
     if policy.final_collection_not_before != time(16, 45):
         raise SystemExit("final collection window must be derived as 16:45 JST")
+    if policy.latest_full_collection_start != time(17, 15):
+        raise SystemExit("latest full collection start must preserve the runtime budget")
+    if not any(
+        value > policy.latest_full_collection_start
+        for value in policy.schedule_heartbeats_jst
+    ):
+        raise SystemExit("schedule needs one checkpoint-only recovery heartbeat")
     zone = ZoneInfo(policy.timezone)
     cases = {
         "2099-01-01T16:44:00+09:00": "wait",
@@ -173,6 +197,14 @@ def self_test() -> None:
             raise SystemExit(f"timing decision mismatch: {raw}: {actual} != {expected}")
     if decision(datetime.now(zone), "workflow_dispatch", policy) != "run":
         raise SystemExit("manual recovery must not be mistaken for a scheduled heartbeat")
+    if not scheduled_fresh_collection_allowed(
+        datetime.fromisoformat("2099-01-01T17:15:00+09:00"), policy
+    ):
+        raise SystemExit("on-budget final collection was rejected")
+    if scheduled_fresh_collection_allowed(
+        datetime.fromisoformat("2099-01-01T17:16:00+09:00"), policy
+    ):
+        raise SystemExit("late checkpoint recovery could start a full collection")
     print("PUBLICATION TIMING SELF-TEST PASSED")
 
 
@@ -203,6 +235,9 @@ def main() -> int:
                 "runtime_budget_minutes": policy.runtime_budget_minutes,
                 "deadline_safety_margin_minutes": policy.deadline_safety_margin_minutes,
                 "final_collection_not_before": policy.final_collection_not_before.strftime(
+                    "%H:%M"
+                ),
+                "latest_full_collection_start": policy.latest_full_collection_start.strftime(
                     "%H:%M"
                 ),
                 "schedule_delay_absorption_minutes": policy.schedule_delay_absorption_minutes,

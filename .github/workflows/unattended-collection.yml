@@ -32,6 +32,7 @@ on:
     - cron: "27 05 * * *"
     - cron: "17 07 * * *"
     - cron: "47 07 * * *"
+    - cron: "17 08 * * *"
 
 permissions:
   contents: write
@@ -103,7 +104,11 @@ jobs:
           REQUESTED_REEDIT: ${{ inputs.reedit_published }}
         run: |
           if [[ "$GITHUB_EVENT_NAME" == "schedule" ]]; then
-            echo "reuse=false" >> "$GITHUB_OUTPUT"
+            # A first scheduled owner has no same-day artifact and still collects
+            # fresh Evidence. A later delayed heartbeat resumes a valid final
+            # checkpoint instead of repeating the same collection after an
+            # Editor or quality-gate failure.
+            echo "reuse=true" >> "$GITHUB_OUTPUT"
             echo "reprocess=false" >> "$GITHUB_OUTPUT"
             echo "reedit=false" >> "$GITHUB_OUTPUT"
           elif [[ "${REQUESTED_REUSE:-true}" == "false" ]]; then

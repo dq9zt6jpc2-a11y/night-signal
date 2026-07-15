@@ -196,9 +196,10 @@ commit・Pages確認を含む105分の処理上限と30分の安全余裕を引�
 置き、実際のJST時刻が16:45より前なら収集もmodel callも行わない。16:45以降に最初に
 開始したownerだけが新規収集し、19:00以降は処理を始めず期限超過として扱う。heartbeatの
 先頭は、現行cronで確認した最大205分の遅延にend-to-end処理上限105分を加えた310分を
-吸収できる位置に置く。後続heartbeatは
-公開auditに合格済みなら即終了する。scheduleではEvidenceを再利用せず、再利用は同日失敗後の
-明示的な回復だけに限定する。
+吸収できる位置に置く。後続heartbeatは公開auditに合格済みなら即終了する。最初の実行は
+新規収集し、取得後に失敗した後続実行だけが、契約一致・同日・16:45以降に完成した最終Evidenceを
+自動再利用する。17:15以降のheartbeatはcheckpoint復旧専用とし、利用可能な最終Evidenceが
+なければ全収集を繰り返さず停止する。
 
 Evidenceの構造、source check、discovery check、watch topic、取得チャネル、取得状態の
 検証規則は`night_signal_evidence.py`だけが所有する。Editor、Issue validator、coverage

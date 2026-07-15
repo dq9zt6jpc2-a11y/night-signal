@@ -56,7 +56,12 @@ the 105-minute end-to-end runtime budget, and a 30-minute safety margin. Schedul
 heartbeats may arrive early or late; only the first actual start from 16:45 through
 18:59 runs collection. Earlier starts exit without model calls, later starts fail
 without spending collection or model tokens, and later heartbeats exit after a
-verified publication. Scheduled publication always collects fresh Evidence.
+verified publication. The first publication attempt collects fresh Evidence. If it
+fails after producing valid final Evidence, a later delayed heartbeat resumes that
+same-day checkpoint; pre-final, incomplete, stale, or contract-mismatched Evidence
+is rejected during the full-collection window. The 17:17 heartbeat is recovery-only:
+it exits after a verified publication, resumes valid final Evidence, or fails without
+starting another full collection.
 
 ## Configuration
 
@@ -72,10 +77,12 @@ python3 scripts/night_signal_state.py --self-test
 python3 scripts/night_signal_publish.py --self-test
 python3 scripts/night_signal_collect.py --self-test
 python3 scripts/night_signal_editor.py --self-test
+python3 scripts/quality_gate.py --self-test
 python3 scripts/night_signal_model_audit.py --self-test
 python3 scripts/publication_timing.py --self-test
 python3 scripts/publication_schedule_audit.py
 python3 scripts/simulate_runtime_failures.py
+python3 scripts/simulate_consecutive_days.py
 python3 scripts/simulate_quality_gate_failures.py
 ```
 

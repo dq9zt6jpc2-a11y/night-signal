@@ -1322,6 +1322,46 @@ def reusable_event_decision(
     return copy.deepcopy(value)
 
 
+def event_decisions_from_result(value: Any) -> dict[str, list[dict[str, Any]]]:
+    """Expose only validated per-event decisions from an Editor result."""
+    if not isinstance(value, tuple) or len(value) < 5 or not isinstance(value[4], dict):
+        return {}
+    return {
+        str(event_id): cards
+        for event_id, cards in value[4].items()
+        if isinstance(cards, list)
+        and all(isinstance(card, dict) for card in cards)
+    }
+
+
+def unresolved_event_records(
+    records: list[dict[str, Any]],
+    event_decisions: dict[str, list[dict[str, Any]]],
+) -> list[dict[str, Any]]:
+    """Return only events that have not passed deterministic validation."""
+    resolved = set(event_decisions)
+    return [
+        record
+        for record in records
+        if str(record.get("_editor_event_id", "")) not in resolved
+    ]
+
+
+def result_has_partial_event_progress(
+    records: list[dict[str, Any]],
+    value: Any,
+) -> bool:
+    """Stop a large retry once at least one event is durably resolved."""
+    event_ids = {
+        str(record.get("_editor_event_id", ""))
+        for record in records
+        if record.get("_editor_event_id")
+    }
+    decisions = event_decisions_from_result(value)
+    resolved = event_ids & set(decisions)
+    return bool(resolved) and bool(event_ids - resolved)
+
+
 def reusable_cards_for_event(
     cards: list[dict[str, Any]],
     category_label: str,
@@ -1430,6 +1470,7 @@ def edit_evidence(
         correction: Callable[[dict[str, Any]], str],
         log_context: dict[str, Any],
         log_fields: Callable[[Any], dict[str, Any]],
+        return_partial: Callable[[Any], bool],
         fallback_on_validation: bool,
     ) -> tuple[Any | None, dict[str, Any], bool]:
         feedback: dict[str, Any] = {}
@@ -1502,6 +1543,8 @@ def edit_evidence(
                 )
                 if accepted:
                     return result, feedback, True
+                if return_partial(result):
+                    return result, feedback, False
                 attempt_messages = [
                     *messages,
                     {
@@ -1801,6 +1844,10 @@ def edit_evidence(
                         "cards": len(value[0]),
                         "unpublishable_items": value[1],
                     },
+                    return_partial=lambda value: result_has_partial_event_progress(
+                        request_records_value,
+                        value,
+                    ),
                     fallback_on_validation=not quality_required,
                 )
 
@@ -1864,12 +1911,10 @@ def edit_evidence(
                 if accepted:
                     chunk_cards.extend(selected_result[0])
                     continue
-                missing_ids = set(feedback.get("missing_event_ids", []))
-                next_pending = [
-                    record
-                    for record in pending_records
-                    if str(record.get("_editor_event_id", "")) in missing_ids
-                ]
+                next_pending = unresolved_event_records(
+                    pending_records,
+                    event_decisions_from_result(selected_result),
+                )
                 if next_pending and len(next_pending) < len(pending_records):
                     chunk_cards.extend(selected_result[0])
                     recovery_round += 1
@@ -2562,6 +2607,23 @@ def self_test() -> None:
     )
     if len(cached_cards) != 1:
         fail("Editor event checkpoint did not deduplicate validated cards")
+    partial_records = [
+        {"title": "OpenAI更新1", "_editor_event_id": "g001"},
+        {"title": "OpenAI更新2", "_editor_event_id": "g002"},
+    ]
+    partial_result = ([], 0, False, {}, {"g001": []})
+    if not result_has_partial_event_progress(partial_records, partial_result):
+        fail("Editor did not stop a large retry after partial event progress")
+    if unresolved_event_records(
+        partial_records,
+        event_decisions_from_result(partial_result),
+    ) != [partial_records[1]]:
+        fail("Editor retried an event that had already passed validation")
+    if result_has_partial_event_progress(
+        [partial_records[0]],
+        partial_result,
+    ):
+        fail("Editor treated a complete single-event decision as partial progress")
     matching_event = [
         {
             "title": card["title"],

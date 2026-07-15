@@ -521,15 +521,20 @@ def validate_detail_daily_delta(issue_date: str, root_html: str, dated_html: str
         fail("detail page appears copied from previous day: " + "; ".join(copied[:8]))
 
 
+def headline_has_abstract_phrase(heading: str) -> bool:
+    """Reject editorial framing without mistaking a concrete financial ratio."""
+    abstract_check = heading.replace("進捗率", "")
+    return any(
+        term in abstract_check
+        for term in HEADLINE_ABSTRACT_LEAK_TERMS
+        + PUBLIC_ABSTRACT_FRAMING_TERMS
+    )
+
+
 def validate_reader_facing_headlines(context: str, headings: list[str]) -> None:
     failures = []
     for heading in headings:
-        abstract_check = heading.replace("進捗率", "")
-        if any(
-            term in abstract_check
-            for term in HEADLINE_ABSTRACT_LEAK_TERMS
-            + PUBLIC_ABSTRACT_FRAMING_TERMS
-        ):
+        if headline_has_abstract_phrase(heading):
             failures.append(f"{heading} [abstract phrase]")
             continue
         if any(char in heading for char in HEADLINE_FORBIDDEN_CHARS):
@@ -865,5 +870,18 @@ def validate(issue_date: str) -> None:
     print(f"QUALITY GATE PASSED: {issue_date}, cards={len(cards)}, fresh={fresh_count}")
 
 
+def self_test() -> None:
+    if headline_has_abstract_phrase(
+        "テンシャル、第3四半期累計経常利益は26.8億円で進捗率70.9％"
+    ):
+        fail("a concrete earnings progress rate was treated as editorial framing")
+    if not headline_has_abstract_phrase("公開状況の進捗を確認する"):
+        fail("an abstract progress heading escaped the reader-facing gate")
+    print("QUALITY GATE SELF-TEST PASSED")
+
+
 if __name__ == "__main__":
-    validate(issue_date_from_args())
+    if "--self-test" in sys.argv[1:]:
+        self_test()
+    else:
+        validate(issue_date_from_args())

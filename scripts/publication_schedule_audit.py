@@ -116,7 +116,7 @@ def main() -> int:
         "reedit_published:",
         "Resolve recovery mode",
         'if [[ "$GITHUB_EVENT_NAME" == "schedule" ]]',
-        'echo "reuse=false"',
+        'echo "reuse=true"',
         'echo "reprocess=false"',
         'echo "reedit=false"',
         "Locate latest Evidence checkpoint",
@@ -132,8 +132,19 @@ def main() -> int:
         fail(
             "manual recovery must reuse checkpoints, published re-edit and "
             "checkpoint-only reprocessing must be explicit, and scheduled "
-            "collection must stay fresh"
+            "recovery must reuse only valid final Evidence"
         )
+    if (
+        'require_final=os.getenv("GITHUB_EVENT_NAME") == "schedule"'
+        not in publish_driver
+    ):
+        fail("scheduled checkpoint reuse must reject pre-final Evidence")
+    if (
+        "late scheduled recovery requires reusable final Evidence"
+        not in publish_driver
+        or "scheduled_fresh_collection_allowed" not in publish_driver
+    ):
+        fail("late recovery must not repeat a full collection")
     if not re.search(
         r"reedit_published:.{0,240}default:\s*false",
         collection,
@@ -181,7 +192,7 @@ def main() -> int:
         f"{policy.publication_deadline.strftime('%H:%M')}, "
         f"runtime={policy.runtime_budget_minutes}m, "
         f"safety={policy.deadline_safety_margin_minutes}m, "
-        "scheduled_collection=fresh"
+        "scheduled_collection=fresh-or-final-checkpoint, late_recovery=checkpoint-only"
     )
     return 0
 

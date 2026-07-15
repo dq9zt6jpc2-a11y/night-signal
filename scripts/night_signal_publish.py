@@ -25,6 +25,18 @@ import publication_timing as timing
 ROOT = Path(__file__).resolve().parents[1]
 STATE_ROOT = ROOT / "state"
 ARCHIVED_PREVIOUS_ISSUES = 3
+EDITOR_PARTIAL_FAILURE = (
+    "Editor could not produce a valid decision for every event"
+)
+EDITOR_CHECKPOINT_RETRY_BLOCKERS = (
+    "HTTP 413",
+    "HTTP 429",
+    "context_length_exceeded",
+    "rate limit exceeds the bounded retry window",
+    '"rate_limited": true',
+    '"schema_invalid": true',
+    "Evidence has material watch topics without resolved source content",
+)
 
 
 def fail(message: str) -> None:
@@ -104,6 +116,42 @@ def run(command: list[str], *, check: bool = True) -> subprocess.CompletedProces
     return result
 
 
+def editor_checkpoint_resume_allowed(
+    result: subprocess.CompletedProcess[str],
+) -> bool:
+    """Allow one same-owner resume only when valid event checkpoints can help."""
+    output = f"{result.stdout or ''}\n{result.stderr or ''}"
+    if result.returncode == 0 or EDITOR_PARTIAL_FAILURE not in output:
+        return False
+    lowered = output.lower()
+    return not any(marker.lower() in lowered for marker in EDITOR_CHECKPOINT_RETRY_BLOCKERS)
+
+
+def run_editor_with_checkpoint_recovery(issue_date: str) -> None:
+    """Run Editor and resume unresolved events once after a partial result."""
+    command = [sys.executable, "scripts/night_signal_editor.py", issue_date]
+    result = run(command, check=False)
+    if result.returncode == 0:
+        return
+    if not editor_checkpoint_resume_allowed(result):
+        fail("command failed: " + " ".join(command))
+    print(
+        json.dumps(
+            {
+                "phase": "editor_checkpoint_resume",
+                "issue_date": issue_date,
+                "reason": "partial validated event decisions",
+                "maximum_additional_attempts": 1,
+            },
+            ensure_ascii=False,
+        ),
+        flush=True,
+    )
+    resumed = run(command, check=False)
+    if resumed.returncode != 0:
+        fail("command failed after one Editor checkpoint resume: " + " ".join(command))
+
+
 def state_dir(issue_date: str) -> Path:
     return STATE_ROOT / issue_date
 
@@ -116,6 +164,7 @@ def fresh_evidence(
     issue_date: str,
     *,
     allow_expired_final: bool = False,
+    require_final: bool = False,
 ) -> bool:
     evidence_path = state_dir(issue_date) / "evidence.json"
     if not evidence_path.exists():
@@ -135,6 +184,7 @@ def fresh_evidence(
         issue_date,
         now=datetime.now(ZoneInfo("Asia/Tokyo")),
         allow_expired_final=allow_expired_final,
+        require_final=require_final,
     )
 
 
@@ -144,6 +194,7 @@ def evidence_reusable(
     *,
     now: datetime,
     allow_expired_final: bool = False,
+    require_final: bool = False,
 ) -> bool:
     if bundle.get("collector_contract_version") != evidence_store.collector_contract_version():
         return False
@@ -157,21 +208,18 @@ def evidence_reusable(
     current = now.astimezone(ZoneInfo("Asia/Tokyo"))
     if checked.date().isoformat() != issue_date or current < checked:
         return False
-    if current.date() == checked.date():
-        if current - checked <= timedelta(hours=4):
-            return True
-        final_cutoff = datetime.combine(
-            checked.date(),
-            timing.load_policy().final_collection_not_before,
-            tzinfo=ZoneInfo("Asia/Tokyo"),
-        )
-        return allow_expired_final and checked >= final_cutoff
-    previous_date = current.date() - timedelta(days=1)
     final_cutoff = datetime.combine(
         checked.date(),
         timing.load_policy().final_collection_not_before,
         tzinfo=ZoneInfo("Asia/Tokyo"),
     )
+    if require_final and checked < final_cutoff:
+        return False
+    if current.date() == checked.date():
+        if current - checked <= timedelta(hours=4):
+            return True
+        return allow_expired_final and checked >= final_cutoff
+    previous_date = current.date() - timedelta(days=1)
     return (
         checked.date() == previous_date
         and current.time() < timing.load_policy().final_collection_not_before
@@ -210,6 +258,7 @@ def collect_and_build(
     evidence_is_reusable = reuse_evidence and fresh_evidence(
         issue_date,
         allow_expired_final=reedit_published,
+        require_final=os.getenv("GITHUB_EVENT_NAME") == "schedule",
     )
     if reprocess_existing:
         if not evidence_is_reusable or not issue_matches_evidence(issue_date):
@@ -233,10 +282,20 @@ def collect_and_build(
     if not (os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")):
         fail("GITHUB_TOKEN is required for Editor model access")
     if not evidence_is_reusable:
+        if (
+            os.getenv("GITHUB_EVENT_NAME") == "schedule"
+            and not timing.scheduled_fresh_collection_allowed(
+                datetime.now(ZoneInfo("Asia/Tokyo"))
+            )
+        ):
+            fail(
+                "late scheduled recovery requires reusable final Evidence; "
+                "refusing a second full collection"
+            )
         run([sys.executable, "scripts/night_signal_collect.py", issue_date])
     if not has_evidence(issue_date):
         fail(f"collection did not create evidence.json for {issue_date}")
-    run([sys.executable, "scripts/night_signal_editor.py", issue_date])
+    run_editor_with_checkpoint_recovery(issue_date)
 
 
 def assemble_and_render(issue_date: str) -> None:
@@ -316,6 +375,29 @@ def validate_collection_freshness(
 
 
 def self_test() -> None:
+    partial_failure = subprocess.CompletedProcess(
+        ["editor"],
+        1,
+        stdout="",
+        stderr=f"NIGHT SIGNAL EDITOR FAILED: {EDITOR_PARTIAL_FAILURE}: OpenAI chunk 1/2",
+    )
+    if not editor_checkpoint_resume_allowed(partial_failure):
+        fail("a checkpoint-resumable Editor failure was not recognized")
+    for blocked_output in (
+        f"{EDITOR_PARTIAL_FAILURE}\nHTTP 429",
+        f"{EDITOR_PARTIAL_FAILURE}\nHTTP 413",
+        f'{EDITOR_PARTIAL_FAILURE}\n{{"schema_invalid": true}}',
+        "unrelated deterministic failure",
+    ):
+        if editor_checkpoint_resume_allowed(
+            subprocess.CompletedProcess(
+                ["editor"],
+                1,
+                stdout="",
+                stderr=blocked_output,
+            )
+        ):
+            fail("a non-resumable Editor failure entered automatic retry")
     if retained_history_dates(
         {"2098-12-31", "2099-01-01", "2099-01-02", "2099-01-03", "2099-01-04"},
         "2099-01-04",
@@ -399,6 +481,23 @@ def self_test() -> None:
         now=datetime.fromisoformat("2099-01-01T18:50:00+09:00"),
     ):
         fail("fresh same-date Evidence was not reusable")
+    if not evidence_reusable(
+        reusable,
+        "2099-01-01",
+        now=datetime.fromisoformat("2099-01-01T18:50:00+09:00"),
+        require_final=True,
+    ):
+        fail("scheduled recovery could not reuse final same-date Evidence")
+    if evidence_reusable(
+        {
+            "checked_at_jst": "2099-01-01T15:29:00+09:00",
+            "collector_contract_version": evidence_store.collector_contract_version(),
+        },
+        "2099-01-01",
+        now=datetime.fromisoformat("2099-01-01T18:50:00+09:00"),
+        require_final=True,
+    ):
+        fail("scheduled recovery reused pre-final Evidence")
     for rejected_date, rejected_now in (
         ("2098-12-31", "2099-01-01T18:50:00+09:00"),
         ("2099-01-01", "2099-01-01T22:30:00+09:00"),
@@ -518,9 +617,11 @@ def self_tests(profile: str) -> None:
     run([sys.executable, "scripts/night_signal_state.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_publish.py", "--self-test"])
     run([sys.executable, "scripts/simulate_runtime_failures.py"])
+    run([sys.executable, "scripts/simulate_consecutive_days.py"])
     run([sys.executable, "scripts/night_signal_collect.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_eval.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_editor.py", "--self-test"])
+    run([sys.executable, "scripts/quality_gate.py", "--self-test"])
     run([sys.executable, "scripts/publication_schedule_audit.py"])
 
 
