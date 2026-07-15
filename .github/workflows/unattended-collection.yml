@@ -17,6 +17,11 @@ on:
         required: false
         default: false
         type: boolean
+      reedit_published:
+        description: "Re-edit the public issue from saved final Evidence with current models."
+        required: false
+        default: false
+        type: boolean
       dry_run:
         description: "Run collection and audits without committing."
         required: false
@@ -95,20 +100,28 @@ jobs:
         env:
           REQUESTED_REUSE: ${{ inputs.reuse_evidence }}
           REQUESTED_REPROCESS: ${{ inputs.reprocess_existing }}
+          REQUESTED_REEDIT: ${{ inputs.reedit_published }}
         run: |
           if [[ "$GITHUB_EVENT_NAME" == "schedule" ]]; then
             echo "reuse=false" >> "$GITHUB_OUTPUT"
             echo "reprocess=false" >> "$GITHUB_OUTPUT"
+            echo "reedit=false" >> "$GITHUB_OUTPUT"
           elif [[ "${REQUESTED_REUSE:-true}" == "false" ]]; then
-            if [[ "${REQUESTED_REPROCESS:-false}" == "true" ]]; then
-              echo "Reprocessing requires Evidence reuse." >&2
+            if [[ "${REQUESTED_REPROCESS:-false}" == "true" || "${REQUESTED_REEDIT:-false}" == "true" ]]; then
+              echo "Reprocessing and published re-edit require Evidence reuse." >&2
               exit 1
             fi
             echo "reuse=false" >> "$GITHUB_OUTPUT"
             echo "reprocess=false" >> "$GITHUB_OUTPUT"
+            echo "reedit=false" >> "$GITHUB_OUTPUT"
           else
+            if [[ "${REQUESTED_REPROCESS:-false}" == "true" && "${REQUESTED_REEDIT:-false}" == "true" ]]; then
+              echo "Checkpoint-only reprocessing and model re-edit are mutually exclusive." >&2
+              exit 1
+            fi
             echo "reuse=true" >> "$GITHUB_OUTPUT"
             echo "reprocess=${REQUESTED_REPROCESS:-false}" >> "$GITHUB_OUTPUT"
+            echo "reedit=${REQUESTED_REEDIT:-false}" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Evaluate publication window
@@ -119,7 +132,7 @@ jobs:
 
       - name: Detect an already verified publication
         id: current_publication
-        if: ${{ steps.timing.outputs.action != 'wait' || steps.recovery.outputs.reprocess == 'true' }}
+        if: ${{ steps.timing.outputs.action != 'wait' || steps.recovery.outputs.reprocess == 'true' || steps.recovery.outputs.reedit == 'true' }}
         run: |
           if python3 scripts/publication_audit.py "$ISSUE_DATE"; then
             echo "published=true" >> "$GITHUB_OUTPUT"
@@ -137,10 +150,17 @@ jobs:
         id: operation
         env:
           REPROCESS_EXISTING: ${{ steps.recovery.outputs.reprocess }}
+          REEDIT_PUBLISHED: ${{ steps.recovery.outputs.reedit }}
           ALREADY_PUBLISHED: ${{ steps.current_publication.outputs.published }}
           TIMING_ACTION: ${{ steps.timing.outputs.action }}
         run: |
-          if [[ "$REPROCESS_EXISTING" == "true" ]]; then
+          if [[ "$REEDIT_PUBLISHED" == "true" ]]; then
+            if [[ "$ALREADY_PUBLISHED" != "true" ]]; then
+              echo "Published re-edit requires an already audited publication." >&2
+              exit 1
+            fi
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          elif [[ "$REPROCESS_EXISTING" == "true" ]]; then
             if [[ "$ALREADY_PUBLISHED" != "true" ]]; then
               echo "Checkpoint-only reprocessing requires an already audited publication." >&2
               exit 1
@@ -194,9 +214,12 @@ jobs:
         env:
           REUSE_EVIDENCE: ${{ steps.recovery.outputs.reuse }}
           REPROCESS_EXISTING: ${{ steps.recovery.outputs.reprocess }}
+          REEDIT_PUBLISHED: ${{ steps.recovery.outputs.reedit }}
         run: |
           if [[ "$REPROCESS_EXISTING" == "true" ]]; then
             python3 scripts/night_signal_publish.py "$ISSUE_DATE" --reuse-evidence --reprocess-existing --verification-profile deploy
+          elif [[ "$REEDIT_PUBLISHED" == "true" ]]; then
+            python3 scripts/night_signal_publish.py "$ISSUE_DATE" --reuse-evidence --reedit-published --verification-profile deploy
           elif [[ "$REUSE_EVIDENCE" == "true" ]]; then
             python3 scripts/night_signal_publish.py "$ISSUE_DATE" --reuse-evidence --verification-profile deploy
           else
@@ -246,11 +269,14 @@ jobs:
         if: ${{ inputs.dry_run != true && steps.operation.outputs.run == 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
+          REEDIT_PUBLISHED: ${{ steps.recovery.outputs.reedit }}
         run: |
           echo "PAGES_DISPATCHED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
-          gh workflow run pages.yml \
-            --ref main \
-            -f issue_date="$ISSUE_DATE"
+          PAGES_ARGS=()
+          if [[ "$REEDIT_PUBLISHED" == "true" ]]; then
+            PAGES_ARGS+=(-f deploy_edited_final_evidence=true)
+          fi
+          gh workflow run pages.yml --ref main -f issue_date="$ISSUE_DATE" "${PAGES_ARGS[@]}"
 
       - name: Wait for Pages publication
         if: ${{ inputs.dry_run != true && steps.operation.outputs.run == 'true' }}

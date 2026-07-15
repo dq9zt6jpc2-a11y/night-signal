@@ -12,6 +12,11 @@ on:
         required: false
         default: false
         type: boolean
+      deploy_edited_final_evidence:
+        description: "Deploy an audited re-edit from final same-day Evidence."
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -39,6 +44,7 @@ jobs:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
           REQUESTED_ISSUE_DATE: ${{ inputs.issue_date || '' }}
           REDEPLOY_PUBLISHED: ${{ inputs.redeploy_published || 'false' }}
+          DEPLOY_EDITED_FINAL_EVIDENCE: ${{ inputs.deploy_edited_final_evidence || 'false' }}
         run: |
           ISSUE_DATE="$(python3 scripts/night_signal_publish.py --resolve-issue-date --event-name "$GITHUB_EVENT_NAME" --requested-issue-date "${REQUESTED_ISSUE_DATE:-}")"
           # Initial publication requires committed evening-fresh state. An
@@ -47,6 +53,9 @@ jobs:
           REDEPLOY_ARGS=()
           if [[ "$REDEPLOY_PUBLISHED" == "true" ]]; then
             REDEPLOY_ARGS+=(--redeploy-published)
+          fi
+          if [[ "$DEPLOY_EDITED_FINAL_EVIDENCE" == "true" ]]; then
+            REDEPLOY_ARGS+=(--deploy-edited-final-evidence)
           fi
           python3 scripts/night_signal_publish.py "$ISSUE_DATE" --deploy-existing "${REDEPLOY_ARGS[@]}" --verification-profile deploy
           cp .nojekyll site/.nojekyll

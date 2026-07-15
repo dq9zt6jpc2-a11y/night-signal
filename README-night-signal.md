@@ -25,6 +25,10 @@ python3 scripts/night_signal_publish.py YYYY-MM-DD --deploy-existing
 `--deploy-existing --redeploy-published` を使う。この経路は公開中の号とローカル号の
 内容一致を先に監査し、再収集やAI編集を行わない。初回公開には使用しない。
 
+公開済み号を現行Editorで作り直す必要がある場合は、owner workflowの
+`reedit_published=true`を使う。公開中の号を先に監査し、保存済みの夕方最終Evidenceを
+再収集せずにAI編集し直す。通常の自動実行や初回公開では使用しない。
+
 Verify public root and dated pages:
 
 ```bash

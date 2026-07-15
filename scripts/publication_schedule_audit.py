@@ -60,10 +60,10 @@ def main() -> int:
         or f"timeout-minutes: {policy.pages_timeout_minutes}" not in collection
     ):
         fail("collection and job runtime must be bounded")
-    if collection.count('python3 scripts/night_signal_publish.py "$ISSUE_DATE"') != 3:
+    if collection.count('python3 scripts/night_signal_publish.py "$ISSUE_DATE"') != 4:
         fail(
-            "fresh, Evidence-reuse, and checkpoint-only reprocessing must use "
-            "the canonical pipeline"
+            "fresh, Evidence-reuse, published re-edit, and checkpoint-only "
+            "reprocessing must use the canonical pipeline"
         )
     for direct_owner in (
         "python3 scripts/night_signal_collect.py",
@@ -113,24 +113,37 @@ def main() -> int:
         "default: true",
         "reprocess_existing:",
         "default: false",
+        "reedit_published:",
         "Resolve recovery mode",
         'if [[ "$GITHUB_EVENT_NAME" == "schedule" ]]',
         'echo "reuse=false"',
         'echo "reprocess=false"',
+        'echo "reedit=false"',
         "Locate latest Evidence checkpoint",
         "steps.recovery.outputs.reuse == 'true'",
         "REUSE_EVIDENCE: ${{ steps.recovery.outputs.reuse }}",
         "--reuse-evidence --reprocess-existing",
+        'elif [[ "$REEDIT_PUBLISHED" == "true" ]]',
+        "--reuse-evidence --reedit-published",
         'elif [[ "$REUSE_EVIDENCE" == "true" ]]',
         'python3 scripts/night_signal_publish.py "$ISSUE_DATE" '
         "--reuse-evidence --verification-profile deploy",
     ):
         fail(
-            "manual recovery must reuse checkpoints, checkpoint-only reprocessing "
-            "must be explicit, and scheduled collection must stay fresh"
+            "manual recovery must reuse checkpoints, published re-edit and "
+            "checkpoint-only reprocessing must be explicit, and scheduled "
+            "collection must stay fresh"
         )
+    if not re.search(
+        r"reedit_published:.{0,240}default:\s*false",
+        collection,
+        flags=re.S,
+    ):
+        fail("published re-edit must be explicit and disabled by default")
     if (
         "Checkpoint-only reprocessing requires an already audited publication."
+        not in collection
+        or "Published re-edit requires an already audited publication."
         not in collection
         or "Checkpoint-only reprocessing cannot run without a saved artifact."
         not in collection

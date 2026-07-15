@@ -112,7 +112,11 @@ def has_evidence(issue_date: str) -> bool:
     return (state_dir(issue_date) / "evidence.json").exists()
 
 
-def fresh_evidence(issue_date: str) -> bool:
+def fresh_evidence(
+    issue_date: str,
+    *,
+    allow_expired_final: bool = False,
+) -> bool:
     evidence_path = state_dir(issue_date) / "evidence.json"
     if not evidence_path.exists():
         return False
@@ -130,6 +134,7 @@ def fresh_evidence(issue_date: str) -> bool:
         bundle,
         issue_date,
         now=datetime.now(ZoneInfo("Asia/Tokyo")),
+        allow_expired_final=allow_expired_final,
     )
 
 
@@ -138,6 +143,7 @@ def evidence_reusable(
     issue_date: str,
     *,
     now: datetime,
+    allow_expired_final: bool = False,
 ) -> bool:
     if bundle.get("collector_contract_version") != evidence_store.collector_contract_version():
         return False
@@ -152,7 +158,14 @@ def evidence_reusable(
     if checked.date().isoformat() != issue_date or current < checked:
         return False
     if current.date() == checked.date():
-        return current - checked <= timedelta(hours=4)
+        if current - checked <= timedelta(hours=4):
+            return True
+        final_cutoff = datetime.combine(
+            checked.date(),
+            timing.load_policy().final_collection_not_before,
+            tzinfo=ZoneInfo("Asia/Tokyo"),
+        )
+        return allow_expired_final and checked >= final_cutoff
     previous_date = current.date() - timedelta(days=1)
     final_cutoff = datetime.combine(
         checked.date(),
@@ -192,8 +205,12 @@ def collect_and_build(
     *,
     reuse_evidence: bool,
     reprocess_existing: bool = False,
+    reedit_published: bool = False,
 ) -> None:
-    evidence_is_reusable = reuse_evidence and fresh_evidence(issue_date)
+    evidence_is_reusable = reuse_evidence and fresh_evidence(
+        issue_date,
+        allow_expired_final=reedit_published,
+    )
     if reprocess_existing:
         if not evidence_is_reusable or not issue_matches_evidence(issue_date):
             fail(
@@ -209,6 +226,8 @@ def collect_and_build(
             ]
         )
         return
+    if reedit_published and not evidence_is_reusable:
+        fail("published-issue re-edit requires reusable final same-day Evidence")
     if evidence_is_reusable and issue_matches_evidence(issue_date):
         return
     if not (os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")):
@@ -391,6 +410,23 @@ def self_test() -> None:
         ):
             fail("stale or cross-date Evidence was reusable")
     if not evidence_reusable(
+        reusable,
+        "2099-01-01",
+        now=datetime.fromisoformat("2099-01-01T22:30:00+09:00"),
+        allow_expired_final=True,
+    ):
+        fail("explicit published re-edit could not reuse final same-day Evidence")
+    if evidence_reusable(
+        {
+            "checked_at_jst": "2099-01-01T15:29:00+09:00",
+            "collector_contract_version": evidence_store.collector_contract_version(),
+        },
+        "2099-01-01",
+        now=datetime.fromisoformat("2099-01-01T22:30:00+09:00"),
+        allow_expired_final=True,
+    ):
+        fail("published re-edit reused pre-final Evidence")
+    if not evidence_reusable(
         {
             "checked_at_jst": "2099-01-01T15:29:00+09:00",
             "collector_contract_version": evidence_store.collector_contract_version(),
@@ -504,8 +540,10 @@ def prepare(
     *,
     reuse_evidence: bool,
     reprocess_existing: bool,
+    reedit_published: bool,
     deploy_existing: bool,
     redeploy_published: bool,
+    deploy_edited_final_evidence: bool,
     verification_profile: str,
 ) -> dict[str, Any]:
     require_jst_current_issue(issue_date)
@@ -526,7 +564,18 @@ def prepare(
                         "--public-content-only",
                     ]
                 )
+            if deploy_edited_final_evidence and not issue_matches_evidence(issue_date):
+                fail("edited final-Evidence deployment requires a current audited issue")
         else:
+            if reedit_published:
+                run(
+                    [
+                        sys.executable,
+                        "scripts/publication_audit.py",
+                        issue_date,
+                        "--public-content-only",
+                    ]
+                )
             current_stage = "plan_written"
             runtime.write_checkpoint(issue_date, current_stage, "completed", "current collection contract loaded", STATE_ROOT)
             current_stage = "collection_complete"
@@ -534,14 +583,19 @@ def prepare(
                 issue_date,
                 reuse_evidence=reuse_evidence,
                 reprocess_existing=reprocess_existing,
+                reedit_published=reedit_published,
             )
             runtime.write_checkpoint(issue_date, current_stage, "completed", "Evidence written", STATE_ROOT)
             current_stage = "story_build_complete"
             runtime.write_checkpoint(issue_date, current_stage, "completed", "important updates and manifest written", STATE_ROOT)
         freshness = collection_freshness(
             issue_date,
-            require_evening_refresh=deploy_existing,
-            allow_expired_current=redeploy_published,
+            require_evening_refresh=deploy_existing or reedit_published,
+            allow_expired_current=(
+                redeploy_published
+                or reedit_published
+                or deploy_edited_final_evidence
+            ),
         )
         current_stage = "render_complete"
         assemble_and_render(issue_date)
@@ -591,6 +645,14 @@ def main() -> int:
         action="store_true",
         help="re-edit reusable Evidence with checkpoints only and make no model request",
     )
+    parser.add_argument(
+        "--reedit-published",
+        action="store_true",
+        help=(
+            "re-edit an already-public issue with its final same-day Evidence and "
+            "current Editor contract; requires --reuse-evidence"
+        ),
+    )
     parser.add_argument("--deploy-existing", action="store_true")
     parser.add_argument(
         "--redeploy-published",
@@ -598,6 +660,14 @@ def main() -> int:
         help=(
             "redeploy an already-public matching issue without recollection; requires "
             "--deploy-existing and a passing public-content audit"
+        ),
+    )
+    parser.add_argument(
+        "--deploy-edited-final-evidence",
+        action="store_true",
+        help=(
+            "deploy an audited current-contract issue rebuilt from final same-day "
+            "Evidence after the normal age limit"
         ),
     )
     parser.add_argument("--public-audit", action="store_true")
@@ -623,8 +693,16 @@ def main() -> int:
         fail("--reprocess-existing requires --reuse-evidence")
     if args.reprocess_existing and args.deploy_existing:
         fail("--reprocess-existing and --deploy-existing are mutually exclusive")
+    if args.reedit_published and not args.reuse_evidence:
+        fail("--reedit-published requires --reuse-evidence")
+    if args.reedit_published and (args.reprocess_existing or args.deploy_existing):
+        fail("--reedit-published cannot be combined with reprocess or deploy modes")
     if args.redeploy_published and not args.deploy_existing:
         fail("--redeploy-published requires --deploy-existing")
+    if args.deploy_edited_final_evidence and not args.deploy_existing:
+        fail("--deploy-edited-final-evidence requires --deploy-existing")
+    if args.deploy_edited_final_evidence and args.redeploy_published:
+        fail("edited final-Evidence deploy and static redeploy are mutually exclusive")
     if args.public_audit:
         result = public_audit(args.issue_date)
     else:
@@ -633,8 +711,10 @@ def main() -> int:
             args.issue_date,
             reuse_evidence=args.reuse_evidence,
             reprocess_existing=args.reprocess_existing,
+            reedit_published=args.reedit_published,
             deploy_existing=args.deploy_existing,
             redeploy_published=args.redeploy_published,
+            deploy_edited_final_evidence=args.deploy_edited_final_evidence,
             verification_profile=verification_profile,
         )
     print(json.dumps(result, ensure_ascii=False, indent=2))
