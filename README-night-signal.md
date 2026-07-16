@@ -51,10 +51,10 @@ public archive lets readers catch up. Older issues are deleted only after the ne
 issue passes every local gate.
 
 Evidence heartbeats before 16:45 JST exit without collection. The 16:47 and 17:17
-heartbeats create final Evidence artifacts but never invoke AI or publish. The Codex
-Plus owner runs at 18:05, with an 18:35 audit-first recovery heartbeat. Recovery reuses
-the last completed stage: Evidence, accepted request/event responses, Issue, commit,
-or Pages deployment.
+heartbeats create or reuse final Evidence artifacts but never invoke AI or publish.
+The local Codex Plus owner runs at 17:05, 17:35, 18:05, and 18:35. Every later run
+is an audit-first recovery heartbeat. Recovery reuses the last completed stage:
+Evidence, accepted request/event responses, Issue, commit, or Pages deployment.
 
 ## Configuration
 

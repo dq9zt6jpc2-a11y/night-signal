@@ -2,7 +2,7 @@
 
 ## Objective and fixed priorities
 
-Publish the current JST issue automatically every evening. The priority order is:
+Publish the current JST issue automatically by 19:00 every evening. The priority order is:
 
 1. coverage of every configured category and watch topic;
 2. evidence grounding, novelty precision, and complete Japanese summaries;
@@ -88,8 +88,9 @@ Write `state/$ISSUE_DATE/editor_review.json` with this shape:
 ```
 
 Allowed exclusion decisions are `duplicate_previous_event`,
-`background_or_navigation`, `wrong_entity_or_category`, and
-`no_material_update`; excluded events have an empty `items` array. Publish every
+`duplicate_current_issue_event`, `background_or_navigation`,
+`wrong_entity_or_category`, and `no_material_update`; excluded events have an
+empty `items` array. Publish every
 material delta without a count target. A new URL, date stamp, or background-only
 rewrite is not a delta. Quarterly, annual, and final earnings results and material
 market moves remain eligible. Exclude only previews or routine low-impact ticks.
@@ -151,8 +152,10 @@ dated public URLs show the same current date.
   redispatch/watch Pages once, then rerun only publication audit.
 - Current issue is already committed but not public: deploy the committed issue;
   do not enter collection or review.
-- A second 18:35 run is a recovery heartbeat. It must audit first and exit with
-  minimal work when the 18:05 run already succeeded.
+- The 17:35, 18:05, and 18:35 runs are recovery heartbeats after the 17:05 owner.
+  They must audit first and exit with minimal work when an earlier run already
+  succeeded. They resume from the latest deterministic checkpoint when an earlier
+  Codex task was interrupted before or during a stage.
 
 CLI network or authentication commands may be retried once. Model turns, full
 collection, full review, commits, and workflow dispatches must never be blindly

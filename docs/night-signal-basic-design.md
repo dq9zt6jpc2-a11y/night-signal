@@ -193,9 +193,10 @@ JSON responseは`night_signal_plus_editor.py`が全request、全event、Evidence
   は前日号をrootへ出さず、それ以前の日付は受け付けない。
 
 公開時刻は`config/night_signal_operations.json`だけが所有する。16:45以降のGitHub Actions
-heartbeatはWeb Evidenceとcompact packetだけを収集し、AI、commit、Pages処理を行わない。
-18:05のCodex Plus ownerが最新の有効artifactを一度だけreviewして19:00までに公開する。
-18:35は回復heartbeatとし、18:05が成功済みならpublication auditだけで即終了する。
+heartbeatはWeb Evidenceとcompact packetだけを収集し、既存artifactがあれば再収集せず、
+AI、commit、Pages処理を行わない。local Codex Plus ownerは17:05、17:35、18:05、18:35に
+audit-firstで起動し、最新の有効artifactを一度だけreviewして19:00までに公開する。後続回は
+先行回が成功済みならpublication auditだけで即終了する。
 未公開の場合も、active collectorを重複dispatchせず、Evidence、review、Issue、commit、Pagesの
 完了済み段階を順に再利用する。19:00以降は通常の日次処理を新規開始しない。
 

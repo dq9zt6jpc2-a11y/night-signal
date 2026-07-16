@@ -34,6 +34,7 @@ NOVELTY_HISTORY_ISSUES = 3
 EVENT_DECISIONS = {
     "publish",
     "duplicate_previous_event",
+    "duplicate_current_issue_event",
     "background_or_navigation",
     "wrong_entity_or_category",
     "no_material_update",

@@ -1,0 +1,1287 @@
+{
+  "issue_date": "2026-07-16",
+  "cards": [
+    {
+      "watch_topic_id": "enterprise_infrastructure",
+      "title": "OpenAI、ChatGPT WorkとCodex統合デスクトップアプリを発表",
+      "summary": "ChatGPT Workは発表当日からWebとモバイルのPro、Enterprise、Edu向けに提供され、PlusとBusinessには数日内に展開する予定です。 統合版Codexには差分内のインライン編集、サイドパネルでのプルリクエストレビュー、複数リポジトリ対応などが追加されました。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-14",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-6344277fe87d-2026-07-16.html",
+        "sources": [
+          {
+            "label": "dime.jp",
+            "url": "https://dime.jp/genre/2134606/"
+          }
+        ],
+        "summary": "ChatGPT Workは発表当日からWebとモバイルのPro、Enterprise、Edu向けに提供され、PlusとBusinessには数日内に展開する予定です。 統合版Codexには差分内のインライン編集、サイドパネルでのプルリクエストレビュー、複数リポジトリ対応などが追加されました。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "ChatGPT Workは発表当日からWebとモバイルのPro、Enterprise、Edu向けに提供され、PlusとBusinessには数日内に展開する予定です。",
+            "統合版Codexには差分内のインライン編集、サイドパネルでのプルリクエストレビュー、複数リポジトリ対応などが追加されました。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "ChatGPT Workは発表当日からWebとモバイルのPro、Enterprise、Edu向けに提供され、PlusとBusinessには数日内に展開する予定です。",
+              "source_urls": [
+                "https://dime.jp/genre/2134606/"
+              ]
+            },
+            {
+              "fact": "統合版Codexには差分内のインライン編集、サイドパネルでのプルリクエストレビュー、複数リポジトリ対応などが追加されました。",
+              "source_urls": [
+                "https://dime.jp/genre/2134606/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-14"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "enterprise_infrastructure",
+      "title": "OpenAI、GPT-5.6をSol・Terra・Lunaの3モデルで正式投入",
+      "summary": "Sol、バランス型のTerra、低価格のLunaという用途別の構成で、Terraは従来のGPT-5.5並みの性能と半分のコストをうたっています。 軽量プログラムでツールを調整するProgrammatic Tool Callingにより、モデルとの往復回数とトークン消費を抑える機能を備えました。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-16",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "top",
+      "change_class": "material_update",
+      "detail": {
+        "slug": "auto-c91ac1c90620-2026-07-16.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/333daa72-4277-4034-8452-028fb0886bef"
+          }
+        ],
+        "summary": "Sol、バランス型のTerra、低価格のLunaという用途別の構成で、Terraは従来のGPT-5.5並みの性能と半分のコストをうたっています。 軽量プログラムでツールを調整するProgrammatic Tool Callingにより、モデルとの往復回数とトークン消費を抑える機能を備えました。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Sol、バランス型のTerra、低価格のLunaという用途別の構成で、Terraは従来のGPT-5.5並みの性能と半分のコストをうたっています。",
+            "軽量プログラムでツールを調整するProgrammatic Tool Callingにより、モデルとの往復回数とトークン消費を抑える機能を備えました。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Sol、バランス型のTerra、低価格のLunaという用途別の構成で、Terraは従来のGPT-5.5並みの性能と半分のコストをうたっています。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/333daa72-4277-4034-8452-028fb0886bef"
+              ]
+            },
+            {
+              "fact": "軽量プログラムでツールを調整するProgrammatic Tool Callingにより、モデルとの往復回数とトークン消費を抑える機能を備えました。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/333daa72-4277-4034-8452-028fb0886bef"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-16"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "product_release",
+      "title": "OpenAI、Codexエージェント用キーパッド「Codex Micro」を発売",
+      "summary": "Work Louderとの共同開発品で価格は230ドル、6つのキーのRGB表示で複数エージェントの状態を確認できます。 音声入力、変更の承認・拒否、プロンプト送信などの操作をChatGPTデスクトップアプリから割り当てられます。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-16",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-393ddefcfc5b-2026-07-16.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/104057fe-175d-4bbf-aba9-bd8a8419a64b"
+          },
+          {
+            "label": "dreamseed.blog",
+            "url": "https://dreamseed.blog/post-203885/"
+          }
+        ],
+        "summary": "Work Louderとの共同開発品で価格は230ドル、6つのキーのRGB表示で複数エージェントの状態を確認できます。 音声入力、変更の承認・拒否、プロンプト送信などの操作をChatGPTデスクトップアプリから割り当てられます。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Work Louderとの共同開発品で価格は230ドル、6つのキーのRGB表示で複数エージェントの状態を確認できます。",
+            "音声入力、変更の承認・拒否、プロンプト送信などの操作をChatGPTデスクトップアプリから割り当てられます。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Work Louderとの共同開発品で価格は230ドル、6つのキーのRGB表示で複数エージェントの状態を確認できます。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/104057fe-175d-4bbf-aba9-bd8a8419a64b",
+                "https://dreamseed.blog/post-203885/"
+              ]
+            },
+            {
+              "fact": "音声入力、変更の承認・拒否、プロンプト送信などの操作をChatGPTデスクトップアプリから割り当てられます。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/104057fe-175d-4bbf-aba9-bd8a8419a64b"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-16"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "math_research",
+      "title": "OpenAI、xAIとの訴訟で弁護士費用100万ドル超を請求",
+      "summary": "OpenAIは、企業秘密窃取の主張をxAIが立証できなかったとして、連邦判事に100万ドル超の法的費用の支払いを命じるよう求めました。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-14",
+      "topic_value_class": "risk_or_safety_signal",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-f979fe06e874-2026-07-16.html",
+        "sources": [
+          {
+            "label": "inshorts.com",
+            "url": "https://inshorts.com/en/amp_news/openai-seeks--9-6-cr-from-musk-as-xai-fails-to-prove-trade-secret-theft-1784008594016"
+          }
+        ],
+        "summary": "OpenAIは、企業秘密窃取の主張をxAIが立証できなかったとして、連邦判事に100万ドル超の法的費用の支払いを命じるよう求めました。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "OpenAIは、企業秘密窃取の主張をxAIが立証できなかったとして、連邦判事に100万ドル超の法的費用の支払いを命じるよう求めました。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "OpenAIは、企業秘密窃取の主張をxAIが立証できなかったとして、連邦判事に100万ドル超の法的費用の支払いを命じるよう求めました。",
+              "source_urls": [
+                "https://inshorts.com/en/amp_news/openai-seeks--9-6-cr-from-musk-as-xai-fails-to-prove-trade-secret-theft-1784008594016"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-14"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "ipo_financing",
+      "title": "Apple、端末開発の機密情報流用を主張してOpenAIを提訴",
+      "summary": "AppleはOpenAIと元Apple従業員2人を相手取り、製品設計、製造工程、供給網戦略の機密取得停止と損害賠償を求めています。 訴訟は7月10日にカリフォルニア州北部地区の連邦地裁へ提起されました。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-16",
+      "topic_value_class": "risk_or_safety_signal",
+      "priority_class": "top",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-8364f78ed2c4-2026-07-16.html",
+        "sources": [
+          {
+            "label": "nikkei.com",
+            "url": "https://www.nikkei.com/prime/digital-governance/article/DGXZQOUC132JE0T10C26A7000000"
+          }
+        ],
+        "summary": "AppleはOpenAIと元Apple従業員2人を相手取り、製品設計、製造工程、供給網戦略の機密取得停止と損害賠償を求めています。 訴訟は7月10日にカリフォルニア州北部地区の連邦地裁へ提起されました。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "AppleはOpenAIと元Apple従業員2人を相手取り、製品設計、製造工程、供給網戦略の機密取得停止と損害賠償を求めています。",
+            "訴訟は7月10日にカリフォルニア州北部地区の連邦地裁へ提起されました。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "AppleはOpenAIと元Apple従業員2人を相手取り、製品設計、製造工程、供給網戦略の機密取得停止と損害賠償を求めています。",
+              "source_urls": [
+                "https://www.nikkei.com/prime/digital-governance/article/DGXZQOUC132JE0T10C26A7000000"
+              ]
+            },
+            {
+              "fact": "訴訟は7月10日にカリフォルニア州北部地区の連邦地裁へ提起されました。",
+              "source_urls": [
+                "https://www.nikkei.com/prime/digital-governance/article/DGXZQOUC132JE0T10C26A7000000"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-16"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "enterprise_infrastructure",
+      "title": "元OpenAI CTO率いるThinking Machines、初の「Inkling」を公開",
+      "summary": "Apache 2.0ライセンスで公開され、テキスト・画像・音声を入力し、テキストやコードを出力します。 Terminal Bench 2.1ではNemotron 3 Ultraと同程度の成績を、平均生成トークン数を約3分の1に抑えて達成したとしています。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-16",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-d27b2abb2083-2026-07-16.html",
+        "sources": [
+          {
+            "label": "news.mynavi.jp",
+            "url": "https://news.mynavi.jp/techplus/article/20260716-4707402/"
+          }
+        ],
+        "summary": "Apache 2.0ライセンスで公開され、テキスト・画像・音声を入力し、テキストやコードを出力します。 Terminal Bench 2.1ではNemotron 3 Ultraと同程度の成績を、平均生成トークン数を約3分の1に抑えて達成したとしています。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Apache 2.0ライセンスで公開され、テキスト・画像・音声を入力し、テキストやコードを出力します。",
+            "Terminal Bench 2.1ではNemotron 3 Ultraと同程度の成績を、平均生成トークン数を約3分の1に抑えて達成したとしています。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Apache 2.0ライセンスで公開され、テキスト・画像・音声を入力し、テキストやコードを出力します。",
+              "source_urls": [
+                "https://news.mynavi.jp/techplus/article/20260716-4707402/"
+              ]
+            },
+            {
+              "fact": "Terminal Bench 2.1ではNemotron 3 Ultraと同程度の成績を、平均生成トークン数を約3分の1に抑えて達成したとしています。",
+              "source_urls": [
+                "https://news.mynavi.jp/techplus/article/20260716-4707402/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-16"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "product_release",
+      "title": "OpenAI、ChatGPTの公式プロンプトガイドを更新",
+      "summary": "指示を明確に区切ること、例示を与えること、禁止事項だけでなく望む動作を示すことなど、8つの実践手法を整理しました。 専門的な指示の生成を支援する「Generate Anything」機能も同時に投入したと報じられています。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-16",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-d97a301ea8ae-2026-07-16.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/74305a9b-496f-4f74-82ed-feb97c38a5e9"
+          }
+        ],
+        "summary": "指示を明確に区切ること、例示を与えること、禁止事項だけでなく望む動作を示すことなど、8つの実践手法を整理しました。 専門的な指示の生成を支援する「Generate Anything」機能も同時に投入したと報じられています。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "指示を明確に区切ること、例示を与えること、禁止事項だけでなく望む動作を示すことなど、8つの実践手法を整理しました。",
+            "専門的な指示の生成を支援する「Generate Anything」機能も同時に投入したと報じられています。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "指示を明確に区切ること、例示を与えること、禁止事項だけでなく望む動作を示すことなど、8つの実践手法を整理しました。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/74305a9b-496f-4f74-82ed-feb97c38a5e9"
+              ]
+            },
+            {
+              "fact": "専門的な指示の生成を支援する「Generate Anything」機能も同時に投入したと報じられています。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/74305a9b-496f-4f74-82ed-feb97c38a5e9"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-16"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "enterprise_infrastructure",
+      "title": "OpenAI、ChatGPTのカスタム指示上限を5000文字へ拡大",
+      "summary": "Pro、Enterprise、Business、Educationが対象で、従来の1500文字から3倍超に増えました。 無料アカウントへの展開時期は示されていません。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-16",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "standard",
+      "change_class": "material_update",
+      "detail": {
+        "slug": "auto-d357b30eb42c-2026-07-16.html",
+        "sources": [
+          {
+            "label": "cryptobriefing.com",
+            "url": "https://cryptobriefing.com/openai-chatgpt-custom-instructions-5000-characters/"
+          }
+        ],
+        "summary": "Pro、Enterprise、Business、Educationが対象で、従来の1500文字から3倍超に増えました。 無料アカウントへの展開時期は示されていません。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Pro、Enterprise、Business、Educationが対象で、従来の1500文字から3倍超に増えました。",
+            "無料アカウントへの展開時期は示されていません。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Pro、Enterprise、Business、Educationが対象で、従来の1500文字から3倍超に増えました。",
+              "source_urls": [
+                "https://cryptobriefing.com/openai-chatgpt-custom-instructions-5000-characters/"
+              ]
+            },
+            {
+              "fact": "無料アカウントへの展開時期は示されていません。",
+              "source_urls": [
+                "https://cryptobriefing.com/openai-chatgpt-custom-instructions-5000-characters/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-16"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "enterprise_infrastructure",
+      "title": "OpenAI、プロンプトインジェクション攻撃用AI「GPT-Red」を発表",
+      "summary": "GPT-5.1を対象にした比較では84％のシナリオで攻撃に成功し、人間のレッドチームの13％を上回りました。 対戦結果を訓練に反映したGPT-5.6では、難関ベンチマークの失敗が4カ月前のモデルの6分の1に減ったとしています。 悪用防止のためGPT-Redは社内限定で、外部提供しない方針です。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-16",
+      "topic_value_class": "risk_or_safety_signal",
+      "priority_class": "top",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-14f01d11b152-2026-07-16.html",
+        "sources": [
+          {
+            "label": "japan.cnet.com",
+            "url": "https://japan.cnet.com/article/35250629/"
+          }
+        ],
+        "summary": "GPT-5.1を対象にした比較では84％のシナリオで攻撃に成功し、人間のレッドチームの13％を上回りました。 対戦結果を訓練に反映したGPT-5.6では、難関ベンチマークの失敗が4カ月前のモデルの6分の1に減ったとしています。 悪用防止のためGPT-Redは社内限定で、外部提供しない方針です。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "GPT-5.1を対象にした比較では84％のシナリオで攻撃に成功し、人間のレッドチームの13％を上回りました。",
+            "対戦結果を訓練に反映したGPT-5.6では、難関ベンチマークの失敗が4カ月前のモデルの6分の1に減ったとしています。",
+            "悪用防止のためGPT-Redは社内限定で、外部提供しない方針です。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "GPT-5.1を対象にした比較では84％のシナリオで攻撃に成功し、人間のレッドチームの13％を上回りました。",
+              "source_urls": [
+                "https://japan.cnet.com/article/35250629/"
+              ]
+            },
+            {
+              "fact": "対戦結果を訓練に反映したGPT-5.6では、難関ベンチマークの失敗が4カ月前のモデルの6分の1に減ったとしています。",
+              "source_urls": [
+                "https://japan.cnet.com/article/35250629/"
+              ]
+            },
+            {
+              "fact": "悪用防止のためGPT-Redは社内限定で、外部提供しない方針です。",
+              "source_urls": [
+                "https://japan.cnet.com/article/35250629/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-16"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "ai_infrastructure",
+      "title": "ソフトバンク孫正義氏、2040年のAIインフラ投資を年800兆円と予測",
+      "summary": "2040年にAIエージェントが100兆個を超え、人類はAIとともに進化する必要があるとの見方を示しました。 データセンターの電力需要に対応するため、2040年までに核融合が安価で安全な主要電源になると予測しています。",
+      "section_id": "softbank",
+      "category": "SoftBank",
+      "source_published_date": "2026-07-14",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-de9d48a4e7ae-2026-07-16.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/4f54e039-29f8-42fa-9e62-2ec1502a85eb"
+          }
+        ],
+        "summary": "2040年にAIエージェントが100兆個を超え、人類はAIとともに進化する必要があるとの見方を示しました。 データセンターの電力需要に対応するため、2040年までに核融合が安価で安全な主要電源になると予測しています。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "2040年にAIエージェントが100兆個を超え、人類はAIとともに進化する必要があるとの見方を示しました。",
+            "データセンターの電力需要に対応するため、2040年までに核融合が安価で安全な主要電源になると予測しています。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "2040年にAIエージェントが100兆個を超え、人類はAIとともに進化する必要があるとの見方を示しました。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/4f54e039-29f8-42fa-9e62-2ec1502a85eb"
+              ]
+            },
+            {
+              "fact": "データセンターの電力需要に対応するため、2040年までに核融合が安価で安全な主要電源になると予測しています。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/4f54e039-29f8-42fa-9e62-2ec1502a85eb"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-14"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "domestic_services",
+      "title": "現代自動車グループ、Boston Dynamicsを完全子会社化",
+      "summary": "SoftBankが残存持分のプットオプションを行使し、現代自動車グループの持分は100％になりました。 ガバナンス簡素化により、Atlasなどロボットの開発・量産や工場導入の意思決定加速が見込まれます。",
+      "section_id": "softbank",
+      "category": "SoftBank",
+      "source_published_date": "2026-07-16",
+      "topic_value_class": "operational_status_change",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-11f570e89a1b-2026-07-16.html",
+        "sources": [
+          {
+            "label": "asiae.co.kr",
+            "url": "https://www.asiae.co.kr/en/article/2026071610132645049"
+          }
+        ],
+        "summary": "SoftBankが残存持分のプットオプションを行使し、現代自動車グループの持分は100％になりました。 ガバナンス簡素化により、Atlasなどロボットの開発・量産や工場導入の意思決定加速が見込まれます。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "SoftBankが残存持分のプットオプションを行使し、現代自動車グループの持分は100％になりました。",
+            "ガバナンス簡素化により、Atlasなどロボットの開発・量産や工場導入の意思決定加速が見込まれます。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "SoftBankが残存持分のプットオプションを行使し、現代自動車グループの持分は100％になりました。",
+              "source_urls": [
+                "https://www.asiae.co.kr/en/article/2026071610132645049"
+              ]
+            },
+            {
+              "fact": "ガバナンス簡素化により、Atlasなどロボットの開発・量産や工場導入の意思決定加速が見込まれます。",
+              "source_urls": [
+                "https://www.asiae.co.kr/en/article/2026071610132645049"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-16"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_sales",
+      "title": "Honda、N-BOXをマイナーチェンジして7月17日発売",
+      "summary": "N-BOX CUSTOMのフロントフェイスを変更し、N-BOX JOYには特別仕様車BLACK STYLEを設定しました。 全タイプにUSB Type-C充電口2個などを標準装備し、シリーズは2026年4月に累計販売300万台を突破しています。",
+      "section_id": "honda",
+      "category": "Honda",
+      "source_published_date": "2026-07-16",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "top",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-508357f47f13-2026-07-16.html",
+        "sources": [
+          {
+            "label": "global.honda",
+            "url": "https://global.honda/jp/news/2026/4260716-n-box.html"
+          }
+        ],
+        "summary": "N-BOX CUSTOMのフロントフェイスを変更し、N-BOX JOYには特別仕様車BLACK STYLEを設定しました。 全タイプにUSB Type-C充電口2個などを標準装備し、シリーズは2026年4月に累計販売300万台を突破しています。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "N-BOX CUSTOMのフロントフェイスを変更し、N-BOX JOYには特別仕様車BLACK STYLEを設定しました。",
+            "全タイプにUSB Type-C充電口2個などを標準装備し、シリーズは2026年4月に累計販売300万台を突破しています。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "N-BOX CUSTOMのフロントフェイスを変更し、N-BOX JOYには特別仕様車BLACK STYLEを設定しました。",
+              "source_urls": [
+                "https://global.honda/jp/news/2026/4260716-n-box.html"
+              ]
+            },
+            {
+              "fact": "全タイプにUSB Type-C充電口2個などを標準装備し、シリーズは2026年4月に累計販売300万台を突破しています。",
+              "source_urls": [
+                "https://global.honda/jp/news/2026/4260716-n-box.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-16"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "market_price_reaction",
+      "title": "Honda、N-BOX新CMにCreepy Nutsの書き下ろし曲を起用",
+      "summary": "新CMは7月16日に放送を開始し、N-BOXのCMでアーティストの書き下ろし新曲を採用するのは初めてです。 新曲「Running Wheel」は8月19日に配信され、通常版N-BOXのCMには「のびしろ」が使われます。",
+      "section_id": "honda",
+      "category": "Honda",
+      "source_published_date": "2026-07-16",
+      "topic_value_class": "cultural_or_audience_signal",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-2bba3488d75b-2026-07-16.html",
+        "sources": [
+          {
+            "label": "skream.jp",
+            "url": "https://skream.jp/news/2026/07/creepy_nuts_running_wheel.php"
+          }
+        ],
+        "summary": "新CMは7月16日に放送を開始し、N-BOXのCMでアーティストの書き下ろし新曲を採用するのは初めてです。 新曲「Running Wheel」は8月19日に配信され、通常版N-BOXのCMには「のびしろ」が使われます。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "新CMは7月16日に放送を開始し、N-BOXのCMでアーティストの書き下ろし新曲を採用するのは初めてです。",
+            "新曲「Running Wheel」は8月19日に配信され、通常版N-BOXのCMには「のびしろ」が使われます。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "新CMは7月16日に放送を開始し、N-BOXのCMでアーティストの書き下ろし新曲を採用するのは初めてです。",
+              "source_urls": [
+                "https://skream.jp/news/2026/07/creepy_nuts_running_wheel.php"
+              ]
+            },
+            {
+              "fact": "新曲「Running Wheel」は8月19日に配信され、通常版N-BOXのCMには「のびしろ」が使われます。",
+              "source_urls": [
+                "https://skream.jp/news/2026/07/creepy_nuts_running_wheel.php"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-16"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "fia_regulation_development",
+      "title": "マクラーレン、ベルギーGPから大規模アップグレードを投入",
+      "summary": "スパでは新しいリアウイングを金曜走行で評価し、続くハンガリーでも追加更新を予定しています。 チームはメルセデスに154点差、ランド・ノリスは首位アントネッリに82点差の状況です。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-07-16",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-e97bbf8504c1-2026-07-16.html",
+        "sources": [
+          {
+            "label": "independent.co.uk",
+            "url": "https://www.independent.co.uk/f1/lando-norris-mclaren-upgrade-belgian-grand-prix-b3015506.html"
+          }
+        ],
+        "summary": "スパでは新しいリアウイングを金曜走行で評価し、続くハンガリーでも追加更新を予定しています。 チームはメルセデスに154点差、ランド・ノリスは首位アントネッリに82点差の状況です。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "スパでは新しいリアウイングを金曜走行で評価し、続くハンガリーでも追加更新を予定しています。",
+            "チームはメルセデスに154点差、ランド・ノリスは首位アントネッリに82点差の状況です。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "スパでは新しいリアウイングを金曜走行で評価し、続くハンガリーでも追加更新を予定しています。",
+              "source_urls": [
+                "https://www.independent.co.uk/f1/lando-norris-mclaren-upgrade-belgian-grand-prix-b3015506.html"
+              ]
+            },
+            {
+              "fact": "チームはメルセデスに154点差、ランド・ノリスは首位アントネッリに82点差の状況です。",
+              "source_urls": [
+                "https://www.independent.co.uk/f1/lando-norris-mclaren-upgrade-belgian-grand-prix-b3015506.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-16"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "business_contracts",
+      "title": "SpaceX、家庭向けアンテナ「Starlink V5」を一部地域で発売",
+      "summary": "V4より小型・軽量で、最大375Mbps、消費電力はV4のほぼ半分とされています。 固定設置向けで移動中の利用には非対応となり、販売地域の拡大時期は公表されていません。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-07-16",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-9e4f07cf25de-2026-07-16.html",
+        "sources": [
+          {
+            "label": "digitaltoday.co.kr",
+            "url": "https://www.digitaltoday.co.kr/jp/view/82280/spacex-rolls-out-smaller-lighter-starlink-v5-compared-with-previous-model"
+          },
+          {
+            "label": "tomshardware.com",
+            "url": "https://www.tomshardware.com/networking/routers/elon-musks-starlink-releases-smaller-and-lighter-v5-residential-kit-offers-speeds-of-up-to-375-mbps-and-almost-half-the-power-consumption-of-v4"
+          }
+        ],
+        "summary": "V4より小型・軽量で、最大375Mbps、消費電力はV4のほぼ半分とされています。 固定設置向けで移動中の利用には非対応となり、販売地域の拡大時期は公表されていません。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "V4より小型・軽量で、最大375Mbps、消費電力はV4のほぼ半分とされています。",
+            "固定設置向けで移動中の利用には非対応となり、販売地域の拡大時期は公表されていません。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "V4より小型・軽量で、最大375Mbps、消費電力はV4のほぼ半分とされています。",
+              "source_urls": [
+                "https://www.digitaltoday.co.kr/jp/view/82280/spacex-rolls-out-smaller-lighter-starlink-v5-compared-with-previous-model",
+                "https://www.tomshardware.com/networking/routers/elon-musks-starlink-releases-smaller-and-lighter-v5-residential-kit-offers-speeds-of-up-to-375-mbps-and-almost-half-the-power-consumption-of-v4"
+              ]
+            },
+            {
+              "fact": "固定設置向けで移動中の利用には非対応となり、販売地域の拡大時期は公表されていません。",
+              "source_urls": [
+                "https://www.digitaltoday.co.kr/jp/view/82280/spacex-rolls-out-smaller-lighter-starlink-v5-compared-with-previous-model"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-15",
+            "2026-07-16"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "business_contracts",
+      "title": "SpaceX株がIPO価格へ接近、社債スプレッドも231bpへ拡大",
+      "summary": "株価は7月10日に4.51％、13日に4.24％下落して139.14ドルとなり、6月12日の上場初値150ドルを約7％下回りました。 2056年償還債の信用スプレッドは発行時の175bpから231bpへ広がり、債券価格下落の3分の2超を説明するとされています。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-07-15",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "top",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-956769750951-2026-07-16.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/a5dbdf7c-990f-450b-8435-8f4b7e13e013"
+          }
+        ],
+        "summary": "株価は7月10日に4.51％、13日に4.24％下落して139.14ドルとなり、6月12日の上場初値150ドルを約7％下回りました。 2056年償還債の信用スプレッドは発行時の175bpから231bpへ広がり、債券価格下落の3分の2超を説明するとされています。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "株価は7月10日に4.51％、13日に4.24％下落して139.14ドルとなり、6月12日の上場初値150ドルを約7％下回りました。",
+            "2056年償還債の信用スプレッドは発行時の175bpから231bpへ広がり、債券価格下落の3分の2超を説明するとされています。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "株価は7月10日に4.51％、13日に4.24％下落して139.14ドルとなり、6月12日の上場初値150ドルを約7％下回りました。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/a5dbdf7c-990f-450b-8435-8f4b7e13e013"
+              ]
+            },
+            {
+              "fact": "2056年償還債の信用スプレッドは発行時の175bpから231bpへ広がり、債券価格下落の3分の2超を説明するとされています。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/a5dbdf7c-990f-450b-8435-8f4b7e13e013"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-15"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "business_contracts",
+      "title": "SpaceX、飛行実績のあるFalconブースターで通算600回目の打ち上げ",
+      "summary": "Starlink 10-45ミッションには第1段B1080が使われ、同ブースター自身は28回目の飛行でした。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-07-15",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-183b55d8549c-2026-07-16.html",
+        "sources": [
+          {
+            "label": "space.com",
+            "url": "https://www.space.com/space-exploration/launches-spacecraft/spacex-starlink-15-14-b1093-vsfb-ocisly-10-45-b1080-ccsfs-asog"
+          },
+          {
+            "label": "spaceflightnow.com",
+            "url": "https://spaceflightnow.com/2026/07/13/live-coverage-spacex-to-launch-a-flight-proven-falcon-booster-for-600th-time/"
+          }
+        ],
+        "summary": "Starlink 10-45ミッションには第1段B1080が使われ、同ブースター自身は28回目の飛行でした。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Starlink 10-45ミッションには第1段B1080が使われ、同ブースター自身は28回目の飛行でした。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Starlink 10-45ミッションには第1段B1080が使われ、同ブースター自身は28回目の飛行でした。",
+              "source_urls": [
+                "https://www.space.com/space-exploration/launches-spacecraft/spacex-starlink-15-14-b1093-vsfb-ocisly-10-45-b1080-ccsfs-asog",
+                "https://spaceflightnow.com/2026/07/13/live-coverage-spacex-to-launch-a-flight-proven-falcon-booster-for-600th-time/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-14",
+            "2026-07-15"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "investment_policy_markets",
+      "title": "日本PCサービス、2026年8月期第3四半期は増収・大幅増益",
+      "summary": "売上高は前年同期比25.1％増の62億3900万円、経常利益は933.8％増の1億2400万円でした。 通期予想は売上高80億円、経常利益7900万円など従来計画を据え置きました。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-07-16",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-f44dae27b37d-2026-07-16.html",
+        "sources": [
+          {
+            "label": "s.kabutan.jp",
+            "url": "https://s.kabutan.jp/news/n202607161010/"
+          }
+        ],
+        "summary": "売上高は前年同期比25.1％増の62億3900万円、経常利益は933.8％増の1億2400万円でした。 通期予想は売上高80億円、経常利益7900万円など従来計画を据え置きました。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "売上高は前年同期比25.1％増の62億3900万円、経常利益は933.8％増の1億2400万円でした。",
+            "通期予想は売上高80億円、経常利益7900万円など従来計画を据え置きました。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "売上高は前年同期比25.1％増の62億3900万円、経常利益は933.8％増の1億2400万円でした。",
+              "source_urls": [
+                "https://s.kabutan.jp/news/n202607161010/"
+              ]
+            },
+            {
+              "fact": "通期予想は売上高80億円、経常利益7900万円など従来計画を据え置きました。",
+              "source_urls": [
+                "https://s.kabutan.jp/news/n202607161010/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-16"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "prices_wages_boj",
+      "title": "太平洋クロマグロの漁獲枠拡大、国際会議で合意できず",
+      "summary": "日本は30キロ以上の大型魚を約25％増やす案を求めましたが、メキシコが最終日に反対し合意案がまとまりませんでした。 8月末のIATTC年次会合までに合意できなければ、2027年度の増枠は困難になる見通しです。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-07-14",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-0518c8b5a372-2026-07-16.html",
+        "sources": [
+          {
+            "label": "news.yahoo.co.jp",
+            "url": "https://news.yahoo.co.jp/articles/e475b7b2a9f4c1d9206ff91dcfde70c144b37d83"
+          }
+        ],
+        "summary": "日本は30キロ以上の大型魚を約25％増やす案を求めましたが、メキシコが最終日に反対し合意案がまとまりませんでした。 8月末のIATTC年次会合までに合意できなければ、2027年度の増枠は困難になる見通しです。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "日本は30キロ以上の大型魚を約25％増やす案を求めましたが、メキシコが最終日に反対し合意案がまとまりませんでした。",
+            "8月末のIATTC年次会合までに合意できなければ、2027年度の増枠は困難になる見通しです。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "日本は30キロ以上の大型魚を約25％増やす案を求めましたが、メキシコが最終日に反対し合意案がまとまりませんでした。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/e475b7b2a9f4c1d9206ff91dcfde70c144b37d83"
+              ]
+            },
+            {
+              "fact": "8月末のIATTC年次会合までに合意できなければ、2027年度の増枠は困難になる見通しです。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/e475b7b2a9f4c1d9206ff91dcfde70c144b37d83"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-14"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "employment_consumption",
+      "title": "政府の骨太方針最終案、日銀の金融政策の自主性尊重を明記",
+      "summary": "2027年度の社会保障負担率を2025年度より上昇させない目標も盛り込み、7月21日の閣議決定を予定しています。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-07-14",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "top",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-8ba537069037-2026-07-16.html",
+        "sources": [
+          {
+            "label": "news.yahoo.co.jp",
+            "url": "https://news.yahoo.co.jp/articles/5166940dfc913ca3b4e28acc23a4c7d65e4dc338"
+          }
+        ],
+        "summary": "2027年度の社会保障負担率を2025年度より上昇させない目標も盛り込み、7月21日の閣議決定を予定しています。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "2027年度の社会保障負担率を2025年度より上昇させない目標も盛り込み、7月21日の閣議決定を予定しています。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "2027年度の社会保障負担率を2025年度より上昇させない目標も盛り込み、7月21日の閣議決定を予定しています。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/5166940dfc913ca3b4e28acc23a4c7d65e4dc338"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-14"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "investment_policy_markets",
+      "title": "日経平均株価、前日比1915.97円安の66835.54円",
+      "summary": "下げ幅は一時2200円を超え、前日の米半導体株安と韓国KOSPIの7％超急落が売りを強めました。 TSMCが市場予想を上回る決算を発表した後も半導体株への売りが続き、東証プライムの売買代金は9兆5639.84億円でした。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-07-16",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "top",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-6c90f72f2009-2026-07-16.html",
+        "sources": [
+          {
+            "label": "gentosha-go.com",
+            "url": "https://gentosha-go.com/articles/-/80182"
+          }
+        ],
+        "summary": "下げ幅は一時2200円を超え、前日の米半導体株安と韓国KOSPIの7％超急落が売りを強めました。 TSMCが市場予想を上回る決算を発表した後も半導体株への売りが続き、東証プライムの売買代金は9兆5639.84億円でした。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "下げ幅は一時2200円を超え、前日の米半導体株安と韓国KOSPIの7％超急落が売りを強めました。",
+            "TSMCが市場予想を上回る決算を発表した後も半導体株への売りが続き、東証プライムの売買代金は9兆5639.84億円でした。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "下げ幅は一時2200円を超え、前日の米半導体株安と韓国KOSPIの7％超急落が売りを強めました。",
+              "source_urls": [
+                "https://gentosha-go.com/articles/-/80182"
+              ]
+            },
+            {
+              "fact": "TSMCが市場予想を上回る決算を発表した後も半導体株への売りが続き、東証プライムの売買代金は9兆5639.84億円でした。",
+              "source_urls": [
+                "https://gentosha-go.com/articles/-/80182"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-16"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "employment_consumption",
+      "title": "2026年上半期の訪日客、2108万4800人に到達",
+      "summary": "日本政府観光局が7月15日に公表し、官民は訪日富裕層の地方消費拡大に向けた誘客を進めています。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-07-15",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-b7bf670ae032-2026-07-16.html",
+        "sources": [
+          {
+            "label": "nikkei.com",
+            "url": "https://www.nikkei.com/article/DGXZQOUA10ALE0Q6A710C2000000/"
+          }
+        ],
+        "summary": "日本政府観光局が7月15日に公表し、官民は訪日富裕層の地方消費拡大に向けた誘客を進めています。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "日本政府観光局が7月15日に公表し、官民は訪日富裕層の地方消費拡大に向けた誘客を進めています。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "日本政府観光局が7月15日に公表し、官民は訪日富裕層の地方消費拡大に向けた誘客を進めています。",
+              "source_urls": [
+                "https://www.nikkei.com/article/DGXZQOUA10ALE0Q6A710C2000000/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-15"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_macro_policy",
+      "title": "中国国有三大航空会社、累計赤字は最大2400億円規模",
+      "summary": "エアチャイナ、中国南方航空、中国東方航空の赤字予想は合計73億7300万～89億7300万元です。 第1四半期の合算利益48億元を基準にすると、第2四半期の累計赤字は100億元を超えます。",
+      "section_id": "asia",
+      "category": "アジア経済",
+      "source_published_date": "2026-07-16",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "top",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-59b5ac4fab92-2026-07-16.html",
+        "sources": [
+          {
+            "label": "recordchina.co.jp",
+            "url": "https://www.recordchina.co.jp/b985458-s12-c20-d0189.html"
+          }
+        ],
+        "summary": "エアチャイナ、中国南方航空、中国東方航空の赤字予想は合計73億7300万～89億7300万元です。 第1四半期の合算利益48億元を基準にすると、第2四半期の累計赤字は100億元を超えます。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "エアチャイナ、中国南方航空、中国東方航空の赤字予想は合計73億7300万～89億7300万元です。",
+            "第1四半期の合算利益48億元を基準にすると、第2四半期の累計赤字は100億元を超えます。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "エアチャイナ、中国南方航空、中国東方航空の赤字予想は合計73億7300万～89億7300万元です。",
+              "source_urls": [
+                "https://www.recordchina.co.jp/b985458-s12-c20-d0189.html"
+              ]
+            },
+            {
+              "fact": "第1四半期の合算利益48億元を基準にすると、第2四半期の累計赤字は100億元を超えます。",
+              "source_urls": [
+                "https://www.recordchina.co.jp/b985458-s12-c20-d0189.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-16"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_macro_policy",
+      "title": "中国の6月建材生産、セメントと板ガラスがともに減少",
+      "summary": "セメントの生産は前年同月比5.6％減、板ガラスは5.3％減でした。",
+      "section_id": "asia",
+      "category": "アジア経済",
+      "source_published_date": "2026-07-15",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-babd3804464a-2026-07-16.html",
+        "sources": [
+          {
+            "label": "ashu-chinastatistics.com",
+            "url": "https://ashu-chinastatistics.com/news/308047-841401817330"
+          }
+        ],
+        "summary": "セメントの生産は前年同月比5.6％減、板ガラスは5.3％減でした。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "セメントの生産は前年同月比5.6％減、板ガラスは5.3％減でした。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "セメントの生産は前年同月比5.6％減、板ガラスは5.3％減でした。",
+              "source_urls": [
+                "https://ashu-chinastatistics.com/news/308047-841401817330"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-15"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_macro_policy",
+      "title": "中国の上半期GDPは4.7％増、第2四半期は4.3％へ減速",
+      "summary": "上半期GDPは約69兆5700億元で、政府の年間目標4.5～5％の範囲に入りました。 6月の都市部失業率は5.0％へ低下し、上半期の1人当たり可処分所得は5.2％増加しました。",
+      "section_id": "asia",
+      "category": "アジア経済",
+      "source_published_date": "2026-07-15",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "top",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-140ef63b0997-2026-07-16.html",
+        "sources": [
+          {
+            "label": "vietnam.vn",
+            "url": "https://www.vietnam.vn/ja/kinh-te-trung-quoc-tiem-can-muc-tieu-tang-truong-nua-dau-nam-2026"
+          }
+        ],
+        "summary": "上半期GDPは約69兆5700億元で、政府の年間目標4.5～5％の範囲に入りました。 6月の都市部失業率は5.0％へ低下し、上半期の1人当たり可処分所得は5.2％増加しました。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "上半期GDPは約69兆5700億元で、政府の年間目標4.5～5％の範囲に入りました。",
+            "6月の都市部失業率は5.0％へ低下し、上半期の1人当たり可処分所得は5.2％増加しました。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "上半期GDPは約69兆5700億元で、政府の年間目標4.5～5％の範囲に入りました。",
+              "source_urls": [
+                "https://www.vietnam.vn/ja/kinh-te-trung-quoc-tiem-can-muc-tieu-tang-truong-nua-dau-nam-2026"
+              ]
+            },
+            {
+              "fact": "6月の都市部失業率は5.0％へ低下し、上半期の1人当たり可処分所得は5.2％増加しました。",
+              "source_urls": [
+                "https://www.vietnam.vn/ja/kinh-te-trung-quoc-tiem-can-muc-tieu-tang-truong-nua-dau-nam-2026"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-15"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_macro_policy",
+      "title": "中国、水力・風力・太陽光を統合運営する大規模モデルを発表",
+      "summary": "国家開発投資集団傘下の雅礱江公司が、四川省の雅礱江流域で7月16日に正式発表しました。",
+      "section_id": "asia",
+      "category": "アジア経済",
+      "source_published_date": "2026-07-16",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-3a0ace39ee1c-2026-07-16.html",
+        "sources": [
+          {
+            "label": "recordchina.co.jp",
+            "url": "https://www.recordchina.co.jp/b985439-s12-c20-d0189.html"
+          }
+        ],
+        "summary": "国家開発投資集団傘下の雅礱江公司が、四川省の雅礱江流域で7月16日に正式発表しました。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "国家開発投資集団傘下の雅礱江公司が、四川省の雅礱江流域で7月16日に正式発表しました。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "国家開発投資集団傘下の雅礱江公司が、四川省の雅礱江流域で7月16日に正式発表しました。",
+              "source_urls": [
+                "https://www.recordchina.co.jp/b985439-s12-c20-d0189.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-16"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_macro_policy",
+      "title": "中国の新エネ車販売、6月は23．6％増",
+      "summary": "販売台数は164万3000台、生産台数は前年同月比26％増の159万8000台でした。",
+      "section_id": "asia",
+      "category": "アジア経済",
+      "source_published_date": "2026-07-16",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-fe12d54fed1f-2026-07-16.html",
+        "sources": [
+          {
+            "label": "recordchina.co.jp",
+            "url": "https://www.recordchina.co.jp/b985386-s50-c20-d0189.html"
+          }
+        ],
+        "summary": "販売台数は164万3000台、生産台数は前年同月比26％増の159万8000台でした。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "販売台数は164万3000台、生産台数は前年同月比26％増の159万8000台でした。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "販売台数は164万3000台、生産台数は前年同月比26％増の159万8000台でした。",
+              "source_urls": [
+                "https://www.recordchina.co.jp/b985386-s50-c20-d0189.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-16"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "us_prices_jobs_fed",
+      "title": "ダウ・S&P500・ナスダックが上昇、Appleは最高値",
+      "summary": "市場は予想を下回るインフレ指標と、AI需要に対するASMLの強気見通しを好感しました。",
+      "section_id": "north_america",
+      "category": "北米経済",
+      "source_published_date": "2026-07-16",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-bf502dfdd9ca-2026-07-16.html",
+        "sources": [
+          {
+            "label": "finance.yahoo.com",
+            "url": "https://finance.yahoo.com/markets/live/stock-market-today-wednesday-july-15-dow-sp-nasdaq-waver-asml-091813320.html"
+          }
+        ],
+        "summary": "市場は予想を下回るインフレ指標と、AI需要に対するASMLの強気見通しを好感しました。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "市場は予想を下回るインフレ指標と、AI需要に対するASMLの強気見通しを好感しました。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "市場は予想を下回るインフレ指標と、AI需要に対するASMLの強気見通しを好感しました。",
+              "source_urls": [
+                "https://finance.yahoo.com/markets/live/stock-market-today-wednesday-july-15-dow-sp-nasdaq-waver-asml-091813320.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-16"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "us_prices_jobs_fed",
+      "title": "米生産者物価、14カ月ぶりの大幅低下",
+      "summary": "エネルギー価格の急落が押し下げましたが、原油反発と新たなコスト圧力からFRBはインフレ見通しへの警戒を維持しています。",
+      "section_id": "north_america",
+      "category": "北米経済",
+      "source_published_date": "2026-07-16",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-8f4e587c0234-2026-07-16.html",
+        "sources": [
+          {
+            "label": "vietnam.vn",
+            "url": "https://www.vietnam.vn/ja/gia-san-xuat-my-giam-manh-nhat-14-thang-nhung-fed-van-chua-the-yen-tam"
+          }
+        ],
+        "summary": "エネルギー価格の急落が押し下げましたが、原油反発と新たなコスト圧力からFRBはインフレ見通しへの警戒を維持しています。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "エネルギー価格の急落が押し下げましたが、原油反発と新たなコスト圧力からFRBはインフレ見通しへの警戒を維持しています。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "エネルギー価格の急落が押し下げましたが、原油反発と新たなコスト圧力からFRBはインフレ見通しへの警戒を維持しています。",
+              "source_urls": [
+                "https://www.vietnam.vn/ja/gia-san-xuat-my-giam-manh-nhat-14-thang-nhung-fed-van-chua-the-yen-tam"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-16"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "us_prices_jobs_fed",
+      "title": "Bank of Canada、政策金利を据え置き",
+      "summary": "インフレ率が3.2％に達するなかでの決定で、カナダの投資家や退職者への影響が注目されています。",
+      "section_id": "north_america",
+      "category": "北米経済",
+      "source_published_date": "2026-07-16",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-cd9aac13b312-2026-07-16.html",
+        "sources": [
+          {
+            "label": "Yahoo! Finance Canada",
+            "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOV3hzUWxKWHpuSjFmLVVYUUlvS2FybGdmaXJ6R2I4b3NZNE94YzVpZ2Nyem1OQmluRG96WUNpT0NOZHdnTjJxY0M0ODBRV3pnbWNXNGpjTTBramZ3NVVTSXZzWVJ5Tk5QcnphQVQ5dDJoNndScEJlbEtGNldCYXNNUWx3?oc=5"
+          }
+        ],
+        "summary": "インフレ率が3.2％に達するなかでの決定で、カナダの投資家や退職者への影響が注目されています。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "インフレ率が3.2％に達するなかでの決定で、カナダの投資家や退職者への影響が注目されています。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "インフレ率が3.2％に達するなかでの決定で、カナダの投資家や退職者への影響が注目されています。",
+              "source_urls": [
+                "https://news.google.com/rss/articles/CBMiggFBVV95cUxOV3hzUWxKWHpuSjFmLVVYUUlvS2FybGdmaXJ6R2I4b3NZNE94YzVpZ2Nyem1OQmluRG96WUNpT0NOZHdnTjJxY0M0ODBRV3pnbWNXNGpjTTBramZ3NVVTSXZzWVJ5Tk5QcnphQVQ5dDJoNndScEJlbEtGNldCYXNNUWx3?oc=5"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-16"
+          ]
+        }
+      }
+    }
+  ],
+  "coverage_manifest": {
+    "contract_version": "2026-07-11.02",
+    "date": "2026-07-16",
+    "collection_completed_at_jst": "2026-07-16T18:56:43+09:00",
+    "collection_mode": "web_evidence_plus_review",
+    "evidence_sha256": "8082e4c608bcbaf78580c2d8e0a3e7235400b65813e7754792cffed305c8bc8a",
+    "editor_contract_sha256": "951f6ef7660d476f74083a07aacff5f418ffa4b206d14760a17c625042ebbc85"
+  }
+}

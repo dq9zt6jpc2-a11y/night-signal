@@ -10,10 +10,12 @@ import shutil
 import subprocess
 import tempfile
 import time
-from datetime import datetime, time as clock
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
+
+import publication_timing
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -122,8 +124,12 @@ def validate_download(directory: Path, issue_date: str) -> tuple[Path, Path, Pat
     if evidence.get("issue_date") != issue_date or packet.get("issue_date") != issue_date:
         raise ValueError("artifact issue date does not match")
     checked = datetime.fromisoformat(str(evidence.get("checked_at_jst")))
-    if checked.tzinfo is None or checked.astimezone(JST).time() < clock(16, 45):
-        raise ValueError("artifact is not final Evidence from 16:45 JST or later")
+    final_not_before = publication_timing.load_policy().final_collection_not_before
+    if checked.tzinfo is None or checked.astimezone(JST).time() < final_not_before:
+        raise ValueError(
+            "artifact is not final Evidence from "
+            f"{final_not_before.strftime('%H:%M')} JST or later"
+        )
     actual_hash = hashlib.sha256(evidence_path.read_bytes()).hexdigest()
     if packet.get("evidence_sha256") != actual_hash:
         raise ValueError("packet and Evidence hashes differ")

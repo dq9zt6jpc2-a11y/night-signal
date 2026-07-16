@@ -81,6 +81,8 @@ def main() -> int:
         "Guard against a queued duplicate collector",
         "Evaluate final collection window",
         "Detect an already verified publication",
+        "Detect a reusable final Evidence artifact",
+        "Reuse completed Evidence without recollection",
         "Collect complete web Evidence and prepare the Plus review packet",
         "Save the complete Evidence and compact review packet",
         "Report zero-cost collection boundary",
@@ -91,6 +93,7 @@ def main() -> int:
         "scripts/night_signal_plus_editor.py",
         "--prepare",
         "editor_packet.json",
+        "artifact_ready",
         "retention-days: 3",
         "if-no-files-found: error",
         "Repository model API requests: 0",
@@ -123,7 +126,7 @@ def main() -> int:
         "scripts/night_signal_review_artifact.py",
         "change only the named request/event",
         "do not recollect or re-review",
-        "second 18:35 run",
+        "17:35, 18:05, and 18:35 runs",
         "official OpenAI",
     ):
         if required.casefold() not in runbook.casefold():

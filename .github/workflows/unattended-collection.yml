@@ -89,15 +89,34 @@ jobs:
             echo "published=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Detect a reusable final Evidence artifact
+        id: evidence_artifact
+        if: ${{ steps.timing.outputs.action != 'wait' && steps.current_publication.outputs.published != 'true' }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python3 scripts/night_signal_run_guard.py \
+            --repository "$GITHUB_REPOSITORY" \
+            --workflow unattended-collection.yml \
+            --run-id "$GITHUB_RUN_ID" \
+            --artifact-name "night-signal-state-$ISSUE_DATE" \
+            --github-output "$GITHUB_OUTPUT"
+
       - name: Enforce publication deadline
-        if: ${{ steps.timing.outputs.action == 'missed' && steps.current_publication.outputs.published != 'true' }}
+        if: ${{ steps.timing.outputs.action == 'missed' && steps.current_publication.outputs.published != 'true' && steps.evidence_artifact.outputs.artifact_ready != 'true' }}
         run: |
           echo "The 19:00 JST publication deadline passed before a usable Evidence artifact was available." >&2
           exit 1
 
+      - name: Reuse completed Evidence without recollection
+        if: ${{ steps.current_publication.outputs.published != 'true' && steps.evidence_artifact.outputs.artifact_ready == 'true' }}
+        run: |
+          echo "Reusable final Evidence artifact ${{ steps.evidence_artifact.outputs.artifact_id }} is already available."
+          echo "Skipping duplicate web collection."
+
       - name: Collect complete web Evidence and prepare the Plus review packet
         id: packet
-        if: ${{ steps.timing.outputs.action == 'run' && steps.current_publication.outputs.published != 'true' }}
+        if: ${{ steps.timing.outputs.action == 'run' && steps.current_publication.outputs.published != 'true' && steps.evidence_artifact.outputs.artifact_ready != 'true' }}
         run: |
           python3 scripts/night_signal_collect.py "$ISSUE_DATE"
           python3 scripts/night_signal_plus_editor.py "$ISSUE_DATE" --prepare --output "state/$ISSUE_DATE/editor_packet.json"
