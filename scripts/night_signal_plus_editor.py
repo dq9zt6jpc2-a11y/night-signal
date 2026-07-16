@@ -171,6 +171,8 @@ def prepare_packet(
             "no_publication_quota": True,
             "review_every_event": True,
             "previous_updates_are_novelty_only": True,
+            "source_publication_date_is_not_an_event_delta": True,
+            "novelty_context_must_support_why_today": True,
             "natural_japanese_required": True,
             "every_summary_point_requires_evidence_ids": True,
             "earnings_results_and_material_market_moves_are_not_routine": True,

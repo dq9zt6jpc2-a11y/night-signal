@@ -441,6 +441,113 @@ def configured_category_contracts() -> dict[str, dict[str, Any]]:
     }
 
 
+SOURCE_AUTHORITY_RANK = {
+    "official": 5,
+    "official_dataset": 5,
+    "major_media": 4,
+    "specialist_media": 3,
+    "sns_x": 2,
+    "youtube_video": 2,
+    "social": 1,
+    "discovered_media": 0,
+}
+EDITOR_TRUSTED_SOURCE_CLASSES = {
+    "official",
+    "official_dataset",
+    "major_media",
+    "specialist_media",
+}
+
+
+def normalized_source_host(value: Any) -> str:
+    parsed = urllib.parse.urlparse(str(value or ""))
+    host = (parsed.hostname or "").casefold().removeprefix("www.")
+    return host.rstrip(".")
+
+
+@functools.lru_cache(maxsize=1)
+def configured_source_profiles() -> dict[str, tuple[str, str]]:
+    """Index configured publishers so RSS discoveries inherit source authority."""
+    categories = load_object(SOURCE_CONFIG).get("categories")
+    if not isinstance(categories, dict):
+        fail("source config categories must be an object")
+    profiles: dict[str, tuple[str, str]] = {}
+    for sources in categories.values():
+        if not isinstance(sources, list):
+            continue
+        for source in sources:
+            if not isinstance(source, dict):
+                continue
+            host = normalized_source_host(source.get("url"))
+            source_class = str(source.get("source_class", ""))
+            source_role = str(source.get("source_role", ""))
+            if not host or not source_class:
+                continue
+            existing = profiles.get(host)
+            if (
+                existing is None
+                or SOURCE_AUTHORITY_RANK.get(source_class, 0)
+                > SOURCE_AUTHORITY_RANK.get(existing[0], 0)
+            ):
+                profiles[host] = (source_class, source_role)
+    return profiles
+
+
+@functools.lru_cache(maxsize=2048)
+def configured_source_profile_for_hosts(
+    candidates: tuple[str, ...],
+) -> tuple[str, str] | None:
+    for candidate in candidates:
+        matches = [
+            profile
+            for host, profile in configured_source_profiles().items()
+            if candidate == host
+            or candidate.endswith(f".{host}")
+            or host.endswith(f".{candidate}")
+        ]
+        if matches:
+            return max(
+                matches,
+                key=lambda profile: SOURCE_AUTHORITY_RANK.get(profile[0], 0),
+            )
+    return None
+
+
+def configured_source_profile(record: dict[str, Any]) -> tuple[str, str] | None:
+    candidates = tuple(
+        sorted(
+            {
+                host
+                for host in (
+                    normalized_source_host(record.get("url")),
+                    normalized_source_host(record.get("publisher_url")),
+                )
+                if host
+            }
+        )
+    )
+    return configured_source_profile_for_hosts(candidates)
+
+
+def effective_source_class(record: dict[str, Any]) -> str:
+    source_class = str(record.get("source_class", ""))
+    if source_class and source_class != "discovered_media":
+        return source_class
+    configured = configured_source_profile(record)
+    return configured[0] if configured is not None else source_class
+
+
+def effective_source_role(record: dict[str, Any]) -> str:
+    configured = configured_source_profile(record)
+    if configured is not None:
+        return configured[1]
+    return str(record.get("source_role", ""))
+
+
+def record_has_trusted_editor_source(record: dict[str, Any]) -> bool:
+    return effective_source_class(record) in EDITOR_TRUSTED_SOURCE_CLASSES
+
+
 @functools.lru_cache(maxsize=1)
 def configured_category_identity_terms() -> dict[str, tuple[str, ...]]:
     configured: dict[str, tuple[str, ...]] = {}
@@ -741,6 +848,50 @@ def same_material_event(left: Any, right: Any) -> bool:
         for term in re.findall(r"[A-Za-z][A-Za-z0-9.-]{2,}", normalized_right)
     }
     shared_ascii_terms = left_ascii_terms & right_ascii_terms
+    shared_version_terms = {
+        term
+        for term in shared_ascii_terms
+        if re.search(r"\d", term) and ("." in term or "-" in term)
+    }
+    ascii_event_stopwords = {
+        "announce",
+        "announced",
+        "announcement",
+        "launch",
+        "launched",
+        "release",
+        "released",
+        "releases",
+        "update",
+        "updated",
+        "model",
+        "models",
+        "series",
+        "official",
+        "formally",
+        "new",
+        "the",
+        "and",
+        "for",
+        "from",
+        "with",
+    }
+    left_unique_subjects = {
+        term
+        for term in left_ascii_terms - shared_ascii_terms
+        if term not in ascii_event_stopwords and not re.search(r"\d", term)
+    }
+    right_unique_subjects = {
+        term
+        for term in right_ascii_terms - shared_ascii_terms
+        if term not in ascii_event_stopwords and not re.search(r"\d", term)
+    }
+    if (
+        shared_version_terms
+        and min(len(left_unique_subjects), len(right_unique_subjects)) >= 1
+        and max(len(left_unique_subjects), len(right_unique_subjects)) >= 3
+    ):
+        return False
     return (
         state_contract.materially_same_fact(normalized_left, normalized_right)
         or (
@@ -767,7 +918,7 @@ def cluster_priority(record: dict[str, Any], category: dict[str, Any]) -> tuple[
     excerpt = str(record.get("excerpt", ""))
     text = f"{title} {excerpt}"
     score = 0
-    if record.get("source_class") != "discovered_media":
+    if effective_source_class(record) != "discovered_media":
         score += 4
     if any(
         str(term).lower() in text.lower()
@@ -1348,6 +1499,7 @@ def publication_evidence_record(
         not record.get("observed")
         or not valid_date(record.get("published_date"), issue_date)
         or not record_document_is_current(record, issue_date)
+        or record_is_delayed_untrusted_recap(record, issue_date)
     ):
         return False
     title = record_public_title(record)
@@ -2456,6 +2608,63 @@ def explicit_title_event_dates(value: str, reference: date) -> set[date]:
     return found
 
 
+def record_explicit_event_dates(
+    record: dict[str, Any],
+    issue_day: date,
+) -> set[date]:
+    """Extract dates that the article itself ties to the reported event."""
+    lead = reader_facing_text(
+        str(record.get("excerpt") or record.get("evidence") or ""),
+        620,
+    )
+    return explicit_title_event_dates(
+        f"{record_public_title(record)} {lead}",
+        issue_day,
+    )
+
+
+def record_is_delayed_untrusted_recap(
+    record: dict[str, Any],
+    issue_date: str,
+) -> bool:
+    """Reject a late secondary retelling while preserving primary and material data."""
+    if (
+        str(record.get("source_class", "")) != "discovered_media"
+        or record_has_trusted_editor_source(record)
+    ):
+        return False
+    try:
+        issue_day = date.fromisoformat(issue_date)
+    except ValueError:
+        return True
+    title = record_public_title(record)
+    excerpt = reader_facing_text(
+        str(record.get("excerpt") or record.get("evidence") or ""),
+        1200,
+    )
+    if (
+        not PUBLICATION_EVENT_RE.search(title)
+        or ACTUAL_EARNINGS_EVENT_RE.search(title)
+        or MATERIAL_EARNINGS_EXCEPTION_RE.search(title)
+        or ROUTINE_MARKET_EXCEPTION_RE.search(title)
+        or (
+            state_contract.ANALYSIS_HEADLINE_RE.search(title)
+            and state_contract.ANALYSIS_REASONING_RE.search(excerpt)
+        )
+    ):
+        return False
+    event_dates = record_explicit_event_dates(record, issue_day)
+    past_dates = {
+        event_day
+        for event_day in event_dates
+        if event_day <= issue_day
+    }
+    return bool(
+        past_dates
+        and all((issue_day - event_day).days > 2 for event_day in past_dates)
+    )
+
+
 def record_document_is_current(record: dict[str, Any], issue_date: str) -> bool:
     try:
         issue_day = date.fromisoformat(issue_date)
@@ -3121,9 +3330,11 @@ def category_prompt(
                     "id": event_id,
                     "previous_updates": record.get("_editor_previous_updates", []),
                     "evidence": [],
+                    "_records": [],
                 }
                 events_by_id[event_id] = event
                 events.append(event)
+            event["_records"].append(record)
             event["evidence"].append(
                 {
                     "id": evidence_id,
@@ -3136,6 +3347,7 @@ def category_prompt(
                     ),
                     "date": record.get("published_date"),
                     "source": record.get("label"),
+                    "source_class": effective_source_class(record),
                     "title": title,
                     "evidence_depth": evidence_depth,
                     "body": editor_source_text(record, limit)
@@ -3143,6 +3355,30 @@ def category_prompt(
                     else "",
                 }
             )
+        issue_day = date.fromisoformat(issue_date)
+        for event in events:
+            event_records = event.pop("_records")
+            previous_dates = {
+                str(update.get("date"))
+                for update in event.get("previous_updates", [])
+                if re.fullmatch(
+                    r"20\d{2}-\d{2}-\d{2}",
+                    str(update.get("date", "")),
+                )
+            }
+            explicit_dates = sorted(
+                {
+                    event_day.isoformat()
+                    for record in event_records
+                    for event_day in record_explicit_event_dates(record, issue_day)
+                    if event_day <= issue_day
+                }
+            )
+            known_dates = sorted(previous_dates | set(explicit_dates))
+            event["novelty_context"] = {
+                "known_since": known_dates[0] if known_dates else None,
+                "explicit_event_dates": explicit_dates,
+            }
         return {
             "category": category["label"],
             "allowed_watch_topic_ids": [
@@ -4675,11 +4911,17 @@ def self_test() -> None:
         "watch_topic_ids",
         "date",
         "source",
+        "source_class",
         "title",
         "evidence_depth",
         "body",
     }:
         fail("editor prompt retained redundant evidence metadata")
+    if set(prompt["events"][0]["novelty_context"]) != {
+        "known_since",
+        "explicit_event_dates",
+    }:
+        fail("editor prompt omitted compact event novelty context")
     large_prompt_records = [
         {
             **long_record,
@@ -4818,6 +5060,34 @@ def self_test() -> None:
     )
     if "Yahoo" in cleaned_yahoo_title or "音楽ナタリー" in cleaned_yahoo_title:
         fail("record title cleanup kept publisher credits")
+    discovered_reuters = {
+        "url": "https://www.reuters.com/technology/example",
+        "publisher_url": "https://www.reuters.com",
+        "source_class": "discovered_media",
+        "source_role": "independent_media_or_data",
+    }
+    if effective_source_class(discovered_reuters) != "major_media":
+        fail("configured publisher authority was lost on a discovered article")
+    delayed_recap = {
+        "url": "https://unregistered.example/openai-release",
+        "publisher_url": "https://unregistered.example",
+        "source_class": "discovered_media",
+        "source_role": "independent_media_or_data",
+        "title": "OpenAIが新しい業務機能を発表",
+        "excerpt": "OpenAIは2099年1月5日、新しい業務機能を発表した。",
+    }
+    if not record_is_delayed_untrusted_recap(delayed_recap, "2099-01-10"):
+        fail("late untrusted retelling passed as a current event")
+    if record_is_delayed_untrusted_recap(
+        {**delayed_recap, "url": "https://openai.com/news/example"},
+        "2099-01-10",
+    ):
+        fail("official event evidence was removed as a secondary recap")
+    if record_is_delayed_untrusted_recap(
+        {**delayed_recap, "title": "OpenAIが2099年度通期決算を発表"},
+        "2099-01-10",
+    ):
+        fail("a final earnings event was removed as a routine recap")
     if not same_material_event(
         "ソフトバンクG株がOpenAIのIPO延期報道で急落",
         "OpenAIがIPOを延期、ソフトバンク株は反落",
@@ -4838,6 +5108,11 @@ def self_test() -> None:
         "ChatGPT Workとは？機能・料金・使い方、Codexとの違いを徹底解説",
     ):
         fail("shared explainer boilerplate merged different subjects")
+    if same_material_event(
+        "OpenAIがGPT-5.6搭載のChatGPT WorkとCodex統合アプリを発表",
+        "GPT-5.6正式発表、OpenAIとAnthropicのモデル競争が激化",
+    ):
+        fail("shared model version merged distinct product announcements")
     if not same_material_event(
         "Starship's Thirteenth Flight Test",
         "SpaceX targets July 16 for Starship Flight 13",

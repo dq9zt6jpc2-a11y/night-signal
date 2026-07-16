@@ -295,7 +295,14 @@ def novelty_numbers(text: str) -> set[str]:
         " ",
         str(text),
     )
-    return set(re.findall(r"\d+(?:\.\d+)?", without_dates))
+    without_variant_counts = re.sub(
+        r"(?<![\d.])\d+(?:\.\d+)?\s*"
+        r"(?=(?:モデル|種類|階層)|(?:tiers?|models?|variants?)\b)",
+        " ",
+        without_dates,
+        flags=re.I,
+    )
+    return set(re.findall(r"\d+(?:\.\d+)?", without_variant_counts))
 
 
 def summary_output_budget(record_count: int) -> int:
@@ -375,7 +382,8 @@ def event_group_has_new_information(
             matches = [
                 update
                 for update in previous_updates
-                if core.same_material_event(
+                if state.text_overlap(title, str(update.get("title", ""))) >= 2
+                and core.same_material_event(
                     record_text,
                     f"{update.get('title', '')}。 {update.get('summary', '')}",
                 )
@@ -398,6 +406,22 @@ def event_group_has_new_information(
             value.casefold()
             for value in NOVELTY_CHANGE_RE.findall(" ".join(prior_facts))
         }
+        explicit_dates = core.record_explicit_event_dates(record, issue_day)
+        recent_event_date = any(
+            event_day <= issue_day and (issue_day - event_day).days <= 2
+            for event_day in explicit_dates
+        )
+        record_delta_is_eligible = bool(
+            core.record_has_trusted_editor_source(record)
+            or recent_event_date
+            or core.ACTUAL_EARNINGS_EVENT_RE.search(title)
+            or core.MATERIAL_EARNINGS_EXCEPTION_RE.search(title)
+            or core.ROUTINE_MARKET_EXCEPTION_RE.search(title)
+            or (
+                state.ANALYSIS_HEADLINE_RE.search(title)
+                and state.ANALYSIS_REASONING_RE.search(record_text)
+            )
+        )
         if (title_changes - prior_changes) or (title_numbers - prior_numbers):
             return True
         for fact in record_material_sentences(record):
@@ -419,7 +443,8 @@ def event_group_has_new_information(
                 value.casefold() for value in NOVELTY_CHANGE_RE.findall(fact)
             }
             if (
-                (fact_numbers - prior_numbers or fact_changes - prior_changes)
+                record_delta_is_eligible
+                and (fact_numbers - prior_numbers or fact_changes - prior_changes)
                 and (
                     core.same_material_event(title, fact)
                     or core.same_material_event(record_text, fact)
@@ -436,7 +461,7 @@ def event_record_priority(record: dict[str, Any]) -> tuple[int, int, int, int, s
         "primary_or_official": 4,
         "independent_media_or_data": 3,
         "social_or_video_signal": 2,
-    }.get(str(record.get("source_role", "")), 1)
+    }.get(core.effective_source_role(record), 1)
     return (
         role_score,
         int(core.record_evidence_depth(title, record) == "body"),
@@ -457,7 +482,7 @@ def bounded_event_records(
     seen_routes: set[tuple[str, str, str]] = set()
     for record in ranked:
         route = (
-            str(record.get("source_role", "")),
+            core.effective_source_role(record),
             str(record.get("channel", "")),
             str(record.get("label", "")),
         )
@@ -487,7 +512,7 @@ def event_group_priority(
         if str(topic_id)
     }
     titles = " ".join(core.record_public_title(record) for record in group)
-    roles = {str(record.get("source_role", "")) for record in group}
+    roles = {core.effective_source_role(record) for record in group}
     configured_topics = {
         str(topic.get("id"))
         for topic in category.get("watch_topics", [])
@@ -1581,6 +1606,8 @@ def self_test() -> None:
     ]
     if novelty_numbers("2099年1月2日更新、利用上限は2倍") != {"2"}:
         fail("Editor novelty comparison treated a date stamp as new information")
+    if novelty_numbers("GPT-5.6を3モデルで展開") != {"5.6"}:
+        fail("Editor novelty comparison treated a model-count recap as a delta")
     if summary_output_budget(1) != 1_600 or summary_output_budget(6) != 4_000:
         fail("Editor summary output budget is outside its bounded range")
     previous_openai_update = [
@@ -1610,6 +1637,57 @@ def self_test() -> None:
         previous_updates=previous_openai_update,
     ):
         fail("Editor removed a prior event that contained a new material number")
+    previous_model_release = [
+        {
+            "date": "2099-01-01",
+            "title": "OpenAIがGPT-5.6 Solを公開",
+            "summary": "OpenAIはGPT-5.6 Solを公開した。",
+        }
+    ]
+    late_secondary_model_recap = {
+        **review_records[0],
+        "label": "Unregistered AI blog",
+        "url": "https://unregistered.example/gpt-5-6-overview",
+        "publisher_url": "https://unregistered.example",
+        "title": "GPT-5.6正式発表、Sol・Terra・Lunaの3モデルを投入",
+        "excerpt": (
+            "OpenAIはGPT-5.6をSol、Terra、Lunaの3モデルで投入した。"
+            "Terraは従来モデル並みの性能と半分のコストをうたう。"
+        ),
+    }
+    if publication_candidate_groups(
+        review_category,
+        "2099-01-02",
+        [late_secondary_model_recap],
+        previous_updates=previous_model_release,
+    ):
+        fail("Editor treated an untrusted retelling of a known model release as new")
+    dated_model_update = {
+        **late_secondary_model_recap,
+        "url": "https://unregistered.example/gpt-5-6-current-update",
+        "title": "OpenAIがGPT-5.6の利用上限を2倍に更新",
+        "excerpt": "OpenAIは2099年1月2日、GPT-5.6の利用上限を2倍に更新した。",
+    }
+    if not publication_candidate_groups(
+        review_category,
+        "2099-01-02",
+        [dated_model_update],
+        previous_updates=previous_model_release,
+    ):
+        fail("Editor removed a dated current update from an unregistered source")
+    if records_describe_same_information(
+        {
+            **review_records[0],
+            "title": "OpenAIがGPT-5.6搭載のChatGPT WorkとCodex統合アプリを発表",
+            "excerpt": "ChatGPT WorkとCodex統合デスクトップアプリを公開した。",
+        },
+        {
+            **review_records[0],
+            "title": "GPT-5.6正式発表、OpenAIとAnthropicのモデル競争が激化",
+            "excerpt": "Sol、Terra、Lunaの3モデル構成と価格を発表した。",
+        },
+    ):
+        fail("Editor merged distinct products that only shared a model version")
     unresolved_body_relay = {
         **review_records[0],
         "url": "https://news.google.com/rss/articles/unresolved-body?oc=5",

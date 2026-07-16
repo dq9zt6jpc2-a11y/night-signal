@@ -51,7 +51,10 @@ API requests. It must retain every distinct candidate event; there is no item ca
 Read `state/$ISSUE_DATE/editor_packet.json`; do not read the full Evidence bundle
 unless deterministic validation names a specific failed event. Review every
 request and every event exactly once. `previous_updates` is novelty context only,
-never a factual source.
+never a factual source. Each event's `novelty_context` gives explicit event dates
+and the earliest known date; each Evidence entry keeps its source-publication date
+and effective source class separately. A source-publication date by itself never
+answers why the item is new today.
 
 Write `state/$ISSUE_DATE/editor_review.json` with this shape:
 
@@ -92,7 +95,9 @@ Allowed exclusion decisions are `duplicate_previous_event`,
 `wrong_entity_or_category`, and `no_material_update`; excluded events have an
 empty `items` array. Publish every
 material delta without a count target. A new URL, date stamp, or background-only
-rewrite is not a delta. Quarterly, annual, and final earnings results and material
+rewrite is not a delta. For an already published event, publish only a concrete
+new decision, execution, result, number, condition, or source-backed analysis.
+Quarterly, annual, and final earnings results and material
 market moves remain eligible. Exclude only previews or routine low-impact ticks.
 
 Use all facts necessary to understand the event: subject and role, concrete
