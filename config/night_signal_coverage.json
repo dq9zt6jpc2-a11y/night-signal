@@ -50,6 +50,54 @@
           "identity_terms": ["भारत", "वियतनाम", "चीन", "एशियाई अर्थव्यवस्था"],
           "change_terms": ["नीति", "निवेश", "साझेदारी", "अधिग्रहण", "वृद्धि"]
         }
+      ],
+      "Honda": [
+        {
+          "id": "zh-CN",
+          "hl": "zh-CN",
+          "gl": "CN",
+          "ceid": "CN:zh-Hans",
+          "identity_terms": ["本田", "讴歌"],
+          "change_terms": ["销量", "产量", "发布", "召回", "投资", "电动车", "混合动力"]
+        }
+      ],
+      "F1": [
+        {
+          "id": "it-IT",
+          "hl": "it",
+          "gl": "IT",
+          "ceid": "IT:it",
+          "identity_terms": ["Formula 1", "Ferrari", "FIA", "Aston Martin"],
+          "change_terms": ["annuncio", "sviluppo", "aggiornamento", "regolamento", "risultato", "accordo"]
+        }
+      ],
+      "YOASOBI / 幾田りら": [
+        {
+          "id": "ko-KR",
+          "hl": "ko",
+          "gl": "KR",
+          "ceid": "KR:ko",
+          "identity_terms": ["요아소비", "이쿠타 리라"],
+          "change_terms": ["발표", "공연", "발매", "차트", "투어", "협업"]
+        }
+      ],
+      "北米経済": [
+        {
+          "id": "fr-CA",
+          "hl": "fr-CA",
+          "gl": "CA",
+          "ceid": "CA:fr",
+          "identity_terms": ["Canada", "Banque du Canada", "Statistique Canada"],
+          "change_terms": ["taux", "inflation", "emploi", "PIB", "investissement", "politique"]
+        },
+        {
+          "id": "es-MX",
+          "hl": "es-419",
+          "gl": "MX",
+          "ceid": "MX:es-419",
+          "identity_terms": ["México", "Banco de México", "INEGI"],
+          "change_terms": ["inflación", "empleo", "PIB", "inversión", "tasa", "política"]
+        }
       ]
     }
   },
@@ -290,6 +338,7 @@
       "label": "SoftBank",
       "identity_terms": ["SoftBank", "ソフトバンク", "SBG", "Arm"],
       "section_id": "softbank",
+      "required_official_scopes": ["softbank_group", "domestic_operator", "arm"],
       "axes": [
         {
           "id": "corporate_ir_news",
@@ -459,8 +508,9 @@
     },
     {
       "label": "Honda",
-      "identity_terms": ["Honda", "ホンダ", "HRC", "Aston Martin", "Acura"],
+      "identity_terms": ["Honda", "ホンダ", "HRC", "Aston Martin", "Acura", "本田", "讴歌"],
       "section_id": "honda",
+      "required_local_horizon_locales": ["zh-CN"],
       "axes": [
         {
           "id": "ir_financials",
@@ -681,6 +731,7 @@
       "identity_terms": ["F1", "FIA", "Grand Prix", "グランプリ", "Formula 1", "ホンダ", "Honda", "ADUO", "PU", "レッドブル", "メルセデス", "フェラーリ", "マクラーレン", "Aston Martin"],
       "allow_sports_results": true,
       "section_id": "f1",
+      "required_local_horizon_locales": ["it-IT"],
       "axes": [
         {
           "id": "official_schedule_results",
@@ -971,8 +1022,9 @@
     },
     {
       "label": "日本経済",
-      "identity_terms": ["日本", "日銀", "財務省", "CPI", "GDP", "円", "JGB"],
+      "identity_terms": ["日本", "日銀", "財務省", "CPI", "GDP", "円", "JGB", "内閣府", "厚生労働省", "経済産業省"],
       "section_id": "japan_economy",
+      "required_official_scopes": ["monetary_policy", "employment_wages", "national_accounts_consumption", "industry_capex"],
       "required_watch_topic_channels": [
         "web",
         "sns_x",
@@ -1123,8 +1175,9 @@
     },
     {
       "label": "YOASOBI / 幾田りら",
-      "identity_terms": ["YOASOBI", "幾田りら", "ikura"],
+      "identity_terms": ["YOASOBI", "幾田りら", "ikura", "요아소비", "이쿠타 리라"],
       "section_id": "yoasobi_ikuta",
+      "required_local_horizon_locales": ["ko-KR"],
       "risk_classes": [
         "music_social_first"
       ],
@@ -1261,6 +1314,7 @@
       "label": "アジア経済",
       "identity_terms": ["アジア", "中国", "インド", "台湾", "韓国", "ASEAN", "ベトナム"],
       "section_id": "asia",
+      "required_local_horizon_locales": ["zh-CN", "vi-VN", "hi-IN"],
       "required_watch_topic_channels": [
         "web",
         "sns_x",
@@ -1460,8 +1514,10 @@
     },
     {
       "label": "北米経済",
-      "identity_terms": ["米", "米国", "アメリカ", "Canada", "Fed", "FRB", "S&P", "Nasdaq"],
+      "identity_terms": ["米", "米国", "アメリカ", "Canada", "Fed", "FRB", "S&P", "Nasdaq", "Mexico", "México"],
       "section_id": "north_america",
+      "required_official_scopes": ["united_states", "canada", "mexico"],
+      "required_local_horizon_locales": ["fr-CA", "es-MX"],
       "required_watch_topic_channels": [
         "web",
         "sns_x",

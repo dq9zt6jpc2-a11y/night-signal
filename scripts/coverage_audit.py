@@ -207,6 +207,98 @@ def self_test() -> None:
         pass
     else:
         fail("canonical Evidence validation accepted an unchecked watch topic")
+    scoped_registry = {
+        "version": "2099-01-01.1",
+        "categories": {
+            "Test": [
+                {
+                    "url": source_url,
+                    "source_role": "primary_or_official",
+                    "official_scope": "test_scope",
+                }
+            ]
+        },
+    }
+    scoped_coverage = json.loads(json.dumps(coverage))
+    scoped_coverage["categories"][0]["required_official_scopes"] = ["test_scope"]
+    scoped_coverage["categories"][0]["required_local_horizon_locales"] = ["ja-JP"]
+    evidence_store.validate_source_configuration(scoped_coverage, scoped_registry)
+    missing_scope_registry = json.loads(json.dumps(scoped_registry))
+    missing_scope_registry["categories"]["Test"][0].pop("official_scope")
+    try:
+        evidence_store.validate_source_configuration(
+            scoped_coverage,
+            missing_scope_registry,
+        )
+    except evidence_store.EvidenceContractError:
+        pass
+    else:
+        fail("source preflight accepted a missing required official scope")
+    frozen = json.loads(json.dumps(bundle))
+    frozen["collector_contract_version"] = evidence_store.collector_contract_version()
+    frozen["source_registry_contract"] = evidence_store.source_registry_contract(
+        scoped_registry
+    )
+    frozen["categories"]["Test"]["discovery_checks"][1]["locale"] = {
+        "id": "ja-JP"
+    }
+    expanded_registry = json.loads(json.dumps(scoped_registry))
+    expanded_registry["categories"]["Test"].append(
+        {
+            "url": "https://example.com/new-source",
+            "source_role": "primary_or_official",
+            "official_scope": "test_scope",
+        }
+    )
+    evidence_store.validate_bundle(
+        frozen,
+        issue_date,
+        coverage=scoped_coverage,
+        registry=expanded_registry,
+    )
+    missing_snapshot = json.loads(json.dumps(frozen))
+    missing_snapshot.pop("source_registry_contract")
+    try:
+        evidence_store.validate_bundle(
+            missing_snapshot,
+            issue_date,
+            coverage=scoped_coverage,
+            registry=scoped_registry,
+        )
+    except evidence_store.EvidenceContractError:
+        pass
+    else:
+        fail("current Evidence validation accepted a missing source registry contract")
+    tampered_snapshot = json.loads(json.dumps(frozen))
+    tampered_snapshot["source_registry_contract"]["categories"]["Test"][0][
+        "url"
+    ] = "https://example.com/tampered"
+    try:
+        evidence_store.validate_bundle(
+            tampered_snapshot,
+            issue_date,
+            coverage=scoped_coverage,
+            registry=scoped_registry,
+        )
+    except evidence_store.EvidenceContractError:
+        pass
+    else:
+        fail("Evidence validation accepted a tampered source registry contract")
+    expanded_snapshot = json.loads(json.dumps(frozen))
+    expanded_snapshot["source_registry_contract"] = evidence_store.source_registry_contract(
+        expanded_registry
+    )
+    try:
+        evidence_store.validate_bundle(
+            expanded_snapshot,
+            issue_date,
+            coverage=scoped_coverage,
+            registry=expanded_registry,
+        )
+    except evidence_store.EvidenceContractError:
+        pass
+    else:
+        fail("Evidence validation accepted an unchecked newly configured seed source")
     print("COVERAGE AUDIT SELF-TEST PASSED")
 
 

@@ -955,6 +955,14 @@ def select_clustered_evidence(
     return records_by_score
 
 
+def record_from_expanded_scope(record: dict[str, Any]) -> bool:
+    """Identify Evidence introduced by an explicit scope expansion."""
+    return bool(record.get("official_scope")) or any(
+        str(query_id).startswith("horizon:local-language:")
+        for query_id in record.get("discovery_query_ids", [])
+    )
+
+
 PUBLIC_COPY_REPLACEMENTS = [
     (
         r"(?:調査|探索|監視|収集)"
@@ -2170,9 +2178,15 @@ def parse_rss_date(value: str | None) -> str | None:
 def discovery_identity_queries(
     category: dict[str, Any],
     extra_terms: list[str] | None = None,
+    *,
+    replace_with_extra: bool = False,
 ) -> list[str]:
     label = str(category["label"])
-    terms = [*(category_identity_terms(label) or (label,)), *(extra_terms or [])]
+    terms = (
+        list(extra_terms or [])
+        if replace_with_extra and extra_terms
+        else [*(category_identity_terms(label) or (label,)), *(extra_terms or [])]
+    )
     useful = list(dict.fromkeys(str(term) for term in terms if str(term).strip()))
     return [
         " OR ".join(f'"{term}"' if " " in term else term for term in group)
@@ -2259,13 +2273,31 @@ def discovery_queries(category: dict[str, Any], issue_date: str) -> list[dict[st
                     }
                 )
 
-    for locale in local_horizon.get(str(category.get("label")), []):
-        if not isinstance(locale, dict):
-            continue
+    category_locales = [
+        value
+        for value in local_horizon.get(str(category.get("label")), [])
+        if isinstance(value, dict)
+    ]
+    configured_locales = {
+        str(value.get("id")) for value in category_locales if value.get("id")
+    }
+    required_locales = {
+        str(value)
+        for value in category.get("required_local_horizon_locales", [])
+        if str(value).strip()
+    }
+    missing_locales = required_locales - configured_locales
+    if missing_locales:
+        raise ValueError(
+            f"{category.get('label')} has unconfigured required local horizons: "
+            + ", ".join(sorted(missing_locales))
+        )
+    for locale in category_locales:
         locale_id = str(locale.get("id") or "local")
         local_identities = discovery_identity_queries(
             category,
             [str(value) for value in locale.get("identity_terms", [])],
+            replace_with_extra=True,
         )
         changes = [str(value) for value in locale.get("change_terms", []) if str(value).strip()]
         if changes:
@@ -3714,6 +3746,7 @@ def normalize_result(
             ("empty_title", not title),
             ("title_copy", not reader_public_copy_ok(title, kind="title")),
             ("empty_summary", not facts),
+            ("information_incomplete", item.get("information_complete") is not True),
             ("summary_copy", not reader_public_copy_ok(summary, kind="summary")),
             (
                 "unsupported_title",
@@ -3865,10 +3898,22 @@ def normalize_result(
 
 
 def collect_evidence(issue_date: str) -> dict[str, Any]:
-    sources = load_object(SOURCE_CONFIG).get("categories")
+    source_config = load_object(SOURCE_CONFIG)
+    sources = source_config.get("categories")
     if not isinstance(sources, dict):
         fail("source config categories must be an object")
     contracts = category_contracts()
+    try:
+        evidence_contract.validate_source_configuration(
+            load_object(COVERAGE_CONFIG),
+            source_config,
+        )
+        # Generate every query once before starting network work so a missing
+        # required locale fails fast instead of wasting a partial collection.
+        for category in contracts:
+            discovery_queries(category, issue_date)
+    except (evidence_contract.EvidenceContractError, ValueError) as exc:
+        fail(str(exc))
     flat_sources = [
         {**source, "category": category}
         for category, category_sources in sources.items()
@@ -3930,6 +3975,72 @@ def collect_evidence(issue_date: str) -> dict[str, Any]:
             len(entry["records"])
             for entry in bundle["categories"].values()
         ),
+        "coverage_proof": {
+            "source_registry_version": source_config.get("version"),
+            "source_registry_sha256": bundle["source_registry_contract"]["sha256"],
+            "required_official_scopes": sum(
+                len(category.get("required_official_scopes", []))
+                for category in contracts
+            ),
+            "required_local_horizons": sum(
+                len(category.get("required_local_horizon_locales", []))
+                for category in contracts
+            ),
+            "completed_local_horizon_queries": sum(
+                1
+                for entry in bundle["categories"].values()
+                for check in entry["discovery_checks"]
+                if str(check.get("query_id", "")).startswith(
+                    "horizon:local-language:"
+                )
+            ),
+            "local_horizon_relevant_results": sum(
+                int(check.get("relevant_result_count", 0))
+                for entry in bundle["categories"].values()
+                for check in entry["discovery_checks"]
+                if str(check.get("query_id", "")).startswith(
+                    "horizon:local-language:"
+                )
+            ),
+            "local_horizon_material_candidates": sum(
+                int(check.get("material_candidate_count", 0))
+                for entry in bundle["categories"].values()
+                for check in entry["discovery_checks"]
+                if str(check.get("query_id", "")).startswith(
+                    "horizon:local-language:"
+                )
+            ),
+            "local_horizon_resolved_candidates": sum(
+                int(check.get("resolved_candidate_count", 0))
+                for entry in bundle["categories"].values()
+                for check in entry["discovery_checks"]
+                if str(check.get("query_id", "")).startswith(
+                    "horizon:local-language:"
+                )
+            ),
+            "scoped_official_sources_configured": sum(
+                bool(source.get("official_scope"))
+                for category_sources in sources.values()
+                for source in category_sources
+                if isinstance(source, dict)
+            ),
+            "scoped_official_sources_observed": sum(
+                check.get("slot_state") == "observed_live"
+                and bool(
+                    next(
+                        (
+                            source.get("official_scope")
+                            for source in sources.get(label, [])
+                            if isinstance(source, dict)
+                            and source.get("url") == check.get("url")
+                        ),
+                        None,
+                    )
+                )
+                for label, entry in bundle["categories"].items()
+                for check in entry["source_checks"]
+            ),
+        },
         "evidence": str(evidence_path),
         "collection_mode": "web_evidence_plus_review",
     }
@@ -4065,6 +4176,22 @@ def self_test() -> None:
     }
     if not {"ja-JP", "en-US"} <= web_locales:
         fail("discovery queries did not search both Japanese and English")
+    missing_locale_category = {
+        **wide_category,
+        "required_local_horizon_locales": ["missing-locale"],
+    }
+    try:
+        discovery_queries(missing_locale_category, "2099-01-01")
+    except ValueError:
+        pass
+    else:
+        fail("discovery configuration accepted a missing required local horizon")
+    if discovery_identity_queries(
+        {"label": "F1"},
+        ["Formula Uno"],
+        replace_with_extra=True,
+    ) != ['"Formula Uno"']:
+        fail("local-language horizon retained unrelated default identity terms")
     horizon_queries = " ".join(
         str(spec["query"])
         for spec in discovery_specs
@@ -4423,6 +4550,7 @@ def self_test() -> None:
         {
             "items": [
                 {
+                    "information_complete": True,
                     "summary_points": [
                         {
                             "text": (
@@ -4767,6 +4895,7 @@ def self_test() -> None:
                 "topic_value_class": "decision_or_policy",
                 "priority_class": "priority",
                 "change_class": "material_update",
+                "information_complete": True,
                 "summary_points": [
                     {
                         "text": fact,
@@ -4783,6 +4912,20 @@ def self_test() -> None:
     normalized = normalize_result(raw, category, "2099-01-03", records)
     if len(normalized["items"]) != 1 or not normalized["coverage_complete"]:
         fail("canonical normalization lost a valid evidence-backed summary")
+    incomplete_raw = json.loads(json.dumps(raw, ensure_ascii=False))
+    incomplete_raw["items"][0]["information_complete"] = False
+    incomplete = normalize_result(
+        incomplete_raw,
+        category,
+        "2099-01-03",
+        records,
+    )
+    if incomplete["items"] or not any(
+        "information_incomplete" in rejection.get("reasons", [])
+        for rejection in incomplete.get("rejected_items", [])
+        if isinstance(rejection, dict)
+    ):
+        fail("normalization accepted an item without information completeness")
     normalized_item = normalized["items"][0]
     if normalized_item["event_id"] != "g001":
         fail("normalization lost the event boundary needed for checkpointing")
@@ -5007,6 +5150,7 @@ def self_test() -> None:
                     "topic_value_class": "decision_or_policy",
                     "priority_class": "priority",
                     "change_class": "new_event",
+                    "information_complete": True,
                     "summary_points": [
                         {
                             "text": point,

@@ -74,6 +74,7 @@ Write `state/$ISSUE_DATE/editor_review.json` with this shape:
             "items": [
               {
                 "title": "natural Japanese title",
+                "information_complete": true,
                 "summary_points": [
                   {"text": "source-backed Japanese fact", "evidence_ids": ["e001"]}
                 ],
@@ -105,6 +106,13 @@ change, numbers, dates, scope, conditions, reasons, and results. Every title and
 summary point must be natural Japanese. Every point must add information beyond
 the title and cite all supporting Evidence ids. Do not infer facts or repeat
 generic company descriptions.
+
+Set `information_complete=true` only after accounting for every distinct,
+current, article-specific supported fact needed to understand the accepted event.
+One summary point is valid only when the Evidence contains one such fact beyond
+the title. Do not add a minimum length, historical background, common knowledge,
+predictions, generic importance, or paraphrase repetition. Never omit a supported
+number, date, scope, condition, reason, or result merely to shorten the summary.
 
 For requests marked `quality_route=true`, check tables, multiple numbers,
 attributed analysis, and cross-source consistency especially carefully. Prefer
@@ -165,6 +173,22 @@ dated public URLs show the same current date.
 CLI network or authentication commands may be retried once. Model turns, full
 collection, full review, commits, and workflow dispatches must never be blindly
 repeated. Browser, Computer Use, screenshots, and Web UI monitoring are forbidden.
+
+## Continuous improvement loop
+
+Every completed issue writes `state/$ISSUE_DATE/eval_report.json`. Compare the
+current issue with up to three prior issues for source and discovery coverage,
+local-language candidate yield, expanded-scope contribution, unavailable sources,
+published facts, review requests, and review payload bytes. Treat the report as
+diagnostic evidence, not as permission to weaken the collection contract.
+
+Runtime recovery may automatically reuse verified checkpoints and avoid duplicate
+work. It must never auto-remove a source, locale, watch topic, quality gate, or
+published fact requirement. Three consecutive zero-contribution expansion results
+raise a precision-review signal; change the configuration only after checking
+whether the cause is duplication, no new event, source failure, or a poor query.
+After any change, require coverage and quality non-regression before accepting an
+efficiency improvement.
 
 ## Model review
 

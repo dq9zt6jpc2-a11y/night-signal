@@ -1,5 +1,5 @@
 {
-  "version": "2026-06-05.1",
+  "version": "2026-07-17.1",
   "description": "Canonical seed sources for NIGHT SIGNAL collection tasks. Search queries discover additional sources, but these targets are the non-negotiable starting points for official, independent, social, video, and data checks.",
   "categories": {
     "OpenAI": [
@@ -17,9 +17,11 @@
       {"label": "OpenAI YouTube", "url": "https://www.youtube.com/@OpenAI", "source_role": "social_or_video_signal", "channel": "youtube", "source_class": "youtube_video"}
     ],
     "SoftBank": [
-      {"label": "SoftBank Group News", "url": "https://group.softbank/en/news", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
-      {"label": "SoftBank Group IR", "url": "https://group.softbank/en/ir", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
-      {"label": "Arm Newsroom", "url": "https://newsroom.arm.com/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
+      {"label": "SoftBank Group News", "url": "https://group.softbank/en/news", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "softbank_group"},
+      {"label": "SoftBank Group IR", "url": "https://group.softbank/en/ir", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "softbank_group"},
+      {"label": "SoftBank Corp News", "url": "https://www.softbank.jp/corp/news/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "domestic_operator"},
+      {"label": "SoftBank Corp IR News", "url": "https://www.softbank.jp/corp/ir/news/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "domestic_operator"},
+      {"label": "Arm Newsroom", "url": "https://newsroom.arm.com/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "arm"},
       {"label": "Reuters Business", "url": "https://www.reuters.com/business/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
       {"label": "Nikkei SoftBank search", "url": "https://www.nikkei.com/search?keyword=%E3%82%BD%E3%83%95%E3%83%88%E3%83%90%E3%83%B3%E3%82%AF%E3%82%B0%E3%83%AB%E3%83%BC%E3%83%97", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
       {"label": "SoftBank Group X", "url": "https://x.com/SoftBank_Group", "source_role": "social_or_video_signal", "channel": "sns_x", "source_class": "sns_x"},
@@ -67,9 +69,12 @@
       {"label": "SpaceX YouTube", "url": "https://www.youtube.com/@SpaceX", "source_role": "social_or_video_signal", "channel": "youtube", "source_class": "youtube_video"}
     ],
     "日本経済": [
-      {"label": "Bank of Japan", "url": "https://www.boj.or.jp/en/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
-      {"label": "Statistics Bureau of Japan", "url": "https://www.stat.go.jp/english/", "source_role": "primary_or_official", "channel": "web", "source_class": "official_dataset"},
-      {"label": "Ministry of Finance Japan", "url": "https://www.mof.go.jp/english/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
+      {"label": "Bank of Japan", "url": "https://www.boj.or.jp/en/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "monetary_policy"},
+      {"label": "Statistics Bureau of Japan", "url": "https://www.stat.go.jp/english/", "source_role": "primary_or_official", "channel": "web", "source_class": "official_dataset", "official_scope": "national_statistics"},
+      {"label": "Ministry of Finance Japan", "url": "https://www.mof.go.jp/english/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "fiscal_trade"},
+      {"label": "MHLW Recent Statistics", "url": "https://www.mhlw.go.jp/toukei/saikin/", "source_role": "primary_or_official", "channel": "web", "source_class": "official_dataset", "official_scope": "employment_wages"},
+      {"label": "Cabinet Office Statistics", "url": "https://www.cao.go.jp/statistics/index.html", "source_role": "primary_or_official", "channel": "web", "source_class": "official_dataset", "official_scope": "national_accounts_consumption"},
+      {"label": "METI Statistics", "url": "https://www.meti.go.jp/statistics/", "source_role": "primary_or_official", "channel": "web", "source_class": "official_dataset", "official_scope": "industry_capex"},
       {"label": "Reuters Japan markets", "url": "https://www.reuters.com/markets/japan/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
       {"label": "Nikkei economy", "url": "https://www.nikkei.com/news/category/economy/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
       {"label": "Trading Economics Japan indicators", "url": "https://tradingeconomics.com/japan/indicators", "source_role": "independent_media_or_data", "channel": "web", "source_class": "specialist_media"},
@@ -100,10 +105,14 @@
       {"label": "Reserve Bank of India YouTube", "url": "https://www.youtube.com/channel/UCIfCOl43tunZVNYafeC4RQA", "source_role": "social_or_video_signal", "channel": "youtube", "source_class": "youtube_video"}
     ],
     "北米経済": [
-      {"label": "Federal Reserve", "url": "https://www.federalreserve.gov/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
-      {"label": "Bureau of Labor Statistics", "url": "https://www.bls.gov/", "source_role": "primary_or_official", "channel": "web", "source_class": "official_dataset"},
-      {"label": "Bureau of Economic Analysis", "url": "https://www.bea.gov/", "source_role": "primary_or_official", "channel": "web", "source_class": "official_dataset"},
-      {"label": "Investment Company Institute", "url": "https://www.ici.org/", "source_role": "primary_or_official", "channel": "web", "source_class": "official_dataset"},
+      {"label": "Federal Reserve", "url": "https://www.federalreserve.gov/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "united_states"},
+      {"label": "Bureau of Labor Statistics", "url": "https://www.bls.gov/", "source_role": "primary_or_official", "channel": "web", "source_class": "official_dataset", "official_scope": "united_states"},
+      {"label": "Bureau of Economic Analysis", "url": "https://www.bea.gov/", "source_role": "primary_or_official", "channel": "web", "source_class": "official_dataset", "official_scope": "united_states"},
+      {"label": "Investment Company Institute", "url": "https://www.ici.org/", "source_role": "primary_or_official", "channel": "web", "source_class": "official_dataset", "official_scope": "united_states"},
+      {"label": "Statistics Canada", "url": "https://www.statcan.gc.ca/en/start", "source_role": "primary_or_official", "channel": "web", "source_class": "official_dataset", "official_scope": "canada"},
+      {"label": "Bank of Canada Press", "url": "https://www.bankofcanada.ca/press/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "canada"},
+      {"label": "Banco de Mexico", "url": "https://www.banxico.org.mx/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "mexico"},
+      {"label": "INEGI Press Room", "url": "https://www.inegi.org.mx/app/saladeprensa/", "source_role": "primary_or_official", "channel": "web", "source_class": "official_dataset", "official_scope": "mexico"},
       {"label": "Reuters US markets", "url": "https://www.reuters.com/markets/us/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
       {"label": "MarketWatch", "url": "https://www.marketwatch.com/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
       {"label": "Trading Economics United States indicators", "url": "https://tradingeconomics.com/united-states/indicators", "source_role": "independent_media_or_data", "channel": "web", "source_class": "specialist_media"},

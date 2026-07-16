@@ -643,6 +643,10 @@ def publication_candidate_groups(
         exact_groups.setdefault(key, []).append(record)
     event_groups = list(exact_groups.values())
     grouped_events = len(event_groups)
+    expanded_grouped_events = sum(
+        any(core.record_from_expanded_scope(record) for record in group)
+        for group in event_groups
+    )
     event_groups = [
         group for group in event_groups if core.sources_from_records(group)
     ]
@@ -654,6 +658,10 @@ def publication_candidate_groups(
             if event_group_has_new_information(group, previous_updates, issue_date)
         ]
     novel_events = len(event_groups)
+    expanded_novel_events = sum(
+        any(core.record_from_expanded_scope(record) for record in group)
+        for group in event_groups
+    )
     semantically_merged = semantically_merge_event_groups(category, event_groups)
     bounded = bounded_candidate_groups(category, semantically_merged)
     print(
@@ -661,6 +669,18 @@ def publication_candidate_groups(
             {
                 "phase": "deterministic_candidate_filter",
                 "category": str(category.get("label", "")),
+                "expanded_input_records": sum(
+                    core.record_from_expanded_scope(record) for record in records
+                ),
+                "expanded_evidence_records": sum(
+                    core.record_from_expanded_scope(record) for record in selected
+                ),
+                "expanded_grouped_events": expanded_grouped_events,
+                "expanded_novel_events": expanded_novel_events,
+                "expanded_model_candidates": sum(
+                    any(core.record_from_expanded_scope(record) for record in group)
+                    for group in bounded
+                ),
                 "evidence_records": len(selected),
                 "grouped_events": grouped_events,
                 "publishable_source_events": publishable_source_events,
@@ -1439,6 +1459,14 @@ def edit_evidence(
 
 def self_test() -> None:
     core.self_test()
+    if not core.record_from_expanded_scope({"official_scope": "canada"}):
+        fail("expanded official source was not identified for efficiency metrics")
+    if not core.record_from_expanded_scope(
+        {"discovery_query_ids": ["horizon:local-language:fr-CA:identity-1"]}
+    ):
+        fail("local-language discovery was not identified for efficiency metrics")
+    if core.record_from_expanded_scope({"discovery_query_ids": ["topic:test:ja-JP"]}):
+        fail("baseline discovery was misclassified as expanded coverage")
     if sanitize_editor_title(
         "OpenAIの政府株式提供提案とAI業界の最新動向"
     ) != "OpenAIの政府株式提供提案":

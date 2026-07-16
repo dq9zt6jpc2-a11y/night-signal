@@ -16,7 +16,8 @@ SOURCE_CONFIG = ROOT / "config" / "night_signal_sources.json"
 COVERAGE_CONFIG = ROOT / "config" / "night_signal_coverage.json"
 # Bump only when collection semantics or the Evidence schema changes. Editor and
 # renderer changes must not invalidate an already verified same-day collection.
-COLLECTOR_CONTRACT_REVISION = "2971bda468f60d99"
+COLLECTOR_CONTRACT_REVISION = "b643a90c6ef1a742"
+LEGACY_COLLECTOR_CONTRACT_REVISIONS = {"2971bda468f60d99"}
 SOURCE_CHECK_STATES = {"observed_live", "source_unavailable"}
 DISCOVERY_CHECK_STATES = {
     "searched_no_results",
@@ -48,6 +49,125 @@ def load_object(path: Path) -> dict[str, Any]:
 
 def collector_contract_version() -> str:
     return COLLECTOR_CONTRACT_REVISION
+
+
+def source_registry_contract(registry: dict[str, Any]) -> dict[str, Any]:
+    """Freeze the compact seed-source contract used by one collection run."""
+    categories = registry.get("categories")
+    if not isinstance(categories, dict):
+        raise EvidenceContractError("source registry categories must be an object")
+    compact_categories: dict[str, list[dict[str, str]]] = {}
+    for label, sources in categories.items():
+        if not isinstance(sources, list):
+            raise EvidenceContractError(f"source registry category must be a list: {label}")
+        compact_sources: list[dict[str, str]] = []
+        for source in sources:
+            if not isinstance(source, dict):
+                continue
+            url = str(source.get("url", "")).strip()
+            if not url.startswith(("http://", "https://")):
+                raise EvidenceContractError(f"source registry has an invalid URL: {label}")
+            compact_source = {"url": url}
+            official_scope = str(source.get("official_scope", "")).strip()
+            if official_scope:
+                if source.get("source_role") != "primary_or_official":
+                    raise EvidenceContractError(
+                        f"official source scope is assigned to a non-official source: {label}"
+                    )
+                compact_source["official_scope"] = official_scope
+            compact_sources.append(compact_source)
+        compact_categories[str(label)] = compact_sources
+    payload = {
+        "registry_version": str(registry.get("version", "")),
+        "categories": compact_categories,
+    }
+    encoded = json.dumps(
+        payload,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return {**payload, "sha256": hashlib.sha256(encoded).hexdigest()}
+
+
+def validate_source_registry_contract(
+    value: Any,
+    configured_labels: set[str],
+) -> dict[str, list[dict[str, str]]]:
+    _require(isinstance(value, dict), "Evidence has no source registry contract")
+    categories = value.get("categories")
+    _require(
+        isinstance(categories, dict) and set(categories) == configured_labels,
+        "Evidence source registry contract must cover every category exactly once",
+    )
+    expected_hash = value.get("sha256")
+    _require(
+        isinstance(expected_hash, str) and len(expected_hash) == 64,
+        "Evidence source registry contract has an invalid hash",
+    )
+    payload = {
+        "registry_version": str(value.get("registry_version", "")),
+        "categories": categories,
+    }
+    actual_hash = hashlib.sha256(
+        json.dumps(
+            payload,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    ).hexdigest()
+    _require(
+        actual_hash == expected_hash,
+        "Evidence source registry contract hash does not match its contents",
+    )
+    for label, sources in categories.items():
+        _require(isinstance(sources, list) and bool(sources), f"{label} has no frozen seed sources")
+        urls: list[str] = []
+        for source in sources:
+            _require(isinstance(source, dict), f"{label} has an invalid frozen seed source")
+            url = source.get("url")
+            _require(
+                isinstance(url, str) and url.startswith(("http://", "https://")),
+                f"{label} has an invalid frozen seed URL",
+            )
+            urls.append(url)
+        _require(len(urls) == len(set(urls)), f"{label} has duplicate frozen seed URLs")
+    return categories
+
+
+def validate_source_configuration(
+    coverage: dict[str, Any],
+    registry: dict[str, Any],
+) -> dict[str, Any]:
+    """Reject incomplete source expansion before any network collection starts."""
+    configured = {
+        str(category["label"]): category
+        for category in coverage.get("categories", [])
+        if isinstance(category, dict) and isinstance(category.get("label"), str)
+    }
+    contract = source_registry_contract(registry)
+    categories = contract["categories"]
+    _require(
+        set(categories) == set(configured),
+        "source registry must cover every configured category exactly once",
+    )
+    for label, category in configured.items():
+        required_scopes = {
+            str(value)
+            for value in category.get("required_official_scopes", [])
+            if str(value).strip()
+        }
+        available_scopes = {
+            str(source.get("official_scope"))
+            for source in categories[label]
+            if source.get("official_scope")
+        }
+        _require(
+            required_scopes <= available_scopes,
+            f"{label} is missing required official source scopes",
+        )
+    return contract
 
 
 def required_channels(contract: dict[str, Any], category: dict[str, Any]) -> set[str]:
@@ -102,14 +222,32 @@ def validate_bundle(
 ) -> dict[str, Any]:
     """Validate collection once and return facts reused by every later stage."""
     coverage = coverage or load_object(COVERAGE_CONFIG)
+    registry_was_supplied = registry is not None
     registry_value = registry or load_object(SOURCE_CONFIG)
-    registry_categories = registry_value.get("categories")
-    _require(isinstance(registry_categories, dict), "source registry categories must be an object")
+    current_registry_categories = registry_value.get("categories")
+    _require(isinstance(current_registry_categories, dict), "source registry categories must be an object")
     configured = {
         str(category["label"]): category
         for category in coverage.get("categories", [])
         if isinstance(category, dict) and isinstance(category.get("label"), str)
     }
+    configured_labels = set(configured)
+    frozen_registry = bundle.get("source_registry_contract")
+    legacy_frozen_registry = (
+        frozen_registry is None
+        and not registry_was_supplied
+        and bundle.get("collector_contract_version")
+        in LEGACY_COLLECTOR_CONTRACT_REVISIONS
+    )
+    if frozen_registry is not None:
+        registry_categories = validate_source_registry_contract(
+            frozen_registry,
+            configured_labels,
+        )
+    elif bundle.get("collector_contract_version") == COLLECTOR_CONTRACT_REVISION:
+        raise EvidenceContractError("current Evidence has no source registry contract")
+    else:
+        registry_categories = current_registry_categories
     _require(bundle.get("issue_date") == issue_date, "Evidence date does not match issue date")
     checked_at = bundle.get("checked_at_jst")
     _require(
@@ -151,6 +289,7 @@ def validate_bundle(
         checked_topics: set[str] = set()
         checked_channels: set[str] = set()
         checked_discovery_channels: set[str] = set()
+        checked_horizon_locales: set[str] = set()
         checked_seed_urls: set[str] = set()
         observed_urls: set[str] = set()
 
@@ -260,6 +399,9 @@ def validate_bundle(
             if check_state != "search_unavailable":
                 checked_topics.update(str(topic) for topic in check_topics)
                 horizon_searched = horizon_searched or purpose == "horizon"
+                locale = check.get("locale")
+                if purpose == "horizon" and isinstance(locale, dict) and locale.get("id"):
+                    checked_horizon_locales.add(str(locale["id"]))
             if int(check["material_candidate_count"]) and not int(
                 check["resolved_candidate_count"]
             ):
@@ -273,12 +415,42 @@ def validate_bundle(
                     check["resolved_candidate_count"]
                 )
 
+        seed_sources = registry_categories.get(label, [])
         seed_urls = {
             str(source.get("url"))
-            for source in registry_categories.get(label, [])
+            for source in seed_sources
             if isinstance(source, dict) and isinstance(source.get("url"), str)
         }
+        if legacy_frozen_registry:
+            # These bundles passed the then-current registry gate before registry
+            # snapshots existed. Preserve that executed proof when sources expand.
+            seed_urls = set(checked_seed_urls)
         _require(seed_urls <= checked_seed_urls, f"{label} has seed sources without explicit result states")
+        if not legacy_frozen_registry:
+            required_official_scopes = {
+                str(value)
+                for value in category.get("required_official_scopes", [])
+                if str(value).strip()
+            }
+            available_official_scopes = {
+                str(source.get("official_scope"))
+                for source in seed_sources
+                if isinstance(source, dict)
+                and source.get("official_scope")
+            }
+            _require(
+                required_official_scopes <= available_official_scopes,
+                f"{label} is missing required official source scopes",
+            )
+            required_locales = {
+                str(value)
+                for value in category.get("required_local_horizon_locales", [])
+                if str(value).strip()
+            }
+            _require(
+                required_locales <= checked_horizon_locales,
+                f"{label} has unchecked required local-language horizons",
+            )
         _require(topics <= checked_topics, f"{label} has unchecked watch topics")
         _require(horizon_searched, f"{label} has no completed horizon search")
         _require(
@@ -372,7 +544,9 @@ def build_evidence_bundle(
     """Build the pure collector output without editorial items or prose."""
     if not checked_at.startswith(issue_date):
         fail("checked_at_jst must be on the issue date")
-    registry = load_object(SOURCE_CONFIG).get("categories")
+    registry_value = load_object(SOURCE_CONFIG)
+    validate_source_configuration(load_object(COVERAGE_CONFIG), registry_value)
+    registry = registry_value.get("categories")
     if not isinstance(registry, dict):
         fail("source registry categories must be an object")
     topics_by_category = category_topics()
@@ -450,6 +624,7 @@ def build_evidence_bundle(
         "checked_at_jst": checked_at,
         "collection_mode": collection_mode,
         "collector_contract_version": collector_contract_version(),
+        "source_registry_contract": source_registry_contract(registry_value),
         "categories": categories,
     }
     try:
