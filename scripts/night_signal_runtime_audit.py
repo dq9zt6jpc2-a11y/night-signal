@@ -9,6 +9,7 @@ import os
 import sqlite3
 import subprocess
 import sys
+import tempfile
 from datetime import datetime, time, timedelta
 from pathlib import Path
 from typing import Any
@@ -75,6 +76,103 @@ def classify_failure(text: str) -> str:
     ):
         return "partial_execution"
     return "unknown"
+
+
+def output_text(value: Any) -> str:
+    """Extract text from persisted tool outputs without reading prompt context."""
+    if isinstance(value, str):
+        return value
+    if isinstance(value, list):
+        return "\n".join(output_text(item) for item in value)
+    if isinstance(value, dict):
+        if isinstance(value.get("text"), str):
+            return str(value["text"])
+        return "\n".join(output_text(item) for item in value.values())
+    return ""
+
+
+def parse_event_time(value: Any) -> datetime | None:
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        return None
+    return parsed.astimezone(JST)
+
+
+def automation_trace_state(
+    rollout_path: Path,
+    *,
+    now: datetime | None = None,
+    stale_after_minutes: int = 15,
+) -> dict[str, Any]:
+    """Read executed JSONL events only; prompts and instructions are not evidence."""
+    current = (now or datetime.now(JST)).astimezone(JST)
+    task_started = False
+    task_complete = False
+    started_at: datetime | None = None
+    completed_at: datetime | None = None
+    last_executed_at: datetime | None = None
+    executed_outputs: list[str] = []
+    malformed_lines = 0
+    try:
+        lines = rollout_path.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError as exc:
+        return {"available": False, "reason": str(exc)}
+    for line in lines:
+        try:
+            record = json.loads(line)
+        except json.JSONDecodeError:
+            malformed_lines += 1
+            continue
+        if not isinstance(record, dict):
+            continue
+        timestamp = parse_event_time(record.get("timestamp"))
+        record_type = record.get("type")
+        payload = record.get("payload")
+        if not isinstance(payload, dict):
+            continue
+        if record_type == "event_msg":
+            event_type = payload.get("type")
+            if event_type == "task_started":
+                task_started = True
+                started_at = timestamp or started_at
+                last_executed_at = timestamp or last_executed_at
+            elif event_type == "task_complete":
+                task_complete = True
+                completed_at = timestamp or completed_at
+                last_executed_at = timestamp or last_executed_at
+        elif record_type == "response_item" and payload.get("type") in {
+            "custom_tool_call_output",
+            "function_call_output",
+        }:
+            text = output_text(payload.get("output")).strip()
+            if text:
+                executed_outputs.append(text)
+            last_executed_at = timestamp or last_executed_at
+    stalled = bool(
+        task_started
+        and not task_complete
+        and last_executed_at is not None
+        and current - last_executed_at >= timedelta(minutes=stale_after_minutes)
+    )
+    executed_text = "\n".join(executed_outputs)
+    return {
+        "available": True,
+        "task_started": task_started,
+        "task_complete": task_complete,
+        "has_agent_completion": task_complete,
+        "stalled": stalled,
+        "started_at_jst": started_at.isoformat() if started_at else None,
+        "completed_at_jst": completed_at.isoformat() if completed_at else None,
+        "last_executed_at_jst": (
+            last_executed_at.isoformat() if last_executed_at else None
+        ),
+        "failure_class": classify_failure(executed_text),
+        "executed_output_count": len(executed_outputs),
+        "malformed_lines": malformed_lines,
+    }
 
 
 def manifest_state(issue_date: str, state_root: Path, now: datetime) -> dict[str, Any]:
@@ -173,15 +271,27 @@ def decide_recovery(
     *,
     fresh_final_issue: bool,
     evidence_usable: bool,
+    artifacts: dict[str, bool] | None = None,
 ) -> str:
     if fresh_final_issue:
         return "fresh_final_issue"
+    artifact_state = artifacts if artifacts is not None else {"editor_packet": True}
+    if artifact_state.get("issue") and artifact_state.get("plus_review_receipt"):
+        return "render_validate_publish"
+    if artifact_state.get("editor_review"):
+        return "apply_review"
+    if evidence_usable and artifact_state.get("editor_packet"):
+        return "await_cloud_review"
     if evidence_usable:
-        return "codex_plus_review"
+        return "prepare_review_packet"
     return "web_evidence_collection"
 
 
-def latest_automation_run(automation_id: str) -> dict[str, Any]:
+def latest_automation_run(
+    automation_id: str,
+    *,
+    now: datetime | None = None,
+) -> dict[str, Any]:
     home = Path.home() / ".codex"
     automation_db = home / "sqlite" / "codex-dev.db"
     state_db = home / "state_5.sqlite"
@@ -222,15 +332,52 @@ def latest_automation_run(automation_id: str) -> dict[str, Any]:
     result["rollout_path"] = str(rollout_path)
     if not rollout_path.exists():
         return result
-    text = rollout_path.read_text(encoding="utf-8", errors="replace")
-    result["failure_class"] = classify_failure(text)
-    result["has_agent_completion"] = '"last_agent_message":null' not in text
+    trace = automation_trace_state(rollout_path, now=now)
+    result["trace"] = trace
+    result["failure_class"] = trace.get("failure_class", "unknown")
+    result["has_agent_completion"] = trace.get("task_complete") is True
+    result["stalled"] = trace.get("stalled") is True
     result["credit_exhausted"] = result["failure_class"] == "codex_credit_exhausted"
     return result
 
 
 def checkpoint_path(issue_date: str, state_root: Path) -> Path:
     return state_root / issue_date / "runtime_checkpoint.json"
+
+
+def local_artifact_state(issue_date: str, state_root: Path) -> dict[str, bool]:
+    base = state_root / issue_date
+    return {
+        "evidence": (base / "evidence.json").exists(),
+        "editor_packet": (base / "editor_packet.json").exists(),
+        "editor_review": (base / "editor_review.json").exists(),
+        "plus_review_receipt": (base / "plus_review_receipt.json").exists(),
+        "issue": (base / "issue.json").exists(),
+        "sample_html": (ROOT / f"night-brief-web-sample-{issue_date}.html").exists(),
+        "dated_site_html": (ROOT / "site" / issue_date / "index.html").exists(),
+    }
+
+
+def read_checkpoint(issue_date: str, state_root: Path) -> dict[str, Any]:
+    path = checkpoint_path(issue_date, state_root)
+    if not path.exists():
+        return {"exists": False, "path": str(path)}
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        return {"exists": True, "path": str(path), "error": str(exc)}
+    if not isinstance(value, dict) or value.get("issue_date") != issue_date:
+        return {
+            "exists": True,
+            "path": str(path),
+            "error": "checkpoint issue date does not match",
+        }
+    last_event = value.get("last_event")
+    return {
+        "exists": True,
+        "path": str(path),
+        "last_event": last_event if isinstance(last_event, dict) else None,
+    }
 
 
 def write_checkpoint(
@@ -284,23 +431,32 @@ def evaluate(
     current = now or datetime.now(JST)
     manifest = manifest_state(issue_date, state_root, current)
     evidence = evidence_state(issue_date, state_root)
+    artifacts = local_artifact_state(issue_date, state_root)
     recovery = decide_recovery(
         fresh_final_issue=bool(manifest["fresh_final_issue"]),
         evidence_usable=bool(evidence["usable"]),
+        artifacts=artifacts,
     )
+    repository = git_state()
     result = {
         "issue_date": issue_date,
         "checked_at_jst": current.astimezone(JST).isoformat(timespec="seconds"),
         "manifest": manifest,
         "evidence": evidence,
         "additional_paid_ai_required": False,
-        "git": git_state(),
+        "artifacts": artifacts,
+        "git": repository,
         "recovery_path": recovery,
-        "publication_blocked": False,
-        "checkpoint": str(checkpoint_path(issue_date, state_root)),
+        "publication_blocked": bool(repository.get("dirty")),
+        "blockers": ["dirty_worktree"] if repository.get("dirty") else [],
+        "checkpoint": read_checkpoint(issue_date, state_root),
     }
     if automation_id:
-        result["automation"] = latest_automation_run(automation_id)
+        automation = latest_automation_run(automation_id, now=current)
+        result["automation"] = automation
+        if automation.get("stalled") is True:
+            result["recovery_required"] = True
+            result["stale_owner_takeover_allowed"] = True
     return result
 
 
@@ -333,8 +489,75 @@ def self_test() -> None:
     if decide_recovery(
         fresh_final_issue=False,
         evidence_usable=True,
-    ) != "codex_plus_review":
-        fail("usable Evidence must select the Codex Plus review")
+    ) != "await_cloud_review":
+        fail("usable Evidence must wait for the PC-independent cloud review")
+    if decide_recovery(
+        fresh_final_issue=False,
+        evidence_usable=True,
+        artifacts={"editor_review": True},
+    ) != "apply_review":
+        fail("saved review must resume at deterministic review application")
+    if decide_recovery(
+        fresh_final_issue=False,
+        evidence_usable=True,
+        artifacts={"issue": True, "plus_review_receipt": True},
+    ) != "render_validate_publish":
+        fail("validated issue must resume at rendering and publication")
+    with tempfile.TemporaryDirectory() as temporary_directory:
+        path = Path(temporary_directory) / "rollout.jsonl"
+        records = [
+            {
+                "timestamp": "2099-01-01T09:00:00Z",
+                "type": "response_item",
+                "payload": {
+                    "type": "message",
+                    "role": "user",
+                    "content": [{"type": "input_text", "text": "HTTP 429 rate_limit"}],
+                },
+            },
+            {
+                "timestamp": "2099-01-01T09:00:01Z",
+                "type": "event_msg",
+                "payload": {"type": "task_started"},
+            },
+            {
+                "timestamp": "2099-01-01T09:00:02Z",
+                "type": "response_item",
+                "payload": {
+                    "type": "custom_tool_call_output",
+                    "output": [{"type": "input_text", "text": "git status clean"}],
+                },
+            },
+        ]
+        path.write_text(
+            "\n".join(json.dumps(value) for value in records) + "\n",
+            encoding="utf-8",
+        )
+        trace = automation_trace_state(
+            path,
+            now=datetime.fromisoformat("2099-01-01T09:20:03+00:00"),
+        )
+        if trace["failure_class"] != "unknown":
+            fail("prompt text was misclassified as an executed failure")
+        if trace["has_agent_completion"] or not trace["stalled"]:
+            fail("incomplete automation trace was not marked stalled")
+        records.append(
+            {
+                "timestamp": "2099-01-01T09:20:04Z",
+                "type": "event_msg",
+                "payload": {"type": "task_complete"},
+            }
+        )
+        path.write_text(
+            "\n".join(json.dumps(value) for value in records) + "\n",
+            encoding="utf-8",
+        )
+        completed = automation_trace_state(
+            path,
+            now=datetime.fromisoformat("2099-01-01T09:20:05+00:00"),
+        )
+        if not completed["has_agent_completion"] or completed["stalled"]:
+            fail("task_complete was not recognized as executed completion proof")
     print("NIGHT SIGNAL RUNTIME AUDIT PASSED")
 
 

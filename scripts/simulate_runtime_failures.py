@@ -29,7 +29,7 @@ def main() -> int:
             fresh_final_issue=True,
             evidence_usable=False,
         ),
-        "codex_plus_review": runtime.decide_recovery(
+        "await_cloud_review": runtime.decide_recovery(
             fresh_final_issue=False,
             evidence_usable=True,
         ),

@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import shutil
 import subprocess
 import tempfile
@@ -112,6 +113,57 @@ def successful_run_ids(runs: list[dict[str, Any]], issue_date: str) -> list[int]
     ]
 
 
+def artifact_inventory_run_ids(
+    issue_date: str,
+    artifacts: list[dict[str, Any]],
+) -> list[int]:
+    artifact_name = f"night-signal-state-{issue_date}"
+    candidates: list[tuple[str, int]] = []
+    for artifact in artifacts:
+        if not isinstance(artifact, dict) or artifact.get("expired") is True:
+            continue
+        workflow_run = artifact.get("workflow_run")
+        if not isinstance(workflow_run, dict):
+            continue
+        try:
+            run_id = int(workflow_run.get("id", 0))
+        except (TypeError, ValueError):
+            continue
+        if (
+            run_id > 0
+            and artifact.get("name") == artifact_name
+            and workflow_run.get("head_branch") == "main"
+        ):
+            candidates.append((str(artifact.get("created_at", "")), run_id))
+    return [run_id for _, run_id in sorted(candidates, reverse=True)]
+
+
+def artifact_run_ids(issue_date: str) -> list[int]:
+    repository = os.getenv("GITHUB_REPOSITORY", "").strip()
+    if not repository:
+        repository = run_gh(
+            ["repo", "view", "--json", "nameWithOwner", "--jq", ".nameWithOwner"]
+        ).stdout.strip()
+    artifact_name = f"night-signal-state-{issue_date}"
+    result = run_gh(
+        [
+            "api",
+            f"repos/{repository}/actions/artifacts?per_page=100&name={artifact_name}",
+        ]
+    )
+    try:
+        value = json.loads(result.stdout)
+    except json.JSONDecodeError as exc:
+        fail(f"cannot parse Actions artifact inventory: {exc}")
+    artifacts = value.get("artifacts") if isinstance(value, dict) else None
+    if not isinstance(artifacts, list):
+        fail("Actions artifact inventory has no artifacts array")
+    return artifact_inventory_run_ids(
+        issue_date,
+        [item for item in artifacts if isinstance(item, dict)],
+    )
+
+
 def validate_download(directory: Path, issue_date: str) -> tuple[Path, Path, Path | None]:
     evidence_path = directory / "evidence.json"
     packet_path = directory / "editor_packet.json"
@@ -203,15 +255,30 @@ def wait_for_new_run(known_ids: set[int], issue_date: str) -> int:
     fail("dispatched Evidence run did not appear within two minutes")
 
 
-def ensure_artifact(issue_date: str, state_root: Path) -> dict[str, Any]:
+def ensure_artifact(
+    issue_date: str,
+    state_root: Path,
+    *,
+    restore_only: bool = False,
+) -> dict[str, Any]:
+    for run_id in artifact_run_ids(issue_date):
+        if restore_run(run_id, issue_date, state_root):
+            return {
+                "issue_date": issue_date,
+                "run_id": run_id,
+                "dispatched": False,
+                "restored_from_artifact_inventory": True,
+            }
     runs = list_runs()
     active = active_run_id(runs, issue_date)
-    if active is not None:
+    if active is not None and not restore_only:
         run_gh(["run", "watch", str(active), "--exit-status"], capture=False)
         runs = list_runs()
     for run_id in successful_run_ids(runs, issue_date):
         if restore_run(run_id, issue_date, state_root):
             return {"issue_date": issue_date, "run_id": run_id, "dispatched": False}
+    if restore_only:
+        fail("no valid final Evidence artifact is available for restore-only recovery")
     known_ids = {
         int(run["databaseId"])
         for run in runs
@@ -261,6 +328,24 @@ def self_test() -> None:
         fail("active current-date run was not selected")
     if successful_run_ids(runs, "2099-01-01") != [3]:
         fail("successful current-date runs were not selected exactly")
+    artifact_inventory = [
+        {
+            "id": 10,
+            "name": "night-signal-state-2099-01-01",
+            "expired": False,
+            "created_at": "2099-01-01T10:00:00Z",
+            "workflow_run": {"id": 3, "head_branch": "main"},
+        },
+        {
+            "id": 11,
+            "name": "night-signal-state-2099-01-01",
+            "expired": True,
+            "created_at": "2099-01-01T11:00:00Z",
+            "workflow_run": {"id": 4, "head_branch": "main"},
+        },
+    ]
+    if artifact_inventory_run_ids("2099-01-01", artifact_inventory) != [3]:
+        fail("failed-run artifact recovery inventory is incorrect")
     print("NIGHT SIGNAL ARTIFACT SELF-TEST PASSED")
 
 
@@ -268,12 +353,22 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("issue_date", nargs="?", default=datetime.now(JST).date().isoformat())
     parser.add_argument("--state-root", type=Path, default=STATE_ROOT)
+    parser.add_argument("--restore-only", action="store_true")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
     if args.self_test:
         self_test()
         return 0
-    print(json.dumps(ensure_artifact(args.issue_date, args.state_root), ensure_ascii=False))
+    print(
+        json.dumps(
+            ensure_artifact(
+                args.issue_date,
+                args.state_root,
+                restore_only=args.restore_only,
+            ),
+            ensure_ascii=False,
+        )
+    )
     return 0
 
 

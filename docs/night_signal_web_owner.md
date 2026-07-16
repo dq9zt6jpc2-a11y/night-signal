@@ -1,0 +1,108 @@
+# NIGHT SIGNAL PC-independent Web owner
+
+## Production boundary
+
+The computer may be shut down for almost the whole day. Therefore a local
+Codex automation is never the production owner. GitHub Actions collects and
+stores final Evidence. A ChatGPT Web Scheduled task included with the existing
+ChatGPT subscription performs one editorial review through the GitHub plugin.
+GitHub Actions then applies that saved review deterministically, runs every
+quality gate, commits, deploys Pages, and audits the root and dated URLs.
+
+This design makes no GitHub Models, OpenAI API, Copilot, or other separately
+billed model request. It never sends the 6MB-class Evidence bundle to ChatGPT.
+The Web task reads only the compact, lossless review packet split into parts no
+larger than 850KB. Candidate events are not capped or shortened to fit a quota.
+
+## Required Web Scheduled tasks
+
+Create these in ChatGPT on the Web, with the GitHub plugin connected to
+`dq9zt6jpc2-a11y/night-signal`:
+
+- Primary owner: every day at 17:20 JST.
+- Recovery heartbeat: every day at 18:20 JST.
+
+The second task is audit-first. When the first task succeeded it reads only the
+small status/review files and exits, so it does not repeat the editorial review.
+These tasks run in the cloud; the Mac and the local ChatGPT app may be off.
+
+Use the following prompt for both tasks:
+
+```text
+You are the PC-independent NIGHT SIGNAL editorial owner. Use only the GitHub
+plugin and the repository dq9zt6jpc2-a11y/night-signal. Never use local files,
+Computer Use, a browser UI, GitHub Models, the OpenAI API, Copilot, or another
+paid service.
+
+Set ISSUE_DATE to today's date in Asia/Tokyo. First check these exact refs:
+1. night-signal-review-ISSUE_DATE at
+   cloud-review/ISSUE_DATE/editor_review.json
+2. night-signal-feedback-ISSUE_DATE at
+   cloud-feedback/ISSUE_DATE/status.json
+
+If the review exists and feedback status is success, stop. If a review exists
+and feedback is absent at the 18:20 recovery heartbeat, resave the identical
+responses once with cloud_handoff.recovery_attempt=1 and a refreshed reviewed_at
+to retrigger deterministic publication; if recovery_attempt is already 1, stop.
+Do not perform another editorial review. If feedback status is failed and
+failed_stage is apply or gates, read validator_log_tail and change only the named
+rejected request/event entries, keeping all accepted responses byte-for-byte
+unchanged. Set cloud_handoff.correction_attempt=1. If failure is restore,
+base_guard, commit, push, pages, pages_retry, pages_watch, or verify, do not alter
+any response: resave the same review once with cloud_handoff.recovery_attempt=1
+to rerun only the deterministic recovery. If the matching attempt value is
+already 1, stop with the exact remaining reason. Permit at most one correction
+or recovery commit in this run.
+
+If no review exists, fetch
+cloud-evidence/ISSUE_DATE/manifest.json from branch
+night-signal-evidence-ISSUE_DATE. If it is absent, stop without creating a
+branch; the 18:20 heartbeat will check again. Read every request part listed by
+the manifest exactly once. Follow the manifest policy and the editorial rules
+in docs/night_signal_plus_runbook.md. Account for every request and every event.
+Publish every material new delta without a count target. Exclude current-issue
+duplicates, previous-issue duplicates, background/navigation, wrong entities,
+and events with no material update. Do not use previous_updates as factual
+Evidence. Do not pad summaries with history, generic company descriptions,
+common knowledge, repetition, or unsupported inference. Preserve all supported
+numbers, dates, scope, conditions, reasons, and results needed to understand an
+accepted event. Quarterly, annual, and final earnings results and material
+market moves remain eligible.
+
+Create branch night-signal-review-ISSUE_DATE from main only if it does not
+exist. Create cloud-review/ISSUE_DATE/editor_review.json as one valid JSON object
+with contract, issue_date, the exact manifest evidence_sha256, every response,
+and:
+"cloud_handoff": {
+  "execution_surface": "chatgpt-web-scheduled-task",
+  "reviewed_at": "timezone-aware ISO timestamp"
+}
+Do not create or change any other repository file. The push automatically starts
+Publish reviewed NIGHT SIGNAL. Do not manually start collection, publication,
+or Pages workflows and do not perform a second full review.
+```
+
+The repository implementation cannot create a ChatGPT Web Scheduled task from a
+local checkout. Activation of these two Web tasks is therefore an explicit
+deployment prerequisite, not something a successful GitHub commit can prove.
+
+## Automatic recovery path
+
+`NIGHT SIGNAL Evidence Collection` keeps near-window runners alive until 16:45
+JST, deduplicates overlapping collectors, uploads final Evidence for three days,
+and publishes an immutable compact handoff branch. A later heartbeat restores
+the existing Artifact even when the original workflow failed after upload; it
+does not recollect.
+
+`Publish reviewed NIGHT SIGNAL` checks the Evidence hash and Web-task
+provenance, accounts for every request/event, applies the review without a model
+call, runs deterministic gates, and commits atomically. A moving `main` causes
+one rebuild from the same review. A push race causes one rebuild. A Pages failure
+causes one redeploy of the same committed issue. No path blindly repeats
+collection or model review.
+
+Every publish run writes compact success or exact validator failure feedback to
+`night-signal-feedback-ISSUE_DATE`. The recovery Web task uses that feedback to
+patch only rejected entries. The final acceptance condition is not a green
+Pages job alone: `publication_audit.py` must prove that origin `main`, the root
+URL, and the dated URL all agree on the same issue date.

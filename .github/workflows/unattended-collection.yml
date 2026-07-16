@@ -10,12 +10,13 @@ on:
   schedule:
     - cron: "27 02 * * *"
     - cron: "27 05 * * *"
+    - cron: "27 06 * * *"
     - cron: "17 07 * * *"
     - cron: "47 07 * * *"
     - cron: "17 08 * * *"
 
 permissions:
-  contents: read
+  contents: write
   actions: read
 
 concurrency:
@@ -53,7 +54,7 @@ jobs:
     needs: owner_guard
     if: ${{ needs.owner_guard.outputs.proceed == 'true' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 105
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -77,6 +78,14 @@ jobs:
         id: timing
         run: |
           ACTION="$(python3 scripts/publication_timing.py --decision --event-name "$GITHUB_EVENT_NAME")"
+          if [[ "$GITHUB_EVENT_NAME" == "schedule" && "$ACTION" == "wait" ]]; then
+            WAIT_SECONDS="$(python3 scripts/publication_timing.py --near-window-wait-seconds --max-wait-minutes 30)"
+            if (( WAIT_SECONDS > 0 )); then
+              echo "Retaining this runner for ${WAIT_SECONDS}s until the final collection window."
+              sleep "$WAIT_SECONDS"
+              ACTION="$(python3 scripts/publication_timing.py --decision --event-name "$GITHUB_EVENT_NAME")"
+            fi
+          fi
           echo "action=$ACTION" >> "$GITHUB_OUTPUT"
 
       - name: Detect an already verified publication
@@ -114,6 +123,13 @@ jobs:
           echo "Reusable final Evidence artifact ${{ steps.evidence_artifact.outputs.artifact_id }} is already available."
           echo "Skipping duplicate web collection."
 
+      - name: Restore reusable Evidence for a missing cloud handoff
+        if: ${{ steps.current_publication.outputs.published != 'true' && steps.evidence_artifact.outputs.artifact_ready == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 scripts/night_signal_review_artifact.py "$ISSUE_DATE" --restore-only
+
       - name: Collect complete web Evidence and prepare the Plus review packet
         id: packet
         if: ${{ steps.timing.outputs.action == 'run' && steps.current_publication.outputs.published != 'true' && steps.evidence_artifact.outputs.artifact_ready != 'true' }}
@@ -139,9 +155,14 @@ jobs:
           retention-days: 3
           compression-level: 6
 
-      - name: Report zero-cost collection boundary
-        if: ${{ steps.packet.outputs.created == 'true' }}
+      - name: Publish the immutable PC-independent review handoff
+        if: ${{ steps.current_publication.outputs.published != 'true' && (steps.packet.outputs.created == 'true' || steps.evidence_artifact.outputs.artifact_ready == 'true') }}
         run: |
-          echo "Evidence and every distinct candidate event are ready for one Codex Plus review."
+          python3 scripts/night_signal_cloud_handoff.py "$ISSUE_DATE" --publish
+
+      - name: Report zero-cost collection boundary
+        if: ${{ steps.current_publication.outputs.published != 'true' && (steps.packet.outputs.created == 'true' || steps.evidence_artifact.outputs.artifact_ready == 'true') }}
+        run: |
+          echo "Evidence and every distinct candidate event are ready on the immutable cloud handoff branch."
           echo "Repository model API requests: 0"
           echo "Additional paid API requests: 0"

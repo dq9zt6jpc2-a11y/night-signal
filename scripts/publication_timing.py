@@ -153,6 +153,27 @@ def scheduled_decision(now: datetime, policy: TimingPolicy) -> str:
     return "run"
 
 
+def near_window_wait_seconds(
+    now: datetime,
+    policy: TimingPolicy,
+    *,
+    max_wait_minutes: int = 30,
+) -> int:
+    """Keep a nearly-on-time GitHub runner alive instead of discarding it."""
+    if max_wait_minutes <= 0:
+        return 0
+    current = now.astimezone(ZoneInfo(policy.timezone))
+    start = datetime.combine(
+        current.date(),
+        policy.final_collection_not_before,
+        tzinfo=ZoneInfo(policy.timezone),
+    )
+    seconds = int((start - current).total_seconds())
+    if 0 < seconds <= max_wait_minutes * 60:
+        return seconds
+    return 0
+
+
 def decision(now: datetime, event_name: str, policy: TimingPolicy) -> str:
     if event_name != "schedule":
         return "run"
@@ -197,6 +218,18 @@ def self_test() -> None:
             raise SystemExit(f"timing decision mismatch: {raw}: {actual} != {expected}")
     if decision(datetime.now(zone), "workflow_dispatch", policy) != "run":
         raise SystemExit("manual recovery must not be mistaken for a scheduled heartbeat")
+    if near_window_wait_seconds(
+        datetime.fromisoformat("2099-01-01T16:17:00+09:00"), policy
+    ) != 28 * 60:
+        raise SystemExit("near-window runner was not retained until 16:45")
+    if near_window_wait_seconds(
+        datetime.fromisoformat("2099-01-01T16:14:59+09:00"), policy
+    ) != 0:
+        raise SystemExit("early runner was retained beyond the bounded wait")
+    if near_window_wait_seconds(
+        datetime.fromisoformat("2099-01-01T16:45:00+09:00"), policy
+    ) != 0:
+        raise SystemExit("on-window runner should not sleep")
     if not scheduled_fresh_collection_allowed(
         datetime.fromisoformat("2099-01-01T17:15:00+09:00"), policy
     ):
@@ -211,6 +244,8 @@ def self_test() -> None:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--decision", action="store_true")
+    parser.add_argument("--near-window-wait-seconds", action="store_true")
+    parser.add_argument("--max-wait-minutes", type=int, default=30)
     parser.add_argument("--event-name", default="schedule")
     parser.add_argument("--now")
     parser.add_argument("--self-test", action="store_true")
@@ -219,6 +254,20 @@ def main() -> int:
         self_test()
         return 0
     policy = load_policy()
+    if args.near_window_wait_seconds:
+        now = (
+            datetime.fromisoformat(args.now)
+            if args.now
+            else datetime.now(ZoneInfo(policy.timezone))
+        )
+        print(
+            near_window_wait_seconds(
+                now,
+                policy,
+                max_wait_minutes=args.max_wait_minutes,
+            )
+        )
+        return 0
     if args.decision:
         now = (
             datetime.fromisoformat(args.now)

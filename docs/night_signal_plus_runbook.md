@@ -9,12 +9,14 @@ Publish the current JST issue automatically by 19:00 every evening. The priority
 3. token and runtime efficiency without weakening 1 or 2;
 4. no charge beyond the user's existing ChatGPT Plus subscription.
 
-GitHub Actions owns web Evidence collection only. The Codex automation included
-with ChatGPT Plus owns one compact editorial review, validation, commit, and Pages
-publication. Never call GitHub Models, the OpenAI API, Copilot credits, or another
-paid AI service.
+GitHub Actions owns Evidence collection and deterministic publication. A
+ChatGPT Web Scheduled task included with the existing subscription owns one
+compact editorial review through the GitHub plugin. The local Codex automation
+is emergency/manual diagnostics only and is never the production owner. See
+`docs/night_signal_web_owner.md` for the PC-independent task contract. Never call
+GitHub Models, the OpenAI API, Copilot credits, or another paid AI service.
 
-## Start gate
+## Local emergency start gate
 
 Work only in `/Users/shimadatakashi/Documents/Codex/2026-05-10/gpt`.
 
@@ -25,7 +27,7 @@ Work only in `/Users/shimadatakashi/Documents/Codex/2026-05-10/gpt`.
 4. Run `python3 scripts/publication_audit.py "$ISSUE_DATE"`. If it passes and
    root plus dated public URLs agree, stop without collection or review.
 
-## Obtain final Evidence without duplicate work
+## Obtain final Evidence without duplicate work (local emergency only)
 
 Run the single stage-aware helper:
 
@@ -46,7 +48,7 @@ python3 scripts/night_signal_plus_editor.py "$ISSUE_DATE" --prepare
 This command must report zero repository model requests and zero additional paid
 API requests. It must retain every distinct candidate event; there is no item cap.
 
-## Perform one compact Plus review
+## Perform one compact Web/Plus review
 
 Read `state/$ISSUE_DATE/editor_packet.json`; do not read the full Evidence bundle
 unless deterministic validation names a specific failed event. Review every
@@ -63,6 +65,10 @@ Write `state/$ISSUE_DATE/editor_review.json` with this shape:
   "contract": "codex-plus-editor-v1",
   "issue_date": "YYYY-MM-DD",
   "evidence_sha256": "copy exactly from editor_packet.json",
+  "cloud_handoff": {
+    "execution_surface": "chatgpt-web-scheduled-task",
+    "reviewed_at": "timezone-aware ISO timestamp"
+  },
   "responses": [
     {
       "request_id": "copy exactly from the packet",
@@ -165,10 +171,10 @@ dated public URLs show the same current date.
   redispatch/watch Pages once, then rerun only publication audit.
 - Current issue is already committed but not public: deploy the committed issue;
   do not enter collection or review.
-- The 17:35, 18:05, and 18:35 runs are recovery heartbeats after the 17:05 owner.
-  They must audit first and exit with minimal work when an earlier run already
-  succeeded. They resume from the latest deterministic checkpoint when an earlier
-  Codex task was interrupted before or during a stage.
+- The 17:20 Web task is the cloud owner and the 18:20 Web task is an audit-first
+  recovery heartbeat. A successful earlier review/publication must not be
+  repeated. The recovery task reads the compact feedback branch and patches only
+  the rejected request/event entries.
 
 CLI network or authentication commands may be retried once. Model turns, full
 collection, full review, commits, and workflow dispatches must never be blindly
@@ -192,9 +198,9 @@ efficiency improvement.
 
 ## Model review
 
-Production uses `gpt-5.6-terra` at low reasoning because it balances long
-evidence review quality with Plus usage. On Mondays only, check official OpenAI
-model documentation for a newer Codex-capable model. Do not change production
-automatically. Promote only after representative NIGHT SIGNAL Evidence shows no
-coverage or quality regression and lower or equal total token use. Report nothing
-when there is no candidate.
+The configured Web task uses the evaluated `gpt-5.6-terra` quality/efficiency
+route at low reasoning when that model is available in the subscribed ChatGPT
+surface. On Mondays only, check official OpenAI model documentation for a newer
+Codex-capable model. Do not change production automatically. Promote only after
+representative NIGHT SIGNAL Evidence shows no coverage or quality regression and
+lower or equal total token use. Report nothing when there is no candidate.
