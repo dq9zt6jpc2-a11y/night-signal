@@ -108,7 +108,8 @@ def manifest_state(issue_date: str, state_root: Path, now: datetime) -> dict[str
                     and completed.timetz().replace(tzinfo=None) >= time(15, 30)
                     and current - completed <= timedelta(hours=4)
                     and completed <= current + timedelta(minutes=5)
-                    and manifest.get("collection_mode") == "github_models_unattended"
+                    and manifest.get("collection_mode")
+                    in {"web_evidence_plus_review", "github_models_unattended"}
                 ),
             }
         )
@@ -172,15 +173,12 @@ def decide_recovery(
     *,
     fresh_final_issue: bool,
     evidence_usable: bool,
-    github_models_token: bool = False,
 ) -> str:
     if fresh_final_issue:
         return "fresh_final_issue"
     if evidence_usable:
-        return "evidence"
-    if github_models_token:
-        return "github_models_unattended"
-    return "blocked_no_honest_collector"
+        return "codex_plus_review"
+    return "web_evidence_collection"
 
 
 def latest_automation_run(automation_id: str) -> dict[str, Any]:
@@ -286,23 +284,19 @@ def evaluate(
     current = now or datetime.now(JST)
     manifest = manifest_state(issue_date, state_root, current)
     evidence = evidence_state(issue_date, state_root)
-    github_models_available = bool(
-        os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")
-    )
     recovery = decide_recovery(
         fresh_final_issue=bool(manifest["fresh_final_issue"]),
         evidence_usable=bool(evidence["usable"]),
-        github_models_token=github_models_available,
     )
     result = {
         "issue_date": issue_date,
         "checked_at_jst": current.astimezone(JST).isoformat(timespec="seconds"),
         "manifest": manifest,
         "evidence": evidence,
-        "github_models_token_available": github_models_available,
+        "additional_paid_ai_required": False,
         "git": git_state(),
         "recovery_path": recovery,
-        "publication_blocked": recovery == "blocked_no_honest_collector",
+        "publication_blocked": False,
         "checkpoint": str(checkpoint_path(issue_date, state_root)),
     }
     if automation_id:
@@ -329,8 +323,8 @@ def self_test() -> None:
     if decide_recovery(
         fresh_final_issue=False,
         evidence_usable=False,
-    ) != "blocked_no_honest_collector":
-        fail("no-collector state must block publication")
+    ) != "web_evidence_collection":
+        fail("missing Evidence must select the web collector")
     if decide_recovery(
         fresh_final_issue=True,
         evidence_usable=False,
@@ -338,10 +332,9 @@ def self_test() -> None:
         fail("fresh issue must select deploy-existing recovery")
     if decide_recovery(
         fresh_final_issue=False,
-        evidence_usable=False,
-        github_models_token=True,
-    ) != "github_models_unattended":
-        fail("GitHub token must select unattended collection fallback")
+        evidence_usable=True,
+    ) != "codex_plus_review":
+        fail("usable Evidence must select the Codex Plus review")
     print("NIGHT SIGNAL RUNTIME AUDIT PASSED")
 
 

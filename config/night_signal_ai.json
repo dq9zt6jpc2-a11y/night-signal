@@ -1,0 +1,38 @@
+{
+  "contract_version": "2026-07-16.01",
+  "editor_contract_revision": "codex-plus-review-v1-event-boundary-unbounded",
+  "additional_paid_services_allowed": false,
+  "included_subscription": "ChatGPT Plus",
+  "production_editor": {
+    "surface": "Codex automation",
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "low"
+  },
+  "quality_order": [
+    "coverage",
+    "source_grounding",
+    "novelty_precision",
+    "summary_completeness",
+    "token_efficiency"
+  ],
+  "token_savings_allowed": [
+    "exact duplicate suppression",
+    "same-event source consolidation",
+    "unchanged three-issue history suppression",
+    "validated decision reuse",
+    "failed-event-only correction"
+  ],
+  "token_savings_forbidden": [
+    "publication item caps",
+    "watch-topic removal",
+    "material fact truncation",
+    "earnings-result suppression",
+    "material market-move suppression"
+  ],
+  "latest_model_review": {
+    "cadence": "weekly",
+    "source": "official OpenAI documentation",
+    "automatic_production_promotion": false,
+    "promotion_requires_representative_evidence_evaluation": true
+  }
+}

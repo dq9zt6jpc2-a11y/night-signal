@@ -1,6 +1,6 @@
 # NIGHT SIGNAL 基本設計
 
-更新日: 2026-07-11
+更新日: 2026-07-16
 
 ## 1. ミッション
 
@@ -80,8 +80,10 @@ Evidenceには網羅性確認用のトップページや索引も保持する。
 
 一つの処理を複数段階で補修しない。後段が前段の不足を埋める設計は禁止する。
 
-定刻実行ownerとアプリケーションownerは一つにする。Workflowから内部処理を
-直接呼ばず、第二の収集・要約・公開経路を作らない。
+GitHub Actionsは認証不要のWeb Evidence収集とcompact packet作成だけを担当する。
+ChatGPT Plusに含まれるCodex automationを唯一の編集・検証・commit・公開ownerとする。
+両者の境界はhash付き`evidence.json`と`editor_packet.json`だけに固定し、どちらにも
+相手段階を実行するfallbackを持たせない。
 
 ## 5. 網羅性
 
@@ -136,8 +138,8 @@ Editor前の決定的処理で、同一事象の複数記事だけを一つのev
 参照元に十分な情報がある時だけ詳しくし、情報がない時は短いままにする。
 参照元にない重要性、影響、常識、背景、未確定点を推測で補わない。
 
-モデルへは、event ID、最大8,000字まで保持した本文、短いEvidence ID、Evidenceごとの
-watch topic IDだけを渡す。
+Codex Plus reviewへは、event ID、必要な根拠文、短いEvidence ID、Evidenceごとの
+watch topic IDだけをcompact packetとして渡す。全Evidenceや作業ログは読ませない。
 複数記事を一つのrequestへ詰めるために本文を再切詰めしない。request上限へ近づく時は、
 同一事象を分断しない単位でrequestを分ける。同一eventの重複報道だけで上限を超える場合は、
 日本語原文、本文量、取得順で決定的に代表ソースを選び、選んだ本文は切り詰めない。選外URLと
@@ -157,20 +159,19 @@ Issue内部では同じ文列を検証と出典対応に使うが、詳細ペー
 掲載可能Evidenceには各段階の短い連番IDを付ける。ただし完全性の単位は記事ではなく
 eventとし、すべてのeventが公開項目または限定された除外理由へ一度だけ割り当てられたかを
 確認する。同一event内の複数記事に個別の採否説明を生成させず、要約文が引用したEvidence
-だけを公開側の根拠対応へ使い、event内の全URLはEvidenceに保持する。AIがeventの判断を返さなかった
-時に薄い文章を機械生成せず、その編集結果を不合格にする。根拠のない要約文だけを除去した
-後も必要十分な根拠付き要約が残る場合はevent全体を再生成しない。単純な事実要約は
-`config/night_signal_models.json`のroutine modelを使う。分析、表・グラフ中心、
-高数値密度の本文は同設定のquality modelへ最初から送り、通常modelの出力が契約を
-満たさない場合だけ一度昇格する。model名は設計文書へ固定せず、隔離評価に合格した
-稼働確認済みmodelだけを設定へ反映する。
-本番でHTTP 413/400を返すmodelは提供中でも日次経路に使わず、同一契約を安定して満たす
-最上位の稼働確認済みmodelをquality modelとする。
-本文が長いだけでは昇格しない。quality modelが単一eventでも内容契約を満たせない時だけ、
-簡潔なroutine modelを一度試し、同じ決定的検証を通過した出力だけを採用する。
-API障害時のfallbackも同じ決定的検証を通過した出力だけを採用する。
+だけを公開側の根拠対応へ使い、event内の全URLはEvidenceに保持する。reviewがeventの判断を
+返さなかった時に薄い文章を機械生成せず、その編集結果を不合格にする。根拠のない要約文だけを
+除去した後も必要十分な根拠付き要約が残る場合はevent全体を再生成しない。
 
-構造化出力はAPIのJSON Schemaで固定し、壊れたJSONを別promptで再生成・修復しない。
+本番reviewは`config/night_signal_ai.json`でGPT-5.6 Terra、low reasoningに固定する。
+これは長いEvidenceの日本語編集品質とPlus使用量の均衡を取る経路であり、件数や重要事実を
+減らすための軽量model routeではない。分析、表・グラフ、高数値密度のeventはpacket上の
+`quality_route=true`で明示し、同じreview内で一次情報、複数数値、帰属、矛盾を重点確認する。
+JSON responseは`night_signal_plus_editor.py`が全request、全event、Evidence ID境界、support、
+日本語copyを決定的に検証する。失敗時は指摘されたeventだけを最大2回修正し、合格済みeventを
+再生成しない。GitHub Models、OpenAI API、Copilot creditsは本番経路に置かない。
+
+構造化出力はrepositoryのreview schemaで固定し、壊れたJSON全体を別promptで再生成しない。
 短い公式発表、英語本文、表・画像中心の資料、分析記事を一律に排除せず、具体的な
 事実が題名を超えて取得できたかで同じように判定する。
 
@@ -181,9 +182,9 @@ API障害時のfallbackも同じ決定的検証を通過した出力だけを採
 更新する。Editor、要約モデル、検証、rendererの変更では同日Evidenceを無効化しない。
 
 - 取得後の失敗ではEvidenceを再利用する。
-- 編集途中の失敗では、Evidence、Editor契約、event payloadの全hashが一致する成功済み
-  chunkだけを再利用する。Editor契約は明示revisionで管理し、prompt、schema、正規化契約を
-  変えた時だけ更新する。制御フローだけの変更で成功済みAI出力を全無効化しない。
+- 編集途中の失敗では、Evidence、review契約、request/event payloadの全hashが一致する
+  合格済みresponseを再利用する。Validatorが示したrequest/eventだけを修正し、制御フローだけの
+  変更で成功済みresponseを全無効化しない。
 - 編集後の失敗ではIssueを再利用する。
 - GitまたはPagesの失敗で収集やAI処理を繰り返さない。
 - 既公開なら即終了する。
@@ -191,16 +192,12 @@ API障害時のfallbackも同じ決定的検証を通過した出力だけを採
   より前に限り、同じ前日Evidenceと前日の日付表示のまま復旧公開できる。当日号の収集開始後
   は前日号をrootへ出さず、それ以前の日付は受け付けない。
 
-公開時刻は`config/night_signal_operations.json`だけが所有する。19:00から収集・編集・
-commit・Pages確認を含む105分の処理上限と30分の安全余裕を引き、16:45を最終収集の
-開始窓とする。GitHubのschedule予定時刻は実行保証ではないため、複数の低コストheartbeatを
-置き、実際のJST時刻が16:45より前なら収集もmodel callも行わない。16:45以降に最初に
-開始したownerだけが新規収集し、19:00以降は処理を始めず期限超過として扱う。heartbeatの
-先頭は、現行cronで確認した最大205分の遅延にend-to-end処理上限105分を加えた310分を
-吸収できる位置に置く。後続heartbeatは公開auditに合格済みなら即終了する。最初の実行は
-新規収集し、取得後に失敗した後続実行だけが、契約一致・同日・16:45以降に完成した最終Evidenceを
-自動再利用する。17:15以降のheartbeatはcheckpoint復旧専用とし、利用可能な最終Evidenceが
-なければ全収集を繰り返さず停止する。
+公開時刻は`config/night_signal_operations.json`だけが所有する。16:45以降のGitHub Actions
+heartbeatはWeb Evidenceとcompact packetだけを収集し、AI、commit、Pages処理を行わない。
+18:05のCodex Plus ownerが最新の有効artifactを一度だけreviewして19:00までに公開する。
+18:35は回復heartbeatとし、18:05が成功済みならpublication auditだけで即終了する。
+未公開の場合も、active collectorを重複dispatchせず、Evidence、review、Issue、commit、Pagesの
+完了済み段階を順に再利用する。19:00以降は通常の日次処理を新規開始しない。
 
 Evidenceの構造、source check、discovery check、watch topic、取得チャネル、取得状態の
 検証規則は`night_signal_evidence.py`だけが所有する。Editor、Issue validator、coverage
@@ -208,11 +205,10 @@ audit、runtime audit、evalは同じ検証結果を使い、各段階で別の�
 CollectorとEditorの再利用可否は関係ファイルと設定のfingerprintで判定し、設計変更時の
 version更新忘れや、検証失敗後の不要な再収集・AI再実行を防ぐ。
 
-取得前にURL重複を除き、AIへ渡す前に同一記事と同一事象を決定的にまとめる。
-候補レビュー専用のAI処理は置かず、採否と要約を一回の構造化出力で行う。categoryは
-順番に処理し、途中失敗は成功済みchunkから再開する。AI処理は必要な編集にだけ使い、
-確認用canaryや同じ文章の再生成には使わない。推論量やmodelを上げるのは、実際の
-網羅性または要約品質が改善する場合だけとする。
+取得前にURL重複を除き、review前に同一記事と同一事象を決定的にまとめる。
+採否と要約は同じPlus reviewで行い、途中失敗は成功済みrequest/eventから再開する。
+reviewはcompact packetだけを読み、確認用canary、全Evidence再読、同じ文章の再生成には
+使わない。推論量やmodelを上げるのは、代表Evidenceで網羅性または要約品質が改善する場合だけとする。
 
 日次処理では公開に必要な検証だけを行う。全故障simulationは設計・実装変更時に
 行い、日次処理へ積み上げない。
@@ -225,7 +221,8 @@ Evidence網羅性、公開HTMLの各境界で一回ずつ検証し、同じ検�
 永続化する公開状態は現在号と直前3号に限定する。Editorは直前3号を新規性比較に使い、
 読者はarchiveから同じ3号を確認できる。次号が全local gateに合格した後で4号より古いstate、
 sample、dated siteと未使用detailを削除する。失敗途中では公開中の履歴を削除しない。
-旧形式のvalidation、日付別contract分岐、旧collection modeは持たない。
+旧形式のvalidationや日付別contract分岐は持たない。旧collection modeは直前3号を表示・監査する
+移行互換としてだけ受理し、新規Evidenceには生成しない。
 
 ## 8. 拡張と新技術
 
@@ -242,13 +239,11 @@ tokenのいずれかを品質低下なしで改善する場合だけ切り替え
 日次経路は、認証不要の登録ソース確認、日英および地域現地語の
 topic別ニュース探索、bounded horizon探索、媒体別の公開index探索、重要候補だけの
 event probeを使う。
-`night_signal_model_audit.py`は日次処理の開始時にOpenAI公式latest-model文書とGitHub Models
-catalogをHTTPだけで照合し、設定modelの提供終了と、公式最新familyに限定しないGitHub上の
-新しい互換世代・tierを検知する。照合に推論tokenは使わない。候補集合または評価契約が変わった
-時だけ、独立workflowが固定ケースで事実精度、除外精度、event完全性、処理時間、tokenを現行の
-routine/quality modelと各1回比較する。同じ候補と評価契約の結果はcacheから再利用し、日次公開へ
-評価tokenや遅延を足さない。品質非劣化を満たしても本番設定は自動変更せず、評価結果を確認して
-反映する。catalog取得不能は公開を止めず、設定済みmodelがcatalogから消えた場合だけmodel処理前に停止する。
+毎週月曜日だけOpenAI公式latest-model文書を確認し、Codex automationで利用できる新しい
+互換世代・tierを候補化する。変更がない日は追加の比較や報告を行わない。候補がある時だけ、
+固定した代表Evidenceで事実精度、除外精度、event完全性、要約品質、処理時間、総tokenを
+GPT-5.6 Terraと一回比較する。品質非劣化と同等以下のtoken使用を満たしても、本番設定は
+自動変更せず評価結果を確認して反映する。モデル確認不能は当日公開を止めない。
 
 Responses API `web_search`は全source metadata、domain filter、画像検索、長時間検索制御を
 利用できるが追加費用が発生するため、現行の日次経路へは追加しない。探索仕様の定期評価と、

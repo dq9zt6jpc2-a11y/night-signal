@@ -1,6 +1,6 @@
 # NIGHT SIGNAL 要求台帳
 
-更新日: 2026-07-11
+更新日: 2026-07-16
 
 ## ビジョン
 
@@ -74,23 +74,25 @@ Facebook、Instagram、TikTokを毎日巡回しなくても、設定テーマで
 - repositoryには公開中の号と直前3号を残す。直前号を最優先、さらに前2号を補助履歴として
   新規性検証に使い、公開archiveから
   読めるようにする。全監査合格後に4号より古いstate、sample HTML、dated siteを削除する。
-- 収集、編集、公開のownerと標準経路を一つにする。
+- GitHub ActionsはEvidence収集だけ、ChatGPT Plusに含まれるCodex automationは編集、
+  検証、commit、公開だけを担当し、同じ段階を実行する第二ownerを作らない。
 - 公開失敗時に収集やAI編集を無条件で繰り返さず、入力が同じ完了段階を再利用する。
+- ChatGPT Plus以外の有料API、GitHub Models、Copilot creditを日次経路で使用しない。
 
 ### 品質と効率
 
 - CollectorはEvidenceを取得し、Editorだけが事象統合、採否、要約を行う。
 - Validatorは拒否だけを行い、文章を後段で補修しない。
-- 同一事象の決定的なgrouping後、採否と要約を一回のAI処理で行う。単純な事実要約には
-  routine model、分析、表・グラフ中心、高数値密度の情報にはquality modelを使う。
-  本文の長さだけでquality modelへ上げず、下位modelが契約を満たさない時だけ一度昇格する。
+- 同一事象の決定的なgrouping後、採否と要約をChatGPT Plus内の一回のcompact reviewで
+  行う。全eventを渡し、分析、表・グラフ、高数値密度のeventには`quality_route`を付けて
+  同じGPT-5.6 Terra review内で慎重に照合する。件数上限や下位modelへの品質切下げは行わない。
+- 失敗時はValidatorが示したrequest/eventだけを修正し、合格済みeventを再生成しない。
 - 推論量、モデル、再検索、再検査は、代表評価で品質向上が確認できる時だけ増やす。
 - 日次は境界検査だけとし、全故障simulationとモデル比較は設計変更時に行う。
 - 新技術はEvidence取得手段またはEditorの置換候補として比較し、採用後に旧経路を
   恒久的に残さない。
-- 日次に公式latest-model情報と利用基盤のmodel catalogをHTTPだけで照合する。変更がない
-  日は推論を使わず、新modelが利用可能になった時だけ代表評価を要求する。最新という理由
-  だけで本番modelを自動変更しない。
+- 公式latest-model情報は週次だけ確認する。新modelが利用可能になった時だけ代表Evidenceで
+  網羅性、抽出精度、要約品質、tokenを比較し、最新という理由だけで本番modelを自動変更しない。
 
 ## 過去トラの再現クラス
 

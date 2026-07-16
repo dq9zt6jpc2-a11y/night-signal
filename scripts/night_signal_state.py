@@ -23,7 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = ROOT / "config" / "night_signal_coverage.json"
 MARKER_PATH = ROOT / ".night-signal-issue-date"
 DEFAULT_STATE_ROOT = ROOT / "state"
-MODEL_CONFIG_PATH = ROOT / "config" / "night_signal_models.json"
+AI_CONFIG_PATH = ROOT / "config" / "night_signal_ai.json"
 
 PUBLIC_COPY_FORBIDDEN_TERMS = sorted(
     set(
@@ -1158,8 +1158,11 @@ def validate_manifest_alignment(issue: dict[str, Any], cards: list[dict[str, Any
         fail("coverage_manifest collection_completed_at_jst must be ISO-8601")
     if completed.strftime("%Y-%m-%d") != issue_date:
         fail("coverage_manifest collection_completed_at_jst date mismatch")
-    if manifest.get("collection_mode") != "github_models_unattended":
-        fail("coverage_manifest collection_mode must use the canonical collector")
+    if manifest.get("collection_mode") not in {
+        "web_evidence_plus_review",
+        "github_models_unattended",
+    }:
+        fail("coverage_manifest collection_mode must use a supported canonical collector")
     expected_version = str(contract.get("contract_version"))
     if manifest.get("contract_version") != expected_version:
         fail(f"coverage_manifest contract_version must be {expected_version}")
@@ -1183,6 +1186,10 @@ def validate_issue_evidence(
     issue_date = require_str(issue, "issue_date")
     if bundle.get("issue_date") != issue_date:
         fail("Evidence date does not match issue date")
+    if issue.get("coverage_manifest", {}).get("collection_mode") != bundle.get(
+        "collection_mode"
+    ):
+        fail("Issue collection mode does not match its Evidence")
     if issue_path is not None:
         evidence_path = issue_path.parent / "evidence.json"
         if evidence_path.exists():
@@ -1279,10 +1286,10 @@ def build_coverage_manifest(
 
 
 def editor_contract_sha256() -> str:
-    config = read_json(MODEL_CONFIG_PATH).get("extraction", {})
+    config = read_json(AI_CONFIG_PATH)
     revision = config.get("editor_contract_revision")
     if not isinstance(revision, str) or not revision:
-        fail("night_signal_models is missing editor_contract_revision")
+        fail("night_signal_ai is missing editor_contract_revision")
     return hashlib.sha256(revision.encode("utf-8")).hexdigest()
 
 

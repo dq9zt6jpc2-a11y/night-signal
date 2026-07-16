@@ -279,8 +279,6 @@ def collect_and_build(
         fail("published-issue re-edit requires reusable final same-day Evidence")
     if evidence_is_reusable and issue_matches_evidence(issue_date):
         return
-    if not (os.getenv("GITHUB_TOKEN") or os.getenv("GH_TOKEN")):
-        fail("GITHUB_TOKEN is required for Editor model access")
     if not evidence_is_reusable:
         if (
             os.getenv("GITHUB_EVENT_NAME") == "schedule"
@@ -295,7 +293,18 @@ def collect_and_build(
         run([sys.executable, "scripts/night_signal_collect.py", issue_date])
     if not has_evidence(issue_date):
         fail(f"collection did not create evidence.json for {issue_date}")
-    run_editor_with_checkpoint_recovery(issue_date)
+    run(
+        [
+            sys.executable,
+            "scripts/night_signal_plus_editor.py",
+            issue_date,
+            "--prepare",
+        ]
+    )
+    fail(
+        "Codex Plus review is required: complete editor_review.json, run "
+        "night_signal_plus_editor.py --apply-review, then deploy the audited issue"
+    )
 
 
 def assemble_and_render(issue_date: str) -> None:
@@ -365,7 +374,7 @@ def validate_collection_freshness(
             f"{final_cutoff.isoformat()}; got {completed.isoformat()}"
         )
     mode = manifest.get("collection_mode")
-    if mode != "github_models_unattended":
+    if mode not in {"web_evidence_plus_review", "github_models_unattended"}:
         fail(f"unsupported collection_mode for publication: {mode}")
     return {
         "collection_completed_at_jst": completed.isoformat(),
@@ -609,10 +618,7 @@ def self_tests(profile: str) -> None:
         return
     if profile != "full":
         fail(f"unknown verification profile: {profile}")
-    run([sys.executable, "scripts/night_signal_models.py"])
     run([sys.executable, "scripts/night_signal_run_guard.py", "--self-test"])
-    run([sys.executable, "scripts/night_signal_model_audit.py", "--self-test"])
-    run([sys.executable, "scripts/night_signal_model_eval.py", "--self-test"])
     run([sys.executable, "scripts/publication_timing.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_runtime_audit.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_state.py", "--self-test"])
@@ -620,6 +626,8 @@ def self_tests(profile: str) -> None:
     run([sys.executable, "scripts/simulate_runtime_failures.py"])
     run([sys.executable, "scripts/simulate_consecutive_days.py"])
     run([sys.executable, "scripts/night_signal_collect.py", "--self-test"])
+    run([sys.executable, "scripts/night_signal_review_artifact.py", "--self-test"])
+    run([sys.executable, "scripts/night_signal_plus_editor.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_eval.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_editor.py", "--self-test"])
     run([sys.executable, "scripts/quality_gate.py", "--self-test"])

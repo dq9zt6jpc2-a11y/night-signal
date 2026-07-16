@@ -3672,7 +3672,7 @@ def collect_evidence(issue_date: str) -> dict[str, Any]:
         checked_at,
         records_by_category,
         discovery_checks_by_category=discovery_checks_by_category,
-        collection_mode="github_models_unattended",
+        collection_mode="web_evidence_plus_review",
     )
     state_dir = STATE_ROOT / issue_date
     state_dir.mkdir(parents=True, exist_ok=True)
@@ -3695,7 +3695,7 @@ def collect_evidence(issue_date: str) -> dict[str, Any]:
             for entry in bundle["categories"].values()
         ),
         "evidence": str(evidence_path),
-        "collection_mode": "github_models_unattended",
+        "collection_mode": "web_evidence_plus_review",
     }
 
 

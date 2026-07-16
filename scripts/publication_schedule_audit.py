@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Verify the two-workflow, single-owner publication boundary."""
+"""Verify the zero-additional-charge collection/review/publication boundary."""
 
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -13,9 +14,11 @@ import publication_timing as timing
 ROOT = Path(__file__).resolve().parents[1]
 PAGES = ROOT / ".github" / "workflows" / "pages.yml"
 COLLECTION = ROOT / ".github" / "workflows" / "unattended-collection.yml"
-MODEL_EVALUATION = ROOT / ".github" / "workflows" / "model-catalog-evaluation.yml"
+RETIRED_MODEL_WORKFLOW = ROOT / ".github" / "workflows" / "model-catalog-evaluation.yml"
+PLUS_EDITOR = ROOT / "scripts" / "night_signal_plus_editor.py"
 PUBLISH_DRIVER = ROOT / "scripts" / "night_signal_publish.py"
-EDITOR = ROOT / "scripts" / "night_signal_editor.py"
+AI_POLICY = ROOT / "config" / "night_signal_ai.json"
+RUNBOOK = ROOT / "docs" / "night_signal_plus_runbook.md"
 
 
 def fail(message: str) -> None:
@@ -25,7 +28,10 @@ def fail(message: str) -> None:
 
 def cron_minutes(text: str) -> list[int]:
     values = []
-    for minute, hour in re.findall(r'cron:\s*"(\d{2})\s+(\d{2})\s+\*\s+\*\s+\*"', text):
+    for minute, hour in re.findall(
+        r'cron:\s*"(\d{2})\s+(\d{2})\s+\*\s+\*\s+\*"',
+        text,
+    ):
         values.append((int(hour) * 60 + int(minute) + 9 * 60) % (24 * 60))
     return sorted(values)
 
@@ -38,188 +44,104 @@ def ordered(text: str, *labels: str) -> bool:
 def main() -> int:
     pages = PAGES.read_text(encoding="utf-8")
     collection = COLLECTION.read_text(encoding="utf-8")
-    model_evaluation = MODEL_EVALUATION.read_text(encoding="utf-8")
+    plus_editor = PLUS_EDITOR.read_text(encoding="utf-8")
     publish_driver = PUBLISH_DRIVER.read_text(encoding="utf-8")
-    editor = EDITOR.read_text(encoding="utf-8")
     policy = timing.load_policy()
+
     if cron_minutes(pages) or re.search(r"\n\s+push:", pages):
-        fail("Pages must be dispatch-only")
+        fail("Pages must remain dispatch-only")
     if "--deploy-existing" not in pages:
-        fail("Pages may deploy only committed issue state")
+        fail("Pages may deploy only committed audited issue state")
     expected_heartbeats = sorted(
         timing.minutes(value) for value in policy.schedule_heartbeats_jst
     )
     if cron_minutes(collection) != expected_heartbeats:
         fail(
-            "collection heartbeats do not match the timing policy: "
+            "Evidence heartbeats do not match timing policy: "
             f"{cron_minutes(collection)} != {expected_heartbeats}"
         )
-    if "night-signal-unattended-collection" not in collection or "cancel-in-progress: false" not in collection:
-        fail("collection needs one non-cancelling concurrency owner")
-    if (
-        f"timeout-minutes: {policy.runtime_budget_minutes}" not in collection
-        or f"timeout-minutes: {policy.build_timeout_minutes}" not in collection
-        or f"timeout-minutes: {policy.pages_timeout_minutes}" not in collection
-    ):
-        fail("collection and job runtime must be bounded")
-    if collection.count('python3 scripts/night_signal_publish.py "$ISSUE_DATE"') != 4:
-        fail(
-            "fresh, Evidence-reuse, published re-edit, and checkpoint-only "
-            "reprocessing must use the canonical pipeline"
-        )
-    for direct_owner in (
-        "python3 scripts/night_signal_collect.py",
-        "python3 scripts/night_signal_editor.py",
-    ):
-        if direct_owner in collection:
-            fail(f"workflow bypasses the canonical pipeline: {direct_owner}")
-    if not ordered(
-        collection,
-        "Guard against a queued duplicate owner",
-        "Evaluate publication window",
-        "Detect an already verified publication",
-        "Enforce publication deadline",
-        "Resolve build decision",
-        "Audit current model catalog",
-        "Restore Evidence checkpoint",
-        "Build audited issue",
-        "Save Evidence checkpoint",
-        "Commit audited issue",
-        "Dispatch Pages publication",
-        "Wait for Pages publication",
-    ):
-        fail("collection, checkpoint, commit, and publication stages are out of order")
-    if (
-        'ALREADY_PUBLISHED: ${{ steps.current_publication.outputs.published }}'
-        not in collection
-        or 'echo "run=false" >> "$GITHUB_OUTPUT"' not in collection
-        or "steps.operation.outputs.run == 'true'" not in collection
-    ):
-        fail("verified publication must short-circuit ordinary fallback attempts")
-    if "force:" in collection or "inputs.force" in collection:
-        fail("verified publication must not have a force-recollection bypass")
-    if "NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE" in collection or "NIGHT_SIGNAL_ALLOW_EXPLICIT_STALE" in pages:
-        fail("production workflows must never publish a stale issue as latest")
-    if "scripts/publication_timing.py --decision" not in collection:
-        fail("scheduled work must use the actual-time publication window")
-    if (
-        "TIMING_ACTION: ${{ steps.timing.outputs.action }}" not in collection
-        or '"$TIMING_ACTION" == "run"' not in collection
-    ):
-        fail("model and publication work must be gated by the timing decision")
-    if "night_signal_model_audit.py" not in collection:
-        fail("daily publication must check current model availability without inference")
-    if not ordered(
-        collection,
-        "reuse_evidence:",
-        "default: true",
-        "reprocess_existing:",
-        "default: false",
-        "reedit_published:",
-        "Resolve recovery mode",
-        'if [[ "$GITHUB_EVENT_NAME" == "schedule" ]]',
-        'echo "reuse=true"',
-        'echo "reprocess=false"',
-        'echo "reedit=false"',
-        "Locate latest Evidence checkpoint",
-        "steps.recovery.outputs.reuse == 'true'",
-        "REUSE_EVIDENCE: ${{ steps.recovery.outputs.reuse }}",
-        "--reuse-evidence --reprocess-existing",
-        'elif [[ "$REEDIT_PUBLISHED" == "true" ]]',
-        "--reuse-evidence --reedit-published",
-        'elif [[ "$REUSE_EVIDENCE" == "true" ]]',
-        'python3 scripts/night_signal_publish.py "$ISSUE_DATE" '
-        "--reuse-evidence --verification-profile deploy",
-    ):
-        fail(
-            "manual recovery must reuse checkpoints, published re-edit and "
-            "checkpoint-only reprocessing must be explicit, and scheduled "
-            "recovery must reuse only valid final Evidence"
-        )
-    if (
-        'require_final=os.getenv("GITHUB_EVENT_NAME") == "schedule"'
-        not in publish_driver
-    ):
-        fail("scheduled checkpoint reuse must reject pre-final Evidence")
-    if (
-        "late scheduled recovery requires reusable final Evidence"
-        not in publish_driver
-        or "scheduled_fresh_collection_allowed" not in publish_driver
-    ):
-        fail("late recovery must not repeat a full collection")
-    if not re.search(
-        r"reedit_published:.{0,240}default:\s*false",
-        collection,
-        flags=re.S,
-    ):
-        fail("published re-edit must be explicit and disabled by default")
-    if (
-        "Checkpoint-only reprocessing requires an already audited publication."
-        not in collection
-        or "Published re-edit requires an already audited publication."
-        not in collection
-        or "Checkpoint-only reprocessing cannot run without a saved artifact."
-        not in collection
-    ):
-        fail("reprocessing must fail closed before any model request")
-    if (
-        '"--postprocess-existing"' not in publish_driver
-        or '"--postprocess-existing"' not in editor
-        or '"model_requests": 0' not in editor
-        or publish_driver.find('"--postprocess-existing"')
-        > publish_driver.find("GITHUB_TOKEN is required for Editor model access")
-    ):
-        fail("reprocessing must use a deterministic path that cannot enter a model call")
-    if (
-        "scripts/night_signal_run_guard.py" not in collection
-        or "needs: owner_guard" not in collection
-        or "needs.owner_guard.outputs.proceed == 'true'" not in collection
-        or "Report duplicate owner skip" not in collection
-    ):
-        fail("queued duplicate owner runs must stop before model work")
-    if "actions/upload-artifact@v7.0.1" not in collection or "actions/download-artifact@v8.0.1" not in collection:
-        fail("a failed first attempt must leave a reusable Evidence")
-    for checkpoint_name in ("editor_checkpoint.json", "runtime_checkpoint.json"):
-        if checkpoint_name not in collection:
-            fail(f"recovery artifact is missing {checkpoint_name}")
-    if "models: read" not in collection or "contents: write" not in collection or "actions: write" not in collection:
-        fail("workflow permissions do not match collection and publication duties")
-    if "git push origin HEAD:main" not in collection or "gh workflow run pages.yml" not in collection:
-        fail("audited state must be committed before Pages dispatch")
-    if 'gh run watch "$RUN_ID" --exit-status' not in collection:
-        fail("collection owner must wait for public deployment")
-    if not ordered(
-        model_evaluation,
-        "Verify model selection contracts",
-        "Audit current catalogs without inference",
-        "Restore evaluation result for this exact candidate set",
-        "Evaluate new candidates once",
-        "Cache the bounded evaluation",
-        "Upload model audit and new evaluation",
-    ):
-        fail("model catalog audit and isolated evaluation stages are out of order")
-    for required in (
-        'cron: "15 00 * * *"',
-        "models: read",
+    if "night-signal-evidence-collection" not in collection:
+        fail("Evidence collection needs one non-cancelling owner")
+    if "cancel-in-progress: false" not in collection:
+        fail("a delayed Evidence run must not cancel an active collector")
+    if "models: read" in collection or "models.github.ai" in collection:
+        fail("active collection must not depend on retired GitHub Models")
+    if "api.openai.com" in collection or "OPENAI_API_KEY" in collection:
+        fail("active collection must not enter a separately billed OpenAI API path")
+    for forbidden in (
+        "git push origin HEAD:main",
+        "gh workflow run pages.yml",
         "night_signal_model_audit.py",
-        "--github-output",
-        "steps.audit.outputs.evaluation_required == 'true'",
-        "steps.evaluation_cache.outputs.cache-hit != 'true'",
-        "night_signal_model_eval.py",
-        "actions/cache/restore@v4",
-        "actions/cache/save@v4",
+        "night_signal_editor.py",
     ):
-        if required not in model_evaluation:
-            fail(f"model evaluation workflow is missing {required}")
-    if "contents: write" in model_evaluation or "git push" in model_evaluation:
-        fail("model evaluation must never change the production route")
+        if forbidden in collection:
+            fail(f"Evidence-only workflow contains forbidden production work: {forbidden}")
+    if not ordered(
+        collection,
+        "Guard against a queued duplicate collector",
+        "Evaluate final collection window",
+        "Detect an already verified publication",
+        "Collect complete web Evidence and prepare the Plus review packet",
+        "Save the complete Evidence and compact review packet",
+        "Report zero-cost collection boundary",
+    ):
+        fail("Evidence collection stages are out of order")
+    for required in (
+        "scripts/night_signal_collect.py",
+        "scripts/night_signal_plus_editor.py",
+        "--prepare",
+        "editor_packet.json",
+        "retention-days: 3",
+        "if-no-files-found: error",
+        "Repository model API requests: 0",
+        "Additional paid API requests: 0",
+    ):
+        if required not in collection:
+            fail(f"Evidence workflow is missing {required}")
+    if RETIRED_MODEL_WORKFLOW.exists():
+        fail("retired GitHub Models evaluation workflow is still active")
+    for retired_path in (
+        ROOT / "scripts" / "night_signal_models.py",
+        ROOT / "scripts" / "night_signal_model_audit.py",
+        ROOT / "scripts" / "night_signal_model_eval.py",
+        ROOT / "config" / "night_signal_models.json",
+    ):
+        if retired_path.exists():
+            fail(f"retired GitHub Models component still exists: {retired_path.name}")
+    if not AI_POLICY.exists() or not RUNBOOK.exists():
+        fail("Plus model policy and unattended runbook must both exist")
+    ai_policy = json.loads(AI_POLICY.read_text(encoding="utf-8"))
+    production_editor = ai_policy.get("production_editor", {})
+    if ai_policy.get("additional_paid_services_allowed") is not False:
+        fail("additional paid AI services must be disabled")
+    if production_editor.get("model") != "gpt-5.6-terra":
+        fail("production Plus review must use the evaluated quality/efficiency route")
+    if production_editor.get("reasoning_effort") != "low":
+        fail("routine evidence review must use bounded reasoning")
+    runbook = RUNBOOK.read_text(encoding="utf-8")
+    for required in (
+        "scripts/night_signal_review_artifact.py",
+        "change only the named request/event",
+        "do not recollect or re-review",
+        "second 18:35 run",
+        "official OpenAI",
+    ):
+        if required.casefold() not in runbook.casefold():
+            fail(f"Plus runbook is missing recovery contract: {required}")
+    if "models.request(" in plus_editor or "urllib.request" in plus_editor:
+        fail("Plus importer must be deterministic and network-free")
+    collect_start = publish_driver.find("def collect_and_build(")
+    assemble_start = publish_driver.find("def assemble_and_render(")
+    collect_body = publish_driver[collect_start:assemble_start]
+    if "night_signal_plus_editor.py" not in collect_body:
+        fail("canonical publish driver does not hand unresolved Evidence to Plus review")
+    if "Editor model access" in collect_body:
+        fail("canonical publish driver can still enter the retired model editor")
     print(
         "PUBLICATION SCHEDULE AUDIT PASSED: "
         f"window={policy.final_collection_not_before.strftime('%H:%M')}-"
         f"{policy.publication_deadline.strftime('%H:%M')}, "
-        f"runtime={policy.runtime_budget_minutes}m, "
-        f"safety={policy.deadline_safety_margin_minutes}m, "
-        "scheduled_collection=fresh-or-final-checkpoint, late_recovery=checkpoint-only"
+        "collector=web-evidence-only, editor=codex-plus, paid-api-requests=0"
     )
     return 0
 

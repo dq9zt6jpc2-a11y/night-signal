@@ -29,16 +29,11 @@ def main() -> int:
             fresh_final_issue=True,
             evidence_usable=False,
         ),
-        "evidence": runtime.decide_recovery(
+        "codex_plus_review": runtime.decide_recovery(
             fresh_final_issue=False,
             evidence_usable=True,
         ),
-        "github_models_unattended": runtime.decide_recovery(
-            fresh_final_issue=False,
-            evidence_usable=False,
-            github_models_token=True,
-        ),
-        "blocked_no_honest_collector": runtime.decide_recovery(
+        "web_evidence_collection": runtime.decide_recovery(
             fresh_final_issue=False,
             evidence_usable=False,
         ),
