@@ -1,6 +1,6 @@
 # NIGHT SIGNAL 要求台帳
 
-更新日: 2026-07-16
+更新日: 2026-07-17
 
 ## ビジョン
 
@@ -78,8 +78,13 @@ Facebook、Instagram、TikTokを毎日巡回しなくても、設定テーマで
 - repositoryには公開中の号と直前3号を残す。直前号を最優先、さらに前2号を補助履歴として
   新規性検証に使い、公開archiveから
   読めるようにする。全監査合格後に4号より古いstate、sample HTML、dated siteを削除する。
-- GitHub ActionsはEvidence収集だけ、ChatGPT Plusに含まれるCodex automationは編集、
-  検証、commit、公開だけを担当し、同じ段階を実行する第二ownerを作らない。
+- GitHub ActionsはEvidence収集と決定論的な検証・commit・Pages公開を担当し、
+  ChatGPT Plusに含まれるWeb Scheduled taskはcompact packetの編集reviewだけを担当する。
+  ローカルPCは本番ownerにせず、同じ段階を実行する第二ownerを作らない。
+- Web Scheduled taskの設定、当日heartbeat、review、公開結果を別々に確認する。
+  task未設定・自動停止・GitHub権限不足を、repository設計の合格で隠さない。
+- review後のrestore、commit、push、Pages、公開反映の失敗は、同じreviewを使う
+  GitHub Actions watchdogが一度だけ復旧し、収集やAI reviewを繰り返さない。
 - 公開失敗時に収集やAI編集を無条件で繰り返さず、入力が同じ完了段階を再利用する。
 - ChatGPT Plus以外の有料API、GitHub Models、Copilot creditを日次経路で使用しない。
 

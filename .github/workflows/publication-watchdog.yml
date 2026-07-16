@@ -1,0 +1,152 @@
+name: Audit and recover NIGHT SIGNAL publication
+run-name: Audit NIGHT SIGNAL publication ${{ inputs.issue_date || github.run_id }}
+
+on:
+  schedule:
+    # 18:35, 18:50, and 19:05 JST.  Actual start time still controls whether
+    # a missing issue is a pre-deadline checkpoint or a hard failure.
+    - cron: "35 09 * * *"
+    - cron: "50 09 * * *"
+    - cron: "05 10 * * *"
+  workflow_dispatch:
+    inputs:
+      issue_date:
+        description: "JST issue date to audit. Empty uses today's date."
+        required: false
+        type: string
+
+permissions:
+  actions: write
+  contents: read
+
+concurrency:
+  group: night-signal-publication-watchdog
+  cancel-in-progress: false
+
+jobs:
+  audit_recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout trusted main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Sync delayed schedule to latest main
+        if: ${{ github.event_name == 'schedule' }}
+        run: |
+          git fetch origin main
+          git checkout --detach origin/main
+
+      - name: Resolve issue date
+        env:
+          REQUESTED_ISSUE_DATE: ${{ inputs.issue_date || '' }}
+        run: |
+          ISSUE_DATE="$(python3 scripts/night_signal_publish.py \
+            --resolve-issue-date \
+            --event-name "$GITHUB_EVENT_NAME" \
+            --requested-issue-date "${REQUESTED_ISSUE_DATE:-}")"
+          echo "ISSUE_DATE=$ISSUE_DATE" >> "$GITHUB_ENV"
+
+      - name: Classify the live stage without changing state
+        id: initial
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 scripts/night_signal_operational_audit.py "$ISSUE_DATE" \
+            --report-only \
+            --github-output "$GITHUB_OUTPUT"
+
+      - name: Reuse the same review for one deterministic recovery
+        id: recovery
+        continue-on-error: true
+        if: ${{ steps.initial.outputs.published != 'true' && steps.initial.outputs.recoverable == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          RUN_ID="$(
+            gh run list --workflow cloud-review-publish.yml --limit 50 \
+              --json databaseId,displayTitle,status \
+            | jq -r --arg date "$ISSUE_DATE" \
+              '.[] | select((.displayTitle | contains($date)) and (.status == "queued" or .status == "in_progress" or .status == "waiting" or .status == "pending")) | .databaseId' \
+            | head -1
+          )"
+          if [[ -z "$RUN_ID" ]]; then
+            COMPLETED_RECOVERY_ID="$(
+              gh run list --workflow cloud-review-publish.yml --limit 50 \
+                --json databaseId,displayTitle,status,event \
+              | jq -r --arg date "$ISSUE_DATE" \
+                '.[] | select((.displayTitle | contains($date)) and .event == "workflow_dispatch" and .status == "completed") | .databaseId' \
+              | head -1
+            )"
+            if [[ -n "$COMPLETED_RECOVERY_ID" ]]; then
+              echo "Bounded recovery run $COMPLETED_RECOVERY_ID already completed; refusing another dispatch." >&2
+              exit 1
+            fi
+            gh run list --workflow cloud-review-publish.yml --limit 50 \
+              --json databaseId --jq '.[].databaseId' \
+              > "$RUNNER_TEMP/review-runs-before.txt"
+            gh workflow run cloud-review-publish.yml --ref main \
+              -f "issue_date=$ISSUE_DATE" \
+              -f "review_ref=night-signal-review-$ISSUE_DATE" \
+              -f "recovery_attempt=1"
+            for attempt in $(seq 1 24); do
+              while read -r candidate; do
+                if ! grep -qx "$candidate" "$RUNNER_TEMP/review-runs-before.txt"; then
+                  RUN_ID="$candidate"
+                  break 2
+                fi
+              done < <(
+                gh run list --workflow cloud-review-publish.yml --limit 15 \
+                  --json databaseId,displayTitle \
+                | jq -r --arg date "$ISSUE_DATE" \
+                  '.[] | select(.displayTitle | contains($date)) | .databaseId'
+              )
+              sleep 5
+            done
+          fi
+          if [[ -z "$RUN_ID" ]]; then
+            echo "The bounded reviewed-publication recovery did not appear." >&2
+            exit 1
+          fi
+          echo "Watching reviewed-publication recovery run $RUN_ID."
+          gh run watch "$RUN_ID" --exit-status
+
+      - name: Re-audit after any bounded recovery
+        id: final
+        if: ${{ always() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [[ "${{ steps.initial.outputs.published }}" == "true" ]]; then
+            echo "stage=published_verified" >> "$GITHUB_OUTPUT"
+            echo "published=true" >> "$GITHUB_OUTPUT"
+            echo "recoverable=false" >> "$GITHUB_OUTPUT"
+            echo "needs_editor_action=false" >> "$GITHUB_OUTPUT"
+            echo "activation_proven_today=${{ steps.initial.outputs.activation_proven_today }}" >> "$GITHUB_OUTPUT"
+            echo "recovery_attempt=${{ steps.initial.outputs.recovery_attempt }}" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          python3 scripts/night_signal_operational_audit.py "$ISSUE_DATE" \
+            --report-only \
+            --github-output "$GITHUB_OUTPUT"
+
+      - name: Enforce the actual deadline without starting expensive work late
+        if: ${{ always() }}
+        run: |
+          if [[ "${{ steps.final.outputs.published }}" == "true" ]]; then
+            echo "Verified publication is live for $ISSUE_DATE."
+            exit 0
+          fi
+          ACTION="$(python3 scripts/publication_timing.py --decision --event-name schedule)"
+          if [[ "$ACTION" == "missed" ]]; then
+            echo "NIGHT SIGNAL publication remains incomplete after the deadline." >&2
+            echo "stage=${{ steps.final.outputs.stage }}" >&2
+            echo "activation_proven_today=${{ steps.final.outputs.activation_proven_today }}" >&2
+            echo "No Evidence recollection or model review was repeated." >&2
+            exit 1
+          fi
+          echo "Pre-deadline checkpoint: stage=${{ steps.final.outputs.stage }}."
+          echo "A later watchdog or Web-owner heartbeat may still complete the same checkpoints."

@@ -1,4 +1,5 @@
 name: Publish reviewed NIGHT SIGNAL
+run-name: Publish reviewed NIGHT SIGNAL ${{ inputs.issue_date || github.ref_name }}
 
 on:
   push:
@@ -291,6 +292,7 @@ jobs:
             --run-id "$GITHUB_RUN_ID" \
             --run-url "$RUN_URL" \
             --workflow-status "$WORKFLOW_STATUS" \
+            --recovery-attempt "$RECOVERY_ATTEMPT" \
             --log-directory "$RUNNER_TEMP" \
             --step "apply=${{ steps.apply.outcome }}" \
             --step "restore=${{ steps.restore.outcome }}" \

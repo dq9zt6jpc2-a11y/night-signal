@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Prepare and import a zero-additional-charge Codex Plus editorial review.
+"""Prepare and import a zero-additional-charge ChatGPT Plus editorial review.
 
 Collection and candidate filtering stay deterministic.  The resulting compact
-packet is reviewed once by the repository's Codex automation, then this module
+packet is reviewed once by the repository's Web Scheduled task, then this module
 re-applies the same source, novelty, and public-copy validators used by the
 former hosted-model editor.  No API or GitHub Models request is made here.
 """

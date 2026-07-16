@@ -56,6 +56,7 @@ def build_feedback(
     run_id: str,
     run_url: str,
     workflow_status: str,
+    recovery_attempt: int,
     step_outcomes: dict[str, str],
     log_directory: Path,
 ) -> dict[str, Any]:
@@ -71,6 +72,7 @@ def build_feedback(
         "recorded_at": datetime.now(timezone.utc).isoformat(),
         "workflow_run_id": run_id,
         "workflow_run_url": run_url,
+        "recovery_attempt": recovery_attempt,
         "status": "success" if workflow_status == "success" else "failed",
         "failed_stage": failed_stage,
         "step_outcomes": step_outcomes,
@@ -173,11 +175,14 @@ def self_test() -> None:
             run_id="123",
             run_url="https://example.invalid/run/123",
             workflow_status="failure",
+            recovery_attempt=1,
             step_outcomes={"apply": "failure", "gates": "skipped"},
             log_directory=directory,
         )
         if feedback["failed_stage"] != "apply":
             fail("failed stage was not preserved")
+        if feedback["recovery_attempt"] != 1:
+            fail("bounded recovery attempt was not preserved")
         if "exact validator reason" not in feedback["validator_log_tail"]:
             fail("validator failure detail was not preserved")
     print("NIGHT SIGNAL CLOUD FEEDBACK SELF-TEST PASSED")
@@ -189,6 +194,7 @@ def main() -> int:
     parser.add_argument("--run-id", default=os.getenv("GITHUB_RUN_ID", ""))
     parser.add_argument("--run-url", default="")
     parser.add_argument("--workflow-status", default="failure")
+    parser.add_argument("--recovery-attempt", type=int, choices=(0, 1), default=0)
     parser.add_argument("--log-directory", type=Path, default=Path(tempfile.gettempdir()))
     parser.add_argument("--step", action="append", default=[])
     parser.add_argument("--output", type=Path)
@@ -211,6 +217,7 @@ def main() -> int:
         run_id=args.run_id,
         run_url=args.run_url,
         workflow_status=args.workflow_status,
+        recovery_attempt=args.recovery_attempt,
         step_outcomes=outcomes,
         log_directory=args.log_directory,
     )

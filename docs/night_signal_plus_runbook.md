@@ -204,3 +204,13 @@ surface. On Mondays only, check official OpenAI model documentation for a newer
 Codex-capable model. Do not change production automatically. Promote only after
 representative NIGHT SIGNAL Evidence shows no coverage or quality regression and
 lower or equal total token use. Report nothing when there is no candidate.
+
+## Operational proof
+
+`publication_schedule_audit.py` proves the repository architecture only.
+`night_signal_operational_audit.py` separately checks the current Evidence
+handoff, primary/recovery Web-owner heartbeat, review, workflow feedback, and
+final root/dated publication. A current remote heartbeat or review is required
+before saying the PC-independent editor is activated. `publication-watchdog.yml`
+may replay only deterministic post-review work once; it never substitutes an
+unreviewed issue, recollects Evidence, or calls a model.

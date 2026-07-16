@@ -26,7 +26,10 @@ The second task is audit-first. When the first task succeeded it reads only the
 small status/review files and exits, so it does not repeat the editorial review.
 These tasks run in the cloud; the Mac and the local ChatGPT app may be off.
 
-Use the following prompt for both tasks:
+Use the following prompt for both tasks. Set `OWNER_ROLE=primary` in the 17:20
+task and `OWNER_ROLE=recovery` in the 18:20 task. The small, separate heartbeat
+lets the repository distinguish a missing review from a task that never ran,
+was paused, or lost GitHub permission.
 
 ```text
 You are the PC-independent NIGHT SIGNAL editorial owner. Use only the GitHub
@@ -34,7 +37,22 @@ plugin and the repository dq9zt6jpc2-a11y/night-signal. Never use local files,
 Computer Use, a browser UI, GitHub Models, the OpenAI API, Copilot, or another
 paid service.
 
-Set ISSUE_DATE to today's date in Asia/Tokyo. First check these exact refs:
+OWNER_ROLE is primary for the 17:20 task and recovery for the 18:20 task. Reject
+any other value. Set ISSUE_DATE to today's date in Asia/Tokyo. Before every stop,
+update exactly one liveness file on branch night-signal-owner-status:
+cloud-owner/OWNER_ROLE.json. Create that branch from main only if absent. Write:
+{
+  "contract": "night-signal-cloud-owner-status-v1",
+  "issue_date": "ISSUE_DATE",
+  "role": "OWNER_ROLE",
+  "checked_at": "timezone-aware ISO timestamp",
+  "outcome": "one short machine-readable outcome"
+}
+Allowed outcomes are feedback_success, review_submitted, evidence_missing,
+review_retriggered, correction_submitted, and recovery_exhausted. Do not change
+main or any other file when recording liveness.
+
+First check these exact refs:
 1. night-signal-review-ISSUE_DATE at
    cloud-review/ISSUE_DATE/editor_review.json
 2. night-signal-feedback-ISSUE_DATE at
@@ -56,8 +74,8 @@ or recovery commit in this run.
 
 If no review exists, fetch
 cloud-evidence/ISSUE_DATE/manifest.json from branch
-night-signal-evidence-ISSUE_DATE. If it is absent, stop without creating a
-branch; the 18:20 heartbeat will check again. Read every request part listed by
+night-signal-evidence-ISSUE_DATE. If it is absent, record the liveness outcome
+without creating a review branch; the 18:20 heartbeat will check again. Read every request part listed by
 the manifest exactly once. Follow the manifest policy and the editorial rules
 in docs/night_signal_plus_runbook.md. Account for every request and every event.
 Publish every material new delta without a count target. Exclude current-issue
@@ -77,9 +95,10 @@ and:
   "execution_surface": "chatgpt-web-scheduled-task",
   "reviewed_at": "timezone-aware ISO timestamp"
 }
-Do not create or change any other repository file. The push automatically starts
-Publish reviewed NIGHT SIGNAL. Do not manually start collection, publication,
-or Pages workflows and do not perform a second full review.
+Apart from the one liveness file, do not create or change any other repository
+file. The review push automatically starts Publish reviewed NIGHT SIGNAL. Do not
+manually start collection, publication, or Pages workflows and do not perform a
+second full review.
 ```
 
 The repository implementation cannot create a ChatGPT Web Scheduled task from a
@@ -106,3 +125,14 @@ Every publish run writes compact success or exact validator failure feedback to
 patch only rejected entries. The final acceptance condition is not a green
 Pages job alone: `publication_audit.py` must prove that origin `main`, the root
 URL, and the dated URL all agree on the same issue date.
+
+`Audit and recover NIGHT SIGNAL publication` checks at 18:35, 18:50, and 19:05
+JST. It can replay a completed review once after an event-trigger, restore,
+commit, push, Pages, or live-reflection failure. It cannot honestly replace a
+missing editorial review without another paid model path, so it reports the
+exact Evidence/owner/review stage instead of publishing unreviewed copy.
+
+ChatGPT Scheduled tasks must be activated from the Scheduled page on ChatGPT Web
+or mobile and may require persistent GitHub app permission. The repository
+therefore treats a current remote owner heartbeat as activation evidence and
+does not equate a passing static schedule audit with a live owner.

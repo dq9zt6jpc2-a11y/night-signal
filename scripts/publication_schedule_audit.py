@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PAGES = ROOT / ".github" / "workflows" / "pages.yml"
 COLLECTION = ROOT / ".github" / "workflows" / "unattended-collection.yml"
 CLOUD_PUBLICATION = ROOT / ".github" / "workflows" / "cloud-review-publish.yml"
+PUBLICATION_WATCHDOG = ROOT / ".github" / "workflows" / "publication-watchdog.yml"
 RETIRED_MODEL_WORKFLOW = ROOT / ".github" / "workflows" / "model-catalog-evaluation.yml"
 PLUS_EDITOR = ROOT / "scripts" / "night_signal_plus_editor.py"
 PUBLISH_DRIVER = ROOT / "scripts" / "night_signal_publish.py"
@@ -24,6 +25,10 @@ WEB_OWNER_RUNBOOK = ROOT / "docs" / "night_signal_web_owner.md"
 CLOUD_HANDOFF = ROOT / "scripts" / "night_signal_cloud_handoff.py"
 CLOUD_REVIEW = ROOT / "scripts" / "night_signal_cloud_review.py"
 CLOUD_FEEDBACK = ROOT / "scripts" / "night_signal_cloud_feedback.py"
+OPERATIONAL_AUDIT = ROOT / "scripts" / "night_signal_operational_audit.py"
+BASIC_DESIGN = ROOT / "docs" / "night-signal-basic-design.md"
+REQUIREMENTS = ROOT / "docs" / "night-signal-requirements.md"
+OPERATIONS_POLICY = ROOT / "config" / "night_signal_operations.json"
 
 
 def fail(message: str) -> None:
@@ -50,6 +55,7 @@ def main() -> int:
     pages = PAGES.read_text(encoding="utf-8")
     collection = COLLECTION.read_text(encoding="utf-8")
     cloud_publication = CLOUD_PUBLICATION.read_text(encoding="utf-8")
+    publication_watchdog = PUBLICATION_WATCHDOG.read_text(encoding="utf-8")
     plus_editor = PLUS_EDITOR.read_text(encoding="utf-8")
     publish_driver = PUBLISH_DRIVER.read_text(encoding="utf-8")
     policy = timing.load_policy()
@@ -134,6 +140,10 @@ def main() -> int:
         CLOUD_REVIEW,
         CLOUD_FEEDBACK,
         CLOUD_PUBLICATION,
+        PUBLICATION_WATCHDOG,
+        OPERATIONAL_AUDIT,
+        BASIC_DESIGN,
+        REQUIREMENTS,
     ):
         if not required_path.exists():
             fail(f"required PC-independent component is missing: {required_path.name}")
@@ -145,6 +155,12 @@ def main() -> int:
         fail("production Plus review must use the evaluated quality/efficiency route")
     if production_editor.get("reasoning_effort") != "low":
         fail("routine evidence review must use bounded reasoning")
+    if production_editor.get("surface") != "chatgpt-web-scheduled-task":
+        fail("production editor surface drifted back to a local owner")
+    if production_editor.get("local_pc_required") is not False:
+        fail("production editor must not require the local PC")
+    if production_editor.get("activation_must_be_proven_by_remote_heartbeat") is not True:
+        fail("static architecture must not be mistaken for Web-owner activation")
     runbook = RUNBOOK.read_text(encoding="utf-8")
     for required in (
         "scripts/night_signal_review_artifact.py",
@@ -166,9 +182,44 @@ def main() -> int:
         "Candidate events are not capped",
         "computer may be shut down",
         "change only the named",
+        "night-signal-owner-status",
+        "night-signal-cloud-owner-status-v1",
     ):
         if required.casefold() not in web_runbook.casefold():
             fail(f"Web owner runbook is missing: {required}")
+
+    operations = json.loads(OPERATIONS_POLICY.read_text(encoding="utf-8"))
+    owner_heartbeats = operations.get("editor_owner_heartbeats_jst")
+    if owner_heartbeats != ["17:20", "18:20"]:
+        fail("Web-owner heartbeat policy must contain only 17:20 and 18:20 JST")
+    watchdog_heartbeats = operations.get("publication_watchdog_heartbeats_jst")
+    if watchdog_heartbeats != ["18:35", "18:50", "19:05"]:
+        fail("publication watchdog policy drifted from the bounded recovery window")
+    expected_watchdog_minutes = sorted(
+        timing.minutes(timing.parse_clock(value)) for value in watchdog_heartbeats
+    )
+    if cron_minutes(publication_watchdog) != expected_watchdog_minutes:
+        fail("publication watchdog cron does not match the operations policy")
+    for required in (
+        "night_signal_operational_audit.py",
+        "recovery_attempt=1",
+        "No Evidence recollection or model review was repeated",
+        "timeout-minutes: 120",
+    ):
+        if required not in publication_watchdog:
+            fail(f"publication watchdog is missing: {required}")
+    if "models.github.ai" in publication_watchdog or "api.openai.com" in publication_watchdog:
+        fail("publication watchdog contains a paid model path")
+
+    basic_design = BASIC_DESIGN.read_text(encoding="utf-8")
+    requirements = REQUIREMENTS.read_text(encoding="utf-8")
+    for stale in (
+        "Codex automationを唯一の編集・検証・commit・公開owner",
+        "local Codex Plus owner",
+        "ChatGPT Plusに含まれるCodex automationは編集",
+    ):
+        if stale in basic_design or stale in requirements:
+            fail(f"stale local production-owner contract remains: {stale}")
 
     for forbidden in ("models: read", "models.github.ai", "api.openai.com", "OPENAI_API_KEY"):
         if forbidden in cloud_publication:
@@ -191,6 +242,7 @@ def main() -> int:
         "Retry the same committed Pages deployment once",
         "publication_audit.py",
         "night_signal_cloud_feedback.py",
+        "--recovery-attempt \"$RECOVERY_ATTEMPT\"",
     ):
         if required not in cloud_publication:
             fail(f"cloud publication is missing: {required}")
@@ -246,6 +298,7 @@ def main() -> int:
         "PUBLICATION SCHEDULE AUDIT PASSED: "
         f"window={policy.final_collection_not_before.strftime('%H:%M')}-"
         f"{policy.publication_deadline.strftime('%H:%M')}, "
+        "architecture-ready=true, activation-proof=remote-heartbeat-required, "
         "collector=github-actions, editor=chatgpt-web, publisher=github-actions, "
         "local-pc-required=false, paid-api-requests=0"
     )

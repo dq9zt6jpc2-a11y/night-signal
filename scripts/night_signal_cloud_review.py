@@ -85,6 +85,9 @@ def validate_review(
         fail("review has no cloud_handoff provenance")
     if handoff.get("execution_surface") != EXECUTION_SURFACE:
         fail(f"cloud_handoff execution_surface must be {EXECUTION_SURFACE}")
+    for field in ("recovery_attempt", "correction_attempt"):
+        if field in handoff and handoff.get(field) not in (0, 1):
+            fail(f"cloud_handoff {field} must be the bounded integer 0 or 1")
     reviewed_at = handoff.get("reviewed_at")
     if not isinstance(reviewed_at, str):
         fail("cloud_handoff reviewed_at is required")
@@ -171,6 +174,20 @@ def self_test() -> None:
             pass
         else:
             fail("mismatched Evidence hash was accepted")
+        unbounded = {
+            **review,
+            "cloud_handoff": {**review["cloud_handoff"], "recovery_attempt": 2},
+        }
+        try:
+            validate_review(
+                unbounded,
+                issue_date=issue_date,
+                expected_evidence_sha256=evidence_sha256(evidence_path),
+            )
+        except SystemExit:
+            pass
+        else:
+            fail("unbounded cloud recovery attempt was accepted")
     print("NIGHT SIGNAL CLOUD REVIEW SELF-TEST PASSED")
 
 

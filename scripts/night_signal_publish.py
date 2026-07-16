@@ -639,6 +639,7 @@ def self_tests(profile: str) -> None:
     run([sys.executable, "scripts/night_signal_cloud_handoff.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_cloud_review.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_cloud_feedback.py", "--self-test"])
+    run([sys.executable, "scripts/night_signal_operational_audit.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_plus_editor.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_eval.py", "--self-test"])
     run([sys.executable, "scripts/night_signal_editor.py", "--self-test"])

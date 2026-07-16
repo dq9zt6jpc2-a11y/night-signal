@@ -1,6 +1,6 @@
 # NIGHT SIGNAL 基本設計
 
-更新日: 2026-07-16
+更新日: 2026-07-17
 
 ## 1. ミッション
 
@@ -83,10 +83,11 @@ Evidenceには網羅性確認用のトップページや索引も保持する。
 
 一つの処理を複数段階で補修しない。後段が前段の不足を埋める設計は禁止する。
 
-GitHub Actionsは認証不要のWeb Evidence収集とcompact packet作成だけを担当する。
-ChatGPT Plusに含まれるCodex automationを唯一の編集・検証・commit・公開ownerとする。
-両者の境界はhash付き`evidence.json`と`editor_packet.json`だけに固定し、どちらにも
-相手段階を実行するfallbackを持たせない。
+GitHub Actionsは認証不要のWeb Evidence収集、compact packet作成、review適用後の
+決定論的検証・commit・Pages公開を担当する。ChatGPT Plusに含まれるWeb Scheduled taskは
+compact packetの採否・要約reviewだけを担当する。ローカルPCは診断専用で、本番ownerにしない。
+境界はhash付き`evidence.json`、`editor_packet.json`、`editor_review.json`に固定し、
+CollectorやPublisherがAI編集を、Web taskが収集やPages公開を代行しない。
 
 ## 5. 網羅性
 
@@ -197,11 +198,18 @@ JSON responseは`night_signal_plus_editor.py`が全request、全event、Evidence
 
 公開時刻は`config/night_signal_operations.json`だけが所有する。16:45以降のGitHub Actions
 heartbeatはWeb Evidenceとcompact packetだけを収集し、既存artifactがあれば再収集せず、
-AI、commit、Pages処理を行わない。local Codex Plus ownerは17:05、17:35、18:05、18:35に
-audit-firstで起動し、最新の有効artifactを一度だけreviewして19:00までに公開する。後続回は
-先行回が成功済みならpublication auditだけで即終了する。
+AI、commit、Pages処理を行わない。ChatGPT Webのprimary ownerは17:20、recovery ownerは
+18:20にaudit-firstで起動し、最新の有効packetを一度だけreviewする。review branchのpushを
+受けたGitHub Actionsが検証・commit・Pages公開を行う。後続回は先行回が成功済みなら
+小さいstatusだけを確認して即終了する。
 未公開の場合も、active collectorを重複dispatchせず、Evidence、review、Issue、commit、Pagesの
 完了済み段階を順に再利用する。19:00以降は通常の日次処理を新規開始しない。
+
+18:35、18:50、19:05のGitHub Actions watchdogは、review後のevent trigger欠落、restore、
+commit、push、Pages、公開反映だけを同じreviewから一度復旧する。review自体がない場合は
+AIの代替生成をせず、Evidence欠落、Web owner heartbeat欠落、task停止・権限不足を区別して
+失敗を明示する。Web taskの当日heartbeat、review、最終publication auditは別の証拠とし、
+repositoryの静的テストだけで本番稼働済みと判定しない。
 
 Evidenceの構造、source check、discovery check、watch topic、取得チャネル、取得状態の
 検証規則は`night_signal_evidence.py`だけが所有する。Editor、Issue validator、coverage
@@ -219,8 +227,9 @@ reviewはcompact packetだけを読み、確認用canary、全Evidence再読、�
 
 同じIssue契約を同一段階で繰り返し検証しない。Editorの出力境界、Rendererの入力境界、
 Evidence網羅性、公開HTMLの各境界で一回ずつ検証し、同じ検証関数を連続実行しない。
-公開HTMLの確認はPages workflowの単一監査に統合し、反映待ちの再試行は同じ
-監査の範囲内で行う。owner workflowはPages workflowの合格結果を再監査しない。
+公開HTMLの反映待ちはPages workflow内で一度監査し、最終ownerはcommit、remote HEAD、
+root URL、dated URLの一致を`publication_audit.py`で確認する。これはPages jobのgreenと
+公開内容の一致が別条件であるためで、収集やAI reviewの再実行理由にはしない。
 
 永続化する公開状態は現在号と直前3号に限定する。Editorは直前3号を新規性比較に使い、
 読者はarchiveから同じ3号を確認できる。次号が全local gateに合格した後で4号より古いstate、
@@ -243,7 +252,7 @@ tokenのいずれかを品質低下なしで改善する場合だけ切り替え
 日次経路は、認証不要の登録ソース確認、日英および地域現地語の
 topic別ニュース探索、bounded horizon探索、媒体別の公開index探索、重要候補だけの
 event probeを使う。
-毎週月曜日だけOpenAI公式latest-model文書を確認し、Codex automationで利用できる新しい
+毎週月曜日だけOpenAI公式latest-model文書を確認し、ChatGPT Scheduled taskで利用できる新しい
 互換世代・tierを候補化する。変更がない日は追加の比較や報告を行わない。候補がある時だけ、
 固定した代表Evidenceで事実精度、除外精度、event完全性、要約品質、処理時間、総tokenを
 GPT-5.6 Terraと一回比較する。品質非劣化と同等以下のtoken使用を満たしても、本番設定は
