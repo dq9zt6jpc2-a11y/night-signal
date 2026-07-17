@@ -67,9 +67,17 @@ def read_json(path: Path) -> dict[str, Any]:
 
 
 def request_id(category_label: str, chunk_index: int, payload: dict[str, Any]) -> str:
+    # Policy guidance may evolve without changing the Evidence/event identity.
+    # Excluding it preserves completed reviews across importer-only upgrades and
+    # avoids repeating model work.
+    identity_payload = {
+        key: value
+        for key, value in payload.items()
+        if key != "allowed_topic_value_classes"
+    }
     digest = hashlib.sha256(
         json.dumps(
-            payload,
+            identity_payload,
             ensure_ascii=False,
             sort_keys=True,
             separators=(",", ":"),
@@ -405,6 +413,15 @@ def self_test() -> None:
     first = request_id("OpenAI", 1, payload)
     if first != request_id("OpenAI", 1, json.loads(json.dumps(payload))):
         fail("review request id is not deterministic")
+    if first != request_id(
+        "OpenAI",
+        1,
+        {
+            **payload,
+            "allowed_topic_value_classes": sorted(core.ALLOWED_TOPIC_VALUES),
+        },
+    ):
+        fail("policy-only guidance changed an existing request identity")
     if first == request_id("OpenAI", 2, payload):
         fail("review request id did not bind its chunk position")
     repeated = {
