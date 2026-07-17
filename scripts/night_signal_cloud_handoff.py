@@ -221,6 +221,7 @@ def commit_packet(issue_date: str, packet_path: Path) -> dict[str, Any]:
             "packet_sha256": hashlib.sha256(raw).hexdigest(),
             "parts": len(files) - 1,
             "created": False,
+            "remote_verified": True,
         }
 
     head = run_git(["rev-parse", "HEAD"]).stdout.strip()
@@ -270,6 +271,9 @@ def commit_packet(issue_date: str, packet_path: Path) -> dict[str, Any]:
         created = False
     else:
         created = True
+    confirmed = remote_files(issue_date, sorted(files))
+    if confirmed != files:
+        fail("handoff push completed without a byte-identical remote manifest")
     return {
         "issue_date": issue_date,
         "branch": branch,
@@ -277,6 +281,7 @@ def commit_packet(issue_date: str, packet_path: Path) -> dict[str, Any]:
         "packet_sha256": hashlib.sha256(raw).hexdigest(),
         "parts": len(files) - 1,
         "created": created,
+        "remote_verified": True,
     }
 
 

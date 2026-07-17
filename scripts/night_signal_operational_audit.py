@@ -49,6 +49,8 @@ NETWORK_ERRORS = (
     "could not resolve host",
     "connection reset",
     "connection timed out",
+    "error connecting to api.github.com",
+    "check your internet connection",
     "temporary failure",
     "503 service unavailable",
 )
@@ -68,6 +70,10 @@ def bounded_attempt(value: Any) -> int:
         return 1 if int(value) >= 1 else 0
     except (TypeError, ValueError):
         return 0
+
+
+def transient_network_error(value: str) -> bool:
+    return any(marker in value.casefold() for marker in NETWORK_ERRORS)
 
 
 def classify_state(
@@ -188,8 +194,8 @@ def run_gh(arguments: list[str], *, check: bool = True) -> subprocess.CompletedP
         )
         if result.returncode == 0:
             return result
-        error = f"{result.stdout}\n{result.stderr}".casefold()
-        if attempt == 0 and any(marker in error for marker in NETWORK_ERRORS):
+        error = f"{result.stdout}\n{result.stderr}"
+        if attempt == 0 and transient_network_error(error):
             time.sleep(2)
             continue
         break
@@ -270,13 +276,26 @@ def write_github_output(path: Path, result: dict[str, Any]) -> None:
 
 def audit(issue_date: str, repository: str) -> dict[str, Any]:
     publication_verified, publication_output = publication_audit(issue_date)
+    owner_heartbeats: dict[str, dict[str, Any]] = {}
+    for role in ("primary", "recovery"):
+        heartbeat = valid_owner_heartbeat(
+            remote_json(
+                repository,
+                OWNER_STATUS_BRANCH,
+                f"cloud-owner/{role}.json",
+            ),
+            issue_date=issue_date,
+            role=role,
+        )
+        if heartbeat is not None:
+            owner_heartbeats[role] = heartbeat
     if publication_verified:
         result = classify_state(
             publication_verified=True,
             evidence_ready=False,
             review=None,
             feedback=None,
-            owner_heartbeats={},
+            owner_heartbeats=owner_heartbeats,
         )
         result.update(
             {
@@ -301,19 +320,6 @@ def audit(issue_date: str, repository: str) -> dict[str, Any]:
         f"night-signal-feedback-{issue_date}",
         f"cloud-feedback/{issue_date}/status.json",
     )
-    owner_heartbeats: dict[str, dict[str, Any]] = {}
-    for role in ("primary", "recovery"):
-        heartbeat = valid_owner_heartbeat(
-            remote_json(
-                repository,
-                OWNER_STATUS_BRANCH,
-                f"cloud-owner/{role}.json",
-            ),
-            issue_date=issue_date,
-            role=role,
-        )
-        if heartbeat is not None:
-            owner_heartbeats[role] = heartbeat
     result = classify_state(
         publication_verified=publication_verified,
         evidence_ready=isinstance(evidence, dict),
@@ -332,6 +338,10 @@ def audit(issue_date: str, repository: str) -> dict[str, Any]:
 
 
 def self_test() -> None:
+    if not transient_network_error(
+        "error connecting to api.github.com; check your internet connection"
+    ):
+        fail("GitHub CLI connection failures are not retried once")
     missing = classify_state(
         publication_verified=False,
         evidence_ready=True,
@@ -382,6 +392,19 @@ def self_test() -> None:
     )
     if published["stage"] != "published_verified":
         fail("verified publication did not short-circuit")
+    published_with_activation = classify_state(
+        publication_verified=True,
+        evidence_ready=False,
+        review=None,
+        feedback=None,
+        owner_heartbeats={
+            "primary": {
+                "outcome": "review_submitted",
+            }
+        },
+    )
+    if not published_with_activation["activation_proven_today"]:
+        fail("published state discarded current Web-owner activation proof")
     print("NIGHT SIGNAL OPERATIONAL AUDIT SELF-TEST PASSED")
 
 

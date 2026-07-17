@@ -26,6 +26,14 @@ The second task is audit-first. When the first task succeeded it reads only the
 small status/review files and exits, so it does not repeat the editorial review.
 These tasks run in the cloud; the Mac and the local ChatGPT app may be off.
 
+Creation is not activation. Before treating either task as production-ready,
+use **Run now** once and grant the GitHub connector persistent write permission
+with **Always allow** (`常に許可`). Then verify that the matching
+`cloud-owner/primary.json` or `cloud-owner/recovery.json` file was updated on
+`night-signal-owner-status` for the current JST date. A visible active schedule
+or a passing static repository audit is not sufficient proof: no current remote
+heartbeat means the task is unproven, paused, or unable to write GitHub.
+
 Use the following prompt for both tasks. Set `OWNER_ROLE=primary` in the 17:20
 task and `OWNER_ROLE=recovery` in the 18:20 task. The small, separate heartbeat
 lets the repository distinguish a missing review from a task that never ran,

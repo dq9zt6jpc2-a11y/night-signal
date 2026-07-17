@@ -19,6 +19,12 @@
     "17:20",
     "18:20"
   ],
+  "editor_owner_activation": {
+    "persistent_github_write_permission": true,
+    "remote_heartbeat_required": true,
+    "run_now_proof_required_before_production": true
+  },
+  "reliability_report_retention_days": 30,
   "publication_watchdog_heartbeats_jst": [
     "18:35",
     "18:50",

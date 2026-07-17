@@ -177,6 +177,8 @@ def main() -> int:
     for required in (
         "never the production owner",
         "ChatGPT Web Scheduled task",
+        "Always allow",
+        "Run now",
         "night-signal-evidence-ISSUE_DATE",
         "night-signal-review-ISSUE_DATE",
         "night-signal-feedback-ISSUE_DATE",
@@ -193,6 +195,15 @@ def main() -> int:
     owner_heartbeats = operations.get("editor_owner_heartbeats_jst")
     if owner_heartbeats != ["17:20", "18:20"]:
         fail("Web-owner heartbeat policy must contain only 17:20 and 18:20 JST")
+    owner_activation = operations.get("editor_owner_activation", {})
+    if owner_activation != {
+        "persistent_github_write_permission": True,
+        "remote_heartbeat_required": True,
+        "run_now_proof_required_before_production": True,
+    }:
+        fail("Web-owner activation proof policy is incomplete")
+    if operations.get("reliability_report_retention_days") != 30:
+        fail("operational reliability history must be retained for 30 days")
     watchdog_heartbeats = operations.get("publication_watchdog_heartbeats_jst")
     if watchdog_heartbeats != ["18:35", "18:50", "19:05"]:
         fail("publication watchdog policy drifted from the bounded recovery window")
@@ -203,8 +214,11 @@ def main() -> int:
         fail("publication watchdog cron does not match the operations policy")
     for required in (
         "night_signal_operational_audit.py",
+        "workflow_run:",
+        "Publish reviewed NIGHT SIGNAL",
         "recovery_attempt=1",
         "No Evidence recollection or model review was repeated",
+        "retention-days: 30",
         "timeout-minutes: 120",
     ):
         if required not in publication_watchdog:
@@ -276,6 +290,7 @@ def main() -> int:
         "MAX_PART_BYTES = 850_000",
         "immutable handoff branch",
         "packet_sha256",
+        '"remote_verified": True',
     ):
         if required not in handoff_source:
             fail(f"cloud handoff is missing: {required}")

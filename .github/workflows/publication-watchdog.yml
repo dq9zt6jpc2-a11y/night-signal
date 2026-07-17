@@ -2,6 +2,12 @@ name: Audit and recover NIGHT SIGNAL publication
 run-name: Audit NIGHT SIGNAL publication ${{ inputs.issue_date || github.run_id }}
 
 on:
+  workflow_run:
+    workflows:
+      - NIGHT SIGNAL Evidence Collection
+      - Publish reviewed NIGHT SIGNAL
+    types:
+      - completed
   schedule:
     # 18:35, 18:50, and 19:05 JST.  Actual start time still controls whether
     # a missing issue is a pre-deadline checkpoint or a hard failure.
@@ -55,9 +61,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          set -o pipefail
           python3 scripts/night_signal_operational_audit.py "$ISSUE_DATE" \
             --report-only \
-            --github-output "$GITHUB_OUTPUT"
+            --github-output "$GITHUB_OUTPUT" \
+            | tee "$RUNNER_TEMP/initial-operational-audit.json"
 
       - name: Reuse the same review for one deterministic recovery
         id: recovery
@@ -129,9 +137,20 @@ jobs:
             echo "recovery_attempt=${{ steps.initial.outputs.recovery_attempt }}" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+          set -o pipefail
           python3 scripts/night_signal_operational_audit.py "$ISSUE_DATE" \
             --report-only \
-            --github-output "$GITHUB_OUTPUT"
+            --github-output "$GITHUB_OUTPUT" \
+            | tee "$RUNNER_TEMP/final-operational-audit.json"
+
+      - name: Preserve the deterministic reliability report for 30 days
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: night-signal-operational-audit-${{ env.ISSUE_DATE }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/*-operational-audit.json
+          if-no-files-found: error
+          retention-days: 30
 
       - name: Enforce the actual deadline without starting expensive work late
         if: ${{ always() }}
