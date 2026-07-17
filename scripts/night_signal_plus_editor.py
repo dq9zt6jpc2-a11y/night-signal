@@ -176,6 +176,7 @@ def prepare_packet(
             "natural_japanese_required": True,
             "every_summary_point_requires_evidence_ids": True,
             "every_published_item_requires_information_complete": True,
+            "allowed_topic_value_classes": sorted(core.ALLOWED_TOPIC_VALUES),
             "one_point_only_for_one_distinct_supported_delta": True,
             "no_background_or_repetition_for_length": True,
             "earnings_results_and_material_market_moves_are_not_routine": True,

@@ -166,6 +166,7 @@ def main() -> int:
         "scripts/night_signal_review_artifact.py",
         "change only the named request/event",
         "do not recollect or re-review",
+        "topic_value_class` must be one of",
         "17:20 Web task",
         "18:20 Web task",
         "official OpenAI",

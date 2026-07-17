@@ -23,8 +23,11 @@ ROOT = Path(__file__).resolve().parents[1]
 STATE_ROOT = ROOT / "state"
 TOPIC_VALUE_CLASS_MAP = {
     "capital_market_shift": "market_or_financial_impact",
+    "market_or_financial_shift": "market_or_financial_impact",
     "competitive_result": "event_result_or_outcome",
     "macro_policy_data": "market_or_financial_impact",
+    "business_or_operational_shift": "operational_status_change",
+    "policy_or_regulatory_shift": "decision_or_policy",
     "roster_change": "operational_status_change",
 }
 SUMMARY_LABEL_RE = re.compile(r"(?:変更点|重要性|確認事実|未確定点)\s*[:：]")
@@ -188,6 +191,9 @@ def sanitize_model_result(raw: dict[str, Any]) -> dict[str, Any]:
                 **raw_item,
                 "title": sanitize_editor_title(raw_item.get("title", "")),
                 "summary_points": points,
+                "topic_value_class": topic_value_class(
+                    raw_item.get("topic_value_class", "")
+                ),
             }
         )
     return sanitized
@@ -1485,6 +1491,7 @@ def self_test() -> None:
         {
             "items": [
                 {
+                    "topic_value_class": "business_or_operational_shift",
                     "summary_points": [
                         {
                             "text": "投資額は500億円。",
@@ -1506,6 +1513,15 @@ def self_test() -> None:
             "excluded_events": [],
         }
     )
+    if sanitized["items"][0]["topic_value_class"] != "operational_status_change":
+        fail("Editor did not normalize a supported topic-value alias")
+    for alias, expected in {
+        "policy_or_regulatory_shift": "decision_or_policy",
+        "market_or_financial_shift": "market_or_financial_impact",
+        "business_or_operational_shift": "operational_status_change",
+    }.items():
+        if topic_value_class(alias) != expected:
+            fail(f"Editor did not normalize topic-value alias: {alias}")
     sanitized_points = sanitized["items"][0]["summary_points"]
     if len(sanitized_points) != 1 or sanitized_points[0]["evidence_ids"] != [
         "e001",
@@ -1925,9 +1941,12 @@ def self_test() -> None:
         "2099-01-02",
         grouped_summary_chunks[0],
     )
-    if len(grouped_payload["events"]) != 1 or not grouped_payload["events"][0][
-        "evidence"
-    ]:
+    if (
+        grouped_payload.get("allowed_topic_value_classes")
+        != sorted(core.ALLOWED_TOPIC_VALUES)
+        or len(grouped_payload["events"]) != 1
+        or not grouped_payload["events"][0]["evidence"]
+    ):
         fail("Editor prompt lost the deterministic event boundary")
     event_result = {
         "events": [

@@ -3413,6 +3413,7 @@ def category_prompt(
             }
         return {
             "category": category["label"],
+            "allowed_topic_value_classes": sorted(ALLOWED_TOPIC_VALUES),
             "allowed_watch_topic_ids": [
                 str(topic["id"])
                 for topic in category.get("watch_topics", [])

@@ -107,6 +107,14 @@ new decision, execution, result, number, condition, or source-backed analysis.
 Quarterly, annual, and final earnings results and material
 market moves remain eligible. Exclude only previews or routine low-impact ticks.
 
+`topic_value_class` must be one of `decision_or_policy`,
+`market_or_financial_impact`, `technical_or_product_shift`,
+`operational_status_change`, `event_result_or_outcome`,
+`material_schedule_change`, `risk_or_safety_signal`, or
+`cultural_or_audience_signal`. The deterministic importer also normalizes the
+documented legacy aliases; it must not request another model review only to
+repair an equivalent class name.
+
 Use all facts necessary to understand the event: subject and role, concrete
 change, numbers, dates, scope, conditions, reasons, and results. Every title and
 summary point must be natural Japanese. Every point must add information beyond
