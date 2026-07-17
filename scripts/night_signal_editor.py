@@ -41,6 +41,7 @@ EVENT_DECISIONS = {
     "background_or_navigation",
     "wrong_entity_or_category",
     "no_material_update",
+    "insufficient_evidence",
 }
 NOVELTY_CHANGE_RE = re.compile(
     r"(決定|合意|契約|申請|成立|結果|延期|中止|承認|却下|開始|終了|発売|提供開始|公開|更新|"
@@ -207,9 +208,13 @@ def flatten_event_response(
 ) -> tuple[dict[str, Any], bool, dict[str, Any]]:
     evidence_entries = core.editor_evidence_records(category, issue_date, records)
     event_evidence_ids: dict[str, set[str]] = {}
+    event_evidence_depths: dict[str, set[str]] = {}
     for evidence_id, record in evidence_entries:
         event_id = str(record.get("_editor_event_id") or evidence_id)
         event_evidence_ids.setdefault(event_id, set()).add(evidence_id)
+        event_evidence_depths.setdefault(event_id, set()).add(
+            core.record_evidence_depth(core.record_public_title(record), record)
+        )
     expected_event_ids = set(event_evidence_ids)
     seen_event_ids: list[str] = []
     unknown_event_ids: set[str] = set()
@@ -238,6 +243,17 @@ def flatten_event_response(
             invalid_event_decisions[event_id] = "publish_without_items"
         elif decision != "publish" and event_items:
             invalid_event_decisions[event_id] = "excluded_event_with_items"
+        elif (
+            decision in {"no_material_update", "background_or_navigation"}
+            and "body" not in event_evidence_depths.get(event_id, set())
+        ):
+            invalid_event_decisions[event_id] = (
+                "headline_only_requires_insufficient_evidence"
+            )
+        elif decision == "insufficient_evidence" and "body" in event_evidence_depths.get(
+            event_id, set()
+        ):
+            invalid_event_decisions[event_id] = "body_evidence_cannot_be_insufficient"
         elif decision != "publish":
             flattened["excluded_events"].append(
                 {"event_id": event_id, "reason": decision}
@@ -325,7 +341,10 @@ def matching_previous_updates(
     for position, update in enumerate(previous_updates):
         previous_title = str(update.get("title", ""))
         matching_titles = [
-            title for title in titles if core.same_material_event(title, previous_title)
+            title
+            for title in titles
+            if core.same_material_event(title, previous_title)
+            or event_identity_terms(title) & event_identity_terms(previous_title)
         ]
         if not matching_titles:
             continue
@@ -350,6 +369,58 @@ def matching_previous_updates(
     ]
 
 
+def event_identity_terms(value: Any) -> set[str]:
+    """Return distinctive product/event anchors, excluding broad organisation names."""
+    generic = {
+        "openai",
+        "softbank",
+        "honda",
+        "spacex",
+        "apple",
+        "microsoft",
+        "google",
+        "amazon",
+        "news",
+        "model",
+        "update",
+        "updates",
+        "release",
+        "releases",
+        "launches",
+        "announces",
+        "company",
+        "business",
+        "enterprise",
+        "customer",
+        "customers",
+        "technology",
+        "software",
+        "platform",
+        "service",
+        "services",
+        "product",
+        "expansion",
+        "quarterly",
+        "official",
+        "market",
+    }
+    terms = {
+        term.casefold().strip("-.")
+        for term in re.findall(r"[A-Za-z][A-Za-z0-9.-]{2,}", str(value))
+    }
+    return {
+        term
+        for term in terms
+        if term not in generic
+        and (
+            re.search(r"\d", term)
+            or "-" in term
+            or "." in term
+            or len(term) >= 7
+        )
+    }
+
+
 def records_describe_same_information(
     left: dict[str, Any],
     right: dict[str, Any],
@@ -358,11 +429,22 @@ def records_describe_same_information(
     right_title = core.record_public_title(right)
     if core.same_material_event(left_title, right_title):
         return True
+    title_overlap = state.text_overlap(left_title, right_title)
+    shared_identity = event_identity_terms(left_title) & event_identity_terms(
+        right_title
+    )
+    if title_overlap == 0 and not shared_identity:
+        # Syndicated pages often share long navigation/recommendation blocks.
+        # Without a title-level event anchor, body similarity must never merge
+        # two otherwise unrelated stories from the same publisher.
+        return False
     left_body = core.editor_source_text(left, 2400)
     right_body = core.editor_source_text(right, 2400)
-    if state.materially_same_fact(left_body, right_body):
+    if (title_overlap or shared_identity) and state.materially_same_fact(
+        left_body, right_body
+    ):
         return True
-    if state.text_overlap(left_title, right_title) < 2:
+    if title_overlap < 2 and not shared_identity:
         return False
     return any(
         state.materially_same_fact(left_fact, right_fact)
@@ -2286,6 +2368,41 @@ def self_test() -> None:
         "source_dates",
     }:
         fail("Editor retained a second prose path in the summary basis")
+    shared_navigation = (
+        "World Asia Economy Markets Latest News Sign in Subscribe "
+        "World Asia Economy Markets Latest News Sign in Subscribe"
+    )
+    if records_describe_same_information(
+        {
+            **review_records[0],
+            "title": "Vietnam starts a 500MW hydropower expansion",
+            "excerpt": (
+                "Vietnam approved a 500MW hydropower expansion. "
+                + shared_navigation
+            ),
+        },
+        {
+            **review_records[0],
+            "title": "India revises quarterly GDP growth to 6.8%",
+            "excerpt": (
+                "India revised quarterly GDP growth to 6.8%. "
+                + shared_navigation
+            ),
+        },
+    ):
+        fail("Editor merged unrelated events because publisher navigation matched")
+    gpt_red_history = matching_previous_updates(
+        ["OpenAI expands GPT-Red access to enterprise customers"],
+        [
+            {
+                "date": "2098-12-31",
+                "title": "OpenAI launches GPT-Red safety testing model",
+                "summary": "GPT-Red was released for safety evaluations.",
+            }
+        ],
+    )
+    if not gpt_red_history:
+        fail("Editor missed a prior event with the same distinctive product identity")
     print("NIGHT SIGNAL EDITOR SELF-TEST PASSED")
 
 

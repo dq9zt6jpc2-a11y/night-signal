@@ -13,11 +13,17 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_CONFIG = ROOT / "config" / "night_signal_sources.json"
+PUBLISHER_PORTFOLIO_CONFIG = (
+    ROOT / "config" / "night_signal_publisher_portfolio.json"
+)
 COVERAGE_CONFIG = ROOT / "config" / "night_signal_coverage.json"
 # Bump only when collection semantics or the Evidence schema changes. Editor and
 # renderer changes must not invalidate an already verified same-day collection.
-COLLECTOR_CONTRACT_REVISION = "b643a90c6ef1a742"
-LEGACY_COLLECTOR_CONTRACT_REVISIONS = {"2971bda468f60d99"}
+COLLECTOR_CONTRACT_REVISION = "b309ad4b7f41fe5f"
+LEGACY_COLLECTOR_CONTRACT_REVISIONS = {
+    "2971bda468f60d99",
+    "b643a90c6ef1a742",
+}
 SOURCE_CHECK_STATES = {"observed_live", "source_unavailable"}
 DISCOVERY_CHECK_STATES = {
     "searched_no_results",
@@ -88,6 +94,46 @@ def source_registry_contract(registry: dict[str, Any]) -> dict[str, Any]:
         separators=(",", ":"),
     ).encode("utf-8")
     return {**payload, "sha256": hashlib.sha256(encoded).hexdigest()}
+
+
+def publisher_portfolio_contract(
+    portfolio: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Record the discovery portfolio without adding it to daily seed checks."""
+    value = portfolio or load_object(PUBLISHER_PORTFOLIO_CONFIG)
+    publishers = value.get("publishers")
+    if not isinstance(publishers, list):
+        raise EvidenceContractError("publisher portfolio publishers must be a list")
+    encoded = json.dumps(
+        value,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return {
+        "portfolio_version": str(value.get("version", "")),
+        "publisher_count": len(publishers),
+        "sha256": hashlib.sha256(encoded).hexdigest(),
+    }
+
+
+def validate_publisher_portfolio_contract(value: Any) -> None:
+    _require(isinstance(value, dict), "Evidence has no publisher portfolio contract")
+    _require(
+        isinstance(value.get("portfolio_version"), str)
+        and bool(str(value.get("portfolio_version")).strip()),
+        "Evidence publisher portfolio contract has no version",
+    )
+    _require(
+        isinstance(value.get("publisher_count"), int)
+        and int(value.get("publisher_count", 0)) > 0,
+        "Evidence publisher portfolio contract has an invalid publisher count",
+    )
+    _require(
+        isinstance(value.get("sha256"), str)
+        and len(str(value.get("sha256"))) == 64,
+        "Evidence publisher portfolio contract has an invalid hash",
+    )
 
 
 def validate_source_registry_contract(
@@ -248,6 +294,10 @@ def validate_bundle(
         raise EvidenceContractError("current Evidence has no source registry contract")
     else:
         registry_categories = current_registry_categories
+    if bundle.get("collector_contract_version") == COLLECTOR_CONTRACT_REVISION:
+        validate_publisher_portfolio_contract(
+            bundle.get("publisher_portfolio_contract")
+        )
     _require(bundle.get("issue_date") == issue_date, "Evidence date does not match issue date")
     checked_at = bundle.get("checked_at_jst")
     _require(
@@ -625,6 +675,7 @@ def build_evidence_bundle(
         "collection_mode": collection_mode,
         "collector_contract_version": collector_contract_version(),
         "source_registry_contract": source_registry_contract(registry_value),
+        "publisher_portfolio_contract": publisher_portfolio_contract(),
         "categories": categories,
     }
     try:

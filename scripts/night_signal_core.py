@@ -32,6 +32,7 @@ import night_signal_state as state_contract
 ROOT = Path(__file__).resolve().parents[1]
 STATE_ROOT = ROOT / "state"
 SOURCE_CONFIG = ROOT / "config" / "night_signal_sources.json"
+PUBLISHER_PORTFOLIO = ROOT / "config" / "night_signal_publisher_portfolio.json"
 COVERAGE_CONFIG = ROOT / "config" / "night_signal_coverage.json"
 JST = ZoneInfo("Asia/Tokyo")
 USER_AGENT = (
@@ -441,6 +442,82 @@ def configured_category_contracts() -> dict[str, dict[str, Any]]:
     }
 
 
+@functools.lru_cache(maxsize=1)
+def configured_discovery_publishers() -> dict[str, list[dict[str, Any]]]:
+    """Load vetted publishers without turning every home page into a daily seed."""
+    value = load_object(PUBLISHER_PORTFOLIO)
+    publishers = value.get("publishers")
+    if not isinstance(publishers, list):
+        fail("publisher portfolio publishers must be a list")
+    configured = configured_category_contracts()
+    by_category: dict[str, list[dict[str, Any]]] = {
+        label: [] for label in configured
+    }
+    seen_labels: set[str] = set()
+    seen_urls: set[str] = set()
+    allowed_access_tiers = {
+        "open",
+        "open_or_mixed",
+        "mixed",
+        "search_or_mixed",
+        "restricted_or_mixed",
+        "restricted",
+    }
+    for publisher in publishers:
+        if not isinstance(publisher, dict):
+            fail("publisher portfolio contains an invalid entry")
+        label = str(publisher.get("label", "")).strip()
+        url = str(publisher.get("url", "")).strip()
+        source_class = str(publisher.get("source_class", "")).strip()
+        access_tier = str(publisher.get("access_tier", "")).strip()
+        roles = publisher.get("roles")
+        categories = publisher.get("categories")
+        try:
+            priority = int(publisher.get("search_priority", 99))
+        except (TypeError, ValueError):
+            fail(f"publisher portfolio has invalid priority: {label or url}")
+        if (
+            not label
+            or not normalized_source_host(url)
+            or source_class not in EDITOR_TRUSTED_SOURCE_CLASSES
+            or access_tier not in allowed_access_tiers
+            or not isinstance(roles, list)
+            or not roles
+            or not isinstance(categories, list)
+            or not categories
+            or priority < 1
+        ):
+            fail(f"publisher portfolio has invalid entry: {label or url}")
+        if label in seen_labels or url in seen_urls:
+            fail(f"publisher portfolio has duplicate entry: {label or url}")
+        seen_labels.add(label)
+        seen_urls.add(url)
+        unknown = {str(category) for category in categories} - set(configured)
+        if unknown:
+            fail(
+                f"publisher portfolio has unknown categories for {label}: "
+                + ", ".join(sorted(unknown))
+            )
+        normalized = {
+            **publisher,
+            "label": label,
+            "url": url,
+            "source_class": source_class,
+            "source_role": "independent_media_or_data",
+            "search_priority": priority,
+        }
+        for category in categories:
+            by_category[str(category)].append(normalized)
+    for publishers_for_category in by_category.values():
+        publishers_for_category.sort(
+            key=lambda publisher: (
+                int(publisher["search_priority"]),
+                str(publisher["label"]),
+            )
+        )
+    return by_category
+
+
 SOURCE_AUTHORITY_RANK = {
     "official": 5,
     "official_dataset": 5,
@@ -472,7 +549,14 @@ def configured_source_profiles() -> dict[str, tuple[str, str]]:
     if not isinstance(categories, dict):
         fail("source config categories must be an object")
     profiles: dict[str, tuple[str, str]] = {}
-    for sources in categories.values():
+    source_groups = list(categories.values()) + [
+        [
+            publisher
+            for publishers in configured_discovery_publishers().values()
+            for publisher in publishers
+        ]
+    ]
+    for sources in source_groups:
         if not isinstance(sources, list):
             continue
         for source in sources:
@@ -2340,6 +2424,149 @@ def discovery_queries(category: dict[str, Any], issue_date: str) -> list[dict[st
     return queries
 
 
+def depth_recovery_queries(
+    category: dict[str, Any],
+    issue_date: str,
+    records: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Build a small second search pass only for evidence-thin watch topics."""
+    topics = [
+        topic
+        for topic in category.get("watch_topics", [])
+        if isinstance(topic, dict) and topic.get("id")
+    ]
+    if not topics:
+        return []
+    eligible = [
+        record
+        for record in records
+        if publication_evidence_record(category, issue_date, record)
+    ]
+    body_records = [
+        record
+        for record in eligible
+        if record_evidence_depth(record_public_title(record), record) == "body"
+    ]
+    body_topics = {
+        str(topic_id)
+        for record in body_records
+        for topic_id in record.get("watch_topic_ids", [])
+        if str(topic_id)
+    }
+    body_events = {
+        record_cluster_key(record) or str(record.get("url", ""))
+        for record in body_records
+    }
+    headline_topics = {
+        str(topic_id)
+        for record in eligible
+        if record_evidence_depth(record_public_title(record), record) == "headline"
+        for topic_id in record.get("watch_topic_ids", [])
+        if str(topic_id)
+    }
+    weak_topics = [topic for topic in topics if str(topic["id"]) not in body_topics]
+    if not weak_topics:
+        return []
+    weak_threshold = max(1, (len(topics) + 1) // 2)
+    if (
+        len(body_events) >= 2
+        and len(weak_topics) < weak_threshold
+        and not headline_topics
+    ):
+        return []
+
+    try:
+        max_queries = max(
+            0,
+            int(os.getenv("NIGHT_SIGNAL_DEPTH_RECOVERY_MAX_QUERIES", "6")),
+        )
+    except ValueError:
+        max_queries = 6
+    if max_queries == 0:
+        return []
+    identities = discovery_identity_queries(category)
+    if not identities:
+        return []
+    prioritized = sorted(
+        weak_topics,
+        key=lambda topic: (
+            str(topic["id"]) not in headline_topics,
+            str(topic["id"]),
+        ),
+    )
+    publisher_hosts = list(
+        dict.fromkeys(
+            normalized_source_host(publisher.get("url"))
+            for publisher in configured_discovery_publishers().get(
+                str(category.get("label", "")),
+                [],
+            )
+            if normalized_source_host(publisher.get("url"))
+        )
+    )
+    candidates: list[list[dict[str, Any]]] = []
+    for topic_index, topic in enumerate(prioritized):
+        topic_id = str(topic["id"])
+        terms = list(
+            dict.fromkeys(
+                str(term).strip()
+                for term in [*topic.get("terms", []), *topic.get("event_classes", [])]
+                if str(term).strip()
+            )
+        )
+        topic_specs: list[dict[str, Any]] = []
+        if terms and publisher_hosts:
+            group_size = min(3, len(publisher_hosts))
+            start = (topic_index * group_size) % len(publisher_hosts)
+            selected_hosts = [
+                publisher_hosts[(start + offset) % len(publisher_hosts)]
+                for offset in range(group_size)
+            ]
+            sites = " OR ".join(f"site:{host}" for host in selected_hosts)
+            identity = identities[topic_index % len(identities)]
+            topic_specs.append(
+                {
+                    "query_id": f"depth:publisher:{topic_id}:bing",
+                    "purpose": "watch_topic",
+                    "watch_topic_ids": [topic_id],
+                    "query": (
+                        f"({sites}) ({identity}) "
+                        f"({' OR '.join(terms[:6])}) when:3d"
+                    ),
+                    "provider": "bing_rss",
+                    "channel": "web",
+                }
+            )
+        for group_index in range(0, min(len(terms), 12), 6):
+            group = terms[group_index : group_index + 6]
+            if not group:
+                continue
+            identity = identities[topic_index % len(identities)]
+            topic_specs.append(
+                {
+                    "query_id": (
+                        f"depth:topic:{topic_id}:{group_index // 6 + 1}:bing"
+                    ),
+                    "purpose": "watch_topic",
+                    "watch_topic_ids": [topic_id],
+                    "query": f"({identity}) ({' OR '.join(group)}) when:3d",
+                    "provider": "bing_rss",
+                    "channel": "web",
+                }
+            )
+        candidates.append(topic_specs)
+    # Round-robin gives every weak watch topic one diverse query before a
+    # second query is spent on any one topic.
+    selected: list[dict[str, Any]] = []
+    for round_index in range(2):
+        for topic_specs in candidates:
+            if round_index < len(topic_specs):
+                selected.append(topic_specs[round_index])
+            if len(selected) >= max_queries:
+                return selected
+    return selected
+
+
 def news_queries(category: dict[str, Any], issue_date: str) -> list[str]:
     return [str(spec["query"]) for spec in discovery_queries(category, issue_date)]
 
@@ -3052,6 +3279,21 @@ def discovery_record_is_material(record: dict[str, Any]) -> bool:
     )
 
 
+def discovery_record_needs_resolution(record: dict[str, Any]) -> bool:
+    """Keep concrete headline-only changes visible until enrichment finishes."""
+    title = record_public_title(record)
+    excerpt = str(record.get("excerpt") or "")
+    return bool(
+        discovery_record_is_material(record)
+        or (
+            title
+            and excerpt
+            and record_evidence_depth(title, record) == "headline"
+            and material_event_candidate(title, excerpt)
+        )
+    )
+
+
 def material_candidate_has_resolved_peer(
     candidate: dict[str, Any],
     records: list[dict[str, Any]],
@@ -3220,7 +3462,7 @@ def fetch_discovery_spec(
         if not discovery_record_is_relevant(category, issue_date, record):
             continue
         relevant_urls.add(link)
-        if discovery_record_is_material(record):
+        if discovery_record_needs_resolution(record):
             material_urls.add(link)
         records.append(record)
 
@@ -3241,10 +3483,15 @@ def fetch_discovery_spec(
     }
 
 
-def fetch_news(category: dict[str, Any], issue_date: str) -> dict[str, Any]:
-    records_by_url: dict[str, dict[str, Any]] = {}
-    specs = discovery_queries(category, issue_date)
+def execute_discovery_specs(
+    category: dict[str, Any],
+    issue_date: str,
+    specs: list[dict[str, Any]],
+) -> list[tuple[int, list[dict[str, Any]], dict[str, Any]]]:
+    """Fetch one bounded discovery pass while preserving configured order."""
     search_results: list[tuple[int, list[dict[str, Any]], dict[str, Any]]] = []
+    if not specs:
+        return search_results
     workers = max(1, int(os.getenv("NIGHT_SIGNAL_SEARCH_CONCURRENCY", "8")))
     with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
         futures = {
@@ -3260,7 +3507,11 @@ def fetch_news(category: dict[str, Any], issue_date: str) -> dict[str, Any]:
                 records = []
                 check = {
                     **spec,
-                    "url": "https://www.bing.com/",
+                    "url": (
+                        "https://news.google.com/"
+                        if spec.get("provider") == "google_news_rss"
+                        else "https://www.bing.com/"
+                    ),
                     "label": str(spec.get("provider") or "search"),
                     "slot_state": "search_unavailable",
                     "result_count": 0,
@@ -3270,9 +3521,16 @@ def fetch_news(category: dict[str, Any], issue_date: str) -> dict[str, Any]:
                     "evidence_summary": f"検索に失敗した: {type(exc).__name__}: {exc}",
                 }
             search_results.append((index, records, check))
+    return sorted(search_results, key=lambda value: value[0])
 
+
+def merge_discovery_results(
+    records_by_url: dict[str, dict[str, Any]],
+    search_results: list[tuple[int, list[dict[str, Any]], dict[str, Any]]],
+) -> list[dict[str, Any]]:
+    """Merge query provenance without dropping a richer duplicate result."""
     checks: list[dict[str, Any]] = []
-    for _, records, check in sorted(search_results, key=lambda value: value[0]):
+    for _, records, check in search_results:
         checks.append(check)
         for record in records:
             link = str(record.get("url", ""))
@@ -3280,18 +3538,41 @@ def fetch_news(category: dict[str, Any], issue_date: str) -> dict[str, Any]:
             if current is None:
                 records_by_url[link] = record
                 continue
-            current["discovery_query_ids"] = list(
+            query_ids = list(
                 dict.fromkeys(
-                    [*current.get("discovery_query_ids", []), *record.get("discovery_query_ids", [])]
+                    [
+                        *current.get("discovery_query_ids", []),
+                        *record.get("discovery_query_ids", []),
+                    ]
                 )
             )
-            current["watch_topic_ids"] = list(
+            topic_ids = list(
                 dict.fromkeys(
-                    [*current.get("watch_topic_ids", []), *record.get("watch_topic_ids", [])]
+                    [
+                        *current.get("watch_topic_ids", []),
+                        *record.get("watch_topic_ids", []),
+                    ]
                 )
             )
+            if len(str(record.get("excerpt", ""))) > len(
+                str(current.get("excerpt", ""))
+            ):
+                records_by_url[link] = {
+                    **record,
+                    "discovery_query_ids": query_ids,
+                    "watch_topic_ids": topic_ids,
+                }
+            else:
+                current["discovery_query_ids"] = query_ids
+                current["watch_topic_ids"] = topic_ids
+    return checks
 
-    records = enrich_discovered_records(category, issue_date, list(records_by_url.values()))
+
+def finalize_discovery_checks(
+    checks: list[dict[str, Any]],
+    records: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Bind search counters to the strongest Evidence obtained after enrichment."""
     enriched_by_url: dict[str, dict[str, Any]] = {}
     for record in records:
         enriched_by_url[str(record.get("url"))] = record
@@ -3319,8 +3600,40 @@ def fetch_news(category: dict[str, Any], issue_date: str) -> dict[str, Any]:
             check["slot_state"] = "searched_resolved"
         else:
             check["slot_state"] = "searched_unresolved"
-        check["evidence_summary"] += f" 編集可能な根拠を確保した重要更新候補は{resolved}件。"
-    return {"records": records, "discovery_checks": checks}
+        check["evidence_summary"] += (
+            f" 編集可能な根拠を確保した重要更新候補は{resolved}件。"
+        )
+    return checks
+
+
+def fetch_news(category: dict[str, Any], issue_date: str) -> dict[str, Any]:
+    records_by_url: dict[str, dict[str, Any]] = {}
+    checks = merge_discovery_results(
+        records_by_url,
+        execute_discovery_specs(
+            category,
+            issue_date,
+            discovery_queries(category, issue_date),
+        ),
+    )
+    records = enrich_discovered_records(
+        category, issue_date, list(records_by_url.values())
+    )
+    depth_specs = depth_recovery_queries(category, issue_date, records)
+    if depth_specs:
+        checks.extend(
+            merge_discovery_results(
+                records_by_url,
+                execute_discovery_specs(category, issue_date, depth_specs),
+            )
+        )
+        records = enrich_discovered_records(
+            category, issue_date, list(records_by_url.values())
+        )
+    return {
+        "records": records,
+        "discovery_checks": finalize_discovery_checks(checks, records),
+    }
 
 
 def category_contracts() -> list[dict[str, Any]]:
@@ -3759,7 +4072,19 @@ def normalize_result(
             ),
             (
                 "category_identity",
-                not category_identity_ok(str(category.get("label", "")), title, factual_text),
+                not (
+                    category_identity_ok(
+                        str(category.get("label", "")), title, factual_text
+                    )
+                    or any(
+                        category_identity_ok(
+                            str(category.get("label", "")),
+                            f"{record.get('label', '')} {record_public_title(record)}",
+                            "",
+                        )
+                        for record in source_records
+                    )
+                ),
             ),
             ("duplicate_title", title in seen_titles),
             (
@@ -3846,36 +4171,10 @@ def normalize_result(
         event_id = str(rejected.get("event_id", ""))
         if event_id in expected_event_ids:
             rejected_by_event.setdefault(event_id, []).append(rejected)
-    deterministic_wrong_category_ids = {
-        event_id
-        for event_id, event_rejections in rejected_by_event.items()
-        if event_id not in published_event_ids
-        and event_id not in excluded_event_ids
-        and event_rejections
-        and all(
-            "category_identity" in rejection.get("reasons", [])
-            for rejection in event_rejections
-        )
-    }
-    if deterministic_wrong_category_ids:
-        print(
-            json.dumps(
-                {
-                    "phase": "wrong_category_events_excluded",
-                    "category": category.get("label"),
-                    "event_ids": sorted(deterministic_wrong_category_ids),
-                },
-                ensure_ascii=False,
-            ),
-            flush=True,
-        )
-        excluded_event_ids.update(deterministic_wrong_category_ids)
-        rejected_items = [
-            rejected
-            for rejected in rejected_items
-            if str(rejected.get("event_id", ""))
-            not in deterministic_wrong_category_ids
-        ]
+    # A publish decision must never disappear merely because a deterministic
+    # identity heuristic disagrees with the reviewed, source-bound event.  Keep
+    # the rejection visible so only this event is corrected/reviewed.
+    deterministic_wrong_category_ids: set[str] = set()
     conflicting_event_ids = sorted(published_event_ids & excluded_event_ids)
     accounted_event_ids = published_event_ids | excluded_event_ids
     missing_event_ids = sorted(expected_event_ids - accounted_event_ids)
@@ -3978,6 +4277,12 @@ def collect_evidence(issue_date: str) -> dict[str, Any]:
         "coverage_proof": {
             "source_registry_version": source_config.get("version"),
             "source_registry_sha256": bundle["source_registry_contract"]["sha256"],
+            "publisher_portfolio_version": bundle[
+                "publisher_portfolio_contract"
+            ]["portfolio_version"],
+            "publisher_portfolio_sha256": bundle[
+                "publisher_portfolio_contract"
+            ]["sha256"],
             "required_official_scopes": sum(
                 len(category.get("required_official_scopes", []))
                 for category in contracts
@@ -5008,12 +5313,15 @@ def self_test() -> None:
         [wrong_category_record],
     )
     if (
-        not wrong_category["coverage_complete"]
+        wrong_category["coverage_complete"]
         or wrong_category["items"]
-        or wrong_category["rejected_items"]
-        or wrong_category["deterministic_wrong_category_ids"] != ["g001"]
+        or not any(
+            "category_identity" in rejection.get("reasons", [])
+            for rejection in wrong_category["rejected_items"]
+        )
+        or wrong_category["deterministic_wrong_category_ids"]
     ):
-        fail("normalization retried an event that deterministically missed category identity")
+        fail("normalization silently discarded a reviewed category disagreement")
     padded_raw = json.loads(json.dumps(raw))
     padded_raw["items"][0]["summary_points"].append(
         {
@@ -5681,4 +5989,44 @@ def self_test() -> None:
     }
     if not record_document_is_current(fresh_pdf_record, "2099-07-02"):
         fail("current report was rejected by document-date validation")
+    if discovery_record_is_material(headline_only_cross_domain):
+        fail("headline-only discovery was treated as resolved body Evidence")
+    if not discovery_record_needs_resolution(headline_only_cross_domain):
+        fail("headline-only material discovery was discarded before enrichment")
+    publisher_portfolio = configured_discovery_publishers()
+    required_publishers = {
+        "Reuters",
+        "Kyodo News",
+        "NHK News",
+        "Financial Times",
+        "Bloomberg",
+        "The Wall Street Journal",
+        "Nikkei",
+        "The Information",
+        "MIT Technology Review",
+        "IEEE Spectrum",
+        "Semafor",
+        "TechCrunch",
+        "The Register",
+    }
+    configured_publishers = {
+        str(publisher.get("label"))
+        for publishers in publisher_portfolio.values()
+        for publisher in publishers
+    }
+    if not required_publishers <= configured_publishers:
+        fail("publisher portfolio omitted a required broad or technology source")
+    f1_depth_specs = depth_recovery_queries(
+        configured_category_contracts()["F1"],
+        "2099-07-02",
+        [],
+    )
+    if not f1_depth_specs or not any(
+        "site:racefans.net" in str(spec.get("query", ""))
+        or "site:the-race.com" in str(spec.get("query", ""))
+        for spec in f1_depth_specs
+    ):
+        fail("depth recovery did not target a vetted category specialist")
+    if len(f1_depth_specs) > 6:
+        fail("depth recovery exceeded its bounded query budget")
     print("NIGHT SIGNAL CORE SELF-TEST PASSED")

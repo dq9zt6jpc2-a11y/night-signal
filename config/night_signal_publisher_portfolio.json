@@ -1,0 +1,52 @@
+{
+  "version": "2026-07-18.1",
+  "description": "Trusted publishers used to qualify discovered articles and to target the bounded second-pass search. They are not all fetched every day as seed pages.",
+  "selection_policy": {
+    "activation": "depth_only_after_coverage_gap",
+    "free_access": "No subscription is required. Restricted articles may raise a discovery signal, but unsupported article text must never be treated as body evidence.",
+    "corroboration": "Material facts from restricted or headline-only coverage require an accessible primary source or an independently readable source before publication.",
+    "review_dimensions": [
+      "editorial_specialization",
+      "primary_source_proximity",
+      "complementarity",
+      "freshness",
+      "search_discoverability",
+      "body_retrieval_stability",
+      "noise",
+      "editorial_reliability"
+    ]
+  },
+  "publishers": [
+    {"label": "Reuters", "url": "https://www.reuters.com/", "source_class": "major_media", "access_tier": "mixed", "search_priority": 1, "roles": ["breaking_news", "companies", "markets"], "categories": ["OpenAI", "SoftBank", "Honda", "F1", "SpaceX", "日本経済", "アジア経済", "北米経済"]},
+    {"label": "Kyodo News", "url": "https://www.kyodonews.jp/", "source_class": "major_media", "access_tier": "search_or_mixed", "search_priority": 1, "roles": ["japan_breaking_news", "official_announcement_follow_up"], "categories": ["OpenAI", "SoftBank", "Honda", "日本経済", "YOASOBI / 幾田りら", "宇都宮ブレックス"]},
+    {"label": "NHK News", "url": "https://www3.nhk.or.jp/news/", "source_class": "major_media", "access_tier": "open_or_mixed", "search_priority": 1, "roles": ["japan_breaking_news", "public_policy"], "categories": ["OpenAI", "SoftBank", "Honda", "日本経済", "アジア経済", "YOASOBI / 幾田りら", "宇都宮ブレックス"]},
+    {"label": "Financial Times", "url": "https://www.ft.com/", "source_class": "major_media", "access_tier": "restricted_or_mixed", "search_priority": 1, "roles": ["companies", "global_economy", "markets", "technology"], "categories": ["OpenAI", "SoftBank", "Honda", "SpaceX", "日本経済", "アジア経済", "北米経済"]},
+    {"label": "Bloomberg", "url": "https://www.bloomberg.com/", "source_class": "major_media", "access_tier": "restricted_or_mixed", "search_priority": 1, "roles": ["companies", "markets", "macro_data"], "categories": ["OpenAI", "SoftBank", "Honda", "SpaceX", "日本経済", "アジア経済", "北米経済"]},
+    {"label": "The Wall Street Journal", "url": "https://www.wsj.com/", "source_class": "major_media", "access_tier": "restricted", "search_priority": 1, "roles": ["companies", "us_economy", "markets", "technology"], "categories": ["OpenAI", "SoftBank", "Honda", "SpaceX", "日本経済", "アジア経済", "北米経済"]},
+    {"label": "Nikkei", "url": "https://www.nikkei.com/", "source_class": "major_media", "access_tier": "restricted_or_mixed", "search_priority": 1, "roles": ["japan_companies", "japan_economy", "asia_business"], "categories": ["OpenAI", "SoftBank", "Honda", "SpaceX", "日本経済", "アジア経済", "北米経済"]},
+    {"label": "The Information", "url": "https://www.theinformation.com/", "source_class": "specialist_media", "access_tier": "restricted", "search_priority": 1, "roles": ["ai_companies", "technology_business", "exclusive_reporting"], "categories": ["OpenAI", "SoftBank", "SpaceX"]},
+    {"label": "MIT Technology Review", "url": "https://www.technologyreview.com/", "source_class": "specialist_media", "access_tier": "restricted_or_mixed", "search_priority": 1, "roles": ["ai_research", "technology_impact"], "categories": ["OpenAI", "SoftBank", "Honda", "SpaceX"]},
+    {"label": "IEEE Spectrum", "url": "https://spectrum.ieee.org/", "source_class": "specialist_media", "access_tier": "open_or_mixed", "search_priority": 1, "roles": ["engineering", "ai_systems", "robotics"], "categories": ["OpenAI", "SoftBank", "Honda", "SpaceX"]},
+    {"label": "Data Center Dynamics", "url": "https://www.datacenterdynamics.com/en/", "source_class": "specialist_media", "access_tier": "open_or_mixed", "search_priority": 1, "roles": ["data_centers", "ai_infrastructure", "power"], "categories": ["OpenAI", "SoftBank"]},
+    {"label": "Light Reading", "url": "https://www.lightreading.com/", "source_class": "specialist_media", "access_tier": "open_or_mixed", "search_priority": 1, "roles": ["telecom", "network_infrastructure"], "categories": ["SoftBank"]},
+    {"label": "InsideEVs", "url": "https://insideevs.com/honda/", "source_class": "specialist_media", "access_tier": "open_or_mixed", "search_priority": 1, "roles": ["electric_vehicles", "automotive_strategy"], "categories": ["Honda"]},
+    {"label": "RaceFans", "url": "https://www.racefans.net/", "source_class": "specialist_media", "access_tier": "open_or_mixed", "search_priority": 1, "roles": ["formula_one", "regulation", "race_results"], "categories": ["F1"]},
+    {"label": "The Race", "url": "https://www.the-race.com/", "source_class": "specialist_media", "access_tier": "open_or_mixed", "search_priority": 1, "roles": ["formula_one", "technical_analysis", "race_results"], "categories": ["F1"]},
+    {"label": "Caixin Global", "url": "https://www.caixinglobal.com/economy/", "source_class": "specialist_media", "access_tier": "restricted_or_mixed", "search_priority": 1, "roles": ["china_economy", "china_policy"], "categories": ["アジア経済"]},
+    {"label": "Economic Times Indicators", "url": "https://economictimes.indiatimes.com/news/economy/indicators", "source_class": "specialist_media", "access_tier": "open_or_mixed", "search_priority": 1, "roles": ["india_economy", "india_indicators"], "categories": ["アジア経済"]},
+    {"label": "VnExpress Economy", "url": "https://e.vnexpress.net/news/business/economy", "source_class": "specialist_media", "access_tier": "open", "search_priority": 1, "roles": ["vietnam_economy", "local_reporting"], "categories": ["アジア経済"]},
+    {"label": "Vietnam Investment Review", "url": "https://vir.com.vn/", "source_class": "specialist_media", "access_tier": "open_or_mixed", "search_priority": 1, "roles": ["vietnam_investment", "supply_chain"], "categories": ["アジア経済"]},
+    {"label": "ORICON NEWS", "url": "https://www.oricon.co.jp/prof/760597/", "source_class": "specialist_media", "access_tier": "open", "search_priority": 1, "roles": ["japan_music", "artist_activity"], "categories": ["YOASOBI / 幾田りら"]},
+    {"label": "Basket Count", "url": "https://basket-count.com/", "source_class": "specialist_media", "access_tier": "open", "search_priority": 1, "roles": ["japan_basketball", "bleague"], "categories": ["宇都宮ブレックス"]},
+    {"label": "The Economist", "url": "https://www.economist.com/", "source_class": "major_media", "access_tier": "restricted", "search_priority": 2, "roles": ["global_economy", "policy_analysis"], "categories": ["OpenAI", "SoftBank", "日本経済", "アジア経済", "北米経済"]},
+    {"label": "Asahi Shimbun", "url": "https://www.asahi.com/", "source_class": "major_media", "access_tier": "restricted_or_mixed", "search_priority": 2, "roles": ["japan_general_news", "public_policy"], "categories": ["OpenAI", "SoftBank", "Honda", "日本経済", "YOASOBI / 幾田りら", "宇都宮ブレックス"]},
+    {"label": "Yomiuri Shimbun", "url": "https://www.yomiuri.co.jp/", "source_class": "major_media", "access_tier": "restricted_or_mixed", "search_priority": 2, "roles": ["japan_general_news", "public_policy"], "categories": ["OpenAI", "SoftBank", "Honda", "日本経済", "YOASOBI / 幾田りら", "宇都宮ブレックス"]},
+    {"label": "Mainichi Shimbun", "url": "https://mainichi.jp/", "source_class": "major_media", "access_tier": "restricted_or_mixed", "search_priority": 2, "roles": ["japan_general_news", "public_policy"], "categories": ["OpenAI", "SoftBank", "Honda", "日本経済", "YOASOBI / 幾田りら", "宇都宮ブレックス"]},
+    {"label": "Nikkei Business", "url": "https://business.nikkei.com/", "source_class": "specialist_media", "access_tier": "restricted", "search_priority": 2, "roles": ["japan_management", "company_strategy"], "categories": ["OpenAI", "SoftBank", "Honda", "日本経済"]},
+    {"label": "Toyo Keizai Online", "url": "https://toyokeizai.net/", "source_class": "specialist_media", "access_tier": "restricted_or_mixed", "search_priority": 2, "roles": ["japan_companies", "japan_economy", "analysis"], "categories": ["OpenAI", "SoftBank", "Honda", "日本経済"]},
+    {"label": "Diamond Online", "url": "https://diamond.jp/", "source_class": "specialist_media", "access_tier": "restricted_or_mixed", "search_priority": 2, "roles": ["japan_business", "management", "analysis"], "categories": ["OpenAI", "SoftBank", "Honda", "日本経済"]},
+    {"label": "Semafor", "url": "https://www.semafor.com/", "source_class": "major_media", "access_tier": "open_or_mixed", "search_priority": 2, "roles": ["global_technology", "policy", "cross_border_reporting"], "categories": ["OpenAI", "SoftBank", "SpaceX", "アジア経済", "北米経済"]},
+    {"label": "TechCrunch", "url": "https://techcrunch.com/", "source_class": "specialist_media", "access_tier": "open_or_mixed", "search_priority": 2, "roles": ["startups", "ai_products", "technology_business"], "categories": ["OpenAI", "SoftBank", "Honda", "SpaceX"]},
+    {"label": "The Register", "url": "https://www.theregister.com/", "source_class": "specialist_media", "access_tier": "open", "search_priority": 2, "roles": ["enterprise_technology", "ai_infrastructure", "security"], "categories": ["OpenAI", "SoftBank", "SpaceX"]}
+  ]
+}

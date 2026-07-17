@@ -188,6 +188,7 @@ def prepare_packet(
             "one_point_only_for_one_distinct_supported_delta": True,
             "no_background_or_repetition_for_length": True,
             "earnings_results_and_material_market_moves_are_not_routine": True,
+            "headline_only_requires_insufficient_evidence": True,
         },
         "requests": [public_request(request) for request in requests],
         "metrics": {
@@ -208,6 +209,25 @@ def prepare_packet(
             ),
             "source_checks": report["source_checks"],
             "discovery_checks": report["discovery_checks"],
+            "publisher_portfolio_version": evidence.get(
+                "publisher_portfolio_contract", {}
+            ).get("portfolio_version"),
+            "depth_recovery_queries": sum(
+                1
+                for entry in evidence.get("categories", {}).values()
+                if isinstance(entry, dict)
+                for check in entry.get("discovery_checks", [])
+                if isinstance(check, dict)
+                and str(check.get("query_id", "")).startswith("depth:")
+            ),
+            "depth_recovery_resolved_candidates": sum(
+                int(check.get("resolved_candidate_count", 0))
+                for entry in evidence.get("categories", {}).values()
+                if isinstance(entry, dict)
+                for check in entry.get("discovery_checks", [])
+                if isinstance(check, dict)
+                and str(check.get("query_id", "")).startswith("depth:")
+            ),
             "observed_urls": len(report["observed_urls"]),
         },
     }
@@ -300,6 +320,120 @@ def merge_within_event_boundaries(
     return merged
 
 
+def category_review_audit(
+    evidence: dict[str, Any],
+    requests: list[dict[str, Any]],
+    response_by_id: dict[str, dict[str, Any]],
+    cards_by_category: dict[str, list[dict[str, Any]]],
+) -> list[dict[str, Any]]:
+    """Explain every low-count category without imposing a publication quota."""
+    evidence_categories = evidence.get("categories", {})
+    audits: list[dict[str, Any]] = []
+    for category in core.category_contracts():
+        label = str(category["label"])
+        category_requests = [
+            request for request in requests if str(request.get("category")) == label
+        ]
+        decisions: dict[str, int] = {}
+        body_events = 0
+        headline_only_events = 0
+        candidate_events = 0
+        for request in category_requests:
+            for event in request.get("payload", {}).get("events", []):
+                if not isinstance(event, dict):
+                    continue
+                candidate_events += 1
+                depths = {
+                    str(item.get("evidence_depth", ""))
+                    for item in event.get("evidence", [])
+                    if isinstance(item, dict)
+                }
+                if "body" in depths:
+                    body_events += 1
+                elif "headline" in depths:
+                    headline_only_events += 1
+            response = response_by_id.get(str(request.get("request_id")), {})
+            for event in response.get("events", []):
+                if not isinstance(event, dict):
+                    continue
+                decision = str(event.get("decision", ""))
+                decisions[decision] = decisions.get(decision, 0) + 1
+        entry = (
+            evidence_categories.get(label, {})
+            if isinstance(evidence_categories, dict)
+            else {}
+        )
+        source_checks = entry.get("source_checks", []) if isinstance(entry, dict) else []
+        discovery_checks = (
+            entry.get("discovery_checks", []) if isinstance(entry, dict) else []
+        )
+        unavailable_sources = sum(
+            isinstance(check, dict)
+            and check.get("slot_state") == "source_unavailable"
+            for check in source_checks
+        )
+        resolved_searches = sum(
+            isinstance(check, dict)
+            and int(check.get("resolved_candidate_count", 0)) > 0
+            for check in discovery_checks
+        )
+        unresolved_searches = sum(
+            isinstance(check, dict)
+            and check.get("slot_state") == "searched_unresolved"
+            for check in discovery_checks
+        )
+        depth_queries = sum(
+            isinstance(check, dict)
+            and str(check.get("query_id", "")).startswith("depth:")
+            for check in discovery_checks
+        )
+        depth_resolved = sum(
+            int(check.get("resolved_candidate_count", 0))
+            for check in discovery_checks
+            if isinstance(check, dict)
+            and str(check.get("query_id", "")).startswith("depth:")
+        )
+        final_cards = len(cards_by_category.get(label, []))
+        low_count = final_cards <= 1
+        needs_follow_up = bool(
+            low_count
+            and (
+                decisions.get("insufficient_evidence", 0)
+                or unresolved_searches
+                or resolved_searches == 0
+                or (
+                    source_checks
+                    and unavailable_sources * 3 >= len(source_checks)
+                )
+            )
+        )
+        audits.append(
+            {
+                "category": label,
+                "candidate_events": candidate_events,
+                "body_events": body_events,
+                "headline_only_events": headline_only_events,
+                "decisions": decisions,
+                "final_cards": final_cards,
+                "source_checks": len(source_checks),
+                "unavailable_sources": unavailable_sources,
+                "resolved_searches": resolved_searches,
+                "unresolved_searches": unresolved_searches,
+                "depth_recovery_queries": depth_queries,
+                "depth_recovery_resolved_candidates": depth_resolved,
+                "low_count_status": (
+                    "limited_evidence"
+                    if needs_follow_up
+                    else "supported"
+                    if low_count
+                    else "not_low_count"
+                ),
+                "needs_follow_up": needs_follow_up,
+            }
+        )
+    return audits
+
+
 def apply_review(
     issue_date: str,
     *,
@@ -369,6 +503,12 @@ def apply_review(
     ]
     if not cards:
         fail("review produced no evidence-backed important update")
+    category_audit = category_review_audit(
+        evidence,
+        requests,
+        response_by_id,
+        cards_by_category,
+    )
     manifest = state.build_coverage_manifest(
         issue_date,
         collection_mode=str(evidence.get("collection_mode")),
@@ -400,6 +540,12 @@ def apply_review(
         ),
         "model_requests_from_repository": 0,
         "additional_paid_api_requests": 0,
+        "category_audit": category_audit,
+        "low_count_categories_needing_follow_up": [
+            audit["category"]
+            for audit in category_audit
+            if audit["needs_follow_up"]
+        ],
     }
     write_json_atomic(state_root / issue_date / "plus_review_receipt.json", receipt)
     return {**receipt, "issue_state": str(issue_path)}
@@ -437,6 +583,66 @@ def self_test() -> None:
     )
     if len(bounded) != 2:
         fail("Plus review merged cards across event boundaries")
+    headline_category = {
+        "label": "OpenAI",
+        "watch_topics": [
+            {
+                "id": "product_release",
+                "terms": ["OpenAI", "GPT", "release"],
+                "event_classes": ["technical_or_product_shift"],
+            }
+        ],
+    }
+    headline_record = {
+        "label": "Example Technology News",
+        "url": "https://example.com/openai-new-model",
+        "source_role": "independent_media_or_data",
+        "channel": "web",
+        "source_class": "discovered_media",
+        "observed": True,
+        "published_date": "2099-01-02",
+        "title": "OpenAI releases GPT-9 with a new reasoning mode",
+        "excerpt": (
+            "OpenAI releases GPT-9 with a new reasoning mode "
+            "Example Technology News"
+        ),
+        "watch_topic_ids": ["product_release"],
+        "_editor_event_id": "g001",
+    }
+    _, accepted_no_material, no_material_feedback = editor.flatten_event_response(
+        {
+            "events": [
+                {
+                    "event_id": "g001",
+                    "decision": "no_material_update",
+                    "items": [],
+                }
+            ]
+        },
+        headline_category,
+        "2099-01-02",
+        [headline_record],
+    )
+    if accepted_no_material or no_material_feedback["invalid_event_decisions"].get(
+        "g001"
+    ) != "headline_only_requires_insufficient_evidence":
+        fail("Plus review allowed a headline-only event to be silently discarded")
+    _, accepted_insufficient, _ = editor.flatten_event_response(
+        {
+            "events": [
+                {
+                    "event_id": "g001",
+                    "decision": "insufficient_evidence",
+                    "items": [],
+                }
+            ]
+        },
+        headline_category,
+        "2099-01-02",
+        [headline_record],
+    )
+    if not accepted_insufficient:
+        fail("Plus review rejected an honest headline-only evidence hold")
     with tempfile.TemporaryDirectory() as temporary_directory:
         path = Path(temporary_directory) / "value.json"
         write_json_atomic(path, {"日本語": "根拠"})

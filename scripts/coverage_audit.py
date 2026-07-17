@@ -239,6 +239,9 @@ def self_test() -> None:
     frozen["source_registry_contract"] = evidence_store.source_registry_contract(
         scoped_registry
     )
+    frozen["publisher_portfolio_contract"] = (
+        evidence_store.publisher_portfolio_contract()
+    )
     frozen["categories"]["Test"]["discovery_checks"][1]["locale"] = {
         "id": "ja-JP"
     }
