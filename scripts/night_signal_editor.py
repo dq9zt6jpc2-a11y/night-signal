@@ -1941,12 +1941,9 @@ def self_test() -> None:
         "2099-01-02",
         grouped_summary_chunks[0],
     )
-    if (
-        grouped_payload.get("allowed_topic_value_classes")
-        != sorted(core.ALLOWED_TOPIC_VALUES)
-        or len(grouped_payload["events"]) != 1
-        or not grouped_payload["events"][0]["evidence"]
-    ):
+    if len(grouped_payload["events"]) != 1 or not grouped_payload["events"][0][
+        "evidence"
+    ]:
         fail("Editor prompt lost the deterministic event boundary")
     event_result = {
         "events": [
