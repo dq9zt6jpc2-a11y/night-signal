@@ -107,7 +107,10 @@ material delta without a count target. A new URL, date stamp, or background-only
 rewrite is not a delta. For an already published event, publish only a concrete
 new decision, execution, result, number, condition, or source-backed analysis.
 Trusted media in `config/night_signal_publisher_portfolio.json` are searched in
-a bounded, category-specific depth pass only after a coverage gap is observed.
+a bounded, category- and topic-specific depth pass when body-rich Evidence from
+a trusted source is missing. Open specialist media are tried before unrelated
+or restricted sources; Google News and Bing remain discovery indexes rather
+than source-quality substitutes.
 Restricted articles are discovery signals, not body Evidence; corroborate them
 with an accessible primary source or independently readable report.
 Quarterly, annual, and final earnings results and material

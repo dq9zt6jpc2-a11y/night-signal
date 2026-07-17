@@ -6,15 +6,16 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from collections import Counter
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
 import night_signal_state as state
 import night_signal_evidence as evidence_store
 import night_signal_core as core
+import night_signal_source_health as source_health
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,10 +25,6 @@ STATE_ROOT = ROOT / "state"
 def fail(message: str) -> None:
     print(f"NIGHT SIGNAL EVAL FAILED: {message}", file=sys.stderr)
     raise SystemExit(1)
-
-
-def normalized_host(url: str) -> str:
-    return urlparse(url).netloc.lower().removeprefix("www.")
 
 
 def review_packet_metrics(base: Path) -> dict[str, int]:
@@ -253,7 +250,9 @@ def evaluate(
         "editor_coverage_gaps": editor_coverage_gaps,
         "observed_urls": len(observed_urls),
         "unavailable_urls": len(unavailable_urls),
-        "evidence_hosts": len({normalized_host(url) for url in observed_urls}),
+        "evidence_hosts": len(
+            {source_health.normalized_host(url) for url in observed_urls}
+        ),
         "published_updates": len(cards),
         "confirmed_facts": facts,
         "facts_with_sources": mapped_facts,
@@ -285,12 +284,16 @@ def evaluate(
         "collection_mode": bundle.get("collection_mode"),
         **review_packet_metrics(base),
     }
+    source_diagnostics = source_health.post_publication_diagnostics(
+        bundle, issue, issue_date
+    )
     result = {
         "issue_date": issue_date,
         "evaluated_at_jst": datetime.now(ZoneInfo("Asia/Tokyo")).isoformat(timespec="seconds"),
         "passed": all(checks.values()),
         "checks": checks,
         "metrics": metrics,
+        "source_diagnostics": source_diagnostics,
         "failures": [name for name, passed in checks.items() if not passed],
     }
     if not include_history:
@@ -316,6 +319,7 @@ def evaluate(
                 "issue_date": prior_date,
                 "passed": prior["passed"],
                 "metrics": prior["metrics"],
+                "source_diagnostics": prior.get("source_diagnostics", {}),
             }
         )
     previous_metrics = history[0]["metrics"] if history else {}
@@ -366,11 +370,63 @@ def evaluate(
         for value in expansion_window
     ):
         improvement_signals.append("expanded_scope_needs_precision_review")
+    current_causes = {
+        (category_label, cause)
+        for category_label, diagnostic in source_diagnostics.items()
+        for cause in diagnostic.get("causes", [])
+    }
+    historical_cause_frequency: Counter[tuple[str, str]] = Counter()
+    for historical in history:
+        historical_cause_frequency.update(
+            (category_label, cause)
+            for category_label, diagnostic in historical.get(
+                "source_diagnostics", {}
+            ).items()
+            for cause in diagnostic.get("causes", [])
+        )
+    recurring_causes = [
+        {
+            "category": category_label,
+            "cause": cause,
+            "days": historical_cause_frequency[(category_label, cause)] + 1,
+        }
+        for category_label, cause in sorted(current_causes)
+        if historical_cause_frequency[(category_label, cause)] >= 1
+    ]
+    recently_resolved_causes = [
+        {"category": category_label, "cause": cause, "prior_days": frequency}
+        for (category_label, cause), frequency in sorted(
+            historical_cause_frequency.items()
+        )
+        if frequency >= 2 and (category_label, cause) not in current_causes
+    ]
+    if recurring_causes:
+        improvement_signals.append("recurring_source_depth_gap")
     result.update(
         {
             "history": history,
             "deltas_vs_previous": deltas,
             "improvement_signals": improvement_signals,
+            "learning": {
+                "contract_version": "2026-07-18.1",
+                "history_days": 3,
+                "current_causes": [
+                    {"category": category_label, "cause": cause}
+                    for category_label, cause in sorted(current_causes)
+                ],
+                "recurring_causes": recurring_causes,
+                "recently_resolved_causes": recently_resolved_causes,
+                "applied_or_recommended_actions": {
+                    category_label: diagnostic.get("actions", [])
+                    for category_label, diagnostic in source_diagnostics.items()
+                    if diagnostic.get("actions")
+                },
+                "automatic_config_mutation": False,
+                "reason": (
+                    "Daily evidence may reprioritize bounded specialist searches, "
+                    "but publisher registry changes remain deterministic and reviewed."
+                ),
+            },
             "automatic_policy": {
                 "scope_auto_reduction": False,
                 "quality_gate_bypass": False,
@@ -384,7 +440,8 @@ def evaluate(
 
 
 def self_test() -> None:
-    if normalized_host("https://www.openai.com/index/test") != "openai.com":
+    source_health.self_test()
+    if source_health.normalized_host("https://www.openai.com/index/test") != "openai.com":
         fail("host normalization failed")
     if not core.record_from_expanded_scope({"official_scope": "mexico"}):
         fail("expanded official source was not recognized")
@@ -396,6 +453,17 @@ def self_test() -> None:
         "source_checks"
     ] != 2:
         fail("history delta calculation failed")
+    if not {
+        "Business Network",
+        "ITmedia Mobile",
+        "K-tai Watch",
+    } <= {
+        str(publisher.get("label"))
+        for publisher in core.discovery_publishers_for_topic(
+            "SoftBank", "domestic_services"
+        )
+    }:
+        fail("source-depth diagnostics lost topic-specific publisher routing")
     print("NIGHT SIGNAL EVAL SELF-TEST PASSED")
 
 

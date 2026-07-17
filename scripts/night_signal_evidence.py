@@ -19,10 +19,11 @@ PUBLISHER_PORTFOLIO_CONFIG = (
 COVERAGE_CONFIG = ROOT / "config" / "night_signal_coverage.json"
 # Bump only when collection semantics or the Evidence schema changes. Editor and
 # renderer changes must not invalidate an already verified same-day collection.
-COLLECTOR_CONTRACT_REVISION = "b309ad4b7f41fe5f"
+COLLECTOR_CONTRACT_REVISION = "f8d8d0c7c4a31a4e"
 LEGACY_COLLECTOR_CONTRACT_REVISIONS = {
     "2971bda468f60d99",
     "b643a90c6ef1a742",
+    "b309ad4b7f41fe5f",
 }
 SOURCE_CHECK_STATES = {"observed_live", "source_unavailable"}
 DISCOVERY_CHECK_STATES = {
@@ -81,6 +82,18 @@ def source_registry_contract(registry: dict[str, Any]) -> dict[str, Any]:
                         f"official source scope is assigned to a non-official source: {label}"
                     )
                 compact_source["official_scope"] = official_scope
+            depth_topic_ids = source.get("depth_topic_ids", [])
+            if depth_topic_ids:
+                if not isinstance(depth_topic_ids, list) or any(
+                    not isinstance(topic_id, str) or not topic_id.strip()
+                    for topic_id in depth_topic_ids
+                ):
+                    raise EvidenceContractError(
+                        f"source registry has invalid depth topics: {label}"
+                    )
+                compact_source["depth_topic_ids"] = list(
+                    dict.fromkeys(depth_topic_ids)
+                )
             compact_sources.append(compact_source)
         compact_categories[str(label)] = compact_sources
     payload = {

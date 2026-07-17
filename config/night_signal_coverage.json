@@ -129,6 +129,7 @@
     {
       "label": "OpenAI",
       "identity_terms": ["OpenAI", "ChatGPT", "Codex", "Azure OpenAI"],
+      "required_discovery_roles": ["ai_research", "ai_products", "developer_ai", "japan_ai"],
       "section_id": "openai",
       "axes": [
         {
@@ -336,9 +337,10 @@
     },
     {
       "label": "SoftBank",
-      "identity_terms": ["SoftBank", "ソフトバンク", "SBG", "Arm"],
+      "identity_terms": ["SoftBank", "ソフトバンク", "SBG", "Arm", "LY Corporation", "LINEヤフー", "PayPay", "SB C&S", "IDC Frontier"],
       "section_id": "softbank",
       "required_official_scopes": ["softbank_group", "domestic_operator", "arm"],
+      "required_discovery_roles": ["markets", "ai_infrastructure", "telecom", "japan_telecom"],
       "axes": [
         {
           "id": "corporate_ir_news",
@@ -508,9 +510,10 @@
     },
     {
       "label": "Honda",
-      "identity_terms": ["Honda", "ホンダ", "HRC", "Aston Martin", "Acura", "本田", "讴歌"],
+      "identity_terms": ["Honda", "ホンダ", "HRC", "Aston Martin", "Acura", "本田", "讴歌", "HondaJet", "Sony Honda Mobility", "AFEELA"],
       "section_id": "honda",
       "required_local_horizon_locales": ["zh-CN"],
+      "required_discovery_roles": ["markets", "electric_vehicles", "japan_automotive", "china_automotive"],
       "axes": [
         {
           "id": "ir_financials",
@@ -732,6 +735,7 @@
       "allow_sports_results": true,
       "section_id": "f1",
       "required_local_horizon_locales": ["it-IT"],
+      "required_discovery_roles": ["formula_one", "technical_analysis", "regulation"],
       "axes": [
         {
           "id": "official_schedule_results",
@@ -1663,6 +1667,7 @@
       "identity_terms": ["宇都宮ブレックス", "Utsunomiya Brex", "宇都宮 BREX"],
       "allow_sports_results": true,
       "section_id": "brex",
+      "required_discovery_roles": ["japan_basketball", "bleague", "local_basketball"],
       "axes": [
         {
           "id": "club_official_roster_staff",

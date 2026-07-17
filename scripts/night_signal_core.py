@@ -442,6 +442,22 @@ def configured_category_contracts() -> dict[str, dict[str, Any]]:
     }
 
 
+PUBLISHER_ACCESS_TIER_RANK = {
+    "open": 0,
+    "open_or_mixed": 1,
+    "mixed": 2,
+    "search_or_mixed": 3,
+    "restricted_or_mixed": 4,
+    "restricted": 5,
+}
+
+
+def publisher_access_rank(publisher: dict[str, Any]) -> int:
+    return PUBLISHER_ACCESS_TIER_RANK.get(
+        str(publisher.get("access_tier", "")), 9
+    )
+
+
 @functools.lru_cache(maxsize=1)
 def configured_discovery_publishers() -> dict[str, list[dict[str, Any]]]:
     """Load vetted publishers without turning every home page into a daily seed."""
@@ -472,6 +488,7 @@ def configured_discovery_publishers() -> dict[str, list[dict[str, Any]]]:
         access_tier = str(publisher.get("access_tier", "")).strip()
         roles = publisher.get("roles")
         categories = publisher.get("categories")
+        topic_ids_by_category = publisher.get("topic_ids_by_category", {})
         try:
             priority = int(publisher.get("search_priority", 99))
         except (TypeError, ValueError):
@@ -483,8 +500,10 @@ def configured_discovery_publishers() -> dict[str, list[dict[str, Any]]]:
             or access_tier not in allowed_access_tiers
             or not isinstance(roles, list)
             or not roles
+            or any(not isinstance(role, str) or not role.strip() for role in roles)
             or not isinstance(categories, list)
             or not categories
+            or not isinstance(topic_ids_by_category, dict)
             or priority < 1
         ):
             fail(f"publisher portfolio has invalid entry: {label or url}")
@@ -498,6 +517,32 @@ def configured_discovery_publishers() -> dict[str, list[dict[str, Any]]]:
                 f"publisher portfolio has unknown categories for {label}: "
                 + ", ".join(sorted(unknown))
             )
+        for mapped_category, topic_ids in topic_ids_by_category.items():
+            if mapped_category not in categories:
+                fail(
+                    f"publisher topic map references an unassigned category: "
+                    f"{label}/{mapped_category}"
+                )
+            configured_topic_ids = {
+                str(topic.get("id"))
+                for topic in configured[str(mapped_category)].get(
+                    "watch_topics", []
+                )
+                if isinstance(topic, dict) and topic.get("id")
+            }
+            if (
+                not isinstance(topic_ids, list)
+                or not topic_ids
+                or any(
+                    not isinstance(topic_id, str)
+                    or topic_id not in configured_topic_ids
+                    for topic_id in topic_ids
+                )
+            ):
+                fail(
+                    f"publisher topic map has invalid watch topics: "
+                    f"{label}/{mapped_category}"
+                )
         normalized = {
             **publisher,
             "label": label,
@@ -512,10 +557,98 @@ def configured_discovery_publishers() -> dict[str, list[dict[str, Any]]]:
         publishers_for_category.sort(
             key=lambda publisher: (
                 int(publisher["search_priority"]),
+                publisher_access_rank(publisher),
                 str(publisher["label"]),
             )
         )
+    for category_label, category in configured.items():
+        required_roles = {
+            str(role)
+            for role in category.get("required_discovery_roles", [])
+            if str(role).strip()
+        }
+        configured_roles = {
+            str(role)
+            for publisher in by_category[category_label]
+            for role in publisher.get("roles", [])
+            if str(role).strip()
+        }
+        missing_roles = required_roles - configured_roles
+        if missing_roles:
+            fail(
+                f"publisher portfolio is missing required discovery roles for "
+                f"{category_label}: {', '.join(sorted(missing_roles))}"
+            )
     return by_category
+
+
+def discovery_publishers_for_topic(
+    category_label: str,
+    topic_id: str,
+) -> list[dict[str, Any]]:
+    """Prefer specialists explicitly matched to the weak topic, with fallback."""
+    publishers = configured_discovery_publishers().get(category_label, [])
+    matched = [
+        publisher
+        for publisher in publishers
+        if topic_id
+        in publisher.get("topic_ids_by_category", {}).get(category_label, [])
+    ]
+    if matched:
+        return matched
+    return sorted(
+        publishers,
+        key=lambda publisher: (
+            int(publisher["search_priority"]),
+            str(publisher.get("source_class")) != "major_media",
+            publisher_access_rank(publisher),
+            str(publisher["label"]),
+        ),
+    )
+
+
+@functools.lru_cache(maxsize=1)
+def configured_official_depth_sources() -> dict[str, dict[str, list[dict[str, Any]]]]:
+    """Index official seed domains that should join topic-specific depth search."""
+    configured = configured_category_contracts()
+    categories = load_object(SOURCE_CONFIG).get("categories", {})
+    indexed: dict[str, dict[str, list[dict[str, Any]]]] = {
+        label: {} for label in configured
+    }
+    if not isinstance(categories, dict):
+        fail("source config categories must be an object")
+    for category_label, sources in categories.items():
+        if category_label not in configured or not isinstance(sources, list):
+            continue
+        allowed_topics = {
+            str(topic.get("id"))
+            for topic in configured[category_label].get("watch_topics", [])
+            if isinstance(topic, dict) and topic.get("id")
+        }
+        for source in sources:
+            if not isinstance(source, dict):
+                continue
+            topic_ids = source.get("depth_topic_ids", [])
+            if not topic_ids:
+                continue
+            if (
+                source.get("source_role") != "primary_or_official"
+                or source.get("channel") != "web"
+                or not isinstance(topic_ids, list)
+                or any(
+                    not isinstance(topic_id, str)
+                    or topic_id not in allowed_topics
+                    for topic_id in topic_ids
+                )
+                or not normalized_source_host(source.get("url"))
+            ):
+                fail(
+                    f"official depth source has invalid topics: "
+                    f"{category_label}/{source.get('label', source.get('url', ''))}"
+                )
+            for topic_id in topic_ids:
+                indexed[category_label].setdefault(str(topic_id), []).append(source)
+    return indexed
 
 
 SOURCE_AUTHORITY_RANK = {
@@ -2446,6 +2579,7 @@ def depth_recovery_queries(
         record
         for record in eligible
         if record_evidence_depth(record_public_title(record), record) == "body"
+        and record_has_trusted_editor_source(record)
     ]
     body_topics = {
         str(topic_id)
@@ -2494,19 +2628,36 @@ def depth_recovery_queries(
             str(topic["id"]),
         ),
     )
-    publisher_hosts = list(
-        dict.fromkeys(
-            normalized_source_host(publisher.get("url"))
-            for publisher in configured_discovery_publishers().get(
-                str(category.get("label", "")),
-                [],
-            )
-            if normalized_source_host(publisher.get("url"))
-        )
-    )
     candidates: list[list[dict[str, Any]]] = []
     for topic_index, topic in enumerate(prioritized):
         topic_id = str(topic["id"])
+        official_hosts = list(
+            dict.fromkeys(
+                normalized_source_host(source.get("url"))
+                for source in configured_official_depth_sources()
+                .get(str(category.get("label", "")), {})
+                .get(topic_id, [])
+                if normalized_source_host(source.get("url"))
+            )
+        )
+        publisher_hosts = list(
+            dict.fromkeys(
+                normalized_source_host(publisher.get("url"))
+                for publisher in discovery_publishers_for_topic(
+                    str(category.get("label", "")), topic_id
+                )
+                if normalized_source_host(publisher.get("url"))
+            )
+        )
+        topic_has_explicit_publishers = any(
+            topic_id
+            in publisher.get("topic_ids_by_category", {}).get(
+                str(category.get("label", "")), []
+            )
+            for publisher in configured_discovery_publishers().get(
+                str(category.get("label", "")), []
+            )
+        )
         terms = list(
             dict.fromkeys(
                 str(term).strip()
@@ -2516,12 +2667,28 @@ def depth_recovery_queries(
         )
         topic_specs: list[dict[str, Any]] = []
         if terms and publisher_hosts:
-            group_size = min(3, len(publisher_hosts))
-            start = (topic_index * group_size) % len(publisher_hosts)
-            selected_hosts = [
+            official_budget = min(3, len(official_hosts))
+            publisher_budget = min(
+                max(1, 6 - official_budget)
+                if topic_has_explicit_publishers
+                else 3,
+                len(publisher_hosts),
+            )
+            group_size = publisher_budget
+            start = (
+                (topic_index * group_size) % len(publisher_hosts)
+                if topic_has_explicit_publishers
+                else 0
+            )
+            selected_publisher_hosts = [
                 publisher_hosts[(start + offset) % len(publisher_hosts)]
                 for offset in range(group_size)
             ]
+            selected_hosts = list(
+                dict.fromkeys(
+                    [*official_hosts[:official_budget], *selected_publisher_hosts]
+                )
+            )
             sites = " OR ".join(f"site:{host}" for host in selected_hosts)
             identity = identities[topic_index % len(identities)]
             topic_specs.append(
@@ -6016,6 +6183,18 @@ def self_test() -> None:
     }
     if not required_publishers <= configured_publishers:
         fail("publisher portfolio omitted a required broad or technology source")
+    softbank_domestic_publishers = {
+        str(publisher.get("label"))
+        for publisher in discovery_publishers_for_topic(
+            "SoftBank", "domestic_services"
+        )
+    }
+    if not {"Business Network", "ITmedia Mobile", "K-tai Watch"} <= (
+        softbank_domestic_publishers
+    ):
+        fail("topic-specific recovery omitted Japanese telecom specialists")
+    if "Financial Times" in softbank_domestic_publishers:
+        fail("topic-specific recovery fell back to unrelated broad publishers")
     f1_depth_specs = depth_recovery_queries(
         configured_category_contracts()["F1"],
         "2099-07-02",

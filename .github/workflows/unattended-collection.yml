@@ -151,7 +151,20 @@ jobs:
           path: |
             state/${{ env.ISSUE_DATE }}/evidence.json
             state/${{ env.ISSUE_DATE }}/editor_packet.json
+            state/${{ env.ISSUE_DATE }}/source_gap_report.json
           if-no-files-found: error
+          retention-days: 3
+          compression-level: 6
+
+      - name: Preserve pre-editor source diagnostics after a failed collection stage
+        if: ${{ always() && steps.packet.outcome == 'failure' && env.ISSUE_DATE != '' }}
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: night-signal-collection-diagnostics-${{ env.ISSUE_DATE }}-${{ github.run_id }}
+          path: |
+            state/${{ env.ISSUE_DATE }}/evidence.json
+            state/${{ env.ISSUE_DATE }}/source_gap_report.json
+          if-no-files-found: ignore
           retention-days: 3
           compression-level: 6
 

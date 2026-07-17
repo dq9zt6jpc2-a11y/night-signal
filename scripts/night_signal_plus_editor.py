@@ -19,6 +19,7 @@ from typing import Any
 import night_signal_core as core
 import night_signal_editor as editor
 import night_signal_evidence as evidence_store
+import night_signal_source_health as source_health
 import night_signal_state as state
 
 
@@ -163,6 +164,10 @@ def prepare_packet(
     except evidence_store.EvidenceContractError as exc:
         fail(str(exc))
     gaps = core.remaining_editor_coverage_gaps(evidence, report)
+    write_json_atomic(
+        state_root / issue_date / "source_gap_report.json",
+        source_health.pre_editor_report(issue_date, evidence, gaps),
+    )
     if gaps:
         fail(
             "Evidence has material watch topics without resolved source content: "

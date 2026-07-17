@@ -1,5 +1,5 @@
 {
-  "version": "2026-07-17.1",
+  "version": "2026-07-18.2",
   "description": "Canonical seed sources for NIGHT SIGNAL collection tasks. Search queries discover additional sources, but these targets are the non-negotiable starting points for official, independent, social, video, and data checks.",
   "categories": {
     "OpenAI": [
@@ -17,11 +17,16 @@
       {"label": "OpenAI YouTube", "url": "https://www.youtube.com/@OpenAI", "source_role": "social_or_video_signal", "channel": "youtube", "source_class": "youtube_video"}
     ],
     "SoftBank": [
-      {"label": "SoftBank Group News", "url": "https://group.softbank/en/news", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "softbank_group"},
-      {"label": "SoftBank Group IR", "url": "https://group.softbank/en/ir", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "softbank_group"},
-      {"label": "SoftBank Corp News", "url": "https://www.softbank.jp/corp/news/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "domestic_operator"},
-      {"label": "SoftBank Corp IR News", "url": "https://www.softbank.jp/corp/ir/news/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "domestic_operator"},
-      {"label": "Arm Newsroom", "url": "https://newsroom.arm.com/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "arm"},
+      {"label": "SoftBank Group News", "url": "https://group.softbank/en/news", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "softbank_group", "depth_topic_ids": ["ai_infrastructure", "power_battery", "corporate_ir_financing"]},
+      {"label": "SoftBank Group IR", "url": "https://group.softbank/en/ir", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "softbank_group", "depth_topic_ids": ["market_price_nav", "corporate_ir_financing"]},
+      {"label": "SoftBank Corp News", "url": "https://www.softbank.jp/corp/news/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "domestic_operator", "depth_topic_ids": ["ai_infrastructure", "domestic_services"]},
+      {"label": "SoftBank Corp IR News", "url": "https://www.softbank.jp/corp/ir/news/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "domestic_operator", "depth_topic_ids": ["market_price_nav", "corporate_ir_financing", "domestic_services"]},
+      {"label": "Arm Newsroom", "url": "https://newsroom.arm.com/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "arm", "depth_topic_ids": ["ai_infrastructure"]},
+      {"label": "LY Corporation News", "url": "https://www.lycorp.co.jp/ja/news/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "ly_corporation", "depth_topic_ids": ["domestic_services"]},
+      {"label": "PayPay Press Releases", "url": "https://about.paypay.ne.jp/pr/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "paypay", "depth_topic_ids": ["domestic_services"]},
+      {"label": "SB C&S News", "url": "https://cas.softbank.jp/news/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "sb_c_and_s", "depth_topic_ids": ["ai_infrastructure", "domestic_services"]},
+      {"label": "SoftBank Vision Fund", "url": "https://visionfund.com/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "vision_fund", "depth_topic_ids": ["ai_infrastructure", "corporate_ir_financing"]},
+      {"label": "IDC Frontier Press Releases", "url": "https://www.idcf.jp/news/pressrelease", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "idc_frontier", "depth_topic_ids": ["ai_infrastructure", "power_battery", "domestic_services"]},
       {"label": "Reuters Business", "url": "https://www.reuters.com/business/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
       {"label": "Nikkei SoftBank search", "url": "https://www.nikkei.com/search?keyword=%E3%82%BD%E3%83%95%E3%83%88%E3%83%90%E3%83%B3%E3%82%AF%E3%82%B0%E3%83%AB%E3%83%BC%E3%83%97", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
       {"label": "SoftBank Group X", "url": "https://x.com/SoftBank_Group", "source_role": "social_or_video_signal", "channel": "sns_x", "source_class": "sns_x"},
@@ -29,9 +34,12 @@
       {"label": "SoftBank Group YouTube", "url": "https://www.youtube.com/user/SoftBankCorp", "source_role": "social_or_video_signal", "channel": "youtube", "source_class": "youtube_video"}
     ],
     "Honda": [
-      {"label": "Honda News", "url": "https://global.honda/en/newsroom/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
-      {"label": "Honda IR", "url": "https://global.honda/en/investors/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
+      {"label": "Honda News", "url": "https://global.honda/en/newsroom/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "depth_topic_ids": ["earnings_guidance", "china_sales", "hybrid_ev_strategy", "regional_production", "official_product_demand"]},
+      {"label": "Honda IR", "url": "https://global.honda/en/investors/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "depth_topic_ids": ["market_price_reaction", "earnings_guidance"]},
       {"label": "Honda Racing", "url": "https://honda.racing/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
+      {"label": "Honda China News", "url": "https://www.honda.com.cn/news.html", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "honda_china", "depth_topic_ids": ["china_sales", "hybrid_ev_strategy", "regional_production"]},
+      {"label": "HondaJet News", "url": "https://www.hondajet.com/en/News-Events", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "honda_aircraft", "depth_topic_ids": ["official_product_demand"]},
+      {"label": "Sony Honda Mobility News", "url": "https://www.shm-afeela.com/en/news/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "official_scope": "sony_honda_mobility", "depth_topic_ids": ["hybrid_ev_strategy", "official_product_demand"]},
       {"label": "Reuters Autos", "url": "https://www.reuters.com/business/autos-transportation/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
       {"label": "AP Honda EV strategy", "url": "https://apnews.com/article/honda-ev-investment-us-tariffs-685b44de9fae0f75717be663ae63a6a8", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
       {"label": "Response Honda", "url": "https://response.jp/special/recent/105/Honda", "source_role": "independent_media_or_data", "channel": "web", "source_class": "specialist_media"},
@@ -40,9 +48,10 @@
       {"label": "Honda YouTube", "url": "https://www.youtube.com/user/Honda", "source_role": "social_or_video_signal", "channel": "youtube", "source_class": "youtube_video"}
     ],
     "F1": [
-      {"label": "Formula 1 official", "url": "https://www.formula1.com/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
-      {"label": "FIA Formula 1", "url": "https://www.fia.com/events/fia-formula-one-world-championship/season-2026/fia-formula-one-world-championship", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
-      {"label": "Aston Martin F1", "url": "https://www.astonmartinf1.com/en-GB/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
+      {"label": "Formula 1 official", "url": "https://www.formula1.com/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "depth_topic_ids": ["race_schedule_results", "fia_regulation_development"]},
+      {"label": "FIA Formula 1", "url": "https://www.fia.com/events/fia-formula-one-world-championship/season-2026/fia-formula-one-world-championship", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "depth_topic_ids": ["race_schedule_results", "fia_regulation_development"]},
+      {"label": "Aston Martin F1", "url": "https://www.astonmartinf1.com/en-GB/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "depth_topic_ids": ["honda_aston_pu"]},
+      {"label": "Honda Racing", "url": "https://honda.racing/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "depth_topic_ids": ["honda_aston_pu"]},
       {"label": "Guardian Formula One", "url": "https://www.theguardian.com/sport/formulaone", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
       {"label": "Motorsport.com F1", "url": "https://www.motorsport.com/f1/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "specialist_media"},
       {"label": "Autosport F1", "url": "https://www.autosport.com/f1/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "specialist_media"},
@@ -120,11 +129,11 @@
       {"label": "Federal Reserve YouTube", "url": "https://www.youtube.com/federalreserve", "source_role": "social_or_video_signal", "channel": "youtube", "source_class": "youtube_video"}
     ],
     "宇都宮ブレックス": [
-      {"label": "Utsunomiya Brex official", "url": "https://www.utsunomiyabrex.com/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
-      {"label": "B.League official", "url": "https://www.bleague.jp/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
-      {"label": "B.League B.PREMIER", "url": "https://www.bleague.jp/new-bleague/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
-      {"label": "Utsunomiya City official", "url": "https://www.city.utsunomiya.lg.jp/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
-      {"label": "Utsunomiya City Council", "url": "https://www.city.utsunomiya.lg.jp/gikai/", "source_role": "primary_or_official", "channel": "web", "source_class": "official"},
+      {"label": "Utsunomiya Brex News", "url": "https://www.utsunomiyabrex.com/news/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "depth_topic_ids": ["club_roster_staff", "bleague_games_schedule", "media_press_video"]},
+      {"label": "B.League official", "url": "https://www.bleague.jp/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "depth_topic_ids": ["bleague_games_schedule", "arena_regional_admin"]},
+      {"label": "B.League B.PREMIER", "url": "https://www.bleague.jp/new-bleague/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "depth_topic_ids": ["arena_regional_admin"]},
+      {"label": "Utsunomiya City official", "url": "https://www.city.utsunomiya.lg.jp/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "depth_topic_ids": ["arena_regional_admin"]},
+      {"label": "Utsunomiya City Council", "url": "https://www.city.utsunomiya.lg.jp/gikai/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "depth_topic_ids": ["arena_regional_admin"]},
       {"label": "Basketball King", "url": "https://basketballking.jp/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "specialist_media"},
       {"label": "Shimotsuke sports", "url": "https://www.shimotsuke.co.jp/list/select/brex", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
       {"label": "Shimotsuke regional news", "url": "https://www.shimotsuke.co.jp/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
