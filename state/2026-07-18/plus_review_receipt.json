@@ -1,0 +1,230 @@
+{
+  "contract": "codex-plus-editor-v1",
+  "issue_date": "2026-07-18",
+  "evidence_sha256": "dfe588be0348dbd09baf46db1d57ab396f948d57699f986d01e416a2cabfdb24",
+  "requests": 16,
+  "candidate_events": 88,
+  "published_cards": 16,
+  "excluded_events": 72,
+  "model_requests_from_repository": 0,
+  "additional_paid_api_requests": 0,
+  "category_audit": [
+    {
+      "category": "OpenAI",
+      "candidate_events": 22,
+      "body_events": 20,
+      "headline_only_events": 2,
+      "decisions": {
+        "duplicate_previous_event": 9,
+        "duplicate_current_issue_event": 3,
+        "publish": 4,
+        "insufficient_evidence": 2,
+        "wrong_entity_or_category": 1,
+        "no_material_update": 2,
+        "background_or_navigation": 1
+      },
+      "final_cards": 4,
+      "source_checks": 12,
+      "unavailable_sources": 2,
+      "resolved_searches": 29,
+      "unresolved_searches": 0,
+      "depth_recovery_queries": 6,
+      "depth_recovery_resolved_candidates": 18,
+      "low_count_status": "not_low_count",
+      "needs_follow_up": false
+    },
+    {
+      "category": "SoftBank",
+      "candidate_events": 4,
+      "body_events": 2,
+      "headline_only_events": 2,
+      "decisions": {
+        "no_material_update": 1,
+        "duplicate_previous_event": 2,
+        "insufficient_evidence": 1
+      },
+      "final_cards": 0,
+      "source_checks": 15,
+      "unavailable_sources": 2,
+      "resolved_searches": 24,
+      "unresolved_searches": 0,
+      "depth_recovery_queries": 6,
+      "depth_recovery_resolved_candidates": 24,
+      "low_count_status": "limited_evidence",
+      "needs_follow_up": true
+    },
+    {
+      "category": "Honda",
+      "candidate_events": 3,
+      "body_events": 3,
+      "headline_only_events": 0,
+      "decisions": {
+        "publish": 1,
+        "background_or_navigation": 1,
+        "wrong_entity_or_category": 1
+      },
+      "final_cards": 1,
+      "source_checks": 12,
+      "unavailable_sources": 2,
+      "resolved_searches": 24,
+      "unresolved_searches": 0,
+      "depth_recovery_queries": 6,
+      "depth_recovery_resolved_candidates": 6,
+      "low_count_status": "supported",
+      "needs_follow_up": false
+    },
+    {
+      "category": "F1",
+      "candidate_events": 11,
+      "body_events": 11,
+      "headline_only_events": 0,
+      "decisions": {
+        "background_or_navigation": 1,
+        "no_material_update": 4,
+        "wrong_entity_or_category": 3,
+        "publish": 2,
+        "duplicate_current_issue_event": 1
+      },
+      "final_cards": 2,
+      "source_checks": 12,
+      "unavailable_sources": 3,
+      "resolved_searches": 31,
+      "unresolved_searches": 0,
+      "depth_recovery_queries": 6,
+      "depth_recovery_resolved_candidates": 4,
+      "low_count_status": "not_low_count",
+      "needs_follow_up": false
+    },
+    {
+      "category": "SpaceX",
+      "candidate_events": 15,
+      "body_events": 9,
+      "headline_only_events": 6,
+      "decisions": {
+        "insufficient_evidence": 5,
+        "duplicate_current_issue_event": 1,
+        "publish": 3,
+        "duplicate_previous_event": 3,
+        "no_material_update": 2,
+        "background_or_navigation": 1
+      },
+      "final_cards": 3,
+      "source_checks": 14,
+      "unavailable_sources": 2,
+      "resolved_searches": 28,
+      "unresolved_searches": 0,
+      "depth_recovery_queries": 6,
+      "depth_recovery_resolved_candidates": 25,
+      "low_count_status": "not_low_count",
+      "needs_follow_up": false
+    },
+    {
+      "category": "日本経済",
+      "candidate_events": 15,
+      "body_events": 13,
+      "headline_only_events": 2,
+      "decisions": {
+        "duplicate_current_issue_event": 7,
+        "duplicate_previous_event": 2,
+        "insufficient_evidence": 2,
+        "background_or_navigation": 2,
+        "publish": 2
+      },
+      "final_cards": 2,
+      "source_checks": 11,
+      "unavailable_sources": 3,
+      "resolved_searches": 28,
+      "unresolved_searches": 0,
+      "depth_recovery_queries": 4,
+      "depth_recovery_resolved_candidates": 4,
+      "low_count_status": "not_low_count",
+      "needs_follow_up": false
+    },
+    {
+      "category": "YOASOBI / 幾田りら",
+      "candidate_events": 3,
+      "body_events": 2,
+      "headline_only_events": 1,
+      "decisions": {
+        "insufficient_evidence": 1,
+        "background_or_navigation": 1,
+        "duplicate_previous_event": 1
+      },
+      "final_cards": 0,
+      "source_checks": 10,
+      "unavailable_sources": 5,
+      "resolved_searches": 22,
+      "unresolved_searches": 0,
+      "depth_recovery_queries": 6,
+      "depth_recovery_resolved_candidates": 12,
+      "low_count_status": "limited_evidence",
+      "needs_follow_up": true
+    },
+    {
+      "category": "アジア経済",
+      "candidate_events": 5,
+      "body_events": 5,
+      "headline_only_events": 0,
+      "decisions": {
+        "no_material_update": 2,
+        "publish": 1,
+        "duplicate_previous_event": 2
+      },
+      "final_cards": 1,
+      "source_checks": 9,
+      "unavailable_sources": 4,
+      "resolved_searches": 2,
+      "unresolved_searches": 0,
+      "depth_recovery_queries": 6,
+      "depth_recovery_resolved_candidates": 0,
+      "low_count_status": "limited_evidence",
+      "needs_follow_up": true
+    },
+    {
+      "category": "北米経済",
+      "candidate_events": 9,
+      "body_events": 8,
+      "headline_only_events": 1,
+      "decisions": {
+        "duplicate_previous_event": 2,
+        "publish": 3,
+        "no_material_update": 2,
+        "insufficient_evidence": 1,
+        "wrong_entity_or_category": 1
+      },
+      "final_cards": 3,
+      "source_checks": 13,
+      "unavailable_sources": 3,
+      "resolved_searches": 5,
+      "unresolved_searches": 0,
+      "depth_recovery_queries": 4,
+      "depth_recovery_resolved_candidates": 0,
+      "low_count_status": "not_low_count",
+      "needs_follow_up": false
+    },
+    {
+      "category": "宇都宮ブレックス",
+      "candidate_events": 1,
+      "body_events": 0,
+      "headline_only_events": 1,
+      "decisions": {
+        "insufficient_evidence": 1
+      },
+      "final_cards": 0,
+      "source_checks": 13,
+      "unavailable_sources": 4,
+      "resolved_searches": 3,
+      "unresolved_searches": 0,
+      "depth_recovery_queries": 4,
+      "depth_recovery_resolved_candidates": 0,
+      "low_count_status": "limited_evidence",
+      "needs_follow_up": true
+    }
+  ],
+  "low_count_categories_needing_follow_up": [
+    "SoftBank",
+    "YOASOBI / 幾田りら",
+    "アジア経済",
+    "宇都宮ブレックス"
+  ]
+}

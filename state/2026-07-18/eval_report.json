@@ -1,0 +1,2369 @@
+{
+  "issue_date": "2026-07-18",
+  "evaluated_at_jst": "2026-07-18T22:13:03+09:00",
+  "passed": true,
+  "checks": {
+    "all_categories_collected": true,
+    "all_watch_topics_reviewed": true,
+    "evidence_contract_valid": true,
+    "material_topics_resolved": true,
+    "public_updates_present": true,
+    "all_facts_cited": true,
+    "all_citations_observed": true
+  },
+  "metrics": {
+    "categories": 10,
+    "watch_topics_expected": 43,
+    "watch_topics_reviewed": 43,
+    "source_checks": 121,
+    "discovery_checks": 377,
+    "material_candidates": 682,
+    "resolved_candidates": 678,
+    "unresolved_queries": [],
+    "editor_coverage_gaps": [],
+    "observed_urls": 833,
+    "unavailable_urls": 30,
+    "evidence_hosts": 331,
+    "published_updates": 16,
+    "confirmed_facts": 28,
+    "facts_with_sources": 28,
+    "summary_characters": 1669,
+    "one_fact_updates": 6,
+    "facts_per_update_milli": 1750,
+    "summary_chars_per_update_milli": 104312,
+    "one_fact_update_ratio_milli": 375,
+    "local_horizon_queries": 8,
+    "local_horizon_relevant_results": 39,
+    "local_horizon_material_candidates": 3,
+    "local_horizon_resolved_candidates": 3,
+    "scoped_official_sources_configured": 27,
+    "scoped_official_sources_observed": 27,
+    "expanded_evidence_records": 66,
+    "expanded_published_updates": 0,
+    "collection_mode": "web_evidence_plus_review",
+    "review_requests": 16,
+    "review_events": 88,
+    "review_payload_bytes": 230745
+  },
+  "source_diagnostics": {
+    "OpenAI": {
+      "material_topics": [
+        "enterprise_infrastructure",
+        "ipo_financing",
+        "math_research",
+        "product_release",
+        "safety_security_regulation",
+        "strategic_talent_japan_gtm"
+      ],
+      "trusted_body_topics": [],
+      "weak_material_topics": [
+        "enterprise_infrastructure",
+        "ipo_financing",
+        "math_research",
+        "product_release",
+        "safety_security_regulation",
+        "strategic_talent_japan_gtm"
+      ],
+      "body_records_by_source_class": {
+        "discovered_media": 34,
+        "major_media": 1,
+        "specialist_media": 4
+      },
+      "configured_specialist_hosts": 14,
+      "observed_specialist_body_host_count": 4,
+      "observed_specialist_body_hosts": [
+        "itmedia.co.jp",
+        "k-tai.watch.impress.co.jp",
+        "techcrunch.com",
+        "theverge.com"
+      ],
+      "depth_recovery_queries": 6,
+      "depth_recovery_resolved_candidates": 18,
+      "depth_recovery_unresolved_queries": 0,
+      "depth_query_results": [
+        {
+          "query_id": "depth:publisher:enterprise_infrastructure:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 3,
+          "resolved_candidates": 3
+        },
+        {
+          "query_id": "depth:publisher:ipo_financing:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 3,
+          "resolved_candidates": 3
+        },
+        {
+          "query_id": "depth:publisher:math_research:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 3,
+          "resolved_candidates": 3
+        },
+        {
+          "query_id": "depth:publisher:product_release:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 3,
+          "resolved_candidates": 3
+        },
+        {
+          "query_id": "depth:publisher:safety_security_regulation:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 3,
+          "resolved_candidates": 3
+        },
+        {
+          "query_id": "depth:publisher:strategic_talent_japan_gtm:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 3,
+          "resolved_candidates": 3
+        }
+      ],
+      "unavailable_web_seeds": 0,
+      "published_updates": 4,
+      "published_citation_hosts": [
+        "cfodive.com",
+        "newsanyway.com",
+        "nikkei.com",
+        "xenospectrum.com"
+      ],
+      "published_source_classes": [
+        "discovered_media",
+        "major_media"
+      ],
+      "causes": [
+        "material_topic_without_trusted_body",
+        "published_without_specialist_corroboration"
+      ],
+      "actions": [
+        "topic_targeted_specialist_depth_recovery",
+        "retain_specialist_corroboration_priority"
+      ]
+    },
+    "SoftBank": {
+      "material_topics": [
+        "ai_infrastructure",
+        "corporate_ir_financing",
+        "domestic_services",
+        "market_price_nav",
+        "power_battery"
+      ],
+      "trusted_body_topics": [],
+      "weak_material_topics": [
+        "ai_infrastructure",
+        "corporate_ir_financing",
+        "domestic_services",
+        "market_price_nav",
+        "power_battery"
+      ],
+      "body_records_by_source_class": {
+        "discovered_media": 2
+      },
+      "configured_specialist_hosts": 16,
+      "observed_specialist_body_host_count": 0,
+      "observed_specialist_body_hosts": [],
+      "depth_recovery_queries": 6,
+      "depth_recovery_resolved_candidates": 24,
+      "depth_recovery_unresolved_queries": 0,
+      "depth_query_results": [
+        {
+          "query_id": "depth:publisher:ai_infrastructure:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 4,
+          "resolved_candidates": 4
+        },
+        {
+          "query_id": "depth:publisher:domestic_services:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 4,
+          "resolved_candidates": 4
+        },
+        {
+          "query_id": "depth:publisher:corporate_ir_financing:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 4,
+          "resolved_candidates": 4
+        },
+        {
+          "query_id": "depth:publisher:market_price_nav:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 4,
+          "resolved_candidates": 4
+        },
+        {
+          "query_id": "depth:publisher:power_battery:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 4,
+          "resolved_candidates": 4
+        },
+        {
+          "query_id": "depth:topic:ai_infrastructure:1:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 4,
+          "resolved_candidates": 4
+        }
+      ],
+      "unavailable_web_seeds": 0,
+      "published_updates": 0,
+      "published_citation_hosts": [],
+      "published_source_classes": [],
+      "causes": [
+        "material_topic_without_trusted_body"
+      ],
+      "actions": [
+        "topic_targeted_specialist_depth_recovery"
+      ]
+    },
+    "Honda": {
+      "material_topics": [
+        "china_sales",
+        "hybrid_ev_strategy",
+        "market_price_reaction",
+        "official_product_demand",
+        "regional_production"
+      ],
+      "trusted_body_topics": [
+        "earnings_guidance"
+      ],
+      "weak_material_topics": [
+        "china_sales",
+        "hybrid_ev_strategy",
+        "market_price_reaction",
+        "official_product_demand",
+        "regional_production"
+      ],
+      "body_records_by_source_class": {
+        "discovered_media": 4,
+        "major_media": 1
+      },
+      "configured_specialist_hosts": 10,
+      "observed_specialist_body_host_count": 0,
+      "observed_specialist_body_hosts": [],
+      "depth_recovery_queries": 6,
+      "depth_recovery_resolved_candidates": 6,
+      "depth_recovery_unresolved_queries": 0,
+      "depth_query_results": [
+        {
+          "query_id": "depth:publisher:china_sales:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 1,
+          "resolved_candidates": 1
+        },
+        {
+          "query_id": "depth:publisher:hybrid_ev_strategy:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 1,
+          "resolved_candidates": 1
+        },
+        {
+          "query_id": "depth:publisher:market_price_reaction:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 1,
+          "resolved_candidates": 1
+        },
+        {
+          "query_id": "depth:publisher:official_product_demand:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 1,
+          "resolved_candidates": 1
+        },
+        {
+          "query_id": "depth:publisher:regional_production:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 1,
+          "resolved_candidates": 1
+        },
+        {
+          "query_id": "depth:topic:china_sales:1:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 1,
+          "resolved_candidates": 1
+        }
+      ],
+      "unavailable_web_seeds": 0,
+      "published_updates": 1,
+      "published_citation_hosts": [
+        "yomiuri.co.jp"
+      ],
+      "published_source_classes": [
+        "major_media"
+      ],
+      "causes": [
+        "material_topic_without_trusted_body",
+        "published_without_specialist_corroboration"
+      ],
+      "actions": [
+        "topic_targeted_specialist_depth_recovery",
+        "retain_specialist_corroboration_priority"
+      ]
+    },
+    "F1": {
+      "material_topics": [
+        "fia_regulation_development",
+        "honda_aston_pu",
+        "race_schedule_results"
+      ],
+      "trusted_body_topics": [],
+      "weak_material_topics": [
+        "fia_regulation_development",
+        "honda_aston_pu",
+        "race_schedule_results"
+      ],
+      "body_records_by_source_class": {
+        "discovered_media": 19,
+        "official": 2,
+        "specialist_media": 3
+      },
+      "configured_specialist_hosts": 3,
+      "observed_specialist_body_host_count": 2,
+      "observed_specialist_body_hosts": [
+        "motorsport.com",
+        "news.google.com"
+      ],
+      "depth_recovery_queries": 6,
+      "depth_recovery_resolved_candidates": 4,
+      "depth_recovery_unresolved_queries": 0,
+      "depth_query_results": [
+        {
+          "query_id": "depth:publisher:fia_regulation_development:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 1,
+          "resolved_candidates": 1
+        },
+        {
+          "query_id": "depth:publisher:honda_aston_pu:bing",
+          "slot_state": "searched_no_results",
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:publisher:race_schedule_results:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 1,
+          "resolved_candidates": 1
+        },
+        {
+          "query_id": "depth:topic:fia_regulation_development:1:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 1,
+          "resolved_candidates": 1
+        },
+        {
+          "query_id": "depth:topic:honda_aston_pu:1:bing",
+          "slot_state": "searched_no_results",
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:topic:race_schedule_results:1:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 1,
+          "resolved_candidates": 1
+        }
+      ],
+      "unavailable_web_seeds": 0,
+      "published_updates": 2,
+      "published_citation_hosts": [
+        "formula1-data.com",
+        "news.yahoo.co.jp",
+        "planetf1.com"
+      ],
+      "published_source_classes": [
+        "discovered_media"
+      ],
+      "causes": [
+        "material_topic_without_trusted_body",
+        "published_without_specialist_corroboration"
+      ],
+      "actions": [
+        "topic_targeted_specialist_depth_recovery",
+        "retain_specialist_corroboration_priority"
+      ]
+    },
+    "SpaceX": {
+      "material_topics": [
+        "ai_mna_compute",
+        "business_contracts",
+        "dragon_iss",
+        "official_launch_manifest",
+        "starship_status"
+      ],
+      "trusted_body_topics": [
+        "dragon_iss"
+      ],
+      "weak_material_topics": [
+        "ai_mna_compute",
+        "business_contracts",
+        "official_launch_manifest",
+        "starship_status"
+      ],
+      "body_records_by_source_class": {
+        "discovered_media": 24,
+        "major_media": 1
+      },
+      "configured_specialist_hosts": 5,
+      "observed_specialist_body_host_count": 0,
+      "observed_specialist_body_hosts": [],
+      "depth_recovery_queries": 6,
+      "depth_recovery_resolved_candidates": 25,
+      "depth_recovery_unresolved_queries": 0,
+      "depth_query_results": [
+        {
+          "query_id": "depth:publisher:business_contracts:bing",
+          "slot_state": "searched_no_results",
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:publisher:ai_mna_compute:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 5,
+          "resolved_candidates": 5
+        },
+        {
+          "query_id": "depth:publisher:official_launch_manifest:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 5,
+          "resolved_candidates": 5
+        },
+        {
+          "query_id": "depth:publisher:starship_status:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 5,
+          "resolved_candidates": 5
+        },
+        {
+          "query_id": "depth:topic:business_contracts:1:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 5,
+          "resolved_candidates": 5
+        },
+        {
+          "query_id": "depth:topic:ai_mna_compute:1:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 5,
+          "resolved_candidates": 5
+        }
+      ],
+      "unavailable_web_seeds": 1,
+      "published_updates": 3,
+      "published_citation_hosts": [
+        "apnews.com",
+        "iraqinews.com",
+        "vietnam.vn"
+      ],
+      "published_source_classes": [
+        "discovered_media",
+        "major_media"
+      ],
+      "causes": [
+        "material_topic_without_trusted_body",
+        "web_seed_unavailable",
+        "published_without_specialist_corroboration"
+      ],
+      "actions": [
+        "topic_targeted_specialist_depth_recovery",
+        "bounded_reader_and_source_search_fallback",
+        "retain_specialist_corroboration_priority"
+      ]
+    },
+    "日本経済": {
+      "material_topics": [
+        "employment_consumption",
+        "investment_policy_markets",
+        "prices_wages_boj"
+      ],
+      "trusted_body_topics": [
+        "investment_policy_markets"
+      ],
+      "weak_material_topics": [
+        "employment_consumption",
+        "prices_wages_boj"
+      ],
+      "body_records_by_source_class": {
+        "discovered_media": 17,
+        "major_media": 5
+      },
+      "configured_specialist_hosts": 3,
+      "observed_specialist_body_host_count": 0,
+      "observed_specialist_body_hosts": [],
+      "depth_recovery_queries": 4,
+      "depth_recovery_resolved_candidates": 4,
+      "depth_recovery_unresolved_queries": 0,
+      "depth_query_results": [
+        {
+          "query_id": "depth:publisher:employment_consumption:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 2,
+          "resolved_candidates": 1
+        },
+        {
+          "query_id": "depth:publisher:prices_wages_boj:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 2,
+          "resolved_candidates": 1
+        },
+        {
+          "query_id": "depth:topic:employment_consumption:1:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 2,
+          "resolved_candidates": 1
+        },
+        {
+          "query_id": "depth:topic:prices_wages_boj:1:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 2,
+          "resolved_candidates": 1
+        }
+      ],
+      "unavailable_web_seeds": 1,
+      "published_updates": 2,
+      "published_citation_hosts": [
+        "media.monex.co.jp",
+        "news.yahoo.co.jp"
+      ],
+      "published_source_classes": [
+        "discovered_media"
+      ],
+      "causes": [
+        "material_topic_without_trusted_body",
+        "web_seed_unavailable",
+        "published_without_specialist_corroboration"
+      ],
+      "actions": [
+        "topic_targeted_specialist_depth_recovery",
+        "bounded_reader_and_source_search_fallback",
+        "retain_specialist_corroboration_priority"
+      ]
+    },
+    "YOASOBI / 幾田りら": {
+      "material_topics": [
+        "live_tour_performance",
+        "music_release_chart_tieup",
+        "official_release",
+        "staff_social_x_instagram"
+      ],
+      "trusted_body_topics": [],
+      "weak_material_topics": [
+        "live_tour_performance",
+        "music_release_chart_tieup",
+        "official_release",
+        "staff_social_x_instagram"
+      ],
+      "body_records_by_source_class": {
+        "discovered_media": 2
+      },
+      "configured_specialist_hosts": 1,
+      "observed_specialist_body_host_count": 0,
+      "observed_specialist_body_hosts": [],
+      "depth_recovery_queries": 6,
+      "depth_recovery_resolved_candidates": 12,
+      "depth_recovery_unresolved_queries": 0,
+      "depth_query_results": [
+        {
+          "query_id": "depth:publisher:staff_social_x_instagram:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 2,
+          "resolved_candidates": 2
+        },
+        {
+          "query_id": "depth:publisher:live_tour_performance:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 2,
+          "resolved_candidates": 2
+        },
+        {
+          "query_id": "depth:publisher:music_release_chart_tieup:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 2,
+          "resolved_candidates": 2
+        },
+        {
+          "query_id": "depth:publisher:official_release:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 2,
+          "resolved_candidates": 2
+        },
+        {
+          "query_id": "depth:topic:staff_social_x_instagram:1:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 2,
+          "resolved_candidates": 2
+        },
+        {
+          "query_id": "depth:topic:live_tour_performance:1:bing",
+          "slot_state": "searched_resolved",
+          "material_candidates": 2,
+          "resolved_candidates": 2
+        }
+      ],
+      "unavailable_web_seeds": 2,
+      "published_updates": 0,
+      "published_citation_hosts": [],
+      "published_source_classes": [],
+      "causes": [
+        "material_topic_without_trusted_body",
+        "web_seed_unavailable"
+      ],
+      "actions": [
+        "topic_targeted_specialist_depth_recovery",
+        "bounded_reader_and_source_search_fallback"
+      ]
+    },
+    "アジア経済": {
+      "material_topics": [
+        "china_macro_policy"
+      ],
+      "trusted_body_topics": [],
+      "weak_material_topics": [
+        "china_macro_policy"
+      ],
+      "body_records_by_source_class": {
+        "discovered_media": 5
+      },
+      "configured_specialist_hosts": 4,
+      "observed_specialist_body_host_count": 0,
+      "observed_specialist_body_hosts": [],
+      "depth_recovery_queries": 6,
+      "depth_recovery_resolved_candidates": 0,
+      "depth_recovery_unresolved_queries": 0,
+      "depth_query_results": [
+        {
+          "query_id": "depth:publisher:china_macro_policy:bing",
+          "slot_state": "searched_no_results",
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:publisher:india_macro_policy:bing",
+          "slot_state": "searched_no_results",
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:publisher:india_vietnam_markets_supply_chain:bing",
+          "slot_state": "searched_no_results",
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:publisher:vietnam_macro_investment:bing",
+          "slot_state": "searched_no_results",
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:topic:china_macro_policy:1:bing",
+          "slot_state": "searched_no_results",
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:topic:india_macro_policy:1:bing",
+          "slot_state": "searched_no_results",
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        }
+      ],
+      "unavailable_web_seeds": 2,
+      "published_updates": 1,
+      "published_citation_hosts": [
+        "ashu-chinastatistics.com"
+      ],
+      "published_source_classes": [
+        "discovered_media"
+      ],
+      "causes": [
+        "material_topic_without_trusted_body",
+        "web_seed_unavailable",
+        "published_without_specialist_corroboration"
+      ],
+      "actions": [
+        "topic_targeted_specialist_depth_recovery",
+        "bounded_reader_and_source_search_fallback",
+        "retain_specialist_corroboration_priority"
+      ]
+    },
+    "北米経済": {
+      "material_topics": [
+        "us_markets_fund_flows_rates",
+        "us_prices_jobs_fed"
+      ],
+      "trusted_body_topics": [
+        "us_prices_jobs_fed"
+      ],
+      "weak_material_topics": [
+        "us_markets_fund_flows_rates"
+      ],
+      "body_records_by_source_class": {
+        "discovered_media": 7,
+        "major_media": 1
+      },
+      "configured_specialist_hosts": 0,
+      "observed_specialist_body_host_count": 0,
+      "observed_specialist_body_hosts": [],
+      "depth_recovery_queries": 4,
+      "depth_recovery_resolved_candidates": 0,
+      "depth_recovery_unresolved_queries": 0,
+      "depth_query_results": [
+        {
+          "query_id": "depth:publisher:us_markets_fund_flows_rates:bing",
+          "slot_state": "searched_no_results",
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:publisher:north_america_investment_policy:bing",
+          "slot_state": "searched_no_results",
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:topic:us_markets_fund_flows_rates:1:bing",
+          "slot_state": "searched_no_results",
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:topic:north_america_investment_policy:1:bing",
+          "slot_state": "searched_no_results",
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        }
+      ],
+      "unavailable_web_seeds": 1,
+      "published_updates": 3,
+      "published_citation_hosts": [
+        "ajupress.com",
+        "pluang.com",
+        "ts2.tech"
+      ],
+      "published_source_classes": [
+        "discovered_media"
+      ],
+      "causes": [
+        "material_topic_without_trusted_body",
+        "web_seed_unavailable"
+      ],
+      "actions": [
+        "topic_targeted_specialist_depth_recovery",
+        "bounded_reader_and_source_search_fallback"
+      ]
+    },
+    "宇都宮ブレックス": {
+      "material_topics": [
+        "bleague_games_schedule",
+        "club_roster_staff",
+        "media_press_video"
+      ],
+      "trusted_body_topics": [],
+      "weak_material_topics": [
+        "bleague_games_schedule",
+        "club_roster_staff",
+        "media_press_video"
+      ],
+      "body_records_by_source_class": {},
+      "configured_specialist_hosts": 3,
+      "observed_specialist_body_host_count": 0,
+      "observed_specialist_body_hosts": [],
+      "depth_recovery_queries": 4,
+      "depth_recovery_resolved_candidates": 0,
+      "depth_recovery_unresolved_queries": 0,
+      "depth_query_results": [
+        {
+          "query_id": "depth:publisher:arena_regional_admin:bing",
+          "slot_state": "searched_no_results",
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:publisher:media_press_video:bing",
+          "slot_state": "searched_no_results",
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:topic:arena_regional_admin:1:bing",
+          "slot_state": "searched_no_results",
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:topic:media_press_video:1:bing",
+          "slot_state": "searched_no_results",
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        }
+      ],
+      "unavailable_web_seeds": 1,
+      "published_updates": 0,
+      "published_citation_hosts": [],
+      "published_source_classes": [],
+      "causes": [
+        "material_topic_without_trusted_body",
+        "web_seed_unavailable"
+      ],
+      "actions": [
+        "topic_targeted_specialist_depth_recovery",
+        "bounded_reader_and_source_search_fallback"
+      ]
+    }
+  },
+  "failures": [],
+  "history": [
+    {
+      "issue_date": "2026-07-17",
+      "passed": true,
+      "metrics": {
+        "categories": 10,
+        "watch_topics_expected": 43,
+        "watch_topics_reviewed": 43,
+        "source_checks": 112,
+        "discovery_checks": 323,
+        "material_candidates": 298,
+        "resolved_candidates": 297,
+        "unresolved_queries": [],
+        "editor_coverage_gaps": [],
+        "observed_urls": 867,
+        "unavailable_urls": 31,
+        "evidence_hosts": 314,
+        "published_updates": 18,
+        "confirmed_facts": 33,
+        "facts_with_sources": 33,
+        "summary_characters": 1939,
+        "one_fact_updates": 4,
+        "facts_per_update_milli": 1833,
+        "summary_chars_per_update_milli": 107722,
+        "one_fact_update_ratio_milli": 222,
+        "local_horizon_queries": 8,
+        "local_horizon_relevant_results": 57,
+        "local_horizon_material_candidates": 0,
+        "local_horizon_resolved_candidates": 0,
+        "scoped_official_sources_configured": 19,
+        "scoped_official_sources_observed": 19,
+        "expanded_evidence_records": 76,
+        "expanded_published_updates": 0,
+        "collection_mode": "web_evidence_plus_review",
+        "review_requests": 16,
+        "review_events": 79,
+        "review_payload_bytes": 222020
+      },
+      "source_diagnostics": {
+        "OpenAI": {
+          "material_topics": [],
+          "trusted_body_topics": [],
+          "weak_material_topics": [],
+          "body_records_by_source_class": {
+            "discovered_media": 40,
+            "major_media": 1,
+            "specialist_media": 2
+          },
+          "configured_specialist_hosts": 14,
+          "observed_specialist_body_host_count": 2,
+          "observed_specialist_body_hosts": [
+            "itmedia.co.jp",
+            "theverge.com"
+          ],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 0,
+          "published_updates": 5,
+          "published_citation_hosts": [
+            "finance.biggo.jp",
+            "gigazine.net",
+            "nikkei.com",
+            "pc.watch.impress.co.jp"
+          ],
+          "published_source_classes": [
+            "discovered_media",
+            "major_media"
+          ],
+          "causes": [
+            "published_without_specialist_corroboration"
+          ],
+          "actions": [
+            "retain_specialist_corroboration_priority"
+          ]
+        },
+        "SoftBank": {
+          "material_topics": [
+            "power_battery"
+          ],
+          "trusted_body_topics": [
+            "domestic_services"
+          ],
+          "weak_material_topics": [
+            "power_battery"
+          ],
+          "body_records_by_source_class": {
+            "discovered_media": 5,
+            "specialist_media": 1
+          },
+          "configured_specialist_hosts": 16,
+          "observed_specialist_body_host_count": 1,
+          "observed_specialist_body_hosts": [
+            "lightreading.com"
+          ],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 0,
+          "published_updates": 0,
+          "published_citation_hosts": [],
+          "published_source_classes": [],
+          "causes": [
+            "material_topic_without_trusted_body"
+          ],
+          "actions": [
+            "topic_targeted_specialist_depth_recovery"
+          ]
+        },
+        "Honda": {
+          "material_topics": [],
+          "trusted_body_topics": [],
+          "weak_material_topics": [],
+          "body_records_by_source_class": {
+            "discovered_media": 8
+          },
+          "configured_specialist_hosts": 10,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 1,
+          "published_updates": 1,
+          "published_citation_hosts": [
+            "planetf1.com"
+          ],
+          "published_source_classes": [
+            "discovered_media"
+          ],
+          "causes": [
+            "web_seed_unavailable",
+            "published_without_specialist_corroboration"
+          ],
+          "actions": [
+            "bounded_reader_and_source_search_fallback",
+            "retain_specialist_corroboration_priority"
+          ]
+        },
+        "F1": {
+          "material_topics": [],
+          "trusted_body_topics": [
+            "fia_regulation_development",
+            "honda_aston_pu"
+          ],
+          "weak_material_topics": [],
+          "body_records_by_source_class": {
+            "discovered_media": 8,
+            "official": 1,
+            "specialist_media": 1
+          },
+          "configured_specialist_hosts": 3,
+          "observed_specialist_body_host_count": 1,
+          "observed_specialist_body_hosts": [
+            "motorsport.com"
+          ],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 0,
+          "published_updates": 1,
+          "published_citation_hosts": [
+            "capetimes.co.za",
+            "motorsport.com"
+          ],
+          "published_source_classes": [
+            "discovered_media",
+            "specialist_media"
+          ],
+          "causes": [],
+          "actions": []
+        },
+        "SpaceX": {
+          "material_topics": [
+            "business_contracts"
+          ],
+          "trusted_body_topics": [
+            "business_contracts",
+            "dragon_iss",
+            "starship_status"
+          ],
+          "weak_material_topics": [],
+          "body_records_by_source_class": {
+            "discovered_media": 22,
+            "major_media": 3,
+            "specialist_media": 1
+          },
+          "configured_specialist_hosts": 5,
+          "observed_specialist_body_host_count": 1,
+          "observed_specialist_body_hosts": [
+            "theverge.com"
+          ],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 1,
+          "published_updates": 5,
+          "published_citation_hosts": [
+            "finance.biggo.jp",
+            "houstonchronicle.com",
+            "spaceflightnow.com",
+            "theverge.com",
+            "zaikei.co.jp"
+          ],
+          "published_source_classes": [
+            "discovered_media",
+            "specialist_media"
+          ],
+          "causes": [
+            "web_seed_unavailable"
+          ],
+          "actions": [
+            "bounded_reader_and_source_search_fallback"
+          ]
+        },
+        "日本経済": {
+          "material_topics": [
+            "investment_policy_markets"
+          ],
+          "trusted_body_topics": [
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "weak_material_topics": [],
+          "body_records_by_source_class": {
+            "discovered_media": 24,
+            "major_media": 7
+          },
+          "configured_specialist_hosts": 3,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 1,
+          "published_updates": 5,
+          "published_citation_hosts": [
+            "finance.yahoo.co.jp",
+            "news.yahoo.co.jp",
+            "sp.m.jiji.com",
+            "yamatogokoro.jp"
+          ],
+          "published_source_classes": [
+            "discovered_media"
+          ],
+          "causes": [
+            "web_seed_unavailable",
+            "published_without_specialist_corroboration"
+          ],
+          "actions": [
+            "bounded_reader_and_source_search_fallback",
+            "retain_specialist_corroboration_priority"
+          ]
+        },
+        "YOASOBI / 幾田りら": {
+          "material_topics": [],
+          "trusted_body_topics": [],
+          "weak_material_topics": [],
+          "body_records_by_source_class": {
+            "discovered_media": 2
+          },
+          "configured_specialist_hosts": 1,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 1,
+          "published_updates": 1,
+          "published_citation_hosts": [
+            "s.inside-games.jp"
+          ],
+          "published_source_classes": [
+            "discovered_media"
+          ],
+          "causes": [
+            "web_seed_unavailable",
+            "published_without_specialist_corroboration"
+          ],
+          "actions": [
+            "bounded_reader_and_source_search_fallback",
+            "retain_specialist_corroboration_priority"
+          ]
+        },
+        "アジア経済": {
+          "material_topics": [],
+          "trusted_body_topics": [],
+          "weak_material_topics": [],
+          "body_records_by_source_class": {
+            "discovered_media": 3
+          },
+          "configured_specialist_hosts": 4,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 2,
+          "published_updates": 0,
+          "published_citation_hosts": [],
+          "published_source_classes": [],
+          "causes": [
+            "web_seed_unavailable"
+          ],
+          "actions": [
+            "bounded_reader_and_source_search_fallback"
+          ]
+        },
+        "北米経済": {
+          "material_topics": [
+            "us_prices_jobs_fed"
+          ],
+          "trusted_body_topics": [
+            "us_prices_jobs_fed"
+          ],
+          "weak_material_topics": [],
+          "body_records_by_source_class": {
+            "discovered_media": 3,
+            "major_media": 1
+          },
+          "configured_specialist_hosts": 0,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 1,
+          "published_updates": 0,
+          "published_citation_hosts": [],
+          "published_source_classes": [],
+          "causes": [
+            "web_seed_unavailable"
+          ],
+          "actions": [
+            "bounded_reader_and_source_search_fallback"
+          ]
+        },
+        "宇都宮ブレックス": {
+          "material_topics": [],
+          "trusted_body_topics": [
+            "bleague_games_schedule",
+            "club_roster_staff"
+          ],
+          "weak_material_topics": [],
+          "body_records_by_source_class": {
+            "official": 1
+          },
+          "configured_specialist_hosts": 3,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 1,
+          "published_updates": 0,
+          "published_citation_hosts": [],
+          "published_source_classes": [],
+          "causes": [
+            "web_seed_unavailable"
+          ],
+          "actions": [
+            "bounded_reader_and_source_search_fallback"
+          ]
+        }
+      }
+    },
+    {
+      "issue_date": "2026-07-16",
+      "passed": true,
+      "metrics": {
+        "categories": 10,
+        "watch_topics_expected": 43,
+        "watch_topics_reviewed": 43,
+        "source_checks": 103,
+        "discovery_checks": 320,
+        "material_candidates": 387,
+        "resolved_candidates": 356,
+        "unresolved_queries": [
+          "北米経済: horizon:indexed:youtube:change-1:identity-1",
+          "北米経済: horizon:indexed:youtube:change-2:identity-1",
+          "北米経済: horizon:indexed:youtube:change-3:identity-1",
+          "北米経済: horizon:indexed:sns_x:change-1:identity-1",
+          "北米経済: horizon:indexed:sns_x:change-2:identity-1",
+          "北米経済: horizon:indexed:sns_x:change-3:identity-1",
+          "北米経済: horizon:indexed:instagram:change-1:identity-1",
+          "北米経済: horizon:indexed:instagram:change-2:identity-1",
+          "北米経済: horizon:indexed:instagram:change-3:identity-1",
+          "北米経済: horizon:indexed:facebook:change-1:identity-1",
+          "北米経済: horizon:indexed:facebook:change-2:identity-1",
+          "北米経済: horizon:indexed:facebook:change-3:identity-1",
+          "北米経済: horizon:indexed:tiktok:change-1:identity-1",
+          "北米経済: horizon:indexed:tiktok:change-2:identity-1",
+          "北米経済: horizon:indexed:tiktok:change-3:identity-1"
+        ],
+        "editor_coverage_gaps": [],
+        "observed_urls": 1009,
+        "unavailable_urls": 33,
+        "evidence_hosts": 348,
+        "published_updates": 27,
+        "confirmed_facts": 45,
+        "facts_with_sources": 45,
+        "summary_characters": 2296,
+        "one_fact_updates": 10,
+        "facts_per_update_milli": 1666,
+        "summary_chars_per_update_milli": 85037,
+        "one_fact_update_ratio_milli": 370,
+        "local_horizon_queries": 5,
+        "local_horizon_relevant_results": 25,
+        "local_horizon_material_candidates": 0,
+        "local_horizon_resolved_candidates": 0,
+        "scoped_official_sources_configured": 0,
+        "scoped_official_sources_observed": 0,
+        "expanded_evidence_records": 25,
+        "expanded_published_updates": 0,
+        "collection_mode": "web_evidence_plus_review",
+        "review_requests": 14,
+        "review_events": 82,
+        "review_payload_bytes": 216572
+      },
+      "source_diagnostics": {
+        "OpenAI": {
+          "material_topics": [],
+          "trusted_body_topics": [],
+          "weak_material_topics": [],
+          "body_records_by_source_class": {
+            "discovered_media": 42,
+            "major_media": 1,
+            "specialist_media": 3
+          },
+          "configured_specialist_hosts": 14,
+          "observed_specialist_body_host_count": 3,
+          "observed_specialist_body_hosts": [
+            "itmedia.co.jp",
+            "techcrunch.com",
+            "theverge.com"
+          ],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 0,
+          "published_updates": 7,
+          "published_citation_hosts": [
+            "cryptobriefing.com",
+            "dreamseed.blog",
+            "finance.biggo.jp",
+            "inshorts.com",
+            "japan.cnet.com",
+            "news.mynavi.jp",
+            "nikkei.com"
+          ],
+          "published_source_classes": [
+            "discovered_media",
+            "major_media"
+          ],
+          "causes": [
+            "published_without_specialist_corroboration"
+          ],
+          "actions": [
+            "retain_specialist_corroboration_priority"
+          ]
+        },
+        "SoftBank": {
+          "material_topics": [],
+          "trusted_body_topics": [
+            "domestic_services"
+          ],
+          "weak_material_topics": [],
+          "body_records_by_source_class": {
+            "discovered_media": 14,
+            "specialist_media": 1
+          },
+          "configured_specialist_hosts": 16,
+          "observed_specialist_body_host_count": 1,
+          "observed_specialist_body_hosts": [
+            "lightreading.com"
+          ],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 0,
+          "published_updates": 1,
+          "published_citation_hosts": [
+            "asiae.co.kr"
+          ],
+          "published_source_classes": [
+            "discovered_media"
+          ],
+          "causes": [
+            "published_without_specialist_corroboration"
+          ],
+          "actions": [
+            "retain_specialist_corroboration_priority"
+          ]
+        },
+        "Honda": {
+          "material_topics": [],
+          "trusted_body_topics": [],
+          "weak_material_topics": [],
+          "body_records_by_source_class": {
+            "discovered_media": 9,
+            "official": 1
+          },
+          "configured_specialist_hosts": 10,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 0,
+          "published_updates": 2,
+          "published_citation_hosts": [
+            "global.honda",
+            "skream.jp"
+          ],
+          "published_source_classes": [
+            "discovered_media",
+            "official"
+          ],
+          "causes": [
+            "published_without_specialist_corroboration"
+          ],
+          "actions": [
+            "retain_specialist_corroboration_priority"
+          ]
+        },
+        "F1": {
+          "material_topics": [
+            "fia_regulation_development"
+          ],
+          "trusted_body_topics": [],
+          "weak_material_topics": [
+            "fia_regulation_development"
+          ],
+          "body_records_by_source_class": {
+            "discovered_media": 6
+          },
+          "configured_specialist_hosts": 3,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 0,
+          "published_updates": 1,
+          "published_citation_hosts": [
+            "independent.co.uk"
+          ],
+          "published_source_classes": [
+            "discovered_media"
+          ],
+          "causes": [
+            "material_topic_without_trusted_body",
+            "published_without_specialist_corroboration"
+          ],
+          "actions": [
+            "topic_targeted_specialist_depth_recovery",
+            "retain_specialist_corroboration_priority"
+          ]
+        },
+        "SpaceX": {
+          "material_topics": [],
+          "trusted_body_topics": [],
+          "weak_material_topics": [],
+          "body_records_by_source_class": {
+            "discovered_media": 15
+          },
+          "configured_specialist_hosts": 5,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 1,
+          "published_updates": 3,
+          "published_citation_hosts": [
+            "digitaltoday.co.kr",
+            "finance.biggo.jp",
+            "space.com",
+            "spaceflightnow.com",
+            "tomshardware.com"
+          ],
+          "published_source_classes": [
+            "discovered_media"
+          ],
+          "causes": [
+            "web_seed_unavailable",
+            "published_without_specialist_corroboration"
+          ],
+          "actions": [
+            "bounded_reader_and_source_search_fallback",
+            "retain_specialist_corroboration_priority"
+          ]
+        },
+        "日本経済": {
+          "material_topics": [
+            "employment_consumption",
+            "investment_policy_markets"
+          ],
+          "trusted_body_topics": [
+            "employment_consumption"
+          ],
+          "weak_material_topics": [
+            "investment_policy_markets"
+          ],
+          "body_records_by_source_class": {
+            "discovered_media": 23,
+            "major_media": 1
+          },
+          "configured_specialist_hosts": 3,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 1,
+          "published_updates": 5,
+          "published_citation_hosts": [
+            "gentosha-go.com",
+            "news.yahoo.co.jp",
+            "nikkei.com",
+            "s.kabutan.jp"
+          ],
+          "published_source_classes": [
+            "discovered_media",
+            "major_media"
+          ],
+          "causes": [
+            "material_topic_without_trusted_body",
+            "web_seed_unavailable",
+            "published_without_specialist_corroboration"
+          ],
+          "actions": [
+            "topic_targeted_specialist_depth_recovery",
+            "bounded_reader_and_source_search_fallback",
+            "retain_specialist_corroboration_priority"
+          ]
+        },
+        "YOASOBI / 幾田りら": {
+          "material_topics": [],
+          "trusted_body_topics": [],
+          "weak_material_topics": [],
+          "body_records_by_source_class": {
+            "discovered_media": 2
+          },
+          "configured_specialist_hosts": 1,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 3,
+          "published_updates": 0,
+          "published_citation_hosts": [],
+          "published_source_classes": [],
+          "causes": [
+            "web_seed_unavailable"
+          ],
+          "actions": [
+            "bounded_reader_and_source_search_fallback"
+          ]
+        },
+        "アジア経済": {
+          "material_topics": [],
+          "trusted_body_topics": [],
+          "weak_material_topics": [],
+          "body_records_by_source_class": {
+            "discovered_media": 5
+          },
+          "configured_specialist_hosts": 4,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 3,
+          "published_updates": 5,
+          "published_citation_hosts": [
+            "ashu-chinastatistics.com",
+            "recordchina.co.jp",
+            "vietnam.vn"
+          ],
+          "published_source_classes": [
+            "discovered_media"
+          ],
+          "causes": [
+            "web_seed_unavailable",
+            "published_without_specialist_corroboration"
+          ],
+          "actions": [
+            "bounded_reader_and_source_search_fallback",
+            "retain_specialist_corroboration_priority"
+          ]
+        },
+        "北米経済": {
+          "material_topics": [
+            "north_america_investment_policy",
+            "us_markets_fund_flows_rates",
+            "us_prices_jobs_fed"
+          ],
+          "trusted_body_topics": [
+            "us_prices_jobs_fed"
+          ],
+          "weak_material_topics": [
+            "north_america_investment_policy",
+            "us_markets_fund_flows_rates"
+          ],
+          "body_records_by_source_class": {
+            "discovered_media": 13,
+            "major_media": 1
+          },
+          "configured_specialist_hosts": 0,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 2,
+          "published_updates": 3,
+          "published_citation_hosts": [
+            "finance.yahoo.com",
+            "news.google.com",
+            "vietnam.vn"
+          ],
+          "published_source_classes": [
+            "discovered_media"
+          ],
+          "causes": [
+            "material_topic_without_trusted_body",
+            "web_seed_unavailable"
+          ],
+          "actions": [
+            "topic_targeted_specialist_depth_recovery",
+            "bounded_reader_and_source_search_fallback"
+          ]
+        },
+        "宇都宮ブレックス": {
+          "material_topics": [],
+          "trusted_body_topics": [],
+          "weak_material_topics": [],
+          "body_records_by_source_class": {},
+          "configured_specialist_hosts": 3,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 2,
+          "published_updates": 0,
+          "published_citation_hosts": [],
+          "published_source_classes": [],
+          "causes": [
+            "web_seed_unavailable"
+          ],
+          "actions": [
+            "bounded_reader_and_source_search_fallback"
+          ]
+        }
+      }
+    },
+    {
+      "issue_date": "2026-07-15",
+      "passed": true,
+      "metrics": {
+        "categories": 10,
+        "watch_topics_expected": 43,
+        "watch_topics_reviewed": 43,
+        "source_checks": 103,
+        "discovery_checks": 320,
+        "material_candidates": 1316,
+        "resolved_candidates": 1147,
+        "unresolved_queries": [
+          "SoftBank: topic:ai_infrastructure:1:identity-1:ja-JP",
+          "Honda: topic:hybrid_ev_strategy:1:identity-1:en-US",
+          "Honda: horizon:material-change:3:identity-1:ja-JP",
+          "アジア経済: horizon:material-change:1:identity-1:en-US"
+        ],
+        "editor_coverage_gaps": [],
+        "observed_urls": 988,
+        "unavailable_urls": 34,
+        "evidence_hosts": 324,
+        "published_updates": 40,
+        "confirmed_facts": 139,
+        "facts_with_sources": 139,
+        "summary_characters": 8638,
+        "one_fact_updates": 8,
+        "facts_per_update_milli": 3475,
+        "summary_chars_per_update_milli": 215950,
+        "one_fact_update_ratio_milli": 200,
+        "local_horizon_queries": 5,
+        "local_horizon_relevant_results": 45,
+        "local_horizon_material_candidates": 45,
+        "local_horizon_resolved_candidates": 42,
+        "scoped_official_sources_configured": 0,
+        "scoped_official_sources_observed": 0,
+        "expanded_evidence_records": 45,
+        "expanded_published_updates": 0,
+        "collection_mode": "github_models_unattended",
+        "review_requests": 0,
+        "review_events": 0,
+        "review_payload_bytes": 0
+      },
+      "source_diagnostics": {
+        "OpenAI": {
+          "material_topics": [
+            "enterprise_infrastructure",
+            "ipo_financing",
+            "math_research",
+            "safety_security_regulation"
+          ],
+          "trusted_body_topics": [
+            "ipo_financing"
+          ],
+          "weak_material_topics": [
+            "enterprise_infrastructure",
+            "math_research",
+            "safety_security_regulation"
+          ],
+          "body_records_by_source_class": {
+            "discovered_media": 16,
+            "major_media": 1,
+            "specialist_media": 1
+          },
+          "configured_specialist_hosts": 14,
+          "observed_specialist_body_host_count": 1,
+          "observed_specialist_body_hosts": [
+            "k-tai.watch.impress.co.jp"
+          ],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 0,
+          "published_updates": 9,
+          "published_citation_hosts": [
+            "dime.jp",
+            "finance.biggo.jp",
+            "hashout.jp",
+            "japan.cnet.com",
+            "moomoo.com",
+            "news.yahoo.co.jp",
+            "pc.watch.impress.co.jp",
+            "plus-web3.com",
+            "robotstart.info",
+            "rocket-boys.co.jp",
+            "sdxcentral.com",
+            "streamlinefeed.co.ke",
+            "telecompaper.com"
+          ],
+          "published_source_classes": [
+            "discovered_media"
+          ],
+          "causes": [
+            "material_topic_without_trusted_body",
+            "published_without_specialist_corroboration"
+          ],
+          "actions": [
+            "topic_targeted_specialist_depth_recovery",
+            "retain_specialist_corroboration_priority"
+          ]
+        },
+        "SoftBank": {
+          "material_topics": [
+            "ai_infrastructure",
+            "domestic_services",
+            "power_battery"
+          ],
+          "trusted_body_topics": [
+            "domestic_services"
+          ],
+          "weak_material_topics": [
+            "ai_infrastructure",
+            "power_battery"
+          ],
+          "body_records_by_source_class": {
+            "discovered_media": 13,
+            "specialist_media": 1
+          },
+          "configured_specialist_hosts": 16,
+          "observed_specialist_body_host_count": 1,
+          "observed_specialist_body_hosts": [
+            "ai.watch.impress.co.jp"
+          ],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 1,
+          "published_updates": 5,
+          "published_citation_hosts": [
+            "ai.watch.impress.co.jp",
+            "finance.biggo.com",
+            "finance.biggo.jp",
+            "news.google.com",
+            "rocket-boys.co.jp"
+          ],
+          "published_source_classes": [
+            "discovered_media",
+            "specialist_media"
+          ],
+          "causes": [
+            "material_topic_without_trusted_body",
+            "web_seed_unavailable"
+          ],
+          "actions": [
+            "topic_targeted_specialist_depth_recovery",
+            "bounded_reader_and_source_search_fallback"
+          ]
+        },
+        "Honda": {
+          "material_topics": [
+            "china_sales",
+            "earnings_guidance",
+            "hybrid_ev_strategy",
+            "market_price_reaction"
+          ],
+          "trusted_body_topics": [],
+          "weak_material_topics": [
+            "china_sales",
+            "earnings_guidance",
+            "hybrid_ev_strategy",
+            "market_price_reaction"
+          ],
+          "body_records_by_source_class": {
+            "discovered_media": 3
+          },
+          "configured_specialist_hosts": 10,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 0,
+          "published_updates": 0,
+          "published_citation_hosts": [],
+          "published_source_classes": [],
+          "causes": [
+            "material_topic_without_trusted_body"
+          ],
+          "actions": [
+            "topic_targeted_specialist_depth_recovery"
+          ]
+        },
+        "F1": {
+          "material_topics": [
+            "fia_regulation_development",
+            "honda_aston_pu",
+            "race_schedule_results"
+          ],
+          "trusted_body_topics": [],
+          "weak_material_topics": [
+            "fia_regulation_development",
+            "honda_aston_pu",
+            "race_schedule_results"
+          ],
+          "body_records_by_source_class": {
+            "discovered_media": 4
+          },
+          "configured_specialist_hosts": 3,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 0,
+          "published_updates": 2,
+          "published_citation_hosts": [
+            "gpfans.com",
+            "motorcyclesports.net",
+            "planetf1.com"
+          ],
+          "published_source_classes": [
+            "discovered_media"
+          ],
+          "causes": [
+            "material_topic_without_trusted_body",
+            "published_without_specialist_corroboration"
+          ],
+          "actions": [
+            "topic_targeted_specialist_depth_recovery",
+            "retain_specialist_corroboration_priority"
+          ]
+        },
+        "SpaceX": {
+          "material_topics": [
+            "ai_mna_compute",
+            "business_contracts",
+            "dragon_iss",
+            "starship_status"
+          ],
+          "trusted_body_topics": [],
+          "weak_material_topics": [
+            "ai_mna_compute",
+            "business_contracts",
+            "dragon_iss",
+            "starship_status"
+          ],
+          "body_records_by_source_class": {
+            "discovered_media": 13
+          },
+          "configured_specialist_hosts": 5,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 1,
+          "published_updates": 6,
+          "published_citation_hosts": [
+            "cafe-dc.com",
+            "edhat.com",
+            "finance.biggo.jp",
+            "mezha.net",
+            "paxex.aero",
+            "plus-web3.com"
+          ],
+          "published_source_classes": [
+            "discovered_media"
+          ],
+          "causes": [
+            "material_topic_without_trusted_body",
+            "web_seed_unavailable",
+            "published_without_specialist_corroboration"
+          ],
+          "actions": [
+            "topic_targeted_specialist_depth_recovery",
+            "bounded_reader_and_source_search_fallback",
+            "retain_specialist_corroboration_priority"
+          ]
+        },
+        "日本経済": {
+          "material_topics": [
+            "employment_consumption",
+            "investment_policy_markets",
+            "prices_wages_boj"
+          ],
+          "trusted_body_topics": [
+            "investment_policy_markets"
+          ],
+          "weak_material_topics": [
+            "employment_consumption",
+            "prices_wages_boj"
+          ],
+          "body_records_by_source_class": {
+            "discovered_media": 20,
+            "major_media": 4
+          },
+          "configured_specialist_hosts": 3,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 1,
+          "published_updates": 11,
+          "published_citation_hosts": [
+            "finance.yahoo.co.jp",
+            "gentosha-go.com",
+            "kabutan.jp",
+            "news.yahoo.co.jp",
+            "nikkei.com",
+            "s.kabutan.jp",
+            "uhb.jp"
+          ],
+          "published_source_classes": [
+            "discovered_media",
+            "major_media"
+          ],
+          "causes": [
+            "material_topic_without_trusted_body",
+            "web_seed_unavailable",
+            "published_without_specialist_corroboration"
+          ],
+          "actions": [
+            "topic_targeted_specialist_depth_recovery",
+            "bounded_reader_and_source_search_fallback",
+            "retain_specialist_corroboration_priority"
+          ]
+        },
+        "YOASOBI / 幾田りら": {
+          "material_topics": [
+            "staff_social_x_instagram"
+          ],
+          "trusted_body_topics": [],
+          "weak_material_topics": [
+            "staff_social_x_instagram"
+          ],
+          "body_records_by_source_class": {
+            "discovered_media": 2
+          },
+          "configured_specialist_hosts": 1,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 3,
+          "published_updates": 1,
+          "published_citation_hosts": [
+            "prtimes.jp",
+            "realsound.jp"
+          ],
+          "published_source_classes": [
+            "discovered_media"
+          ],
+          "causes": [
+            "material_topic_without_trusted_body",
+            "web_seed_unavailable",
+            "published_without_specialist_corroboration"
+          ],
+          "actions": [
+            "topic_targeted_specialist_depth_recovery",
+            "bounded_reader_and_source_search_fallback",
+            "retain_specialist_corroboration_priority"
+          ]
+        },
+        "アジア経済": {
+          "material_topics": [
+            "china_macro_policy"
+          ],
+          "trusted_body_topics": [],
+          "weak_material_topics": [
+            "china_macro_policy"
+          ],
+          "body_records_by_source_class": {
+            "discovered_media": 5
+          },
+          "configured_specialist_hosts": 4,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 2,
+          "published_updates": 5,
+          "published_citation_hosts": [
+            "ashu-chinastatistics.com",
+            "news.google.com",
+            "news.livedoor.com"
+          ],
+          "published_source_classes": [
+            "discovered_media"
+          ],
+          "causes": [
+            "material_topic_without_trusted_body",
+            "web_seed_unavailable",
+            "published_without_specialist_corroboration"
+          ],
+          "actions": [
+            "topic_targeted_specialist_depth_recovery",
+            "bounded_reader_and_source_search_fallback",
+            "retain_specialist_corroboration_priority"
+          ]
+        },
+        "北米経済": {
+          "material_topics": [
+            "north_america_investment_policy",
+            "us_markets_fund_flows_rates",
+            "us_prices_jobs_fed"
+          ],
+          "trusted_body_topics": [
+            "us_markets_fund_flows_rates",
+            "us_prices_jobs_fed"
+          ],
+          "weak_material_topics": [
+            "north_america_investment_policy"
+          ],
+          "body_records_by_source_class": {
+            "discovered_media": 10,
+            "major_media": 2,
+            "specialist_media": 1
+          },
+          "configured_specialist_hosts": 0,
+          "observed_specialist_body_host_count": 1,
+          "observed_specialist_body_hosts": [
+            "zai.diamond.jp"
+          ],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 1,
+          "published_updates": 1,
+          "published_citation_hosts": [
+            "finance.biggo.jp",
+            "nikkei.com"
+          ],
+          "published_source_classes": [
+            "discovered_media",
+            "major_media"
+          ],
+          "causes": [
+            "material_topic_without_trusted_body",
+            "web_seed_unavailable"
+          ],
+          "actions": [
+            "topic_targeted_specialist_depth_recovery",
+            "bounded_reader_and_source_search_fallback"
+          ]
+        },
+        "宇都宮ブレックス": {
+          "material_topics": [
+            "arena_regional_admin",
+            "bleague_games_schedule",
+            "club_roster_staff",
+            "media_press_video"
+          ],
+          "trusted_body_topics": [],
+          "weak_material_topics": [
+            "arena_regional_admin",
+            "bleague_games_schedule",
+            "club_roster_staff",
+            "media_press_video"
+          ],
+          "body_records_by_source_class": {},
+          "configured_specialist_hosts": 3,
+          "observed_specialist_body_host_count": 0,
+          "observed_specialist_body_hosts": [],
+          "depth_recovery_queries": 0,
+          "depth_recovery_resolved_candidates": 0,
+          "depth_recovery_unresolved_queries": 0,
+          "depth_query_results": [],
+          "unavailable_web_seeds": 1,
+          "published_updates": 0,
+          "published_citation_hosts": [],
+          "published_source_classes": [],
+          "causes": [
+            "material_topic_without_trusted_body",
+            "web_seed_unavailable"
+          ],
+          "actions": [
+            "topic_targeted_specialist_depth_recovery",
+            "bounded_reader_and_source_search_fallback"
+          ]
+        }
+      }
+    }
+  ],
+  "deltas_vs_previous": {
+    "source_checks": 9,
+    "discovery_checks": 54,
+    "material_candidates": 384,
+    "resolved_candidates": 381,
+    "published_updates": -2,
+    "unavailable_urls": -1,
+    "review_requests": 0,
+    "review_events": 9,
+    "review_payload_bytes": 8725,
+    "local_horizon_queries": 0,
+    "local_horizon_material_candidates": 3,
+    "local_horizon_resolved_candidates": 3,
+    "scoped_official_sources_configured": 8,
+    "scoped_official_sources_observed": 8,
+    "expanded_evidence_records": -10,
+    "expanded_published_updates": 0,
+    "confirmed_facts": -5,
+    "summary_characters": -270,
+    "one_fact_updates": 2,
+    "facts_per_update_milli": -83,
+    "summary_chars_per_update_milli": -3410,
+    "one_fact_update_ratio_milli": 153
+  },
+  "improvement_signals": [
+    "expanded_scope_needs_precision_review",
+    "recurring_source_depth_gap"
+  ],
+  "learning": {
+    "contract_version": "2026-07-18.1",
+    "history_days": 3,
+    "current_causes": [
+      {
+        "category": "F1",
+        "cause": "material_topic_without_trusted_body"
+      },
+      {
+        "category": "F1",
+        "cause": "published_without_specialist_corroboration"
+      },
+      {
+        "category": "Honda",
+        "cause": "material_topic_without_trusted_body"
+      },
+      {
+        "category": "Honda",
+        "cause": "published_without_specialist_corroboration"
+      },
+      {
+        "category": "OpenAI",
+        "cause": "material_topic_without_trusted_body"
+      },
+      {
+        "category": "OpenAI",
+        "cause": "published_without_specialist_corroboration"
+      },
+      {
+        "category": "SoftBank",
+        "cause": "material_topic_without_trusted_body"
+      },
+      {
+        "category": "SpaceX",
+        "cause": "material_topic_without_trusted_body"
+      },
+      {
+        "category": "SpaceX",
+        "cause": "published_without_specialist_corroboration"
+      },
+      {
+        "category": "SpaceX",
+        "cause": "web_seed_unavailable"
+      },
+      {
+        "category": "YOASOBI / 幾田りら",
+        "cause": "material_topic_without_trusted_body"
+      },
+      {
+        "category": "YOASOBI / 幾田りら",
+        "cause": "web_seed_unavailable"
+      },
+      {
+        "category": "アジア経済",
+        "cause": "material_topic_without_trusted_body"
+      },
+      {
+        "category": "アジア経済",
+        "cause": "published_without_specialist_corroboration"
+      },
+      {
+        "category": "アジア経済",
+        "cause": "web_seed_unavailable"
+      },
+      {
+        "category": "北米経済",
+        "cause": "material_topic_without_trusted_body"
+      },
+      {
+        "category": "北米経済",
+        "cause": "web_seed_unavailable"
+      },
+      {
+        "category": "宇都宮ブレックス",
+        "cause": "material_topic_without_trusted_body"
+      },
+      {
+        "category": "宇都宮ブレックス",
+        "cause": "web_seed_unavailable"
+      },
+      {
+        "category": "日本経済",
+        "cause": "material_topic_without_trusted_body"
+      },
+      {
+        "category": "日本経済",
+        "cause": "published_without_specialist_corroboration"
+      },
+      {
+        "category": "日本経済",
+        "cause": "web_seed_unavailable"
+      }
+    ],
+    "recurring_causes": [
+      {
+        "category": "F1",
+        "cause": "material_topic_without_trusted_body",
+        "days": 3
+      },
+      {
+        "category": "F1",
+        "cause": "published_without_specialist_corroboration",
+        "days": 3
+      },
+      {
+        "category": "Honda",
+        "cause": "material_topic_without_trusted_body",
+        "days": 2
+      },
+      {
+        "category": "Honda",
+        "cause": "published_without_specialist_corroboration",
+        "days": 3
+      },
+      {
+        "category": "OpenAI",
+        "cause": "material_topic_without_trusted_body",
+        "days": 2
+      },
+      {
+        "category": "OpenAI",
+        "cause": "published_without_specialist_corroboration",
+        "days": 4
+      },
+      {
+        "category": "SoftBank",
+        "cause": "material_topic_without_trusted_body",
+        "days": 3
+      },
+      {
+        "category": "SpaceX",
+        "cause": "material_topic_without_trusted_body",
+        "days": 2
+      },
+      {
+        "category": "SpaceX",
+        "cause": "published_without_specialist_corroboration",
+        "days": 3
+      },
+      {
+        "category": "SpaceX",
+        "cause": "web_seed_unavailable",
+        "days": 4
+      },
+      {
+        "category": "YOASOBI / 幾田りら",
+        "cause": "material_topic_without_trusted_body",
+        "days": 2
+      },
+      {
+        "category": "YOASOBI / 幾田りら",
+        "cause": "web_seed_unavailable",
+        "days": 4
+      },
+      {
+        "category": "アジア経済",
+        "cause": "material_topic_without_trusted_body",
+        "days": 2
+      },
+      {
+        "category": "アジア経済",
+        "cause": "published_without_specialist_corroboration",
+        "days": 3
+      },
+      {
+        "category": "アジア経済",
+        "cause": "web_seed_unavailable",
+        "days": 4
+      },
+      {
+        "category": "北米経済",
+        "cause": "material_topic_without_trusted_body",
+        "days": 3
+      },
+      {
+        "category": "北米経済",
+        "cause": "web_seed_unavailable",
+        "days": 4
+      },
+      {
+        "category": "宇都宮ブレックス",
+        "cause": "material_topic_without_trusted_body",
+        "days": 2
+      },
+      {
+        "category": "宇都宮ブレックス",
+        "cause": "web_seed_unavailable",
+        "days": 4
+      },
+      {
+        "category": "日本経済",
+        "cause": "material_topic_without_trusted_body",
+        "days": 3
+      },
+      {
+        "category": "日本経済",
+        "cause": "published_without_specialist_corroboration",
+        "days": 4
+      },
+      {
+        "category": "日本経済",
+        "cause": "web_seed_unavailable",
+        "days": 4
+      }
+    ],
+    "recently_resolved_causes": [
+      {
+        "category": "YOASOBI / 幾田りら",
+        "cause": "published_without_specialist_corroboration",
+        "prior_days": 2
+      }
+    ],
+    "applied_or_recommended_actions": {
+      "OpenAI": [
+        "topic_targeted_specialist_depth_recovery",
+        "retain_specialist_corroboration_priority"
+      ],
+      "SoftBank": [
+        "topic_targeted_specialist_depth_recovery"
+      ],
+      "Honda": [
+        "topic_targeted_specialist_depth_recovery",
+        "retain_specialist_corroboration_priority"
+      ],
+      "F1": [
+        "topic_targeted_specialist_depth_recovery",
+        "retain_specialist_corroboration_priority"
+      ],
+      "SpaceX": [
+        "topic_targeted_specialist_depth_recovery",
+        "bounded_reader_and_source_search_fallback",
+        "retain_specialist_corroboration_priority"
+      ],
+      "日本経済": [
+        "topic_targeted_specialist_depth_recovery",
+        "bounded_reader_and_source_search_fallback",
+        "retain_specialist_corroboration_priority"
+      ],
+      "YOASOBI / 幾田りら": [
+        "topic_targeted_specialist_depth_recovery",
+        "bounded_reader_and_source_search_fallback"
+      ],
+      "アジア経済": [
+        "topic_targeted_specialist_depth_recovery",
+        "bounded_reader_and_source_search_fallback",
+        "retain_specialist_corroboration_priority"
+      ],
+      "北米経済": [
+        "topic_targeted_specialist_depth_recovery",
+        "bounded_reader_and_source_search_fallback"
+      ],
+      "宇都宮ブレックス": [
+        "topic_targeted_specialist_depth_recovery",
+        "bounded_reader_and_source_search_fallback"
+      ]
+    },
+    "automatic_config_mutation": false,
+    "reason": "Daily evidence may reprioritize bounded specialist searches, but publisher registry changes remain deterministic and reviewed."
+  },
+  "automatic_policy": {
+    "scope_auto_reduction": false,
+    "quality_gate_bypass": false,
+    "safe_runtime_recovery_only": true,
+    "minimum_summary_length": false,
+    "background_padding_allowed": false
+  }
+}
