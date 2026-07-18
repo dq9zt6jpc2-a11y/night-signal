@@ -198,18 +198,26 @@ JSON responseは`night_signal_plus_editor.py`が全request、全event、Evidence
 
 公開時刻は`config/night_signal_operations.json`だけが所有する。16:45以降のGitHub Actions
 heartbeatはWeb Evidenceとcompact packetだけを収集し、既存artifactがあれば再収集せず、
-AI、commit、Pages処理を行わない。ChatGPT Webのprimary ownerは17:20、recovery ownerは
-18:20にaudit-firstで起動し、最新の有効packetを一度だけreviewする。review branchのpushを
+AI、commit、Pages処理を行わない。GitHub pluginを明示したChatGPT Web Work modeの
+primary ownerは17:50、recovery ownerは18:25にaudit-firstで起動し、最新の有効packetを
+一度だけreviewする。各ownerは最初に`started` heartbeatを書き、GitHub writeが失敗した場合は
+review tokenを使わず停止する。review branchのpushを
 受けたGitHub Actionsが検証・commit・Pages公開を行う。後続回は先行回が成功済みなら
 小さいstatusだけを確認して即終了する。
 未公開の場合も、active collectorを重複dispatchせず、Evidence、review、Issue、commit、Pagesの
 完了済み段階を順に再利用する。19:00以降は通常の日次処理を新規開始しない。
 
-18:35、18:50、19:05のGitHub Actions watchdogは、review後のevent trigger欠落、restore、
+18:00のGitHub Actions watchdogはprimary ownerのGitHub到達を検証する。18:35、18:50、
+19:05のwatchdogは、review後のevent trigger欠落、restore、
 commit、push、Pages、公開反映だけを同じreviewから一度復旧する。review自体がない場合は
 AIの代替生成をせず、Evidence欠落、Web owner heartbeat欠落、task停止・権限不足を区別して
 失敗を明示する。Web taskの当日heartbeat、review、最終publication auditは別の証拠とし、
 repositoryの静的テストだけで本番稼働済みと判定しない。
+
+review validatorは全requestを一度走査して全不合格request/eventを一括報告する。
+Web recovery ownerは大きい`editor_review.json`を書き直さず、不合格requestの完全なresponseだけを
+`editor_correction.json`へ一度書く。GitHub Actionsは同じEvidence hashを検証してoverlayするため、
+合格済みresponseの再生成、再送、再編集を行わない。
 
 Evidenceの構造、source check、discovery check、watch topic、取得チャネル、取得状態の
 検証規則は`night_signal_evidence.py`だけが所有する。Editor、Issue validator、coverage

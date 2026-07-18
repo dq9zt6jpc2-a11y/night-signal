@@ -29,6 +29,15 @@ PACKET_CONTRACT = "codex-plus-editor-v1"
 COLLECTION_MODE = "web_evidence_plus_review"
 
 
+class ReviewResponseValidationError(ValueError):
+    """One request failed deterministic review validation."""
+
+    def __init__(self, request_id: str, details: dict[str, Any]) -> None:
+        super().__init__(request_id)
+        self.request_id = request_id
+        self.details = details
+
+
 def fail(message: str) -> None:
     print(f"NIGHT SIGNAL PLUS REVIEW FAILED: {message}", file=__import__("sys").stderr)
     raise SystemExit(1)
@@ -287,20 +296,15 @@ def cards_from_response(
         or normalized["rejected_items"]
         or failures
     ):
-        fail(
-            "review response failed deterministic validation for "
-            f"{request['request_id']}: "
-            + json.dumps(
-                {
-                    "event_response": response_feedback,
-                    "missing_event_ids": normalized["missing_event_ids"],
-                    "conflicting_event_ids": normalized["conflicting_event_ids"],
-                    "rejected_items": normalized["rejected_items"],
-                    "unpublishable_items": failures,
-                },
-                ensure_ascii=False,
-                separators=(",", ":"),
-            )
+        raise ReviewResponseValidationError(
+            str(request["request_id"]),
+            {
+                "event_response": response_feedback,
+                "missing_event_ids": normalized["missing_event_ids"],
+                "conflicting_event_ids": normalized["conflicting_event_ids"],
+                "rejected_items": normalized["rejected_items"],
+                "unpublishable_items": failures,
+            },
         )
     return cards
 
@@ -491,12 +495,27 @@ def apply_review(
             )
         )
     cards_by_category: dict[str, list[dict[str, Any]]] = {}
+    rejected_requests: list[dict[str, Any]] = []
     for request in requests:
+        try:
+            request_cards = cards_from_response(
+                response_by_id[str(request["request_id"])], request, issue_date
+            )
+        except ReviewResponseValidationError as exc:
+            rejected_requests.append(
+                {"request_id": exc.request_id, **exc.details}
+            )
+            continue
         cards_by_category.setdefault(str(request["category"]), []).extend(
-            cards_from_response(
-                response_by_id[str(request["request_id"])],
-                request,
-                issue_date,
+            request_cards
+        )
+    if rejected_requests:
+        fail(
+            "review responses failed deterministic validation: "
+            + json.dumps(
+                {"rejected_requests": rejected_requests},
+                ensure_ascii=False,
+                separators=(",", ":"),
             )
         )
     cards = [

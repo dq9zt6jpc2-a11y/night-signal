@@ -7,6 +7,7 @@ on:
       - "night-signal-review-*"
     paths:
       - "cloud-review/**/editor_review.json"
+      - "cloud-review/**/editor_correction.json"
   workflow_dispatch:
     inputs:
       issue_date:
@@ -69,6 +70,13 @@ jobs:
           git show \
             "refs/remotes/origin/$REVIEW_REF:cloud-review/$ISSUE_DATE/editor_review.json" \
             > "$RUNNER_TEMP/editor_review.json"
+          CORRECTION_SPEC="refs/remotes/origin/$REVIEW_REF:cloud-review/$ISSUE_DATE/editor_correction.json"
+          if git cat-file -e "$CORRECTION_SPEC" 2>/dev/null; then
+            git show "$CORRECTION_SPEC" > "$RUNNER_TEMP/editor_correction.json"
+            echo "CORRECTION_PATH=$RUNNER_TEMP/editor_correction.json" >> "$GITHUB_ENV"
+          else
+            echo "CORRECTION_PATH=" >> "$GITHUB_ENV"
+          fi
           echo "ISSUE_DATE=$ISSUE_DATE" >> "$GITHUB_ENV"
           echo "REVIEW_REF=$REVIEW_REF" >> "$GITHUB_ENV"
           echo "RECOVERY_ATTEMPT=$RECOVERY_ATTEMPT" >> "$GITHUB_ENV"
@@ -98,10 +106,15 @@ jobs:
         if: ${{ steps.already_public.outputs.published != 'true' }}
         run: |
           set -o pipefail
+          CORRECTION_ARGS=()
+          if [[ -n "$CORRECTION_PATH" ]]; then
+            CORRECTION_ARGS+=(--correction-path "$CORRECTION_PATH")
+          fi
           {
             python3 scripts/night_signal_cloud_review.py "$ISSUE_DATE" \
               --review-ref "$REVIEW_REF" \
-              --review-path "$RUNNER_TEMP/editor_review.json"
+              --review-path "$RUNNER_TEMP/editor_review.json" \
+              "${CORRECTION_ARGS[@]}"
             python3 scripts/night_signal_plus_editor.py "$ISSUE_DATE" \
               --apply-review "state/$ISSUE_DATE/editor_review.json"
           } 2>&1 | tee "$RUNNER_TEMP/apply.log"

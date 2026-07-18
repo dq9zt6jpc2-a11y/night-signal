@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 STATE_ROOT = ROOT / "state"
 BRANCH_PREFIX = "night-signal-review-"
 REVIEW_CONTRACT = "codex-plus-editor-v1"
+CORRECTION_CONTRACT = "night-signal-cloud-review-correction-v1"
 EXECUTION_SURFACE = "chatgpt-web-scheduled-task"
 MAX_REVIEW_BYTES = 4_000_000
 JST = ZoneInfo("Asia/Tokyo")
@@ -102,6 +103,69 @@ def validate_review(
         fail("cloud_handoff reviewed_at must be on the issue date in JST")
 
 
+def apply_correction(
+    review: dict[str, Any],
+    correction: dict[str, Any],
+    *,
+    issue_date: str,
+    expected_evidence_sha256: str,
+) -> dict[str, Any]:
+    """Overlay only named failed requests without rewriting the full review."""
+    if correction.get("contract") != CORRECTION_CONTRACT:
+        fail(f"correction contract must be {CORRECTION_CONTRACT}")
+    if correction.get("issue_date") != issue_date:
+        fail("correction issue date does not match the review branch")
+    if correction.get("evidence_sha256") != expected_evidence_sha256:
+        fail("correction Evidence hash does not match the restored final artifact")
+    handoff = correction.get("cloud_handoff")
+    if not isinstance(handoff, dict):
+        fail("correction has no cloud_handoff provenance")
+    if handoff.get("correction_attempt") != 1:
+        fail("correction_attempt must be the bounded integer 1")
+    responses = correction.get("responses")
+    if not isinstance(responses, list) or not responses:
+        fail("correction must contain at least one named response")
+    base_responses = review.get("responses")
+    if not isinstance(base_responses, list):
+        fail("base review responses must be an array")
+    replacement_by_id: dict[str, dict[str, Any]] = {}
+    for entry in responses:
+        if not isinstance(entry, dict):
+            fail("each correction response must be an object")
+        request_id = str(entry.get("request_id", ""))
+        response = entry.get("response")
+        if not request_id or not isinstance(response, dict):
+            fail("each correction response needs request_id and response")
+        if request_id in replacement_by_id:
+            fail(f"duplicate correction request id: {request_id}")
+        replacement_by_id[request_id] = entry
+    base_ids = {
+        str(entry.get("request_id", ""))
+        for entry in base_responses
+        if isinstance(entry, dict)
+    }
+    unknown = sorted(set(replacement_by_id) - base_ids)
+    if unknown:
+        fail("correction contains unknown request ids: " + ", ".join(unknown))
+    merged = json.loads(json.dumps(review, ensure_ascii=False))
+    merged["responses"] = [
+        replacement_by_id.get(str(entry.get("request_id", "")), entry)
+        for entry in base_responses
+    ]
+    merged["cloud_handoff"] = {
+        **dict(review.get("cloud_handoff", {})),
+        "execution_surface": handoff.get("execution_surface"),
+        "reviewed_at": handoff.get("reviewed_at"),
+        "correction_attempt": 1,
+    }
+    validate_review(
+        merged,
+        issue_date=issue_date,
+        expected_evidence_sha256=expected_evidence_sha256,
+    )
+    return merged
+
+
 def install_review(
     issue_date: str,
     review_path: Path,
@@ -109,16 +173,25 @@ def install_review(
     state_root: Path,
     *,
     review_ref: str,
+    correction_path: Path | None = None,
 ) -> Path:
     ref_date = issue_date_from_ref(review_ref)
     if ref_date != issue_date:
         fail("review ref date and requested issue date differ")
     review = read_object(review_path)
+    expected_hash = evidence_sha256(evidence_path)
     validate_review(
         review,
         issue_date=issue_date,
-        expected_evidence_sha256=evidence_sha256(evidence_path),
+        expected_evidence_sha256=expected_hash,
     )
+    if correction_path is not None:
+        review = apply_correction(
+            review,
+            read_object(correction_path),
+            issue_date=issue_date,
+            expected_evidence_sha256=expected_hash,
+        )
     destination = state_root / issue_date / "editor_review.json"
     destination.parent.mkdir(parents=True, exist_ok=True)
     temporary = destination.with_suffix(".json.tmp")
@@ -160,6 +233,29 @@ def self_test() -> None:
         )
         if not installed.exists():
             fail("valid cloud review was not installed")
+        correction = {
+            "contract": CORRECTION_CONTRACT,
+            "issue_date": issue_date,
+            "evidence_sha256": evidence_sha256(evidence_path),
+            "cloud_handoff": {
+                "execution_surface": EXECUTION_SURFACE,
+                "reviewed_at": "2099-01-02T18:10:00+09:00",
+                "correction_attempt": 1,
+            },
+            "responses": [
+                {"request_id": "r001", "response": {"events": [{"id": "g001"}]}}
+            ],
+        }
+        corrected = apply_correction(
+            review,
+            correction,
+            issue_date=issue_date,
+            expected_evidence_sha256=evidence_sha256(evidence_path),
+        )
+        if corrected["responses"][0] != correction["responses"][0]:
+            fail("named correction response was not overlaid")
+        if corrected["cloud_handoff"].get("correction_attempt") != 1:
+            fail("correction provenance was not preserved")
         wrong_hash = {**review, "evidence_sha256": "0" * 64}
         review_path.write_text(json.dumps(wrong_hash), encoding="utf-8")
         try:
@@ -197,6 +293,7 @@ def main() -> int:
     parser.add_argument("--review-path", type=Path)
     parser.add_argument("--review-ref", default="")
     parser.add_argument("--evidence", type=Path)
+    parser.add_argument("--correction-path", type=Path)
     parser.add_argument("--state-root", type=Path, default=STATE_ROOT)
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
@@ -212,6 +309,7 @@ def main() -> int:
         evidence_path,
         args.state_root,
         review_ref=args.review_ref,
+        correction_path=args.correction_path,
     )
     print(
         json.dumps(

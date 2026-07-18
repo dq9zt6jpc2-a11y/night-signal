@@ -52,8 +52,9 @@ issue passes every local gate.
 
 Evidence heartbeats before 16:45 JST exit without collection. The 16:47 and 17:17
 heartbeats create or reuse final Evidence artifacts but never invoke AI or publish.
-The local Codex Plus owner runs at 17:05, 17:35, 18:05, and 18:35. Every later run
-is an audit-first recovery heartbeat. Recovery reuses the last completed stage:
+The GitHub-plugin-enabled ChatGPT Work-mode primary owner runs at 17:50 and the
+recovery owner at 18:25. The owner first proves GitHub write access, then performs
+only the missing review or correction. Recovery reuses the last completed stage:
 Evidence, accepted request/event responses, Issue, commit, or Pages deployment.
 
 ## Configuration

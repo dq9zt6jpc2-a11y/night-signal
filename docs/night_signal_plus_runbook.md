@@ -178,8 +178,9 @@ dated public URLs show the same current date.
 
 - Evidence collection failed: inspect the failed log, correct only a code/config
   cause, or retry the same network command once. Never start parallel collectors.
-- Review validation failed: patch only rejected request/event entries; keep all
-  accepted responses unchanged.
+- Review validation failed: write one small correction overlay containing all
+  rejected request/event entries; keep the large base review and all accepted
+  responses unchanged.
 - Render or quality gate failed: fix the exact deterministic contract mismatch;
   reuse Evidence and accepted review responses.
 - Remote main changed before commit: do not rebase a generated issue. Restart
@@ -188,7 +189,7 @@ dated public URLs show the same current date.
   redispatch/watch Pages once, then rerun only publication audit.
 - Current issue is already committed but not public: deploy the committed issue;
   do not enter collection or review.
-- The 17:20 Web task is the cloud owner and the 18:20 Web task is an audit-first
+- The 17:50 Work-mode Web task is the cloud owner and the 18:25 Work-mode Web task is an audit-first
   recovery heartbeat. A successful earlier review/publication must not be
   repeated. The recovery task reads the compact feedback branch and patches only
   the rejected request/event entries.

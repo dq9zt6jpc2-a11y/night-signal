@@ -167,8 +167,8 @@ def main() -> int:
         "change only the named request/event",
         "do not recollect or re-review",
         "topic_value_class` must be one of",
-        "17:20 Web task",
-        "18:20 Web task",
+        "17:50 Work-mode Web task",
+        "18:25 Work-mode Web task",
         "official OpenAI",
     ):
         if required.casefold() not in runbook.casefold():
@@ -184,7 +184,7 @@ def main() -> int:
         "night-signal-feedback-ISSUE_DATE",
         "Candidate events are not capped",
         "computer may be shut down",
-        "change only the named",
+        "correct every named",
         "night-signal-owner-status",
         "night-signal-cloud-owner-status-v1",
     ):
@@ -193,8 +193,8 @@ def main() -> int:
 
     operations = json.loads(OPERATIONS_POLICY.read_text(encoding="utf-8"))
     owner_heartbeats = operations.get("editor_owner_heartbeats_jst")
-    if owner_heartbeats != ["17:20", "18:20"]:
-        fail("Web-owner heartbeat policy must contain only 17:20 and 18:20 JST")
+    if owner_heartbeats != ["17:50", "18:25"]:
+        fail("Web-owner heartbeat policy must contain only 17:50 and 18:25 JST")
     owner_activation = operations.get("editor_owner_activation", {})
     if owner_activation != {
         "persistent_github_write_permission": True,
@@ -205,7 +205,7 @@ def main() -> int:
     if operations.get("reliability_report_retention_days") != 30:
         fail("operational reliability history must be retained for 30 days")
     watchdog_heartbeats = operations.get("publication_watchdog_heartbeats_jst")
-    if watchdog_heartbeats != ["18:35", "18:50", "19:05"]:
+    if watchdog_heartbeats != ["18:00", "18:35", "18:50", "19:05"]:
         fail("publication watchdog policy drifted from the bounded recovery window")
     expected_watchdog_minutes = sorted(
         timing.minutes(timing.parse_clock(value)) for value in watchdog_heartbeats
@@ -246,9 +246,11 @@ def main() -> int:
     for required in (
         'branches:\n      - "night-signal-review-*"',
         '"cloud-review/**/editor_review.json"',
+        '"cloud-review/**/editor_correction.json"',
         "Checkout trusted main",
         "--restore-only",
         "night_signal_cloud_review.py",
+        "--correction-path",
         "--apply-review",
         "Require the same trusted main before committing",
         "Bounded deterministic base-race recovery attempt",
@@ -311,10 +313,11 @@ def main() -> int:
     if "Editor model access" in collect_body:
         fail("canonical publish driver can still enter the retired model editor")
     print(
-        "PUBLICATION SCHEDULE AUDIT PASSED: "
+        "PUBLICATION STATIC CONFIG AUDIT PASSED: "
         f"window={policy.final_collection_not_before.strftime('%H:%M')}-"
         f"{policy.publication_deadline.strftime('%H:%M')}, "
-        "architecture-ready=true, activation-proof=remote-heartbeat-required, "
+        "architecture-ready=true, live-activation-proven=false, "
+        "activation-proof=remote-heartbeat-required, "
         "collector=github-actions, editor=chatgpt-web, publisher=github-actions, "
         "local-pc-required=false, paid-api-requests=0"
     )

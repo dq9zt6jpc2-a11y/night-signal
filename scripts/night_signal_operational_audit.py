@@ -27,6 +27,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OWNER_STATUS_BRANCH = "night-signal-owner-status"
 OWNER_STATUS_CONTRACT = "night-signal-cloud-owner-status-v1"
 OWNER_STATUS_OUTCOMES = {
+    "started",
     "feedback_success",
     "review_submitted",
     "evidence_missing",
@@ -83,6 +84,7 @@ def classify_state(
     review: dict[str, Any] | None,
     feedback: dict[str, Any] | None,
     owner_heartbeats: dict[str, dict[str, Any]],
+    correction: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     review_handoff = review.get("cloud_handoff", {}) if isinstance(review, dict) else {}
     review_attempt = bounded_attempt(
@@ -94,6 +96,14 @@ def classify_state(
         feedback.get("recovery_attempt") if isinstance(feedback, dict) else 0
     )
     recovery_attempt = max(review_attempt, feedback_attempt)
+    correction_handoff = (
+        correction.get("cloud_handoff", {}) if isinstance(correction, dict) else {}
+    )
+    correction_attempt = bounded_attempt(
+        correction_handoff.get("correction_attempt")
+        if isinstance(correction_handoff, dict)
+        else 0
+    )
     heartbeat_roles = sorted(owner_heartbeats)
     activation_proven = bool(heartbeat_roles) or bool(
         isinstance(review_handoff, dict)
@@ -110,7 +120,13 @@ def classify_state(
             role: str(value.get("outcome", ""))
             for role, value in owner_heartbeats.items()
         },
+        "owner_heartbeat_checked_at": {
+            role: str(value.get("checked_at", ""))
+            for role, value in owner_heartbeats.items()
+        },
         "recovery_attempt": recovery_attempt,
+        "correction_attempt": correction_attempt,
+        "correction_ready": isinstance(correction, dict),
         "recoverable": False,
         "needs_editor_action": False,
         "additional_paid_api_requests": 0,
@@ -125,10 +141,17 @@ def classify_state(
         }
     if not isinstance(review, dict):
         if heartbeat_roles:
+            outcomes = ", ".join(
+                f"{role}={owner_heartbeats[role].get('outcome', '')}"
+                for role in heartbeat_roles
+            )
             return {
                 **base,
                 "stage": "review_missing_after_owner_heartbeat",
-                "reason": "Web owner ran but did not produce a review; inspect its recorded outcome",
+                "reason": (
+                    "Web owner ran but did not produce a review; inspect its recorded "
+                    f"outcome ({outcomes})"
+                ),
                 "needs_editor_action": True,
             }
         return {
@@ -157,6 +180,16 @@ def classify_state(
             "recoverable": recovery_attempt == 0,
         }
     if failed_stage in EDITOR_CORRECTION_STAGES:
+        if correction_attempt == 1:
+            return {
+                **base,
+                "stage": "review_correction_exhausted",
+                "reason": (
+                    f"the one bounded correction already failed at {failed_stage}; "
+                    "do not rewrite accepted review responses"
+                ),
+                "needs_editor_action": True,
+            }
         return {
             **base,
             "stage": "review_correction_required",
@@ -268,6 +301,7 @@ def write_github_output(path: Path, result: dict[str, Any]) -> None:
         "needs_editor_action": str(bool(result["needs_editor_action"])).lower(),
         "activation_proven_today": str(bool(result["activation_proven_today"])).lower(),
         "recovery_attempt": str(result["recovery_attempt"]),
+        "correction_attempt": str(result["correction_attempt"]),
     }
     with path.open("a", encoding="utf-8") as handle:
         for key, value in values.items():
@@ -296,6 +330,7 @@ def audit(issue_date: str, repository: str) -> dict[str, Any]:
             review=None,
             feedback=None,
             owner_heartbeats=owner_heartbeats,
+            correction=None,
         )
         result.update(
             {
@@ -320,12 +355,18 @@ def audit(issue_date: str, repository: str) -> dict[str, Any]:
         f"night-signal-feedback-{issue_date}",
         f"cloud-feedback/{issue_date}/status.json",
     )
+    correction = remote_json(
+        repository,
+        f"night-signal-review-{issue_date}",
+        f"cloud-review/{issue_date}/editor_correction.json",
+    )
     result = classify_state(
         publication_verified=publication_verified,
         evidence_ready=isinstance(evidence, dict),
         review=review,
         feedback=feedback,
         owner_heartbeats=owner_heartbeats,
+        correction=correction,
     )
     result.update(
         {
@@ -351,6 +392,20 @@ def self_test() -> None:
     )
     if missing["stage"] != "review_missing_owner_heartbeat_missing":
         fail("missing Web owner was not classified")
+    started = classify_state(
+        publication_verified=False,
+        evidence_ready=True,
+        review=None,
+        feedback=None,
+        owner_heartbeats={
+            "primary": {
+                "outcome": "started",
+                "checked_at": "2099-01-01T17:50:00+09:00",
+            }
+        },
+    )
+    if started["stage"] != "review_missing_after_owner_heartbeat":
+        fail("started Web owner heartbeat was not classified")
     ready = classify_state(
         publication_verified=False,
         evidence_ready=True,
@@ -383,6 +438,16 @@ def self_test() -> None:
     )
     if correction["stage"] != "review_correction_required" or not correction["needs_editor_action"]:
         fail("review correction was mistaken for deterministic recovery")
+    correction_exhausted = classify_state(
+        publication_verified=False,
+        evidence_ready=True,
+        review={"cloud_handoff": {}},
+        feedback={"status": "failed", "failed_stage": "apply"},
+        owner_heartbeats={},
+        correction={"cloud_handoff": {"correction_attempt": 1}},
+    )
+    if correction_exhausted["stage"] != "review_correction_exhausted":
+        fail("bounded review correction exhaustion was not enforced")
     published = classify_state(
         publication_verified=True,
         evidence_ready=False,

@@ -9,8 +9,9 @@ on:
     types:
       - completed
   schedule:
-    # 18:35, 18:50, and 19:05 JST.  Actual start time still controls whether
-    # a missing issue is a pre-deadline checkpoint or a hard failure.
+    # 18:00 proves the primary Web owner reached GitHub.  The later checks
+    # cover the recovery owner, deterministic recovery, and the hard deadline.
+    - cron: "00 09 * * *"
     - cron: "35 09 * * *"
     - cron: "50 09 * * *"
     - cron: "05 10 * * *"
@@ -158,6 +159,20 @@ jobs:
           if [[ "${{ steps.final.outputs.published }}" == "true" ]]; then
             echo "Verified publication is live for $ISSUE_DATE."
             exit 0
+          fi
+          STAGE="${{ steps.final.outputs.stage }}"
+          if [[ "$GITHUB_EVENT_NAME" == "schedule" && "$STAGE" == "review_missing_owner_heartbeat_missing" ]]; then
+            echo "NIGHT SIGNAL Web owner did not prove GitHub access at the scheduled checkpoint." >&2
+            echo "stage=$STAGE" >&2
+            echo "No Evidence recollection or model review was repeated." >&2
+            exit 1
+          fi
+          NOW_JST="$(TZ=Asia/Tokyo date +%H%M)"
+          if [[ "$GITHUB_EVENT_NAME" == "schedule" && "$STAGE" == "review_missing_after_owner_heartbeat" && "$NOW_JST" -ge 1830 ]]; then
+            echo "NIGHT SIGNAL Web owner started but did not submit a review by the recovery checkpoint." >&2
+            echo "stage=$STAGE" >&2
+            echo "No Evidence recollection or model review was repeated." >&2
+            exit 1
           fi
           ACTION="$(python3 scripts/publication_timing.py --decision --event-name schedule)"
           if [[ "$ACTION" == "missed" ]]; then
