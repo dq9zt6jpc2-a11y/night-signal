@@ -116,7 +116,8 @@ DETAIL_FORBIDDEN_SECTION_HEADINGS = [
     "今回の要点",
     "一次で押さえる点",
 ]
-DEFAULT_DETAIL_SUMMARY_HEADING = "概要"
+DEFAULT_DETAIL_SUMMARY_HEADING = "確認できた事実"
+OPTIONAL_DETAIL_SECTION_HEADINGS = ["分析・兆し", "反証・不確実性"]
 
 READER_PROCESS_LEAK_TERMS = [
     "今日の再抽出",
@@ -714,7 +715,12 @@ def validate_detail_quality(issue_date: str, root_html: str, dated_html: str) ->
         h2_texts = heading_texts(html, ("h2",))
         if any(any(term in heading for term in DETAIL_FORBIDDEN_SECTION_HEADINGS) for heading in h2_texts):
             checklist_headings.append(name)
-        if h2_texts != [detail_summary_heading()]:
+        expected_first = detail_summary_heading()
+        optional_headings = [
+            heading for heading in OPTIONAL_DETAIL_SECTION_HEADINGS if heading in h2_texts
+        ]
+        expected_headings = [expected_first, *optional_headings]
+        if h2_texts != expected_headings:
             article_structure_failures.append(f"{name}: h2={h2_texts or '-'}")
         summary_match = re.search(r'<div class="article-summary">(.*?)</div>', html, flags=re.S)
         if not summary_match:

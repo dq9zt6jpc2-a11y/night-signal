@@ -173,14 +173,22 @@ def prepare_packet(
     except evidence_store.EvidenceContractError as exc:
         fail(str(exc))
     gaps = core.remaining_editor_coverage_gaps(evidence, report)
+    reported_gaps = [str(value) for value in report.get("editor_coverage_gaps", [])]
     write_json_atomic(
         state_root / issue_date / "source_gap_report.json",
-        source_health.pre_editor_report(issue_date, evidence, gaps),
+        source_health.pre_editor_report(issue_date, evidence, reported_gaps),
     )
     if gaps:
-        fail(
-            "Evidence has material watch topics without resolved source content: "
-            + ", ".join(gaps)
+        print(
+            json.dumps(
+                {
+                    "phase": "unresolved_source_depth_recorded",
+                    "gaps": gaps,
+                    "publication_continues": True,
+                },
+                ensure_ascii=False,
+            ),
+            flush=True,
         )
     requests = review_requests(issue_date, evidence, state_root)
     evidence_hash = evidence_store.bundle_sha256(evidence_path)
@@ -191,6 +199,8 @@ def prepare_packet(
         "editor_contract_sha256": state.editor_contract_sha256(),
         "policy": {
             "no_publication_quota": True,
+            "coverage_before_analysis": True,
+            "analysis_must_never_suppress_a_verified_news_item": True,
             "review_every_event": True,
             "previous_updates_are_novelty_only": True,
             "source_publication_date_is_not_an_event_delta": True,
@@ -201,6 +211,13 @@ def prepare_packet(
             "allowed_topic_value_classes": sorted(core.ALLOWED_TOPIC_VALUES),
             "one_point_only_for_one_distinct_supported_delta": True,
             "no_background_or_repetition_for_length": True,
+            "retain_subject_change_numbers_dates_scope_conditions_reasons_results": True,
+            "headline_only_cannot_be_published": True,
+            "prefer_official_specialist_and_primary_body_sources": True,
+            "preserve_distinct_facts_from_multiple_sources_in_one_event": True,
+            "optional_analysis_requires_two_independent_body_sources": True,
+            "analysis_separates_inference_counterargument_uncertainty": True,
+            "analysis_must_not_pad_or_repeat_confirmed_facts": True,
             "earnings_results_and_material_market_moves_are_not_routine": True,
             "headline_only_requires_insufficient_evidence": True,
         },
@@ -243,6 +260,8 @@ def prepare_packet(
                 and str(check.get("query_id", "")).startswith("depth:")
             ),
             "observed_urls": len(report["observed_urls"]),
+            "reported_editor_coverage_gaps": len(reported_gaps),
+            "unattempted_editor_coverage_gaps": len(gaps),
         },
     }
     write_json_compact_atomic(output_path, packet)

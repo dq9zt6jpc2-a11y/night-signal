@@ -27,7 +27,8 @@ def normalize_current_detail_contract(temp: Path) -> None:
             continue
         for detail in path.glob("*.html"):
             html = detail.read_text(encoding="utf-8")
-            html = html.replace("<h2>要点と背景</h2>", "<h2>概要</h2>")
+            html = html.replace("<h2>要点と背景</h2>", "<h2>確認できた事実</h2>")
+            html = html.replace("<h2>概要</h2>", "<h2>確認できた事実</h2>")
             html = re.sub(
                 r'\s*<p class="source-dates">確認日付:.*?</p>',
                 "",

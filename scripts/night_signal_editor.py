@@ -105,6 +105,18 @@ def public_item_copy(item: dict[str, Any]) -> tuple[str, str]:
 
 
 def quality_model_required(category_payload: dict[str, Any]) -> bool:
+    for event in category_payload.get("events", []):
+        if not isinstance(event, dict):
+            continue
+        body_sources = {
+            str(item.get("source", ""))
+            for item in event.get("evidence", [])
+            if isinstance(item, dict)
+            and item.get("evidence_depth") == "body"
+            and str(item.get("source", ""))
+        }
+        if len(body_sources) >= 2:
+            return True
     evidence = [
         item
         for event in category_payload.get("events", [])
@@ -241,6 +253,10 @@ def flatten_event_response(
             invalid_event_decisions[event_id] = "unknown_decision"
         elif decision == "publish" and not event_items:
             invalid_event_decisions[event_id] = "publish_without_items"
+        elif decision == "publish" and "body" not in event_evidence_depths.get(
+            event_id, set()
+        ):
+            invalid_event_decisions[event_id] = "headline_only_cannot_publish"
         elif decision != "publish" and event_items:
             invalid_event_decisions[event_id] = "excluded_event_with_items"
         elif (
@@ -270,6 +286,13 @@ def flatten_event_response(
                 for evidence_id in point.get("evidence_ids", [])
                 if isinstance(evidence_id, str)
             }
+            analysis = item.get("analysis")
+            if isinstance(analysis, dict):
+                cited_ids.update(
+                    str(evidence_id)
+                    for evidence_id in analysis.get("evidence_ids", [])
+                    if isinstance(evidence_id, str)
+                )
             cross_event_evidence_ids.update(cited_ids - allowed_ids)
     duplicate_event_ids = sorted(
         event_id
@@ -851,7 +874,7 @@ def representative_event_records(
     records: list[dict[str, Any]],
     *,
     max_payload_bytes: int = 20_000,
-    selection_limit: int = 8,
+    selection_limit: int = 12,
 ) -> list[dict[str, Any]]:
     """Bound a duplicate-heavy event without shortening any selected source."""
     if len(records) == 1:
@@ -863,20 +886,47 @@ def representative_event_records(
     ):
         return list(records)
 
-    def rank(indexed: tuple[int, dict[str, Any]]) -> tuple[int, int, int]:
+    def record_fact_keys(record: dict[str, Any]) -> set[str]:
+        return {
+            state.copy_signature(fact)
+            for fact in record_material_sentences(record)
+            if state.copy_signature(fact)
+        }
+
+    def rank(
+        indexed: tuple[int, dict[str, Any]],
+        seen_fact_keys: set[str],
+    ) -> tuple[int, int, int, int, int]:
         index, record = indexed
         title = core.record_public_title(record)
         body = str(record.get("excerpt") or record.get("evidence") or "")
         japanese = len(re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", f"{title} {body}"))
-        return (int(japanese >= 12), min(len(body), 8000), -index)
+        authority = core.SOURCE_AUTHORITY_RANK.get(
+            core.effective_source_class(record), 0
+        )
+        novel_facts = len(record_fact_keys(record) - seen_fact_keys)
+        return (
+            novel_facts,
+            authority,
+            int(japanese >= 12),
+            min(len(body), 8000),
+            -index,
+        )
 
     selected: list[dict[str, Any]] = []
-    for _, record in sorted(enumerate(records), key=rank, reverse=True):
+    remaining = list(enumerate(records))
+    seen_fact_keys: set[str] = set()
+    while remaining and len(selected) < selection_limit:
+        indexed = max(
+            remaining,
+            key=lambda value: rank(value, seen_fact_keys),
+        )
+        remaining.remove(indexed)
+        _, record = indexed
         proposed = [*selected, record]
-        if len(proposed) > selection_limit:
-            continue
         if model_payload_bytes(category, issue_date, proposed) <= max_payload_bytes:
             selected = proposed
+            seen_fact_keys.update(record_fact_keys(record))
     if not selected:
         raise ValueError("no complete representative source fits the event request limit")
     return selected
@@ -1022,6 +1072,32 @@ def item_card(
     if not slug_stem.endswith(f"-{issue_date}"):
         slug_stem = f"{slug_stem}-{issue_date}"
     slug = f"{slug_stem}.html"
+    analysis = item.get("analysis") if isinstance(item.get("analysis"), dict) else None
+    summary_basis: dict[str, Any] = {
+        "confirmed_facts": facts,
+        "fact_sources": item["fact_sources"],
+        "source_dates": sorted(
+            {
+                str(source.get("published_date"))
+                for source in item["sources"]
+                if source.get("published_date")
+            }
+        ),
+    }
+    if analysis:
+        summary_basis.update(
+            {
+                "why_it_matters": str(analysis["inference"]),
+                "limits_or_unknowns": (
+                    f"反証: {analysis['counterargument']} "
+                    f"残る不確実性: {analysis['remaining_uncertainty']}"
+                ),
+                "analysis_basis": {
+                    "confidence": str(analysis["confidence"]),
+                    "source_urls": list(analysis["source_urls"]),
+                },
+            }
+        )
     return {
         "watch_topic_id": str(item["watch_topic_id"]),
         "title": card_title,
@@ -1042,17 +1118,7 @@ def item_card(
                 for source in item["sources"]
             ],
             "summary": card_summary,
-            "summary_basis": {
-                "confirmed_facts": facts,
-                "fact_sources": item["fact_sources"],
-                "source_dates": sorted(
-                    {
-                        str(source.get("published_date"))
-                        for source in item["sources"]
-                        if source.get("published_date")
-                    }
-                ),
-            },
+            "summary_basis": summary_basis,
         },
     }
 
@@ -2103,6 +2169,39 @@ def self_test() -> None:
         ],
     }
     card = item_card("OpenAI", "openai", item, "2099-01-01")
+    analysis_item = copy.deepcopy(item)
+    analysis_item["sources"].append(
+        {
+            "label": "Security Specialist",
+            "url": "https://specialist.example/analysis",
+            "published_date": "2099-01-01",
+        }
+    )
+    analysis_item["analysis"] = {
+        "inference": "二つの本文根拠は、修正工程まで自動化が進む兆しを示唆する。",
+        "counterargument": "単一製品の事例だけでは市場全体への波及を確認できない。",
+        "remaining_uncertainty": "他社環境での再現性は未確認である。",
+        "confidence": "medium",
+        "source_urls": [
+            "https://openai.com/example",
+            "https://specialist.example/analysis",
+        ],
+    }
+    analysis_card = item_card(
+        "OpenAI", "openai", analysis_item, "2099-01-01"
+    )
+    analysis_basis = analysis_card["detail"]["summary_basis"]
+    if (
+        analysis_basis.get("why_it_matters") != analysis_item["analysis"]["inference"]
+        or analysis_basis.get("analysis_basis", {}).get("confidence") != "medium"
+    ):
+        fail("Editor mixed or dropped the optional analysis layer")
+    state.validate_public_card_copy(
+        analysis_card,
+        analysis_card["detail"],
+        issue_date="2099-01-01",
+        card_index=1,
+    )
     if set(card) != {
         "title",
         "watch_topic_id",

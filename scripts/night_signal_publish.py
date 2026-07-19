@@ -177,8 +177,6 @@ def fresh_evidence(
         report = evidence_store.validate_bundle(bundle, issue_date)
     except evidence_store.EvidenceContractError:
         return False
-    if core.remaining_editor_coverage_gaps(bundle, report):
-        return False
     return evidence_reusable(
         bundle,
         issue_date,

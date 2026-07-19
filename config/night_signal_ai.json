@@ -1,6 +1,6 @@
 {
   "contract_version": "2026-07-17.01",
-  "editor_contract_revision": "codex-plus-review-v1-event-boundary-unbounded",
+  "editor_contract_revision": "codex-plus-review-v2-broad-deep-lossless",
   "additional_paid_services_allowed": false,
   "included_subscription": "ChatGPT Plus",
   "production_editor": {

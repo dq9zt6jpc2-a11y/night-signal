@@ -245,6 +245,18 @@ SUMMARY_BASIS_SCHEMA: dict[str, Any] = {
             },
         },
         "limits_or_unknowns": {"type": "string"},
+        "analysis_basis": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["confidence", "source_urls"],
+            "properties": {
+                "confidence": {"type": "string"},
+                "source_urls": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                },
+            },
+        },
         "source_dates": {"type": "array", "items": {"type": "string"}},
     },
 }
@@ -812,6 +824,40 @@ def validate_summary_basis(
             limits,
             kind="summary",
         )
+
+    analysis_basis = basis.get("analysis_basis")
+    if why_it_matters is None and analysis_basis is not None:
+        fail(
+            f"cards[{card_index}].detail.summary_basis.analysis_basis "
+            "requires why_it_matters"
+        )
+    if why_it_matters is not None and analysis_basis is not None:
+        if not isinstance(analysis_basis, dict):
+            fail(
+                f"cards[{card_index}].detail.summary_basis.analysis_basis "
+                "must be an object"
+            )
+        confidence = analysis_basis.get("confidence")
+        analysis_urls = analysis_basis.get("source_urls")
+        detail_urls = {
+            str(source.get("url"))
+            for source in detail.get("sources", [])
+            if isinstance(source, dict)
+        }
+        if confidence not in {"high", "medium", "low"}:
+            fail(
+                f"cards[{card_index}].detail.summary_basis.analysis_basis "
+                "has invalid confidence"
+            )
+        if (
+            not isinstance(analysis_urls, list)
+            or len(set(str(url) for url in analysis_urls)) < 2
+            or any(str(url) not in detail_urls for url in analysis_urls)
+        ):
+            fail(
+                f"cards[{card_index}].detail.summary_basis.analysis_basis "
+                "must cite at least two detail sources"
+            )
 
     facts = basis.get("confirmed_facts")
     if not isinstance(facts, list) or not any(

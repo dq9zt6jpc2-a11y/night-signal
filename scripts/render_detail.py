@@ -142,10 +142,38 @@ def render_sources(sources: list[Any]) -> str:
 
 def render_information_basis(summary: str, basis: dict[str, Any]) -> str:
     required_list(basis, "source_dates")
-    return f"""      <h2>概要</h2>
+    analysis = basis.get("why_it_matters")
+    limits = basis.get("limits_or_unknowns")
+    analysis_basis = basis.get("analysis_basis")
+    analysis_block = ""
+    if isinstance(analysis, str) and analysis.strip():
+        confidence = (
+            str(analysis_basis.get("confidence", ""))
+            if isinstance(analysis_basis, dict)
+            else ""
+        )
+        confidence_label = {
+            "high": "高",
+            "medium": "中",
+            "low": "低",
+        }.get(confidence, "未評価")
+        analysis_block = f"""
+      <h2>分析・兆し</h2>
+      <div class="article-summary">
+        <p>{html.escape(analysis.strip())}</p>
+        <p><strong>確信度:</strong> {confidence_label}</p>
+      </div>"""
+    limits_block = ""
+    if isinstance(limits, str) and limits.strip():
+        limits_block = f"""
+      <h2>反証・不確実性</h2>
+      <div class="article-summary">
+        <p>{html.escape(limits.strip())}</p>
+      </div>"""
+    return f"""      <h2>確認できた事実</h2>
       <div class="article-summary">
         <p>{html.escape(summary)}</p>
-      </div>"""
+      </div>{analysis_block}{limits_block}"""
 
 
 def render(data: dict[str, Any]) -> str:

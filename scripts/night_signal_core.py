@@ -1130,13 +1130,16 @@ def same_material_event(left: Any, right: Any) -> bool:
     )
 
 
-def cluster_priority(record: dict[str, Any], category: dict[str, Any]) -> tuple[int, str]:
+def cluster_priority(
+    record: dict[str, Any],
+    category: dict[str, Any],
+) -> tuple[int, int, str]:
     title = str(record.get("title", ""))
     excerpt = str(record.get("excerpt", ""))
     text = f"{title} {excerpt}"
-    score = 0
-    if effective_source_class(record) != "discovered_media":
-        score += 4
+    score = SOURCE_AUTHORITY_RANK.get(effective_source_class(record), 0) * 4
+    score += 5 * record_has_material_body(record_public_title(record), record)
+    score += 2 * (effective_source_role(record) == "primary_or_official")
     if any(
         str(term).lower() in text.lower()
         for topic in category.get("watch_topics", [])
@@ -1148,7 +1151,7 @@ def cluster_priority(record: dict[str, Any], category: dict[str, Any]) -> tuple[
         score += 1
     if str(record.get("publisher_url", "")).startswith(("http://", "https://")):
         score += 1
-    return score, compact_text(title or excerpt, 160)
+    return score, min(len(excerpt), 8000), compact_text(title or excerpt, 160)
 
 
 def select_clustered_evidence(
@@ -1156,16 +1159,48 @@ def select_clustered_evidence(
     records: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
     observed = [record for record in records if record.get("observed")]
-    clustered: dict[str, dict[str, Any]] = {}
+    clustered: dict[str, list[dict[str, Any]]] = {}
     for record in observed:
         key = record_cluster_key(record)
         if not key:
             key = str(record.get("url", ""))
-        current = clustered.get(key)
-        if current is None or cluster_priority(record, category) > cluster_priority(current, category):
-            clustered[key] = record
+        clustered.setdefault(key, []).append(record)
+    selected: list[dict[str, Any]] = []
+    for group in clustered.values():
+        ranked = sorted(
+            group,
+            key=lambda record: cluster_priority(record, category),
+            reverse=True,
+        )
+        hosts: set[str] = set()
+        source_classes: set[str] = set()
+        for record in ranked:
+            host = normalized_source_host(
+                record.get("publisher_url") or record.get("url")
+            )
+            source_class = effective_source_class(record)
+            if any(
+                state_contract.materially_same_fact(
+                    editor_source_text(record, 2400),
+                    editor_source_text(existing, 2400),
+                )
+                for existing in selected
+                if (record_cluster_key(existing) or str(existing.get("url", "")))
+                == (record_cluster_key(record) or str(record.get("url", "")))
+            ):
+                continue
+            if (
+                hosts
+                and source_class in source_classes
+                and not record_has_material_body(record_public_title(record), record)
+            ):
+                continue
+            selected.append(record)
+            if host:
+                hosts.add(host)
+            source_classes.add(source_class)
     records_by_score = sorted(
-        clustered.values(),
+        selected,
         key=lambda record: cluster_priority(record, category),
         reverse=True,
     )
@@ -1407,7 +1442,7 @@ def record_has_material_body(title: str, record: dict[str, Any]) -> bool:
     ).strip()
     title_for_anchor = headline_core or canonical_title
     title_japanese = "".join(
-        re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", title_for_anchor)
+        re.findall(r"[\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af]", title_for_anchor)
     )
     title_ngrams = {
         title_japanese[index : index + 4]
@@ -1423,15 +1458,24 @@ def record_has_material_body(title: str, record: dict[str, Any]) -> bool:
         if (
             state_contract.DOCUMENT_EXTRACTION_NOISE_RE.search(sentence)
             or state_contract.SOURCE_CHROME_RE.search(sentence)
+            or re.search(
+                r"(?:cookie|privacy policy|terms of use|sign up|log in|"
+                r"subscribe|newsletter|advertisement|accept all|consent|"
+                r"already a subscriber|skip to main content|"
+                r"クッキー|プライバシー|会員登録|ログイン|購読|広告)",
+                sentence,
+                re.I,
+            )
         ):
             continue
+        added_terms = (
+            state_contract.content_terms(sentence)
+            - state_contract.content_terms(title)
+        )
+        added_numbers = numeric_claims(sentence) - numeric_claims(title)
         repetition_score = state_contract.title_repetition_score(title, sentence)
         if repetition_score >= 0.82:
             canonical_sentence = canonical_article_match_text(sentence)
-            added_terms = state_contract.content_terms(
-                sentence
-            ) - state_contract.content_terms(title)
-            added_numbers = numeric_claims(sentence) - numeric_claims(title)
             adds_substance = bool(
                 len(added_terms) >= 2
                 or added_numbers
@@ -1446,7 +1490,7 @@ def record_has_material_body(title: str, record: dict[str, Any]) -> bool:
             ):
                 continue
         sentence_japanese = "".join(
-            re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", sentence)
+            re.findall(r"[\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af]", sentence)
         )
         sentence_ngrams = {
             sentence_japanese[index : index + 4]
@@ -1468,11 +1512,21 @@ def record_has_material_body(title: str, record: dict[str, Any]) -> bool:
         )
         if not visible_count or letter_count / visible_count < 0.45:
             continue
-        japanese_count = len(re.findall(r"[\u3040-\u30ff\u3400-\u9fff]", sentence))
+        japanese_count = len(
+            re.findall(r"[\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af]", sentence)
+        )
         latin_words = re.findall(r"[A-Za-z][A-Za-z0-9'-]{2,}", sentence)
-        if japanese_count >= 8 and useful_fact(sentence, ""):
+        if (
+            japanese_count >= 8
+            and useful_fact(sentence, "")
+            and (len(added_terms) >= 2 or bool(added_numbers))
+        ):
             return True
-        if len(latin_words) >= 8 and not state_contract.navigation_shell_text(sentence):
+        if (
+            len(latin_words) >= 8
+            and (len(added_terms) >= 4 or bool(added_numbers))
+            and not state_contract.navigation_shell_text(sentence)
+        ):
             return True
     return False
 
@@ -1787,20 +1841,50 @@ def editor_evidence_records(
 def normalized_financial_amounts(value: str) -> tuple[list[tuple[str, float]], str]:
     amounts: list[tuple[str, float]] = []
     spans: list[tuple[int, int]] = []
-    japanese = re.compile(
-        r"((?:\d[\d,]*(?:\.\d+)?\s*(?:兆|億|万)\s*){1,3})"
-        r"(ドル|円|ユーロ|ポンド)"
+    japanese_number = (
+        r"(?:\d[\d,]*(?:\.\d+)?\s*(?:兆|億|万|千)\s*)+"
+        r"(?:\d[\d,]*(?:\.\d+)?)?"
     )
-    unit_scale = {"兆": 1e12, "億": 1e8, "万": 1e4}
+    japanese = re.compile(
+        rf"(?P<number>{japanese_number})\s*(?P<currency>ドル|円|ユーロ|ポンド)"
+    )
+    japanese_range = re.compile(
+        rf"(?P<left>{japanese_number})\s*[～〜–—-]\s*"
+        rf"(?P<right>{japanese_number})\s*(?P<currency>ドル|円|ユーロ|ポンド)"
+    )
+    unit_scale = {"兆": 1e12, "億": 1e8, "万": 1e4, "千": 1e3}
     currency_map = {"ドル": "USD", "円": "JPY", "ユーロ": "EUR", "ポンド": "GBP"}
-    for match in japanese.finditer(value):
+
+    def japanese_amount(raw: str) -> float:
         total = sum(
             float(number.replace(",", "")) * unit_scale[unit]
             for number, unit in re.findall(
-                r"(\d[\d,]*(?:\.\d+)?)\s*(兆|億|万)", match.group(1)
+                r"(\d[\d,]*(?:\.\d+)?)\s*(兆|億|万|千)", raw
             )
         )
-        amounts.append((currency_map[match.group(2)], total))
+        trailing = re.search(r"(?:兆|億|万|千)\s*(\d[\d,]*(?:\.\d+)?)\s*$", raw)
+        return total + (
+            float(trailing.group(1).replace(",", "")) if trailing else 0.0
+        )
+
+    for match in japanese_range.finditer(value):
+        currency = currency_map[match.group("currency")]
+        amounts.extend(
+            [
+                (currency, japanese_amount(match.group("left"))),
+                (currency, japanese_amount(match.group("right"))),
+            ]
+        )
+        spans.append(match.span())
+    for match in japanese.finditer(value):
+        if any(match.start() < end and match.end() > start for start, end in spans):
+            continue
+        amounts.append(
+            (
+                currency_map[match.group("currency")],
+                japanese_amount(match.group("number")),
+            )
+        )
         spans.append(match.span())
     english = re.compile(
         r"(?:(?P<symbol>[$€£])\s*)?"
@@ -1994,7 +2078,28 @@ def fact_supported_by_records(
         ):
             continue
         if source_requires_japanese_translation(evidence):
-            return True
+            fact_anchors = {
+                value.casefold()
+                for value in re.findall(r"[A-Za-z][A-Za-z0-9.+-]{1,}", fact)
+                if value.casefold()
+                not in {"ai", "the", "and", "for", "with", "from"}
+            }
+            evidence_anchors = {
+                value.casefold()
+                for value in re.findall(
+                    r"[A-Za-z][A-Za-z0-9.+-]{1,}", evidence
+                )
+            }
+            if (
+                bool(fact_numbers)
+                or bool(fact_amounts)
+                or (
+                    record_has_material_body(title, record)
+                    and bool(fact_anchors & evidence_anchors)
+                )
+            ):
+                return True
+            continue
         if (
             state_contract.materially_same_fact(fact, title)
             or state_contract.text_overlap(fact, evidence) >= 1
@@ -3504,6 +3609,12 @@ def remaining_editor_coverage_gaps(
             and int(check.get("material_candidate_count", 0)) > 0
             and int(check.get("resolved_candidate_count", 0)) == 0
         }
+        bounded_depth_attempted = any(
+            isinstance(check, dict)
+            and str(check.get("query_id", "")).startswith("depth:")
+            and topic in check.get("watch_topic_ids", [])
+            for check in entry.get("discovery_checks", [])
+        )
         candidates = [
             record
             for record in records
@@ -3529,7 +3640,7 @@ def remaining_editor_coverage_gaps(
         if candidates and not all(
             material_candidate_has_resolved_peer(candidate, records)
             for candidate in candidates
-        ):
+        ) and not bounded_depth_attempted:
             remaining.append(str(gap))
     return remaining
 
@@ -4012,6 +4123,107 @@ def derived_watch_topic(
     return max(ranked, default=(0, 0, ""))[2]
 
 
+ANALYSIS_INFERENCE_RE = re.compile(
+    r"(?:示唆|兆し|可能性|とみられ|考えられ|整合|一方|反面|"
+    r"suggest|indicat|signal|could|may\b)",
+    re.I,
+)
+
+
+def normalize_analysis_block(
+    raw: Any,
+    records_by_id: dict[str, dict[str, Any]],
+) -> tuple[dict[str, Any] | None, list[str]]:
+    """Validate optional multi-source analysis separately from confirmed facts."""
+    if raw is None:
+        return None, []
+    if not isinstance(raw, dict):
+        return None, ["analysis_shape"]
+    inference = reader_facing_text(raw.get("inference", ""), 900)
+    counterargument = reader_facing_text(raw.get("counterargument", ""), 700)
+    uncertainty = reader_facing_text(raw.get("remaining_uncertainty", ""), 700)
+    confidence = str(raw.get("confidence", ""))
+    evidence_ids = list(
+        dict.fromkeys(
+            str(value)
+            for value in raw.get("evidence_ids", [])
+            if isinstance(value, str) and value
+        )
+    )
+    unknown_ids = [value for value in evidence_ids if value not in records_by_id]
+    records = [records_by_id[value] for value in evidence_ids if value in records_by_id]
+    hosts = {
+        normalized_source_host(record.get("publisher_url") or record.get("url"))
+        for record in records
+        if normalized_source_host(record.get("publisher_url") or record.get("url"))
+    }
+    reasons: list[str] = []
+    if not inference or not counterargument or not uncertainty:
+        reasons.append("analysis_layers_incomplete")
+    if confidence not in {"high", "medium", "low"}:
+        reasons.append("analysis_confidence")
+    if unknown_ids:
+        reasons.append("analysis_unknown_evidence_id")
+    if len(evidence_ids) < 2 or len(hosts) < 2:
+        reasons.append("analysis_requires_two_independent_sources")
+    if records and any(
+        record_evidence_depth(record_public_title(record), record) != "body"
+        for record in records
+    ):
+        reasons.append("analysis_requires_body_evidence")
+    if records and not any(record_has_trusted_editor_source(record) for record in records):
+        reasons.append("analysis_requires_trusted_source")
+    if inference and not ANALYSIS_INFERENCE_RE.search(inference):
+        reasons.append("analysis_not_labeled_as_inference")
+    if any(
+        not reader_public_copy_ok(text, kind="summary")
+        for text in (inference, counterargument, uncertainty)
+        if text
+    ):
+        reasons.append("analysis_copy")
+    analysis_text = " ".join((inference, counterargument, uncertainty))
+    analysis_amounts, analysis_without_amounts = normalized_financial_amounts(
+        analysis_text
+    )
+    evidence_text = " ".join(
+        f"{record.get('title', '')} {record.get('excerpt') or record.get('evidence') or ''}"
+        for record in records
+    )
+    evidence_amounts, evidence_without_amounts = normalized_financial_amounts(
+        evidence_text
+    )
+    evidence_numbers = numeric_claims(evidence_without_amounts)
+    if any(
+        not numeric_claim_supported(number, evidence_numbers, approximate=True)
+        for number in numeric_claims(analysis_without_amounts)
+    ):
+        reasons.append("analysis_unsupported_number")
+    if any(
+        not any(
+            (currency == observed_currency or "UNSPECIFIED" in {currency, observed_currency})
+            and abs(amount - observed_amount) <= max(1.0, abs(amount) * 1e-9)
+            for observed_currency, observed_amount in evidence_amounts
+        )
+        for currency, amount in analysis_amounts
+    ):
+        reasons.append("analysis_unsupported_amount")
+    if reasons:
+        return None, list(dict.fromkeys(reasons))
+    return (
+        {
+            "inference": inference,
+            "counterargument": counterargument,
+            "remaining_uncertainty": uncertainty,
+            "confidence": confidence,
+            "evidence_ids": evidence_ids,
+            "source_urls": list(
+                dict.fromkeys(str(record.get("url")) for record in records)
+            ),
+        },
+        [],
+    )
+
+
 def normalize_result(
     raw: dict[str, Any],
     category: dict[str, Any],
@@ -4075,7 +4287,6 @@ def normalize_result(
                 continue
             for normalized_text in normalized_texts:
                 if normalized_text in seen_point_texts:
-                    invalid_point_shape = True
                     continue
                 seen_point_texts.add(normalized_text)
                 support_quotes = [
@@ -4110,7 +4321,7 @@ def normalize_result(
             print(
                 json.dumps(
                     {
-                        "phase": "unsupported_summary_points_removed",
+                        "phase": "unsupported_summary_points_rejected",
                         "category": category.get("label"),
                         "facts": unsupported_facts,
                     },
@@ -4129,7 +4340,7 @@ def normalize_result(
             print(
                 json.dumps(
                     {
-                        "phase": "invalid_summary_points_removed",
+                        "phase": "invalid_summary_points_rejected",
                         "category": category.get("label"),
                         "title": title,
                     },
@@ -4137,6 +4348,35 @@ def normalize_result(
                 ),
                 flush=True,
             )
+        unknown_evidence_ids = [
+            evidence_id
+            for evidence_id in evidence_ids
+            if evidence_id not in records_by_id
+        ]
+        source_records = [
+            records_by_id[evidence_id]
+            for evidence_id in evidence_ids
+            if evidence_id in records_by_id
+        ]
+        analysis, analysis_reasons = normalize_analysis_block(
+            item.get("analysis"),
+            records_by_id,
+        )
+        if analysis_reasons:
+            print(
+                json.dumps(
+                    {
+                        "phase": "analysis_not_published",
+                        "category": category.get("label"),
+                        "title": title,
+                        "reasons": analysis_reasons,
+                    },
+                    ensure_ascii=False,
+                ),
+                flush=True,
+            )
+        analysis_evidence_ids = analysis.get("evidence_ids", []) if analysis else []
+        evidence_ids = list(dict.fromkeys([*evidence_ids, *analysis_evidence_ids]))
         unknown_evidence_ids = [
             evidence_id
             for evidence_id in evidence_ids
@@ -4205,8 +4445,19 @@ def normalize_result(
             for fact, (_, point_ids, _) in zip(facts, point_values)
         ]
         rejection_checks = [
+            ("invalid_summary_point", invalid_point_shape),
+            ("unsupported_summary_point", bool(unsupported_facts)),
             ("missing_evidence_id", not evidence_ids),
             ("unknown_evidence_id", bool(unknown_evidence_ids)),
+            (
+                "insufficient_body_evidence",
+                bool(source_records)
+                and not any(
+                    record_evidence_depth(record_public_title(record), record)
+                    == "body"
+                    for record in source_records
+                ),
+            ),
             ("unknown_topic", topic not in valid_topics),
             (
                 "missing_event_id",
@@ -4328,6 +4579,7 @@ def normalize_result(
                 ),
                 "confirmed_facts": facts,
                 "fact_sources": fact_source_urls,
+                "analysis": analysis,
                 "sources": sources,
                 "observation_source_role": first_source["source_role"],
                 "observation_channel": first_source["channel"],
@@ -5055,8 +5307,14 @@ def self_test() -> None:
         "2099-01-03",
         [headline_record],
     )
-    if not headline_normalized["coverage_complete"] or not headline_normalized["items"]:
-        fail("headline Evidence could not produce a non-repetitive supported update")
+    if headline_normalized["coverage_complete"] or headline_normalized["items"]:
+        fail("headline-only Evidence was allowed to become a public update")
+    if not any(
+        "insufficient_body_evidence" in rejection.get("reasons", [])
+        for rejection in headline_normalized.get("rejected_items", [])
+        if isinstance(rejection, dict)
+    ):
+        fail("headline-only rejection did not identify the missing body Evidence")
     undated_record = {
         **navigation_record,
         "url": "https://example.com/yoasobi-release",
@@ -5331,6 +5589,91 @@ def self_test() -> None:
         metadata_only_record["title"], metadata_only_record
     ):
         fail("extraction metadata was accepted as a material article body")
+    newsletter_shell_record = {
+        **english_record,
+        "title": "OpenAI CFO proposes useful intelligence per dollar metric",
+        "excerpt": (
+            "OpenAI CFO proposes useful intelligence per dollar metric. "
+            "Sign up for our newsletter. Accept all cookies. Subscribe to read "
+            "more. Privacy policy. Already a subscriber? Log in."
+        ),
+    }
+    if record_has_material_body(
+        newsletter_shell_record["title"], newsletter_shell_record
+    ):
+        fail("headline plus newsletter shell was accepted as article body")
+    salary_record = {
+        **english_record,
+        "title": "OpenAI hires an applied AI banking specialist",
+        "excerpt": (
+            "OpenAI is hiring an applied AI banking specialist in San Francisco. "
+            "The role pays $185,000-$205,000 plus equity and requires at least "
+            "two years of live transaction experience."
+        ),
+    }
+    if not fact_supported_by_records(
+        "基本給は18万5,000～20万5,000ドルで、株式報酬も付く。",
+        [salary_record],
+    ):
+        fail("localized Japanese currency range lost valid source support")
+    if fact_supported_by_records(
+        "基本給は18万5,000～21万5,000ドルで、株式報酬も付く。",
+        [salary_record],
+    ):
+        fail("localized Japanese currency range accepted a different amount")
+    multi_source_records = [
+        {
+            **english_record,
+            "label": "Official",
+            "source_class": "official",
+            "source_role": "primary_or_official",
+            "url": "https://official.example/event",
+            "publisher_url": "https://official.example/",
+            "title": "OpenAI launches a new security model",
+        },
+        {
+            **english_record,
+            "label": "Security Specialist",
+            "source_class": "specialist_media",
+            "url": "https://specialist.example/event-analysis",
+            "publisher_url": "https://specialist.example/",
+            "title": "OpenAI launches a new security model",
+            "excerpt": (
+                "OpenAI launched the security model for enterprise customers. "
+                "Independent testing found faster vulnerability triage and "
+                "documented the deployment conditions."
+            ),
+        },
+    ]
+    retained_sources = select_clustered_evidence(openai_category, multi_source_records)
+    if len(retained_sources) != 2:
+        fail("event clustering discarded a distinct official or specialist source")
+    analysis_fixture = {
+        "inference": (
+            "公式発表と専門媒体の検証結果は、企業向け脆弱性対応の"
+            "自動化が実運用へ進む兆しを示唆する。"
+        ),
+        "counterargument": (
+            "単一製品の導入結果だけでは市場全体への波及を確認できない。"
+        ),
+        "remaining_uncertainty": (
+            "他社環境での再現性と長期運用時の誤検知率は未確認である。"
+        ),
+        "confidence": "medium",
+        "evidence_ids": ["e001", "e002"],
+    }
+    normalized_analysis, analysis_errors = normalize_analysis_block(
+        analysis_fixture,
+        {"e001": multi_source_records[0], "e002": multi_source_records[1]},
+    )
+    if analysis_errors or not normalized_analysis:
+        fail("valid multi-source analysis did not pass the separate analysis contract")
+    _, thin_analysis_errors = normalize_analysis_block(
+        {**analysis_fixture, "evidence_ids": ["e001"]},
+        {"e001": multi_source_records[0]},
+    )
+    if "analysis_requires_two_independent_sources" not in thin_analysis_errors:
+        fail("single-source text was accepted as multi-source analysis")
     category = {
         "label": "Test",
         "watch_topics": [
@@ -5500,10 +5843,12 @@ def self_test() -> None:
         }
     )
     padded_result = normalize_result(padded_raw, category, "2099-01-03", records)
-    if len(padded_result["items"]) != 1 or "競争が激化" in padded_result["items"][0][
-        "summary"
-    ]:
-        fail("normalization did not remove an unsupported padding claim")
+    if padded_result["items"] or not any(
+        "unsupported_summary_point" in rejection.get("reasons", [])
+        for rejection in padded_result.get("rejected_items", [])
+        if isinstance(rejection, dict)
+    ):
+        fail("normalization silently removed an unsupported padding claim")
     repeated_raw = json.loads(json.dumps(raw))
     repeated_raw["items"][0]["summary_points"].append(
         repeated_raw["items"][0]["summary_points"][0]

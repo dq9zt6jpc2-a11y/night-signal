@@ -119,6 +119,19 @@ numbers, dates, scope, conditions, reasons, and results needed to understand an
 accepted event. Quarterly, annual, and final earnings results and material
 market moves remain eligible.
 
+Breadth and source depth come before analysis. Account for every category,
+watch topic, request, and event. Treat discovery indexes as leads and prefer
+official, specialist, technical, financial, regulatory, and independent body
+Evidence. When several sources cover one event, retain every distinct supported
+fact instead of copying one account. Never publish headline-only Evidence.
+Optional analysis must not suppress a verified news item: add it only when two
+independent body sources support a labeled inference, counterargument, remaining
+uncertainty, and confidence. Otherwise omit analysis without shortening or
+discarding the verified fact summary. Never pad either layer.
+An unresolved body candidate stays in the source-gap diagnostics; it is not a
+headline-based public item and does not suppress other verified news or the
+daily Web publication.
+
 Create branch night-signal-review-ISSUE_DATE from main only if it does not
 exist. Create cloud-review/ISSUE_DATE/editor_review.json as one valid JSON object
 with contract, issue_date, the exact manifest evidence_sha256, every response,

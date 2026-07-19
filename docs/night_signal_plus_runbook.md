@@ -84,6 +84,13 @@ Write `state/$ISSUE_DATE/editor_review.json` with this shape:
                 "summary_points": [
                   {"text": "source-backed Japanese fact", "evidence_ids": ["e001"]}
                 ],
+                "analysis": {
+                  "inference": "labeled synthesis supported by multiple sources",
+                  "counterargument": "strongest evidence-backed alternative",
+                  "remaining_uncertainty": "what is still unknown",
+                  "confidence": "high | medium | low",
+                  "evidence_ids": ["e001", "e002"]
+                },
                 "topic_value_class": "technical_or_product_shift",
                 "priority_class": "priority",
                 "change_class": "new_event"
@@ -116,6 +123,14 @@ with an accessible primary source or independently readable report.
 Quarterly, annual, and final earnings results and material
 market moves remain eligible. Exclude only previews or routine low-impact ticks.
 
+Breadth comes before analysis. Review every category, watch topic, and event;
+never reduce the verified news set merely because an analysis cannot be formed.
+Resolve important discovery results to official, regulatory, technical,
+financial, specialist, or independently reported body text. Within one event,
+preserve distinct facts contributed by different sources instead of selecting
+one syndicated account and discarding the rest. Headline-only Evidence may stay
+as an explicit insufficient-evidence candidate but cannot become a public update.
+
 `topic_value_class` must be one of `decision_or_policy`,
 `market_or_financial_impact`, `technical_or_product_shift`,
 `operational_status_change`, `event_result_or_outcome`,
@@ -136,6 +151,18 @@ One summary point is valid only when the Evidence contains one such fact beyond
 the title. Do not add a minimum length, historical background, common knowledge,
 predictions, generic importance, or paraphrase repetition. Never omit a supported
 number, date, scope, condition, reason, or result merely to shorten the summary.
+
+`analysis` is optional and must never block an otherwise valid, information-
+complete news item. Include it only when at least two independent body sources
+for the same event support a useful synthesis. Keep verified facts in
+`summary_points`; label the conclusion as inference and separately state the
+strongest counterargument, remaining uncertainty, and confidence. If those
+conditions are not met, omit `analysis` rather than padding it.
+
+After the bounded official/specialist depth pass, keep any unresolved material
+candidate in `source_gap_report.json` and the evaluation signals. Do not turn a
+headline into a public update, but do not withhold other verified news or the
+daily Web publication because one source body remains unavailable.
 
 For requests marked `quality_route=true`, check tables, multiple numbers,
 attributed analysis, and cross-source consistency especially carefully. Prefer
@@ -205,6 +232,10 @@ current issue with up to three prior issues for source and discovery coverage,
 local-language candidate yield, expanded-scope contribution, unavailable sources,
 published facts, review requests, and review payload bytes. Treat the report as
 diagnostic evidence, not as permission to weaken the collection contract.
+Also track body-rich, trusted, and specialist Evidence, multi-source published
+updates, non-body citations, unresolved source-depth gaps, facts per update, and
+one-fact update ratio. Search-count growth alone is never proof of wider or
+deeper coverage.
 
 Runtime recovery may automatically reuse verified checkpoints and avoid duplicate
 work. It must never auto-remove a source, locale, watch topic, quality gate, or

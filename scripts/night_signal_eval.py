@@ -72,6 +72,15 @@ def metric_deltas(current: dict[str, Any], previous: dict[str, Any]) -> dict[str
         "facts_per_update_milli",
         "summary_chars_per_update_milli",
         "one_fact_update_ratio_milli",
+        "body_evidence_records",
+        "trusted_body_evidence_records",
+        "specialist_body_evidence_records",
+        "multi_source_updates",
+        "specialist_source_updates",
+        "analysis_updates",
+        "body_backed_cited_urls",
+        "non_body_cited_urls",
+        "editor_coverage_gap_count",
     )
     return {
         key: int(current.get(key, 0)) - int(previous.get(key, 0))
@@ -176,6 +185,31 @@ def evaluate(
         and core.record_from_expanded_scope(record)
         and str(record.get("url", "")).startswith(("http://", "https://"))
     }
+    all_records = [
+        record
+        for entry in categories.values()
+        if isinstance(entry, dict)
+        for record in entry.get("records", [])
+        if isinstance(record, dict) and record.get("observed")
+    ]
+    body_urls = {
+        str(record.get("url"))
+        for record in all_records
+        if core.record_evidence_depth(core.record_public_title(record), record)
+        == "body"
+    }
+    trusted_body_urls = {
+        str(record.get("url"))
+        for record in all_records
+        if str(record.get("url")) in body_urls
+        and core.record_has_trusted_editor_source(record)
+    }
+    specialist_body_urls = {
+        str(record.get("url"))
+        for record in all_records
+        if str(record.get("url")) in body_urls
+        and core.effective_source_class(record) == "specialist_media"
+    }
     frozen_registry = bundle.get("source_registry_contract")
     frozen_categories = (
         frozen_registry.get("categories", {})
@@ -202,6 +236,9 @@ def evaluate(
     one_fact_updates = 0
     cited_urls: set[str] = set()
     expanded_published_updates = 0
+    multi_source_updates = 0
+    specialist_source_updates = 0
+    analysis_updates = 0
     for card in cards:
         detail = card.get("detail")
         basis = detail.get("summary_basis") if isinstance(detail, dict) else None
@@ -228,12 +265,14 @@ def evaluate(
         }
         cited_urls.update(card_urls)
         expanded_published_updates += bool(card_urls & expanded_urls)
+        multi_source_updates += len(card_urls) >= 2
+        specialist_source_updates += bool(card_urls & specialist_body_urls)
+        analysis_updates += bool(basis.get("why_it_matters"))
 
     checks = {
         "all_categories_collected": set(categories) == set(configured),
         "all_watch_topics_reviewed": reviewed_topics >= expected_topics,
         "evidence_contract_valid": True,
-        "material_topics_resolved": not editor_coverage_gaps,
         "public_updates_present": bool(cards),
         "all_facts_cited": facts > 0 and mapped_facts == facts,
         "all_citations_observed": bool(cited_urls) and cited_urls <= observed_urls,
@@ -248,6 +287,7 @@ def evaluate(
         "resolved_candidates": resolved_candidates,
         "unresolved_queries": unresolved_queries,
         "editor_coverage_gaps": editor_coverage_gaps,
+        "editor_coverage_gap_count": len(editor_coverage_gaps),
         "observed_urls": len(observed_urls),
         "unavailable_urls": len(unavailable_urls),
         "evidence_hosts": len(
@@ -265,6 +305,14 @@ def evaluate(
         "one_fact_update_ratio_milli": (
             one_fact_updates * 1000 // len(cards) if cards else 0
         ),
+        "body_evidence_records": len(body_urls),
+        "trusted_body_evidence_records": len(trusted_body_urls),
+        "specialist_body_evidence_records": len(specialist_body_urls),
+        "multi_source_updates": multi_source_updates,
+        "specialist_source_updates": specialist_source_updates,
+        "analysis_updates": analysis_updates,
+        "body_backed_cited_urls": len(cited_urls & body_urls),
+        "non_body_cited_urls": len(cited_urls - body_urls),
         "local_horizon_queries": local_horizon_queries,
         "local_horizon_relevant_results": local_horizon_relevant_results,
         "local_horizon_material_candidates": local_horizon_material_candidates,
@@ -363,6 +411,26 @@ def evaluate(
         < int(previous_metrics["summary_characters"]) * current_updates * 65
     ):
         improvement_signals.append("summary_information_retention_regression")
+    if (
+        history
+        and current_updates >= 10
+        and previous_updates >= 10
+        and int(metrics["one_fact_update_ratio_milli"])
+        >= int(previous_metrics.get("one_fact_update_ratio_milli", 0)) + 100
+        and int(metrics["facts_per_update_milli"]) * 100
+        < int(previous_metrics.get("facts_per_update_milli", 0)) * 95
+    ):
+        improvement_signals.append("summary_depth_regression")
+    if (
+        metrics["trusted_body_evidence_records"] >= max(4, current_updates // 2)
+        and current_updates >= 4
+        and metrics["multi_source_updates"] * 5 < current_updates
+    ):
+        improvement_signals.append("multi_source_synthesis_gap")
+    if metrics["non_body_cited_urls"]:
+        improvement_signals.append("published_fact_body_gap")
+    if metrics["editor_coverage_gap_count"]:
+        improvement_signals.append("unresolved_source_depth_gap")
     expansion_window = [metrics, *(value["metrics"] for value in history[:2])]
     if len(expansion_window) == 3 and all(
         int(value.get("expanded_evidence_records", 0)) > 0

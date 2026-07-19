@@ -103,7 +103,7 @@
   },
   "minimum_published_cards_per_category": 0,
   "minimum_changed_cards_vs_previous_issue": 1,
-  "detail_summary_heading": "概要",
+  "detail_summary_heading": "確認できた事実",
   "allowed_topic_value_classes": [
     "decision_or_policy",
     "market_or_financial_impact",
