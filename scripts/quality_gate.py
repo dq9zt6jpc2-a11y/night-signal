@@ -167,7 +167,7 @@ FORBIDDEN_PUBLIC_CONFIRMATION_LAYER_TERMS = [
 
 PUBLIC_SUMMARY_PROCESS_PATTERNS = [
     (r"(?:採用|掲載|公開)(?:判断|基準|可否|候補)", "selection/publication decision"),
-    (r"(?:調査|探索|監視|収集)(?:方法|経路|方針|対象|チャネル|チャンネル)", "research procedure"),
+    (r"(?:調査|探索|監視|収集)(?:方法|経路|方針|チャネル|チャンネル)", "research procedure"),
     (r"(?:見る|追う|確認する|収集する)必要がある", "research instruction"),
     (r"(?:本人|スタッフ|公式|SNS|X|Instagram|YouTube).{0,24}(?:毎回|必ず|継続して)(?:見る|確認|追う)", "monitoring instruction"),
     (r"(?:原文確認先|参照経路|参照先).{0,24}(?:併記|揃え|区別)", "source-handling commentary"),
@@ -883,6 +883,11 @@ def self_test() -> None:
         fail("a concrete earnings progress rate was treated as editorial framing")
     if not headline_has_abstract_phrase("公開状況の進捗を確認する"):
         fail("an abstract progress heading escaped the reader-facing gate")
+    validate_public_summary_language(
+        "self-test card summary",
+        "Ferrariはタイヤ返却違反でFIAの調査対象になった。",
+        "2099-01-02",
+    )
     print("QUALITY GATE SELF-TEST PASSED")
 
 
