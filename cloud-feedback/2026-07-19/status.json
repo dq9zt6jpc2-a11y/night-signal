@@ -1,24 +1,24 @@
 {
   "contract": "night-signal-cloud-feedback-v1",
   "issue_date": "2026-07-19",
-  "recorded_at": "2026-07-19T18:06:12.332761+00:00",
-  "workflow_run_id": "29698103000",
-  "workflow_run_url": "https://github.com/dq9zt6jpc2-a11y/night-signal/actions/runs/29698103000",
-  "recovery_attempt": 0,
-  "status": "failed",
-  "failed_stage": "gates",
+  "recorded_at": "2026-07-19T18:09:19.923931+00:00",
+  "workflow_run_id": "29698166972",
+  "workflow_run_url": "https://github.com/dq9zt6jpc2-a11y/night-signal/actions/runs/29698166972",
+  "recovery_attempt": 1,
+  "status": "success",
+  "failed_stage": null,
   "step_outcomes": {
     "apply": "success",
     "restore": "success",
-    "gates": "failure",
-    "base_guard": "skipped",
-    "commit": "skipped",
-    "push": "skipped",
-    "pages": "skipped",
+    "gates": "success",
+    "base_guard": "success",
+    "commit": "success",
+    "push": "success",
+    "pages": "success",
     "pages_retry": "skipped",
-    "pages_watch": "skipped",
-    "verify": "skipped"
+    "pages_watch": "success",
+    "verify": "success"
   },
-  "validator_log_tail": "+ /usr/bin/python3 scripts/night_signal_state.py --generate-issue /home/runner/work/night-signal/night-signal/state/2026-07-19/issue.json\n+ /usr/bin/python3 scripts/sync_site.py 2026-07-19\n+ /usr/bin/python3 scripts/current_issue_audit.py 2026-07-19\n+ /usr/bin/python3 scripts/coverage_audit.py 2026-07-19\n+ /usr/bin/python3 scripts/quality_gate.py 2026-07-19\nQUALITY GATE FAILED: root page card summary contains editorial/research procedure wording: research procedure\nNIGHT SIGNAL PUBLISH FAILED: command failed: /usr/bin/python3 scripts/quality_gate.py 2026-07-19\n{\n  \"cards\": 25,\n  \"display_cards\": 25,\n  \"issue_date\": \"2026-07-19\",\n  \"marker_written\": true,\n  \"sample_html\": \"/home/runner/work/night-signal/night-signal/night-brief-web-sample-2026-07-19.html\"\n}\n/home/runner/work/night-signal/night-signal/site/2026-07-19/index.html\n/home/runner/work/night-signal/night-signal/site/index.html\n/home/runner/work/night-signal/night-signal/site/archive.html\nCURRENT ISSUE AUDIT PASSED: 2026-07-19\nCOVERAGE AUDIT PASSED: 2026-07-19, categories=10, cards=25, source_checks=121, discovery_checks=395, observed_urls=720\n",
+  "validator_log_tail": "",
   "recovery_contract": "reuse the same Evidence; change only named rejected request/event entries"
 }
