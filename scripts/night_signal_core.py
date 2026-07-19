@@ -2013,6 +2013,20 @@ def normalized_financial_amounts(value: str) -> tuple[list[tuple[str, float]], s
             )
         )
         spans.append(match.span())
+    plain_japanese = re.compile(
+        r"(?P<number>\d[\d,]*(?:[.．]\d+)?)\s*"
+        r"(?P<currency>ドル|円|ユーロ|ポンド)"
+    )
+    for match in plain_japanese.finditer(value):
+        if any(match.start() < end and match.end() > start for start, end in spans):
+            continue
+        amounts.append(
+            (
+                currency_map[match.group("currency")],
+                float(match.group("number").replace(",", "").replace("．", ".")),
+            )
+        )
+        spans.append(match.span())
     english = re.compile(
         r"(?:(?P<symbol>[$€£])\s*)?"
         r"(?P<number>\d[\d,]*(?:\.\d+)?)\s*"
@@ -2034,6 +2048,8 @@ def normalized_financial_amounts(value: str) -> tuple[list[tuple[str, float]], s
     }
     for match in english.finditer(value):
         marker = (match.group("symbol") or match.group("word") or "").lower()
+        if not marker:
+            continue
         amounts.append(
             (
                 english_currency.get(marker, "UNSPECIFIED"),
@@ -2067,6 +2083,12 @@ def normalized_financial_amounts(value: str) -> tuple[list[tuple[str, float]], s
 
 
 def numeric_literals(value: str) -> set[float]:
+    value = value.replace("．", ".").replace("，", ",")
+    value = re.sub(
+        r"(?<!\d)(\d+)分(\d{1,2})秒(\d{1,3})(?!\d)",
+        lambda match: f"{match.group(1)} {match.group(2)}.{match.group(3)}",
+        value,
+    )
     value = re.sub(
         r"(?<![\d,])(\d{1,3}),(\d{1,2})(?![\d,])",
         lambda match: f"{match.group(1)}.{match.group(2)}",
@@ -2094,6 +2116,23 @@ def normalized_scaled_numbers(value: str) -> tuple[set[float], str]:
                     match.group(1),
                 )
             )
+        )
+        stripped[match.start() : match.end()] = " " * (match.end() - match.start())
+    english_pattern = re.compile(
+        r"(?<![\d.])(\d[\d,]*(?:\.\d+)?)\s*"
+        r"(trillion|billion|million|thousand)\b",
+        re.I,
+    )
+    english_scale = {
+        "trillion": 1e12,
+        "billion": 1e9,
+        "million": 1e6,
+        "thousand": 1e3,
+    }
+    for match in english_pattern.finditer(value):
+        numbers.add(
+            float(match.group(1).replace(",", ""))
+            * english_scale[match.group(2).lower()]
         )
         stripped[match.start() : match.end()] = " " * (match.end() - match.start())
     return numbers, "".join(stripped)
@@ -5650,6 +5689,27 @@ def self_test() -> None:
         [plain_currency_record],
     ):
         fail("plain currency normalization accepted a different amount")
+    if normalized_financial_amounts("株価は68.95ドルだった。")[0] != [
+        ("USD", 68.95)
+    ]:
+        fail("plain Japanese decimal currency amount was not normalized")
+    population_record = {
+        **english_record,
+        "title": "Sichuan economy ranks sixth in China",
+        "excerpt": (
+            "Sichuan has the sixth-largest provincial economy in China "
+            "and a population of more than 80 million."
+        ),
+    }
+    if not fact_supported_by_records(
+        "Sichuan（四川省）は人口8000万人超で、中国第6位の省経済規模を持つ。",
+        [population_record],
+    ):
+        fail("non-financial English million quantity lost Japanese support")
+    if not {4.3, 5.9}.issubset(numeric_claims("GDPは4．3％から5．9％へ上昇")):
+        fail("full-width decimal points lost numeric support")
+    if not {1.0, 44.361}.issubset(numeric_claims("首位タイムは1分44秒361")):
+        fail("Japanese lap time lost source-compatible numeric support")
     fiscal_period_record = {
         **english_record,
         "title": "Ｓａｎｓａｎ、今期経常は125億～145億円、2.5円増配へ",

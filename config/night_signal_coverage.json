@@ -1026,7 +1026,7 @@
     },
     {
       "label": "日本経済",
-      "identity_terms": ["日本", "日銀", "財務省", "CPI", "GDP", "円", "JGB", "内閣府", "厚生労働省", "経済産業省"],
+      "identity_terms": ["日本", "日銀", "財務省", "CPI", "GDP", "円", "JGB", "内閣府", "厚生労働省", "経済産業省", "消費税", "税制", "国税"],
       "section_id": "japan_economy",
       "required_official_scopes": ["monetary_policy", "employment_wages", "national_accounts_consumption", "industry_capex"],
       "required_watch_topic_channels": [

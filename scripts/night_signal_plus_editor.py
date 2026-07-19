@@ -206,6 +206,7 @@ def prepare_packet(
             "source_publication_date_is_not_an_event_delta": True,
             "novelty_context_must_support_why_today": True,
             "natural_japanese_required": True,
+            "translated_facts_retain_source_spelled_entity_or_exact_numeric_anchor": True,
             "every_summary_point_requires_evidence_ids": True,
             "every_published_item_requires_information_complete": True,
             "allowed_topic_value_classes": sorted(core.ALLOWED_TOPIC_VALUES),
@@ -220,6 +221,7 @@ def prepare_packet(
             "analysis_must_not_pad_or_repeat_confirmed_facts": True,
             "earnings_results_and_material_market_moves_are_not_routine": True,
             "headline_only_requires_insufficient_evidence": True,
+            "body_without_a_substantive_supported_delta_requires_no_material_update": True,
         },
         "requests": [public_request(request) for request in requests],
         "metrics": {

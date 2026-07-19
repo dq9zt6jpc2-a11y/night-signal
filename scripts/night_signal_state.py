@@ -67,7 +67,7 @@ PUBLIC_COPY_FORBIDDEN_TERMS = sorted(
 
 PUBLIC_SUMMARY_PROCESS_PATTERNS = [
     (r"(?:採用|掲載|公開)(?:判断|基準|可否|候補)", "selection/publication procedure"),
-    (r"(?:調査|探索|監視|収集)(?:方法|経路|方針|対象|チャネル|チャンネル)", "research procedure"),
+    (r"(?:調査|探索|監視|収集)(?:方法|経路|方針|チャネル|チャンネル)", "research procedure"),
     (r"(?:見る|追う|確認する|収集する)必要がある", "reader/research instruction"),
     (r"(?:原文確認先|参照経路|参照先).{0,24}(?:併記|揃え|区別)", "source-handling commentary"),
     (r"(?:本項目|本記事).{0,24}(?:区別して掲載|掲載する)", "publication commentary"),
@@ -1533,6 +1533,11 @@ def self_test() -> None:
         kind="summary",
     ):
         fail("public-copy validation accepted publisher navigation chrome")
+    if public_render_copy_violations(
+        "Ferrariはタイヤ返却違反でFIAの調査対象になった。",
+        kind="summary",
+    ):
+        fail("public-copy validation rejected a legitimate investigation target")
     leaked_source = dict(card)
     leaked_source["summary"] = f"{card['summary']} Example News"
     leaked_detail = dict(card["detail"])

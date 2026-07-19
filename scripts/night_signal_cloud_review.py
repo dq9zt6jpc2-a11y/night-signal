@@ -9,7 +9,7 @@ import json
 import re
 import sys
 import tempfile
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
@@ -21,6 +21,7 @@ BRANCH_PREFIX = "night-signal-review-"
 REVIEW_CONTRACT = "codex-plus-editor-v1"
 CORRECTION_CONTRACT = "night-signal-cloud-review-correction-v1"
 EXECUTION_SURFACE = "chatgpt-web-scheduled-task"
+RECOVERY_CUTOFF_HOUR_JST = 6
 MAX_REVIEW_BYTES = 4_000_000
 JST = ZoneInfo("Asia/Tokyo")
 
@@ -120,8 +121,32 @@ def apply_correction(
     handoff = correction.get("cloud_handoff")
     if not isinstance(handoff, dict):
         fail("correction has no cloud_handoff provenance")
+    if handoff.get("execution_surface") != EXECUTION_SURFACE:
+        fail(f"correction execution_surface must be {EXECUTION_SURFACE}")
     if handoff.get("correction_attempt") != 1:
         fail("correction_attempt must be the bounded integer 1")
+    corrected_at = handoff.get("reviewed_at")
+    if not isinstance(corrected_at, str):
+        fail("correction reviewed_at is required")
+    try:
+        corrected = datetime.fromisoformat(corrected_at.replace("Z", "+00:00"))
+    except ValueError:
+        fail("correction reviewed_at must be an ISO timestamp")
+    if corrected.tzinfo is None:
+        fail("correction reviewed_at must include a timezone")
+    corrected_jst = corrected.astimezone(JST)
+    issue_day = datetime.strptime(issue_date, "%Y-%m-%d").date()
+    if not (
+        corrected_jst.date() == issue_day
+        or (
+            corrected_jst.date() == issue_day + timedelta(days=1)
+            and corrected_jst.hour < RECOVERY_CUTOFF_HOUR_JST
+        )
+    ):
+        fail(
+            "correction reviewed_at must be on the issue date "
+            "or before 06:00 JST the next day"
+        )
     responses = correction.get("responses")
     if not isinstance(responses, list) or not responses:
         fail("correction must contain at least one named response")
@@ -155,7 +180,7 @@ def apply_correction(
     merged["cloud_handoff"] = {
         **dict(review.get("cloud_handoff", {})),
         "execution_surface": handoff.get("execution_surface"),
-        "reviewed_at": handoff.get("reviewed_at"),
+        "corrected_at": corrected_at,
         "correction_attempt": 1,
     }
     validate_review(
@@ -239,7 +264,7 @@ def self_test() -> None:
             "evidence_sha256": evidence_sha256(evidence_path),
             "cloud_handoff": {
                 "execution_surface": EXECUTION_SURFACE,
-                "reviewed_at": "2099-01-02T18:10:00+09:00",
+                "reviewed_at": "2099-01-03T02:10:00+09:00",
                 "correction_attempt": 1,
             },
             "responses": [
@@ -256,6 +281,11 @@ def self_test() -> None:
             fail("named correction response was not overlaid")
         if corrected["cloud_handoff"].get("correction_attempt") != 1:
             fail("correction provenance was not preserved")
+        if (
+            corrected["cloud_handoff"].get("corrected_at")
+            != "2099-01-03T02:10:00+09:00"
+        ):
+            fail("after-midnight correction provenance was not preserved")
         wrong_hash = {**review, "evidence_sha256": "0" * 64}
         review_path.write_text(json.dumps(wrong_hash), encoding="utf-8")
         try:
