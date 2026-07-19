@@ -1,0 +1,1179 @@
+{
+  "issue_date": "2026-07-19",
+  "cards": [
+    {
+      "watch_topic_id": "ipo_financing",
+      "title": "OpenAI、投資銀行業務の専門人材を採用へ",
+      "summary": "サンフランシスコのApplied AIチームで、企業・業界調査、財務モデリング、企業価値評価、デューデリジェンス、顧客資料作成・審査の品質基準を定める役割を募集している。 応募条件は実案件の取引経験2年以上で、基本給は18万5000～20万5000ドルに株式報酬を加える。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-17",
+      "topic_value_class": "operational_status_change",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-a1f4307595d2-2026-07-19.html",
+        "sources": [
+          {
+            "label": "newsanyway.com",
+            "url": "https://www.newsanyway.com/2026/07/17/openai-investment-banking-hire-signals-a-push-into-enterprise-finance/"
+          }
+        ],
+        "summary": "サンフランシスコのApplied AIチームで、企業・業界調査、財務モデリング、企業価値評価、デューデリジェンス、顧客資料作成・審査の品質基準を定める役割を募集している。 応募条件は実案件の取引経験2年以上で、基本給は18万5000～20万5000ドルに株式報酬を加える。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "サンフランシスコのApplied AIチームで、企業・業界調査、財務モデリング、企業価値評価、デューデリジェンス、顧客資料作成・審査の品質基準を定める役割を募集している。",
+            "応募条件は実案件の取引経験2年以上で、基本給は18万5000～20万5000ドルに株式報酬を加える。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "サンフランシスコのApplied AIチームで、企業・業界調査、財務モデリング、企業価値評価、デューデリジェンス、顧客資料作成・審査の品質基準を定める役割を募集している。",
+              "source_urls": [
+                "https://www.newsanyway.com/2026/07/17/openai-investment-banking-hire-signals-a-push-into-enterprise-finance/"
+              ]
+            },
+            {
+              "fact": "応募条件は実案件の取引経験2年以上で、基本給は18万5000～20万5000ドルに株式報酬を加える。",
+              "source_urls": [
+                "https://www.newsanyway.com/2026/07/17/openai-investment-banking-hire-signals-a-push-into-enterprise-finance/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-17"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "enterprise_infrastructure",
+      "title": "Thinking Machines「Inkling」のモデル規模が判明",
+      "summary": "InklingはMoE方式で総パラメータ数9750億、推論時のアクティブパラメータ数410億として公開された。 軽量版Inkling-Smallは総2760億・アクティブ120億で、テスト完了後にウェイトを公開する予定だ。 推論環境ではTogether AI、Fireworks、Databricksなどと提携し、複数の導入経路を用意した。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-17",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-b43977dbffe1-2026-07-19.html",
+        "sources": [
+          {
+            "label": "sbbit.jp",
+            "url": "https://www.sbbit.jp/article/cont1/186139"
+          }
+        ],
+        "summary": "InklingはMoE方式で総パラメータ数9750億、推論時のアクティブパラメータ数410億として公開された。 軽量版Inkling-Smallは総2760億・アクティブ120億で、テスト完了後にウェイトを公開する予定だ。 推論環境ではTogether AI、Fireworks、Databricksなどと提携し、複数の導入経路を用意した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "InklingはMoE方式で総パラメータ数9750億、推論時のアクティブパラメータ数410億として公開された。",
+            "軽量版Inkling-Smallは総2760億・アクティブ120億で、テスト完了後にウェイトを公開する予定だ。",
+            "推論環境ではTogether AI、Fireworks、Databricksなどと提携し、複数の導入経路を用意した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "InklingはMoE方式で総パラメータ数9750億、推論時のアクティブパラメータ数410億として公開された。",
+              "source_urls": [
+                "https://www.sbbit.jp/article/cont1/186139"
+              ]
+            },
+            {
+              "fact": "軽量版Inkling-Smallは総2760億・アクティブ120億で、テスト完了後にウェイトを公開する予定だ。",
+              "source_urls": [
+                "https://www.sbbit.jp/article/cont1/186139"
+              ]
+            },
+            {
+              "fact": "推論環境ではTogether AI、Fireworks、Databricksなどと提携し、複数の導入経路を用意した。",
+              "source_urls": [
+                "https://www.sbbit.jp/article/cont1/186139"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-17"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "ipo_financing",
+      "title": "OpenAI、10代のAI利用で「禁止」より安全なアクセスを提唱",
+      "summary": "新指針は、Study Mode、保護者向けコントロール、年齢推定、休憩リマインダー、有害コンテンツの保護フィルターを組み合わせる方針を示した。 教育現場や家庭でAIを一律に遠ざけるのではなく、年齢に応じた保護と利用機会を両立させる考えを明確にした。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-18",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-c13c913f978b-2026-07-19.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/2010d554-38ec-48b1-8c29-a80835636422"
+          }
+        ],
+        "summary": "新指針は、Study Mode、保護者向けコントロール、年齢推定、休憩リマインダー、有害コンテンツの保護フィルターを組み合わせる方針を示した。 教育現場や家庭でAIを一律に遠ざけるのではなく、年齢に応じた保護と利用機会を両立させる考えを明確にした。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "新指針は、Study Mode、保護者向けコントロール、年齢推定、休憩リマインダー、有害コンテンツの保護フィルターを組み合わせる方針を示した。",
+            "教育現場や家庭でAIを一律に遠ざけるのではなく、年齢に応じた保護と利用機会を両立させる考えを明確にした。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "新指針は、Study Mode、保護者向けコントロール、年齢推定、休憩リマインダー、有害コンテンツの保護フィルターを組み合わせる方針を示した。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/2010d554-38ec-48b1-8c29-a80835636422"
+              ]
+            },
+            {
+              "fact": "教育現場や家庭でAIを一律に遠ざけるのではなく、年齢に応じた保護と利用機会を両立させる考えを明確にした。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/2010d554-38ec-48b1-8c29-a80835636422"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-18"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "strategic_talent_japan_gtm",
+      "title": "ソフトバンク、OpenAI活用の脆弱性対策を3000社へ拡大",
+      "summary": "法人向け「Patching as a Service」の対象を3000社に広げ、脆弱性診断からレポート、対策提案、パッチ作成・適用までを一体提供する。 先行診断ではソースコード1000万行当たり平均約280件の潜在的脆弱性を検出し、その25％は早急な対応が必要となり得る高リスクだった。 ソフトバンクはAIサイバー防衛室とSB OAI Japanを合わせ約1000人の体制で提供を進める。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-18",
+      "topic_value_class": "operational_status_change",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-d0ff2e092c76-2026-07-19.html",
+        "sources": [
+          {
+            "label": "k-tai.watch.impress.co.jp",
+            "url": "https://k-tai.watch.impress.co.jp/docs/news/2125402.html"
+          }
+        ],
+        "summary": "法人向け「Patching as a Service」の対象を3000社に広げ、脆弱性診断からレポート、対策提案、パッチ作成・適用までを一体提供する。 先行診断ではソースコード1000万行当たり平均約280件の潜在的脆弱性を検出し、その25％は早急な対応が必要となり得る高リスクだった。 ソフトバンクはAIサイバー防衛室とSB OAI Japanを合わせ約1000人の体制で提供を進める。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "法人向け「Patching as a Service」の対象を3000社に広げ、脆弱性診断からレポート、対策提案、パッチ作成・適用までを一体提供する。",
+            "先行診断ではソースコード1000万行当たり平均約280件の潜在的脆弱性を検出し、その25％は早急な対応が必要となり得る高リスクだった。",
+            "ソフトバンクはAIサイバー防衛室とSB OAI Japanを合わせ約1000人の体制で提供を進める。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "法人向け「Patching as a Service」の対象を3000社に広げ、脆弱性診断からレポート、対策提案、パッチ作成・適用までを一体提供する。",
+              "source_urls": [
+                "https://k-tai.watch.impress.co.jp/docs/news/2125402.html"
+              ]
+            },
+            {
+              "fact": "先行診断ではソースコード1000万行当たり平均約280件の潜在的脆弱性を検出し、その25％は早急な対応が必要となり得る高リスクだった。",
+              "source_urls": [
+                "https://k-tai.watch.impress.co.jp/docs/news/2125402.html"
+              ]
+            },
+            {
+              "fact": "ソフトバンクはAIサイバー防衛室とSB OAI Japanを合わせ約1000人の体制で提供を進める。",
+              "source_urls": [
+                "https://k-tai.watch.impress.co.jp/docs/news/2125402.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-18"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "ipo_financing",
+      "title": "Apple、営業秘密を巡りOpenAIを提訴",
+      "summary": "訴訟はOpenAIへ移った400人超の元Apple従業員による営業秘密の持ち出しを主張し、OpenAIのハードウェア責任者にも疑いを向けている。 OpenAIは倫理的な採用と知的財産尊重を強調する声明を出したが、記事が伝える個別の主張は肯定も否定もしていない。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-18",
+      "topic_value_class": "risk_or_safety_signal",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-98738a3c7f4b-2026-07-19.html",
+        "sources": [
+          {
+            "label": "techbuzz.ai",
+            "url": "https://www.techbuzz.ai/articles/apple-sues-openai-over-trade-secrets-threatening-ipo"
+          }
+        ],
+        "summary": "訴訟はOpenAIへ移った400人超の元Apple従業員による営業秘密の持ち出しを主張し、OpenAIのハードウェア責任者にも疑いを向けている。 OpenAIは倫理的な採用と知的財産尊重を強調する声明を出したが、記事が伝える個別の主張は肯定も否定もしていない。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "訴訟はOpenAIへ移った400人超の元Apple従業員による営業秘密の持ち出しを主張し、OpenAIのハードウェア責任者にも疑いを向けている。",
+            "OpenAIは倫理的な採用と知的財産尊重を強調する声明を出したが、記事が伝える個別の主張は肯定も否定もしていない。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "訴訟はOpenAIへ移った400人超の元Apple従業員による営業秘密の持ち出しを主張し、OpenAIのハードウェア責任者にも疑いを向けている。",
+              "source_urls": [
+                "https://www.techbuzz.ai/articles/apple-sues-openai-over-trade-secrets-threatening-ipo"
+              ]
+            },
+            {
+              "fact": "OpenAIは倫理的な採用と知的財産尊重を強調する声明を出したが、記事が伝える個別の主張は肯定も否定もしていない。",
+              "source_urls": [
+                "https://www.techbuzz.ai/articles/apple-sues-openai-over-trade-secrets-threatening-ipo"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-18"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "market_price_reaction",
+      "title": "Honda、夏休み明けにF1パワーユニットを更新へ",
+      "summary": "HondaはF1のサマーブレイク後のオランダ戦でPU更新を投入し、内燃機関の出力向上に重点を置く予定だ。 Hondaは潤滑系の変更で信頼性向上と摩擦低減を図り、ドライバビリティも改善する一方、電装系は今回の対象外としている。 Hondaの折原伸太郎氏は開発の進捗について、想定どおりだとの認識を示した。",
+      "section_id": "honda",
+      "category": "Honda",
+      "source_published_date": "2026-07-17",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-d5951bdb13e3-2026-07-19.html",
+        "sources": [
+          {
+            "label": "planetf1.com",
+            "url": "https://www.planetf1.com/news/honda-aston-martin-engine-upgrade"
+          }
+        ],
+        "summary": "HondaはF1のサマーブレイク後のオランダ戦でPU更新を投入し、内燃機関の出力向上に重点を置く予定だ。 Hondaは潤滑系の変更で信頼性向上と摩擦低減を図り、ドライバビリティも改善する一方、電装系は今回の対象外としている。 Hondaの折原伸太郎氏は開発の進捗について、想定どおりだとの認識を示した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "HondaはF1のサマーブレイク後のオランダ戦でPU更新を投入し、内燃機関の出力向上に重点を置く予定だ。",
+            "Hondaは潤滑系の変更で信頼性向上と摩擦低減を図り、ドライバビリティも改善する一方、電装系は今回の対象外としている。",
+            "Hondaの折原伸太郎氏は開発の進捗について、想定どおりだとの認識を示した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "HondaはF1のサマーブレイク後のオランダ戦でPU更新を投入し、内燃機関の出力向上に重点を置く予定だ。",
+              "source_urls": [
+                "https://www.planetf1.com/news/honda-aston-martin-engine-upgrade"
+              ]
+            },
+            {
+              "fact": "Hondaは潤滑系の変更で信頼性向上と摩擦低減を図り、ドライバビリティも改善する一方、電装系は今回の対象外としている。",
+              "source_urls": [
+                "https://www.planetf1.com/news/honda-aston-martin-engine-upgrade"
+              ]
+            },
+            {
+              "fact": "Hondaの折原伸太郎氏は開発の進捗について、想定どおりだとの認識を示した。",
+              "source_urls": [
+                "https://www.planetf1.com/news/honda-aston-martin-engine-upgrade"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-17"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "honda_aston_pu",
+      "title": "Aston Martin、夏休み明けの大規模改良を優先",
+      "summary": "Aston Martinは小規模更新を延期し、ノーズ、フロア、リヤサスペンション、軽量化、空力効率を含む包括的改良を夏休み明けに投入する計画だ。 記事はAMR26の課題としてHondaエンジンの強い振動とダウンフォース不足を挙げ、空力パッケージとエンジン更新を同時期に合わせるとしている。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-07-17",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-35b0e3a542a4-2026-07-19.html",
+        "sources": [
+          {
+            "label": "sundayindependent.co.za",
+            "url": "https://sundayindependent.co.za/motoring/f1-grand-prix/2026-07-16-aston-martin-delay-minor-updates-for-major-post-summer-break-reboot/"
+          }
+        ],
+        "summary": "Aston Martinは小規模更新を延期し、ノーズ、フロア、リヤサスペンション、軽量化、空力効率を含む包括的改良を夏休み明けに投入する計画だ。 記事はAMR26の課題としてHondaエンジンの強い振動とダウンフォース不足を挙げ、空力パッケージとエンジン更新を同時期に合わせるとしている。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Aston Martinは小規模更新を延期し、ノーズ、フロア、リヤサスペンション、軽量化、空力効率を含む包括的改良を夏休み明けに投入する計画だ。",
+            "記事はAMR26の課題としてHondaエンジンの強い振動とダウンフォース不足を挙げ、空力パッケージとエンジン更新を同時期に合わせるとしている。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Aston Martinは小規模更新を延期し、ノーズ、フロア、リヤサスペンション、軽量化、空力効率を含む包括的改良を夏休み明けに投入する計画だ。",
+              "source_urls": [
+                "https://sundayindependent.co.za/motoring/f1-grand-prix/2026-07-16-aston-martin-delay-minor-updates-for-major-post-summer-break-reboot/"
+              ]
+            },
+            {
+              "fact": "記事はAMR26の課題としてHondaエンジンの強い振動とダウンフォース不足を挙げ、空力パッケージとエンジン更新を同時期に合わせるとしている。",
+              "source_urls": [
+                "https://sundayindependent.co.za/motoring/f1-grand-prix/2026-07-16-aston-martin-delay-minor-updates-for-major-post-summer-break-reboot/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-17"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "fia_regulation_development",
+      "title": "マクラーレン、ベルギーGPで更新版Mercedes PUを投入",
+      "summary": "Mercedes顧客勢で最後となる更新版PUを装着し、低ダウンフォース仕様のリヤウイングも持ち込んだ。 更新版PUは信頼性向上を狙い、リヤウイングはスパ向けに軽量で絞った改良パッケージの一部となる。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-07-17",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-7bcdf1f65509-2026-07-19.html",
+        "sources": [
+          {
+            "label": "motorsportweek.com",
+            "url": "https://www.motorsportweek.com/2026/07/17/mclaren-belgian-gp-f1-upgrades-sheet/"
+          }
+        ],
+        "summary": "Mercedes顧客勢で最後となる更新版PUを装着し、低ダウンフォース仕様のリヤウイングも持ち込んだ。 更新版PUは信頼性向上を狙い、リヤウイングはスパ向けに軽量で絞った改良パッケージの一部となる。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Mercedes顧客勢で最後となる更新版PUを装着し、低ダウンフォース仕様のリヤウイングも持ち込んだ。",
+            "更新版PUは信頼性向上を狙い、リヤウイングはスパ向けに軽量で絞った改良パッケージの一部となる。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Mercedes顧客勢で最後となる更新版PUを装着し、低ダウンフォース仕様のリヤウイングも持ち込んだ。",
+              "source_urls": [
+                "https://www.motorsportweek.com/2026/07/17/mclaren-belgian-gp-f1-upgrades-sheet/"
+              ]
+            },
+            {
+              "fact": "更新版PUは信頼性向上を狙い、リヤウイングはスパ向けに軽量で絞った改良パッケージの一部となる。",
+              "source_urls": [
+                "https://www.motorsportweek.com/2026/07/17/mclaren-belgian-gp-f1-upgrades-sheet/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-17"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "race_schedule_results",
+      "title": "FIA、黄旗区間のサインツに追加措置なし",
+      "summary": "FP3のダブルイエロー区間でフェルスタッペンとの接近を審査した結果、FIAはカルロス・サインツに追加措置を科さなかった。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-07-19",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-0bcefd21c3bc-2026-07-19.html",
+        "sources": [
+          {
+            "label": "gpfans.com",
+            "url": "https://www.gpfans.com/en/f1-news/1087908/max-verstappen-x-rated-tirade-f1-rival-carlos-sainz-belgian-grand-prix-fia/"
+          }
+        ],
+        "summary": "FP3のダブルイエロー区間でフェルスタッペンとの接近を審査した結果、FIAはカルロス・サインツに追加措置を科さなかった。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "FP3のダブルイエロー区間でフェルスタッペンとの接近を審査した結果、FIAはカルロス・サインツに追加措置を科さなかった。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "FP3のダブルイエロー区間でフェルスタッペンとの接近を審査した結果、FIAはカルロス・サインツに追加措置を科さなかった。",
+              "source_urls": [
+                "https://www.gpfans.com/en/f1-news/1087908/max-verstappen-x-rated-tirade-f1-rival-carlos-sainz-belgian-grand-prix-fia/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-19"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "race_schedule_results",
+      "title": "Ferrari、ベルギーGPでタイヤ返却違反を調査される",
+      "summary": "FerrariはFP1後にルクレール車とハミルトン車のドライタイヤ各2セットを電子上は返却したが、FP2開始前までに現物をPirelliへ返さなかったとしてFIAの調査対象になった。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-07-18",
+      "topic_value_class": "risk_or_safety_signal",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-0aa00ff6975d-2026-07-19.html",
+        "sources": [
+          {
+            "label": "planetf1.com",
+            "url": "https://www.planetf1.com/news/ferrari-fia-belgian-grand-prix-2026-incident"
+          }
+        ],
+        "summary": "FerrariはFP1後にルクレール車とハミルトン車のドライタイヤ各2セットを電子上は返却したが、FP2開始前までに現物をPirelliへ返さなかったとしてFIAの調査対象になった。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "FerrariはFP1後にルクレール車とハミルトン車のドライタイヤ各2セットを電子上は返却したが、FP2開始前までに現物をPirelliへ返さなかったとしてFIAの調査対象になった。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "FerrariはFP1後にルクレール車とハミルトン車のドライタイヤ各2セットを電子上は返却したが、FP2開始前までに現物をPirelliへ返さなかったとしてFIAの調査対象になった。",
+              "source_urls": [
+                "https://www.planetf1.com/news/ferrari-fia-belgian-grand-prix-2026-incident"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-18"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "race_schedule_results",
+      "title": "F1ベルギーGP予選、アントネッリがポール獲得",
+      "summary": "アンドレア・キミ・アントネッリが1分44秒361で首位となり、マックス・フェルスタッペンが1分44秒678、ランド・ノリスが1分44秒801で続いた。 アストンマーティン勢はフェルナンド・アロンソが21番手、ランス・ストロールが22番手だった。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-07-19",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-c3bf0a7fc63f-2026-07-19.html",
+        "sources": [
+          {
+            "label": "as-web.jp",
+            "url": "https://www.as-web.jp/f1/1335611"
+          }
+        ],
+        "summary": "アンドレア・キミ・アントネッリが1分44秒361で首位となり、マックス・フェルスタッペンが1分44秒678、ランド・ノリスが1分44秒801で続いた。 アストンマーティン勢はフェルナンド・アロンソが21番手、ランス・ストロールが22番手だった。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "アンドレア・キミ・アントネッリが1分44秒361で首位となり、マックス・フェルスタッペンが1分44秒678、ランド・ノリスが1分44秒801で続いた。",
+            "アストンマーティン勢はフェルナンド・アロンソが21番手、ランス・ストロールが22番手だった。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "アンドレア・キミ・アントネッリが1分44秒361で首位となり、マックス・フェルスタッペンが1分44秒678、ランド・ノリスが1分44秒801で続いた。",
+              "source_urls": [
+                "https://www.as-web.jp/f1/1335611"
+              ]
+            },
+            {
+              "fact": "アストンマーティン勢はフェルナンド・アロンソが21番手、ランス・ストロールが22番手だった。",
+              "source_urls": [
+                "https://www.as-web.jp/f1/1335611"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-19"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "dragon_iss",
+      "title": "NASA、Artemis IIIの通信にStarlinkレーザー端末を採用",
+      "summary": "2027年後半予定のArtemis IIIで、Orion宇宙船外部にStarlinkの小型レーザー端末2台を搭載する。 低軌道での民間月着陸船とのランデブー・ドッキングを4Kで連続中継できる設計で、2万5000超の衛星間レーザーリンク網と通信する。 管制室向け映像の具体的な地上へのダウンリンク構成は、NASAの公開文書ではまだ示されていない。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-07-19",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-0c6de318dbde-2026-07-19.html",
+        "sources": [
+          {
+            "label": "zaikei.co.jp",
+            "url": "https://www.zaikei.co.jp/amp/article/20260719/861877.html"
+          }
+        ],
+        "summary": "2027年後半予定のArtemis IIIで、Orion宇宙船外部にStarlinkの小型レーザー端末2台を搭載する。 低軌道での民間月着陸船とのランデブー・ドッキングを4Kで連続中継できる設計で、2万5000超の衛星間レーザーリンク網と通信する。 管制室向け映像の具体的な地上へのダウンリンク構成は、NASAの公開文書ではまだ示されていない。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "2027年後半予定のArtemis IIIで、Orion宇宙船外部にStarlinkの小型レーザー端末2台を搭載する。",
+            "低軌道での民間月着陸船とのランデブー・ドッキングを4Kで連続中継できる設計で、2万5000超の衛星間レーザーリンク網と通信する。",
+            "管制室向け映像の具体的な地上へのダウンリンク構成は、NASAの公開文書ではまだ示されていない。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "2027年後半予定のArtemis IIIで、Orion宇宙船外部にStarlinkの小型レーザー端末2台を搭載する。",
+              "source_urls": [
+                "https://www.zaikei.co.jp/amp/article/20260719/861877.html"
+              ]
+            },
+            {
+              "fact": "低軌道での民間月着陸船とのランデブー・ドッキングを4Kで連続中継できる設計で、2万5000超の衛星間レーザーリンク網と通信する。",
+              "source_urls": [
+                "https://www.zaikei.co.jp/amp/article/20260719/861877.html"
+              ]
+            },
+            {
+              "fact": "管制室向け映像の具体的な地上へのダウンリンク構成は、NASAの公開文書ではまだ示されていない。",
+              "source_urls": [
+                "https://www.zaikei.co.jp/amp/article/20260719/861877.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-19"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "starship_status",
+      "title": "Starship、月曜の再打ち上げを目標",
+      "summary": "SpaceXは点火中の直前中止を受け、次のStarship打ち上げ試行を月曜日に設定する方針だと報じられた。 SpaceX株は金曜日午前の取引で6％下落した。 打ち上げ中止後、時価総額は約1000億ドル減少した。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-07-19",
+      "topic_value_class": "material_schedule_change",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-7ad7f47028d2-2026-07-19.html",
+        "sources": [
+          {
+            "label": "channelnewsasia.com",
+            "url": "https://www.channelnewsasia.com/business/spacex-targets-next-week-another-starship-launch-attempt-shares-slide-abort-6261871"
+          },
+          {
+            "label": "ca.finance.yahoo.com",
+            "url": "https://ca.finance.yahoo.com/news/elon-musks-spacex-lost-1t-150000833.html"
+          }
+        ],
+        "summary": "SpaceXは点火中の直前中止を受け、次のStarship打ち上げ試行を月曜日に設定する方針だと報じられた。 SpaceX株は金曜日午前の取引で6％下落した。 打ち上げ中止後、時価総額は約1000億ドル減少した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "SpaceXは点火中の直前中止を受け、次のStarship打ち上げ試行を月曜日に設定する方針だと報じられた。",
+            "SpaceX株は金曜日午前の取引で6％下落した。",
+            "打ち上げ中止後、時価総額は約1000億ドル減少した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "SpaceXは点火中の直前中止を受け、次のStarship打ち上げ試行を月曜日に設定する方針だと報じられた。",
+              "source_urls": [
+                "https://www.channelnewsasia.com/business/spacex-targets-next-week-another-starship-launch-attempt-shares-slide-abort-6261871"
+              ]
+            },
+            {
+              "fact": "SpaceX株は金曜日午前の取引で6％下落した。",
+              "source_urls": [
+                "https://ca.finance.yahoo.com/news/elon-musks-spacex-lost-1t-150000833.html"
+              ]
+            },
+            {
+              "fact": "打ち上げ中止後、時価総額は約1000億ドル減少した。",
+              "source_urls": [
+                "https://www.channelnewsasia.com/business/spacex-targets-next-week-another-starship-launch-attempt-shares-slide-abort-6261871"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-18",
+            "2026-07-19"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "business_contracts",
+      "title": "SpaceX株、公開価格135ドルを下回る",
+      "summary": "7月16日の終値は131.11ドルとなり、上場から約1カ月で公開価格135ドルを割り込んだ。 6月16日の上場来高値終値から時価総額は約9030億ドル減り、下落率は約3分の1に達した。 上場後3営業日で米個人投資家は3億7000万ドル、上場初日に韓国の個人投資家は約8億ドルを買い越したとされる。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-07-17",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-9357f2485f89-2026-07-19.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/d0edd7b9-50ea-4e11-b56d-12ccdca44a11"
+          }
+        ],
+        "summary": "7月16日の終値は131.11ドルとなり、上場から約1カ月で公開価格135ドルを割り込んだ。 6月16日の上場来高値終値から時価総額は約9030億ドル減り、下落率は約3分の1に達した。 上場後3営業日で米個人投資家は3億7000万ドル、上場初日に韓国の個人投資家は約8億ドルを買い越したとされる。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "7月16日の終値は131.11ドルとなり、上場から約1カ月で公開価格135ドルを割り込んだ。",
+            "6月16日の上場来高値終値から時価総額は約9030億ドル減り、下落率は約3分の1に達した。",
+            "上場後3営業日で米個人投資家は3億7000万ドル、上場初日に韓国の個人投資家は約8億ドルを買い越したとされる。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "7月16日の終値は131.11ドルとなり、上場から約1カ月で公開価格135ドルを割り込んだ。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/d0edd7b9-50ea-4e11-b56d-12ccdca44a11"
+              ]
+            },
+            {
+              "fact": "6月16日の上場来高値終値から時価総額は約9030億ドル減り、下落率は約3分の1に達した。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/d0edd7b9-50ea-4e11-b56d-12ccdca44a11"
+              ]
+            },
+            {
+              "fact": "上場後3営業日で米個人投資家は3億7000万ドル、上場初日に韓国の個人投資家は約8億ドルを買い越したとされる。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/d0edd7b9-50ea-4e11-b56d-12ccdca44a11"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-17"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "business_contracts",
+      "title": "米SBA長官、SpaceX投資で利益相反の懸念",
+      "summary": "Kelly Loeffler米中小企業庁長官は指名後、2025年にSpaceXとxAIへ100万～500万ドルを追加投資していたことが財務開示から判明した。 記事は政府倫理の専門家2人の評価を引用し、SpaceXのIPOによって同氏が数百万ドル規模の利益を得たと伝えた。 2025年の財務開示では、トランプ政権当局者の少なくとも10人がSpaceXまたはxAIへの投資を記載していた。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-07-18",
+      "topic_value_class": "risk_or_safety_signal",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-fd4f499a6b94-2026-07-19.html",
+        "sources": [
+          {
+            "label": "americanbazaaronline.com",
+            "url": "https://americanbazaaronline.com/2026/07/17/loeffler-earns-millions-from-spacex-investment-following-its-ipo-484758/"
+          }
+        ],
+        "summary": "Kelly Loeffler米中小企業庁長官は指名後、2025年にSpaceXとxAIへ100万～500万ドルを追加投資していたことが財務開示から判明した。 記事は政府倫理の専門家2人の評価を引用し、SpaceXのIPOによって同氏が数百万ドル規模の利益を得たと伝えた。 2025年の財務開示では、トランプ政権当局者の少なくとも10人がSpaceXまたはxAIへの投資を記載していた。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Kelly Loeffler米中小企業庁長官は指名後、2025年にSpaceXとxAIへ100万～500万ドルを追加投資していたことが財務開示から判明した。",
+            "記事は政府倫理の専門家2人の評価を引用し、SpaceXのIPOによって同氏が数百万ドル規模の利益を得たと伝えた。",
+            "2025年の財務開示では、トランプ政権当局者の少なくとも10人がSpaceXまたはxAIへの投資を記載していた。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Kelly Loeffler米中小企業庁長官は指名後、2025年にSpaceXとxAIへ100万～500万ドルを追加投資していたことが財務開示から判明した。",
+              "source_urls": [
+                "https://americanbazaaronline.com/2026/07/17/loeffler-earns-millions-from-spacex-investment-following-its-ipo-484758/"
+              ]
+            },
+            {
+              "fact": "記事は政府倫理の専門家2人の評価を引用し、SpaceXのIPOによって同氏が数百万ドル規模の利益を得たと伝えた。",
+              "source_urls": [
+                "https://americanbazaaronline.com/2026/07/17/loeffler-earns-millions-from-spacex-investment-following-its-ipo-484758/"
+              ]
+            },
+            {
+              "fact": "2025年の財務開示では、トランプ政権当局者の少なくとも10人がSpaceXまたはxAIへの投資を記載していた。",
+              "source_urls": [
+                "https://americanbazaaronline.com/2026/07/17/loeffler-earns-millions-from-spacex-investment-following-its-ipo-484758/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-18"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "business_contracts",
+      "title": "SpaceX、Gen3 Starlink最大10万基をFCCへ申請",
+      "summary": "第3世代Starlink衛星を最大10万基展開する計画をFCCへ申請した。 記事掲載時の株価は131.11ドルで、1週間で13.8％、30日間で35.0％下落していた。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-07-18",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-3d82972d5708-2026-07-19.html",
+        "sources": [
+          {
+            "label": "simplywall.st",
+            "url": "https://simplywall.st/ja/stocks/us/telecom/nasdaq-spcx/space-exploration-technologies/news/2541afd6c7d532b2/amp"
+          }
+        ],
+        "summary": "第3世代Starlink衛星を最大10万基展開する計画をFCCへ申請した。 記事掲載時の株価は131.11ドルで、1週間で13.8％、30日間で35.0％下落していた。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "第3世代Starlink衛星を最大10万基展開する計画をFCCへ申請した。",
+            "記事掲載時の株価は131.11ドルで、1週間で13.8％、30日間で35.0％下落していた。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "第3世代Starlink衛星を最大10万基展開する計画をFCCへ申請した。",
+              "source_urls": [
+                "https://simplywall.st/ja/stocks/us/telecom/nasdaq-spcx/space-exploration-technologies/news/2541afd6c7d532b2/amp"
+              ]
+            },
+            {
+              "fact": "記事掲載時の株価は131.11ドルで、1週間で13.8％、30日間で35.0％下落していた。",
+              "source_urls": [
+                "https://simplywall.st/ja/stocks/us/telecom/nasdaq-spcx/space-exploration-technologies/news/2541afd6c7d532b2/amp"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-18"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "business_contracts",
+      "title": "ウクライナ、Starlink端末の登録規則を厳格化",
+      "summary": "新規登録ではKIT番号とUTIDの記載を必須とし、個人と個人事業主は登録する全端末を行政サービスセンターへ提示する必要がある。 一般企業の登録上限は10台で、重要企業は上限対象外となる。 法人がオンライン手続きを使う条件は、登録後1カ月から1年以上へ厳格化された。 端末の削除と登録情報取得のサービスを追加し、一時・永住許可を持つ外国人にも行政サービスセンター経由の申請を認める。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-07-18",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-8f728d2f7ac3-2026-07-19.html",
+        "sources": [
+          {
+            "label": "mezha.net",
+            "url": "https://mezha.net/jp/bukvy/96f95988_ukraine_updates_starlink/"
+          }
+        ],
+        "summary": "新規登録ではKIT番号とUTIDの記載を必須とし、個人と個人事業主は登録する全端末を行政サービスセンターへ提示する必要がある。 一般企業の登録上限は10台で、重要企業は上限対象外となる。 法人がオンライン手続きを使う条件は、登録後1カ月から1年以上へ厳格化された。 端末の削除と登録情報取得のサービスを追加し、一時・永住許可を持つ外国人にも行政サービスセンター経由の申請を認める。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "新規登録ではKIT番号とUTIDの記載を必須とし、個人と個人事業主は登録する全端末を行政サービスセンターへ提示する必要がある。",
+            "一般企業の登録上限は10台で、重要企業は上限対象外となる。",
+            "法人がオンライン手続きを使う条件は、登録後1カ月から1年以上へ厳格化された。",
+            "端末の削除と登録情報取得のサービスを追加し、一時・永住許可を持つ外国人にも行政サービスセンター経由の申請を認める。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "新規登録ではKIT番号とUTIDの記載を必須とし、個人と個人事業主は登録する全端末を行政サービスセンターへ提示する必要がある。",
+              "source_urls": [
+                "https://mezha.net/jp/bukvy/96f95988_ukraine_updates_starlink/"
+              ]
+            },
+            {
+              "fact": "一般企業の登録上限は10台で、重要企業は上限対象外となる。",
+              "source_urls": [
+                "https://mezha.net/jp/bukvy/96f95988_ukraine_updates_starlink/"
+              ]
+            },
+            {
+              "fact": "法人がオンライン手続きを使う条件は、登録後1カ月から1年以上へ厳格化された。",
+              "source_urls": [
+                "https://mezha.net/jp/bukvy/96f95988_ukraine_updates_starlink/"
+              ]
+            },
+            {
+              "fact": "端末の削除と登録情報取得のサービスを追加し、一時・永住許可を持つ外国人にも行政サービスセンター経由の申請を認める。",
+              "source_urls": [
+                "https://mezha.net/jp/bukvy/96f95988_ukraine_updates_starlink/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-18"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "investment_policy_markets",
+      "title": "東京ドームの法人向けVIP個室、開設以来4年間空き待ち",
+      "summary": "2022年開設の「THE SUITE TOKYO」は全28室が法人の年間契約で埋まり、新規申し込みを停止した状態が4年間続いている。 半個室のMASU SUITEは年1056万～2112万円、MASU CABANAは年768万～1536万円で、全室完売または残席僅少となっている。 THE SUITE TOKYOの料金は非公表で、法人限定、専用ゲートとホテルの専属サービスを備える。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-07-19",
+      "topic_value_class": "cultural_or_audience_signal",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-66e25f675a4e-2026-07-19.html",
+        "sources": [
+          {
+            "label": "president.jp",
+            "url": "https://president.jp/articles/-/116101?page=1"
+          },
+          {
+            "label": "news.yahoo.co.jp",
+            "url": "https://news.yahoo.co.jp/articles/ba288d594d8aba35b7df4b46fd7a5b7f36aead6c?page=3"
+          }
+        ],
+        "summary": "2022年開設の「THE SUITE TOKYO」は全28室が法人の年間契約で埋まり、新規申し込みを停止した状態が4年間続いている。 半個室のMASU SUITEは年1056万～2112万円、MASU CABANAは年768万～1536万円で、全室完売または残席僅少となっている。 THE SUITE TOKYOの料金は非公表で、法人限定、専用ゲートとホテルの専属サービスを備える。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "2022年開設の「THE SUITE TOKYO」は全28室が法人の年間契約で埋まり、新規申し込みを停止した状態が4年間続いている。",
+            "半個室のMASU SUITEは年1056万～2112万円、MASU CABANAは年768万～1536万円で、全室完売または残席僅少となっている。",
+            "THE SUITE TOKYOの料金は非公表で、法人限定、専用ゲートとホテルの専属サービスを備える。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "2022年開設の「THE SUITE TOKYO」は全28室が法人の年間契約で埋まり、新規申し込みを停止した状態が4年間続いている。",
+              "source_urls": [
+                "https://president.jp/articles/-/116101?page=1"
+              ]
+            },
+            {
+              "fact": "半個室のMASU SUITEは年1056万～2112万円、MASU CABANAは年768万～1536万円で、全室完売または残席僅少となっている。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/ba288d594d8aba35b7df4b46fd7a5b7f36aead6c?page=3"
+              ]
+            },
+            {
+              "fact": "THE SUITE TOKYOの料金は非公表で、法人限定、専用ゲートとホテルの専属サービスを備える。",
+              "source_urls": [
+                "https://president.jp/articles/-/116101?page=1",
+                "https://news.yahoo.co.jp/articles/ba288d594d8aba35b7df4b46fd7a5b7f36aead6c?page=3"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-19"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "employment_consumption",
+      "title": "ITエンジニアの賃金、AI代替の進みやすさで二極化",
+      "summary": "AIで代替されやすい業務の賃金が5割安となり、日本でもIT雇用の縮小が始まっていると報じられた。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-07-19",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-51fdb9c988e4-2026-07-19.html",
+        "sources": [
+          {
+            "label": "nikkei.com",
+            "url": "https://www.nikkei.com/article/DGXZQOUC115KO0R10C26A6000000/"
+          }
+        ],
+        "summary": "AIで代替されやすい業務の賃金が5割安となり、日本でもIT雇用の縮小が始まっていると報じられた。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "AIで代替されやすい業務の賃金が5割安となり、日本でもIT雇用の縮小が始まっていると報じられた。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "AIで代替されやすい業務の賃金が5割安となり、日本でもIT雇用の縮小が始まっていると報じられた。",
+              "source_urls": [
+                "https://www.nikkei.com/article/DGXZQOUC115KO0R10C26A6000000/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-19"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "employment_consumption",
+      "title": "食品の消費税減税、政府が8月上旬までに方針決定へ",
+      "summary": "政府は食料品の消費税減税について、8月上旬までをめどに方針を決めると骨太の方針へ明記する方向だ。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-07-17",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-3acf1cfa5586-2026-07-19.html",
+        "sources": [
+          {
+            "label": "nikkei.com",
+            "url": "https://www.nikkei.com/article/DGXZQOUA171QM0X10C26A7000000/"
+          }
+        ],
+        "summary": "政府は食料品の消費税減税について、8月上旬までをめどに方針を決めると骨太の方針へ明記する方向だ。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "政府は食料品の消費税減税について、8月上旬までをめどに方針を決めると骨太の方針へ明記する方向だ。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "政府は食料品の消費税減税について、8月上旬までをめどに方針を決めると骨太の方針へ明記する方向だ。",
+              "source_urls": [
+                "https://www.nikkei.com/article/DGXZQOUA171QM0X10C26A7000000/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-17"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "investment_policy_markets",
+      "title": "日経平均、週間で4416円安 SOXは弱気相場入り",
+      "summary": "7月第3週の日経平均は前週末比4416円、率にして6.4％下落し、6万4141円で2週連続安となった。 キオクシアは1カ月で半値となり、半導体関連へ売りが広がってイビデン、東京エレクトロン、住友金属鉱山なども8～10％下落した。 SOX指数は6月22日の最高値から21％下落し、直近高値から20％超下げる弱気相場入りとなった。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-07-18",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-278d15169a7d-2026-07-19.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/55af6086-dea9-4267-8dae-078284a0b708"
+          }
+        ],
+        "summary": "7月第3週の日経平均は前週末比4416円、率にして6.4％下落し、6万4141円で2週連続安となった。 キオクシアは1カ月で半値となり、半導体関連へ売りが広がってイビデン、東京エレクトロン、住友金属鉱山なども8～10％下落した。 SOX指数は6月22日の最高値から21％下落し、直近高値から20％超下げる弱気相場入りとなった。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "7月第3週の日経平均は前週末比4416円、率にして6.4％下落し、6万4141円で2週連続安となった。",
+            "キオクシアは1カ月で半値となり、半導体関連へ売りが広がってイビデン、東京エレクトロン、住友金属鉱山なども8～10％下落した。",
+            "SOX指数は6月22日の最高値から21％下落し、直近高値から20％超下げる弱気相場入りとなった。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "7月第3週の日経平均は前週末比4416円、率にして6.4％下落し、6万4141円で2週連続安となった。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/55af6086-dea9-4267-8dae-078284a0b708"
+              ]
+            },
+            {
+              "fact": "キオクシアは1カ月で半値となり、半導体関連へ売りが広がってイビデン、東京エレクトロン、住友金属鉱山なども8～10％下落した。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/55af6086-dea9-4267-8dae-078284a0b708"
+              ]
+            },
+            {
+              "fact": "SOX指数は6月22日の最高値から21％下落し、直近高値から20％超下げる弱気相場入りとなった。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/55af6086-dea9-4267-8dae-078284a0b708"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-18"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_macro_policy",
+      "title": "タイ投資委員会、中国4拠点目の成都事務所を開設",
+      "summary": "タイのアヌティン首相がBOI成都事務所を開設し、中国・ASEAN・タイを結ぶ投資窓口として活用する方針を示した。 Sichuan（四川省）は人口8000万人超、中国で6番目の省経済規模を持つ戦略地域として位置付けられている。",
+      "section_id": "asia",
+      "category": "アジア経済",
+      "source_published_date": "2026-07-18",
+      "topic_value_class": "operational_status_change",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-56ac2dce5080-2026-07-19.html",
+        "sources": [
+          {
+            "label": "nationthailand.com",
+            "url": "https://www.nationthailand.com/news/world/40068781"
+          }
+        ],
+        "summary": "タイのアヌティン首相がBOI成都事務所を開設し、中国・ASEAN・タイを結ぶ投資窓口として活用する方針を示した。 Sichuan（四川省）は人口8000万人超、中国で6番目の省経済規模を持つ戦略地域として位置付けられている。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "タイのアヌティン首相がBOI成都事務所を開設し、中国・ASEAN・タイを結ぶ投資窓口として活用する方針を示した。",
+            "Sichuan（四川省）は人口8000万人超、中国で6番目の省経済規模を持つ戦略地域として位置付けられている。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "タイのアヌティン首相がBOI成都事務所を開設し、中国・ASEAN・タイを結ぶ投資窓口として活用する方針を示した。",
+              "source_urls": [
+                "https://www.nationthailand.com/news/world/40068781"
+              ]
+            },
+            {
+              "fact": "Sichuan（四川省）は人口8000万人超、中国で6番目の省経済規模を持つ戦略地域として位置付けられている。",
+              "source_urls": [
+                "https://www.nationthailand.com/news/world/40068781"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-18"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_macro_policy",
+      "title": "中国4～6月GDP、製造業の内訳は加速",
+      "summary": "実質GDP成長率は1～3月の5.0％から4～6月に4.3％へ減速した一方、名目ベースの4～6月GDPは前年同期比5.9％増となった。 一定規模以上の設備製造業の付加価値は9.7％、ハイテク製造業は14％増え、電子製品産業は4～6月に16.1％増加した。 4～6月のGDP増加額は2兆元で、1～3月より4000億元多かった。",
+      "section_id": "asia",
+      "category": "アジア経済",
+      "source_published_date": "2026-07-17",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-367aa86b74bf-2026-07-19.html",
+        "sources": [
+          {
+            "label": "recordchina.co.jp",
+            "url": "https://www.recordchina.co.jp/b985487-s6-c20-d0189.html"
+          }
+        ],
+        "summary": "実質GDP成長率は1～3月の5.0％から4～6月に4.3％へ減速した一方、名目ベースの4～6月GDPは前年同期比5.9％増となった。 一定規模以上の設備製造業の付加価値は9.7％、ハイテク製造業は14％増え、電子製品産業は4～6月に16.1％増加した。 4～6月のGDP増加額は2兆元で、1～3月より4000億元多かった。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "実質GDP成長率は1～3月の5.0％から4～6月に4.3％へ減速した一方、名目ベースの4～6月GDPは前年同期比5.9％増となった。",
+            "一定規模以上の設備製造業の付加価値は9.7％、ハイテク製造業は14％増え、電子製品産業は4～6月に16.1％増加した。",
+            "4～6月のGDP増加額は2兆元で、1～3月より4000億元多かった。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "実質GDP成長率は1～3月の5.0％から4～6月に4.3％へ減速した一方、名目ベースの4～6月GDPは前年同期比5.9％増となった。",
+              "source_urls": [
+                "https://www.recordchina.co.jp/b985487-s6-c20-d0189.html"
+              ]
+            },
+            {
+              "fact": "一定規模以上の設備製造業の付加価値は9.7％、ハイテク製造業は14％増え、電子製品産業は4～6月に16.1％増加した。",
+              "source_urls": [
+                "https://www.recordchina.co.jp/b985487-s6-c20-d0189.html"
+              ]
+            },
+            {
+              "fact": "4～6月のGDP増加額は2兆元で、1～3月より4000億元多かった。",
+              "source_urls": [
+                "https://www.recordchina.co.jp/b985487-s6-c20-d0189.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-17"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_macro_policy",
+      "title": "中国の上期鉄道固定資産投資、2.1％増",
+      "summary": "2026年上期の鉄道向け固定資産投資は前年同期比2.1％増え、8.71兆円となった。",
+      "section_id": "asia",
+      "category": "アジア経済",
+      "source_published_date": "2026-07-17",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-415656df1199-2026-07-19.html",
+        "sources": [
+          {
+            "label": "ashu-chinastatistics.com",
+            "url": "https://ashu-chinastatistics.com/news/301747-841602810430"
+          }
+        ],
+        "summary": "2026年上期の鉄道向け固定資産投資は前年同期比2.1％増え、8.71兆円となった。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "2026年上期の鉄道向け固定資産投資は前年同期比2.1％増え、8.71兆円となった。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "2026年上期の鉄道向け固定資産投資は前年同期比2.1％増え、8.71兆円となった。",
+              "source_urls": [
+                "https://ashu-chinastatistics.com/news/301747-841602810430"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-17"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "us_markets_fund_flows_rates",
+      "title": "Netflix株、決算後に7.26％下落",
+      "summary": "Netflix株は金曜日に7.26％安の68.95ドルで終え、週間では6.0％下落した。 第2四半期売上高は125.6億ドル、希薄化後1株利益は0.80ドルで、第3四半期売上高見通し128.6億ドルは市場予想130億ドルを下回った。 上期売上高は14.7％増えた一方、視聴時間の伸びは2％で、成長の多くを収益化が担ったとの推計が示された。",
+      "section_id": "north_america",
+      "category": "北米経済",
+      "source_published_date": "2026-07-19",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-c093e09f56b7-2026-07-19.html",
+        "sources": [
+          {
+            "label": "ts2.tech",
+            "url": "https://ts2.tech/en/netflix-nasdaqnflx-share-decline-raises-questions-about-monetization-driven-growth/"
+          }
+        ],
+        "summary": "Netflix株は金曜日に7.26％安の68.95ドルで終え、週間では6.0％下落した。 第2四半期売上高は125.6億ドル、希薄化後1株利益は0.80ドルで、第3四半期売上高見通し128.6億ドルは市場予想130億ドルを下回った。 上期売上高は14.7％増えた一方、視聴時間の伸びは2％で、成長の多くを収益化が担ったとの推計が示された。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Netflix株は金曜日に7.26％安の68.95ドルで終え、週間では6.0％下落した。",
+            "第2四半期売上高は125.6億ドル、希薄化後1株利益は0.80ドルで、第3四半期売上高見通し128.6億ドルは市場予想130億ドルを下回った。",
+            "上期売上高は14.7％増えた一方、視聴時間の伸びは2％で、成長の多くを収益化が担ったとの推計が示された。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Netflix株は金曜日に7.26％安の68.95ドルで終え、週間では6.0％下落した。",
+              "source_urls": [
+                "https://ts2.tech/en/netflix-nasdaqnflx-share-decline-raises-questions-about-monetization-driven-growth/"
+              ]
+            },
+            {
+              "fact": "第2四半期売上高は125.6億ドル、希薄化後1株利益は0.80ドルで、第3四半期売上高見通し128.6億ドルは市場予想130億ドルを下回った。",
+              "source_urls": [
+                "https://ts2.tech/en/netflix-nasdaqnflx-share-decline-raises-questions-about-monetization-driven-growth/"
+              ]
+            },
+            {
+              "fact": "上期売上高は14.7％増えた一方、視聴時間の伸びは2％で、成長の多くを収益化が担ったとの推計が示された。",
+              "source_urls": [
+                "https://ts2.tech/en/netflix-nasdaqnflx-share-decline-raises-questions-about-monetization-driven-growth/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-19"
+          ]
+        }
+      }
+    }
+  ],
+  "coverage_manifest": {
+    "contract_version": "2026-07-11.02",
+    "date": "2026-07-19",
+    "collection_completed_at_jst": "2026-07-19T17:52:37+09:00",
+    "collection_mode": "web_evidence_plus_review",
+    "evidence_sha256": "83d0d507c4bc21b50cc10fd80afceac65359efd62d11210df8dc291cd4069af9",
+    "editor_contract_sha256": "d6c3ebf3edf97dd3dff4a22b78881bb748af6ce2d29e7417f703b37f53bce819"
+  }
+}
