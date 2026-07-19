@@ -29,6 +29,13 @@ def collection_observation(entry: dict[str, Any]) -> dict[str, Any]:
         {
             "query_id": str(check.get("query_id", "")),
             "slot_state": str(check.get("slot_state", "")),
+            "target_source_class": str(check.get("target_source_class", "")),
+            "allowed_hosts": [
+                str(host)
+                for host in check.get("allowed_hosts", [])
+                if isinstance(host, str)
+            ],
+            "fallback_attempted": bool(check.get("fallback_attempted")),
             "material_candidates": int(check.get("material_candidate_count", 0)),
             "resolved_candidates": int(check.get("resolved_candidate_count", 0)),
         }
@@ -174,7 +181,7 @@ def post_publication_diagnostics(
             for url in citation_urls
             if url in record_by_url
         }
-        configured_publishers = core.configured_discovery_publishers().get(label, [])
+        configured_publishers = core.configured_depth_publishers().get(label, [])
         configured_specialist_hosts = {
             normalized_host(str(publisher.get("url", "")))
             for publisher in configured_publishers
@@ -221,6 +228,17 @@ def post_publication_diagnostics(
                 result["resolved_candidates"] for result in depth_results
             ),
             "depth_recovery_unresolved_queries": depth_unresolved,
+            "depth_recovery_targeted_queries": sum(
+                bool(result.get("allowed_hosts")) for result in depth_results
+            ),
+            "depth_recovery_specialist_resolved_candidates": sum(
+                result["resolved_candidates"]
+                for result in depth_results
+                if result.get("target_source_class") == "specialist_media"
+            ),
+            "depth_recovery_fallback_queries": sum(
+                bool(result.get("fallback_attempted")) for result in depth_results
+            ),
             "depth_query_results": depth_results,
             "unavailable_web_seeds": len(
                 observation["unavailable_web_seeds"]

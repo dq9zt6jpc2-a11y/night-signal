@@ -64,7 +64,10 @@ def validate(issue_date: str) -> dict[str, int]:
         evidence_report = evidence_store.validate_bundle(bundle, issue_date)
     except evidence_store.EvidenceContractError as exc:
         fail(str(exc))
-    editor_coverage_gaps = core.remaining_editor_coverage_gaps(
+    reported_source_depth_gaps = [
+        str(value) for value in evidence_report.get("editor_coverage_gaps", [])
+    ]
+    unattempted_source_depth_gaps = core.remaining_editor_coverage_gaps(
         bundle,
         evidence_report,
     )
@@ -96,7 +99,8 @@ def validate(issue_date: str) -> dict[str, int]:
         "source_checks": evidence_report["source_checks"],
         "discovery_checks": evidence_report["discovery_checks"],
         "observed_urls": len(evidence_report["observed_urls"]),
-        "unresolved_source_depth_gaps": len(editor_coverage_gaps),
+        "unresolved_source_depth_gaps": len(reported_source_depth_gaps),
+        "unattempted_source_depth_gaps": len(unattempted_source_depth_gaps),
     }
 
 
@@ -178,6 +182,29 @@ def self_test() -> None:
         fail(f"unexpected self-test metrics: {report}")
     if report["editor_coverage_gaps"] != ["Test/topic-one"]:
         fail("unresolved material watch topic was not exposed as a coverage gap")
+    targeted = json.loads(json.dumps(bundle))
+    targeted_check = targeted["categories"]["Test"]["discovery_checks"][0]
+    targeted_check["query_id"] = "depth:specialist_media:topic-one:bing"
+    targeted_check["allowed_hosts"] = ["example.com"]
+    targeted["categories"]["Test"]["records"].append(
+        {
+            "url": "https://en.wikipedia.org/wiki/Test",
+            "publisher_url": "https://en.wikipedia.org/",
+            "observed": True,
+            "discovery_query_ids": [targeted_check["query_id"]],
+        }
+    )
+    try:
+        evidence_store.validate_bundle(
+            targeted,
+            issue_date,
+            coverage=coverage,
+            registry=registry,
+        )
+    except evidence_store.EvidenceContractError:
+        pass
+    else:
+        fail("targeted specialist search retained an off-domain result")
     resolved = json.loads(json.dumps(bundle))
     resolved["categories"]["Test"]["discovery_checks"][0][
         "resolved_candidate_count"

@@ -582,12 +582,90 @@ def configured_discovery_publishers() -> dict[str, list[dict[str, Any]]]:
     return by_category
 
 
+@functools.lru_cache(maxsize=1)
+def configured_depth_publishers() -> dict[str, list[dict[str, Any]]]:
+    """Merge the research portfolio with trusted Web seeds for depth search.
+
+    Seed registration already represents an explicit source decision. Reusing
+    those domains here prevents a specialist such as Billboard Japan,
+    SpaceNews, or Trading Economics from being checked as a home page but then
+    omitted from the article-level recovery search.
+    """
+    portfolio = configured_discovery_publishers()
+    source_categories = load_object(SOURCE_CONFIG).get("categories", {})
+    merged: dict[str, list[dict[str, Any]]] = {}
+    for category_label in configured_category_contracts():
+        by_host: dict[str, dict[str, Any]] = {
+            normalized_source_host(publisher.get("url")): dict(publisher)
+            for publisher in portfolio.get(category_label, [])
+            if normalized_source_host(publisher.get("url"))
+        }
+        seeds = (
+            source_categories.get(category_label, [])
+            if isinstance(source_categories, dict)
+            else []
+        )
+        for source in seeds if isinstance(seeds, list) else []:
+            if (
+                not isinstance(source, dict)
+                or source.get("channel") != "web"
+                or source.get("source_role") != "independent_media_or_data"
+                or source.get("source_class") not in EDITOR_TRUSTED_SOURCE_CLASSES
+            ):
+                continue
+            host = normalized_source_host(source.get("url"))
+            if not host or host in by_host:
+                continue
+            depth_topic_ids = source.get("depth_topic_ids", [])
+            allowed_topic_ids = {
+                str(topic.get("id"))
+                for topic in configured_category_contracts()[category_label].get(
+                    "watch_topics", []
+                )
+                if isinstance(topic, dict) and topic.get("id")
+            }
+            if (
+                not isinstance(depth_topic_ids, list)
+                or any(
+                    not isinstance(topic_id, str)
+                    or topic_id not in allowed_topic_ids
+                    for topic_id in depth_topic_ids
+                )
+            ):
+                fail(
+                    f"registered depth publisher has invalid topics: "
+                    f"{category_label}/{source.get('label', source.get('url', ''))}"
+                )
+            by_host[host] = {
+                **source,
+                "access_tier": "open_or_mixed",
+                "search_priority": 1,
+                "roles": ["registered_seed_depth"],
+                "categories": [category_label],
+                "topic_ids_by_category": (
+                    {category_label: list(depth_topic_ids)}
+                    if depth_topic_ids
+                    else {}
+                ),
+            }
+        merged[category_label] = sorted(
+            by_host.values(),
+            key=lambda publisher: (
+                int(publisher.get("search_priority", 99)),
+                str(publisher.get("source_class")) != "specialist_media",
+                publisher_access_rank(publisher),
+                str(publisher.get("label", "")),
+            ),
+        )
+    return merged
+
+
 def discovery_publishers_for_topic(
     category_label: str,
     topic_id: str,
 ) -> list[dict[str, Any]]:
     """Prefer specialists explicitly matched to the weak topic, with fallback."""
-    publishers = configured_discovery_publishers().get(category_label, [])
+    publishers = configured_depth_publishers().get(category_label, [])
     matched = [
         publisher
         for publisher in publishers
@@ -595,12 +673,25 @@ def discovery_publishers_for_topic(
         in publisher.get("topic_ids_by_category", {}).get(category_label, [])
     ]
     if matched:
-        return matched
+        return sorted(
+            matched,
+            key=lambda publisher: (
+                str(publisher.get("source_class")) != "specialist_media",
+                len(
+                    publisher.get("topic_ids_by_category", {}).get(
+                        category_label, []
+                    )
+                ),
+                int(publisher.get("search_priority", 99)),
+                publisher_access_rank(publisher),
+                str(publisher.get("label", "")),
+            ),
+        )
     return sorted(
         publishers,
         key=lambda publisher: (
             int(publisher["search_priority"]),
-            str(publisher.get("source_class")) != "major_media",
+            str(publisher.get("source_class")) != "specialist_media",
             publisher_access_rank(publisher),
             str(publisher["label"]),
         ),
@@ -631,9 +722,10 @@ def configured_official_depth_sources() -> dict[str, dict[str, list[dict[str, An
             topic_ids = source.get("depth_topic_ids", [])
             if not topic_ids:
                 continue
+            if source.get("source_role") != "primary_or_official":
+                continue
             if (
-                source.get("source_role") != "primary_or_official"
-                or source.get("channel") != "web"
+                source.get("channel") != "web"
                 or not isinstance(topic_ids, list)
                 or any(
                     not isinstance(topic_id, str)
@@ -673,6 +765,41 @@ def normalized_source_host(value: Any) -> str:
     parsed = urllib.parse.urlparse(str(value or ""))
     host = (parsed.hostname or "").casefold().removeprefix("www.")
     return host.rstrip(".")
+
+
+def source_host_matches(candidate: str, allowed: str) -> bool:
+    return bool(
+        candidate
+        and allowed
+        and (
+            candidate == allowed
+            or candidate.endswith(f".{allowed}")
+            or allowed.endswith(f".{candidate}")
+        )
+    )
+
+
+def record_matches_allowed_hosts(
+    record: dict[str, Any],
+    allowed_hosts: list[str],
+) -> bool:
+    """Enforce targeted search domains after the search provider responds."""
+    normalized_allowed = [
+        normalized_source_host(f"https://{host}")
+        for host in allowed_hosts
+        if normalized_source_host(f"https://{host}")
+    ]
+    if not normalized_allowed:
+        return True
+    candidates = {
+        normalized_source_host(record.get("url")),
+        normalized_source_host(record.get("publisher_url")),
+    } - {""}
+    return any(
+        source_host_matches(candidate, allowed)
+        for candidate in candidates
+        for allowed in normalized_allowed
+    )
 
 
 @functools.lru_cache(maxsize=1)
@@ -2714,13 +2841,15 @@ def depth_recovery_queries(
     ):
         return []
 
+    configured_max_queries = os.getenv("NIGHT_SIGNAL_DEPTH_RECOVERY_MAX_QUERIES")
     try:
-        max_queries = max(
-            0,
-            int(os.getenv("NIGHT_SIGNAL_DEPTH_RECOVERY_MAX_QUERIES", "6")),
+        max_queries = (
+            max(0, int(configured_max_queries))
+            if configured_max_queries is not None
+            else len(weak_topics) * 2
         )
     except ValueError:
-        max_queries = 6
+        max_queries = len(weak_topics) * 2
     if max_queries == 0:
         return []
     identities = discovery_identity_queries(category)
@@ -2745,22 +2874,23 @@ def depth_recovery_queries(
                 if normalized_source_host(source.get("url"))
             )
         )
-        publisher_hosts = list(
+        publishers = discovery_publishers_for_topic(
+            str(category.get("label", "")), topic_id
+        )
+        specialist_hosts = list(
             dict.fromkeys(
                 normalized_source_host(publisher.get("url"))
-                for publisher in discovery_publishers_for_topic(
-                    str(category.get("label", "")), topic_id
-                )
-                if normalized_source_host(publisher.get("url"))
+                for publisher in publishers
+                if publisher.get("source_class") == "specialist_media"
+                and normalized_source_host(publisher.get("url"))
             )
         )
-        topic_has_explicit_publishers = any(
-            topic_id
-            in publisher.get("topic_ids_by_category", {}).get(
-                str(category.get("label", "")), []
-            )
-            for publisher in configured_discovery_publishers().get(
-                str(category.get("label", "")), []
+        major_hosts = list(
+            dict.fromkeys(
+                normalized_source_host(publisher.get("url"))
+                for publisher in publishers
+                if publisher.get("source_class") == "major_media"
+                and normalized_source_host(publisher.get("url"))
             )
         )
         terms = list(
@@ -2771,57 +2901,52 @@ def depth_recovery_queries(
             )
         )
         topic_specs: list[dict[str, Any]] = []
-        if terms and publisher_hosts:
-            official_budget = min(3, len(official_hosts))
-            publisher_budget = min(
-                max(1, 6 - official_budget)
-                if topic_has_explicit_publishers
-                else 3,
-                len(publisher_hosts),
-            )
-            group_size = publisher_budget
-            start = (
-                (topic_index * group_size) % len(publisher_hosts)
-                if topic_has_explicit_publishers
-                else 0
-            )
-            selected_publisher_hosts = [
-                publisher_hosts[(start + offset) % len(publisher_hosts)]
-                for offset in range(group_size)
-            ]
-            selected_hosts = list(
-                dict.fromkeys(
-                    [*official_hosts[:official_budget], *selected_publisher_hosts]
+        identity = identities[topic_index % len(identities)]
+
+        def targeted_spec(kind: str, host: str) -> dict[str, Any]:
+            return {
+                "query_id": f"depth:{kind}:{topic_id}:bing",
+                "purpose": "watch_topic",
+                "watch_topic_ids": [topic_id],
+                "query": (
+                    f"site:{host} ({identity}) "
+                    f"({' OR '.join(terms[:6])}) when:3d"
+                ),
+                "provider": "bing_rss",
+                "fallback_provider": "google_news_rss",
+                "channel": "web",
+                "allowed_hosts": [host],
+                "target_source_class": kind,
+            }
+
+        if terms and official_hosts:
+            topic_specs.append(
+                targeted_spec(
+                    "official",
+                    official_hosts[0],
                 )
             )
-            sites = " OR ".join(f"site:{host}" for host in selected_hosts)
-            identity = identities[topic_index % len(identities)]
+        if terms and specialist_hosts:
             topic_specs.append(
-                {
-                    "query_id": f"depth:publisher:{topic_id}:bing",
-                    "purpose": "watch_topic",
-                    "watch_topic_ids": [topic_id],
-                    "query": (
-                        f"({sites}) ({identity}) "
-                        f"({' OR '.join(terms[:6])}) when:3d"
-                    ),
-                    "provider": "bing_rss",
-                    "channel": "web",
-                }
+                targeted_spec(
+                    "specialist_media",
+                    specialist_hosts[0],
+                )
             )
-        for group_index in range(0, min(len(terms), 12), 6):
-            group = terms[group_index : group_index + 6]
-            if not group:
-                continue
-            identity = identities[topic_index % len(identities)]
+        if terms and len(topic_specs) < 2 and major_hosts:
+            topic_specs.append(
+                targeted_spec(
+                    "major_media",
+                    major_hosts[0],
+                )
+            )
+        if terms and len(topic_specs) < 2:
             topic_specs.append(
                 {
-                    "query_id": (
-                        f"depth:topic:{topic_id}:{group_index // 6 + 1}:bing"
-                    ),
+                    "query_id": f"depth:open-web:{topic_id}:bing",
                     "purpose": "watch_topic",
                     "watch_topic_ids": [topic_id],
-                    "query": f"({identity}) ({' OR '.join(group)}) when:3d",
+                    "query": f"({identity}) ({' OR '.join(terms[:6])}) when:3d",
                     "provider": "bing_rss",
                     "channel": "web",
                 }
@@ -3645,6 +3770,24 @@ def remaining_editor_coverage_gaps(
     return remaining
 
 
+def discovery_fallback_spec(spec: dict[str, Any]) -> dict[str, Any] | None:
+    fallback_provider = str(spec.get("fallback_provider", ""))
+    primary_provider = str(spec.get("provider", ""))
+    if (
+        not fallback_provider
+        or fallback_provider == primary_provider
+        or spec.get("fallback_attempted")
+    ):
+        return None
+    return {
+        **spec,
+        "provider": fallback_provider,
+        "fallback_provider": "",
+        "fallback_attempted": True,
+        "fallback_from_provider": primary_provider,
+    }
+
+
 def fetch_discovery_spec(
     category: dict[str, Any],
     issue_date: str,
@@ -3675,6 +3818,18 @@ def fetch_discovery_spec(
         raw, _, _ = request_bytes(rss_url)
         root = ET.fromstring(raw)
     except (OSError, TimeoutError, urllib.error.URLError, ET.ParseError) as exc:
+        fallback = discovery_fallback_spec(spec)
+        if fallback is not None:
+            records, check = fetch_discovery_spec(
+                category,
+                issue_date,
+                fallback,
+            )
+            check["evidence_summary"] = (
+                f"{provider_label}失敗後に代替検索を実行した。"
+                f"{check['evidence_summary']}"
+            )
+            return records, check
         return [], {
             **spec,
             "url": rss_url,
@@ -3737,12 +3892,33 @@ def fetch_discovery_spec(
                 f"{published_date or '日付不明'}。"
             ),
         }
+        allowed_hosts = [
+            str(host)
+            for host in spec.get("allowed_hosts", [])
+            if isinstance(host, str) and host.strip()
+        ]
+        if allowed_hosts and not record_matches_allowed_hosts(record, allowed_hosts):
+            continue
         if not discovery_record_is_relevant(category, issue_date, record):
             continue
         relevant_urls.add(link)
         if discovery_record_needs_resolution(record):
             material_urls.add(link)
         records.append(record)
+
+    if spec.get("allowed_hosts") and not relevant_urls:
+        fallback = discovery_fallback_spec(spec)
+        if fallback is not None:
+            fallback_records, fallback_check = fetch_discovery_spec(
+                category,
+                issue_date,
+                fallback,
+            )
+            fallback_check["evidence_summary"] = (
+                f"{provider_label}の対象ドメイン結果が0件だったため"
+                f"代替検索を実行した。{fallback_check['evidence_summary']}"
+            )
+            return fallback_records, fallback_check
 
     return records, {
         **spec,
@@ -6540,17 +6716,85 @@ def self_test() -> None:
         fail("topic-specific recovery omitted Japanese telecom specialists")
     if "Financial Times" in softbank_domestic_publishers:
         fail("topic-specific recovery fell back to unrelated broad publishers")
+    yoasobi_depth_publishers = {
+        str(publisher.get("label"))
+        for publisher in discovery_publishers_for_topic(
+            "YOASOBI / 幾田りら", "music_release_chart_tieup"
+        )
+    }
+    if not {"Billboard Japan", "Natalie Music", "ORICON NEWS"} <= (
+        yoasobi_depth_publishers
+    ):
+        fail("registered music specialists were omitted from depth discovery")
+    asia_depth_publishers = discovery_publishers_for_topic(
+        "アジア経済", "china_macro_policy"
+    )
+    if not asia_depth_publishers or asia_depth_publishers[0].get(
+        "source_class"
+    ) != "specialist_media":
+        fail("regional macro depth discovery did not prioritize specialists")
     f1_depth_specs = depth_recovery_queries(
         configured_category_contracts()["F1"],
         "2099-07-02",
         [],
     )
     if not f1_depth_specs or not any(
-        "site:racefans.net" in str(spec.get("query", ""))
-        or "site:the-race.com" in str(spec.get("query", ""))
+        spec.get("target_source_class") == "specialist_media"
+        and spec.get("allowed_hosts")
         for spec in f1_depth_specs
     ):
         fail("depth recovery did not target a vetted category specialist")
     if len(f1_depth_specs) > 6:
         fail("depth recovery exceeded its bounded query budget")
+    if any(
+        len(spec.get("allowed_hosts", [])) != 1
+        or str(spec.get("query", "")).count("site:") != 1
+        for spec in f1_depth_specs
+        if spec.get("allowed_hosts")
+    ):
+        fail("targeted depth recovery did not isolate one publisher domain")
+    if any(
+        spec.get("fallback_provider") != "google_news_rss"
+        for spec in f1_depth_specs
+    ):
+        fail("targeted depth recovery omitted its bounded search fallback")
+    original_request_bytes = request_bytes
+
+    def unavailable_search(
+        url: str,
+        timeout: int = 15,
+    ) -> tuple[bytes, str, str]:
+        raise urllib.error.URLError("self-test search outage")
+
+    globals()["request_bytes"] = unavailable_search
+    try:
+        _, fallback_check = fetch_discovery_spec(
+            configured_category_contracts()["F1"],
+            "2099-07-02",
+            f1_depth_specs[0],
+        )
+    finally:
+        globals()["request_bytes"] = original_request_bytes
+    if (
+        not fallback_check.get("fallback_attempted")
+        or fallback_check.get("fallback_from_provider") != "bing_rss"
+        or fallback_check.get("provider") != "google_news_rss"
+    ):
+        fail("targeted depth recovery did not execute its one bounded fallback")
+    if record_matches_allowed_hosts(
+        {
+            "url": "https://en.wikipedia.org/wiki/Formula_One",
+            "publisher_url": "https://en.wikipedia.org/",
+        },
+        ["racefans.net"],
+    ):
+        fail("off-domain search noise passed a targeted publisher boundary")
+    if not record_matches_allowed_hosts(
+        {
+            "url": "https://www.racefans.net/2099/07/report/",
+            "publisher_url": "https://www.racefans.net/",
+        },
+        ["racefans.net"],
+    ):
+        fail("a valid targeted publisher result failed its domain boundary")
     print("NIGHT SIGNAL CORE SELF-TEST PASSED")

@@ -6,6 +6,7 @@ from __future__ import annotations
 import hashlib
 import json
 import sys
+import urllib.parse
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -19,12 +20,30 @@ PUBLISHER_PORTFOLIO_CONFIG = (
 COVERAGE_CONFIG = ROOT / "config" / "night_signal_coverage.json"
 # Bump only when collection semantics or the Evidence schema changes. Editor and
 # renderer changes must not invalidate an already verified same-day collection.
-COLLECTOR_CONTRACT_REVISION = "f8d8d0c7c4a31a4e"
+COLLECTOR_CONTRACT_REVISION = "7f7b93f1ee1b4619"
 LEGACY_COLLECTOR_CONTRACT_REVISIONS = {
+    "f8d8d0c7c4a31a4e",
     "2971bda468f60d99",
     "b643a90c6ef1a742",
     "b309ad4b7f41fe5f",
 }
+
+
+def normalized_host(value: Any) -> str:
+    parsed = urllib.parse.urlparse(str(value or ""))
+    return (parsed.hostname or "").casefold().removeprefix("www.").rstrip(".")
+
+
+def host_matches(candidate: str, allowed: str) -> bool:
+    return bool(
+        candidate
+        and allowed
+        and (
+            candidate == allowed
+            or candidate.endswith(f".{allowed}")
+            or allowed.endswith(f".{candidate}")
+        )
+    )
 SOURCE_CHECK_STATES = {"observed_live", "source_unavailable"}
 DISCOVERY_CHECK_STATES = {
     "searched_no_results",
@@ -401,6 +420,7 @@ def validate_bundle(
         )
         horizon_searched = False
         unresolved_queries: list[str] = []
+        targeted_query_hosts: dict[str, set[str]] = {}
         topic_resolution = {
             topic: {"material_candidates": 0, "resolved_candidates": 0}
             for topic in topics
@@ -434,6 +454,24 @@ def validate_bundle(
                 isinstance(check.get("query"), str) and bool(str(check.get("query")).strip()),
                 f"{label} discovery_checks[{index}] has no query",
             )
+            allowed_hosts = check.get("allowed_hosts", [])
+            _require(
+                isinstance(allowed_hosts, list)
+                and all(
+                    isinstance(host, str) and bool(normalized_host(f"https://{host}"))
+                    for host in allowed_hosts
+                ),
+                f"{label} discovery_checks[{index}] has invalid allowed hosts",
+            )
+            if allowed_hosts:
+                query_id = str(check.get("query_id", ""))
+                _require(
+                    bool(query_id),
+                    f"{label} discovery_checks[{index}] has targeted search without query id",
+                )
+                targeted_query_hosts[query_id] = {
+                    normalized_host(f"https://{host}") for host in allowed_hosts
+                }
             _require(
                 isinstance(channel, str) and bool(channel),
                 f"{label} discovery_checks[{index}] has no channel",
@@ -538,6 +576,23 @@ def validate_bundle(
             records_by_url.setdefault(url, []).append(record)
             if record.get("observed"):
                 observed_urls.add(url)
+            for query_id in record.get("discovery_query_ids", []):
+                allowed = targeted_query_hosts.get(str(query_id))
+                if not allowed:
+                    continue
+                candidate_hosts = {
+                    normalized_host(record.get("url")),
+                    normalized_host(record.get("publisher_url")),
+                } - {""}
+                _require(
+                    any(
+                        host_matches(candidate, expected)
+                        for candidate in candidate_hosts
+                        for expected in allowed
+                    ),
+                    f"{label} targeted discovery retained an off-domain record: "
+                    f"{query_id}/{url}",
+                )
         observed_record_urls = {
             url
             for url, url_records in records_by_url.items()

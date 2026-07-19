@@ -421,6 +421,25 @@ def category_review_audit(
             if isinstance(check, dict)
             and str(check.get("query_id", "")).startswith("depth:")
         )
+        depth_targeted = sum(
+            isinstance(check, dict)
+            and str(check.get("query_id", "")).startswith("depth:")
+            and bool(check.get("allowed_hosts"))
+            for check in discovery_checks
+        )
+        depth_specialist_resolved = sum(
+            int(check.get("resolved_candidate_count", 0))
+            for check in discovery_checks
+            if isinstance(check, dict)
+            and str(check.get("query_id", "")).startswith("depth:")
+            and check.get("target_source_class") == "specialist_media"
+        )
+        depth_fallbacks = sum(
+            isinstance(check, dict)
+            and str(check.get("query_id", "")).startswith("depth:")
+            and bool(check.get("fallback_attempted"))
+            for check in discovery_checks
+        )
         final_cards = len(cards_by_category.get(label, []))
         low_count = final_cards <= 1
         needs_follow_up = bool(
@@ -449,6 +468,11 @@ def category_review_audit(
                 "unresolved_searches": unresolved_searches,
                 "depth_recovery_queries": depth_queries,
                 "depth_recovery_resolved_candidates": depth_resolved,
+                "depth_recovery_targeted_queries": depth_targeted,
+                "depth_recovery_specialist_resolved_candidates": (
+                    depth_specialist_resolved
+                ),
+                "depth_recovery_fallback_queries": depth_fallbacks,
                 "low_count_status": (
                     "limited_evidence"
                     if needs_follow_up

@@ -81,6 +81,10 @@ def metric_deltas(current: dict[str, Any], previous: dict[str, Any]) -> dict[str
         "body_backed_cited_urls",
         "non_body_cited_urls",
         "editor_coverage_gap_count",
+        "unattempted_editor_coverage_gap_count",
+        "targeted_depth_queries",
+        "specialist_depth_resolved_candidates",
+        "depth_fallback_queries",
     )
     return {
         key: int(current.get(key, 0)) - int(previous.get(key, 0))
@@ -133,7 +137,10 @@ def evaluate(
     material_candidates = 0
     resolved_candidates = 0
     unresolved_queries = list(evidence_report["unresolved_queries"])
-    editor_coverage_gaps = core.remaining_editor_coverage_gaps(
+    editor_coverage_gaps = [
+        str(value) for value in evidence_report.get("editor_coverage_gaps", [])
+    ]
+    unattempted_editor_coverage_gaps = core.remaining_editor_coverage_gaps(
         bundle,
         evidence_report,
     )
@@ -143,6 +150,9 @@ def evaluate(
     local_horizon_relevant_results = 0
     local_horizon_material_candidates = 0
     local_horizon_resolved_candidates = 0
+    targeted_depth_queries = 0
+    specialist_depth_resolved_candidates = 0
+    depth_fallback_queries = 0
     reviewed_topics = {
         (label, topic)
         for label, report in evidence_report["categories"].items()
@@ -162,6 +172,13 @@ def evaluate(
                 continue
             material_candidates += int(check.get("material_candidate_count", 0))
             resolved_candidates += int(check.get("resolved_candidate_count", 0))
+            if str(check.get("query_id", "")).startswith("depth:"):
+                targeted_depth_queries += bool(check.get("allowed_hosts"))
+                depth_fallback_queries += bool(check.get("fallback_attempted"))
+                if check.get("target_source_class") == "specialist_media":
+                    specialist_depth_resolved_candidates += int(
+                        check.get("resolved_candidate_count", 0)
+                    )
             if str(check.get("query_id", "")).startswith(
                 "horizon:local-language:"
             ):
@@ -288,6 +305,15 @@ def evaluate(
         "unresolved_queries": unresolved_queries,
         "editor_coverage_gaps": editor_coverage_gaps,
         "editor_coverage_gap_count": len(editor_coverage_gaps),
+        "unattempted_editor_coverage_gaps": unattempted_editor_coverage_gaps,
+        "unattempted_editor_coverage_gap_count": len(
+            unattempted_editor_coverage_gaps
+        ),
+        "targeted_depth_queries": targeted_depth_queries,
+        "specialist_depth_resolved_candidates": (
+            specialist_depth_resolved_candidates
+        ),
+        "depth_fallback_queries": depth_fallback_queries,
         "observed_urls": len(observed_urls),
         "unavailable_urls": len(unavailable_urls),
         "evidence_hosts": len(

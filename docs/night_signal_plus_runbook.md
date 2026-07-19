@@ -118,6 +118,12 @@ a bounded, category- and topic-specific depth pass when body-rich Evidence from
 a trusted source is missing. Open specialist media are tried before unrelated
 or restricted sources; Google News and Bing remain discovery indexes rather
 than source-quality substitutes.
+Each weak topic gets separate single-domain official and specialist searches;
+never combine several `site:` domains into one OR query. Count a targeted result
+only when its article or publisher host matches that exact registered domain.
+Use Google News once as a fallback when the primary Bing query is unavailable or
+returns no on-domain result. Registered trusted Web seeds participate in this
+depth search even when they are not duplicated in the publisher portfolio.
 Restricted articles are discovery signals, not body Evidence; corroborate them
 with an accessible primary source or independently readable report.
 Quarterly, annual, and final earnings results and material

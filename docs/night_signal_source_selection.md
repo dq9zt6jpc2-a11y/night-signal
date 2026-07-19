@@ -13,12 +13,16 @@ General search remains the broad recall and counterexample layer. Information
 depth comes from official releases and topic-matched specialist publishers.
 Each specialist may declare `topic_ids_by_category`; the recovery pass searches
 those open publishers before unrelated, mixed-access, or restricted publishers.
-Official seed pages may declare `depth_topic_ids`; up to three matching official
-domains join the same bounded query, so a release page and independent technical
-coverage are searched together instead of creating a second unbounded pass.
-The pass remains capped by `NIGHT_SIGNAL_DEPTH_RECOVERY_MAX_QUERIES` (default
-six per category), so adding a publisher does not add an unconditional daily
-fetch or model request.
+Official seed pages may declare `depth_topic_ids`. For each evidence-thin topic,
+the recovery pass issues at most one single-domain official query and one
+single-domain specialist query. Results must match that exact registered domain;
+an index result from Wikipedia or another unrelated publisher cannot satisfy the
+topic. If Bing is unavailable or returns no matching-domain result, that same
+query is retried once through Google News RSS. The default budget is therefore
+two deterministic searches per weak topic, with
+`NIGHT_SIGNAL_DEPTH_RECOVERY_MAX_QUERIES` available as an operational cap.
+Strong topics add no query, adding a publisher adds no unconditional fetch, and
+the recovery pass adds no model request.
 
 Coverage contracts may declare `required_discovery_roles`. Collection fails
 fast when the configured portfolio loses a required domain such as telecom,
