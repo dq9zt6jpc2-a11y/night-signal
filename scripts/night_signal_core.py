@@ -1525,7 +1525,8 @@ ARTICLE_REQUIRED_FACT_TAIL_RE = re.compile(
 )
 ARTICLE_OPTIONAL_REQUIRED_FACT_RE = re.compile(
     r"^実験的な機能のため、?記事本文と併せてご確認ください|"
-    r"^(?:本記事|この記事)では.{0,180}(?:紹介|解説|紐解|確認)(?:します|する)|"
+    r"^(?:本記事|この記事)では.{0,180}(?:(?:紹介|解説|確認)(?:します|する)|"
+    r"紐解(?:きます|く))|"
     r"^[A-Z][A-Za-z.'’-]+ last (?:Monday|Tuesday|Wednesday|Thursday|Friday|"
     r"Saturday|Sunday|week|month)[。.!?]?$|"
     r"^Must Read\b",
