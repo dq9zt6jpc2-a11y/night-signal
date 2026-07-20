@@ -1484,6 +1484,12 @@ ARTICLE_CONTENT_END_RE = re.compile(
     r"(?:^|\s)共有する(?:\s|$)|(?:^|\s)Related Stories(?:\s|$)",
     re.I,
 )
+ARTICLE_REQUIRED_FACT_TAIL_RE = re.compile(
+    r"(?:^|\s)(?:Recent(?:ly)? Published|Latest (?:News|Articles|Stories)|"
+    r"TOP STORIES|Related Articles|Recommended (?:Articles|Stories)|"
+    r"You May Also Like|Read Next|More (?:News|Stories|From))(?:\s|$)",
+    re.I,
+)
 ARTICLE_CHROME_SENTENCE_RE = re.compile(
     r"印刷機能|会員登録|無料登録|ログイン|マイページ|"
     r"トップページ|タグをフォロー|著者を応援|"
@@ -1666,6 +1672,12 @@ def editor_required_source_facts(
         event_id = str(record.get("_editor_event_id") or evidence_id)
         event_facts = required.setdefault(event_id, [])
         for fact in editor_source_fact_inventory(evidence_id, record):
+            # Keep stable fact ids in the packet inventory, but never make a
+            # publisher's related-story/navigation tail mandatory summary
+            # content.  Once a tail marker appears, all later extracted
+            # sentences belong to the page shell rather than the article.
+            if ARTICLE_REQUIRED_FACT_TAIL_RE.search(fact["text"]):
+                break
             if any(
                 state_contract.materially_same_fact(fact["text"], existing["text"])
                 for existing in event_facts
@@ -4843,10 +4855,20 @@ def normalize_result(
                     uncovered_source_fact_ids.add(source_fact_id)
                 else:
                     covered_source_fact_ids.add(source_fact_id)
+            cited_source_facts = [
+                source_facts_by_id[source_fact_id]
+                for source_fact_id in source_fact_ids
+                if source_fact_id in source_facts_by_id
+                and source_facts_by_id[source_fact_id]["evidence_id"] in point_ids
+            ]
+            explicitly_supported = bool(cited_source_facts) and all(
+                source_fact_covered_by_summary(source_fact["text"], text)
+                for source_fact in cited_source_facts
+            )
             if fact_supported_by_records(
                 text,
                 [records_by_id[evidence_id] for evidence_id in point_ids],
-            ):
+            ) or explicitly_supported:
                 supported_point_values.append(
                     (text, point_ids, source_fact_ids, support_quotes)
                 )
@@ -4943,6 +4965,22 @@ def normalize_result(
             *[text for text, _, _, _ in point_values],
         )
         point_texts = [text for text, _, _, _ in point_values]
+        # The model-provided id-to-sentence mapping is useful grounding but is
+        # not itself the completeness boundary.  Credit every required fact
+        # that the accepted title or summary actually represents.  This avoids
+        # rejecting a complete review merely because an id was attached to the
+        # wrong point, while the event-wide missing-fact gate still rejects a
+        # real omission.
+        represented_texts = [title, *point_texts]
+        covered_source_fact_ids.update(
+            fact["id"]
+            for fact in required_facts_by_event.get(item_event_id, [])
+            if fact["evidence_id"] in evidence_ids
+            and any(
+                source_fact_covered_by_summary(fact["text"], represented)
+                for represented in represented_texts
+            )
+        )
         facts = point_texts
         summary = " ".join(facts)
         invalid_support_quotes = [
@@ -4987,10 +5025,6 @@ def normalize_result(
             (
                 "invalid_source_fact_id",
                 require_source_fact_coverage and bool(invalid_source_fact_ids),
-            ),
-            (
-                "source_fact_not_covered",
-                require_source_fact_coverage and bool(uncovered_source_fact_ids),
             ),
             ("missing_evidence_id", not evidence_ids),
             ("unknown_evidence_id", bool(unknown_evidence_ids)),
@@ -6373,6 +6407,24 @@ def self_test() -> None:
     )
     if len(strict_normalized["items"]) != 1 or not strict_normalized["coverage_complete"]:
         fail("source-to-summary fact recall rejected complete coverage")
+    misassigned_fact_raw = json.loads(json.dumps(strict_raw, ensure_ascii=False))
+    misassigned_fact_raw["items"][0]["summary_points"][0]["source_fact_ids"] = [
+        required_fixture_facts[1]["id"]
+    ]
+    misassigned_fact_raw["items"][0]["summary_points"][1]["source_fact_ids"] = [
+        required_fixture_facts[0]["id"]
+    ]
+    misassigned_fact = normalize_result(
+        misassigned_fact_raw,
+        category,
+        "2099-01-03",
+        records,
+        require_source_fact_coverage=True,
+    )
+    if len(misassigned_fact["items"]) != 1 or not misassigned_fact[
+        "coverage_complete"
+    ]:
+        fail("event-wide fact recall rejected complete copy with misassigned ids")
     omitted_fact_raw = json.loads(json.dumps(strict_raw, ensure_ascii=False))
     omitted_fact_raw["items"][0]["summary_points"] = omitted_fact_raw["items"][0][
         "summary_points"
@@ -6538,6 +6590,21 @@ def self_test() -> None:
         != prompt_evidence["article_fact_count"] - MAX_EDITOR_SOURCE_FACTS
     ):
         fail("editor prompt did not expose its bounded long-source fact selection")
+    tail_record = {
+        **records[0],
+        "url": "https://example.com/article-with-related-links",
+        "title": "OpenAIが開発者向け機能の提供条件を公表",
+        "excerpt": (
+            "OpenAIは対象機能の提供条件と利用開始日を公表した。"
+            "Recent Published TOP STORIES Another company announced an unrelated merger. "
+            "A separate unrelated market article followed."
+        ),
+    }
+    tail_required = editor_required_source_facts(
+        editor_evidence_records(category, "2099-01-03", [tail_record])
+    )["g001"]
+    if len(tail_required) != 1 or "unrelated" in tail_required[0]["text"]:
+        fail("publisher related-story tail was made mandatory summary content")
     if set(prompt_evidence) != {
         "id",
         "watch_topic_ids",
