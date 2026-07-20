@@ -1509,7 +1509,26 @@ ARTICLE_CONTENT_END_RE = re.compile(
 ARTICLE_REQUIRED_FACT_TAIL_RE = re.compile(
     r"(?:^|\s)(?:Recent(?:ly)? Published|Latest (?:News|Articles|Stories)|"
     r"TOP STORIES|Related Articles|Recommended (?:Articles|Stories)|"
-    r"You May Also Like|Read Next|More (?:News|Stories|From))(?:\s|$)",
+    r"You May Also Like|Read Next|More (?:News|Stories|From))(?=\s|[:：]|$)|"
+    r"Download (?:the )?[^。.!?]{0,80}?(?:App|Articles)(?=[\s:：。.!?]|$)|"
+    r"Complete profile|Before downloading the whitepaper|"
+    r"(?:Follow|Connect with) [^。.!?]{0,80}? on LinkedIn|"
+    r"商品ページ|TV放送[＆&]タイムスケジュール|"
+    r"コメントを読む|本記事はニュース提供社|"
+    r"すべてのコンテンツの著作権|"
+    r"(?:株式会社|有限公司)\s*概要|"
+    r"(?:氏|さん)[（(][^）)]{0,60}[）)]\s*19\d{2}年|"
+    r"まずは一度、?ぜひ|"
+    r"What to do before the window closes|"
+    r"Reference\s*[:：]",
+    re.I,
+)
+ARTICLE_OPTIONAL_REQUIRED_FACT_RE = re.compile(
+    r"^実験的な機能のため、?記事本文と併せてご確認ください|"
+    r"^(?:本記事|この記事)では.{0,180}(?:紹介|解説|紐解|確認)(?:します|する)|"
+    r"^[A-Z][A-Za-z.'’-]+ last (?:Monday|Tuesday|Wednesday|Thursday|Friday|"
+    r"Saturday|Sunday|week|month)[。.!?]?$|"
+    r"^Must Read\b",
     re.I,
 )
 ARTICLE_CHROME_SENTENCE_RE = re.compile(
@@ -1700,6 +1719,12 @@ def editor_required_source_facts(
             # sentences belong to the page shell rather than the article.
             if ARTICLE_REQUIRED_FACT_TAIL_RE.search(fact["text"]):
                 break
+            # A publisher can inject an isolated promo, article-description,
+            # extraction warning, or sentence fragment between real body
+            # paragraphs.  Skip that one fact without truncating later body
+            # facts, and keep packet fact ids immutable.
+            if ARTICLE_OPTIONAL_REQUIRED_FACT_RE.search(fact["text"]):
+                continue
             if any(
                 state_contract.materially_same_fact(fact["text"], existing["text"])
                 for existing in event_facts
@@ -4751,16 +4776,17 @@ def source_fact_covered_by_summary(source_fact: str, summary_point: str) -> bool
             re.sub(r"[^a-z0-9]", "", value.casefold())
             for value in re.findall(r"[A-Za-z][A-Za-z0-9.+-]{1,}", summary_point)
         }
+        # Source sentences often contain publication times or other incidental
+        # numbers beside the material claim.  Require one numeric bridge for a
+        # translated numeric fact, not every number in the source sentence.
+        # The opposite direction is still strict below:
+        # summary_claims_supported_by_source_facts rejects every number added
+        # by the summary unless it exists in the cited source facts.
         numeric_anchor = not source_numbers or any(
             numeric_claim_supported(number, summary_numbers, approximate=True)
             for number in source_numbers
         )
         return numeric_anchor and bool(source_anchors & summary_anchors)
-    if any(
-        not numeric_claim_supported(number, summary_numbers, approximate=True)
-        for number in source_numbers
-    ):
-        return False
     if state_contract.materially_same_fact(source_fact, summary_point):
         return True
     required_overlap = min(2, max(1, len(state_contract.content_terms(source_fact))))
@@ -6709,6 +6735,33 @@ def self_test() -> None:
     )["g001"]
     if len(tail_required) != 1 or "unrelated" in tail_required[0]["text"]:
         fail("publisher related-story tail was made mandatory summary content")
+    embedded_chrome_record = {
+        **records[0],
+        "url": "https://example.com/article-with-embedded-chrome",
+        "title": "OpenAIが開発者向け機能の提供条件を公表",
+        "excerpt": (
+            "OpenAIは対象機能の提供条件と利用開始日を公表した。"
+            "実験的な機能のため、記事本文と併せてご確認ください。"
+            "指標は完了した重要業務と総費用を比較する。"
+            "Download the Example App."
+            "Related Articles: An unrelated company changed its strategy."
+        ),
+    }
+    embedded_required_by_event = editor_required_source_facts(
+        editor_evidence_records(category, "2099-01-03", [embedded_chrome_record])
+    )
+    embedded_required = next(iter(embedded_required_by_event.values()))
+    embedded_text = " ".join(fact["text"] for fact in embedded_required)
+    if (
+        "重要業務" not in embedded_text
+        or "実験的な機能" in embedded_text
+        or "Download" in embedded_text
+        or "unrelated" in embedded_text
+    ):
+        fail(
+            "embedded publisher chrome changed the mandatory article facts: "
+            + embedded_text
+        )
     if set(prompt_evidence) != {
         "id",
         "watch_topic_ids",

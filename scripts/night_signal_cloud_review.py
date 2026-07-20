@@ -111,7 +111,7 @@ def apply_correction(
     issue_date: str,
     expected_evidence_sha256: str,
 ) -> dict[str, Any]:
-    """Overlay only named failed requests without rewriting the full review."""
+    """Overlay only named failed events without rewriting accepted review work."""
     if correction.get("contract") != CORRECTION_CONTRACT:
         fail(f"correction contract must be {CORRECTION_CONTRACT}")
     if correction.get("issue_date") != issue_date:
@@ -153,7 +153,7 @@ def apply_correction(
     base_responses = review.get("responses")
     if not isinstance(base_responses, list):
         fail("base review responses must be an array")
-    replacement_by_id: dict[str, dict[str, Any]] = {}
+    correction_by_id: dict[str, dict[str, Any]] = {}
     for entry in responses:
         if not isinstance(entry, dict):
             fail("each correction response must be an object")
@@ -161,22 +161,62 @@ def apply_correction(
         response = entry.get("response")
         if not request_id or not isinstance(response, dict):
             fail("each correction response needs request_id and response")
-        if request_id in replacement_by_id:
+        if set(response) != {"events"} or not isinstance(response.get("events"), list):
+            fail("each correction response must contain only an events array")
+        if not response["events"]:
+            fail("each correction response must name at least one failed event")
+        if request_id in correction_by_id:
             fail(f"duplicate correction request id: {request_id}")
-        replacement_by_id[request_id] = entry
+        correction_by_id[request_id] = entry
     base_ids = {
         str(entry.get("request_id", ""))
         for entry in base_responses
         if isinstance(entry, dict)
     }
-    unknown = sorted(set(replacement_by_id) - base_ids)
+    unknown = sorted(set(correction_by_id) - base_ids)
     if unknown:
         fail("correction contains unknown request ids: " + ", ".join(unknown))
     merged = json.loads(json.dumps(review, ensure_ascii=False))
-    merged["responses"] = [
-        replacement_by_id.get(str(entry.get("request_id", "")), entry)
-        for entry in base_responses
-    ]
+    merged_responses: list[dict[str, Any]] = []
+    for base_entry in base_responses:
+        request_id = str(base_entry.get("request_id", ""))
+        correction_entry = correction_by_id.get(request_id)
+        if correction_entry is None:
+            merged_responses.append(base_entry)
+            continue
+        base_response = base_entry.get("response")
+        base_events = base_response.get("events") if isinstance(base_response, dict) else None
+        if not isinstance(base_events, list):
+            fail(f"base response has no events array: {request_id}")
+        base_event_ids = [
+            str(event.get("event_id", ""))
+            for event in base_events
+            if isinstance(event, dict)
+        ]
+        if len(base_event_ids) != len(base_events) or any(not value for value in base_event_ids):
+            fail(f"base response has malformed event ids: {request_id}")
+        if len(set(base_event_ids)) != len(base_event_ids):
+            fail(f"base response has duplicate event ids: {request_id}")
+        corrected_events = correction_entry["response"]["events"]
+        corrected_by_id: dict[str, dict[str, Any]] = {}
+        for event in corrected_events:
+            if not isinstance(event, dict):
+                fail(f"correction event must be an object: {request_id}")
+            event_id = str(event.get("event_id", ""))
+            if not event_id:
+                fail(f"correction event needs event_id: {request_id}")
+            if event_id in corrected_by_id:
+                fail(f"duplicate correction event id: {request_id}/{event_id}")
+            if event_id not in base_event_ids:
+                fail(f"unknown correction event id: {request_id}/{event_id}")
+            corrected_by_id[event_id] = event
+        merged_entry = json.loads(json.dumps(base_entry, ensure_ascii=False))
+        merged_entry["response"]["events"] = [
+            corrected_by_id.get(event_id, event)
+            for event_id, event in zip(base_event_ids, base_events)
+        ]
+        merged_responses.append(merged_entry)
+    merged["responses"] = merged_responses
     merged["cloud_handoff"] = {
         **dict(review.get("cloud_handoff", {})),
         "execution_surface": handoff.get("execution_surface"),
@@ -245,7 +285,17 @@ def self_test() -> None:
                 "execution_surface": EXECUTION_SURFACE,
                 "reviewed_at": "2099-01-02T18:00:00+09:00",
             },
-            "responses": [{"request_id": "r001", "response": {"events": []}}],
+            "responses": [
+                {
+                    "request_id": "r001",
+                    "response": {
+                        "events": [
+                            {"event_id": "g001", "decision": "publish"},
+                            {"event_id": "g002", "decision": "exclude"},
+                        ]
+                    },
+                }
+            ],
         }
         review_path = root / "review.json"
         review_path.write_text(json.dumps(review), encoding="utf-8")
@@ -268,7 +318,12 @@ def self_test() -> None:
                 "correction_attempt": 1,
             },
             "responses": [
-                {"request_id": "r001", "response": {"events": [{"id": "g001"}]}}
+                {
+                    "request_id": "r001",
+                    "response": {
+                        "events": [{"event_id": "g001", "decision": "exclude"}]
+                    },
+                }
             ],
         }
         corrected = apply_correction(
@@ -277,8 +332,11 @@ def self_test() -> None:
             issue_date=issue_date,
             expected_evidence_sha256=evidence_sha256(evidence_path),
         )
-        if corrected["responses"][0] != correction["responses"][0]:
-            fail("named correction response was not overlaid")
+        corrected_events = corrected["responses"][0]["response"]["events"]
+        if corrected_events[0]["decision"] != "exclude":
+            fail("named correction event was not overlaid")
+        if corrected_events[1]["event_id"] != "g002":
+            fail("accepted event was not preserved by the correction overlay")
         if corrected["cloud_handoff"].get("correction_attempt") != 1:
             fail("correction provenance was not preserved")
         if (

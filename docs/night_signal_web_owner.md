@@ -93,10 +93,16 @@ cloud-review/ISSUE_DATE/editor_correction.json on the existing review branch:
     "reviewed_at": "timezone-aware ISO timestamp",
     "correction_attempt": 1
   },
-  "responses": ["complete corrected response entries for named request_ids only"]
+  "responses": [
+    {
+      "request_id": "failed request id",
+      "response": {"events": ["complete corrected failed event objects only"]}
+    }
+  ]
 }
-Keep accepted request responses out of this small overlay so they remain
-unchanged. If the correction file already exists, do not perform another
+Include only the failed event objects named by validator_log_tail. The
+deterministic merge preserves every other event in that request and every
+accepted request unchanged. If the correction file already exists, do not perform another
 correction. If failure is restore,
 base_guard, commit, push, pages, pages_retry, pages_watch, or verify, do not alter
 any response: resave the same review once with cloud_handoff.recovery_attempt=1

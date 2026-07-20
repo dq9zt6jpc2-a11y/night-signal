@@ -228,7 +228,7 @@ dated public URLs show the same current date.
 
 - Evidence collection failed: inspect the failed log, correct only a code/config
   cause, or retry the same network command once. Never start parallel collectors.
-- Review validation failed: write one small correction overlay containing all
+- Review validation failed: write one small event-level correction overlay containing all
   rejected request/event entries; keep the large base review and all accepted
   responses unchanged.
 - Render or quality gate failed: fix the exact deterministic contract mismatch;
