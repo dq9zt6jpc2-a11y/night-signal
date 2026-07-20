@@ -150,14 +150,20 @@ Editor前の決定的処理で、同一事象の複数記事だけを一つのev
 参照元に十分な情報がある時だけ詳しくし、情報がない時は短いままにする。
 参照元にない重要性、影響、常識、背景、未確定点を推測で補わない。
 
-Codex Plus reviewへは、event ID、必要な根拠文、短いEvidence ID、Evidenceごとの
-watch topic IDだけをcompact packetとして渡す。全Evidenceや作業ログは読ませない。
+Codex Plus reviewへは、event ID、記事本文からページ部品を除いて抽出した必要な根拠文、
+短いEvidence ID、根拠文ごとのsource fact ID、Evidenceごとのwatch topic IDだけを
+compact packetとして渡す。全Evidenceや作業ログは読ませない。
 複数記事を一つのrequestへ詰めるために本文を再切詰めしない。request上限へ近づく時は、
 同一事象を分断しない単位でrequestを分ける。同一eventの重複報道だけで上限を超える場合は、
 日本語原文、本文量、取得順で決定的に代表ソースを選び、選んだ本文は切り詰めない。選外URLと
 本文もEvidenceには保持し、記事ごとのAI採否処理は追加しない。
-モデルはevent ID、題名、分類、重要度、根拠ID付き`summary_points`を構造化出力し、
-各項目の根拠IDが同じevent境界内にあることを決定的に照合する。
+モデルはevent ID、題名、分類、重要度、Evidence IDとsource fact ID付き
+`summary_points`を構造化出力し、各項目の根拠IDが同じevent境界内にあること、
+掲載eventのrequired source fact IDが一つも欠落していないことを決定的に照合する。
+直前号は掲載可否を決める新規性判定にだけ使い、掲載すると決めたeventでは、現在の
+根拠本文にある主体、変化、数値、日付、範囲、条件、理由、結果を読者が単独で理解できる
+形に戻す。一般的な会社紹介や常識を足すことと、現在の記事内の理解に必要な文脈を残す
+ことを混同しない。
 `summary_points`の同じ文列を公開要約、確認事実、事実とURLの対応へ再利用し、summary、
 detail summary、what changedを別々に生成しない。URLと掲載日はAIに
 書かせず、Evidence IDから決定的に復元する。同一事象を統合する場合も、計画、決定、

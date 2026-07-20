@@ -203,15 +203,19 @@ def prepare_packet(
             "analysis_must_never_suppress_a_verified_news_item": True,
             "review_every_event": True,
             "previous_updates_are_novelty_only": True,
+            "accepted_items_must_be_self_contained_from_current_evidence": True,
+            "novelty_filter_must_not_remove_context_needed_for_comprehension": True,
             "source_publication_date_is_not_an_event_delta": True,
             "novelty_context_must_support_why_today": True,
             "natural_japanese_required": True,
             "translated_facts_retain_source_spelled_entity_or_exact_numeric_anchor": True,
             "every_summary_point_requires_evidence_ids": True,
+            "every_summary_point_requires_source_fact_ids": True,
+            "every_required_source_fact_must_be_covered": True,
             "every_published_item_requires_information_complete": True,
             "allowed_topic_value_classes": sorted(core.ALLOWED_TOPIC_VALUES),
             "one_point_only_for_one_distinct_supported_delta": True,
-            "no_background_or_repetition_for_length": True,
+            "omit_generic_background_but_retain_current_source_context": True,
             "retain_subject_change_numbers_dates_scope_conditions_reasons_results": True,
             "headline_only_cannot_be_published": True,
             "prefer_official_specialist_and_primary_body_sources": True,
@@ -239,6 +243,34 @@ def prepare_packet(
                     ).encode("utf-8")
                 )
                 for request in requests
+            ),
+            "source_fact_candidates": sum(
+                int(item.get("article_fact_count", 0))
+                for request in requests
+                for event in request["payload"].get("events", [])
+                for item in event.get("evidence", [])
+                if isinstance(item, dict)
+            ),
+            "required_source_facts": sum(
+                len(item.get("required_fact_ids", []))
+                for request in requests
+                for event in request["payload"].get("events", [])
+                for item in event.get("evidence", [])
+                if isinstance(item, dict)
+            ),
+            "source_fact_overflow": sum(
+                int(item.get("source_fact_overflow_count", 0))
+                for request in requests
+                for event in request["payload"].get("events", [])
+                for item in event.get("evidence", [])
+                if isinstance(item, dict)
+            ),
+            "sources_with_fact_overflow": sum(
+                int(item.get("source_fact_overflow_count", 0) > 0)
+                for request in requests
+                for event in request["payload"].get("events", [])
+                for item in event.get("evidence", [])
+                if isinstance(item, dict)
             ),
             "source_checks": report["source_checks"],
             "discovery_checks": report["discovery_checks"],
@@ -290,7 +322,13 @@ def cards_from_response(
         records,
     )
     flattened = editor.sanitize_model_result(flattened)
-    normalized = core.normalize_result(flattened, category, issue_date, records)
+    normalized = core.normalize_result(
+        flattened,
+        category,
+        issue_date,
+        records,
+        require_source_fact_coverage=True,
+    )
     failures: list[str] = []
     cards: list[dict[str, Any]] = []
     for item in normalized["items"]:
@@ -323,6 +361,9 @@ def cards_from_response(
                 "event_response": response_feedback,
                 "missing_event_ids": normalized["missing_event_ids"],
                 "conflicting_event_ids": normalized["conflicting_event_ids"],
+                "missing_source_fact_ids_by_event": normalized[
+                    "missing_source_fact_ids_by_event"
+                ],
                 "rejected_items": normalized["rejected_items"],
                 "unpublishable_items": failures,
             },
@@ -712,6 +753,68 @@ def self_test() -> None:
     )
     if not accepted_insufficient:
         fail("Plus review rejected an honest headline-only evidence hold")
+    body_record = {
+        **headline_record,
+        "title": "OpenAI releases GPT-9 for enterprise developers",
+        "excerpt": (
+            "OpenAI released GPT-9 for enterprise developers on January 2, 2099. "
+            "The model supports a 1 million token context window."
+        ),
+    }
+    _, accepted_unknown_fact, unknown_fact_feedback = editor.flatten_event_response(
+        {
+            "events": [
+                {
+                    "event_id": "g001",
+                    "decision": "publish",
+                    "items": [
+                        {
+                            "summary_points": [
+                                {
+                                    "text": "GPT-9は企業開発者向けに公開された。",
+                                    "evidence_ids": ["e001"],
+                                    "source_fact_ids": ["e001:f99"],
+                                }
+                            ]
+                        }
+                    ],
+                }
+            ]
+        },
+        headline_category,
+        "2099-01-02",
+        [body_record],
+    )
+    if accepted_unknown_fact or unknown_fact_feedback["unknown_source_fact_ids"] != [
+        "e001:f99"
+    ]:
+        fail("Plus review accepted an unknown source fact id")
+    merged_points = editor.sanitize_model_result(
+        {
+            "items": [
+                {
+                    "title": "OpenAIがGPT-9を公開",
+                    "summary_points": [
+                        {
+                            "text": "GPT-9は企業開発者向けに公開された。",
+                            "evidence_ids": ["e001"],
+                            "source_fact_ids": ["e001:f01"],
+                        },
+                        {
+                            "text": "GPT-9は企業開発者向けに公開された。",
+                            "evidence_ids": ["e001"],
+                            "source_fact_ids": ["e001:f02"],
+                        },
+                    ],
+                }
+            ]
+        }
+    )["items"][0]["summary_points"]
+    if len(merged_points) != 1 or merged_points[0]["source_fact_ids"] != [
+        "e001:f01",
+        "e001:f02",
+    ]:
+        fail("Plus review sanitizer discarded source fact coverage while merging")
     with tempfile.TemporaryDirectory() as temporary_directory:
         path = Path(temporary_directory) / "value.json"
         write_json_atomic(path, {"日本語": "根拠"})

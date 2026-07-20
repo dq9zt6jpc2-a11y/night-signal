@@ -156,7 +156,7 @@ FACT_MARKUP_RE = re.compile(r"<\s*/?\s*[a-z!]|\bhref\s*=|&(?:lt|gt|nbsp);", re.I
 DOCUMENT_EXTRACTION_NOISE_RE = re.compile(
     r"(?:お問い合わせ|問合せ).{0,120}(?:E-?mail|TEL|担当)|"
     r"Title:\s*.{0,180}URL Source:\s*.{0,180}Published Time:|"
-    r"Number of Pages:\s*\d+|Markdown Content:|"
+    r"URL Source:|Published Time:|Number of Pages:\s*\d+|Markdown Content:|"
     r"(?:^|\s)>\s*-?50\s*>\s*-?40\s*>\s*-?30",
     re.I,
 )
@@ -600,19 +600,29 @@ def reader_summary_violations(title: str, summary: str) -> list[str]:
     return violations
 
 
-def material_fact_violations(text: str) -> list[str]:
+def source_material_fact_violations(text: str) -> list[str]:
+    """Reject non-facts before translation or reader-facing copy is created."""
     value = html.unescape(str(text)).strip()
     violations: list[str] = []
     if len(value) < 18:
         violations.append("too short to be a material fact")
     if FACT_MARKUP_RE.search(value):
         violations.append("contains markup")
+    if re.match(r"^#{1,6}\s", value) or value.endswith(("?", "？")):
+        violations.append("is a heading or question, not a confirmed fact")
     if FACT_SOURCE_METADATA_RE.search(value):
         violations.append("is source metadata, not an event fact")
     if SOURCE_CHROME_RE.search(value):
         violations.append("is publisher chrome, not an event fact")
     if FACT_ANALYSIS_OR_UNKNOWN_RE.search(value):
         violations.append("is analysis or an unknown, not a confirmed fact")
+    return violations
+
+
+def material_fact_violations(text: str) -> list[str]:
+    """Reject non-facts and copy that cannot be published as-is."""
+    value = html.unescape(str(text)).strip()
+    violations = source_material_fact_violations(value)
     if public_render_copy_violations(value, kind="summary"):
         violations.append("is not reader-facing public copy")
     return violations

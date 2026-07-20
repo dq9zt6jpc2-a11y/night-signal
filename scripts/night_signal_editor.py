@@ -176,6 +176,13 @@ def sanitize_model_result(raw: dict[str, Any]) -> dict[str, Any]:
                     if isinstance(value, str) and value
                 )
             )
+            source_fact_ids = list(
+                dict.fromkeys(
+                    value
+                    for value in raw_point.get("source_fact_ids", [])
+                    if isinstance(value, str) and value
+                )
+            )
             duplicate = next(
                 (
                     point
@@ -193,11 +200,20 @@ def sanitize_model_result(raw: dict[str, Any]) -> dict[str, Any]:
                     {
                         "text": text,
                         "evidence_ids": evidence_ids,
+                        "source_fact_ids": source_fact_ids,
                     }
                 )
             else:
                 duplicate["evidence_ids"] = list(
                     dict.fromkeys([*duplicate.get("evidence_ids", []), *evidence_ids])
+                )
+                duplicate["source_fact_ids"] = list(
+                    dict.fromkeys(
+                        [
+                            *duplicate.get("source_fact_ids", []),
+                            *source_fact_ids,
+                        ]
+                    )
                 )
         sanitized["items"].append(
             {
@@ -221,16 +237,23 @@ def flatten_event_response(
     evidence_entries = core.editor_evidence_records(category, issue_date, records)
     event_evidence_ids: dict[str, set[str]] = {}
     event_evidence_depths: dict[str, set[str]] = {}
+    event_source_fact_ids: dict[str, set[str]] = {}
     for evidence_id, record in evidence_entries:
         event_id = str(record.get("_editor_event_id") or evidence_id)
         event_evidence_ids.setdefault(event_id, set()).add(evidence_id)
         event_evidence_depths.setdefault(event_id, set()).add(
             core.record_evidence_depth(core.record_public_title(record), record)
         )
+        event_source_fact_ids.setdefault(event_id, set()).update(
+            fact["id"]
+            for fact in core.editor_source_fact_inventory(evidence_id, record)
+        )
     expected_event_ids = set(event_evidence_ids)
     seen_event_ids: list[str] = []
     unknown_event_ids: set[str] = set()
     cross_event_evidence_ids: set[str] = set()
+    cross_event_source_fact_ids: set[str] = set()
+    unknown_source_fact_ids: set[str] = set()
     invalid_event_decisions: dict[str, str] = {}
     malformed_event_results = 0
     flattened = {"items": [], "excluded_events": []}
@@ -286,6 +309,13 @@ def flatten_event_response(
                 for evidence_id in point.get("evidence_ids", [])
                 if isinstance(evidence_id, str)
             }
+            cited_source_fact_ids = {
+                str(source_fact_id)
+                for point in item.get("summary_points", [])
+                if isinstance(point, dict)
+                for source_fact_id in point.get("source_fact_ids", [])
+                if isinstance(source_fact_id, str)
+            }
             analysis = item.get("analysis")
             if isinstance(analysis, dict):
                 cited_ids.update(
@@ -294,6 +324,14 @@ def flatten_event_response(
                     if isinstance(evidence_id, str)
                 )
             cross_event_evidence_ids.update(cited_ids - allowed_ids)
+            all_source_fact_ids = set().union(*event_source_fact_ids.values())
+            unknown_source_fact_ids.update(
+                cited_source_fact_ids - all_source_fact_ids
+            )
+            cross_event_source_fact_ids.update(
+                (cited_source_fact_ids & all_source_fact_ids)
+                - event_source_fact_ids.get(event_id, set())
+            )
     duplicate_event_ids = sorted(
         event_id
         for event_id in set(seen_event_ids)
@@ -305,6 +343,8 @@ def flatten_event_response(
         "duplicate_event_ids": duplicate_event_ids,
         "unknown_event_ids": sorted(unknown_event_ids),
         "cross_event_evidence_ids": sorted(cross_event_evidence_ids),
+        "cross_event_source_fact_ids": sorted(cross_event_source_fact_ids),
+        "unknown_source_fact_ids": sorted(unknown_source_fact_ids),
         "invalid_event_decisions": invalid_event_decisions,
         "malformed_event_results": malformed_event_results,
     }
@@ -314,6 +354,8 @@ def flatten_event_response(
             duplicate_event_ids,
             unknown_event_ids,
             cross_event_evidence_ids,
+            cross_event_source_fact_ids,
+            unknown_source_fact_ids,
             invalid_event_decisions,
             malformed_event_results,
         )

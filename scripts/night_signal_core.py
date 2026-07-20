@@ -1476,8 +1476,207 @@ def material_event_candidate(title: str, excerpt: str) -> bool:
     )
 
 
+ARTICLE_CONTENT_END_RE = re.compile(
+    r"AI・生成AIのおすすめコンテンツ|おすすめコンテンツ|"
+    r"Googleで見つけやすく|(?:^|\s)関連記事(?:一覧|はこちら)?|"
+    r"関連コンテンツ|もっと読むにはこちら|"
+    r"Daily Debrief Newsletter|Sign up for (?:our|the) newsletter|"
+    r"(?:^|\s)共有する(?:\s|$)|(?:^|\s)Related Stories(?:\s|$)",
+    re.I,
+)
+ARTICLE_CHROME_SENTENCE_RE = re.compile(
+    r"印刷機能|会員登録|無料登録|ログイン|マイページ|"
+    r"トップページ|タグをフォロー|著者を応援|"
+    r"コメントを投稿|通報|ブロック解除|"
+    r"(?:^|\s)(?:Home|Menu|Share|Subscribe|Sign up|Log in)(?:\s|$)|"
+    r"cookies?|privacy policy|already a subscriber|read more",
+    re.I,
+)
+ARTICLE_LEADING_CHROME_RE = re.compile(
+    r"^.*?(?:タグをもっとみる|Tags?\s*[:：])\s*",
+    re.I,
+)
+FIGURE_LINK_PREFIX_RE = re.compile(
+    r"^【(?:図版付き記事はこちら|関連記事)】[^。！？!?]{0,280}?[）)]\s*"
+)
+ARTICLE_GENERIC_PURPOSE_RE = re.compile(
+    r"企業ミッションとして掲げ|"
+    r"(?:環境|体制|AIシステムの構築)を推進する[。．.!！?？]*$|"
+    r"(?:可能性がある|期待される|見通しだ|注目される)[。．.!！?？]*$"
+)
+ARTICLE_EMBEDDED_ENTITY_HISTORY_RE = re.compile(
+    r"20\d{2}年\d{1,2}月に(?:設立|創業)した.{0,160}"
+    r"20\d{2}年\d{1,2}月\d{1,2}日.{0,120}(?:発表|公開)"
+)
+
+
+def article_source_window(record: dict[str, Any]) -> str:
+    """Keep the article body while dropping deterministic page chrome."""
+    raw = reader_facing_text(
+        str(record.get("excerpt") or record.get("evidence") or ""),
+        12_000,
+    )
+    if not raw:
+        return ""
+    title = record_public_title(record)
+    start = 0
+    leading_markers = list(
+        re.finditer(r"タグをもっとみる|Tags?\s*[:：]", raw[:3000], re.I)
+    )
+    if leading_markers:
+        start = leading_markers[-1].end()
+    elif title:
+        title_positions = [
+            match.start()
+            for match in re.finditer(re.escape(title), raw[:3000], re.I)
+        ]
+        if title_positions:
+            start = title_positions[-1]
+    author_expander = raw.find("もっと見る", start, min(len(raw), start + 1200))
+    author_close = raw.find("閉じる", author_expander, min(len(raw), start + 3000))
+    if author_expander >= 0 and author_close > author_expander:
+        start = author_close + len("閉じる")
+    end = len(raw)
+    for match in ARTICLE_CONTENT_END_RE.finditer(raw, max(0, start + 120)):
+        end = match.start()
+        break
+    return raw[start:end].strip(" -–—|｜")
+
+
+def clean_article_sentence(value: str) -> str:
+    sentence = ARTICLE_LEADING_CHROME_RE.sub("", value).strip()
+    sentence = FIGURE_LINK_PREFIX_RE.sub("", sentence).strip()
+    sentence = re.sub(r"^[（(]Photo\s*:[^）)]*[）)]\s*", "", sentence, flags=re.I)
+    return sentence.strip(" -–—|｜")
+
+
+def editor_article_facts(record: dict[str, Any]) -> list[str]:
+    """Return the complete, article-specific confirmed-fact inventory."""
+    title = record_public_title(record)
+    window = article_source_window(record)
+    facts: list[str] = []
+    for raw_sentence in sentence_parts(window, limit=12_000):
+        sentence = clean_article_sentence(raw_sentence)
+        visible_count = len(re.findall(r"\S", sentence))
+        letter_count = len(
+            re.findall(r"[A-Za-z\u3040-\u30ff\u3400-\u9fff]", sentence)
+        )
+        if (
+            not sentence
+            or not visible_count
+            or letter_count / visible_count < 0.45
+            or ARTICLE_CONTENT_END_RE.search(sentence)
+            or ARTICLE_CHROME_SENTENCE_RE.search(sentence)
+            or state_contract.DOCUMENT_EXTRACTION_NOISE_RE.search(sentence)
+            or state_contract.navigation_shell_text(sentence)
+            or state_contract.source_material_fact_violations(sentence)
+            or state_contract.GENERIC_ENTITY_OVERVIEW_RE.search(sentence)
+            or INVESTMENT_GUIDE_RE.search(sentence)
+            or NON_NEWS_GUIDE_RE.search(sentence)
+            or ARTICLE_GENERIC_PURPOSE_RE.search(sentence)
+            or state_contract.materially_same_fact(title, sentence)
+        ):
+            continue
+        if not state_contract.fact_adds_information(title, sentence):
+            continue
+        if (
+            ARTICLE_EMBEDDED_ENTITY_HISTORY_RE.search(sentence)
+            and any(
+                state_contract.text_overlap(existing, sentence) >= 6
+                for existing in facts
+            )
+        ):
+            continue
+        duplicate_index = next(
+            (
+                index
+                for index, existing in enumerate(facts)
+                if state_contract.materially_same_fact(existing, sentence)
+            ),
+            None,
+        )
+        if duplicate_index is not None:
+            if state_contract.fact_specificity(sentence) > state_contract.fact_specificity(
+                facts[duplicate_index]
+            ):
+                facts[duplicate_index] = sentence
+            continue
+        facts.append(sentence)
+    if facts:
+        return facts
+    return []
+
+
+MAX_EDITOR_SOURCE_FACTS = 16
+
+
+def editor_source_fact_inventory(
+    evidence_id: str,
+    record: dict[str, Any],
+) -> list[dict[str, str]]:
+    facts = editor_article_facts(record)
+    if len(facts) > MAX_EDITOR_SOURCE_FACTS:
+        title = record_public_title(record)
+
+        def fact_rank(indexed: tuple[int, str]) -> tuple[int, int, int, int]:
+            index, fact = indexed
+            return (
+                6 * bool(PUBLICATION_EVENT_RE.search(fact))
+                + 5 * bool(MATERIAL_SIGNAL_RE.search(fact))
+                + 4 * bool(SPORTS_RESULT_RE.search(fact))
+                + 3 * min(3, state_contract.text_overlap(title, fact))
+                + 2 * bool(
+                    re.search(
+                        r"理由|要因|背景|ため|結果|影響|条件|対象|範囲|"
+                        r"because|reason|result|impact|condition|scope",
+                        fact,
+                        re.I,
+                    )
+                )
+                + min(3, len(numeric_claims(fact)))
+                + max(0, 6 - index),
+                len(numeric_claims(fact)),
+                state_contract.text_overlap(title, fact),
+                -index,
+            )
+
+        selected_indexes = {
+            index
+            for index, _ in sorted(
+                enumerate(facts),
+                key=fact_rank,
+                reverse=True,
+            )[:MAX_EDITOR_SOURCE_FACTS]
+        }
+        facts = [
+            fact for index, fact in enumerate(facts) if index in selected_indexes
+        ]
+    return [
+        {"id": f"{evidence_id}:f{index:02d}", "text": fact}
+        for index, fact in enumerate(facts, start=1)
+    ]
+
+
+def editor_required_source_facts(
+    evidence_entries: list[tuple[str, dict[str, Any]]],
+) -> dict[str, list[dict[str, str]]]:
+    """Deduplicate repeated source facts without discarding distinct additions."""
+    required: dict[str, list[dict[str, str]]] = {}
+    for evidence_id, record in evidence_entries:
+        event_id = str(record.get("_editor_event_id") or evidence_id)
+        event_facts = required.setdefault(event_id, [])
+        for fact in editor_source_fact_inventory(evidence_id, record):
+            if any(
+                state_contract.materially_same_fact(fact["text"], existing["text"])
+                for existing in event_facts
+            ):
+                continue
+            event_facts.append({**fact, "evidence_id": evidence_id})
+    return required
+
+
 def editor_source_text(record: dict[str, Any], limit: int) -> str:
-    """Select a bounded set of material sentences for the Editor."""
+    """Select a bounded relevance view for deterministic grouping only."""
     text = reader_facing_text(
         str(record.get("excerpt") or record.get("evidence") or ""),
         8000,
@@ -1493,7 +1692,7 @@ def editor_source_text(record: dict[str, Any], limit: int) -> str:
     title = record_public_title(record)
     sentences = [
         sentence.strip()
-        for sentence in sentence_parts(text)
+        for sentence in sentence_parts(text, split_latin_sentences=False)
         if sentence.strip()
         and not state_contract.navigation_shell_text(sentence)
     ]
@@ -1653,6 +1852,19 @@ def record_has_material_body(title: str, record: dict[str, Any]) -> bool:
             len(latin_words) >= 8
             and (len(added_terms) >= 4 or bool(added_numbers))
             and not state_contract.navigation_shell_text(sentence)
+        ):
+            return True
+    article_text = " ".join(editor_article_facts(record))
+    if source_requires_japanese_translation(article_text):
+        article_terms = (
+            state_contract.content_terms(article_text)
+            - state_contract.content_terms(title)
+        )
+        article_numbers = numeric_claims(article_text) - numeric_claims(title)
+        if (
+            state_contract.text_overlap(title_for_anchor, article_text) >= 1
+            and len(re.findall(r"[A-Za-z][A-Za-z0-9'-]{2,}", article_text)) >= 8
+            and (len(article_terms) >= 4 or bool(article_numbers))
         ):
             return True
     return False
@@ -4153,15 +4365,20 @@ def category_prompt(
     records: list[dict[str, Any]],
 ) -> dict[str, Any]:
     selected = editor_evidence_records(category, issue_date, records)
-    body_limit = 1200
+    required_facts_by_event = editor_required_source_facts(selected)
 
-    def build_payload(limit: int) -> dict[str, Any]:
+    def build_payload() -> dict[str, Any]:
         events: list[dict[str, Any]] = []
         events_by_id: dict[str, dict[str, Any]] = {}
         for evidence_id, record in selected:
             title = record_public_title(record)
             evidence_depth = record_evidence_depth(title, record)
             event_id = str(record.get("_editor_event_id") or evidence_id)
+            required_fact_ids = {
+                fact["id"]
+                for fact in required_facts_by_event.get(event_id, [])
+                if fact["evidence_id"] == evidence_id
+            }
             event = events_by_id.get(event_id)
             if event is None:
                 event = {
@@ -4173,6 +4390,16 @@ def category_prompt(
                 events_by_id[event_id] = event
                 events.append(event)
             event["_records"].append(record)
+            article_fact_count = (
+                len(editor_article_facts(record))
+                if evidence_depth == "body"
+                else 0
+            )
+            fact_inventory = (
+                editor_source_fact_inventory(evidence_id, record)
+                if evidence_depth == "body"
+                else []
+            )
             event["evidence"].append(
                 {
                     "id": evidence_id,
@@ -4188,9 +4415,20 @@ def category_prompt(
                     "source_class": effective_source_class(record),
                     "title": title,
                     "evidence_depth": evidence_depth,
-                    "body": editor_source_text(record, limit)
-                    if evidence_depth == "body"
-                    else "",
+                    "body": " ".join(
+                        f"[{fact['id']}] {fact['text']}"
+                        for fact in fact_inventory
+                    ),
+                    "required_fact_ids": [
+                        fact["id"]
+                        for fact in fact_inventory
+                        if fact["id"] in required_fact_ids
+                    ],
+                    "article_fact_count": article_fact_count,
+                    "source_fact_overflow_count": max(
+                        0,
+                        article_fact_count - len(fact_inventory),
+                    ),
                 }
             )
         issue_day = date.fromisoformat(issue_date)
@@ -4227,7 +4465,7 @@ def category_prompt(
             "events": events,
         }
 
-    return build_payload(body_limit)
+    return build_payload()
 
 
 def valid_date(value: Any, issue_date: str) -> bool:
@@ -4247,18 +4485,35 @@ def reader_facing_source_label(value: Any, url: str) -> str:
     return hostname.removeprefix("www.") or url
 
 
-def sentence_parts(value: str) -> list[str]:
+def sentence_parts(
+    value: str,
+    *,
+    limit: int = 2400,
+    split_latin_sentences: bool = True,
+) -> list[str]:
     parts: list[str] = []
-    for part in re.split(r"(?<=[。！？!?])", reader_facing_text(value, 2400)):
+    splitter = (
+        r"(?<=[。！？!?])\s*|(?<=\.)\s+(?=[A-Z0-9“\"'])"
+        if split_latin_sentences
+        else r"(?<=[。！？!?])"
+    )
+    for part in re.split(
+        splitter,
+        reader_facing_text(value, limit),
+    ):
         text = part.strip()
         if text and not re.fullmatch(
             r"(?:ニュース|ファイナンス|MSN|web|オンライン)[。．.!！?？]*",
             text,
             flags=re.I,
         ):
-            parts.append(text if text.endswith(("。", "！", "？", "!", "?")) else f"{text}。")
+            parts.append(
+                text
+                if text.endswith(("。", "．", ".", "！", "？", "!", "?"))
+                else f"{text}。"
+            )
     if not parts and value:
-        text = reader_facing_text(value, 700).strip()
+        text = reader_facing_text(value, min(limit, 700)).strip()
         if text:
             parts.append(text if text.endswith("。") else f"{text}。")
     return parts
@@ -4439,11 +4694,36 @@ def normalize_analysis_block(
     )
 
 
+def source_fact_covered_by_summary(source_fact: str, summary_point: str) -> bool:
+    """Verify that a cited source-fact id is actually represented in the copy."""
+    source_numbers = numeric_claims(source_fact)
+    summary_numbers = numeric_claims(summary_point)
+    if any(number not in summary_numbers for number in source_numbers):
+        return False
+    if source_requires_japanese_translation(source_fact):
+        source_anchors = {
+            value.casefold()
+            for value in re.findall(r"[A-Za-z][A-Za-z0-9.+-]{1,}", source_fact)
+            if value.casefold() not in {"ai", "the", "and", "for", "with", "from"}
+        }
+        summary_anchors = {
+            value.casefold()
+            for value in re.findall(r"[A-Za-z][A-Za-z0-9.+-]{1,}", summary_point)
+        }
+        return bool(source_anchors & summary_anchors)
+    if state_contract.materially_same_fact(source_fact, summary_point):
+        return True
+    required_overlap = min(2, max(1, len(state_contract.content_terms(source_fact))))
+    return state_contract.text_overlap(source_fact, summary_point) >= required_overlap
+
+
 def normalize_result(
     raw: dict[str, Any],
     category: dict[str, Any],
     issue_date: str,
     records: list[dict[str, Any]],
+    *,
+    require_source_fact_coverage: bool = False,
 ) -> dict[str, Any]:
     valid_topic_order = [
         str(topic["id"])
@@ -4453,6 +4733,12 @@ def normalize_result(
     valid_topics = set(valid_topic_order)
     evidence_entries = editor_evidence_records(category, issue_date, records)
     records_by_id = dict(evidence_entries)
+    required_facts_by_event = editor_required_source_facts(evidence_entries)
+    source_facts_by_id = {
+        fact["id"]: fact
+        for facts in required_facts_by_event.values()
+        for fact in facts
+    }
     expected_event_ids = {
         str(record.get("_editor_event_id") or evidence_id)
         for evidence_id, record in evidence_entries
@@ -4462,6 +4748,7 @@ def normalize_result(
     seen_titles: set[str] = set()
     seen_clusters: set[str] = set()
     published_event_ids: set[str] = set()
+    covered_source_fact_ids_by_event: dict[str, set[str]] = {}
     excluded_event_ids = {
         str(value.get("event_id"))
         for value in raw.get("excluded_events", [])
@@ -4478,7 +4765,9 @@ def normalize_result(
         if not isinstance(item, dict):
             continue
         title = compact_text(str(item.get("title", "")), 180)
-        point_values: list[tuple[str, list[str], list[dict[str, str]]]] = []
+        point_values: list[
+            tuple[str, list[str], list[str], list[dict[str, str]]]
+        ] = []
         seen_point_texts: set[str] = set()
         invalid_point_shape = False
         for raw_point in item.get("summary_points", []):
@@ -4493,7 +4782,18 @@ def normalize_result(
                     if isinstance(value, str) and value
                 )
             )
-            if not text or not point_ids:
+            source_fact_ids = list(
+                dict.fromkeys(
+                    str(value)
+                    for value in raw_point.get("source_fact_ids", [])
+                    if isinstance(value, str) and value
+                )
+            )
+            if (
+                not text
+                or not point_ids
+                or (require_source_fact_coverage and not source_fact_ids)
+            ):
                 invalid_point_shape = True
                 continue
             normalized_texts = state_contract.normalize_material_facts(title, [text])
@@ -4515,22 +4815,44 @@ def normalize_result(
                     for evidence_id in point_ids
                     if evidence_id in records_by_id
                 ]
-                point_values.append((normalized_text, point_ids, support_quotes))
+                point_values.append(
+                    (normalized_text, point_ids, source_fact_ids, support_quotes)
+                )
         unsupported_facts: list[str] = []
         supported_point_values: list[
-            tuple[str, list[str], list[dict[str, str]]]
+            tuple[str, list[str], list[str], list[dict[str, str]]]
         ] = []
-        for text, point_ids, support_quotes in point_values:
+        invalid_source_fact_ids: set[str] = set()
+        uncovered_source_fact_ids: set[str] = set()
+        covered_source_fact_ids: set[str] = set()
+        for text, point_ids, source_fact_ids, support_quotes in point_values:
             if any(evidence_id not in records_by_id for evidence_id in point_ids):
-                supported_point_values.append((text, point_ids, support_quotes))
+                supported_point_values.append(
+                    (text, point_ids, source_fact_ids, support_quotes)
+                )
                 continue
+            for source_fact_id in source_fact_ids:
+                source_fact = source_facts_by_id.get(source_fact_id)
+                if (
+                    source_fact is None
+                    or source_fact["evidence_id"] not in point_ids
+                ):
+                    invalid_source_fact_ids.add(source_fact_id)
+                    continue
+                if not source_fact_covered_by_summary(source_fact["text"], text):
+                    uncovered_source_fact_ids.add(source_fact_id)
+                else:
+                    covered_source_fact_ids.add(source_fact_id)
             if fact_supported_by_records(
                 text,
                 [records_by_id[evidence_id] for evidence_id in point_ids],
             ):
-                supported_point_values.append((text, point_ids, support_quotes))
+                supported_point_values.append(
+                    (text, point_ids, source_fact_ids, support_quotes)
+                )
             else:
                 unsupported_facts.append(text)
+        uncovered_source_fact_ids -= covered_source_fact_ids
         point_values = supported_point_values
         if unsupported_facts:
             print(
@@ -4547,7 +4869,7 @@ def normalize_result(
         evidence_ids = list(
             dict.fromkeys(
                 evidence_id
-                for _, point_ids, _ in point_values
+                for _, point_ids, _, _ in point_values
                 for evidence_id in point_ids
             )
         )
@@ -4618,14 +4940,14 @@ def normalize_result(
             category,
             source_records,
             title,
-            *[text for text, _, _ in point_values],
+            *[text for text, _, _, _ in point_values],
         )
-        point_texts = [text for text, _, _ in point_values]
+        point_texts = [text for text, _, _, _ in point_values]
         facts = point_texts
         summary = " ".join(facts)
         invalid_support_quotes = [
             quote
-            for _, point_ids, quotes in point_values
+            for _, point_ids, _, quotes in point_values
             for quote in quotes
             if quote["evidence_id"] not in point_ids
             or quote["evidence_id"] not in records_by_id
@@ -4633,7 +4955,7 @@ def normalize_result(
         ]
         missing_quote_ids = [
             evidence_id
-            for _, point_ids, quotes in point_values
+            for _, point_ids, _, quotes in point_values
             for evidence_id in point_ids
             if evidence_id
             not in {str(quote.get("evidence_id")) for quote in quotes}
@@ -4657,11 +4979,19 @@ def normalize_result(
                     if evidence_id in records_by_id
                 ],
             }
-            for fact, (_, point_ids, _) in zip(facts, point_values)
+            for fact, (_, point_ids, _, _) in zip(facts, point_values)
         ]
         rejection_checks = [
             ("invalid_summary_point", invalid_point_shape),
             ("unsupported_summary_point", bool(unsupported_facts)),
+            (
+                "invalid_source_fact_id",
+                require_source_fact_coverage and bool(invalid_source_fact_ids),
+            ),
+            (
+                "source_fact_not_covered",
+                require_source_fact_coverage and bool(uncovered_source_fact_ids),
+            ),
             ("missing_evidence_id", not evidence_ids),
             ("unknown_evidence_id", bool(unknown_evidence_ids)),
             (
@@ -4752,6 +5082,8 @@ def normalize_result(
                     "title": title,
                     "reasons": rejection_reasons,
                     "unsupported_facts": unsupported_facts,
+                    "invalid_source_fact_ids": sorted(invalid_source_fact_ids),
+                    "uncovered_source_fact_ids": sorted(uncovered_source_fact_ids),
                 }
             )
             print(
@@ -4771,6 +5103,9 @@ def normalize_result(
         seen_titles.add(title)
         seen_clusters.add(item_cluster)
         published_event_ids.add(item_event_id)
+        covered_source_fact_ids_by_event.setdefault(item_event_id, set()).update(
+            covered_source_fact_ids
+        )
         first_source = sources[0]
         items.append(
             {
@@ -4793,6 +5128,7 @@ def normalize_result(
                     + f"-{issue_date}"
                 ),
                 "confirmed_facts": facts,
+                "source_fact_ids": sorted(covered_source_fact_ids),
                 "fact_sources": fact_source_urls,
                 "analysis": analysis,
                 "sources": sources,
@@ -4812,16 +5148,32 @@ def normalize_result(
     conflicting_event_ids = sorted(published_event_ids & excluded_event_ids)
     accounted_event_ids = published_event_ids | excluded_event_ids
     missing_event_ids = sorted(expected_event_ids - accounted_event_ids)
+    missing_source_fact_ids_by_event = {
+        event_id: sorted(
+            {fact["id"] for fact in required_facts_by_event.get(event_id, [])}
+            - covered_source_fact_ids_by_event.get(event_id, set())
+        )
+        for event_id in sorted(published_event_ids)
+        if {
+            fact["id"] for fact in required_facts_by_event.get(event_id, [])
+        }
+        - covered_source_fact_ids_by_event.get(event_id, set())
+    }
     return {
         "items": items,
         "coverage_complete": not (
             missing_event_ids
             or conflicting_event_ids
             or unknown_excluded_event_ids
+            or (
+                require_source_fact_coverage
+                and missing_source_fact_ids_by_event
+            )
         ),
         "missing_event_ids": missing_event_ids,
         "conflicting_event_ids": conflicting_event_ids,
         "unknown_excluded_event_ids": sorted(unknown_excluded_event_ids),
+        "missing_source_fact_ids_by_event": missing_source_fact_ids_by_event,
         "deterministic_wrong_category_ids": sorted(
             deterministic_wrong_category_ids
         ),
@@ -5838,6 +6190,44 @@ def self_test() -> None:
         newsletter_shell_record["title"], newsletter_shell_record
     ):
         fail("headline plus newsletter shell was accepted as article body")
+    rich_article_record = {
+        **english_record,
+        "title": "Thinking MachinesがAIモデルInklingを公開",
+        "excerpt": (
+            "印刷機能のご利用には会員登録が必要です。ログイン。トップページ。"
+            "AI・生成AI | タグをもっとみる "
+            "Thinking Machinesは2099年1月2日、AIモデルInklingを公開した。"
+            "Apache 2.0でHugging Faceから重みを提供する。"
+            "テキスト、画像、音声、動画の45兆トークンで事前学習した。"
+            "MoE方式で総9750億、推論時は410億パラメータを使う。"
+            "最大100万トークンのコンテキストを備える。"
+            "軽量版Inkling-Smallは総2760億、稼働120億である。"
+            "Tinkerで独自データによる微調整に対応する。"
+            "TogetherAI、Fireworks、Databricks、NVIDIA NIM、Unslothと連携する。"
+            "人間の判断を拡張するAIを企業ミッションとして掲げている。"
+            "AI・生成AIのおすすめコンテンツ OpenAIの関連記事を読む。"
+        ),
+    }
+    rich_article_facts = editor_article_facts(rich_article_record)
+    rich_article_text = " ".join(rich_article_facts)
+    for anchor in (
+        "Apache 2.0",
+        "45兆トークン",
+        "9750億",
+        "410億",
+        "100万トークン",
+        "Inkling-Small",
+        "Tinker",
+        "NVIDIA NIM",
+        "Unsloth",
+    ):
+        if anchor not in rich_article_text:
+            fail(f"article fact inventory omitted a material source fact: {anchor}")
+    if any(
+        marker in rich_article_text
+        for marker in ("会員登録", "おすすめコンテンツ", "企業ミッション")
+    ):
+        fail("article fact inventory retained page chrome or generic padding")
     salary_record = {
         **english_record,
         "title": "OpenAI hires an applied AI banking specialist",
@@ -5963,6 +6353,41 @@ def self_test() -> None:
     normalized = normalize_result(raw, category, "2099-01-03", records)
     if len(normalized["items"]) != 1 or not normalized["coverage_complete"]:
         fail("canonical normalization lost a valid evidence-backed summary")
+    strict_raw = json.loads(json.dumps(raw, ensure_ascii=False))
+    required_fixture_facts = editor_required_source_facts(
+        editor_evidence_records(category, "2099-01-03", records)
+    )["g001"]
+    if len(required_fixture_facts) != 2:
+        fail("source fact inventory did not preserve both fixture facts")
+    for point, source_fact in zip(
+        strict_raw["items"][0]["summary_points"],
+        required_fixture_facts,
+    ):
+        point["source_fact_ids"] = [source_fact["id"]]
+    strict_normalized = normalize_result(
+        strict_raw,
+        category,
+        "2099-01-03",
+        records,
+        require_source_fact_coverage=True,
+    )
+    if len(strict_normalized["items"]) != 1 or not strict_normalized["coverage_complete"]:
+        fail("source-to-summary fact recall rejected complete coverage")
+    omitted_fact_raw = json.loads(json.dumps(strict_raw, ensure_ascii=False))
+    omitted_fact_raw["items"][0]["summary_points"] = omitted_fact_raw["items"][0][
+        "summary_points"
+    ][:1]
+    omitted_fact = normalize_result(
+        omitted_fact_raw,
+        category,
+        "2099-01-03",
+        records,
+        require_source_fact_coverage=True,
+    )
+    if omitted_fact["coverage_complete"] or omitted_fact[
+        "missing_source_fact_ids_by_event"
+    ] != {"g001": [required_fixture_facts[1]["id"]]}:
+        fail("source-to-summary fact recall accepted an omitted source fact")
     incomplete_raw = json.loads(json.dumps(raw, ensure_ascii=False))
     incomplete_raw["items"][0]["information_complete"] = False
     incomplete = normalize_result(
@@ -6099,12 +6524,20 @@ def self_test() -> None:
     long_record = {
         **records[0],
         "url": "https://example.com/long-item",
-        "excerpt": records[0]["excerpt"] + " 追加条件を説明した。" * 120,
+        "excerpt": records[0]["excerpt"]
+        + " ".join(
+            f"追加条件{index}では対象機能{index}の適用範囲と開始手順を定めた。"
+            for index in range(1, 41)
+        ),
     }
     prompt = category_prompt(category, "2099-01-03", [long_record])
     prompt_evidence = prompt["events"][0]["evidence"][0]
-    if len(prompt_evidence["body"]) <= 1000:
-        fail("editor prompt still truncates rich source material to a thin excerpt")
+    if (
+        len(prompt_evidence["required_fact_ids"]) != MAX_EDITOR_SOURCE_FACTS
+        or prompt_evidence["source_fact_overflow_count"]
+        != prompt_evidence["article_fact_count"] - MAX_EDITOR_SOURCE_FACTS
+    ):
+        fail("editor prompt did not expose its bounded long-source fact selection")
     if set(prompt_evidence) != {
         "id",
         "watch_topic_ids",
@@ -6114,6 +6547,9 @@ def self_test() -> None:
         "title",
         "evidence_depth",
         "body",
+        "required_fact_ids",
+        "article_fact_count",
+        "source_fact_overflow_count",
     }:
         fail("editor prompt retained redundant evidence metadata")
     if set(prompt["events"][0]["novelty_context"]) != {
@@ -6142,8 +6578,18 @@ def self_test() -> None:
     ]
     if large_prompt_size <= 64_000 or len(large_prompt_evidence) != 80:
         fail("editor prompt silently shortened rich Evidence instead of leaving chunking to Editor")
-    if any(len(item["body"]) != len(prompt_evidence["body"]) for item in large_prompt_evidence):
-        fail("editor prompt applied unequal or lossy body truncation")
+    if (
+        not any(item["required_fact_ids"] for item in large_prompt_evidence)
+        or any(not item["body"] for item in large_prompt_evidence)
+        or any(
+            any(
+            f"[{source_fact_id}]" not in item["body"]
+            for source_fact_id in item["required_fact_ids"]
+            )
+            for item in large_prompt_evidence
+        )
+    ):
+        fail("editor prompt lost required source facts before request chunking")
     summary_cases = [
         (
             "ジグザグ台湾とW2、越境EC支援で業務提携を発表",

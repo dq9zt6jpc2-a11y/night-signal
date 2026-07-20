@@ -82,7 +82,11 @@ Write `state/$ISSUE_DATE/editor_review.json` with this shape:
                 "title": "natural Japanese title",
                 "information_complete": true,
                 "summary_points": [
-                  {"text": "source-backed Japanese fact", "evidence_ids": ["e001"]}
+                  {
+                    "text": "source-backed Japanese fact",
+                    "evidence_ids": ["e001"],
+                    "source_fact_ids": ["e001:f01", "e001:f02"]
+                  }
                 ],
                 "analysis": {
                   "inference": "labeled synthesis supported by multiple sources",
@@ -148,11 +152,24 @@ repair an equivalent class name.
 Use all facts necessary to understand the event: subject and role, concrete
 change, numbers, dates, scope, conditions, reasons, and results. Every title and
 summary point must be natural Japanese. Every point must add information beyond
-the title and cite all supporting Evidence ids. Do not infer facts or repeat
-generic company descriptions.
+the title, cite all supporting Evidence ids, and list every `source_fact_id`
+represented by that point. One sentence may cover several source-fact ids and
+several items in one event may divide them. Do not infer facts or repeat generic
+company descriptions.
 
 Set `information_complete=true` only after accounting for every distinct,
 current, article-specific supported fact needed to understand the accepted event.
+Every id listed in Evidence `required_fact_ids` must be represented by at least
+one accepted summary point. The importer rejects unknown ids, ids from another
+event, ids whose Evidence is not cited by the point, and required ids omitted from
+the whole event. `previous_updates` decide whether there is a publishable new
+delta; after a publish decision, they must not remove current-source context needed
+to understand the accepted event as a self-contained update.
+`article_fact_count` records the complete cleaned sentence inventory and
+`source_fact_overflow_count` records how many lower-ranked facts from an unusually
+long single article could not enter the bounded summary inventory. This is a
+quality/self-improvement signal, not permission to claim full source coverage or
+to stop the daily publication. Never describe overflow as zero omission.
 One summary point is valid only when the Evidence contains one such fact beyond
 the title. Do not add a minimum length, historical background, common knowledge,
 predictions, generic importance, or paraphrase repetition. Never omit a supported
