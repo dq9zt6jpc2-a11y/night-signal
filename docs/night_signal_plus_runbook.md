@@ -62,7 +62,7 @@ Write `state/$ISSUE_DATE/editor_review.json` with this shape:
 
 ```json
 {
-  "contract": "codex-plus-editor-v1",
+  "contract": "codex-plus-editor-v2",
   "issue_date": "YYYY-MM-DD",
   "evidence_sha256": "copy exactly from editor_packet.json",
   "cloud_handoff": {

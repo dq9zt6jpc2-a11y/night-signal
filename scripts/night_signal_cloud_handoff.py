@@ -17,7 +17,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE_ROOT = ROOT / "state"
-PACKET_CONTRACT = "codex-plus-editor-v1"
+PACKET_CONTRACT = "codex-plus-editor-v2"
 BRANCH_PREFIX = "night-signal-evidence-"
 MAX_PACKET_BYTES = 20_000_000
 MAX_PART_BYTES = 850_000

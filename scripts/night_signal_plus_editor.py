@@ -25,7 +25,7 @@ import night_signal_state as state
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE_ROOT = ROOT / "state"
-PACKET_CONTRACT = "codex-plus-editor-v1"
+PACKET_CONTRACT = "codex-plus-editor-v2"
 COLLECTION_MODE = "web_evidence_plus_review"
 
 

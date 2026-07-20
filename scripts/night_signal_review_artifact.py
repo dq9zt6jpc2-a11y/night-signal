@@ -185,7 +185,7 @@ def validate_download(directory: Path, issue_date: str) -> tuple[Path, Path, Pat
     actual_hash = hashlib.sha256(evidence_path.read_bytes()).hexdigest()
     if packet.get("evidence_sha256") != actual_hash:
         raise ValueError("packet and Evidence hashes differ")
-    if packet.get("contract") != "codex-plus-editor-v1":
+    if packet.get("contract") != "codex-plus-editor-v2":
         raise ValueError("artifact uses an unknown Plus review contract")
     return evidence_path, packet_path, eval_path if eval_path.exists() else None
 

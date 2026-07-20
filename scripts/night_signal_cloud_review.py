@@ -18,7 +18,7 @@ from zoneinfo import ZoneInfo
 ROOT = Path(__file__).resolve().parents[1]
 STATE_ROOT = ROOT / "state"
 BRANCH_PREFIX = "night-signal-review-"
-REVIEW_CONTRACT = "codex-plus-editor-v1"
+REVIEW_CONTRACT = "codex-plus-editor-v2"
 CORRECTION_CONTRACT = "night-signal-cloud-review-correction-v1"
 EXECUTION_SURFACE = "chatgpt-web-scheduled-task"
 RECOVERY_CUTOFF_HOUR_JST = 6
