@@ -1,0 +1,1177 @@
+{
+  "issue_date": "2026-07-20",
+  "cards": [
+    {
+      "watch_topic_id": "ipo_financing",
+      "title": "Moonshot AI、3兆パラメータ級「Kimi K3」を公開",
+      "summary": "Kimi K3はKimi Work、Kimi Code、APIで提供を開始し、完全なモデルウェイトは7月27日までに公開する予定だ。 独自のKimi Delta AttentionとAttention ResidualsをMoEに組み合わせ、896エキスパートのうち16を稼働させ、K2比で約2.5倍のスケーリング効率をうたう。 Moonshotは総合性能がClaude Fable 5とGPT-5.6 Solには及ばない一方、Claude Opus 4.8やGPT-5.5を上回ると主張している。 48時間でナノスケールチップを自律設計・検証した事例や、20本超の論文を照合して3000行超のコードを生成した研究事例を示し、API料金は100万トークン当たりキャッシュ入力0.30ドル、通常入力3ドル、出力15ドルとした。 思考履歴を保持しない環境や途中で他モデルから切り替えた場合は出力が不安定になり得ると警告しており、K2系の後継として米国の先端モデルとの差を縮める狙いが報じられている。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-18",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-8ea2312ff8d4-2026-07-20.html",
+        "sources": [
+          {
+            "label": "businessoutreach.in",
+            "url": "https://www.businessoutreach.in/kimi-k3-ai-model-launch-openai-anthropic-rival/"
+          }
+        ],
+        "summary": "Kimi K3はKimi Work、Kimi Code、APIで提供を開始し、完全なモデルウェイトは7月27日までに公開する予定だ。 独自のKimi Delta AttentionとAttention ResidualsをMoEに組み合わせ、896エキスパートのうち16を稼働させ、K2比で約2.5倍のスケーリング効率をうたう。 Moonshotは総合性能がClaude Fable 5とGPT-5.6 Solには及ばない一方、Claude Opus 4.8やGPT-5.5を上回ると主張している。 48時間でナノスケールチップを自律設計・検証した事例や、20本超の論文を照合して3000行超のコードを生成した研究事例を示し、API料金は100万トークン当たりキャッシュ入力0.30ドル、通常入力3ドル、出力15ドルとした。 思考履歴を保持しない環境や途中で他モデルから切り替えた場合は出力が不安定になり得ると警告しており、K2系の後継として米国の先端モデルとの差を縮める狙いが報じられている。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Kimi K3はKimi Work、Kimi Code、APIで提供を開始し、完全なモデルウェイトは7月27日までに公開する予定だ。",
+            "独自のKimi Delta AttentionとAttention ResidualsをMoEに組み合わせ、896エキスパートのうち16を稼働させ、K2比で約2.5倍のスケーリング効率をうたう。",
+            "Moonshotは総合性能がClaude Fable 5とGPT-5.6 Solには及ばない一方、Claude Opus 4.8やGPT-5.5を上回ると主張している。",
+            "48時間でナノスケールチップを自律設計・検証した事例や、20本超の論文を照合して3000行超のコードを生成した研究事例を示し、API料金は100万トークン当たりキャッシュ入力0.30ドル、通常入力3ドル、出力15ドルとした。",
+            "思考履歴を保持しない環境や途中で他モデルから切り替えた場合は出力が不安定になり得ると警告しており、K2系の後継として米国の先端モデルとの差を縮める狙いが報じられている。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Kimi K3はKimi Work、Kimi Code、APIで提供を開始し、完全なモデルウェイトは7月27日までに公開する予定だ。",
+              "source_urls": [
+                "https://www.businessoutreach.in/kimi-k3-ai-model-launch-openai-anthropic-rival/"
+              ]
+            },
+            {
+              "fact": "独自のKimi Delta AttentionとAttention ResidualsをMoEに組み合わせ、896エキスパートのうち16を稼働させ、K2比で約2.5倍のスケーリング効率をうたう。",
+              "source_urls": [
+                "https://www.businessoutreach.in/kimi-k3-ai-model-launch-openai-anthropic-rival/"
+              ]
+            },
+            {
+              "fact": "Moonshotは総合性能がClaude Fable 5とGPT-5.6 Solには及ばない一方、Claude Opus 4.8やGPT-5.5を上回ると主張している。",
+              "source_urls": [
+                "https://www.businessoutreach.in/kimi-k3-ai-model-launch-openai-anthropic-rival/"
+              ]
+            },
+            {
+              "fact": "48時間でナノスケールチップを自律設計・検証した事例や、20本超の論文を照合して3000行超のコードを生成した研究事例を示し、API料金は100万トークン当たりキャッシュ入力0.30ドル、通常入力3ドル、出力15ドルとした。",
+              "source_urls": [
+                "https://www.businessoutreach.in/kimi-k3-ai-model-launch-openai-anthropic-rival/"
+              ]
+            },
+            {
+              "fact": "思考履歴を保持しない環境や途中で他モデルから切り替えた場合は出力が不安定になり得ると警告しており、K2系の後継として米国の先端モデルとの差を縮める狙いが報じられている。",
+              "source_urls": [
+                "https://www.businessoutreach.in/kimi-k3-ai-model-launch-openai-anthropic-rival/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-18"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "ipo_financing",
+      "title": "ReliaQuestとOpenAI、企業向けAIサイバー防衛で提携",
+      "summary": "ReliaQuestはOpenAIの先端サイバー能力とモデルへ接続し、GreyMatter上で脆弱性の発見・修正と脅威対応を高速化する。 両社は高効果のセキュリティ運用事例を選定し、開発、テスト、評価、本番展開まで共同で進める一方、ReliaQuestは企業環境で観測した攻撃行動や調査パターンを提供する。 ReliaQuestのBrian Murphy CEOは、AIで攻撃速度が上がるなか、GreyMatterにエージェント型AIを組み込み、調査と対応を数分単位に短縮すると説明した。 GreyMatterは自然言語による検知・調査・対応・ハンティングを支え、テレメトリー正規化、データ所在点での検知、速度・コスト・精度に応じたモデル選択を含むエージェント連携を提供する。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-20",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-8c7f88ff984a-2026-07-20.html",
+        "sources": [
+          {
+            "label": "mymalonetelegram.com",
+            "url": "https://www.mymalonetelegram.com/online_features/press_releases/reliaquest-and-openai-announce-partnership-to-accelerate-agentic-cyber-defense-for-the-enterprise/article_61e3e465-3a9f-5dbb-85a1-7b3f228cf85a.html"
+          }
+        ],
+        "summary": "ReliaQuestはOpenAIの先端サイバー能力とモデルへ接続し、GreyMatter上で脆弱性の発見・修正と脅威対応を高速化する。 両社は高効果のセキュリティ運用事例を選定し、開発、テスト、評価、本番展開まで共同で進める一方、ReliaQuestは企業環境で観測した攻撃行動や調査パターンを提供する。 ReliaQuestのBrian Murphy CEOは、AIで攻撃速度が上がるなか、GreyMatterにエージェント型AIを組み込み、調査と対応を数分単位に短縮すると説明した。 GreyMatterは自然言語による検知・調査・対応・ハンティングを支え、テレメトリー正規化、データ所在点での検知、速度・コスト・精度に応じたモデル選択を含むエージェント連携を提供する。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "ReliaQuestはOpenAIの先端サイバー能力とモデルへ接続し、GreyMatter上で脆弱性の発見・修正と脅威対応を高速化する。",
+            "両社は高効果のセキュリティ運用事例を選定し、開発、テスト、評価、本番展開まで共同で進める一方、ReliaQuestは企業環境で観測した攻撃行動や調査パターンを提供する。",
+            "ReliaQuestのBrian Murphy CEOは、AIで攻撃速度が上がるなか、GreyMatterにエージェント型AIを組み込み、調査と対応を数分単位に短縮すると説明した。",
+            "GreyMatterは自然言語による検知・調査・対応・ハンティングを支え、テレメトリー正規化、データ所在点での検知、速度・コスト・精度に応じたモデル選択を含むエージェント連携を提供する。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "ReliaQuestはOpenAIの先端サイバー能力とモデルへ接続し、GreyMatter上で脆弱性の発見・修正と脅威対応を高速化する。",
+              "source_urls": [
+                "https://www.mymalonetelegram.com/online_features/press_releases/reliaquest-and-openai-announce-partnership-to-accelerate-agentic-cyber-defense-for-the-enterprise/article_61e3e465-3a9f-5dbb-85a1-7b3f228cf85a.html"
+              ]
+            },
+            {
+              "fact": "両社は高効果のセキュリティ運用事例を選定し、開発、テスト、評価、本番展開まで共同で進める一方、ReliaQuestは企業環境で観測した攻撃行動や調査パターンを提供する。",
+              "source_urls": [
+                "https://www.mymalonetelegram.com/online_features/press_releases/reliaquest-and-openai-announce-partnership-to-accelerate-agentic-cyber-defense-for-the-enterprise/article_61e3e465-3a9f-5dbb-85a1-7b3f228cf85a.html"
+              ]
+            },
+            {
+              "fact": "ReliaQuestのBrian Murphy CEOは、AIで攻撃速度が上がるなか、GreyMatterにエージェント型AIを組み込み、調査と対応を数分単位に短縮すると説明した。",
+              "source_urls": [
+                "https://www.mymalonetelegram.com/online_features/press_releases/reliaquest-and-openai-announce-partnership-to-accelerate-agentic-cyber-defense-for-the-enterprise/article_61e3e465-3a9f-5dbb-85a1-7b3f228cf85a.html"
+              ]
+            },
+            {
+              "fact": "GreyMatterは自然言語による検知・調査・対応・ハンティングを支え、テレメトリー正規化、データ所在点での検知、速度・コスト・精度に応じたモデル選択を含むエージェント連携を提供する。",
+              "source_urls": [
+                "https://www.mymalonetelegram.com/online_features/press_releases/reliaquest-and-openai-announce-partnership-to-accelerate-agentic-cyber-defense-for-the-enterprise/article_61e3e465-3a9f-5dbb-85a1-7b3f228cf85a.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-20"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "ipo_financing",
+      "title": "OpenAI CFO、AI投資評価に「有用な知能／ドル」を提唱",
+      "summary": "Sarah Friar CFOは、価格やトークン単価ではなく、重要業務をどれだけ完了したかでAI投資を評価する新たな企業向け指標を提案した。 顧客問題の完全解決、出荷したコード、審査した契約などの成果を追い、成功タスク1件当たりの総費用を測るよう求めた。 正確性と人による修正・エスカレーション回数を費用要因として扱い、成果価値の伸びが生成コストの伸びを上回るかを継続監視すべきだとした。 企業のAIクラウド費用管理が不透明ななか、巨額請求の報道や、Sam Altman CEOが企業顧客の不満として導入難に次ぐ費用管理を挙げたことも背景にある。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-20",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-1b53d42677d0-2026-07-20.html",
+        "sources": [
+          {
+            "label": "timesofindia.indiatimes.com",
+            "url": "https://timesofindia.indiatimes.com/technology/tech-news/openai-cfo-sarah-friar-to-companies-questioning-return-on-their-ai-investments-dont-rush-to-the-cheapest-ai-model-buy-ai-tools-that-/articleshow/132504421.cms"
+          }
+        ],
+        "summary": "Sarah Friar CFOは、価格やトークン単価ではなく、重要業務をどれだけ完了したかでAI投資を評価する新たな企業向け指標を提案した。 顧客問題の完全解決、出荷したコード、審査した契約などの成果を追い、成功タスク1件当たりの総費用を測るよう求めた。 正確性と人による修正・エスカレーション回数を費用要因として扱い、成果価値の伸びが生成コストの伸びを上回るかを継続監視すべきだとした。 企業のAIクラウド費用管理が不透明ななか、巨額請求の報道や、Sam Altman CEOが企業顧客の不満として導入難に次ぐ費用管理を挙げたことも背景にある。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Sarah Friar CFOは、価格やトークン単価ではなく、重要業務をどれだけ完了したかでAI投資を評価する新たな企業向け指標を提案した。",
+            "顧客問題の完全解決、出荷したコード、審査した契約などの成果を追い、成功タスク1件当たりの総費用を測るよう求めた。",
+            "正確性と人による修正・エスカレーション回数を費用要因として扱い、成果価値の伸びが生成コストの伸びを上回るかを継続監視すべきだとした。",
+            "企業のAIクラウド費用管理が不透明ななか、巨額請求の報道や、Sam Altman CEOが企業顧客の不満として導入難に次ぐ費用管理を挙げたことも背景にある。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Sarah Friar CFOは、価格やトークン単価ではなく、重要業務をどれだけ完了したかでAI投資を評価する新たな企業向け指標を提案した。",
+              "source_urls": [
+                "https://timesofindia.indiatimes.com/technology/tech-news/openai-cfo-sarah-friar-to-companies-questioning-return-on-their-ai-investments-dont-rush-to-the-cheapest-ai-model-buy-ai-tools-that-/articleshow/132504421.cms"
+              ]
+            },
+            {
+              "fact": "顧客問題の完全解決、出荷したコード、審査した契約などの成果を追い、成功タスク1件当たりの総費用を測るよう求めた。",
+              "source_urls": [
+                "https://timesofindia.indiatimes.com/technology/tech-news/openai-cfo-sarah-friar-to-companies-questioning-return-on-their-ai-investments-dont-rush-to-the-cheapest-ai-model-buy-ai-tools-that-/articleshow/132504421.cms"
+              ]
+            },
+            {
+              "fact": "正確性と人による修正・エスカレーション回数を費用要因として扱い、成果価値の伸びが生成コストの伸びを上回るかを継続監視すべきだとした。",
+              "source_urls": [
+                "https://timesofindia.indiatimes.com/technology/tech-news/openai-cfo-sarah-friar-to-companies-questioning-return-on-their-ai-investments-dont-rush-to-the-cheapest-ai-model-buy-ai-tools-that-/articleshow/132504421.cms"
+              ]
+            },
+            {
+              "fact": "企業のAIクラウド費用管理が不透明ななか、巨額請求の報道や、Sam Altman CEOが企業顧客の不満として導入難に次ぐ費用管理を挙げたことも背景にある。",
+              "source_urls": [
+                "https://timesofindia.indiatimes.com/technology/tech-news/openai-cfo-sarah-friar-to-companies-questioning-return-on-their-ai-investments-dont-rush-to-the-cheapest-ai-model-buy-ai-tools-that-/articleshow/132504421.cms"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-20"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "enterprise_infrastructure",
+      "title": "インド証券会社5paisa、OpenAIと提携",
+      "summary": "5paisa CapitalはOpenAIとの戦略提携を発表し、インドの個人投資家向けに個別インサイトと助言支援を提供するため、投資・取引プロセスへAIを統合する。 同社はChatGPT経由でサービスを提供する初の証券プラットフォームになるとしており、機会探索、市場動向の把握、ポートフォリオ評価、意思決定を支援する。 次段階ではChatGPT上で会話型の投資・取引体験を提供し、利用者自身が判断を管理できる設計を目指す。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-19",
+      "topic_value_class": "operational_status_change",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-eb1d2d0baaa8-2026-07-20.html",
+        "sources": [
+          {
+            "label": "newsbytesapp.com",
+            "url": "https://www.newsbytesapp.com/news/business/5paisa-partners-with-openai-to-bring-ai-powered-investing/story"
+          }
+        ],
+        "summary": "5paisa CapitalはOpenAIとの戦略提携を発表し、インドの個人投資家向けに個別インサイトと助言支援を提供するため、投資・取引プロセスへAIを統合する。 同社はChatGPT経由でサービスを提供する初の証券プラットフォームになるとしており、機会探索、市場動向の把握、ポートフォリオ評価、意思決定を支援する。 次段階ではChatGPT上で会話型の投資・取引体験を提供し、利用者自身が判断を管理できる設計を目指す。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "5paisa CapitalはOpenAIとの戦略提携を発表し、インドの個人投資家向けに個別インサイトと助言支援を提供するため、投資・取引プロセスへAIを統合する。",
+            "同社はChatGPT経由でサービスを提供する初の証券プラットフォームになるとしており、機会探索、市場動向の把握、ポートフォリオ評価、意思決定を支援する。",
+            "次段階ではChatGPT上で会話型の投資・取引体験を提供し、利用者自身が判断を管理できる設計を目指す。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "5paisa CapitalはOpenAIとの戦略提携を発表し、インドの個人投資家向けに個別インサイトと助言支援を提供するため、投資・取引プロセスへAIを統合する。",
+              "source_urls": [
+                "https://www.newsbytesapp.com/news/business/5paisa-partners-with-openai-to-bring-ai-powered-investing/story"
+              ]
+            },
+            {
+              "fact": "同社はChatGPT経由でサービスを提供する初の証券プラットフォームになるとしており、機会探索、市場動向の把握、ポートフォリオ評価、意思決定を支援する。",
+              "source_urls": [
+                "https://www.newsbytesapp.com/news/business/5paisa-partners-with-openai-to-bring-ai-powered-investing/story"
+              ]
+            },
+            {
+              "fact": "次段階ではChatGPT上で会話型の投資・取引体験を提供し、利用者自身が判断を管理できる設計を目指す。",
+              "source_urls": [
+                "https://www.newsbytesapp.com/news/business/5paisa-partners-with-openai-to-bring-ai-powered-investing/story"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-19"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "enterprise_infrastructure",
+      "title": "OpenAI、計算基盤担当CTOにUday Ruddarraju氏を起用",
+      "summary": "OpenAIはUday Ruddarraju氏をCTO, Computeに任命した。 同氏はOpenAI在籍1年を経て就任し、以前はxAIに所属していた。 ComputeチームはGPT-5.6などの訓練に必要な計算、ネットワーク、ストレージ、機械学習基盤を整え、容量を迅速かつ安定的に稼働させてきた。 OpenAIは世界最大の計算基盤を目指し、大規模分散システム、ハードウェア、製造、土木・機械・電気を含むデータセンター建設で採用を拡大する。 Ruddarraju氏はAWSでのインターン、eBay、Robinhood、xAIを経てOpenAIへ移ったと報じられた。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-20",
+      "topic_value_class": "operational_status_change",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-6a1899f9914a-2026-07-20.html",
+        "sources": [
+          {
+            "label": "enterpriseai.economictimes.indiatimes.com",
+            "url": "https://enterpriseai.economictimes.indiatimes.com/amp/news/industry/uday-ruddarraju-named-cto-of-compute-at-openai-to-drive-ai-infrastructure-growth/132508892"
+          },
+          {
+            "label": "rediff.com",
+            "url": "https://www.rediff.com/business/report/indian-origin-uday-ruddaraju-named-openai-cto-compute/20260719.htm"
+          }
+        ],
+        "summary": "OpenAIはUday Ruddarraju氏をCTO, Computeに任命した。 同氏はOpenAI在籍1年を経て就任し、以前はxAIに所属していた。 ComputeチームはGPT-5.6などの訓練に必要な計算、ネットワーク、ストレージ、機械学習基盤を整え、容量を迅速かつ安定的に稼働させてきた。 OpenAIは世界最大の計算基盤を目指し、大規模分散システム、ハードウェア、製造、土木・機械・電気を含むデータセンター建設で採用を拡大する。 Ruddarraju氏はAWSでのインターン、eBay、Robinhood、xAIを経てOpenAIへ移ったと報じられた。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "OpenAIはUday Ruddarraju氏をCTO, Computeに任命した。",
+            "同氏はOpenAI在籍1年を経て就任し、以前はxAIに所属していた。",
+            "ComputeチームはGPT-5.6などの訓練に必要な計算、ネットワーク、ストレージ、機械学習基盤を整え、容量を迅速かつ安定的に稼働させてきた。",
+            "OpenAIは世界最大の計算基盤を目指し、大規模分散システム、ハードウェア、製造、土木・機械・電気を含むデータセンター建設で採用を拡大する。",
+            "Ruddarraju氏はAWSでのインターン、eBay、Robinhood、xAIを経てOpenAIへ移ったと報じられた。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "OpenAIはUday Ruddarraju氏をCTO, Computeに任命した。",
+              "source_urls": [
+                "https://enterpriseai.economictimes.indiatimes.com/amp/news/industry/uday-ruddarraju-named-cto-of-compute-at-openai-to-drive-ai-infrastructure-growth/132508892",
+                "https://www.rediff.com/business/report/indian-origin-uday-ruddaraju-named-openai-cto-compute/20260719.htm"
+              ]
+            },
+            {
+              "fact": "同氏はOpenAI在籍1年を経て就任し、以前はxAIに所属していた。",
+              "source_urls": [
+                "https://enterpriseai.economictimes.indiatimes.com/amp/news/industry/uday-ruddarraju-named-cto-of-compute-at-openai-to-drive-ai-infrastructure-growth/132508892",
+                "https://www.rediff.com/business/report/indian-origin-uday-ruddaraju-named-openai-cto-compute/20260719.htm"
+              ]
+            },
+            {
+              "fact": "ComputeチームはGPT-5.6などの訓練に必要な計算、ネットワーク、ストレージ、機械学習基盤を整え、容量を迅速かつ安定的に稼働させてきた。",
+              "source_urls": [
+                "https://enterpriseai.economictimes.indiatimes.com/amp/news/industry/uday-ruddarraju-named-cto-of-compute-at-openai-to-drive-ai-infrastructure-growth/132508892"
+              ]
+            },
+            {
+              "fact": "OpenAIは世界最大の計算基盤を目指し、大規模分散システム、ハードウェア、製造、土木・機械・電気を含むデータセンター建設で採用を拡大する。",
+              "source_urls": [
+                "https://enterpriseai.economictimes.indiatimes.com/amp/news/industry/uday-ruddarraju-named-cto-of-compute-at-openai-to-drive-ai-infrastructure-growth/132508892"
+              ]
+            },
+            {
+              "fact": "Ruddarraju氏はAWSでのインターン、eBay、Robinhood、xAIを経てOpenAIへ移ったと報じられた。",
+              "source_urls": [
+                "https://www.rediff.com/business/report/indian-origin-uday-ruddaraju-named-openai-cto-compute/20260719.htm"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-20"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "enterprise_infrastructure",
+      "title": "Stargate UK、300億ポンド構想の大半が未確約と判明",
+      "summary": "英政府が最大300億ポンドの投資誘致を掲げたStargate UKについて、情報公開資料を基にした調査は約200億ポンドが具体的な資金約束を伴わない潜在投資だったと報じた。 OpenAIは電力費と規制の不確実性を理由に4月に参加を停止した一方、ロンドンでの研究拠点と事業拡大計画は維持するとしている。 主要候補地North Tynesideでは、正式発表前にOpenAIが現地を訪れておらず、自治体も準備状況を把握せず、必要な電力インフラもなかったとされた。 報道は、大規模AI投資では電力供給、系統接続速度、規制環境、既存インフラが実現性を左右し、発表額と確定投資の乖離がリスクになると指摘した。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-07-19",
+      "topic_value_class": "risk_or_safety_signal",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-47e44cc25ba2-2026-07-20.html",
+        "sources": [
+          {
+            "label": "logos-pres.md",
+            "url": "https://logos-pres.md/en/news/an-investigation-has-cast-doubt-on-openais-30-billion-project-in-the-united-kingdom/"
+          }
+        ],
+        "summary": "英政府が最大300億ポンドの投資誘致を掲げたStargate UKについて、情報公開資料を基にした調査は約200億ポンドが具体的な資金約束を伴わない潜在投資だったと報じた。 OpenAIは電力費と規制の不確実性を理由に4月に参加を停止した一方、ロンドンでの研究拠点と事業拡大計画は維持するとしている。 主要候補地North Tynesideでは、正式発表前にOpenAIが現地を訪れておらず、自治体も準備状況を把握せず、必要な電力インフラもなかったとされた。 報道は、大規模AI投資では電力供給、系統接続速度、規制環境、既存インフラが実現性を左右し、発表額と確定投資の乖離がリスクになると指摘した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "英政府が最大300億ポンドの投資誘致を掲げたStargate UKについて、情報公開資料を基にした調査は約200億ポンドが具体的な資金約束を伴わない潜在投資だったと報じた。",
+            "OpenAIは電力費と規制の不確実性を理由に4月に参加を停止した一方、ロンドンでの研究拠点と事業拡大計画は維持するとしている。",
+            "主要候補地North Tynesideでは、正式発表前にOpenAIが現地を訪れておらず、自治体も準備状況を把握せず、必要な電力インフラもなかったとされた。",
+            "報道は、大規模AI投資では電力供給、系統接続速度、規制環境、既存インフラが実現性を左右し、発表額と確定投資の乖離がリスクになると指摘した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "英政府が最大300億ポンドの投資誘致を掲げたStargate UKについて、情報公開資料を基にした調査は約200億ポンドが具体的な資金約束を伴わない潜在投資だったと報じた。",
+              "source_urls": [
+                "https://logos-pres.md/en/news/an-investigation-has-cast-doubt-on-openais-30-billion-project-in-the-united-kingdom/"
+              ]
+            },
+            {
+              "fact": "OpenAIは電力費と規制の不確実性を理由に4月に参加を停止した一方、ロンドンでの研究拠点と事業拡大計画は維持するとしている。",
+              "source_urls": [
+                "https://logos-pres.md/en/news/an-investigation-has-cast-doubt-on-openais-30-billion-project-in-the-united-kingdom/"
+              ]
+            },
+            {
+              "fact": "主要候補地North Tynesideでは、正式発表前にOpenAIが現地を訪れておらず、自治体も準備状況を把握せず、必要な電力インフラもなかったとされた。",
+              "source_urls": [
+                "https://logos-pres.md/en/news/an-investigation-has-cast-doubt-on-openais-30-billion-project-in-the-united-kingdom/"
+              ]
+            },
+            {
+              "fact": "報道は、大規模AI投資では電力供給、系統接続速度、規制環境、既存インフラが実現性を左右し、発表額と確定投資の乖離がリスクになると指摘した。",
+              "source_urls": [
+                "https://logos-pres.md/en/news/an-investigation-has-cast-doubt-on-openais-30-billion-project-in-the-united-kingdom/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-19"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "hybrid_ev_strategy",
+      "title": "Hondaと広汽集団、広汽Hondaの合弁期間を延長",
+      "summary": "広汽Hondaは1998年7月設立、1999年3月に広州で生産を開始したHonda初の中国四輪合弁会社で、累計販売は1100万台を超える。 販売・サービス・部品供給・顧客管理情報を統合する「四位一体」の販売サービス網を構築し、中国市場で顧客基盤を広げてきた。 電動化・智能化で競争が激化する中国市場で、両社は技術と資源を組み合わせて商品供給と事業強化を続ける。",
+      "section_id": "honda",
+      "category": "Honda",
+      "source_published_date": "2026-07-20",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-3c619f8b37b7-2026-07-20.html",
+        "sources": [
+          {
+            "label": "global.honda",
+            "url": "https://global.honda/jp/news/2026/c260720.html"
+          }
+        ],
+        "summary": "広汽Hondaは1998年7月設立、1999年3月に広州で生産を開始したHonda初の中国四輪合弁会社で、累計販売は1100万台を超える。 販売・サービス・部品供給・顧客管理情報を統合する「四位一体」の販売サービス網を構築し、中国市場で顧客基盤を広げてきた。 電動化・智能化で競争が激化する中国市場で、両社は技術と資源を組み合わせて商品供給と事業強化を続ける。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "広汽Hondaは1998年7月設立、1999年3月に広州で生産を開始したHonda初の中国四輪合弁会社で、累計販売は1100万台を超える。",
+            "販売・サービス・部品供給・顧客管理情報を統合する「四位一体」の販売サービス網を構築し、中国市場で顧客基盤を広げてきた。",
+            "電動化・智能化で競争が激化する中国市場で、両社は技術と資源を組み合わせて商品供給と事業強化を続ける。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "広汽Hondaは1998年7月設立、1999年3月に広州で生産を開始したHonda初の中国四輪合弁会社で、累計販売は1100万台を超える。",
+              "source_urls": [
+                "https://global.honda/jp/news/2026/c260720.html"
+              ]
+            },
+            {
+              "fact": "販売・サービス・部品供給・顧客管理情報を統合する「四位一体」の販売サービス網を構築し、中国市場で顧客基盤を広げてきた。",
+              "source_urls": [
+                "https://global.honda/jp/news/2026/c260720.html"
+              ]
+            },
+            {
+              "fact": "電動化・智能化で競争が激化する中国市場で、両社は技術と資源を組み合わせて商品供給と事業強化を続ける。",
+              "source_urls": [
+                "https://global.honda/jp/news/2026/c260720.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-20"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_sales",
+      "title": "アステモ、新社長にHonda四輪事業出身の井上勝史氏",
+      "summary": "井上勝史氏の社長就任は6月25日の定時株主総会と7月1日の臨時取締役会を経て正式決定する。 欧州・中国・電動事業の責任者を歴任し、昨年4月に四輪事業本部長へ就任、6月にHonda取締役退任が決まった。 Hondaは日立保有のアステモ株21％を取得して持分を61％へ引き上げ、子会社化する予定だ。 EV戦略の不振を受けてSDV・HV重視へ軌道修正するなか、アステモのSDV・電動車向けパワートレイン技術と開発力を評価し、連携を強化する。 井上氏へのトップ交代により、系列サプライヤーとしてHonda四輪事業の立て直しを全面支援する体制を整える。 退任する竹内弘平社長は2023年7月就任後、前任期の品質問題への対応、財務体質の改善、株式公開準備を担ってきた。",
+      "section_id": "honda",
+      "category": "Honda",
+      "source_published_date": "2026-07-18",
+      "topic_value_class": "operational_status_change",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-8ca30bd14556-2026-07-20.html",
+        "sources": [
+          {
+            "label": "netdenjd.com",
+            "url": "https://www.netdenjd.com/archives/669398"
+          }
+        ],
+        "summary": "井上勝史氏の社長就任は6月25日の定時株主総会と7月1日の臨時取締役会を経て正式決定する。 欧州・中国・電動事業の責任者を歴任し、昨年4月に四輪事業本部長へ就任、6月にHonda取締役退任が決まった。 Hondaは日立保有のアステモ株21％を取得して持分を61％へ引き上げ、子会社化する予定だ。 EV戦略の不振を受けてSDV・HV重視へ軌道修正するなか、アステモのSDV・電動車向けパワートレイン技術と開発力を評価し、連携を強化する。 井上氏へのトップ交代により、系列サプライヤーとしてHonda四輪事業の立て直しを全面支援する体制を整える。 退任する竹内弘平社長は2023年7月就任後、前任期の品質問題への対応、財務体質の改善、株式公開準備を担ってきた。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "井上勝史氏の社長就任は6月25日の定時株主総会と7月1日の臨時取締役会を経て正式決定する。",
+            "欧州・中国・電動事業の責任者を歴任し、昨年4月に四輪事業本部長へ就任、6月にHonda取締役退任が決まった。",
+            "Hondaは日立保有のアステモ株21％を取得して持分を61％へ引き上げ、子会社化する予定だ。",
+            "EV戦略の不振を受けてSDV・HV重視へ軌道修正するなか、アステモのSDV・電動車向けパワートレイン技術と開発力を評価し、連携を強化する。",
+            "井上氏へのトップ交代により、系列サプライヤーとしてHonda四輪事業の立て直しを全面支援する体制を整える。",
+            "退任する竹内弘平社長は2023年7月就任後、前任期の品質問題への対応、財務体質の改善、株式公開準備を担ってきた。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "井上勝史氏の社長就任は6月25日の定時株主総会と7月1日の臨時取締役会を経て正式決定する。",
+              "source_urls": [
+                "https://www.netdenjd.com/archives/669398"
+              ]
+            },
+            {
+              "fact": "欧州・中国・電動事業の責任者を歴任し、昨年4月に四輪事業本部長へ就任、6月にHonda取締役退任が決まった。",
+              "source_urls": [
+                "https://www.netdenjd.com/archives/669398"
+              ]
+            },
+            {
+              "fact": "Hondaは日立保有のアステモ株21％を取得して持分を61％へ引き上げ、子会社化する予定だ。",
+              "source_urls": [
+                "https://www.netdenjd.com/archives/669398"
+              ]
+            },
+            {
+              "fact": "EV戦略の不振を受けてSDV・HV重視へ軌道修正するなか、アステモのSDV・電動車向けパワートレイン技術と開発力を評価し、連携を強化する。",
+              "source_urls": [
+                "https://www.netdenjd.com/archives/669398"
+              ]
+            },
+            {
+              "fact": "井上氏へのトップ交代により、系列サプライヤーとしてHonda四輪事業の立て直しを全面支援する体制を整える。",
+              "source_urls": [
+                "https://www.netdenjd.com/archives/669398"
+              ]
+            },
+            {
+              "fact": "退任する竹内弘平社長は2023年7月就任後、前任期の品質問題への対応、財務体質の改善、株式公開準備を担ってきた。",
+              "source_urls": [
+                "https://www.netdenjd.com/archives/669398"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-18"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "race_schedule_results",
+      "title": "Ferrari、Hamiltonの危険なピットリリースで罰金",
+      "summary": "ベルギーGPのLewis Hamiltonのピットストップで起きた危険なリリースを受け、Ferrariに罰金が科された。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-07-20",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-2d646405b8b5-2026-07-20.html",
+        "sources": [
+          {
+            "label": "formula1.com",
+            "url": "https://www.formula1.com/en/latest/article/hamilton-penalty-for-unsafe-pit-release-in-belgian-grand-prix-confirmed.p8ItnzotleVFVAU50e08T"
+          }
+        ],
+        "summary": "ベルギーGPのLewis Hamiltonのピットストップで起きた危険なリリースを受け、Ferrariに罰金が科された。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "ベルギーGPのLewis Hamiltonのピットストップで起きた危険なリリースを受け、Ferrariに罰金が科された。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "ベルギーGPのLewis Hamiltonのピットストップで起きた危険なリリースを受け、Ferrariに罰金が科された。",
+              "source_urls": [
+                "https://www.formula1.com/en/latest/article/hamilton-penalty-for-unsafe-pit-release-in-belgian-grand-prix-confirmed.p8ItnzotleVFVAU50e08T"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-20"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "fia_regulation_development",
+      "title": "Mercedes、FerrariによるAntonelli獲得の動きを警戒",
+      "summary": "Toto Wolff代表はFerrariの関心を認識し、Antonelliは11歳からMercedes育成であり、Ferrariはイタリア人ドライバー獲得へ動くとの見方を示した。 WolffはAntonelliとGeorge RussellをMercedes育成の成果と評価する一方、Russell車には直線で説明できない約0.25秒の損失があり、チームが原因を分析中だと明らかにした。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-07-19",
+      "topic_value_class": "operational_status_change",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-b7ed19f9d873-2026-07-20.html",
+        "sources": [
+          {
+            "label": "autoracing1.com",
+            "url": "https://www.autoracing1.com/pl/498990/formula-1-news-wolff-admits-ferrari-will-try-to-sign-antonelli/"
+          }
+        ],
+        "summary": "Toto Wolff代表はFerrariの関心を認識し、Antonelliは11歳からMercedes育成であり、Ferrariはイタリア人ドライバー獲得へ動くとの見方を示した。 WolffはAntonelliとGeorge RussellをMercedes育成の成果と評価する一方、Russell車には直線で説明できない約0.25秒の損失があり、チームが原因を分析中だと明らかにした。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Toto Wolff代表はFerrariの関心を認識し、Antonelliは11歳からMercedes育成であり、Ferrariはイタリア人ドライバー獲得へ動くとの見方を示した。",
+            "WolffはAntonelliとGeorge RussellをMercedes育成の成果と評価する一方、Russell車には直線で説明できない約0.25秒の損失があり、チームが原因を分析中だと明らかにした。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Toto Wolff代表はFerrariの関心を認識し、Antonelliは11歳からMercedes育成であり、Ferrariはイタリア人ドライバー獲得へ動くとの見方を示した。",
+              "source_urls": [
+                "https://www.autoracing1.com/pl/498990/formula-1-news-wolff-admits-ferrari-will-try-to-sign-antonelli/"
+              ]
+            },
+            {
+              "fact": "WolffはAntonelliとGeorge RussellをMercedes育成の成果と評価する一方、Russell車には直線で説明できない約0.25秒の損失があり、チームが原因を分析中だと明らかにした。",
+              "source_urls": [
+                "https://www.autoracing1.com/pl/498990/formula-1-news-wolff-admits-ferrari-will-try-to-sign-antonelli/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-19"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "honda_aston_pu",
+      "title": "F1ベルギーGP決勝、Leclercが2位、Verstappenが3位",
+      "summary": "正式結果ではCharles Leclerc（Ferrari）が2位、Max Verstappen（Red Bull）が3位となった。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-07-19",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-2f8fa7725d7c-2026-07-20.html",
+        "sources": [
+          {
+            "label": "as-web.jp",
+            "url": "https://www.as-web.jp/f1/1336099"
+          }
+        ],
+        "summary": "正式結果ではCharles Leclerc（Ferrari）が2位、Max Verstappen（Red Bull）が3位となった。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "正式結果ではCharles Leclerc（Ferrari）が2位、Max Verstappen（Red Bull）が3位となった。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "正式結果ではCharles Leclerc（Ferrari）が2位、Max Verstappen（Red Bull）が3位となった。",
+              "source_urls": [
+                "https://www.as-web.jp/f1/1336099"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-19"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "business_contracts",
+      "title": "コートジボワール、Starlinkの全国サービスを最終承認",
+      "summary": "米国外交団の訪問後、コートジボワール政府はStarlinkの国内運用を最終承認し、遠隔地・農村部を中心に未接続地域のブロードバンド拡大を目指す。 政府は同時に、米輸出入銀行が資金を供給する米Cybastionの1億7000万ドル規模プロジェクトも承認した。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-07-20",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-22be092c51ed-2026-07-20.html",
+        "sources": [
+          {
+            "label": "developingtelecoms.com",
+            "url": "https://developingtelecoms.com/telecom-business/telecom-investment-mergers/20549-cote-divoire-approves-starlink-service-data-centre-project-and-more-after-us-state-visit.html"
+          },
+          {
+            "label": "telecompaper.com",
+            "url": "https://www.telecompaper.com/news/cote-divoire-approves-starlink-launch-cybastion-data-centre-at-us-diplomatic-visit--1577439"
+          }
+        ],
+        "summary": "米国外交団の訪問後、コートジボワール政府はStarlinkの国内運用を最終承認し、遠隔地・農村部を中心に未接続地域のブロードバンド拡大を目指す。 政府は同時に、米輸出入銀行が資金を供給する米Cybastionの1億7000万ドル規模プロジェクトも承認した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "米国外交団の訪問後、コートジボワール政府はStarlinkの国内運用を最終承認し、遠隔地・農村部を中心に未接続地域のブロードバンド拡大を目指す。",
+            "政府は同時に、米輸出入銀行が資金を供給する米Cybastionの1億7000万ドル規模プロジェクトも承認した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "米国外交団の訪問後、コートジボワール政府はStarlinkの国内運用を最終承認し、遠隔地・農村部を中心に未接続地域のブロードバンド拡大を目指す。",
+              "source_urls": [
+                "https://developingtelecoms.com/telecom-business/telecom-investment-mergers/20549-cote-divoire-approves-starlink-service-data-centre-project-and-more-after-us-state-visit.html",
+                "https://www.telecompaper.com/news/cote-divoire-approves-starlink-launch-cybastion-data-centre-at-us-diplomatic-visit--1577439"
+              ]
+            },
+            {
+              "fact": "政府は同時に、米輸出入銀行が資金を供給する米Cybastionの1億7000万ドル規模プロジェクトも承認した。",
+              "source_urls": [
+                "https://developingtelecoms.com/telecom-business/telecom-investment-mergers/20549-cote-divoire-approves-starlink-service-data-centre-project-and-more-after-us-state-visit.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-20"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "dragon_iss",
+      "title": "SpaceX株、最高値から43％下落 時価総額1兆ドル減",
+      "summary": "SpaceXはIPO価格を135ドルとした。 取引開始直後には時価総額でAmazonとMicrosoftを一時上回った。 金曜午後は125ドルで、最高値225ドルから43％下落した。 6月16日の時価総額2.7兆ドルのピークから1兆ドル超を失った。 Starshipの次回試行についてMusk氏は数日内を希望し、最短の打ち上げ時期を翌週初めとした。 公開流通株は5％未満で、残る約95％はロックアップ対象。 最初の解除分は8月初旬の4～6月期決算後に市場へ出る見込みで、その後6カ月にわたり段階的に解除される。 SpaceXは7月8日にNasdaq-100へ採用され、受動運用資金の流入は約43億ドルと推計されている。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-07-19",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-ca3fc9646593-2026-07-20.html",
+        "sources": [
+          {
+            "label": "ca.finance.yahoo.com",
+            "url": "https://ca.finance.yahoo.com/news/elon-musks-spacex-lost-1t-150000833.html"
+          }
+        ],
+        "summary": "SpaceXはIPO価格を135ドルとした。 取引開始直後には時価総額でAmazonとMicrosoftを一時上回った。 金曜午後は125ドルで、最高値225ドルから43％下落した。 6月16日の時価総額2.7兆ドルのピークから1兆ドル超を失った。 Starshipの次回試行についてMusk氏は数日内を希望し、最短の打ち上げ時期を翌週初めとした。 公開流通株は5％未満で、残る約95％はロックアップ対象。 最初の解除分は8月初旬の4～6月期決算後に市場へ出る見込みで、その後6カ月にわたり段階的に解除される。 SpaceXは7月8日にNasdaq-100へ採用され、受動運用資金の流入は約43億ドルと推計されている。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "SpaceXはIPO価格を135ドルとした。",
+            "取引開始直後には時価総額でAmazonとMicrosoftを一時上回った。",
+            "金曜午後は125ドルで、最高値225ドルから43％下落した。",
+            "6月16日の時価総額2.7兆ドルのピークから1兆ドル超を失った。",
+            "Starshipの次回試行についてMusk氏は数日内を希望し、最短の打ち上げ時期を翌週初めとした。",
+            "公開流通株は5％未満で、残る約95％はロックアップ対象。",
+            "最初の解除分は8月初旬の4～6月期決算後に市場へ出る見込みで、その後6カ月にわたり段階的に解除される。",
+            "SpaceXは7月8日にNasdaq-100へ採用され、受動運用資金の流入は約43億ドルと推計されている。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "SpaceXはIPO価格を135ドルとした。",
+              "source_urls": [
+                "https://ca.finance.yahoo.com/news/elon-musks-spacex-lost-1t-150000833.html"
+              ]
+            },
+            {
+              "fact": "取引開始直後には時価総額でAmazonとMicrosoftを一時上回った。",
+              "source_urls": [
+                "https://ca.finance.yahoo.com/news/elon-musks-spacex-lost-1t-150000833.html"
+              ]
+            },
+            {
+              "fact": "金曜午後は125ドルで、最高値225ドルから43％下落した。",
+              "source_urls": [
+                "https://ca.finance.yahoo.com/news/elon-musks-spacex-lost-1t-150000833.html"
+              ]
+            },
+            {
+              "fact": "6月16日の時価総額2.7兆ドルのピークから1兆ドル超を失った。",
+              "source_urls": [
+                "https://ca.finance.yahoo.com/news/elon-musks-spacex-lost-1t-150000833.html"
+              ]
+            },
+            {
+              "fact": "Starshipの次回試行についてMusk氏は数日内を希望し、最短の打ち上げ時期を翌週初めとした。",
+              "source_urls": [
+                "https://ca.finance.yahoo.com/news/elon-musks-spacex-lost-1t-150000833.html"
+              ]
+            },
+            {
+              "fact": "公開流通株は5％未満で、残る約95％はロックアップ対象。",
+              "source_urls": [
+                "https://ca.finance.yahoo.com/news/elon-musks-spacex-lost-1t-150000833.html"
+              ]
+            },
+            {
+              "fact": "最初の解除分は8月初旬の4～6月期決算後に市場へ出る見込みで、その後6カ月にわたり段階的に解除される。",
+              "source_urls": [
+                "https://ca.finance.yahoo.com/news/elon-musks-spacex-lost-1t-150000833.html"
+              ]
+            },
+            {
+              "fact": "SpaceXは7月8日にNasdaq-100へ採用され、受動運用資金の流入は約43億ドルと推計されている。",
+              "source_urls": [
+                "https://ca.finance.yahoo.com/news/elon-musks-spacex-lost-1t-150000833.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-19"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "business_contracts",
+      "title": "SpaceX、IPOから15営業日でNasdaq-100入り",
+      "summary": "新しい取引所ルールの適用により、SpaceXはIPOから15営業日でNasdaq-100への採用が決まり、QQQなどのパッシブファンドに数十億ドル規模の買い需要が生じるとみられる。 指数採用による需要に対して自由流通株の供給が著しく少ないことが懸念されている。 発行済み約130億株に対し自由流通株は3～5％程度で、多くがロックアップされているため、需給の偏りが価格変動を増幅している。 株価はIPO後に一時225ドルまで上昇後に調整した。 今回の事例は、指数投資の浸透が個別企業の株価形成を歪め得ることを示す。 高い売上高倍率にも警戒があり、指数採用を単純な買いシグナルと捉えるべきではなく、長期上昇を保証しないとの見方が示されている。 市場ではTeslaやxAIとの将来的な統合可能性と、宇宙・通信を超える複合的な巨大エコシステムへの発展が議論されているが、評価は今後の決算と実際の企業統合の進展に左右される。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-07-20",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-d3ee64247034-2026-07-20.html",
+        "sources": [
+          {
+            "label": "tabi-labo.com",
+            "url": "https://tabi-labo.com/312774/worldtrend-spacex-nasdaq100"
+          }
+        ],
+        "summary": "新しい取引所ルールの適用により、SpaceXはIPOから15営業日でNasdaq-100への採用が決まり、QQQなどのパッシブファンドに数十億ドル規模の買い需要が生じるとみられる。 指数採用による需要に対して自由流通株の供給が著しく少ないことが懸念されている。 発行済み約130億株に対し自由流通株は3～5％程度で、多くがロックアップされているため、需給の偏りが価格変動を増幅している。 株価はIPO後に一時225ドルまで上昇後に調整した。 今回の事例は、指数投資の浸透が個別企業の株価形成を歪め得ることを示す。 高い売上高倍率にも警戒があり、指数採用を単純な買いシグナルと捉えるべきではなく、長期上昇を保証しないとの見方が示されている。 市場ではTeslaやxAIとの将来的な統合可能性と、宇宙・通信を超える複合的な巨大エコシステムへの発展が議論されているが、評価は今後の決算と実際の企業統合の進展に左右される。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "新しい取引所ルールの適用により、SpaceXはIPOから15営業日でNasdaq-100への採用が決まり、QQQなどのパッシブファンドに数十億ドル規模の買い需要が生じるとみられる。",
+            "指数採用による需要に対して自由流通株の供給が著しく少ないことが懸念されている。",
+            "発行済み約130億株に対し自由流通株は3～5％程度で、多くがロックアップされているため、需給の偏りが価格変動を増幅している。",
+            "株価はIPO後に一時225ドルまで上昇後に調整した。",
+            "今回の事例は、指数投資の浸透が個別企業の株価形成を歪め得ることを示す。",
+            "高い売上高倍率にも警戒があり、指数採用を単純な買いシグナルと捉えるべきではなく、長期上昇を保証しないとの見方が示されている。",
+            "市場ではTeslaやxAIとの将来的な統合可能性と、宇宙・通信を超える複合的な巨大エコシステムへの発展が議論されているが、評価は今後の決算と実際の企業統合の進展に左右される。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "新しい取引所ルールの適用により、SpaceXはIPOから15営業日でNasdaq-100への採用が決まり、QQQなどのパッシブファンドに数十億ドル規模の買い需要が生じるとみられる。",
+              "source_urls": [
+                "https://tabi-labo.com/312774/worldtrend-spacex-nasdaq100"
+              ]
+            },
+            {
+              "fact": "指数採用による需要に対して自由流通株の供給が著しく少ないことが懸念されている。",
+              "source_urls": [
+                "https://tabi-labo.com/312774/worldtrend-spacex-nasdaq100"
+              ]
+            },
+            {
+              "fact": "発行済み約130億株に対し自由流通株は3～5％程度で、多くがロックアップされているため、需給の偏りが価格変動を増幅している。",
+              "source_urls": [
+                "https://tabi-labo.com/312774/worldtrend-spacex-nasdaq100"
+              ]
+            },
+            {
+              "fact": "株価はIPO後に一時225ドルまで上昇後に調整した。",
+              "source_urls": [
+                "https://tabi-labo.com/312774/worldtrend-spacex-nasdaq100"
+              ]
+            },
+            {
+              "fact": "今回の事例は、指数投資の浸透が個別企業の株価形成を歪め得ることを示す。",
+              "source_urls": [
+                "https://tabi-labo.com/312774/worldtrend-spacex-nasdaq100"
+              ]
+            },
+            {
+              "fact": "高い売上高倍率にも警戒があり、指数採用を単純な買いシグナルと捉えるべきではなく、長期上昇を保証しないとの見方が示されている。",
+              "source_urls": [
+                "https://tabi-labo.com/312774/worldtrend-spacex-nasdaq100"
+              ]
+            },
+            {
+              "fact": "市場ではTeslaやxAIとの将来的な統合可能性と、宇宙・通信を超える複合的な巨大エコシステムへの発展が議論されているが、評価は今後の決算と実際の企業統合の進展に左右される。",
+              "source_urls": [
+                "https://tabi-labo.com/312774/worldtrend-spacex-nasdaq100"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-20"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "staff_social_x_instagram",
+      "title": "Ayase、初のソロEP「dialogue」を27日発売",
+      "summary": "YOASOBIのAyaseは、作詞・作曲・編曲・歌唱をすべて自身で手掛けた5曲入り初ソロEPを27日に発売する。 ジャケット写真と新たなアーティスト写真も公開された。 全曲ノンタイアップで、自分、人、社会との「対話」を軸に、より個人的な感情や葛藤を表現する。 表題曲「dialogue」と「PLANETS」などを収録する。 収録曲「うるさ」は20日に先行配信され、ダンサブルなエレクトロチューンとして新境地を打ち出す。 AyaseはYOASOBIで約7年活動する中でも消えなかった「歌いたい」という気持ちを作品にし、5曲へ現在の思い、葛藤、願いを込めたと説明した。",
+      "section_id": "yoasobi_ikuta",
+      "category": "YOASOBI / 幾田りら",
+      "source_published_date": "2026-07-18",
+      "topic_value_class": "cultural_or_audience_signal",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-2b665f010b6a-2026-07-20.html",
+        "sources": [
+          {
+            "label": "sanyonews.jp",
+            "url": "https://www.sanyonews.jp/article/1922829?kw=%E7%A6%8F%E7%A5%8F"
+          }
+        ],
+        "summary": "YOASOBIのAyaseは、作詞・作曲・編曲・歌唱をすべて自身で手掛けた5曲入り初ソロEPを27日に発売する。 ジャケット写真と新たなアーティスト写真も公開された。 全曲ノンタイアップで、自分、人、社会との「対話」を軸に、より個人的な感情や葛藤を表現する。 表題曲「dialogue」と「PLANETS」などを収録する。 収録曲「うるさ」は20日に先行配信され、ダンサブルなエレクトロチューンとして新境地を打ち出す。 AyaseはYOASOBIで約7年活動する中でも消えなかった「歌いたい」という気持ちを作品にし、5曲へ現在の思い、葛藤、願いを込めたと説明した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "YOASOBIのAyaseは、作詞・作曲・編曲・歌唱をすべて自身で手掛けた5曲入り初ソロEPを27日に発売する。",
+            "ジャケット写真と新たなアーティスト写真も公開された。",
+            "全曲ノンタイアップで、自分、人、社会との「対話」を軸に、より個人的な感情や葛藤を表現する。",
+            "表題曲「dialogue」と「PLANETS」などを収録する。",
+            "収録曲「うるさ」は20日に先行配信され、ダンサブルなエレクトロチューンとして新境地を打ち出す。",
+            "AyaseはYOASOBIで約7年活動する中でも消えなかった「歌いたい」という気持ちを作品にし、5曲へ現在の思い、葛藤、願いを込めたと説明した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "YOASOBIのAyaseは、作詞・作曲・編曲・歌唱をすべて自身で手掛けた5曲入り初ソロEPを27日に発売する。",
+              "source_urls": [
+                "https://www.sanyonews.jp/article/1922829?kw=%E7%A6%8F%E7%A5%8F"
+              ]
+            },
+            {
+              "fact": "ジャケット写真と新たなアーティスト写真も公開された。",
+              "source_urls": [
+                "https://www.sanyonews.jp/article/1922829?kw=%E7%A6%8F%E7%A5%8F"
+              ]
+            },
+            {
+              "fact": "全曲ノンタイアップで、自分、人、社会との「対話」を軸に、より個人的な感情や葛藤を表現する。",
+              "source_urls": [
+                "https://www.sanyonews.jp/article/1922829?kw=%E7%A6%8F%E7%A5%8F"
+              ]
+            },
+            {
+              "fact": "表題曲「dialogue」と「PLANETS」などを収録する。",
+              "source_urls": [
+                "https://www.sanyonews.jp/article/1922829?kw=%E7%A6%8F%E7%A5%8F"
+              ]
+            },
+            {
+              "fact": "収録曲「うるさ」は20日に先行配信され、ダンサブルなエレクトロチューンとして新境地を打ち出す。",
+              "source_urls": [
+                "https://www.sanyonews.jp/article/1922829?kw=%E7%A6%8F%E7%A5%8F"
+              ]
+            },
+            {
+              "fact": "AyaseはYOASOBIで約7年活動する中でも消えなかった「歌いたい」という気持ちを作品にし、5曲へ現在の思い、葛藤、願いを込めたと説明した。",
+              "source_urls": [
+                "https://www.sanyonews.jp/article/1922829?kw=%E7%A6%8F%E7%A5%8F"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-18"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_macro_policy",
+      "title": "中国、アジア最大級の浚渫船「浚広」を稼働",
+      "summary": "中国の中交広州航道局が運用する、独自設計・開発・建造のドラグサクション浚渫船「浚広」が引き渡され、稼働を開始した。 全長198メートル、最大掘削深度120メートル、載貨重量6万483トンで、アジア最大級とされる。 世界初の角度調整可能なデュアル・バウ・ジェッティング、ワンクリック浚渫、浚渫・航行統合制御を搭載し、作業の全自動制御を実現した。 港湾・航路の浚渫、深海採砂、海底ケーブルやパイプ用の溝掘削・埋め戻し、深海パイプライン施工に利用できる。",
+      "section_id": "asia",
+      "category": "アジア経済",
+      "source_published_date": "2026-07-20",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-5658ca6d7772-2026-07-20.html",
+        "sources": [
+          {
+            "label": "recordchina.co.jp",
+            "url": "https://www.recordchina.co.jp/b986041-s50-c20-d0165.html"
+          }
+        ],
+        "summary": "中国の中交広州航道局が運用する、独自設計・開発・建造のドラグサクション浚渫船「浚広」が引き渡され、稼働を開始した。 全長198メートル、最大掘削深度120メートル、載貨重量6万483トンで、アジア最大級とされる。 世界初の角度調整可能なデュアル・バウ・ジェッティング、ワンクリック浚渫、浚渫・航行統合制御を搭載し、作業の全自動制御を実現した。 港湾・航路の浚渫、深海採砂、海底ケーブルやパイプ用の溝掘削・埋め戻し、深海パイプライン施工に利用できる。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "中国の中交広州航道局が運用する、独自設計・開発・建造のドラグサクション浚渫船「浚広」が引き渡され、稼働を開始した。",
+            "全長198メートル、最大掘削深度120メートル、載貨重量6万483トンで、アジア最大級とされる。",
+            "世界初の角度調整可能なデュアル・バウ・ジェッティング、ワンクリック浚渫、浚渫・航行統合制御を搭載し、作業の全自動制御を実現した。",
+            "港湾・航路の浚渫、深海採砂、海底ケーブルやパイプ用の溝掘削・埋め戻し、深海パイプライン施工に利用できる。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "中国の中交広州航道局が運用する、独自設計・開発・建造のドラグサクション浚渫船「浚広」が引き渡され、稼働を開始した。",
+              "source_urls": [
+                "https://www.recordchina.co.jp/b986041-s50-c20-d0165.html"
+              ]
+            },
+            {
+              "fact": "全長198メートル、最大掘削深度120メートル、載貨重量6万483トンで、アジア最大級とされる。",
+              "source_urls": [
+                "https://www.recordchina.co.jp/b986041-s50-c20-d0165.html"
+              ]
+            },
+            {
+              "fact": "世界初の角度調整可能なデュアル・バウ・ジェッティング、ワンクリック浚渫、浚渫・航行統合制御を搭載し、作業の全自動制御を実現した。",
+              "source_urls": [
+                "https://www.recordchina.co.jp/b986041-s50-c20-d0165.html"
+              ]
+            },
+            {
+              "fact": "港湾・航路の浚渫、深海採砂、海底ケーブルやパイプ用の溝掘削・埋め戻し、深海パイプライン施工に利用できる。",
+              "source_urls": [
+                "https://www.recordchina.co.jp/b986041-s50-c20-d0165.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-20"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_macro_policy",
+      "title": "エア・カンボジア、中国COMACのC909を20機購入",
+      "summary": "中国商用飛機COMACとエア・カンボジアは、上海でC909型機20機の購入契約を締結した。",
+      "section_id": "asia",
+      "category": "アジア経済",
+      "source_published_date": "2026-07-20",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-04a033f1d99a-2026-07-20.html",
+        "sources": [
+          {
+            "label": "recordchina.co.jp",
+            "url": "https://www.recordchina.co.jp/newsinfo?id=986097"
+          }
+        ],
+        "summary": "中国商用飛機COMACとエア・カンボジアは、上海でC909型機20機の購入契約を締結した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "中国商用飛機COMACとエア・カンボジアは、上海でC909型機20機の購入契約を締結した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "中国商用飛機COMACとエア・カンボジアは、上海でC909型機20機の購入契約を締結した。",
+              "source_urls": [
+                "https://www.recordchina.co.jp/newsinfo?id=986097"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-20"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_macro_policy",
+      "title": "中国Moonshot AIがKimi K3を発表、米AI・半導体株に売り",
+      "summary": "Moonshot AIはパラメータ数2兆8千億のオープンモデルKimi K3を発表し、DeepSeekを上回る規模とされた。 発表後、米国のAI・半導体関連株が売られた。",
+      "section_id": "asia",
+      "category": "アジア経済",
+      "source_published_date": "2026-07-19",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-62dd0dfde627-2026-07-20.html",
+        "sources": [
+          {
+            "label": "news.livedoor.com",
+            "url": "https://news.livedoor.com/topics/detail/31864621/"
+          }
+        ],
+        "summary": "Moonshot AIはパラメータ数2兆8千億のオープンモデルKimi K3を発表し、DeepSeekを上回る規模とされた。 発表後、米国のAI・半導体関連株が売られた。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Moonshot AIはパラメータ数2兆8千億のオープンモデルKimi K3を発表し、DeepSeekを上回る規模とされた。",
+            "発表後、米国のAI・半導体関連株が売られた。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Moonshot AIはパラメータ数2兆8千億のオープンモデルKimi K3を発表し、DeepSeekを上回る規模とされた。",
+              "source_urls": [
+                "https://news.livedoor.com/topics/detail/31864621/"
+              ]
+            },
+            {
+              "fact": "発表後、米国のAI・半導体関連株が売られた。",
+              "source_urls": [
+                "https://news.livedoor.com/topics/detail/31864621/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-19"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "us_markets_fund_flows_rates",
+      "title": "Micron株、AI投資減速への警戒で週間13.3％安",
+      "summary": "Micron株は7月10日から13.3％下落し、金曜は848.95ドルで終了。 半導体指数の10.0％安、Nasdaqの2.9％安を下回り、市場では「chip fatigue」と表現された。 直近四半期はデータセンター部門が売上高の61％、自動車・組み込み部門が11％を占める。 新たな自動車向け長期契約は供給安定、価格設定、生産計画を改善する狙いだが、売上構成にはまだ影響していない。 今週のAlphabetとIntelの決算は、AI需要の強さを測る次の材料となる。 Micronは次の四半期の売上高を500億ドル±10億ドル、利益率を86％と見込む一方、AI設備投資の縮小と半導体株売りが持続性を試すとの警戒が示された。",
+      "section_id": "north_america",
+      "category": "北米経済",
+      "source_published_date": "2026-07-20",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-19629a198c78-2026-07-20.html",
+        "sources": [
+          {
+            "label": "ts2.tech",
+            "url": "https://ts2.tech/en/micron-technology-nasdaqmu-falls-13-as-market-focuses-on-ai-investment-prospects/"
+          }
+        ],
+        "summary": "Micron株は7月10日から13.3％下落し、金曜は848.95ドルで終了。 半導体指数の10.0％安、Nasdaqの2.9％安を下回り、市場では「chip fatigue」と表現された。 直近四半期はデータセンター部門が売上高の61％、自動車・組み込み部門が11％を占める。 新たな自動車向け長期契約は供給安定、価格設定、生産計画を改善する狙いだが、売上構成にはまだ影響していない。 今週のAlphabetとIntelの決算は、AI需要の強さを測る次の材料となる。 Micronは次の四半期の売上高を500億ドル±10億ドル、利益率を86％と見込む一方、AI設備投資の縮小と半導体株売りが持続性を試すとの警戒が示された。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Micron株は7月10日から13.3％下落し、金曜は848.95ドルで終了。",
+            "半導体指数の10.0％安、Nasdaqの2.9％安を下回り、市場では「chip fatigue」と表現された。",
+            "直近四半期はデータセンター部門が売上高の61％、自動車・組み込み部門が11％を占める。",
+            "新たな自動車向け長期契約は供給安定、価格設定、生産計画を改善する狙いだが、売上構成にはまだ影響していない。",
+            "今週のAlphabetとIntelの決算は、AI需要の強さを測る次の材料となる。",
+            "Micronは次の四半期の売上高を500億ドル±10億ドル、利益率を86％と見込む一方、AI設備投資の縮小と半導体株売りが持続性を試すとの警戒が示された。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Micron株は7月10日から13.3％下落し、金曜は848.95ドルで終了。",
+              "source_urls": [
+                "https://ts2.tech/en/micron-technology-nasdaqmu-falls-13-as-market-focuses-on-ai-investment-prospects/"
+              ]
+            },
+            {
+              "fact": "半導体指数の10.0％安、Nasdaqの2.9％安を下回り、市場では「chip fatigue」と表現された。",
+              "source_urls": [
+                "https://ts2.tech/en/micron-technology-nasdaqmu-falls-13-as-market-focuses-on-ai-investment-prospects/"
+              ]
+            },
+            {
+              "fact": "直近四半期はデータセンター部門が売上高の61％、自動車・組み込み部門が11％を占める。",
+              "source_urls": [
+                "https://ts2.tech/en/micron-technology-nasdaqmu-falls-13-as-market-focuses-on-ai-investment-prospects/"
+              ]
+            },
+            {
+              "fact": "新たな自動車向け長期契約は供給安定、価格設定、生産計画を改善する狙いだが、売上構成にはまだ影響していない。",
+              "source_urls": [
+                "https://ts2.tech/en/micron-technology-nasdaqmu-falls-13-as-market-focuses-on-ai-investment-prospects/"
+              ]
+            },
+            {
+              "fact": "今週のAlphabetとIntelの決算は、AI需要の強さを測る次の材料となる。",
+              "source_urls": [
+                "https://ts2.tech/en/micron-technology-nasdaqmu-falls-13-as-market-focuses-on-ai-investment-prospects/"
+              ]
+            },
+            {
+              "fact": "Micronは次の四半期の売上高を500億ドル±10億ドル、利益率を86％と見込む一方、AI設備投資の縮小と半導体株売りが持続性を試すとの警戒が示された。",
+              "source_urls": [
+                "https://ts2.tech/en/micron-technology-nasdaqmu-falls-13-as-market-focuses-on-ai-investment-prospects/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-20"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "us_markets_fund_flows_rates",
+      "title": "MARA株、AI向け確定契約不足を嫌気し週間15.2％安",
+      "summary": "MARAは金曜に6.4％安の10.69ドル、週間で15.2％下落した。 同期間のBitcoinは0.4％安にとどまり、MARAは14.8ポイント下回った。 CleanSparkは20年・175MW・契約価値66億ドルのAIリースを発表して週間1.4％上昇した一方、MARAのTexas計画は2027年10月に1GW、2028年4月に2GWへ拡張可能だが、確定テナント契約はない。 MARAのLong Ridge買収は約15億ドルで、少なくとも7億8500万ドルの債務を含む。 Piper Sandlerは目標株価を16ドルから13ドルへ下げ、空売り比率は6月末時点で浮動株の28.7％だった。",
+      "section_id": "north_america",
+      "category": "北米経済",
+      "source_published_date": "2026-07-20",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-f8771475e25c-2026-07-20.html",
+        "sources": [
+          {
+            "label": "ts2.tech",
+            "url": "https://ts2.tech/en/mara-holdings-nasdaqmara-formerly-marathon-digital-drops-15-as-market-shifts-to-signed-ai-capacity/"
+          }
+        ],
+        "summary": "MARAは金曜に6.4％安の10.69ドル、週間で15.2％下落した。 同期間のBitcoinは0.4％安にとどまり、MARAは14.8ポイント下回った。 CleanSparkは20年・175MW・契約価値66億ドルのAIリースを発表して週間1.4％上昇した一方、MARAのTexas計画は2027年10月に1GW、2028年4月に2GWへ拡張可能だが、確定テナント契約はない。 MARAのLong Ridge買収は約15億ドルで、少なくとも7億8500万ドルの債務を含む。 Piper Sandlerは目標株価を16ドルから13ドルへ下げ、空売り比率は6月末時点で浮動株の28.7％だった。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "MARAは金曜に6.4％安の10.69ドル、週間で15.2％下落した。",
+            "同期間のBitcoinは0.4％安にとどまり、MARAは14.8ポイント下回った。",
+            "CleanSparkは20年・175MW・契約価値66億ドルのAIリースを発表して週間1.4％上昇した一方、MARAのTexas計画は2027年10月に1GW、2028年4月に2GWへ拡張可能だが、確定テナント契約はない。",
+            "MARAのLong Ridge買収は約15億ドルで、少なくとも7億8500万ドルの債務を含む。",
+            "Piper Sandlerは目標株価を16ドルから13ドルへ下げ、空売り比率は6月末時点で浮動株の28.7％だった。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "MARAは金曜に6.4％安の10.69ドル、週間で15.2％下落した。",
+              "source_urls": [
+                "https://ts2.tech/en/mara-holdings-nasdaqmara-formerly-marathon-digital-drops-15-as-market-shifts-to-signed-ai-capacity/"
+              ]
+            },
+            {
+              "fact": "同期間のBitcoinは0.4％安にとどまり、MARAは14.8ポイント下回った。",
+              "source_urls": [
+                "https://ts2.tech/en/mara-holdings-nasdaqmara-formerly-marathon-digital-drops-15-as-market-shifts-to-signed-ai-capacity/"
+              ]
+            },
+            {
+              "fact": "CleanSparkは20年・175MW・契約価値66億ドルのAIリースを発表して週間1.4％上昇した一方、MARAのTexas計画は2027年10月に1GW、2028年4月に2GWへ拡張可能だが、確定テナント契約はない。",
+              "source_urls": [
+                "https://ts2.tech/en/mara-holdings-nasdaqmara-formerly-marathon-digital-drops-15-as-market-shifts-to-signed-ai-capacity/"
+              ]
+            },
+            {
+              "fact": "MARAのLong Ridge買収は約15億ドルで、少なくとも7億8500万ドルの債務を含む。",
+              "source_urls": [
+                "https://ts2.tech/en/mara-holdings-nasdaqmara-formerly-marathon-digital-drops-15-as-market-shifts-to-signed-ai-capacity/"
+              ]
+            },
+            {
+              "fact": "Piper Sandlerは目標株価を16ドルから13ドルへ下げ、空売り比率は6月末時点で浮動株の28.7％だった。",
+              "source_urls": [
+                "https://ts2.tech/en/mara-holdings-nasdaqmara-formerly-marathon-digital-drops-15-as-market-shifts-to-signed-ai-capacity/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-07-20"
+          ]
+        }
+      }
+    }
+  ],
+  "coverage_manifest": {
+    "contract_version": "2026-07-11.02",
+    "date": "2026-07-20",
+    "collection_completed_at_jst": "2026-07-20T17:35:36+09:00",
+    "collection_mode": "web_evidence_plus_review",
+    "evidence_sha256": "2f95f4c196ad581252a6ed652a3cfdfd0431abbc53cf11212896e8cf5db9112f",
+    "editor_contract_sha256": "d6c3ebf3edf97dd3dff4a22b78881bb748af6ce2d29e7417f703b37f53bce819"
+  }
+}
