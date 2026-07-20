@@ -1,0 +1,1313 @@
+{
+  "contract": "codex-plus-editor-v2",
+  "issue_date": "2026-07-20",
+  "evidence_sha256": "2f95f4c196ad581252a6ed652a3cfdfd0431abbc53cf11212896e8cf5db9112f",
+  "cloud_handoff": {
+    "execution_surface": "chatgpt-web-scheduled-task",
+    "reviewed_at": "2026-07-20T18:04:00+09:00"
+  },
+  "responses": [
+    {
+      "request_id": "openai-01-1792c063da41de24",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Moonshot AI、3兆パラメータ級「Kimi K3」を公開",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Kimi K3はKimi Work、Kimi Code、APIで提供を開始し、完全なモデルウェイトは7月27日までに公開する予定だ。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01",
+                      "e002:f02",
+                      "e002:f03",
+                      "e002:f04"
+                    ]
+                  },
+                  {
+                    "text": "独自のKimi Delta AttentionとAttention ResidualsをMoEに組み合わせ、896エキスパートのうち16を稼働させ、K2比で約2.5倍のスケーリング効率をうたう。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f05",
+                      "e002:f06"
+                    ]
+                  },
+                  {
+                    "text": "Moonshotは総合性能がClaude Fable 5とGPT-5.6 Solには及ばない一方、Claude Opus 4.8やGPT-5.5を上回ると主張している。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f07",
+                      "e002:f08"
+                    ]
+                  },
+                  {
+                    "text": "48時間でナノスケールチップを自律設計・検証した事例や、20本超の論文を照合して3000行超のコードを生成した研究事例を示し、API料金は100万トークン当たりキャッシュ入力0.30ドル、通常入力3ドル、出力15ドルとした。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f09",
+                      "e002:f10"
+                    ]
+                  },
+                  {
+                    "text": "思考履歴を保持しない環境や途中で他モデルから切り替えた場合は出力が不安定になり得ると警告しており、K2系の後継として米国の先端モデルとの差を縮める狙いが報じられている。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f11",
+                      "e002:f12",
+                      "e002:f13",
+                      "e002:f14",
+                      "e002:f15",
+                      "e002:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g006",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "ReliaQuestとOpenAI、企業向けAIサイバー防衛で提携",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "ReliaQuestはOpenAIの先端サイバー能力とモデルへ接続し、GreyMatter上で脆弱性の発見・修正と脅威対応を高速化する。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f01",
+                      "e003:f02"
+                    ]
+                  },
+                  {
+                    "text": "両社は高効果のセキュリティ運用事例を選定し、開発、テスト、評価、本番展開まで共同で進める一方、ReliaQuestは企業環境で観測した攻撃行動や調査パターンを提供する。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f03",
+                      "e003:f04",
+                      "e003:f05"
+                    ]
+                  },
+                  {
+                    "text": "ReliaQuestのBrian Murphy CEOは、AIで攻撃速度が上がるなか、GreyMatterにエージェント型AIを組み込み、調査と対応を数分単位に短縮すると説明した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f06",
+                      "e003:f07",
+                      "e003:f08",
+                      "e003:f09",
+                      "e003:f10"
+                    ]
+                  },
+                  {
+                    "text": "GreyMatterは自然言語による検知・調査・対応・ハンティングを支え、テレメトリー正規化、データ所在点での検知、速度・コスト・精度に応じたモデル選択を含むエージェント連携を提供する。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f11",
+                      "e003:f12",
+                      "e003:f13",
+                      "e003:f14",
+                      "e003:f15"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI CFO、AI投資評価に「有用な知能／ドル」を提唱",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Sarah Friar CFOは、価格やトークン単価ではなく、重要業務をどれだけ完了したかでAI投資を評価する新たな企業向け指標を提案した。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f01",
+                      "e004:f02",
+                      "e004:f03",
+                      "e004:f04"
+                    ]
+                  },
+                  {
+                    "text": "顧客問題の完全解決、出荷したコード、審査した契約などの成果を追い、成功タスク1件当たりの総費用を測るよう求めた。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f05",
+                      "e004:f06"
+                    ]
+                  },
+                  {
+                    "text": "正確性と人への修正・エスカレーション回数を費用要因として扱い、成果価値の伸びが生成コストの伸びを上回るかを継続監視すべきだとした。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f07",
+                      "e004:f08",
+                      "e004:f09"
+                    ]
+                  },
+                  {
+                    "text": "企業のAIクラウド費用管理が不透明ななか、巨額請求の報道や、Sam Altman CEOが企業顧客の不満として導入難に次ぐ費用管理を挙げたことも背景にある。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f10",
+                      "e004:f11",
+                      "e004:f12"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g005",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "インド証券会社5paisa、OpenAIと提携",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "5paisa CapitalはOpenAIとの戦略提携を発表し、インドの個人投資家向けに個別インサイトと助言支援を提供するため、投資・取引プロセスへAIを統合する。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f01",
+                      "e006:f02",
+                      "e006:f03",
+                      "e006:f04"
+                    ]
+                  },
+                  {
+                    "text": "同社はChatGPT経由でサービスを提供する初の証券プラットフォームになるとしており、機会探索、市場動向の把握、ポートフォリオ評価、意思決定を支援する。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f05",
+                      "e006:f06",
+                      "e006:f07",
+                      "e006:f08"
+                    ]
+                  },
+                  {
+                    "text": "次段階ではChatGPT上で会話型の投資・取引体験を提供し、利用者自身が判断を管理できる設計を目指す。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f09",
+                      "e006:f10",
+                      "e006:f11"
+                    ]
+                  }
+                ],
+                "topic_value_class": "operational_status_change",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "duplicate_previous_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-02-8337c2a868c2879c",
+      "response": {
+        "events": [
+          {
+            "event_id": "g011",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、計算基盤担当CTOにUday Ruddarraju氏を起用",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "OpenAIはUday Ruddarraju氏をCTO, Computeに任命した。同氏はOpenAI在籍1年を経て就任し、以前はxAIに所属していた。",
+                    "evidence_ids": [
+                      "e001",
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01",
+                      "e001:f02",
+                      "e006:f01",
+                      "e006:f02",
+                      "e006:f03"
+                    ]
+                  },
+                  {
+                    "text": "ComputeチームはGPT-5.6などの訓練に必要な計算、ネットワーク、ストレージ、機械学習基盤を整え、容量を迅速かつ安定的に稼働させてきた。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f03"
+                    ]
+                  },
+                  {
+                    "text": "OpenAIは世界最大の計算基盤を目指し、大規模分散システム、ハードウェア、製造、土木・機械・電気を含むデータセンター建設で採用を拡大する。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f04",
+                      "e001:f05",
+                      "e001:f06",
+                      "e001:f07"
+                    ]
+                  },
+                  {
+                    "text": "Ruddarraju氏はAWSでのインターン、eBay、Robinhood、xAIを経てOpenAIへ移ったと報じられた。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f07",
+                      "e006:f08",
+                      "e006:f09",
+                      "e006:f10"
+                    ]
+                  }
+                ],
+                "topic_value_class": "operational_status_change",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g014",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g013",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g012",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g010",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Stargate UK、300億ポンド構想の大半が未確約と判明",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "英政府が最大300億ポンドの投資誘致を掲げたStargate UKについて、情報公開資料を基にした調査は約200億ポンドが具体的な資金約束を伴わない潜在投資だったと報じた。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f01",
+                      "e007:f02",
+                      "e007:f03",
+                      "e007:f04",
+                      "e007:f05",
+                      "e007:f06"
+                    ]
+                  },
+                  {
+                    "text": "OpenAIは電力費と規制の不確実性を理由に4月に参加を停止した一方、ロンドンでの研究拠点と事業拡大計画は維持するとしている。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f07",
+                      "e007:f08"
+                    ]
+                  },
+                  {
+                    "text": "主要候補地North Tynesideでは、正式発表前にOpenAIが現地を訪れておらず、自治体も準備状況を把握せず、必要な電力インフラもなかったとされた。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f05",
+                      "e007:f06",
+                      "e007:f07",
+                      "e007:f08",
+                      "e007:f09"
+                    ]
+                  },
+                  {
+                    "text": "報道は、大規模AI投資では電力供給、系統接続速度、規制環境、既存インフラが実現性を左右し、発表額と確定投資の乖離がリスクになると指摘した。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f10",
+                      "e007:f11",
+                      "e007:f12",
+                      "e007:f13",
+                      "e007:f14"
+                    ]
+                  }
+                ],
+                "topic_value_class": "risk_or_safety_signal",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-03-e192ffeee258bb86",
+      "response": {
+        "events": [
+          {
+            "event_id": "g015",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g016",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "honda-01-454facb7a69a13e7",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Hondaと広汽集団、広汽Hondaの合弁期間を延長",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "広汽Hondaは1998年7月設立、1999年3月に広州で生産を開始したHonda初の中国四輪合弁会社で、累計販売は1100万台を超える。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01",
+                      "e001:f02"
+                    ]
+                  },
+                  {
+                    "text": "電動化・智能化で競争が激化する中国市場で、両社は技術と資源を組み合わせて商品供給と事業強化を続ける。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f03"
+                    ]
+                  },
+                  {
+                    "text": "出資比率は広汽集団50％、Honda40％、本田技研工業（中国）投資10％で、販売・サービス・部品・顧客情報を統合する体制を持つ。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f04"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g001",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "アステモ、新社長にHonda四輪事業出身の井上勝史氏",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "井上勝史氏の社長就任は6月25日の定時株主総会と7月1日の臨時取締役会を経て正式決定する。欧州、中国、電動事業、四輪事業の責任者を歴任した。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f01",
+                      "e004:f02"
+                    ]
+                  },
+                  {
+                    "text": "Hondaは日立保有のアステモ株21％を取得して持分を61％へ引き上げ、子会社化する予定で、EV中心からSDV・HV重視へ転換した四輪事業との連携を強める。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f03",
+                      "e004:f04",
+                      "e004:f05",
+                      "e004:f06",
+                      "e004:f07"
+                    ]
+                  },
+                  {
+                    "text": "退任する竹内弘平社長は2023年就任後、品質問題への対応、財務改善、株式公開準備を担ってきた。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f08",
+                      "e004:f09"
+                    ]
+                  },
+                  {
+                    "text": "井上氏は1986年Honda入社後、インド、欧州、中国、電動事業、四輪事業で経営職を務めてきた。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f10",
+                      "e004:f11"
+                    ]
+                  }
+                ],
+                "topic_value_class": "operational_status_change",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g006",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-01-33b49e12d850933a",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Ferrari、Hamiltonの危険なピットリリースで罰金",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "ベルギーGPのLewis Hamiltonのピットストップで起きた危険なリリースを受け、Ferrariに罰金が科された。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              },
+              {
+                "title": "Mercedes、FerrariによるAntonelli獲得の動きを警戒",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Toto Wolff代表はFerrariの関心を認識し、Antonelliは11歳からMercedes育成であり、Ferrariはイタリア人ドライバー獲得へ動くとの見方を示した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01",
+                      "e002:f02",
+                      "e002:f03",
+                      "e002:f04",
+                      "e002:f05"
+                    ]
+                  },
+                  {
+                    "text": "WolffはAntonelliとGeorge RussellをMercedes育成の成果と評価する一方、Russell車には直線で説明できない約0.25秒の損失があり、チームが原因を分析中だと明らかにした。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f06",
+                      "e002:f07",
+                      "e002:f08",
+                      "e002:f09",
+                      "e002:f10",
+                      "e002:f11",
+                      "e002:f12",
+                      "e002:f13",
+                      "e002:f14",
+                      "e002:f15",
+                      "e002:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "operational_status_change",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "F1ベルギーGP決勝、Leclercが2位、Verstappenが3位",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "正式結果ではCharles Leclercが2位、Max Verstappenが3位となった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e005:f02"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              },
+              {
+                "title": "ベルギーGP FP2関連情報、Antonelliが首位",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "FP2ではAndrea Kimi Antonelliがトップタイムを記録し、関連情報では中団のRacing Bullsの好調、Red Bullの回転式リヤウイング見合わせ、Verstappen事故原因の判明が挙げられた。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f01",
+                      "e006:f03",
+                      "e006:f04",
+                      "e006:f05"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g007",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-02-bfdde95f89f71f2d",
+      "response": {
+        "events": [
+          {
+            "event_id": "g009",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g010",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g012",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g011",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "spacex-01-93519e6033140d07",
+      "response": {
+        "events": [
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "コートジボワール、Starlinkの全国サービスを最終承認",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "米国外交団の訪問後、コートジボワール政府はStarlinkの国内運用を最終承認し、遠隔地・農村部を中心に未接続地域のブロードバンド拡大を目指す。",
+                    "evidence_ids": [
+                      "e001",
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01",
+                      "e001:f02",
+                      "e003:f01",
+                      "e003:f02",
+                      "e003:f03",
+                      "e003:f04",
+                      "e003:f05"
+                    ]
+                  },
+                  {
+                    "text": "政府は同時に、米輸出入銀行が資金を供給する米Cybastionの1億7000万ドル規模プロジェクトも承認した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f03"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "SpaceX株、最高値から43％下落　時価総額1兆ドル減",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "SpaceXは6月のIPOで1株135ドルとし、一時は時価総額でAmazonとMicrosoftを上回ったが、金曜午後は125ドルで、最高値225ドルから43％下落した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01",
+                      "e002:f02",
+                      "e002:f03",
+                      "e002:f04"
+                    ]
+                  },
+                  {
+                    "text": "6月16日の時価総額27兆ドルのピークから1兆ドル超を失い、Starshipの次回試行は数日内、最短で翌週初めとされた。金曜午前の株価は6％安だった。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f05",
+                      "e002:f06",
+                      "e002:f07",
+                      "e002:f08",
+                      "e002:f09"
+                    ]
+                  },
+                  {
+                    "text": "公開流通株は5％未満で、残る約95％はロックアップ対象。最初の解除分は8月初旬の4～6月期決算後に市場へ出る見込みで、その後6カ月にわたり段階的に解除される。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f10",
+                      "e002:f11",
+                      "e002:f12",
+                      "e002:f13"
+                    ]
+                  },
+                  {
+                    "text": "SpaceXは7月8日にNasdaq-100へ採用され、受動運用資金の流入は約43億ドルと推計されている。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f14",
+                      "e002:f15",
+                      "e002:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g005",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "SpaceX、IPOから15営業日でNasdaq-100入り",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "新しい取引所ルールの適用により、SpaceXはIPOから15営業日でNasdaq-100への採用が決まり、QQQなどのパッシブファンドに数十億ドル規模の買い需要が生じるとみられる。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e005:f02",
+                      "e005:f03",
+                      "e005:f04",
+                      "e005:f05"
+                    ]
+                  },
+                  {
+                    "text": "発行済み約130億株に対し自由流通株は3～5％程度で、多くがロックアップされているため、需給の偏りが価格変動を増幅している。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f06",
+                      "e005:f07",
+                      "e005:f08"
+                    ]
+                  },
+                  {
+                    "text": "株価はIPO後に一時225ドルまで上昇後に調整し、高い売上高倍率への警戒から、指数採用が長期上昇を保証しないとの見方も示されている。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f09",
+                      "e005:f10",
+                      "e005:f11",
+                      "e005:f12"
+                    ]
+                  },
+                  {
+                    "text": "市場ではTeslaやxAIとの将来的な統合可能性も議論されているが、評価は今後の決算と実際の企業統合の進展に左右される。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f13",
+                      "e005:f14",
+                      "e005:f15",
+                      "e005:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g008",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "japan_economy-01-217057d898a71dad",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "yoasobi_ikuta-01-ab53dbba363a59cc",
+      "response": {
+        "events": [
+          {
+            "event_id": "g002",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Ayase、初のソロEP「dialogue」を7月27日発売",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "YOASOBIのAyaseは、作詞・作曲・編曲・歌唱をすべて自身で手掛けた5曲入り初ソロEPを7月27日に発売し、ジャケットと新しいアーティスト写真も公開した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f01",
+                      "e003:f02",
+                      "e003:f03"
+                    ]
+                  },
+                  {
+                    "text": "全曲ノンタイアップで、自分、人、社会との「対話」を軸に、より個人的な感情や葛藤を表現する。表題曲「dialogue」と「PLANETS」などを収録する。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f04",
+                      "e003:f05",
+                      "e003:f06"
+                    ]
+                  },
+                  {
+                    "text": "収録曲「うるさ」は7月20日に先行配信され、ダンサブルなエレクトロチューンとして新境地を打ち出す。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f07",
+                      "e003:f08"
+                    ]
+                  },
+                  {
+                    "text": "AyaseはYOASOBIで約7年活動する中でも消えなかった「歌いたい」という気持ちを作品にし、5曲へ現在の思い、葛藤、願いを込めたと説明した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f09",
+                      "e003:f10",
+                      "e003:f11",
+                      "e003:f12",
+                      "e003:f13",
+                      "e003:f14",
+                      "e003:f15"
+                    ]
+                  }
+                ],
+                "topic_value_class": "cultural_or_audience_signal",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "asia-01-f6862f7274e7d523",
+      "response": {
+        "events": [
+          {
+            "event_id": "g005",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "中国、アジア最大級の浚渫船「浚広」を稼働",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "中国独自設計のドラグサクション浚渫船「浚広」は全長198メートル、最大掘削深度120メートル、載貨重量6万483トンで、引き渡し後に稼働を開始した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01",
+                      "e002:f02",
+                      "e002:f03"
+                    ]
+                  },
+                  {
+                    "text": "角度調整可能なデュアル・バウ・ジェッティング、ワンクリック浚渫、浚渫・航行統合制御を搭載し、作業の全自動制御を実現した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f04",
+                      "e002:f05"
+                    ]
+                  },
+                  {
+                    "text": "港湾・航路の浚渫、深海採砂、海底ケーブルやパイプ用の溝掘削・埋め戻し、深海パイプライン施工に利用できる。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f06",
+                      "e002:f07",
+                      "e002:f08"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "エア・カンボジア、中国COMACのC909を20機購入",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "中国商用飛機COMACとエア・カンボジアは、上海でC909型機20機の購入契約を締結した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f01"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g004",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "中国Moonshot AIがKimi K3を発表、米AI・半導体株に売り",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Moonshot AIは2兆8000億パラメータのオープンモデルKimi K3を発表し、DeepSeekを上回る規模とされた。発表後、米国のAI・半導体関連株が売られた。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e005:f02"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g006",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "north_america-01-191af8985987ac22",
+      "response": {
+        "events": [
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Micron株、AI投資減速への警戒で週間13.3％安",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Micron株は7月10日から13.3％下落し、金曜は848.95ドルで終了。半導体指数の10.0％安、Nasdaqの2.9％安を下回った。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01",
+                      "e001:f02",
+                      "e001:f03",
+                      "e001:f04",
+                      "e001:f05"
+                    ]
+                  },
+                  {
+                    "text": "4～6月期はデータセンター部門が売上高の61％、自動車・組み込み部門が11％を占め、新たな自動車向け長期供給契約は計画の可視性を高めるが、売上構成にはまだ影響していない。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f06",
+                      "e001:f07",
+                      "e001:f08",
+                      "e001:f09",
+                      "e001:f10",
+                      "e001:f11"
+                    ]
+                  },
+                  {
+                    "text": "Micronは6～8月期売上高を500億ドル±10億ドル、利益率を86％と見込む一方、AI設備投資の縮小と半導体株売りが持続性を試すとの警戒が示された。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f12",
+                      "e001:f13",
+                      "e001:f14",
+                      "e001:f15",
+                      "e001:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "MARA株、AI向け確定契約不足を嫌気し週間15.2％安",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "MARAは金曜に6.4％安の10.69ドル、週間で15.2％下落した。同期間のBitcoinは0.4％安にとどまり、MARAは14.8ポイント下回った。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01",
+                      "e002:f02",
+                      "e002:f03",
+                      "e002:f04"
+                    ]
+                  },
+                  {
+                    "text": "CleanSparkは20年・175MW・契約価値66億ドルのAIリースを発表して週間1.4％上昇した一方、MARAのTexas計画は2027年10月に1GW、2028年4月に2GWへ拡張可能だが、確定テナント契約はない。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f05",
+                      "e002:f06",
+                      "e002:f07",
+                      "e002:f08",
+                      "e002:f09",
+                      "e002:f10",
+                      "e002:f11"
+                    ]
+                  },
+                  {
+                    "text": "MARAのLong Ridge買収は約15億ドルで、少なくとも7億8500万ドルの債務を含む。Piper Sandlerは目標株価を16ドルから13ドルへ下げ、空売り比率は6月末時点で浮動株の28.7％だった。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f12",
+                      "e002:f13",
+                      "e002:f14",
+                      "e002:f15",
+                      "e002:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g001",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    }
+  ]
+}
