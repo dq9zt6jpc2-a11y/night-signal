@@ -92,6 +92,20 @@ ENGLISH_NUMBER_WORD_VALUES = {
     "nineteenth": 19,
     "twentieth": 20,
 }
+ENGLISH_MONTH_VALUES = {
+    "january": 1,
+    "february": 2,
+    "march": 3,
+    "april": 4,
+    "may": 5,
+    "june": 6,
+    "july": 7,
+    "august": 8,
+    "september": 9,
+    "october": 10,
+    "november": 11,
+    "december": 12,
+}
 MATERIAL_SIGNAL_RE = re.compile(
     r"("
     r"\d+(?:\.\d+)?\s*(?:%|％|億|兆|万|ドル|円|bps|bp)|"
@@ -276,6 +290,12 @@ ROUTINE_SPACEX_LAUNCH_RE = re.compile(
 SPACEX_LAUNCH_EXCEPTION_RE = re.compile(
     r"(Starship|Dragon|有人|crew|初|milestone|\d+(?:st|nd|rd|th)|600th|record|"
     r"failure|anomaly|test flight|飛行試験)",
+    re.I,
+)
+F1_COMPETITION_IDENTITY_RE = re.compile(
+    r"\b(?:Ferrari|Mercedes|McLaren|Red Bull|Aston Martin|Hamilton|"
+    r"Verstappen|Leclerc|Russell|Antonelli|Norris|Piastri|"
+    r"FP[123]|qualifying|pit (?:lane|stop|release))\b",
     re.I,
 )
 ENTITY_SCOPE_NOISE_RE = {
@@ -1434,6 +1454,8 @@ def category_identity_ok(category_label: str, title: str, summary: str) -> bool:
     if not terms:
         return True
     text = f"{title} {summary}".lower()
+    if category_label == "F1" and F1_COMPETITION_IDENTITY_RE.search(text):
+        return True
     return any(term.lower() in text for term in terms)
 
 
@@ -2343,7 +2365,7 @@ def normalized_scaled_numbers(value: str) -> tuple[set[float], str]:
         )
         stripped[match.start() : match.end()] = " " * (match.end() - match.start())
     english_pattern = re.compile(
-        r"(?<![\d.])(\d[\d,]*(?:\.\d+)?)\s*"
+        r"(?<![\d.])(\d[\d,]*(?:\.\d+)?)\s*[-–—]?\s*"
         r"(trillion|billion|million|thousand)\b",
         re.I,
     )
@@ -2391,11 +2413,20 @@ def numeric_claims(value: str) -> set[float]:
             flags=re.I,
         )
     }
+    month_numbers = {
+        float(ENGLISH_MONTH_VALUES[match.group(0).lower()])
+        for match in re.finditer(
+            r"\b(?:" + "|".join(ENGLISH_MONTH_VALUES) + r")\b",
+            remainder,
+            flags=re.I,
+        )
+    }
     return (
         scaled
         | short_years
         | numeric_literals(remainder)
         | word_numbers
+        | month_numbers
         | period_components
     )
 
@@ -4710,23 +4741,59 @@ def source_fact_covered_by_summary(source_fact: str, summary_point: str) -> bool
     """Verify that a cited source-fact id is actually represented in the copy."""
     source_numbers = numeric_claims(source_fact)
     summary_numbers = numeric_claims(summary_point)
-    if any(number not in summary_numbers for number in source_numbers):
-        return False
     if source_requires_japanese_translation(source_fact):
         source_anchors = {
-            value.casefold()
+            re.sub(r"[^a-z0-9]", "", value.casefold())
             for value in re.findall(r"[A-Za-z][A-Za-z0-9.+-]{1,}", source_fact)
             if value.casefold() not in {"ai", "the", "and", "for", "with", "from"}
         }
         summary_anchors = {
-            value.casefold()
+            re.sub(r"[^a-z0-9]", "", value.casefold())
             for value in re.findall(r"[A-Za-z][A-Za-z0-9.+-]{1,}", summary_point)
         }
-        return bool(source_anchors & summary_anchors)
+        numeric_anchor = not source_numbers or any(
+            numeric_claim_supported(number, summary_numbers, approximate=True)
+            for number in source_numbers
+        )
+        return numeric_anchor and bool(source_anchors & summary_anchors)
+    if any(
+        not numeric_claim_supported(number, summary_numbers, approximate=True)
+        for number in source_numbers
+    ):
+        return False
     if state_contract.materially_same_fact(source_fact, summary_point):
         return True
     required_overlap = min(2, max(1, len(state_contract.content_terms(source_fact))))
     return state_contract.text_overlap(source_fact, summary_point) >= required_overlap
+
+
+def summary_claims_supported_by_source_facts(
+    summary_point: str,
+    source_facts: list[dict[str, str]],
+) -> bool:
+    """Reject translated copy that adds a number or amount absent from its facts."""
+    if not source_facts:
+        return False
+    source_text = " ".join(fact["text"] for fact in source_facts)
+    source_amounts, source_without_amounts = normalized_financial_amounts(source_text)
+    summary_amounts, summary_without_amounts = normalized_financial_amounts(
+        summary_point
+    )
+    source_numbers = numeric_claims(source_without_amounts)
+    summary_numbers = numeric_claims(summary_without_amounts)
+    if any(
+        not numeric_claim_supported(number, source_numbers, approximate=True)
+        for number in summary_numbers
+    ):
+        return False
+    return not any(
+        not any(
+            (currency == observed_currency or "UNSPECIFIED" in {currency, observed_currency})
+            and abs(amount - observed_amount) <= max(1.0, abs(amount) * 1e-9)
+            for observed_currency, observed_amount in source_amounts
+        )
+        for currency, amount in summary_amounts
+    )
 
 
 def normalize_result(
@@ -4747,9 +4814,9 @@ def normalize_result(
     records_by_id = dict(evidence_entries)
     required_facts_by_event = editor_required_source_facts(evidence_entries)
     source_facts_by_id = {
-        fact["id"]: fact
-        for facts in required_facts_by_event.values()
-        for fact in facts
+        fact["id"]: {**fact, "evidence_id": evidence_id}
+        for evidence_id, record in evidence_entries
+        for fact in editor_source_fact_inventory(evidence_id, record)
     }
     expected_event_ids = {
         str(record.get("_editor_event_id") or evidence_id)
@@ -4861,9 +4928,21 @@ def normalize_result(
                 if source_fact_id in source_facts_by_id
                 and source_facts_by_id[source_fact_id]["evidence_id"] in point_ids
             ]
-            explicitly_supported = bool(cited_source_facts) and all(
-                source_fact_covered_by_summary(source_fact["text"], text)
-                for source_fact in cited_source_facts
+            claims_supported = summary_claims_supported_by_source_facts(
+                text, cited_source_facts
+            )
+            if claims_supported:
+                # Exact source-fact ids are the semantic bridge for natural
+                # Japanese translations.  Deterministic validation still owns
+                # id existence, Evidence boundaries, and every numeric claim.
+                covered_source_fact_ids.update(
+                    source_fact["id"]
+                    for source_fact in cited_source_facts
+                    if source_requires_japanese_translation(source_fact["text"])
+                )
+            explicitly_supported = claims_supported and bool(
+                covered_source_fact_ids
+                & {source_fact["id"] for source_fact in cited_source_facts}
             )
             if fact_supported_by_records(
                 text,
@@ -5536,6 +5615,12 @@ def self_test() -> None:
         for term in category_identity_terms("F1")
     ):
         fail("bounded discovery queries dropped a later category identity")
+    if not category_identity_ok(
+        "F1",
+        "Ferrari penalised for unsafe pit release involving Hamilton",
+        "",
+    ):
+        fail("F1 competition entities failed the category identity boundary")
     indexed_queries = " ".join(
         str(spec["query"])
         for spec in split_identity_specs
@@ -6407,6 +6492,25 @@ def self_test() -> None:
     )
     if len(strict_normalized["items"]) != 1 or not strict_normalized["coverage_complete"]:
         fail("source-to-summary fact recall rejected complete coverage")
+    translated_source_facts = [
+        {
+            "id": "e001:f01",
+            "text": (
+                "The 3-trillion-parameter model is scheduled for release on July 27."
+            ),
+            "evidence_id": "e001",
+        }
+    ]
+    if not summary_claims_supported_by_source_facts(
+        "3兆パラメータのモデルは7月27日に公開予定だ。",
+        translated_source_facts,
+    ):
+        fail("translated source-fact validation rejected supported numbers")
+    if summary_claims_supported_by_source_facts(
+        "4兆パラメータのモデルは7月27日に公開予定だ。",
+        translated_source_facts,
+    ):
+        fail("translated source-fact validation accepted an invented number")
     misassigned_fact_raw = json.loads(json.dumps(strict_raw, ensure_ascii=False))
     misassigned_fact_raw["items"][0]["summary_points"][0]["source_fact_ids"] = [
         required_fixture_facts[1]["id"]
