@@ -155,6 +155,80 @@ def public_request(request: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def request_boundary_signature(request: dict[str, Any]) -> tuple[Any, ...]:
+    payload = request.get("payload")
+    if not isinstance(payload, dict):
+        fail("review request payload must be an object")
+    events = payload.get("events")
+    if not isinstance(events, list):
+        fail("review request events must be an array")
+    event_boundary: list[tuple[str, tuple[str, ...]]] = []
+    for event in events:
+        if not isinstance(event, dict) or not str(event.get("id", "")):
+            fail("review request contains an invalid event boundary")
+        evidence = event.get("evidence")
+        if not isinstance(evidence, list):
+            fail("review request event Evidence must be an array")
+        event_boundary.append(
+            (
+                str(event["id"]),
+                tuple(
+                    str(item.get("id", ""))
+                    for item in evidence
+                    if isinstance(item, dict) and str(item.get("id", ""))
+                ),
+            )
+        )
+    return (str(request.get("category", "")), tuple(event_boundary))
+
+
+def bind_immutable_packet_requests(
+    packet: dict[str, Any],
+    current_requests: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Bind saved request ids to current internal records without re-reviewing."""
+    packet_requests = packet.get("requests")
+    if not isinstance(packet_requests, list):
+        fail("saved editor packet requests must be an array")
+    current_by_boundary: dict[tuple[Any, ...], dict[str, Any]] = {}
+    for request in current_requests:
+        boundary = request_boundary_signature(request)
+        if boundary in current_by_boundary:
+            fail("current review requests contain a duplicate event boundary")
+        current_by_boundary[boundary] = request
+    bound: list[dict[str, Any]] = []
+    packet_boundaries: set[tuple[Any, ...]] = set()
+    packet_ids: set[str] = set()
+    for saved in packet_requests:
+        if not isinstance(saved, dict):
+            fail("saved editor packet contains a malformed request")
+        identifier = str(saved.get("request_id", ""))
+        boundary = request_boundary_signature(saved)
+        if not identifier or identifier in packet_ids:
+            fail("saved editor packet request ids must be unique")
+        if boundary in packet_boundaries:
+            fail("saved editor packet contains a duplicate event boundary")
+        packet_ids.add(identifier)
+        packet_boundaries.add(boundary)
+        current = current_by_boundary.get(boundary)
+        if current is None:
+            fail(
+                "immutable editor packet event boundary drifted from restored Evidence"
+            )
+        bound.append(
+            {
+                **current,
+                "request_id": identifier,
+                "category": str(saved.get("category", "")),
+                "quality_route": bool(saved.get("quality_route")),
+                "payload": saved["payload"],
+            }
+        )
+    if packet_boundaries != set(current_by_boundary):
+        fail("restored Evidence contains events outside the immutable editor packet")
+    return bound
+
+
 def prepare_packet(
     issue_date: str,
     *,
@@ -566,7 +640,18 @@ def apply_review(
         response_by_id[identifier] = response
     if duplicates:
         fail("duplicate review request ids: " + ", ".join(sorted(duplicates)))
-    requests = review_requests(issue_date, evidence, state_root)
+    packet_path = state_root / issue_date / "editor_packet.json"
+    packet = read_json(packet_path)
+    if packet.get("contract") != PACKET_CONTRACT:
+        fail(f"saved editor packet contract must be {PACKET_CONTRACT}")
+    if packet.get("issue_date") != issue_date:
+        fail("saved editor packet issue date does not match")
+    if packet.get("evidence_sha256") != evidence_hash:
+        fail("saved editor packet was generated from different Evidence")
+    requests = bind_immutable_packet_requests(
+        packet,
+        review_requests(issue_date, evidence, state_root),
+    )
     expected_ids = {str(request["request_id"]) for request in requests}
     supplied_ids = set(response_by_id)
     if expected_ids != supplied_ids:
@@ -680,6 +765,66 @@ def self_test() -> None:
         fail("policy-only guidance changed an existing request identity")
     if first == request_id("OpenAI", 2, payload):
         fail("review request id did not bind its chunk position")
+    saved_request = {
+        "request_id": "openai-01-saved",
+        "category": "OpenAI",
+        "quality_route": True,
+        "payload": {
+            "category": "OpenAI",
+            "events": [
+                {
+                    "id": "g001",
+                    "evidence": [
+                        {
+                            "id": "e001",
+                            "body": "[e001:f01] saved fact",
+                            "required_fact_ids": ["e001:f01"],
+                        }
+                    ],
+                }
+            ],
+        },
+    }
+    current_request = {
+        **saved_request,
+        "request_id": "openai-01-recomputed",
+        "payload": {
+            "category": "OpenAI",
+            "events": [
+                {
+                    "id": "g001",
+                    "evidence": [
+                        {
+                            "id": "e001",
+                            "body": "[e001:f01] revised validation view",
+                            "required_fact_ids": [],
+                        }
+                    ],
+                }
+            ],
+        },
+        "_records": [{"title": "internal Evidence"}],
+        "_category_contract": {"label": "OpenAI"},
+    }
+    rebound = bind_immutable_packet_requests(
+        {"requests": [saved_request]}, [current_request]
+    )
+    if (
+        rebound[0]["request_id"] != "openai-01-saved"
+        or rebound[0]["payload"] != saved_request["payload"]
+        or rebound[0]["_records"] != current_request["_records"]
+    ):
+        fail("immutable packet binding regenerated a completed review identity")
+    drifted_request = json.loads(json.dumps(current_request))
+    drifted_request["payload"]["events"][0]["id"] = "g002"
+    try:
+        bind_immutable_packet_requests(
+            {"requests": [saved_request]}, [drifted_request]
+        )
+    except SystemExit:
+        pass
+    else:
+        fail("immutable packet binding accepted an event-boundary drift")
     repeated = {
         "category": "OpenAI",
         "title": "OpenAIが新機能を公開",
