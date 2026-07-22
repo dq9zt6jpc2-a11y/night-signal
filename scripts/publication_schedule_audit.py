@@ -299,7 +299,8 @@ def main() -> int:
     for required in (
         'EXECUTION_SURFACE = "chatgpt-web-scheduled-task"',
         "Evidence hash does not match",
-        "reviewed_at must be on the issue date in JST",
+        "within_review_window",
+        "or before 06:00 JST the next day",
     ):
         if required not in review_source:
             fail(f"cloud review validation is missing: {required}")

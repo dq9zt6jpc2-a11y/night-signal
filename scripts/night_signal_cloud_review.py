@@ -67,6 +67,16 @@ def evidence_sha256(evidence_path: Path) -> str:
         fail(f"cannot hash Evidence: {exc}")
 
 
+def within_review_window(timestamp: datetime, issue_date: str) -> bool:
+    """Accept same-day review or bounded after-midnight incident recovery."""
+    timestamp_jst = timestamp.astimezone(JST)
+    issue_day = datetime.strptime(issue_date, "%Y-%m-%d").date()
+    return timestamp_jst.date() == issue_day or (
+        timestamp_jst.date() == issue_day + timedelta(days=1)
+        and timestamp_jst.hour < RECOVERY_CUTOFF_HOUR_JST
+    )
+
+
 def validate_review(
     review: dict[str, Any],
     *,
@@ -99,9 +109,11 @@ def validate_review(
         fail("cloud_handoff reviewed_at must be an ISO timestamp")
     if reviewed.tzinfo is None:
         fail("cloud_handoff reviewed_at must include a timezone")
-    reviewed_jst = reviewed.astimezone(JST)
-    if reviewed_jst.date().isoformat() != issue_date:
-        fail("cloud_handoff reviewed_at must be on the issue date in JST")
+    if not within_review_window(reviewed, issue_date):
+        fail(
+            "cloud_handoff reviewed_at must be on the issue date "
+            "or before 06:00 JST the next day"
+        )
 
 
 def apply_correction(
@@ -134,15 +146,7 @@ def apply_correction(
         fail("correction reviewed_at must be an ISO timestamp")
     if corrected.tzinfo is None:
         fail("correction reviewed_at must include a timezone")
-    corrected_jst = corrected.astimezone(JST)
-    issue_day = datetime.strptime(issue_date, "%Y-%m-%d").date()
-    if not (
-        corrected_jst.date() == issue_day
-        or (
-            corrected_jst.date() == issue_day + timedelta(days=1)
-            and corrected_jst.hour < RECOVERY_CUTOFF_HOUR_JST
-        )
-    ):
+    if not within_review_window(corrected, issue_date):
         fail(
             "correction reviewed_at must be on the issue date "
             "or before 06:00 JST the next day"
@@ -308,6 +312,36 @@ def self_test() -> None:
         )
         if not installed.exists():
             fail("valid cloud review was not installed")
+        after_midnight_review = {
+            **review,
+            "cloud_handoff": {
+                **review["cloud_handoff"],
+                "reviewed_at": "2099-01-03T02:10:00+09:00",
+                "recovery_attempt": 1,
+            },
+        }
+        validate_review(
+            after_midnight_review,
+            issue_date=issue_date,
+            expected_evidence_sha256=evidence_sha256(evidence_path),
+        )
+        too_late_review = {
+            **after_midnight_review,
+            "cloud_handoff": {
+                **after_midnight_review["cloud_handoff"],
+                "reviewed_at": "2099-01-03T06:00:00+09:00",
+            },
+        }
+        try:
+            validate_review(
+                too_late_review,
+                issue_date=issue_date,
+                expected_evidence_sha256=evidence_sha256(evidence_path),
+            )
+        except SystemExit:
+            pass
+        else:
+            fail("review after the bounded recovery window was accepted")
         correction = {
             "contract": CORRECTION_CONTRACT,
             "issue_date": issue_date,
