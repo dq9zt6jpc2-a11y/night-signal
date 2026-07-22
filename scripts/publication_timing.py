@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from dataclasses import dataclass
 from datetime import datetime, time, timedelta
 from pathlib import Path
@@ -14,6 +15,7 @@ from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG_PATH = ROOT / "config" / "night_signal_operations.json"
+EVIDENCE_COLLECTION_WORKFLOW = "NIGHT SIGNAL Evidence Collection"
 
 
 def parse_clock(value: str) -> time:
@@ -180,6 +182,28 @@ def decision(now: datetime, event_name: str, policy: TimingPolicy) -> str:
     return scheduled_decision(now, policy)
 
 
+def workflow_decision(
+    now: datetime,
+    event_name: str,
+    policy: TimingPolicy,
+    workflow_name: str,
+) -> str:
+    """Allow the collector to recover late while SLA audits still report a miss."""
+    result = decision(now, event_name, policy)
+    if (
+        result == "missed"
+        and event_name == "schedule"
+        and workflow_name == EVIDENCE_COLLECTION_WORKFLOW
+    ):
+        # GitHub scheduled events can arrive hours late.  Refusing collection
+        # here makes one delayed trigger or transient source error permanently
+        # unrecoverable.  The watchdog continues to receive "missed" and report
+        # the SLA breach; only the collection owner is allowed to resume the
+        # same-day checkpoint chain.
+        return "run"
+    return result
+
+
 def scheduled_fresh_collection_allowed(
     now: datetime,
     policy: TimingPolicy | None = None,
@@ -218,6 +242,21 @@ def self_test() -> None:
             raise SystemExit(f"timing decision mismatch: {raw}: {actual} != {expected}")
     if decision(datetime.now(zone), "workflow_dispatch", policy) != "run":
         raise SystemExit("manual recovery must not be mistaken for a scheduled heartbeat")
+    missed = datetime.fromisoformat("2099-01-01T19:30:00+09:00").astimezone(zone)
+    if workflow_decision(
+        missed,
+        "schedule",
+        policy,
+        EVIDENCE_COLLECTION_WORKFLOW,
+    ) != "run":
+        raise SystemExit("late collector could not recover a missing same-day checkpoint")
+    if workflow_decision(
+        missed,
+        "schedule",
+        policy,
+        "Audit NIGHT SIGNAL publication",
+    ) != "missed":
+        raise SystemExit("deadline audit no longer reports a missed publication SLA")
     if near_window_wait_seconds(
         datetime.fromisoformat("2099-01-01T16:17:00+09:00"), policy
     ) != 28 * 60:
@@ -274,7 +313,14 @@ def main() -> int:
             if args.now
             else datetime.now(ZoneInfo(policy.timezone))
         )
-        print(decision(now, args.event_name, policy))
+        print(
+            workflow_decision(
+                now,
+                args.event_name,
+                policy,
+                os.getenv("GITHUB_WORKFLOW", ""),
+            )
+        )
         return 0
     print(
         json.dumps(

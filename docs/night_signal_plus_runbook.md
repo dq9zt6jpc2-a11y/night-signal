@@ -228,6 +228,9 @@ dated public URLs show the same current date.
 
 - Evidence collection failed: inspect the failed log, correct only a code/config
   cause, or retry the same network command once. Never start parallel collectors.
+  A delayed scheduled collector may resume the same-day Evidence chain after the
+  deadline; the watchdog must still report the SLA miss until publication is
+  verified. Late arrival is never a reason to leave the issue permanently absent.
 - Review validation failed: write one small event-level correction overlay containing all
   rejected request/event entries; keep the large base review and all accepted
   responses unchanged.
