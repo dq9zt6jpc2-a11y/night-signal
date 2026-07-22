@@ -2591,10 +2591,42 @@ def support_quote_from_record(fact: str, record: dict[str, Any]) -> str:
     return max(candidates, key=relevance)
 
 
+HTTP_CHARSET_ALIASES = {
+    # Microsoft/IANA aliases that are emitted by Japanese publisher servers
+    # but are not registered codec names in every Python runtime.
+    "cp51932": "euc_jp",
+    "windows-31j": "cp932",
+    "x-euc-jp": "euc_jp",
+    "x-sjis": "cp932",
+}
+
+
+def decode_http_text(raw: bytes, content_type: str) -> str:
+    """Decode a response without letting one vendor charset abort collection."""
+    charset_match = re.search(
+        r"charset\s*=\s*[\"']?([A-Za-z0-9._-]+)",
+        content_type,
+        re.I,
+    )
+    declared = charset_match.group(1) if charset_match else "utf-8"
+    normalized = declared.casefold().replace("_", "-")
+    charset = HTTP_CHARSET_ALIASES.get(normalized, declared)
+    try:
+        return raw.decode(charset, errors="replace")
+    except LookupError:
+        # Unknown names are external metadata failures, not a reason to lose
+        # all categories.  Prefer lossless decoding; replacement is the final
+        # bounded fallback only when no common Web encoding fits.
+        for fallback in ("utf-8", "cp932", "euc_jp", "iso2022_jp"):
+            try:
+                return raw.decode(fallback)
+            except UnicodeDecodeError:
+                continue
+        return raw.decode("utf-8", errors="replace")
+
+
 def page_text(raw: bytes, content_type: str) -> tuple[str, str]:
-    charset_match = re.search(r"charset=([A-Za-z0-9._-]+)", content_type)
-    charset = charset_match.group(1) if charset_match else "utf-8"
-    text = raw.decode(charset, errors="replace")
+    text = decode_http_text(raw, content_type)
     if "<html" not in text[:1000].lower() and "<!doctype" not in text[:1000].lower():
         plain = compact_text(text, 8000)
         return plain[:180], plain
@@ -2695,13 +2727,11 @@ def google_news_decoding_params(params_url: str) -> tuple[str, str, str] | None:
     )
     with urllib.request.urlopen(request, timeout=12) as response:
         content_type = response.headers.get("Content-Type", "")
-        charset_match = re.search(r"charset=([A-Za-z0-9._-]+)", content_type)
-        charset = charset_match.group(1) if charset_match else "utf-8"
         raw = response.read(500_000)
         if response.headers.get("Content-Encoding", "").lower() == "gzip":
             raw = gzip.decompress(raw)
         parser = GoogleNewsArticleParser()
-        parser.feed(raw.decode(charset, errors="replace"))
+        parser.feed(decode_http_text(raw, content_type))
         return parser.params
 
 
@@ -6297,6 +6327,22 @@ def self_test() -> None:
     )
     if "SHOPPING CART" in parsed_body or "新曲を6月30日に発売" not in parsed_body:
         fail("HTML extraction did not separate navigation from article text")
+    _, cp51932_body = page_text(
+        (
+            "<html><head><title>文字コード検証</title></head><body>"
+            "<article>ホンダが新技術の提供条件を公表した。</article>"
+            "</body></html>"
+        ).encode("euc_jp"),
+        "text/html; charset=cp51932",
+    )
+    if "ホンダが新技術の提供条件を公表" not in cp51932_body:
+        fail("cp51932 publisher response was not decoded as Japanese EUC")
+    unknown_charset_text = decode_http_text(
+        "OpenAIが新機能を公表した。".encode("utf-8"),
+        'text/plain; charset="x-unknown-publisher-codec"',
+    )
+    if "OpenAIが新機能を公表" not in unknown_charset_text:
+        fail("unknown publisher charset did not use a safe text fallback")
     corrupted_visual_record = {
         **english_record,
         "title": "Previewing a next-generation model",
