@@ -165,6 +165,11 @@ event, ids whose Evidence is not cited by the point, and required ids omitted fr
 the whole event. `previous_updates` decide whether there is a publishable new
 delta; after a publish decision, they must not remove current-source context needed
 to understand the accepted event as a self-contained update.
+The required-fact set is ranked across the whole event and bounded to three distinct
+article-specific facts. This is a summary-completeness budget, not a news-item
+cap: it prevents duplicated background, publisher chrome, and one long article
+from crowding out other events, while preserving decisions, numbers, conditions,
+reasons, results, and title-linked details first.
 `article_fact_count` records the complete cleaned sentence inventory and
 `source_fact_overflow_count` records how many lower-ranked facts from an unusually
 long single article could not enter the bounded summary inventory. This is a

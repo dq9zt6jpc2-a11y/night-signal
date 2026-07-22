@@ -1529,7 +1529,20 @@ ARTICLE_OPTIONAL_REQUIRED_FACT_RE = re.compile(
     r"紐解(?:きます|く))|"
     r"^[A-Z][A-Za-z.'’-]+ last (?:Monday|Tuesday|Wednesday|Thursday|Friday|"
     r"Saturday|Sunday|week|month)[。.!?]?$|"
-    r"^Must Read\b",
+    r"^Must Read\b|"
+    r"^Additional options regarding these technologies|"
+    r"^(?:They|These technologies) (?:are capable of tracking|may be used|do not store|help us to know)|"
+    r"^(?:本AIまとめ|内容の正確性や品質|機能の詳細に関して)|"
+    r"^(?:広告\s*)?出典\b|^広告\b|"
+    r"^最新のAI関連技術、?テクノロジー|"
+    r"^(?:Join|Sign up for) [0-9,]+\+? readers|"
+    r"^(?:詳しくはこちら|登録すると続きをお読みいただけます|NIKKEI 詳しく見る)|"
+    r"^(?:本記事|ご覧頂いている記事)は.{0,120}(?:対象外|会員限定)|"
+    r"^(?:おすすめ|関連記事|写真アクセスランキング|一覧ページへ|"
+    r"View full biography|Related F1|All rights reserved|Website by|"
+    r"ツイート\s+[^。]{0,120}執筆者の最近のレポート)|"
+    r"(?:ニュースレター|NIKKEI NEWS|日経の記事利用サービス|"
+    r"ホーム画面に追加|更新通知を受け取る)",
     re.I,
 )
 ARTICLE_CHROME_SENTENCE_RE = re.compile(
@@ -1656,6 +1669,7 @@ def editor_article_facts(record: dict[str, Any]) -> list[str]:
 
 
 MAX_EDITOR_SOURCE_FACTS = 16
+MAX_REQUIRED_SOURCE_FACTS_PER_EVENT = 3
 
 
 def editor_source_fact_inventory(
@@ -1710,8 +1724,10 @@ def editor_required_source_facts(
 ) -> dict[str, list[dict[str, str]]]:
     """Deduplicate repeated source facts without discarding distinct additions."""
     required: dict[str, list[dict[str, str]]] = {}
+    titles_by_event: dict[str, str] = {}
     for evidence_id, record in evidence_entries:
         event_id = str(record.get("_editor_event_id") or evidence_id)
+        titles_by_event.setdefault(event_id, record_public_title(record))
         event_facts = required.setdefault(event_id, [])
         for fact in editor_source_fact_inventory(evidence_id, record):
             # Keep stable fact ids in the packet inventory, but never make a
@@ -1726,12 +1742,58 @@ def editor_required_source_facts(
             # facts, and keep packet fact ids immutable.
             if ARTICLE_OPTIONAL_REQUIRED_FACT_RE.search(fact["text"]):
                 continue
+            if re.search(
+                r"こちらもおすすめ|【関連記事】|関連キーワード|"
+                r"関連企業・業界|一覧ページへ|執筆者の最近のレポート",
+                fact["text"],
+                re.I,
+            ):
+                continue
             if any(
                 state_contract.materially_same_fact(fact["text"], existing["text"])
                 for existing in event_facts
             ):
                 continue
             event_facts.append({**fact, "evidence_id": evidence_id})
+    for event_id, event_facts in required.items():
+        if len(event_facts) <= MAX_REQUIRED_SOURCE_FACTS_PER_EVENT:
+            continue
+        title = titles_by_event.get(event_id, "")
+
+        def required_rank(indexed: tuple[int, dict[str, str]]) -> tuple[int, int, int, int]:
+            index, fact = indexed
+            text = fact["text"]
+            return (
+                8 * bool(PUBLICATION_EVENT_RE.search(text))
+                + 7 * bool(MATERIAL_SIGNAL_RE.search(text))
+                + 6 * bool(SPORTS_RESULT_RE.search(text))
+                + 4 * min(3, len(numeric_claims(text)))
+                + 3 * bool(
+                    re.search(
+                        r"理由|要因|ため|結果|影響|条件|対象|範囲|方針|"
+                        r"because|reason|result|impact|condition|scope",
+                        text,
+                        re.I,
+                    )
+                )
+                + 2 * min(4, state_contract.text_overlap(title, text))
+                + max(0, 4 - index),
+                len(numeric_claims(text)),
+                state_contract.text_overlap(title, text),
+                -index,
+            )
+
+        selected_indexes = {
+            index
+            for index, _ in sorted(
+                enumerate(event_facts),
+                key=required_rank,
+                reverse=True,
+            )[:MAX_REQUIRED_SOURCE_FACTS_PER_EVENT]
+        }
+        required[event_id] = [
+            fact for index, fact in enumerate(event_facts) if index in selected_indexes
+        ]
     return required
 
 
@@ -6762,7 +6824,8 @@ def self_test() -> None:
     prompt = category_prompt(category, "2099-01-03", [long_record])
     prompt_evidence = prompt["events"][0]["evidence"][0]
     if (
-        len(prompt_evidence["required_fact_ids"]) != MAX_EDITOR_SOURCE_FACTS
+        len(prompt_evidence["required_fact_ids"])
+        != MAX_REQUIRED_SOURCE_FACTS_PER_EVENT
         or prompt_evidence["source_fact_overflow_count"]
         != prompt_evidence["article_fact_count"] - MAX_EDITOR_SOURCE_FACTS
     ):

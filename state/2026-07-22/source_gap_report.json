@@ -1,0 +1,908 @@
+{
+  "contract": "night-signal-source-gap-v1",
+  "issue_date": "2026-07-22",
+  "collector_contract_version": "7f7b93f1ee1b4619",
+  "publisher_portfolio_version": "2026-07-19.1",
+  "editor_coverage_gaps": [],
+  "categories": {
+    "OpenAI": {
+      "editor_coverage_gaps": [],
+      "unavailable_web_seeds": [],
+      "depth_query_results": [
+        {
+          "query_id": "depth:official:math_research:bing",
+          "slot_state": "searched_resolved",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "openai.com"
+          ],
+          "fallback_attempted": false,
+          "material_candidates": 1,
+          "resolved_candidates": 1
+        },
+        {
+          "query_id": "depth:official:product_release:bing",
+          "slot_state": "searched_resolved",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "openai.com"
+          ],
+          "fallback_attempted": false,
+          "material_candidates": 1,
+          "resolved_candidates": 1
+        },
+        {
+          "query_id": "depth:official:safety_security_regulation:bing",
+          "slot_state": "searched_resolved",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "openai.com"
+          ],
+          "fallback_attempted": false,
+          "material_candidates": 1,
+          "resolved_candidates": 1
+        },
+        {
+          "query_id": "depth:official:strategic_talent_japan_gtm:bing",
+          "slot_state": "searched_resolved",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "openai.com"
+          ],
+          "fallback_attempted": false,
+          "material_candidates": 1,
+          "resolved_candidates": 1
+        },
+        {
+          "query_id": "depth:specialist_media:math_research:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "arstechnica.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:product_release:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "infoq.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:safety_security_regulation:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "ai.watch.impress.co.jp"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:strategic_talent_japan_gtm:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "itmedia.co.jp"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        }
+      ],
+      "causes": [],
+      "actions": []
+    },
+    "SoftBank": {
+      "editor_coverage_gaps": [],
+      "unavailable_web_seeds": [],
+      "depth_query_results": [
+        {
+          "query_id": "depth:official:ai_infrastructure:bing",
+          "slot_state": "searched_resolved",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "group.softbank"
+          ],
+          "fallback_attempted": false,
+          "material_candidates": 1,
+          "resolved_candidates": 1
+        },
+        {
+          "query_id": "depth:official:corporate_ir_financing:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "group.softbank"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:official:market_price_nav:bing",
+          "slot_state": "searched_resolved",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "group.softbank"
+          ],
+          "fallback_attempted": false,
+          "material_candidates": 1,
+          "resolved_candidates": 1
+        },
+        {
+          "query_id": "depth:official:power_battery:bing",
+          "slot_state": "searched_resolved",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "group.softbank"
+          ],
+          "fallback_attempted": false,
+          "material_candidates": 1,
+          "resolved_candidates": 1
+        },
+        {
+          "query_id": "depth:specialist_media:ai_infrastructure:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "ai.watch.impress.co.jp"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:major_media:corporate_ir_financing:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "major_media",
+          "allowed_hosts": [
+            "reuters.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:major_media:market_price_nav:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "major_media",
+          "allowed_hosts": [
+            "reuters.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:power_battery:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "datacenterdynamics.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        }
+      ],
+      "causes": [],
+      "actions": []
+    },
+    "Honda": {
+      "editor_coverage_gaps": [],
+      "unavailable_web_seeds": [],
+      "depth_query_results": [
+        {
+          "query_id": "depth:official:earnings_guidance:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "global.honda"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:official:hybrid_ev_strategy:bing",
+          "slot_state": "searched_resolved",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "global.honda"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 1,
+          "resolved_candidates": 1
+        },
+        {
+          "query_id": "depth:official:market_price_reaction:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "global.honda"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:official:official_product_demand:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "global.honda"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:official:regional_production:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "global.honda"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:earnings_guidance:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "car.watch.impress.co.jp"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:hybrid_ev_strategy:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "electrek.co"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:major_media:market_price_reaction:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "major_media",
+          "allowed_hosts": [
+            "ft.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:official_product_demand:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "electrek.co"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:regional_production:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "autonews.gasgoo.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        }
+      ],
+      "causes": [],
+      "actions": []
+    },
+    "F1": {
+      "editor_coverage_gaps": [],
+      "unavailable_web_seeds": [],
+      "depth_query_results": [
+        {
+          "query_id": "depth:official:honda_aston_pu:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "astonmartinf1.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:honda_aston_pu:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "racingnews365.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        }
+      ],
+      "causes": [],
+      "actions": []
+    },
+    "SpaceX": {
+      "editor_coverage_gaps": [],
+      "unavailable_web_seeds": [
+        {
+          "label": "SpaceX updates",
+          "url": "https://www.spacex.com/updates/"
+        }
+      ],
+      "depth_query_results": [
+        {
+          "query_id": "depth:official:official_launch_manifest:bing",
+          "slot_state": "searched_resolved",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "spacex.com"
+          ],
+          "fallback_attempted": false,
+          "material_candidates": 2,
+          "resolved_candidates": 2
+        },
+        {
+          "query_id": "depth:official:ai_mna_compute:bing",
+          "slot_state": "searched_resolved",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "spacex.com"
+          ],
+          "fallback_attempted": false,
+          "material_candidates": 2,
+          "resolved_candidates": 2
+        },
+        {
+          "query_id": "depth:official:dragon_iss:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "nasa.gov"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:official_launch_manifest:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "arstechnica.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:ai_mna_compute:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "arstechnica.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:dragon_iss:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "arstechnica.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        }
+      ],
+      "causes": [
+        "web_seed_unavailable"
+      ],
+      "actions": [
+        "bounded_reader_and_source_search_fallback"
+      ]
+    },
+    "日本経済": {
+      "editor_coverage_gaps": [],
+      "unavailable_web_seeds": [
+        {
+          "label": "Trading Economics Japan indicators",
+          "url": "https://tradingeconomics.com/japan/indicators"
+        }
+      ],
+      "depth_query_results": [
+        {
+          "query_id": "depth:official:employment_consumption:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "stat.go.jp"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:official:prices_wages_boj:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "boj.or.jp"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:employment_consumption:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "tradingeconomics.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:prices_wages_boj:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "tradingeconomics.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        }
+      ],
+      "causes": [
+        "web_seed_unavailable"
+      ],
+      "actions": [
+        "bounded_reader_and_source_search_fallback"
+      ]
+    },
+    "YOASOBI / 幾田りら": {
+      "editor_coverage_gaps": [],
+      "unavailable_web_seeds": [
+        {
+          "label": "Ikuta Lilas official",
+          "url": "https://www.ikuralilas.com/"
+        },
+        {
+          "label": "Natalie Music",
+          "url": "https://natalie.mu/music"
+        },
+        {
+          "label": "New York Post YOASOBI coverage",
+          "url": "https://nypost.com/2026/04/21/ticket-sales/yoasobi-american-dream-tour-2026-where-to-buy-tickets-best-prices/"
+        }
+      ],
+      "depth_query_results": [
+        {
+          "query_id": "depth:official:staff_social_x_instagram:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "yoasobi-music.jp"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:official:live_tour_performance:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "yoasobi-music.jp"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:official:music_release_chart_tieup:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "yoasobi-music.jp"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:official:official_release:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "yoasobi-music.jp"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:staff_social_x_instagram:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "oricon.co.jp"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:live_tour_performance:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "oricon.co.jp"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:music_release_chart_tieup:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "billboard-japan.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:official_release:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "oricon.co.jp"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        }
+      ],
+      "causes": [
+        "web_seed_unavailable"
+      ],
+      "actions": [
+        "bounded_reader_and_source_search_fallback"
+      ]
+    },
+    "アジア経済": {
+      "editor_coverage_gaps": [],
+      "unavailable_web_seeds": [
+        {
+          "label": "Reserve Bank of India",
+          "url": "https://www.rbi.org.in/"
+        },
+        {
+          "label": "India MOSPI",
+          "url": "https://www.mospi.gov.in/"
+        },
+        {
+          "label": "Vietnam GSO",
+          "url": "https://www.gso.gov.vn/en/homepage/"
+        }
+      ],
+      "depth_query_results": [
+        {
+          "query_id": "depth:official:china_macro_policy:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "stats.gov.cn"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:official:india_macro_policy:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "rbi.org.in"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:official:india_vietnam_markets_supply_chain:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "rbi.org.in"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:official:vietnam_macro_investment:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "gso.gov.vn"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:china_macro_policy:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "caixinglobal.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:india_macro_policy:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "economictimes.indiatimes.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:india_vietnam_markets_supply_chain:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "e.vnexpress.net"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:vietnam_macro_investment:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "e.vnexpress.net"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        }
+      ],
+      "causes": [
+        "web_seed_unavailable"
+      ],
+      "actions": [
+        "bounded_reader_and_source_search_fallback"
+      ]
+    },
+    "北米経済": {
+      "editor_coverage_gaps": [],
+      "unavailable_web_seeds": [
+        {
+          "label": "Trading Economics United States indicators",
+          "url": "https://tradingeconomics.com/united-states/indicators"
+        }
+      ],
+      "depth_query_results": [
+        {
+          "query_id": "depth:official:north_america_investment_policy:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "bea.gov"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:official:us_markets_fund_flows_rates:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "federalreserve.gov"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:official:us_prices_jobs_fed:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "federalreserve.gov"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:north_america_investment_policy:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "tradingeconomics.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:us_markets_fund_flows_rates:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "tradingeconomics.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:us_prices_jobs_fed:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "tradingeconomics.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        }
+      ],
+      "causes": [
+        "web_seed_unavailable"
+      ],
+      "actions": [
+        "bounded_reader_and_source_search_fallback"
+      ]
+    },
+    "宇都宮ブレックス": {
+      "editor_coverage_gaps": [],
+      "unavailable_web_seeds": [
+        {
+          "label": "Shimotsuke sports",
+          "url": "https://www.shimotsuke.co.jp/list/select/brex"
+        }
+      ],
+      "depth_query_results": [
+        {
+          "query_id": "depth:official:arena_regional_admin:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "bleague.jp"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:official:bleague_games_schedule:bing",
+          "slot_state": "searched_no_material_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "utsunomiyabrex.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:official:club_roster_staff:bing",
+          "slot_state": "searched_no_material_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "utsunomiyabrex.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:official:media_press_video:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "official",
+          "allowed_hosts": [
+            "utsunomiyabrex.com"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:arena_regional_admin:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "sports.yahoo.co.jp"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:bleague_games_schedule:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "sports.yahoo.co.jp"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:club_roster_staff:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "sports.yahoo.co.jp"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        },
+        {
+          "query_id": "depth:specialist_media:media_press_video:bing",
+          "slot_state": "searched_no_results",
+          "target_source_class": "specialist_media",
+          "allowed_hosts": [
+            "bballnews2for1.jp"
+          ],
+          "fallback_attempted": true,
+          "material_candidates": 0,
+          "resolved_candidates": 0
+        }
+      ],
+      "causes": [
+        "web_seed_unavailable"
+      ],
+      "actions": [
+        "bounded_reader_and_source_search_fallback"
+      ]
+    }
+  },
+  "automatic_config_mutation": false
+}
