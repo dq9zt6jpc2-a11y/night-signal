@@ -1,0 +1,24 @@
+{
+  "contract": "night-signal-cloud-feedback-v1",
+  "issue_date": "2026-07-23",
+  "recorded_at": "2026-07-23T11:51:31.044711+00:00",
+  "workflow_run_id": "30004696631",
+  "workflow_run_url": "https://github.com/dq9zt6jpc2-a11y/night-signal/actions/runs/30004696631",
+  "recovery_attempt": 0,
+  "status": "success",
+  "failed_stage": null,
+  "step_outcomes": {
+    "apply": "skipped",
+    "restore": "skipped",
+    "gates": "skipped",
+    "base_guard": "skipped",
+    "commit": "skipped",
+    "push": "skipped",
+    "pages": "skipped",
+    "pages_retry": "skipped",
+    "pages_watch": "skipped",
+    "verify": "skipped"
+  },
+  "validator_log_tail": "",
+  "recovery_contract": "reuse the same Evidence; change only named rejected request/event entries"
+}
