@@ -249,8 +249,11 @@ dated public URLs show the same current date.
   do not enter collection or review.
 - The 17:50 Work-mode Web task is the cloud owner and the 18:25 Work-mode Web task is an audit-first
   recovery heartbeat. A successful earlier review/publication must not be
-  repeated. The recovery task reads the compact feedback branch and patches only
-  the rejected request/event entries.
+  repeated. Immediately after its write-permission canary, either task must stop
+  with `feedback_success` when both `.night-signal-issue-date` and
+  `site/index.html` on main already show the issue date; it must not read
+  Evidence or create or resave a review. The recovery task otherwise reads the
+  compact feedback branch and patches only the rejected request/event entries.
 
 CLI network or authentication commands may be retried once. Model turns, full
 collection, full review, commits, and workflow dispatches must never be blindly

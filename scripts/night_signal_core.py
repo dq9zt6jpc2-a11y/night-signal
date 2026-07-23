@@ -9,6 +9,7 @@ import functools
 import gzip
 import hashlib
 import html
+import http.client
 import json
 import os
 import re
@@ -2725,11 +2726,35 @@ def request_bytes(url: str, timeout: int = 15) -> tuple[bytes, str, str]:
             "User-Agent": USER_AGENT,
         },
     )
-    with NETWORK_SEMAPHORE:
-        with urllib.request.urlopen(request, timeout=timeout) as response:
-            raw = response.read(350_000)
-            content_type = response.headers.get("Content-Type", "")
-            return raw, content_type, response.geturl()
+    best_partial = b""
+    best_content_type = ""
+    best_resolved_url = url
+    for attempt in range(2):
+        with NETWORK_SEMAPHORE:
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                content_type = response.headers.get("Content-Type", "")
+                resolved_url = response.geturl()
+                try:
+                    raw = response.read(350_000)
+                except http.client.IncompleteRead as exc:
+                    partial = bytes(exc.partial)[:350_000]
+                    if len(partial) > len(best_partial):
+                        best_partial = partial
+                        best_content_type = content_type
+                        best_resolved_url = resolved_url
+                    if attempt == 0:
+                        continue
+                    if best_partial:
+                        return (
+                            best_partial,
+                            best_content_type,
+                            best_resolved_url,
+                        )
+                    raise
+                return raw, content_type, resolved_url
+    if best_partial:
+        return best_partial, best_content_type, best_resolved_url
+    raise http.client.IncompleteRead(b"", None)
 
 
 def post_form_bytes(
@@ -5570,6 +5595,45 @@ def collect_evidence(issue_date: str) -> dict[str, Any]:
 
 
 def self_test() -> None:
+    original_urlopen = urllib.request.urlopen
+    incomplete_calls = 0
+
+    class IncompleteResponse:
+        headers = {"Content-Type": "text/html; charset=utf-8"}
+
+        def __enter__(self) -> IncompleteResponse:
+            return self
+
+        def __exit__(self, *_: object) -> None:
+            return None
+
+        def geturl(self) -> str:
+            return "https://example.com/article"
+
+        def read(self, _: int) -> bytes:
+            nonlocal incomplete_calls
+            incomplete_calls += 1
+            partial = (
+                b"<html><title>Recovered article</title><body>"
+                + (b"material evidence " * incomplete_calls)
+            )
+            raise http.client.IncompleteRead(partial, 100)
+
+    urllib.request.urlopen = lambda *_args, **_kwargs: IncompleteResponse()
+    try:
+        partial_raw, partial_type, partial_url = request_bytes(
+            "https://example.com/article"
+        )
+    finally:
+        urllib.request.urlopen = original_urlopen
+    if (
+        incomplete_calls != 2
+        or partial_raw.count(b"material evidence") != 2
+        or partial_type != "text/html; charset=utf-8"
+        or partial_url != "https://example.com/article"
+    ):
+        fail("bounded partial HTTP recovery did not preserve the best response")
+
     if PUBLICATION_EVENT_RE.search("Emergency Alert Today"):
         fail("English event matching treated Emergency as a merger")
     if not PUBLICATION_EVENT_RE.search("SpaceX launches a new vehicle"):

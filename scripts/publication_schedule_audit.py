@@ -187,6 +187,9 @@ def main() -> int:
         "correct every named",
         "night-signal-owner-status",
         "night-signal-cloud-owner-status-v1",
+        "both show ISSUE_DATE",
+        "Do not read Evidence",
+        "spend review tokens",
     ):
         if required.casefold() not in web_runbook.casefold():
             fail(f"Web owner runbook is missing: {required}")

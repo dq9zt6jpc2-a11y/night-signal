@@ -69,6 +69,13 @@ review before that write succeeds. At the end overwrite the same file with the
 final outcome. If the first write cannot be completed, stop immediately instead
 of spending review tokens that cannot be handed off.
 
+After the started heartbeat succeeds, first inspect `.night-signal-issue-date`
+and `site/index.html` on main. If both show ISSUE_DATE, the editorial and
+repository publication stage is already complete: overwrite the liveness file
+with outcome feedback_success and stop immediately. Do not read Evidence,
+create or resave a review, or spend review tokens. GitHub Actions and the
+publication watchdog own any remaining Pages-reflection check.
+
 First check these exact refs:
 1. night-signal-review-ISSUE_DATE at
    cloud-review/ISSUE_DATE/editor_review.json
