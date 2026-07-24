@@ -1,39 +1,25 @@
 {
   "contract": "night-signal-cloud-feedback-v1",
   "issue_date": "2026-07-24",
-  "recorded_at": "2026-07-24T09:04:45.287231+00:00",
-  "workflow_run_id": "30081098207",
-  "workflow_run_url": "https://github.com/dq9zt6jpc2-a11y/night-signal/actions/runs/30081098207",
+  "recorded_at": "2026-07-24T10:20:08.111145+00:00",
+  "workflow_run_id": "30085790560",
+  "workflow_run_url": "https://github.com/dq9zt6jpc2-a11y/night-signal/actions/runs/30085790560",
   "recovery_attempt": 0,
   "status": "success",
   "failed_stage": null,
   "step_outcomes": {
-    "apply": "success",
-    "restore": "success",
-    "gates": "success",
-    "base_guard": "success",
-    "commit": "success",
-    "push": "success",
-    "pages": "success",
+    "apply": "skipped",
+    "restore": "skipped",
+    "gates": "skipped",
+    "base_guard": "skipped",
+    "commit": "skipped",
+    "push": "skipped",
+    "pages": "skipped",
     "pages_retry": "skipped",
-    "pages_watch": "success",
-    "verify": "success"
+    "pages_watch": "skipped",
+    "verify": "skipped"
   },
   "validator_log_tail": "",
-  "recovery_contract": "reuse the same Evidence; change only named rejected request/event entries",
-  "recall_risk_categories": [
-    "OpenAI",
-    "Honda",
-    "F1",
-    "SpaceX",
-    "日本経済",
-    "北米経済"
-  ],
-  "recall_audit": {
-    "audited_at": "2026-07-24T19:30:00+09:00",
-    "candidate_events": 114,
-    "published_cards": 4,
-    "prior_issue_published_cards": 27,
-    "reason": "body-rich no_material_update decisions were concentrated despite no matching previous_updates"
-  }
+  "recall_risk_categories": [],
+  "recovery_contract": "reuse the same Evidence; change only named rejected request/event entries"
 }
