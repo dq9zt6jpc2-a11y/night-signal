@@ -191,11 +191,21 @@ def bind_immutable_packet_requests(
     if not isinstance(packet_requests, list):
         fail("saved editor packet requests must be an array")
     current_by_boundary: dict[tuple[Any, ...], dict[str, Any]] = {}
+    event_records: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    category_templates: dict[str, dict[str, Any]] = {}
     for request in current_requests:
         boundary = request_boundary_signature(request)
         if boundary in current_by_boundary:
             fail("current review requests contain a duplicate event boundary")
         current_by_boundary[boundary] = request
+        category_label = str(request.get("category", ""))
+        category_templates.setdefault(category_label, request)
+        for record in request.get("_records", []):
+            if not isinstance(record, dict):
+                continue
+            event_id = str(record.get("_editor_event_id", ""))
+            if event_id:
+                event_records.setdefault((category_label, event_id), []).append(record)
     bound: list[dict[str, Any]] = []
     packet_boundaries: set[tuple[Any, ...]] = set()
     packet_ids: set[str] = set()
@@ -212,9 +222,41 @@ def bind_immutable_packet_requests(
         packet_boundaries.add(boundary)
         current = current_by_boundary.get(boundary)
         if current is None:
-            fail(
-                "immutable editor packet event boundary drifted from restored Evidence"
-            )
+            category_label = str(saved.get("category", ""))
+            template = category_templates.get(category_label)
+            saved_events = saved.get("payload", {}).get("events", [])
+            if template is None or not isinstance(saved_events, list):
+                fail(
+                    "immutable editor packet event boundary drifted from restored Evidence"
+                )
+            reconstructed_records: list[dict[str, Any]] = []
+            for event in saved_events:
+                event_id = str(event.get("id", "")) if isinstance(event, dict) else ""
+                records = event_records.get((category_label, event_id), [])
+                if not event_id or not records:
+                    fail(
+                        "immutable editor packet event boundary drifted from restored Evidence"
+                    )
+                reconstructed_records.extend(records)
+            current = {
+                **template,
+                "_records": reconstructed_records,
+                "category": category_label,
+            }
+            reconstructed = {
+                **current,
+                "payload": editor.fit_model_payload(
+                    core.category_prompt(
+                        current["_category_contract"],
+                        str(packet.get("issue_date", "")),
+                        reconstructed_records,
+                    )
+                ),
+            }
+            if request_boundary_signature(reconstructed) != boundary:
+                fail(
+                    "immutable editor packet event boundary drifted from restored Evidence"
+                )
         bound.append(
             {
                 **current,
@@ -224,7 +266,14 @@ def bind_immutable_packet_requests(
                 "payload": saved["payload"],
             }
         )
-    if packet_boundaries != set(current_by_boundary):
+    packet_event_keys = {
+        (str(saved.get("category", "")), str(event.get("id", "")))
+        for saved in packet_requests
+        if isinstance(saved, dict)
+        for event in saved.get("payload", {}).get("events", [])
+        if isinstance(event, dict) and str(event.get("id", ""))
+    }
+    if event_records and packet_event_keys != set(event_records):
         fail("restored Evidence contains events outside the immutable editor packet")
     return bound
 
