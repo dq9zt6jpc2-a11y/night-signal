@@ -1,6 +1,6 @@
 {
   "issue_date": "2026-07-24",
-  "evaluated_at_jst": "2026-07-24T19:32:37+09:00",
+  "evaluated_at_jst": "2026-07-24T20:11:31+09:00",
   "passed": true,
   "checks": {
     "all_categories_collected": true,
@@ -44,21 +44,21 @@
     "observed_urls": 961,
     "unavailable_urls": 28,
     "evidence_hosts": 370,
-    "published_updates": 5,
-    "confirmed_facts": 15,
-    "facts_with_sources": 15,
-    "summary_characters": 853,
+    "published_updates": 18,
+    "confirmed_facts": 59,
+    "facts_with_sources": 59,
+    "summary_characters": 3702,
     "one_fact_updates": 0,
-    "facts_per_update_milli": 3000,
-    "summary_chars_per_update_milli": 170600,
+    "facts_per_update_milli": 3277,
+    "summary_chars_per_update_milli": 205666,
     "one_fact_update_ratio_milli": 0,
     "body_evidence_records": 719,
     "trusted_body_evidence_records": 131,
     "specialist_body_evidence_records": 23,
-    "multi_source_updates": 1,
+    "multi_source_updates": 3,
     "specialist_source_updates": 0,
     "analysis_updates": 0,
-    "body_backed_cited_urls": 6,
+    "body_backed_cited_urls": 21,
     "non_body_cited_urls": 0,
     "local_horizon_queries": 8,
     "local_horizon_relevant_results": 69,
@@ -204,11 +204,13 @@
         }
       ],
       "unavailable_web_seeds": 0,
-      "published_updates": 2,
+      "published_updates": 5,
       "published_citation_hosts": [
         "finance.biggo.jp",
+        "politico.com",
         "prtimes.jp",
-        "taisy0.com"
+        "taisy0.com",
+        "techafricanews.com"
       ],
       "published_source_classes": [
         "discovered_media"
@@ -490,16 +492,24 @@
         }
       ],
       "unavailable_web_seeds": 1,
-      "published_updates": 0,
-      "published_citation_hosts": [],
-      "published_source_classes": [],
+      "published_updates": 3,
+      "published_citation_hosts": [
+        "carscoops.com",
+        "news.yahoo.co.jp",
+        "vietnam.vn"
+      ],
+      "published_source_classes": [
+        "discovered_media"
+      ],
       "causes": [
         "material_topic_without_trusted_body",
-        "web_seed_unavailable"
+        "web_seed_unavailable",
+        "published_without_specialist_corroboration"
       ],
       "actions": [
         "topic_targeted_specialist_depth_recovery",
-        "bounded_reader_and_source_search_fallback"
+        "bounded_reader_and_source_search_fallback",
+        "retain_specialist_corroboration_priority"
       ]
     },
     "F1": {
@@ -553,14 +563,20 @@
         }
       ],
       "unavailable_web_seeds": 0,
-      "published_updates": 0,
-      "published_citation_hosts": [],
-      "published_source_classes": [],
+      "published_updates": 1,
+      "published_citation_hosts": [
+        "cryptobriefing.com"
+      ],
+      "published_source_classes": [
+        "discovered_media"
+      ],
       "causes": [
-        "material_topic_without_trusted_body"
+        "material_topic_without_trusted_body",
+        "published_without_specialist_corroboration"
       ],
       "actions": [
-        "topic_targeted_specialist_depth_recovery"
+        "topic_targeted_specialist_depth_recovery",
+        "retain_specialist_corroboration_priority"
       ]
     },
     "SpaceX": {
@@ -687,16 +703,23 @@
         }
       ],
       "unavailable_web_seeds": 1,
-      "published_updates": 0,
-      "published_citation_hosts": [],
-      "published_source_classes": [],
+      "published_updates": 2,
+      "published_citation_hosts": [
+        "benzinga.com",
+        "finance.biggo.jp"
+      ],
+      "published_source_classes": [
+        "discovered_media"
+      ],
       "causes": [
         "material_topic_without_trusted_body",
-        "web_seed_unavailable"
+        "web_seed_unavailable",
+        "published_without_specialist_corroboration"
       ],
       "actions": [
         "topic_targeted_specialist_depth_recovery",
-        "bounded_reader_and_source_search_fallback"
+        "bounded_reader_and_source_search_fallback",
+        "retain_specialist_corroboration_priority"
       ]
     },
     "日本経済": {
@@ -753,8 +776,9 @@
         }
       ],
       "unavailable_web_seeds": 1,
-      "published_updates": 1,
+      "published_updates": 2,
       "published_citation_hosts": [
+        "asahi.com",
         "nikkei.com"
       ],
       "published_source_classes": [
@@ -1104,9 +1128,13 @@
         }
       ],
       "unavailable_web_seeds": 1,
-      "published_updates": 1,
+      "published_updates": 4,
       "published_citation_hosts": [
-        "mezha.net"
+        "fool.com",
+        "jpost.com",
+        "marketsmedia.com",
+        "mezha.net",
+        "quiverquant.com"
       ],
       "published_source_classes": [
         "discovered_media"
@@ -5085,7 +5113,7 @@
     "discovery_checks": 0,
     "material_candidates": 69,
     "resolved_candidates": 55,
-    "published_updates": -22,
+    "published_updates": -9,
     "unavailable_urls": -7,
     "review_requests": -2,
     "review_events": -10,
@@ -5097,19 +5125,19 @@
     "scoped_official_sources_observed": 0,
     "expanded_evidence_records": 13,
     "expanded_published_updates": 0,
-    "confirmed_facts": -53,
-    "summary_characters": -2847,
+    "confirmed_facts": -9,
+    "summary_characters": 2,
     "one_fact_updates": -4,
-    "facts_per_update_milli": 482,
-    "summary_chars_per_update_milli": 33563,
+    "facts_per_update_milli": 759,
+    "summary_chars_per_update_milli": 68629,
     "one_fact_update_ratio_milli": -148,
     "body_evidence_records": -17,
     "trusted_body_evidence_records": 5,
     "specialist_body_evidence_records": 2,
-    "multi_source_updates": -7,
+    "multi_source_updates": -5,
     "specialist_source_updates": -4,
     "analysis_updates": 0,
-    "body_backed_cited_urls": -29,
+    "body_backed_cited_urls": -14,
     "non_body_cited_urls": 0,
     "editor_coverage_gap_count": 0,
     "unattempted_editor_coverage_gap_count": 0,
@@ -5118,6 +5146,7 @@
     "depth_fallback_queries": 3
   },
   "improvement_signals": [
+    "multi_source_synthesis_gap",
     "expanded_scope_needs_precision_review",
     "recurring_source_depth_gap"
   ],
@@ -5130,8 +5159,16 @@
         "cause": "material_topic_without_trusted_body"
       },
       {
+        "category": "F1",
+        "cause": "published_without_specialist_corroboration"
+      },
+      {
         "category": "Honda",
         "cause": "material_topic_without_trusted_body"
+      },
+      {
+        "category": "Honda",
+        "cause": "published_without_specialist_corroboration"
       },
       {
         "category": "Honda",
@@ -5152,6 +5189,10 @@
       {
         "category": "SpaceX",
         "cause": "material_topic_without_trusted_body"
+      },
+      {
+        "category": "SpaceX",
+        "cause": "published_without_specialist_corroboration"
       },
       {
         "category": "SpaceX",
@@ -5217,9 +5258,19 @@
         "days": 2
       },
       {
+        "category": "F1",
+        "cause": "published_without_specialist_corroboration",
+        "days": 4
+      },
+      {
         "category": "Honda",
         "cause": "material_topic_without_trusted_body",
         "days": 3
+      },
+      {
+        "category": "Honda",
+        "cause": "published_without_specialist_corroboration",
+        "days": 4
       },
       {
         "category": "Honda",
@@ -5245,6 +5296,11 @@
         "category": "SpaceX",
         "cause": "material_topic_without_trusted_body",
         "days": 4
+      },
+      {
+        "category": "SpaceX",
+        "cause": "published_without_specialist_corroboration",
+        "days": 3
       },
       {
         "category": "SpaceX",
@@ -5314,22 +5370,7 @@
     ],
     "recently_resolved_causes": [
       {
-        "category": "F1",
-        "cause": "published_without_specialist_corroboration",
-        "prior_days": 3
-      },
-      {
-        "category": "Honda",
-        "cause": "published_without_specialist_corroboration",
-        "prior_days": 3
-      },
-      {
         "category": "SoftBank",
-        "cause": "published_without_specialist_corroboration",
-        "prior_days": 2
-      },
-      {
-        "category": "SpaceX",
         "cause": "published_without_specialist_corroboration",
         "prior_days": 2
       }
@@ -5344,14 +5385,17 @@
       ],
       "Honda": [
         "topic_targeted_specialist_depth_recovery",
-        "bounded_reader_and_source_search_fallback"
+        "bounded_reader_and_source_search_fallback",
+        "retain_specialist_corroboration_priority"
       ],
       "F1": [
-        "topic_targeted_specialist_depth_recovery"
+        "topic_targeted_specialist_depth_recovery",
+        "retain_specialist_corroboration_priority"
       ],
       "SpaceX": [
         "topic_targeted_specialist_depth_recovery",
-        "bounded_reader_and_source_search_fallback"
+        "bounded_reader_and_source_search_fallback",
+        "retain_specialist_corroboration_priority"
       ],
       "日本経済": [
         "topic_targeted_specialist_depth_recovery",
