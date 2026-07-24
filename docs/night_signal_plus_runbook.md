@@ -56,7 +56,12 @@ request and every event exactly once. `previous_updates` is novelty context only
 never a factual source. Each event's `novelty_context` gives explicit event dates
 and the earliest known date; each Evidence entry keeps its source-publication date
 and effective source class separately. A source-publication date by itself never
-answers why the item is new today.
+answers why the item is new today. Conversely, a missing explicit event date is
+never by itself a reason to exclude a body-rich event. If current Evidence
+describes a concrete announcement, decision, execution, result, number, condition,
+or source-backed analysis and `previous_updates` contains no matching delta, treat
+that body Evidence as sufficient novelty context. Do not require the article to
+repeat its publication date inside the prose.
 
 Write `state/$ISSUE_DATE/editor_review.json` with this shape:
 
@@ -117,6 +122,11 @@ excluded events have an empty `items` array. A headline-only event must use
 material delta without a count target. A new URL, date stamp, or background-only
 rewrite is not a delta. For an already published event, publish only a concrete
 new decision, execution, result, number, condition, or source-backed analysis.
+Quarterly, annual, and final earnings results and material market moves remain
+eligible whenever the same result or move is absent from `previous_updates`.
+A zero-card or one-card category with several body-rich
+`no_material_update` decisions is a recall warning, not proof that the category
+had no news; recheck those decisions once before declaring the review complete.
 Trusted media in `config/night_signal_publisher_portfolio.json` are searched in
 a bounded, category- and topic-specific depth pass when body-rich Evidence from
 a trusted source is missing. Open specialist media are tried before unrelated

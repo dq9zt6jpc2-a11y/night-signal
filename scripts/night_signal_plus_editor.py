@@ -279,8 +279,10 @@ def prepare_packet(
             "previous_updates_are_novelty_only": True,
             "accepted_items_must_be_self_contained_from_current_evidence": True,
             "novelty_filter_must_not_remove_context_needed_for_comprehension": True,
-            "source_publication_date_is_not_an_event_delta": True,
-            "novelty_context_must_support_why_today": True,
+            "source_publication_date_alone_is_not_an_event_delta": True,
+            "missing_explicit_event_date_must_not_suppress_a_body_event": True,
+            "current_body_evidence_of_a_concrete_delta_can_establish_novelty": True,
+            "quarterly_annual_and_final_results_remain_publishable": True,
             "natural_japanese_required": True,
             "translated_facts_retain_source_spelled_entity_or_exact_numeric_anchor": True,
             "every_summary_point_requires_evidence_ids": True,
@@ -481,10 +483,18 @@ def category_review_audit(
         ]
         decisions: dict[str, int] = {}
         body_events = 0
+        body_events_without_previous_updates = 0
+        no_material_body_events_without_previous_updates = 0
         headline_only_events = 0
         candidate_events = 0
         for request in category_requests:
-            for event in request.get("payload", {}).get("events", []):
+            payload_events = request.get("payload", {}).get("events", [])
+            payload_by_id = {
+                str(event.get("id", "")): event
+                for event in payload_events
+                if isinstance(event, dict)
+            }
+            for event in payload_events:
                 if not isinstance(event, dict):
                     continue
                 candidate_events += 1
@@ -495,6 +505,8 @@ def category_review_audit(
                 }
                 if "body" in depths:
                     body_events += 1
+                    if not event.get("previous_updates"):
+                        body_events_without_previous_updates += 1
                 elif "headline" in depths:
                     headline_only_events += 1
             response = response_by_id.get(str(request.get("request_id")), {})
@@ -503,6 +515,17 @@ def category_review_audit(
                     continue
                 decision = str(event.get("decision", ""))
                 decisions[decision] = decisions.get(decision, 0) + 1
+                payload_event = payload_by_id.get(str(event.get("event_id", "")), {})
+                if (
+                    decision == "no_material_update"
+                    and not payload_event.get("previous_updates")
+                    and any(
+                        isinstance(item, dict)
+                        and item.get("evidence_depth") == "body"
+                        for item in payload_event.get("evidence", [])
+                    )
+                ):
+                    no_material_body_events_without_previous_updates += 1
         entry = (
             evidence_categories.get(label, {})
             if isinstance(evidence_categories, dict)
@@ -559,15 +582,26 @@ def category_review_audit(
         )
         final_cards = len(cards_by_category.get(label, []))
         low_count = final_cards <= 1
+        recall_risk = bool(
+            candidate_events >= 4
+            and body_events_without_previous_updates >= 3
+            and no_material_body_events_without_previous_updates >= 2
+            and no_material_body_events_without_previous_updates * 2
+            >= body_events_without_previous_updates
+            and final_cards * 5 <= candidate_events
+        )
         needs_follow_up = bool(
-            low_count
-            and (
-                decisions.get("insufficient_evidence", 0)
-                or unresolved_searches
-                or resolved_searches == 0
-                or (
-                    source_checks
-                    and unavailable_sources * 3 >= len(source_checks)
+            recall_risk
+            or (
+                low_count
+                and (
+                    decisions.get("insufficient_evidence", 0)
+                    or unresolved_searches
+                    or resolved_searches == 0
+                    or (
+                        source_checks
+                        and unavailable_sources * 3 >= len(source_checks)
+                    )
                 )
             )
         )
@@ -576,6 +610,12 @@ def category_review_audit(
                 "category": label,
                 "candidate_events": candidate_events,
                 "body_events": body_events,
+                "body_events_without_previous_updates": (
+                    body_events_without_previous_updates
+                ),
+                "no_material_body_events_without_previous_updates": (
+                    no_material_body_events_without_previous_updates
+                ),
                 "headline_only_events": headline_only_events,
                 "decisions": decisions,
                 "final_cards": final_cards,
@@ -591,12 +631,15 @@ def category_review_audit(
                 ),
                 "depth_recovery_fallback_queries": depth_fallbacks,
                 "low_count_status": (
-                    "limited_evidence"
+                    "recall_risk"
+                    if recall_risk
+                    else "limited_evidence"
                     if needs_follow_up
                     else "supported"
                     if low_count
                     else "not_low_count"
                 ),
+                "recall_risk": recall_risk,
                 "needs_follow_up": needs_follow_up,
             }
         )
@@ -740,6 +783,11 @@ def apply_review(
             audit["category"]
             for audit in category_audit
             if audit["needs_follow_up"]
+        ],
+        "recall_risk_categories": [
+            audit["category"]
+            for audit in category_audit
+            if audit["recall_risk"]
         ],
     }
     write_json_atomic(state_root / issue_date / "plus_review_receipt.json", receipt)
@@ -960,6 +1008,46 @@ def self_test() -> None:
         "e001:f02",
     ]:
         fail("Plus review sanitizer discarded source fact coverage while merging")
+    recall_events = [
+        {
+            "id": f"g{index:03d}",
+            "previous_updates": [],
+            "evidence": [{"evidence_depth": "body"}],
+        }
+        for index in range(1, 6)
+    ]
+    recall_audit = category_review_audit(
+        {"categories": {"OpenAI": {"source_checks": [], "discovery_checks": []}}},
+        [
+            {
+                "request_id": "openai-recall",
+                "category": "OpenAI",
+                "payload": {"events": recall_events},
+            }
+        ],
+        {
+            "openai-recall": {
+                "events": [
+                    {
+                        "event_id": event["id"],
+                        "decision": "no_material_update",
+                        "items": [],
+                    }
+                    for event in recall_events
+                ]
+            }
+        },
+        {},
+    )
+    openai_recall = next(
+        audit for audit in recall_audit if audit["category"] == "OpenAI"
+    )
+    if (
+        not openai_recall["recall_risk"]
+        or openai_recall["low_count_status"] != "recall_risk"
+        or openai_recall["no_material_body_events_without_previous_updates"] != 5
+    ):
+        fail("Plus review did not flag concentrated body-event exclusions")
     with tempfile.TemporaryDirectory() as temporary_directory:
         path = Path(temporary_directory) / "value.json"
         write_json_atomic(path, {"日本語": "根拠"})

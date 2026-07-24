@@ -307,6 +307,7 @@ jobs:
             --workflow-status "$WORKFLOW_STATUS" \
             --recovery-attempt "$RECOVERY_ATTEMPT" \
             --log-directory "$RUNNER_TEMP" \
+            --receipt-path "state/$ISSUE_DATE/plus_review_receipt.json" \
             --step "apply=${{ steps.apply.outcome }}" \
             --step "restore=${{ steps.restore.outcome }}" \
             --step "gates=${{ steps.gates.outcome }}" \

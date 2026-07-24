@@ -1671,13 +1671,32 @@ def editor_article_facts(record: dict[str, Any]) -> list[str]:
 
 MAX_EDITOR_SOURCE_FACTS = 16
 MAX_REQUIRED_SOURCE_FACTS_PER_EVENT = 3
+EDITOR_SOURCE_FACT_NOISE_RE = re.compile(
+    r"\[(?:Image|画像)\s*\d+[:：]|"
+    r"Contact this reporter|personal email address|"
+    r"こちらもおすすめ|おすすめ（自動検索）|【関連記事】|関連キーワード|"
+    r"関連トピック|トピックをフォロー|有料会員限定|登録すると続きを|"
+    r"権限不足|アプリで開く|ニュースレター|"
+    r"Download the .+ App|Performing security verification|"
+    r"privacy policy|terms of use",
+    re.I,
+)
+
+
+def editor_source_fact_is_noise(fact: str) -> bool:
+    """Reject publisher chrome before it can become mandatory summary content."""
+    return bool(EDITOR_SOURCE_FACT_NOISE_RE.search(fact))
 
 
 def editor_source_fact_inventory(
     evidence_id: str,
     record: dict[str, Any],
 ) -> list[dict[str, str]]:
-    facts = editor_article_facts(record)
+    facts = [
+        fact
+        for fact in editor_article_facts(record)
+        if not editor_source_fact_is_noise(fact)
+    ]
     if len(facts) > MAX_EDITOR_SOURCE_FACTS:
         title = record_public_title(record)
 
@@ -6936,6 +6955,26 @@ def self_test() -> None:
             "embedded publisher chrome changed the mandatory article facts: "
             + embedded_text
         )
+    noisy_required_record = {
+        **records[0],
+        "url": "https://example.com/article-with-contact-chrome",
+        "title": "OpenAIが企業向け管理機能を公開",
+        "excerpt": (
+            "OpenAIは企業向け管理機能を公開し、権限と監査条件を追加した。"
+            "[Image 1: product screenshot](https://example.com/image) "
+            "Contact this reporter via email at reporter@example.com. "
+            "対象企業は7月27日から新機能を利用できる。"
+        ),
+    }
+    noisy_inventory = editor_source_fact_inventory("e001", noisy_required_record)
+    noisy_text = " ".join(fact["text"] for fact in noisy_inventory)
+    if (
+        "管理機能" not in noisy_text
+        or "7月27日" not in noisy_text
+        or "Image 1" in noisy_text
+        or "Contact this reporter" in noisy_text
+    ):
+        fail("publisher image/contact chrome entered the source fact inventory")
     if set(prompt_evidence) != {
         "id",
         "watch_topic_ids",

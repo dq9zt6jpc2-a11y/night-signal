@@ -50,6 +50,22 @@ def read_tail(path: Path) -> str:
     return text[-MAX_LOG_CHARS:]
 
 
+def read_recall_risk_categories(path: Path | None) -> list[str]:
+    if path is None:
+        return []
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    return list(
+        dict.fromkeys(
+            str(category)
+            for category in value.get("recall_risk_categories", [])
+            if str(category)
+        )
+    )
+
+
 def build_feedback(
     issue_date: str,
     *,
@@ -59,6 +75,7 @@ def build_feedback(
     recovery_attempt: int,
     step_outcomes: dict[str, str],
     log_directory: Path,
+    receipt_path: Path | None = None,
 ) -> dict[str, Any]:
     validate_issue_date(issue_date)
     failed_stage = next(
@@ -77,6 +94,7 @@ def build_feedback(
         "failed_stage": failed_stage,
         "step_outcomes": step_outcomes,
         "validator_log_tail": log_tail,
+        "recall_risk_categories": read_recall_risk_categories(receipt_path),
         "recovery_contract": (
             "reuse the same Evidence; change only named rejected request/event entries"
         ),
@@ -170,6 +188,11 @@ def self_test() -> None:
     with tempfile.TemporaryDirectory() as temporary_directory:
         directory = Path(temporary_directory)
         (directory / "apply.log").write_text("first\nexact validator reason\n", encoding="utf-8")
+        receipt_path = directory / "plus_review_receipt.json"
+        receipt_path.write_text(
+            json.dumps({"recall_risk_categories": ["OpenAI", "北米経済"]}),
+            encoding="utf-8",
+        )
         feedback = build_feedback(
             "2099-01-02",
             run_id="123",
@@ -178,6 +201,7 @@ def self_test() -> None:
             recovery_attempt=1,
             step_outcomes={"apply": "failure", "gates": "skipped"},
             log_directory=directory,
+            receipt_path=receipt_path,
         )
         if feedback["failed_stage"] != "apply":
             fail("failed stage was not preserved")
@@ -185,6 +209,8 @@ def self_test() -> None:
             fail("bounded recovery attempt was not preserved")
         if "exact validator reason" not in feedback["validator_log_tail"]:
             fail("validator failure detail was not preserved")
+        if feedback["recall_risk_categories"] != ["OpenAI", "北米経済"]:
+            fail("recall-risk categories were not preserved")
     print("NIGHT SIGNAL CLOUD FEEDBACK SELF-TEST PASSED")
 
 
@@ -196,6 +222,7 @@ def main() -> int:
     parser.add_argument("--workflow-status", default="failure")
     parser.add_argument("--recovery-attempt", type=int, choices=(0, 1), default=0)
     parser.add_argument("--log-directory", type=Path, default=Path(tempfile.gettempdir()))
+    parser.add_argument("--receipt-path", type=Path)
     parser.add_argument("--step", action="append", default=[])
     parser.add_argument("--output", type=Path)
     parser.add_argument("--publish", action="store_true")
@@ -220,6 +247,7 @@ def main() -> int:
         recovery_attempt=args.recovery_attempt,
         step_outcomes=outcomes,
         log_directory=args.log_directory,
+        receipt_path=args.receipt_path,
     )
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)

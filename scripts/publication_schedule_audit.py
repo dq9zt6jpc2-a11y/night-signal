@@ -193,6 +193,9 @@ def main() -> int:
         "current blob SHA",
         "retry only that same liveness write once",
         "must never pause",
+        "missing explicit",
+        "event date must never suppress",
+        "recall_risk_categories",
     ):
         if required.casefold() not in web_runbook.casefold():
             fail(f"Web owner runbook is missing: {required}")
@@ -266,6 +269,7 @@ def main() -> int:
         "publication_audit.py",
         "night_signal_cloud_feedback.py",
         "--recovery-attempt \"$RECOVERY_ATTEMPT\"",
+        "--receipt-path \"state/$ISSUE_DATE/plus_review_receipt.json\"",
     ):
         if required not in cloud_publication:
             fail(f"cloud publication is missing: {required}")

@@ -89,8 +89,14 @@ First check these exact refs:
 2. night-signal-feedback-ISSUE_DATE at
    cloud-feedback/ISSUE_DATE/status.json
 
-If the review exists and feedback status is success, stop. If a review exists
-and feedback is absent at the 18:25 recovery heartbeat, resave the identical
+If the review exists and feedback status is success with an empty
+`recall_risk_categories` array, stop. If success feedback names recall-risk
+categories and no correction file exists, read only those categories' requests
+from the immutable packet and recheck body-rich `no_material_update` events with
+no matching `previous_updates`. Create one small correction overlay only for
+events whose concrete delta was missed; keep every other response unchanged.
+This post-publication recall challenge must never take the already published
+page offline. If the review exists and feedback is absent at the 18:25 recovery heartbeat, resave the identical
 responses once with cloud_handoff.recovery_attempt=1 and a refreshed reviewed_at
 to retrigger deterministic publication; if recovery_attempt is already 1, stop.
 Do not perform another editorial review. If feedback status is failed and
@@ -138,6 +144,16 @@ common knowledge, repetition, or unsupported inference. Preserve all supported
 numbers, dates, scope, conditions, reasons, and results needed to understand an
 accepted event. Quarterly, annual, and final earnings results and material
 market moves remain eligible.
+
+A source-publication date alone is not an event delta, but a missing explicit
+event date must never suppress a body-rich event. Current body Evidence of a
+concrete announcement, decision, execution, result, number, condition, or
+source-backed analysis establishes novelty when `previous_updates` has no
+matching delta. Before submitting, recheck each category that would publish zero
+or one card while two or more body-rich events were labeled
+`no_material_update`; this is a bounded recall challenge, not a publication
+quota. Keep legitimate exclusions, but do not silently discard quarterly,
+annual, or final results, material market moves, or concrete schedule changes.
 
 Breadth and source depth come before analysis. Account for every category,
 watch topic, request, and event. Treat discovery indexes as leads and prefer
