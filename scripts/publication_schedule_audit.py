@@ -277,6 +277,7 @@ def main() -> int:
         cloud_publication,
         "Checkout trusted main",
         "Stop when this exact issue is already verified live",
+        "Correction overlay requires a same-day rebuild",
         "Restore final Evidence without collection or model work",
         "Validate cloud provenance and apply every reviewed event",
         "Render and run deterministic publication gates",
@@ -299,7 +300,7 @@ def main() -> int:
         if "models." + "github.ai" in source or "api." + "openai.com" in source:
             fail(f"{label} helper contains a paid/retired model endpoint")
     for required in (
-        "MAX_PART_BYTES = 850_000",
+        "MAX_PART_BYTES = 90_000",
         "immutable handoff branch",
         "packet_sha256",
         '"remote_verified": True',

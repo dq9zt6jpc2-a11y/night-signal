@@ -85,6 +85,11 @@ jobs:
       - name: Stop when this exact issue is already verified live
         id: already_public
         run: |
+          if [[ -n "$CORRECTION_PATH" ]]; then
+            echo "published=false" >> "$GITHUB_OUTPUT"
+            echo "Correction overlay requires a same-day rebuild."
+            exit 0
+          fi
           if python3 scripts/publication_audit.py "$ISSUE_DATE"; then
             echo "published=true" >> "$GITHUB_OUTPUT"
             echo "The committed issue and both public URLs are already verified."
