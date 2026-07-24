@@ -1,32 +1,25 @@
 {
   "contract": "night-signal-cloud-feedback-v1",
   "issue_date": "2026-07-24",
-  "recorded_at": "2026-07-24T10:33:35.692457+00:00",
-  "workflow_run_id": "30086443215",
-  "workflow_run_url": "https://github.com/dq9zt6jpc2-a11y/night-signal/actions/runs/30086443215",
+  "recorded_at": "2026-07-24T10:58:27.999215+00:00",
+  "workflow_run_id": "30087992445",
+  "workflow_run_url": "https://github.com/dq9zt6jpc2-a11y/night-signal/actions/runs/30087992445",
   "recovery_attempt": 0,
   "status": "success",
   "failed_stage": null,
   "step_outcomes": {
-    "apply": "success",
-    "restore": "success",
-    "gates": "success",
-    "base_guard": "success",
-    "commit": "success",
-    "push": "success",
-    "pages": "success",
+    "apply": "skipped",
+    "restore": "skipped",
+    "gates": "skipped",
+    "base_guard": "skipped",
+    "commit": "skipped",
+    "push": "skipped",
+    "pages": "skipped",
     "pages_retry": "skipped",
-    "pages_watch": "success",
-    "verify": "success"
+    "pages_watch": "skipped",
+    "verify": "skipped"
   },
   "validator_log_tail": "",
-  "recall_risk_categories": [
-    "OpenAI",
-    "Honda",
-    "F1",
-    "SpaceX",
-    "日本経済",
-    "北米経済"
-  ],
+  "recall_risk_categories": [],
   "recovery_contract": "reuse the same Evidence; change only named rejected request/event entries"
 }
