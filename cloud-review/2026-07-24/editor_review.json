@@ -1,0 +1,869 @@
+{
+  "contract": "codex-plus-editor-v2",
+  "issue_date": "2026-07-24",
+  "evidence_sha256": "c11366a794c94baeb529511f8428b2c7a13fd6c790b1ed8d2b846b89a1ec4882",
+  "cloud_handoff": {
+    "execution_surface": "chatgpt-web-scheduled-task",
+    "reviewed_at": "2026-07-24T18:02:22+09:00"
+  },
+  "responses": [
+    {
+      "request_id": "openai-01-5647e043e72ddd02",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-02-062ae9a9b6a02e60",
+      "response": {
+        "events": [
+          {
+            "event_id": "g008",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、ChatGPT Healthを米国の成人ユーザーへ一般提供",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "OpenAIは7月23日、医療記録やApple Healthのデータを連携し、健康状態に応じた回答を生成する「Health in ChatGPT」の米国向け一般提供を開始した。",
+                    "evidence_ids": [
+                      "e005",
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e006:f01"
+                    ]
+                  },
+                  {
+                    "text": "毎週3億人以上が健康関連の質問をする中、GPT-5.6を採用し、260人超の医師が70万件以上の回答をレビューして精度を高めた。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f03"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-03-2659a86e76fc6646",
+      "response": {
+        "events": [
+          {
+            "event_id": "g010",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g011",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "グラッドキューブ、ChatGPT広告の出稿・運用支援を開始",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "グラッドキューブは7月24日、LLMO／AIO対策基盤「LLMOA」の計測データを使うChatGPT広告の出稿・運用支援サービスを開始した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f02"
+                    ]
+                  },
+                  {
+                    "text": "自然なAI回答での推薦・引用を狙うLLMO／AIO対策と有料広告を組み合わせ、統合マーケティングとして提供する。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f09"
+                    ]
+                  },
+                  {
+                    "text": "提供範囲は競合・AI言及分析、配信戦略、広告設定と成果分析、制作、GA4連携、継続的な入札・クリエイティブ改善を含む。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f13"
+                    ]
+                  }
+                ],
+                "topic_value_class": "operational_status_change",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g014",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g012",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g013",
+            "decision": "duplicate_previous_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-04-11910c0bf207a25f",
+      "response": {
+        "events": [
+          {
+            "event_id": "g020",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g017",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g018",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g019",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g015",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g016",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-05-1be708ca8607a01c",
+      "response": {
+        "events": [
+          {
+            "event_id": "g025",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g021",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g026",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g022",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g023",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g024",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-06-931e0b68d82dadf9",
+      "response": {
+        "events": [
+          {
+            "event_id": "g029",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g027",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g028",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g030",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "softbank-01-a85f2e6e42fbf05e",
+      "response": {
+        "events": [
+          {
+            "event_id": "g002",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "duplicate_previous_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "honda-01-cb4c08e9985d0d90",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "honda-02-0b723ea5ffbc7d6b",
+      "response": {
+        "events": [
+          {
+            "event_id": "g010",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g012",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g011",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g013",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-01-820bdaf10c00361f",
+      "response": {
+        "events": [
+          {
+            "event_id": "g002",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-02-2ad152c1f66db732",
+      "response": {
+        "events": [
+          {
+            "event_id": "g013",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g015",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g010",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g012",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g011",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g014",
+            "decision": "duplicate_previous_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-03-3ab6d7bb64a47e95",
+      "response": {
+        "events": [
+          {
+            "event_id": "g016",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "spacex-01-526fb37806f3c1fc",
+      "response": {
+        "events": [
+          {
+            "event_id": "g005",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "spacex-02-a0a633c258fe946d",
+      "response": {
+        "events": [
+          {
+            "event_id": "g012",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g011",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g010",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g013",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g015",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g016",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g017",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g014",
+            "decision": "duplicate_previous_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "spacex-03-c04ccdef3fe66cf1",
+      "response": {
+        "events": [
+          {
+            "event_id": "g019",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g018",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "japan_economy-01-6eb56ae9b08384e0",
+      "response": {
+        "events": [
+          {
+            "event_id": "g007",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "japan_economy-02-4fb2ddef0f64d2af",
+      "response": {
+        "events": [
+          {
+            "event_id": "g008",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "6月の消費者物価1.6％上昇、5カ月連続で2％未満",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "6月の消費者物価上昇率は日銀の物価安定目標である2％を5カ月連続で下回った。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f04"
+                    ]
+                  },
+                  {
+                    "text": "コメ類は前年同月比8.7％下落し、ピーク時には前年の約2倍まで上昇していた価格が低下した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f08"
+                    ]
+                  },
+                  {
+                    "text": "ガソリン価格は0.7％下落し、5月の7.0％下落から下落幅が大きく縮小した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f10"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g014",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g015",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g013",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g010",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g012",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g011",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "yoasobi_ikuta-01-552c541bbb793c71",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "asia-01-e4fe964d7b76dd46",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "中国DRAM大手CXMT、最大666億元のIPOで増産へ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "中国メモリー大手CXMTはIPOで最大666億元（約1兆6千億円）を調達し、生産能力の拡大を目指す。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f01"
+                    ]
+                  },
+                  {
+                    "text": "親会社は長鑫科技集団で、新興企業向け市場「科創板」への上場承認を得た。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f02"
+                    ]
+                  },
+                  {
+                    "text": "国内需要が自社の生産能力を大きく上回るとして、資金を増産、世界トップ人材の獲得、研究開発の加速に充てる。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f03"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g004",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "north_america-01-12b438f2f3d0c2d5",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "north_america-02-31320207bf223c76",
+      "response": {
+        "events": [
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    }
+  ]
+}
