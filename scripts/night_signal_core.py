@@ -303,18 +303,21 @@ ENTITY_SCOPE_NOISE_RE = {
     "SoftBank": re.compile(r"\b(?:reliance|grasim).{0,24}\barm\b", re.I),
     "Honda": re.compile(
         r"\b(?:dealer|dealership|charit|body kit|aftermarket|deserves you)\b|"
-        r"(?:販売店|ディーラー|チャリティ|ボディキット)",
+        r"(?:販売店|ディーラー|チャリティ|ボディキット|本田圭佑)|"
+        r"\bKeisuke Honda\b",
         re.I,
     ),
     "F1": re.compile(
         r"(Formula [23]|(?<![A-Za-z0-9])F[23](?![A-Za-z0-9])|"
         r"(?<![A-Za-z0-9])TCR(?![A-Za-z0-9])|Sクラス|限定発売|ニコチン|nicotine|"
-        r"brand new website)",
+        r"brand new website|"
+        r"\bFIA 20\d{2}\b.{0,120}\b(?:Embraer|Anduril|missile|airframer|C-390)\b)",
         re.I,
     ),
     "SpaceX": re.compile(
         r"(^Ex-SpaceX|flight surgeon|we.re all SpaceX investors|"
-        r"fantastic news for SpaceX stock|should investors be worried)",
+        r"fantastic news for SpaceX stock|should investors be worried|"
+        r"\bfalcon breeders?\b|\bfalcon.{0,40}\bauction\b)",
         re.I,
     ),
 }
@@ -1677,6 +1680,8 @@ EDITOR_SOURCE_FACT_NOISE_RE = re.compile(
     r"こちらもおすすめ|おすすめ（自動検索）|【関連記事】|関連キーワード|"
     r"関連トピック|トピックをフォロー|有料会員限定|登録すると続きを|"
     r"権限不足|アプリで開く|ニュースレター|"
+    r"購読ご契約済|購読申し込み|無料トライアル|"
+    r"\bRecord Korea\b.*20\d{2}/\d{1,2}/\d{1,2}|"
     r"Download the .+ App|Performing security verification|"
     r"privacy policy|terms of use",
     re.I,
@@ -1686,6 +1691,20 @@ EDITOR_SOURCE_FACT_NOISE_RE = re.compile(
 def editor_source_fact_is_noise(fact: str) -> bool:
     """Reject publisher chrome before it can become mandatory summary content."""
     return bool(EDITOR_SOURCE_FACT_NOISE_RE.search(fact))
+
+
+def editor_required_source_fact_text(fact: str) -> str:
+    """Remove chrome fragments without discarding adjacent article sentences."""
+    segments = re.split(
+        r"(?<=[。！？!?])\s*|(?<=\.)\s+(?=[A-Z\u3040-\u30ff\u3400-\u9fff])",
+        fact,
+    )
+    material = [
+        segment.strip()
+        for segment in segments
+        if segment.strip() and not editor_source_fact_is_noise(segment)
+    ]
+    return " ".join(material)
 
 
 def editor_source_fact_inventory(
@@ -1749,14 +1768,16 @@ def editor_required_source_facts(
         titles_by_event.setdefault(event_id, record_public_title(record))
         event_facts = required.setdefault(event_id, [])
         for fact in editor_source_fact_inventory(evidence_id, record):
-            if editor_source_fact_is_noise(fact["text"]):
-                continue
             # Keep stable fact ids in the packet inventory, but never make a
             # publisher's related-story/navigation tail mandatory summary
             # content.  Once a tail marker appears, all later extracted
             # sentences belong to the page shell rather than the article.
             if ARTICLE_REQUIRED_FACT_TAIL_RE.search(fact["text"]):
                 break
+            cleaned_fact = editor_required_source_fact_text(fact["text"])
+            if not cleaned_fact:
+                continue
+            fact = {**fact, "text": cleaned_fact}
             # A publisher can inject an isolated promo, article-description,
             # extraction warning, or sentence fragment between real body
             # paragraphs.  Skip that one fact without truncating later body
@@ -7251,6 +7272,31 @@ def self_test() -> None:
         "日本語対応の生成AI基盤を公開した。",
     ):
         fail("OpenAI category accepted a generic AI update")
+    routine_scope_checks = (
+        (
+            "Honda",
+            "Keisuke Honda linked with South Korea manager role",
+            "本田圭佑氏の代表監督就任を報じた。",
+        ),
+        (
+            "F1",
+            "FIA 2026: Embraer and Anduril develop C-390 missile capability",
+            "The aerospace companies signed a cruise missile launch agreement.",
+        ),
+        (
+            "SpaceX",
+            "Falcon breeders auction to be launched on Aug. 5",
+            "Breeders will offer falcons at auction.",
+        ),
+    )
+    for scope_category, scope_title, scope_excerpt in routine_scope_checks:
+        if not record_is_low_importance_routine(
+            configured_category_contracts()[scope_category],
+            scope_title,
+            {"excerpt": scope_excerpt, "source_class": "discovered_media"},
+            "2099-07-24",
+        ):
+            fail(f"{scope_category} category accepted an unrelated identity")
     if category_identity_ok(
         "宇都宮ブレックス",
         "川崎ブレイブサンダースが新アリーナ施策を発表",
