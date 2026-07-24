@@ -190,6 +190,9 @@ def main() -> int:
         "both show ISSUE_DATE",
         "Do not read Evidence",
         "spend review tokens",
+        "current blob SHA",
+        "retry only that same liveness write once",
+        "must never pause",
     ):
         if required.casefold() not in web_runbook.casefold():
             fail(f"Web owner runbook is missing: {required}")
