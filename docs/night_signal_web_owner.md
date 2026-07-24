@@ -63,6 +63,13 @@ Allowed outcomes are started, feedback_success, review_submitted, evidence_missi
 review_retriggered, correction_submitted, and recovery_exhausted. Do not change
 main or any other file when recording liveness.
 
+Immediately before every liveness write, fetch the current liveness file from
+`night-signal-owner-status` and use its current blob SHA. Never reuse a SHA
+from an earlier run or earlier read. If GitHub reports a SHA or ref conflict,
+refetch the current file and retry only that same liveness write once. A
+second failure must stop before reading Evidence. The owner must never pause,
+delete, or edit its own recurring schedule; every run leaves the daily
+schedule active.
 Your first repository action must be writing outcome started to the liveness
 file. This is the GitHub-access canary. Do not read Evidence or perform model
 review before that write succeeds. At the end overwrite the same file with the
