@@ -247,6 +247,10 @@ dated public URLs show the same current date.
   redispatch/watch Pages once, then rerun only publication audit.
 - Current issue is already committed but not public: deploy the committed issue;
   do not enter collection or review.
+- Before each cloud-owner liveness write, fetch the current blob SHA and never
+  reuse a SHA from an earlier run. On a SHA or ref conflict, refetch and retry
+  only that heartbeat once. Neither task may pause, delete, or edit its own
+  recurring schedule.
 - The 17:50 Work-mode Web task is the cloud owner and the 18:25 Work-mode Web task is an audit-first
   recovery heartbeat. A successful earlier review/publication must not be
   repeated. Immediately after its write-permission canary, either task must stop
