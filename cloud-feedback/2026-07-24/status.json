@@ -20,5 +20,20 @@
     "verify": "success"
   },
   "validator_log_tail": "",
-  "recovery_contract": "reuse the same Evidence; change only named rejected request/event entries"
+  "recovery_contract": "reuse the same Evidence; change only named rejected request/event entries",
+  "recall_risk_categories": [
+    "OpenAI",
+    "Honda",
+    "F1",
+    "SpaceX",
+    "日本経済",
+    "北米経済"
+  ],
+  "recall_audit": {
+    "audited_at": "2026-07-24T19:30:00+09:00",
+    "candidate_events": 114,
+    "published_cards": 4,
+    "prior_issue_published_cards": 27,
+    "reason": "body-rich no_material_update decisions were concentrated despite no matching previous_updates"
+  }
 }
