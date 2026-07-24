@@ -1,0 +1,69 @@
+{
+  "contract": "night-signal-cloud-review-correction-v1",
+  "issue_date": "2026-07-24",
+  "evidence_sha256": "c11366a794c94baeb529511f8428b2c7a13fd6c790b1ed8d2b846b89a1ec4882",
+  "cloud_handoff": {
+    "execution_surface": "chatgpt-web-scheduled-task",
+    "reviewed_at": "2026-07-24T19:30:00+09:00",
+    "correction_attempt": 1
+  },
+  "responses": [
+    {
+      "request_id": "north_america-02-31320207bf223c76",
+      "response": {
+        "events": [
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "米国・メキシコ、USMCA第4回協議を9月上旬に開催へ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "米国とメキシコは7月23日、USMCA見直しの第4回協議を9月上旬に開くことで合意した。今週の第3回協議では鉄鋼、アルミニウム、アジアからの輸入代替で進展があった。",
+                    "evidence_ids": ["e004"],
+                    "source_fact_ids": ["e004:f02", "e004:f05"]
+                  },
+                  {
+                    "text": "現行ルールは自動車の75％を北米産とし、40％を時給16ドル以上の労働者が生産することを求める一方、米国は優遇措置の条件として米国産比率50％を要求している。",
+                    "evidence_ids": ["e004"],
+                    "source_fact_ids": ["e004:f07", "e004:f09", "e004:f10"]
+                  },
+                  {
+                    "text": "メキシコは自動車25％、鉄鋼・アルミニウム50％の米通商拡大法232条関税の調整を求めており、米通商代表部は年内の暫定合意と2027年の複雑な制度変更を並行して検討している。",
+                    "evidence_ids": ["e004"],
+                    "source_fact_ids": ["e004:f11", "e004:f12"]
+                  }
+                ],
+                "topic_value_class": "material_schedule_change",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g005",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    }
+  ]
+}
