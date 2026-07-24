@@ -1,15 +1,15 @@
 {
   "contract": "night-signal-cloud-feedback-v1",
   "issue_date": "2026-07-24",
-  "recorded_at": "2026-07-24T11:00:06.971013+00:00",
-  "workflow_run_id": "30088001425",
-  "workflow_run_url": "https://github.com/dq9zt6jpc2-a11y/night-signal/actions/runs/30088001425",
+  "recorded_at": "2026-07-24T11:09:18.871790+00:00",
+  "workflow_run_id": "30088584870",
+  "workflow_run_url": "https://github.com/dq9zt6jpc2-a11y/night-signal/actions/runs/30088584870",
   "recovery_attempt": 0,
-  "status": "failed",
-  "failed_stage": "apply",
+  "status": "success",
+  "failed_stage": null,
   "step_outcomes": {
-    "apply": "failure",
-    "restore": "success",
+    "apply": "skipped",
+    "restore": "skipped",
     "gates": "skipped",
     "base_guard": "skipped",
     "commit": "skipped",
@@ -19,14 +19,7 @@
     "pages_watch": "skipped",
     "verify": "skipped"
   },
-  "validator_log_tail": "{\"issue_date\": \"2026-07-24\", \"review_ref\": \"night-signal-review-2026-07-24\", \"installed_review\": \"/home/runner/work/night-signal/night-signal/state/2026-07-24/editor_review.json\", \"additional_paid_api_requests\": 0}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"OpenAI\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 47, \"grouped_events\": 45, \"publishable_source_events\": 45, \"novel_events\": 37, \"semantic_dedup_pool\": 37, \"model_candidates\": 30}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"SoftBank\", \"expanded_input_records\": 10, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 4, \"grouped_events\": 4, \"publishable_source_events\": 4, \"novel_events\": 3, \"semantic_dedup_pool\": 3, \"model_candidates\": 3}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"Honda\", \"expanded_input_records\": 12, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 15, \"grouped_events\": 14, \"publishable_source_events\": 14, \"novel_events\": 13, \"semantic_dedup_pool\": 13, \"model_candidates\": 13}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"F1\", \"expanded_input_records\": 2, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 26, \"grouped_events\": 24, \"publishable_source_events\": 24, \"novel_events\": 22, \"semantic_dedup_pool\": 22, \"model_candidates\": 16}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"SpaceX\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 32, \"grouped_events\": 32, \"publishable_source_events\": 32, \"novel_events\": 29, \"semantic_dedup_pool\": 29, \"model_candidates\": 19}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"日本経済\", \"expanded_input_records\": 6, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 21, \"grouped_events\": 20, \"publishable_source_events\": 18, \"novel_events\": 17, \"semantic_dedup_pool\": 17, \"model_candidates\": 15}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"YOASOBI / 幾田りら\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 9, \"grouped_events\": 8, \"publishable_source_events\": 8, \"novel_events\": 7, \"semantic_dedup_pool\": 7, \"model_candidates\": 5}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"アジア経済\", \"expanded_input_records\": 6, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 4, \"grouped_events\": 4, \"publishable_source_events\": 4, \"novel_events\": 4, \"semantic_dedup_pool\": 4, \"model_candidates\": 4}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"北米経済\", \"expanded_input_records\": 60, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 13, \"grouped_events\": 13, \"publishable_source_events\": 13, \"novel_events\": 12, \"semantic_dedup_pool\": 12, \"model_candidates\": 9}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"宇都宮ブレックス\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 0, \"grouped_events\": 0, \"publishable_source_events\": 0, \"novel_events\": 0, \"semantic_dedup_pool\": 0, \"model_candidates\": 0}\nNIGHT SIGNAL PLUS REVIEW FAILED: review responses failed deterministic validation: {\"rejected_requests\":[{\"request_id\":\"north_america-01-12b438f2f3d0c2d5\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{},\"malformed_event_results\":0},\"missing_event_ids\":[],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{\"g003\":[\"e006:f07\"]},\"rejected_items\":[],\"unpublishable_items\":[]}]}\n",
-  "recall_risk_categories": [
-    "OpenAI",
-    "Honda",
-    "F1",
-    "SpaceX",
-    "日本経済",
-    "北米経済"
-  ],
+  "validator_log_tail": "",
+  "recall_risk_categories": [],
   "recovery_contract": "reuse the same Evidence; change only named rejected request/event entries"
 }
