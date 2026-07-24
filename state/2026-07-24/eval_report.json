@@ -1,6 +1,6 @@
 {
   "issue_date": "2026-07-24",
-  "evaluated_at_jst": "2026-07-24T18:03:49+09:00",
+  "evaluated_at_jst": "2026-07-24T19:32:37+09:00",
   "passed": true,
   "checks": {
     "all_categories_collected": true,
@@ -44,13 +44,13 @@
     "observed_urls": 961,
     "unavailable_urls": 28,
     "evidence_hosts": 370,
-    "published_updates": 4,
-    "confirmed_facts": 11,
-    "facts_with_sources": 11,
-    "summary_characters": 602,
+    "published_updates": 5,
+    "confirmed_facts": 15,
+    "facts_with_sources": 15,
+    "summary_characters": 853,
     "one_fact_updates": 0,
-    "facts_per_update_milli": 2750,
-    "summary_chars_per_update_milli": 150500,
+    "facts_per_update_milli": 3000,
+    "summary_chars_per_update_milli": 170600,
     "one_fact_update_ratio_milli": 0,
     "body_evidence_records": 719,
     "trusted_body_evidence_records": 131,
@@ -58,7 +58,7 @@
     "multi_source_updates": 1,
     "specialist_source_updates": 0,
     "analysis_updates": 0,
-    "body_backed_cited_urls": 5,
+    "body_backed_cited_urls": 6,
     "non_body_cited_urls": 0,
     "local_horizon_queries": 8,
     "local_horizon_relevant_results": 69,
@@ -1104,16 +1104,22 @@
         }
       ],
       "unavailable_web_seeds": 1,
-      "published_updates": 0,
-      "published_citation_hosts": [],
-      "published_source_classes": [],
+      "published_updates": 1,
+      "published_citation_hosts": [
+        "mezha.net"
+      ],
+      "published_source_classes": [
+        "discovered_media"
+      ],
       "causes": [
         "material_topic_without_trusted_body",
-        "web_seed_unavailable"
+        "web_seed_unavailable",
+        "published_without_specialist_corroboration"
       ],
       "actions": [
         "topic_targeted_specialist_depth_recovery",
-        "bounded_reader_and_source_search_fallback"
+        "bounded_reader_and_source_search_fallback",
+        "retain_specialist_corroboration_priority"
       ]
     },
     "宇都宮ブレックス": {
@@ -5079,7 +5085,7 @@
     "discovery_checks": 0,
     "material_candidates": 69,
     "resolved_candidates": 55,
-    "published_updates": -23,
+    "published_updates": -22,
     "unavailable_urls": -7,
     "review_requests": -2,
     "review_events": -10,
@@ -5091,11 +5097,11 @@
     "scoped_official_sources_observed": 0,
     "expanded_evidence_records": 13,
     "expanded_published_updates": 0,
-    "confirmed_facts": -57,
-    "summary_characters": -3098,
+    "confirmed_facts": -53,
+    "summary_characters": -2847,
     "one_fact_updates": -4,
-    "facts_per_update_milli": 232,
-    "summary_chars_per_update_milli": 13463,
+    "facts_per_update_milli": 482,
+    "summary_chars_per_update_milli": 33563,
     "one_fact_update_ratio_milli": -148,
     "body_evidence_records": -17,
     "trusted_body_evidence_records": 5,
@@ -5103,7 +5109,7 @@
     "multi_source_updates": -7,
     "specialist_source_updates": -4,
     "analysis_updates": 0,
-    "body_backed_cited_urls": -30,
+    "body_backed_cited_urls": -29,
     "non_body_cited_urls": 0,
     "editor_coverage_gap_count": 0,
     "unattempted_editor_coverage_gap_count": 0,
@@ -5174,6 +5180,10 @@
       {
         "category": "北米経済",
         "cause": "material_topic_without_trusted_body"
+      },
+      {
+        "category": "北米経済",
+        "cause": "published_without_specialist_corroboration"
       },
       {
         "category": "北米経済",
@@ -5273,6 +5283,11 @@
       },
       {
         "category": "北米経済",
+        "cause": "published_without_specialist_corroboration",
+        "days": 4
+      },
+      {
+        "category": "北米経済",
         "cause": "web_seed_unavailable",
         "days": 4
       },
@@ -5317,11 +5332,6 @@
         "category": "SpaceX",
         "cause": "published_without_specialist_corroboration",
         "prior_days": 2
-      },
-      {
-        "category": "北米経済",
-        "cause": "published_without_specialist_corroboration",
-        "prior_days": 3
       }
     ],
     "applied_or_recommended_actions": {
@@ -5359,7 +5369,8 @@
       ],
       "北米経済": [
         "topic_targeted_specialist_depth_recovery",
-        "bounded_reader_and_source_search_fallback"
+        "bounded_reader_and_source_search_fallback",
+        "retain_specialist_corroboration_priority"
       ],
       "宇都宮ブレックス": [
         "topic_targeted_specialist_depth_recovery",

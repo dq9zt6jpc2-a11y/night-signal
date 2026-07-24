@@ -4,8 +4,8 @@
   "evidence_sha256": "c11366a794c94baeb529511f8428b2c7a13fd6c790b1ed8d2b846b89a1ec4882",
   "requests": 21,
   "candidate_events": 114,
-  "published_cards": 4,
-  "excluded_events": 110,
+  "published_cards": 5,
+  "excluded_events": 109,
   "model_requests_from_repository": 0,
   "additional_paid_api_requests": 0,
   "category_audit": [
@@ -13,6 +13,8 @@
       "category": "OpenAI",
       "candidate_events": 30,
       "body_events": 28,
+      "body_events_without_previous_updates": 22,
+      "no_material_body_events_without_previous_updates": 19,
       "headline_only_events": 2,
       "decisions": {
         "no_material_update": 19,
@@ -31,13 +33,16 @@
       "depth_recovery_targeted_queries": 8,
       "depth_recovery_specialist_resolved_candidates": 1,
       "depth_recovery_fallback_queries": 4,
-      "low_count_status": "not_low_count",
-      "needs_follow_up": false
+      "low_count_status": "recall_risk",
+      "recall_risk": true,
+      "needs_follow_up": true
     },
     {
       "category": "SoftBank",
       "candidate_events": 3,
       "body_events": 3,
+      "body_events_without_previous_updates": 0,
+      "no_material_body_events_without_previous_updates": 0,
       "headline_only_events": 0,
       "decisions": {
         "duplicate_previous_event": 3
@@ -53,12 +58,15 @@
       "depth_recovery_specialist_resolved_candidates": 0,
       "depth_recovery_fallback_queries": 3,
       "low_count_status": "supported",
+      "recall_risk": false,
       "needs_follow_up": false
     },
     {
       "category": "Honda",
       "candidate_events": 13,
       "body_events": 9,
+      "body_events_without_previous_updates": 8,
+      "no_material_body_events_without_previous_updates": 8,
       "headline_only_events": 4,
       "decisions": {
         "insufficient_evidence": 4,
@@ -75,13 +83,16 @@
       "depth_recovery_targeted_queries": 12,
       "depth_recovery_specialist_resolved_candidates": 0,
       "depth_recovery_fallback_queries": 12,
-      "low_count_status": "limited_evidence",
+      "low_count_status": "recall_risk",
+      "recall_risk": true,
       "needs_follow_up": true
     },
     {
       "category": "F1",
       "candidate_events": 16,
       "body_events": 15,
+      "body_events_without_previous_updates": 12,
+      "no_material_body_events_without_previous_updates": 10,
       "headline_only_events": 1,
       "decisions": {
         "no_material_update": 10,
@@ -98,13 +109,16 @@
       "depth_recovery_targeted_queries": 2,
       "depth_recovery_specialist_resolved_candidates": 0,
       "depth_recovery_fallback_queries": 2,
-      "low_count_status": "supported",
-      "needs_follow_up": false
+      "low_count_status": "recall_risk",
+      "recall_risk": true,
+      "needs_follow_up": true
     },
     {
       "category": "SpaceX",
       "candidate_events": 19,
       "body_events": 12,
+      "body_events_without_previous_updates": 7,
+      "no_material_body_events_without_previous_updates": 7,
       "headline_only_events": 7,
       "decisions": {
         "no_material_update": 7,
@@ -121,13 +135,16 @@
       "depth_recovery_targeted_queries": 8,
       "depth_recovery_specialist_resolved_candidates": 0,
       "depth_recovery_fallback_queries": 5,
-      "low_count_status": "limited_evidence",
+      "low_count_status": "recall_risk",
+      "recall_risk": true,
       "needs_follow_up": true
     },
     {
       "category": "日本経済",
       "candidate_events": 15,
       "body_events": 15,
+      "body_events_without_previous_updates": 10,
+      "no_material_body_events_without_previous_updates": 9,
       "headline_only_events": 0,
       "decisions": {
         "no_material_update": 9,
@@ -144,13 +161,16 @@
       "depth_recovery_targeted_queries": 2,
       "depth_recovery_specialist_resolved_candidates": 1,
       "depth_recovery_fallback_queries": 2,
-      "low_count_status": "supported",
-      "needs_follow_up": false
+      "low_count_status": "recall_risk",
+      "recall_risk": true,
+      "needs_follow_up": true
     },
     {
       "category": "YOASOBI / 幾田りら",
       "candidate_events": 5,
       "body_events": 5,
+      "body_events_without_previous_updates": 2,
+      "no_material_body_events_without_previous_updates": 1,
       "headline_only_events": 0,
       "decisions": {
         "duplicate_previous_event": 3,
@@ -168,12 +188,15 @@
       "depth_recovery_specialist_resolved_candidates": 4,
       "depth_recovery_fallback_queries": 8,
       "low_count_status": "limited_evidence",
+      "recall_risk": false,
       "needs_follow_up": true
     },
     {
       "category": "アジア経済",
       "candidate_events": 4,
       "body_events": 4,
+      "body_events_without_previous_updates": 4,
+      "no_material_body_events_without_previous_updates": 3,
       "headline_only_events": 0,
       "decisions": {
         "no_material_update": 3,
@@ -190,18 +213,22 @@
       "depth_recovery_specialist_resolved_candidates": 0,
       "depth_recovery_fallback_queries": 8,
       "low_count_status": "limited_evidence",
+      "recall_risk": false,
       "needs_follow_up": true
     },
     {
       "category": "北米経済",
       "candidate_events": 9,
       "body_events": 9,
+      "body_events_without_previous_updates": 8,
+      "no_material_body_events_without_previous_updates": 7,
       "headline_only_events": 0,
       "decisions": {
-        "no_material_update": 8,
-        "duplicate_previous_event": 1
+        "no_material_update": 7,
+        "duplicate_previous_event": 1,
+        "publish": 1
       },
-      "final_cards": 0,
+      "final_cards": 1,
       "source_checks": 13,
       "unavailable_sources": 2,
       "resolved_searches": 8,
@@ -211,13 +238,16 @@
       "depth_recovery_targeted_queries": 4,
       "depth_recovery_specialist_resolved_candidates": 0,
       "depth_recovery_fallback_queries": 4,
-      "low_count_status": "limited_evidence",
+      "low_count_status": "recall_risk",
+      "recall_risk": true,
       "needs_follow_up": true
     },
     {
       "category": "宇都宮ブレックス",
       "candidate_events": 0,
       "body_events": 0,
+      "body_events_without_previous_updates": 0,
+      "no_material_body_events_without_previous_updates": 0,
       "headline_only_events": 0,
       "decisions": {},
       "final_cards": 0,
@@ -231,15 +261,27 @@
       "depth_recovery_specialist_resolved_candidates": 0,
       "depth_recovery_fallback_queries": 8,
       "low_count_status": "limited_evidence",
+      "recall_risk": false,
       "needs_follow_up": true
     }
   ],
   "low_count_categories_needing_follow_up": [
+    "OpenAI",
     "Honda",
+    "F1",
     "SpaceX",
+    "日本経済",
     "YOASOBI / 幾田りら",
     "アジア経済",
     "北米経済",
     "宇都宮ブレックス"
+  ],
+  "recall_risk_categories": [
+    "OpenAI",
+    "Honda",
+    "F1",
+    "SpaceX",
+    "日本経済",
+    "北米経済"
   ]
 }
