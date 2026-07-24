@@ -20,7 +20,7 @@ STATE_ROOT = ROOT / "state"
 PACKET_CONTRACT = "codex-plus-editor-v2"
 BRANCH_PREFIX = "night-signal-evidence-"
 MAX_PACKET_BYTES = 20_000_000
-MAX_PART_BYTES = 850_000
+MAX_PART_BYTES = 90_000
 
 
 def fail(message: str) -> None:
@@ -312,6 +312,34 @@ def self_test() -> None:
             fail("handoff part digest is inconsistent")
         if branch_name(issue_date) != "night-signal-evidence-2099-01-02":
             fail("Evidence handoff branch is not deterministic")
+        large_packet = {
+            **packet,
+            "requests": [
+                {
+                    "request_id": f"request-{index}",
+                    "payload": {
+                        "events": [
+                            {
+                                "id": f"event-{index}",
+                                "evidence": [{"body": "x" * 30_000}],
+                            }
+                        ]
+                    },
+                }
+                for index in range(1, 6)
+            ],
+            "metrics": {"requests": 5, "candidate_events": 5},
+        }
+        large_path = Path(temporary_directory) / "large-editor-packet.json"
+        large_path.write_text(json.dumps(large_packet), encoding="utf-8")
+        large_parsed, large_raw = read_packet(large_path, issue_date)
+        large_files = handoff_files(large_parsed, large_raw)
+        large_manifest = json.loads(large_files[handoff_path(issue_date)])
+        if len(large_manifest["parts"]) < 2 or any(
+            int(part["bytes"]) > MAX_PART_BYTES
+            for part in large_manifest["parts"]
+        ):
+            fail("large review packet was not split into bounded parts")
         packet["metrics"]["candidate_events"] = 2
         packet_path.write_text(json.dumps(packet), encoding="utf-8")
         try:
