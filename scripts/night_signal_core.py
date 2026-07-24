@@ -1692,11 +1692,10 @@ def editor_source_fact_inventory(
     evidence_id: str,
     record: dict[str, Any],
 ) -> list[dict[str, str]]:
-    facts = [
-        fact
-        for fact in editor_article_facts(record)
-        if not editor_source_fact_is_noise(fact)
-    ]
+    # Fact ids are part of the immutable review contract.  Keep the complete
+    # inventory stable across validator upgrades and remove publisher chrome
+    # only when selecting mandatory summary facts below.
+    facts = editor_article_facts(record)
     if len(facts) > MAX_EDITOR_SOURCE_FACTS:
         title = record_public_title(record)
 
@@ -1750,6 +1749,8 @@ def editor_required_source_facts(
         titles_by_event.setdefault(event_id, record_public_title(record))
         event_facts = required.setdefault(event_id, [])
         for fact in editor_source_fact_inventory(evidence_id, record):
+            if editor_source_fact_is_noise(fact["text"]):
+                continue
             # Keep stable fact ids in the packet inventory, but never make a
             # publisher's related-story/navigation tail mandatory summary
             # content.  Once a tail marker appears, all later extracted
@@ -6967,14 +6968,22 @@ def self_test() -> None:
         ),
     }
     noisy_inventory = editor_source_fact_inventory("e001", noisy_required_record)
-    noisy_text = " ".join(fact["text"] for fact in noisy_inventory)
+    noisy_required = editor_required_source_facts(
+        [("e001", {**noisy_required_record, "_editor_event_id": "g001"})]
+    )["g001"]
+    noisy_text = " ".join(fact["text"] for fact in noisy_required)
     if (
         "管理機能" not in noisy_text
         or "7月27日" not in noisy_text
         or "Image 1" in noisy_text
         or "Contact this reporter" in noisy_text
+        or [fact["id"] for fact in noisy_inventory]
+        != [
+            f"e001:f{index:02d}"
+            for index in range(1, len(noisy_inventory) + 1)
+        ]
     ):
-        fail("publisher image/contact chrome entered the source fact inventory")
+        fail("publisher chrome filtering changed fact ids or mandatory facts")
     if set(prompt_evidence) != {
         "id",
         "watch_topic_ids",
