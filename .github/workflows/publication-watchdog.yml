@@ -2,19 +2,8 @@ name: Audit and recover NIGHT SIGNAL publication
 run-name: Audit NIGHT SIGNAL publication ${{ inputs.issue_date || github.run_id }}
 
 on:
-  workflow_run:
-    workflows:
-      - NIGHT SIGNAL Evidence Collection
-      - Publish reviewed NIGHT SIGNAL
-    types:
-      - completed
-  schedule:
-    # 18:00 proves the primary Web owner reached GitHub.  The later checks
-    # cover the recovery owner, deterministic recovery, and the hard deadline.
-    - cron: "00 09 * * *"
-    - cron: "35 09 * * *"
-    - cron: "50 09 * * *"
-    - cron: "05 10 * * *"
+  # Automatic watchdog triggers were paused on 2026-09-02 at the owner's request.
+  # Manual audits remain available from the Actions tab.
   workflow_dispatch:
     inputs:
       issue_date:
