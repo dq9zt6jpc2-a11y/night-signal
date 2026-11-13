@@ -16,8 +16,8 @@
     "17:17"
   ],
   "editor_owner_heartbeats_jst": [
-    "17:50",
-    "18:25"
+    "19:30",
+    "20:30"
   ],
   "editor_owner_activation": {
     "persistent_github_write_permission": true,
@@ -26,9 +26,7 @@
   },
   "reliability_report_retention_days": 30,
   "publication_watchdog_heartbeats_jst": [
-    "18:00",
-    "18:35",
-    "18:50",
-    "19:05"
+    "21:15",
+    "22:15"
   ]
 }

@@ -21,9 +21,8 @@ the installed GitHub plugin and connecting it to
 `dq9zt6jpc2-a11y/night-signal`. Do not create production owners as standalone
 Chat-mode tasks; plugins are not available in Chat mode:
 
-- Primary owner: every day at 17:50 JST, after the 17:17 Evidence collection
-  has enough time to finish.
-- Recovery heartbeat: every day at 18:25 JST.
+- Primary owner: every day at 19:30 JST, after the final Evidence handoff.
+- Recovery heartbeat: every day at 20:30 JST.
 
 The second task is audit-first. When the first task succeeded it reads only the
 small status/review files and exits, so it does not repeat the editorial review.
@@ -37,8 +36,8 @@ with **Always allow** (`常に許可`). Then verify that the matching
 or a passing static repository audit is not sufficient proof: no current remote
 heartbeat means the task is unproven, paused, or unable to write GitHub.
 
-Use the following prompt for both tasks. Set `OWNER_ROLE=primary` in the 17:50
-task and `OWNER_ROLE=recovery` in the 18:25 task. The small, separate heartbeat
+Use the following prompt for both tasks. Set `OWNER_ROLE=primary` in the 19:30
+task and `OWNER_ROLE=recovery` in the 20:30 task. The small, separate heartbeat
 lets the repository distinguish a missing review from a task that never ran,
 was paused, or lost GitHub permission.
 
@@ -48,7 +47,7 @@ plugin and the repository dq9zt6jpc2-a11y/night-signal. Never use local files,
 Computer Use, a browser UI, GitHub Models, the OpenAI API, Copilot, or another
 paid service.
 
-OWNER_ROLE is primary for the 17:50 task and recovery for the 18:25 task. Reject
+OWNER_ROLE is primary for the 19:30 task and recovery for the 20:30 task. Reject
 any other value. Set ISSUE_DATE to today's date in Asia/Tokyo. Before every stop,
 update exactly one liveness file on branch night-signal-owner-status:
 cloud-owner/OWNER_ROLE.json. Create that branch from main only if absent. Write:
@@ -96,7 +95,7 @@ from the immutable packet and recheck body-rich `no_material_update` events with
 no matching `previous_updates`. Create one small correction overlay only for
 events whose concrete delta was missed; keep every other response unchanged.
 This post-publication recall challenge must never take the already published
-page offline. If the review exists and feedback is absent at the 18:25 recovery heartbeat, resave the identical
+page offline. If the review exists and feedback is absent at the 20:30 recovery heartbeat, resave the identical
 responses once with cloud_handoff.recovery_attempt=1 and a refreshed reviewed_at
 to retrigger deterministic publication; if recovery_attempt is already 1, stop.
 Do not perform another editorial review. If feedback status is failed and
@@ -133,7 +132,7 @@ or recovery commit in this run.
 If no review exists, fetch
 cloud-evidence/ISSUE_DATE/manifest.json from branch
 night-signal-evidence-ISSUE_DATE. If it is absent, record the liveness outcome
-without creating a review branch; the 18:25 heartbeat will check again. Read every request part listed by
+without creating a review branch; the 20:30 heartbeat will check again. Read every request part listed by
 the manifest exactly once. Follow the manifest policy and the editorial rules
 in docs/night_signal_plus_runbook.md. Account for every request and every event.
 Publish every material new delta without a count target. Exclude current-issue
@@ -142,7 +141,14 @@ and events with no material update. Do not use previous_updates as factual
 Evidence. Do not pad summaries with history, generic company descriptions,
 common knowledge, repetition, or unsupported inference. Preserve all supported
 numbers, dates, scope, conditions, reasons, and results needed to understand an
-accepted event. Quarterly, annual, and final earnings results and material
+accepted event. Required_fact_ids are a minimum validation subset, not the full
+fact inventory. Read every body fact present in each request. For an accepted
+event, retain material qualifiers including approval versus completion, upper
+bounds, IPO conditions, share type, timing, and affected entity even when their
+fact IDs are not marked required. Do not state a high-impact financial claim as
+confirmed when the packet contains only repeated articles from one publisher;
+use insufficient_evidence unless independent support is present. Quarterly,
+annual, and final earnings results and material
 market moves remain eligible.
 
 A source-publication date alone is not an event delta, but a missing explicit
@@ -210,8 +216,8 @@ Pages job alone: `publication_audit.py` must prove that origin `main`, the root
 URL, and the dated URL all agree on the same issue date.
 
 `Audit and recover NIGHT SIGNAL publication` first checks owner activation at
-18:00, then checks recovery/publication at 18:35, 18:50, and 19:05
-JST. It can replay a completed review once after an event-trigger, restore,
+21:15 and 22:15 JST, after the Web owner and recovery heartbeat.
+It can replay a completed review once after an event-trigger, restore,
 commit, push, Pages, or live-reflection failure. It cannot honestly replace a
 missing editorial review without another paid model path, so it reports the
 exact Evidence/owner/review stage instead of publishing unreviewed copy.

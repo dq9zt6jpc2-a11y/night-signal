@@ -167,8 +167,8 @@ def main() -> int:
         "change only the named request/event",
         "do not recollect or re-review",
         "topic_value_class` must be one of",
-        "17:50 Work-mode Web task",
-        "18:25 Work-mode Web task",
+        "19:30 Work-mode Web task",
+        "20:30 Work-mode Web task",
         "official OpenAI",
     ):
         if required.casefold() not in runbook.casefold():
@@ -202,8 +202,8 @@ def main() -> int:
 
     operations = json.loads(OPERATIONS_POLICY.read_text(encoding="utf-8"))
     owner_heartbeats = operations.get("editor_owner_heartbeats_jst")
-    if owner_heartbeats != ["17:50", "18:25"]:
-        fail("Web-owner heartbeat policy must contain only 17:50 and 18:25 JST")
+    if owner_heartbeats != ["19:30", "20:30"]:
+        fail("Web-owner heartbeat policy must contain only 19:30 and 20:30 JST")
     owner_activation = operations.get("editor_owner_activation", {})
     if owner_activation != {
         "persistent_github_write_permission": True,
@@ -214,7 +214,7 @@ def main() -> int:
     if operations.get("reliability_report_retention_days") != 30:
         fail("operational reliability history must be retained for 30 days")
     watchdog_heartbeats = operations.get("publication_watchdog_heartbeats_jst")
-    if watchdog_heartbeats != ["18:00", "18:35", "18:50", "19:05"]:
+    if watchdog_heartbeats != ["21:15", "22:15"]:
         fail("publication watchdog policy drifted from the bounded recovery window")
     expected_watchdog_minutes = sorted(
         timing.minutes(timing.parse_clock(value)) for value in watchdog_heartbeats

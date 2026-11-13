@@ -1674,6 +1674,11 @@ def editor_article_facts(record: dict[str, Any]) -> list[str]:
 
 MAX_EDITOR_SOURCE_FACTS = 16
 MAX_REQUIRED_SOURCE_FACTS_PER_EVENT = 3
+MATERIAL_QUALIFIER_RE = re.compile(
+    r"条件|前提|ただし|限り|普通株|優先株|IPO価格|"
+    r"subject to|contingent|provided that|only if|preferred stock|common stock",
+    re.I,
+)
 EDITOR_SOURCE_FACT_NOISE_RE = re.compile(
     r"\[(?:Image|画像)\s*\d+[:：]|"
     r"Contact this reporter|personal email address|"
@@ -1805,10 +1810,12 @@ def editor_required_source_facts(
         def required_rank(indexed: tuple[int, dict[str, str]]) -> tuple[int, int, int, int]:
             index, fact = indexed
             text = fact["text"]
+            title_overlap = state_contract.text_overlap(title, text)
             return (
                 8 * bool(PUBLICATION_EVENT_RE.search(text))
                 + 7 * bool(MATERIAL_SIGNAL_RE.search(text))
                 + 6 * bool(SPORTS_RESULT_RE.search(text))
+                + 12 * bool(index < 6 and title_overlap >= 2 and MATERIAL_QUALIFIER_RE.search(text))
                 + 4 * min(3, len(numeric_claims(text)))
                 + 3 * bool(
                     re.search(
@@ -1818,10 +1825,10 @@ def editor_required_source_facts(
                         re.I,
                     )
                 )
-                + 2 * min(4, state_contract.text_overlap(title, text))
+                + 2 * min(4, title_overlap)
                 + max(0, 4 - index),
                 len(numeric_claims(text)),
-                state_contract.text_overlap(title, text),
+                title_overlap,
                 -index,
             )
 
@@ -6950,6 +6957,22 @@ def self_test() -> None:
     )["g001"]
     if len(tail_required) != 1 or "unrelated" in tail_required[0]["text"]:
         fail("publisher related-story tail was made mandatory summary content")
+    qualifier_record = {
+        **records[0],
+        "url": "https://example.com/conditional-investment",
+        "title": "TSMCがAnthropicとOpenAIへの投資を承認",
+        "excerpt": (
+            "TSMCはAnthropicとOpenAIにそれぞれ最大5億ドルの投資を承認した。"
+            "Anthropicの普通株はIPO価格で、OpenAIの優先株は別途取得する条件だ。"
+            "関連する3件の投資承認額は計15億ドルとなる。"
+            "TSMCの四半期売上高は1兆4942億台湾ドル、純利益は7630億台湾ドルだった。"
+        ),
+    }
+    qualifier_facts = editor_required_source_facts(
+        [("e001", {**qualifier_record, "_editor_event_id": "g001"})]
+    )["g001"]
+    if not any("IPO価格" in fact["text"] and "優先株" in fact["text"] for fact in qualifier_facts):
+        fail("material investment conditions were omitted from required source facts")
     embedded_chrome_record = {
         **records[0],
         "url": "https://example.com/article-with-embedded-chrome",
