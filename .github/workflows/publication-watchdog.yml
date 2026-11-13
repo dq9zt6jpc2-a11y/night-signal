@@ -2,8 +2,14 @@ name: Audit and recover NIGHT SIGNAL publication
 run-name: Audit NIGHT SIGNAL publication ${{ inputs.issue_date || github.run_id }}
 
 on:
-  # Automatic watchdog triggers were paused on 2026-09-02 at the owner's request.
-  # Manual audits remain available from the Actions tab.
+  workflow_run:
+    workflows:
+      - Publish reviewed NIGHT SIGNAL
+    types:
+      - completed
+  schedule:
+    - cron: "15 12 * * *"
+    - cron: "15 13 * * *"
   workflow_dispatch:
     inputs:
       issue_date:
@@ -157,7 +163,7 @@ jobs:
             exit 1
           fi
           NOW_JST="$(TZ=Asia/Tokyo date +%H%M)"
-          if [[ "$GITHUB_EVENT_NAME" == "schedule" && "$STAGE" == "review_missing_after_owner_heartbeat" && "$NOW_JST" -ge 1830 ]]; then
+          if [[ "$GITHUB_EVENT_NAME" == "schedule" && "$STAGE" == "review_missing_after_owner_heartbeat" && "$NOW_JST" -ge 2100 ]]; then
             echo "NIGHT SIGNAL Web owner started but did not submit a review by the recovery checkpoint." >&2
             echo "stage=$STAGE" >&2
             echo "No Evidence recollection or model review was repeated." >&2
