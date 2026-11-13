@@ -24,8 +24,8 @@ NIGHT SIGNALは、各カテゴリの情報を広く確認し、根拠のある�
 - 参照元が薄い時は文章を膨らませない。
 - 画像、図、表は文章だけでは重要情報を伝えにくい場合だけ使う。
 - 承認待ちで停止しない。
-- JST当日号を19:00までに固定URLへ公開する。
-- 19:00以降の通常情報は翌日号へ送り、緊急性と影響度が特に高い変化だけ
+- JST当日号を22:30までに固定URLへ公開する。
+- 22:30以降の通常情報は翌日号へ送り、緊急性と影響度が特に高い変化だけ
   当日追記する。
 - 前日号を当日号として再公開しない。
 - 新規性は直前号との差分を必ず確認し、さらに前2号を既知情報の補助履歴として使う。
@@ -222,16 +222,15 @@ JSON responseは`night_signal_plus_editor.py`が全request、全event、Evidence
 公開時刻は`config/night_signal_operations.json`だけが所有する。16:45以降のGitHub Actions
 heartbeatはWeb Evidenceとcompact packetだけを収集し、既存artifactがあれば再収集せず、
 AI、commit、Pages処理を行わない。GitHub pluginを明示したChatGPT Web Work modeの
-primary ownerは17:50、recovery ownerは18:25にaudit-firstで起動し、最新の有効packetを
+primary ownerは19:30、recovery ownerは20:30にaudit-firstで起動し、最新の有効packetを
 一度だけreviewする。各ownerは最初に`started` heartbeatを書き、GitHub writeが失敗した場合は
 review tokenを使わず停止する。review branchのpushを
 受けたGitHub Actionsが検証・commit・Pages公開を行う。後続回は先行回が成功済みなら
 小さいstatusだけを確認して即終了する。
 未公開の場合も、active collectorを重複dispatchせず、Evidence、review、Issue、commit、Pagesの
-完了済み段階を順に再利用する。19:00以降は通常の日次処理を新規開始しない。
+完了済み段階を順に再利用する。22:30以降は通常の日次処理を新規開始しない。
 
-18:00のGitHub Actions watchdogはprimary ownerのGitHub到達を検証する。18:35、18:50、
-19:05のwatchdogは、review後のevent trigger欠落、restore、
+21:15、22:15、22:45のGitHub Actions watchdogは、ownerの到達とreview後のevent trigger欠落、restore、
 commit、push、Pages、公開反映だけを同じreviewから一度復旧する。review自体がない場合は
 AIの代替生成をせず、Evidence欠落、Web owner heartbeat欠落、task停止・権限不足を区別して
 失敗を明示する。Web taskの当日heartbeat、review、最終publication auditは別の証拠とし、
@@ -311,7 +310,7 @@ Issue契約だけを安定させる。
 - root URLとdated URLの日付・内容
 - 公開Issueの根拠URLと詳細リンク
 
-19:00を超えた公開、当日号の欠落、古い号の再表示は失敗として扱う。
+22:30を超えた公開、当日号の欠落、古い号の再表示は失敗として扱う。
 
 ## 10. 禁止事項
 

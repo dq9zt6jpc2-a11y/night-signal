@@ -30,6 +30,7 @@ def minutes(value: time) -> int:
 class TimingPolicy:
     timezone: str
     publication_deadline: time
+    collection_window_anchor: time
     build_timeout_minutes: int
     pages_timeout_minutes: int
     workflow_overhead_budget_minutes: int
@@ -49,7 +50,7 @@ class TimingPolicy:
     @property
     def final_collection_not_before(self) -> time:
         value = (
-            minutes(self.publication_deadline)
+            minutes(self.collection_window_anchor)
             - self.runtime_budget_minutes
             - self.deadline_safety_margin_minutes
         )
@@ -59,7 +60,7 @@ class TimingPolicy:
 
     @property
     def latest_full_collection_start(self) -> time:
-        value = minutes(self.publication_deadline) - self.runtime_budget_minutes
+        value = minutes(self.collection_window_anchor) - self.runtime_budget_minutes
         if value < 0:
             raise ValueError("publication runtime budget crosses the previous day")
         return time(hour=value // 60, minute=value % 60)
@@ -88,6 +89,7 @@ def load_policy(path: Path = CONFIG_PATH) -> TimingPolicy:
     policy = TimingPolicy(
         timezone=str(value.get("timezone", "")),
         publication_deadline=parse_clock(str(value.get("publication_deadline", ""))),
+        collection_window_anchor=parse_clock(str(value.get("collection_window_anchor", ""))),
         build_timeout_minutes=positive_int(
             value.get("build_timeout_minutes"), "build_timeout_minutes"
         ),
@@ -115,6 +117,8 @@ def load_policy(path: Path = CONFIG_PATH) -> TimingPolicy:
         ),
     )
     ZoneInfo(policy.timezone)
+    if minutes(policy.publication_deadline) <= minutes(policy.collection_window_anchor):
+        raise ValueError("publication deadline must follow collection window anchor")
     heartbeat_minutes = [minutes(item) for item in policy.schedule_heartbeats_jst]
     if heartbeat_minutes != sorted(set(heartbeat_minutes)):
         raise ValueError("schedule_heartbeats_jst must be unique and ordered")
@@ -234,7 +238,8 @@ def self_test() -> None:
         "2099-01-01T16:44:00+09:00": "wait",
         "2099-01-01T16:45:00+09:00": "run",
         "2099-01-01T18:59:00+09:00": "run",
-        "2099-01-01T19:00:00+09:00": "missed",
+        "2099-01-01T19:00:00+09:00": "run",
+        "2099-01-01T22:30:00+09:00": "missed",
     }
     for raw, expected in cases.items():
         actual = scheduled_decision(datetime.fromisoformat(raw).astimezone(zone), policy)
@@ -242,7 +247,7 @@ def self_test() -> None:
             raise SystemExit(f"timing decision mismatch: {raw}: {actual} != {expected}")
     if decision(datetime.now(zone), "workflow_dispatch", policy) != "run":
         raise SystemExit("manual recovery must not be mistaken for a scheduled heartbeat")
-    missed = datetime.fromisoformat("2099-01-01T19:30:00+09:00").astimezone(zone)
+    missed = datetime.fromisoformat("2099-01-01T22:45:00+09:00").astimezone(zone)
     if workflow_decision(
         missed,
         "schedule",
