@@ -1,6 +1,7 @@
 {
   "timezone": "Asia/Tokyo",
-  "publication_deadline": "19:00",
+  "publication_deadline": "22:30",
+  "collection_window_anchor": "19:00",
   "build_timeout_minutes": 70,
   "pages_timeout_minutes": 20,
   "workflow_overhead_budget_minutes": 15,
@@ -27,6 +28,7 @@
   "reliability_report_retention_days": 30,
   "publication_watchdog_heartbeats_jst": [
     "21:15",
-    "22:15"
+    "22:15",
+    "22:45"
   ]
 }

@@ -2,7 +2,8 @@
 
 ## Objective and fixed priorities
 
-Publish the current JST issue automatically by 19:00 every evening. The priority order is:
+Publish the current JST issue automatically by 22:30 every evening. Keep the
+existing 16:45 final Evidence collection window. The priority order is:
 
 1. coverage of every configured category and watch topic;
 2. evidence grounding, novelty precision, and complete Japanese summaries;

@@ -10,6 +10,7 @@ on:
   schedule:
     - cron: "15 12 * * *"
     - cron: "15 13 * * *"
+    - cron: "45 13 * * *"
   workflow_dispatch:
     inputs:
       issue_date:
