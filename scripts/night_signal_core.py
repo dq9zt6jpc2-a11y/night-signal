@@ -300,6 +300,7 @@ F1_COMPETITION_IDENTITY_RE = re.compile(
     re.I,
 )
 ENTITY_SCOPE_NOISE_RE = {
+    "OpenAI": re.compile(r"\bNational Codex Committee\b", re.I),
     "SoftBank": re.compile(r"\b(?:reliance|grasim).{0,24}\barm\b", re.I),
     "Honda": re.compile(
         r"\b(?:dealer|dealership|charit|body kit|aftermarket|deserves you)\b|"
@@ -1452,6 +1453,8 @@ def reader_public_copy_ok(text: str, *, kind: str) -> bool:
 
 def category_identity_ok(category_label: str, title: str, summary: str) -> bool:
     category = configured_category_contracts().get(category_label, {})
+    if category_label == "OpenAI" and ENTITY_SCOPE_NOISE_RE["OpenAI"].search(title):
+        return False
     if not category.get("allow_sports_results", False) and SPORTS_RESULT_RE.search(title):
         return False
     terms = category_identity_terms(category_label)
@@ -7296,6 +7299,11 @@ def self_test() -> None:
     ):
         fail("OpenAI category accepted a generic AI update")
     routine_scope_checks = (
+        (
+            "OpenAI",
+            "Kenya establishes a National Codex Committee",
+            "The new committee coordinates food standards.",
+        ),
         (
             "Honda",
             "Keisuke Honda linked with South Korea manager role",
