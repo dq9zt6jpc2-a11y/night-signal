@@ -111,28 +111,29 @@ jobs:
             --artifact-name "night-signal-state-$ISSUE_DATE" \
             --github-output "$GITHUB_OUTPUT"
 
-      - name: Enforce publication deadline
-        if: ${{ steps.timing.outputs.action == 'missed' && steps.current_publication.outputs.published != 'true' && steps.evidence_artifact.outputs.artifact_ready != 'true' }}
-        run: |
-          echo "The 22:30 JST publication deadline passed before a usable Evidence artifact was available." >&2
-          exit 1
-
-      - name: Reuse completed Evidence without recollection
-        if: ${{ steps.current_publication.outputs.published != 'true' && steps.evidence_artifact.outputs.artifact_ready == 'true' }}
-        run: |
-          echo "Reusable final Evidence artifact ${{ steps.evidence_artifact.outputs.artifact_id }} is already available."
-          echo "Skipping duplicate web collection."
-
       - name: Restore reusable Evidence for a missing cloud handoff
+        id: validated_evidence
         if: ${{ steps.current_publication.outputs.published != 'true' && steps.evidence_artifact.outputs.artifact_ready == 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          python3 scripts/night_signal_review_artifact.py "$ISSUE_DATE" --restore-only
+          if python3 scripts/night_signal_review_artifact.py "$ISSUE_DATE" --restore-only; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+            echo "Validated final Evidence was restored without recollection."
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "Artifact metadata matched, but its contents failed final Evidence validation." >&2
+          fi
+
+      - name: Enforce publication deadline
+        if: ${{ steps.timing.outputs.action == 'missed' && steps.current_publication.outputs.published != 'true' && steps.validated_evidence.outputs.ready != 'true' }}
+        run: |
+          echo "The publication deadline passed before a valid final Evidence artifact was available." >&2
+          exit 1
 
       - name: Collect complete web Evidence and prepare the Plus review packet
         id: packet
-        if: ${{ steps.timing.outputs.action == 'run' && steps.current_publication.outputs.published != 'true' && steps.evidence_artifact.outputs.artifact_ready != 'true' }}
+        if: ${{ steps.timing.outputs.action == 'run' && steps.current_publication.outputs.published != 'true' && steps.validated_evidence.outputs.ready != 'true' }}
         run: |
           python3 scripts/night_signal_collect.py "$ISSUE_DATE"
           python3 scripts/night_signal_plus_editor.py "$ISSUE_DATE" --prepare --output "state/$ISSUE_DATE/editor_packet.json"
@@ -143,8 +144,23 @@ jobs:
           git diff --check
           echo "created=true" >> "$GITHUB_OUTPUT"
 
+      - name: Validate final Evidence before naming it reusable
+        id: final_packet
+        if: ${{ steps.packet.outputs.created == 'true' }}
+        run: |
+          if python3 scripts/night_signal_review_artifact.py "$ISSUE_DATE" --check-local-final; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            status=$?
+            if (( status == 2 )); then
+              echo "ready=false" >> "$GITHUB_OUTPUT"
+            else
+              exit "$status"
+            fi
+          fi
+
       - name: Save the complete Evidence and compact review packet
-        if: ${{ always() && steps.packet.outputs.created == 'true' }}
+        if: ${{ always() && steps.final_packet.outputs.ready == 'true' }}
         uses: actions/upload-artifact@v7.0.1
         with:
           name: night-signal-state-${{ env.ISSUE_DATE }}
@@ -169,12 +185,12 @@ jobs:
           compression-level: 6
 
       - name: Publish the immutable PC-independent review handoff
-        if: ${{ steps.current_publication.outputs.published != 'true' && (steps.packet.outputs.created == 'true' || steps.evidence_artifact.outputs.artifact_ready == 'true') }}
+        if: ${{ steps.current_publication.outputs.published != 'true' && (steps.final_packet.outputs.ready == 'true' || steps.validated_evidence.outputs.ready == 'true') }}
         run: |
           python3 scripts/night_signal_cloud_handoff.py "$ISSUE_DATE" --publish
 
       - name: Report zero-cost collection boundary
-        if: ${{ steps.current_publication.outputs.published != 'true' && (steps.packet.outputs.created == 'true' || steps.evidence_artifact.outputs.artifact_ready == 'true') }}
+        if: ${{ steps.current_publication.outputs.published != 'true' && (steps.final_packet.outputs.ready == 'true' || steps.validated_evidence.outputs.ready == 'true') }}
         run: |
           echo "Evidence and every distinct candidate event are ready on the immutable cloud handoff branch."
           echo "Repository model API requests: 0"

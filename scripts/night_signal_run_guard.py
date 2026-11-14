@@ -252,7 +252,7 @@ def main() -> int:
     if duplicate_of:
         print(f"Queued duplicate of owner run {duplicate_of}; model work will be skipped.")
     if artifact_id:
-        print(f"Reusable final Evidence artifact {artifact_id} is already available.")
+        print(f"Evidence artifact candidate {artifact_id} found; content validation follows.")
     return 0
 
 
