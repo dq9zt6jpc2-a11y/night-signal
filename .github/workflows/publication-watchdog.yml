@@ -157,6 +157,12 @@ jobs:
             exit 0
           fi
           STAGE="${{ steps.final.outputs.stage }}"
+          if [[ "$STAGE" == "review_correction_exhausted" ]]; then
+            echo "NIGHT SIGNAL review correction failed; publication needs an operator before the deadline." >&2
+            echo "stage=$STAGE" >&2
+            echo "The watchdog cannot repair unsupported editorial claims without another reviewed correction." >&2
+            exit 1
+          fi
           if [[ "$GITHUB_EVENT_NAME" == "schedule" && "$STAGE" == "review_missing_owner_heartbeat_missing" ]]; then
             echo "NIGHT SIGNAL Web owner did not prove GitHub access at the scheduled checkpoint." >&2
             echo "stage=$STAGE" >&2
