@@ -177,7 +177,9 @@ def validate_download(directory: Path, issue_date: str) -> tuple[Path, Path, Pat
         raise ValueError("artifact issue date does not match")
     checked = datetime.fromisoformat(str(evidence.get("checked_at_jst")))
     final_not_before = publication_timing.load_policy().final_collection_not_before
-    if checked.tzinfo is None or checked.astimezone(JST).time() < final_not_before:
+    if checked.tzinfo is None or checked.astimezone(JST).date().isoformat() != issue_date:
+        raise ValueError("artifact collection date does not match issue date")
+    if checked.astimezone(JST).time() < final_not_before:
         raise ValueError(
             "artifact is not final Evidence from "
             f"{final_not_before.strftime('%H:%M')} JST or later"
@@ -188,6 +190,24 @@ def validate_download(directory: Path, issue_date: str) -> tuple[Path, Path, Pat
     if packet.get("contract") != "codex-plus-editor-v2":
         raise ValueError("artifact uses an unknown Plus review contract")
     return evidence_path, packet_path, eval_path if eval_path.exists() else None
+
+
+def local_final_status(directory: Path, issue_date: str) -> int:
+    """Return 0 for final Evidence, 2 for an early snapshot, 1 for invalid data."""
+    try:
+        evidence = json.loads((directory / "evidence.json").read_text(encoding="utf-8"))
+        checked = datetime.fromisoformat(str(evidence.get("checked_at_jst")))
+        if checked.tzinfo is None or checked.astimezone(JST).date().isoformat() != issue_date:
+            raise ValueError("checked_at_jst does not match issue date")
+        if checked.astimezone(JST).time() < publication_timing.load_policy().final_collection_not_before:
+            print("Evidence is preliminary; final collection window has not started")
+            return 2
+        validate_download(directory, issue_date)
+    except (FileNotFoundError, json.JSONDecodeError, ValueError) as exc:
+        print(f"Invalid final Evidence: {exc}", file=__import__("sys").stderr)
+        return 1
+    print("Final Evidence and editor packet validated")
+    return 0
 
 
 def restore_run(run_id: int, issue_date: str, state_root: Path) -> bool:
@@ -346,6 +366,33 @@ def self_test() -> None:
     ]
     if artifact_inventory_run_ids("2099-01-01", artifact_inventory) != [3]:
         fail("failed-run artifact recovery inventory is incorrect")
+    with tempfile.TemporaryDirectory(prefix="night-signal-final-test-") as temporary:
+        directory = Path(temporary)
+        evidence_path = directory / "evidence.json"
+        packet_path = directory / "editor_packet.json"
+        evidence = {
+            "issue_date": "2099-01-01",
+            "checked_at_jst": "2099-01-01T08:37:00+09:00",
+        }
+        evidence_path.write_text(json.dumps(evidence), encoding="utf-8")
+        packet = {
+            "issue_date": "2099-01-01",
+            "contract": "codex-plus-editor-v2",
+            "evidence_sha256": hashlib.sha256(evidence_path.read_bytes()).hexdigest(),
+        }
+        packet_path.write_text(json.dumps(packet), encoding="utf-8")
+        if local_final_status(directory, "2099-01-01") != 2:
+            fail("early Evidence was incorrectly marked final")
+        evidence["checked_at_jst"] = "2099-01-01T16:46:00+09:00"
+        evidence_path.write_text(json.dumps(evidence), encoding="utf-8")
+        packet["evidence_sha256"] = hashlib.sha256(evidence_path.read_bytes()).hexdigest()
+        packet_path.write_text(json.dumps(packet), encoding="utf-8")
+        if local_final_status(directory, "2099-01-01") != 0:
+            fail("valid final Evidence was rejected")
+        packet["contract"] = "codex-plus-editor-v1"
+        packet_path.write_text(json.dumps(packet), encoding="utf-8")
+        if local_final_status(directory, "2099-01-01") != 1:
+            fail("incompatible packet contract was marked final")
     print("NIGHT SIGNAL ARTIFACT SELF-TEST PASSED")
 
 
@@ -354,11 +401,14 @@ def main() -> int:
     parser.add_argument("issue_date", nargs="?", default=datetime.now(JST).date().isoformat())
     parser.add_argument("--state-root", type=Path, default=STATE_ROOT)
     parser.add_argument("--restore-only", action="store_true")
+    parser.add_argument("--check-local-final", action="store_true")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
     if args.self_test:
         self_test()
         return 0
+    if args.check_local_final:
+        return local_final_status(args.state_root / args.issue_date, args.issue_date)
     print(
         json.dumps(
             ensure_artifact(
