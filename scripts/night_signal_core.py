@@ -2417,7 +2417,7 @@ def normalized_financial_amounts(value: str) -> tuple[list[tuple[str, float]], s
         r"(?:(?P<symbol>[$€£])\s*)?"
         r"(?P<number>\d[\d,]*(?:\.\d+)?)\s*"
         r"(?P<unit>trillion|billion|million)"
-        r"(?:\s*(?P<word>dollars?|euros?|pounds?))?",
+        r"(?:\s*(?P<word>dollars?|euros?|pounds?|yen))?",
         re.I,
     )
     english_scale = {"trillion": 1e12, "billion": 1e9, "million": 1e6}
@@ -2431,6 +2431,7 @@ def normalized_financial_amounts(value: str) -> tuple[list[tuple[str, float]], s
         "euros": "EUR",
         "pound": "GBP",
         "pounds": "GBP",
+        "yen": "JPY",
     }
     for match in english.finditer(value):
         marker = (match.group("symbol") or match.group("word") or "").lower()
@@ -2447,7 +2448,7 @@ def normalized_financial_amounts(value: str) -> tuple[list[tuple[str, float]], s
     plain_english = re.compile(
         r"(?:(?P<symbol>[$€£])\s*(?P<symbol_number>\d[\d,]*(?:\.\d+)?)|"
         r"(?P<word_number>\d[\d,]*(?:\.\d+)?)\s*"
-        r"(?P<word>dollars?|euros?|pounds?))",
+        r"(?P<word>dollars?|euros?|pounds?|yen))",
         re.I,
     )
     for match in plain_english.finditer(value):
@@ -6379,6 +6380,21 @@ def self_test() -> None:
         [million_record],
     ):
         fail("financial amount normalization accepted a different amount")
+    yen_record = {
+        **english_record,
+        "title": "Honda raises operating profit outlook",
+        "excerpt": "Honda raised its fiscal 2027 operating-profit forecast to 780 billion yen from 650 billion yen.",
+    }
+    if not fact_supported_by_records(
+        "Hondaは2027年度の営業利益見通しを6,500億円から7,800億円へ引き上げた。",
+        [yen_record],
+    ):
+        fail("translated English yen amounts lost source support")
+    if fact_supported_by_records(
+        "Hondaは2027年度の営業利益見通しを6,500億円から7,900億円へ引き上げた。",
+        [yen_record],
+    ):
+        fail("English yen normalization accepted a different amount")
     plain_currency_record = {
         **english_record,
         "title": "America stopped selling new cars under $20,000",
