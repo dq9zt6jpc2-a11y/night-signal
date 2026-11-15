@@ -880,9 +880,9 @@
       }
     },
     {
-      "watch_topic_id": "dragon_iss",
-      "title": "Starship Flight 15、宇宙帰還機を初キャッチ ブースターは爆発",
-      "summary": "SpaceXはFlight 15で、約22時間の飛行を終えたStarship上段をテキサス発射場のタワーアームで初めて捕捉した。 一方、1段目ブースターは打ち上げ直後に爆発し、上段とブースターの同時回収には失敗した。",
+      "watch_topic_id": "starship_status",
+      "title": "【訂正】Starship Flight 15、上段を初捕捉　ブースターの捕捉は実現せず",
+      "summary": "SpaceXのStarship Flight 15では、上段が約22時間の飛行後、テキサス州Starbaseの発射塔アームで初めて捕捉された。 1段目ブースターはメキシコ湾で爆発し、両段を同時に捕捉する計画は実現しなかった。",
       "section_id": "spacex",
       "category": "SpaceX",
       "source_published_date": "2026-11-15",
@@ -897,26 +897,25 @@
             "url": "https://www.reuters.com/science/spacex-attempt-first-starship-spacecraft-recovery-land-15th-flight-2026-11-13/"
           },
           {
-            "label": "timesfreepress.com",
+            "label": "timesfreepress.com (AP)",
             "url": "https://www.timesfreepress.com/news/2026/nov/14/spacexs-starship-returns-from-orbit-and-is-captured-by-launch-pad-arms-in-a-dramatic-first/"
           }
         ],
-        "summary": "SpaceXはFlight 15で、約22時間の飛行を終えたStarship上段をテキサス発射場のタワーアームで初めて捕捉した。 一方、1段目ブースターは打ち上げ直後に爆発し、上段とブースターの同時回収には失敗した。",
+        "summary": "SpaceXのStarship Flight 15では、上段が約22時間の飛行後、テキサス州Starbaseの発射塔アームで初めて捕捉された。 1段目ブースターはメキシコ湾で爆発し、両段を同時に捕捉する計画は実現しなかった。",
         "summary_basis": {
           "confirmed_facts": [
-            "SpaceXはFlight 15で、約22時間の飛行を終えたStarship上段をテキサス発射場のタワーアームで初めて捕捉した。",
-            "一方、1段目ブースターは打ち上げ直後に爆発し、上段とブースターの同時回収には失敗した。"
+            "SpaceXのStarship Flight 15では、上段が約22時間の飛行後、テキサス州Starbaseの発射塔アームで初めて捕捉された。",
+            "1段目ブースターはメキシコ湾で爆発し、両段を同時に捕捉する計画は実現しなかった。"
           ],
           "fact_sources": [
             {
-              "fact": "SpaceXはFlight 15で、約22時間の飛行を終えたStarship上段をテキサス発射場のタワーアームで初めて捕捉した。",
+              "fact": "SpaceXのStarship Flight 15では、上段が約22時間の飛行後、テキサス州Starbaseの発射塔アームで初めて捕捉された。",
               "source_urls": [
-                "https://www.reuters.com/science/spacex-attempt-first-starship-spacecraft-recovery-land-15th-flight-2026-11-13/",
                 "https://www.timesfreepress.com/news/2026/nov/14/spacexs-starship-returns-from-orbit-and-is-captured-by-launch-pad-arms-in-a-dramatic-first/"
               ]
             },
             {
-              "fact": "一方、1段目ブースターは打ち上げ直後に爆発し、上段とブースターの同時回収には失敗した。",
+              "fact": "1段目ブースターはメキシコ湾で爆発し、両段を同時に捕捉する計画は実現しなかった。",
               "source_urls": [
                 "https://www.timesfreepress.com/news/2026/nov/14/spacexs-starship-returns-from-orbit-and-is-captured-by-launch-pad-arms-in-a-dramatic-first/"
               ]
@@ -927,6 +926,12 @@
             "2026-11-15"
           ]
         }
+      },
+      "correction_record": {
+        "corrected_at_jst": "2026-11-15",
+        "reason": "The initial wording put booster explosion immediately after liftoff; stage separation and return attempt preceded it.",
+        "previous_summary": "SpaceXはFlight 15で、約22時間の飛行を終えたStarship上段をテキサス発射場のタワーアームで初めて捕捉した。 一方、1段目ブースターは打ち上げ直後に爆発し、上段とブースターの同時回収には失敗した。",
+        "verified_source_url": "https://www.timesfreepress.com/news/2026/nov/14/spacexs-starship-returns-from-orbit-and-is-captured-by-launch-pad-arms-in-a-dramatic-first/"
       }
     },
     {
