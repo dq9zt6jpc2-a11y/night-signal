@@ -1,1 +1,816 @@
-{"contract":"night-signal-cloud-review-correction-v1","issue_date":"2026-11-15","evidence_sha256":"6c47efd8c89cc75036c8d2cd8ccb93cf9a5078a1acf4337f28d3397e272b491e","cloud_handoff":{"execution_surface":"chatgpt-web-scheduled-task","reviewed_at":"2026-11-15T20:34:26.864+09:00","correction_attempt":1},"responses":[{"request_id":"openai-01-54e7647dd5106abb","response":{"events":[{"event_id":"g001","decision":"no_material_update","items":[]},{"event_id":"g005","decision":"publish","items":[{"title":"GPT-6 Cyber、長文入力時の料金体系を確認","information_complete":true,"summary_points":[{"text":"GPT-6 Cyberは2026年11月5日に公開され、100万トークン当たりの料金は入力20ドル、出力100ドルだった。","evidence_ids":["e003"],"source_fact_ids":["e003:f01"]},{"text":"11月12日の基調講演は1週間前に公開済みのモデルを再利用しており、運用上の新情報は料金表の詳細にある。","evidence_ids":["e003"],"source_fact_ids":["e003:f05"]},{"text":"入力が27万2,000トークン以下の場合は入力20ドル・出力100ドル、これを超える場合は入力40ドル・出力150ドルとなり、非推奨エイリアスは変更されるまで経路に残る。","evidence_ids":["e003"],"source_fact_ids":["e003:f15"]}],"topic_value_class":"technical_or_product_shift","priority_class":"priority","change_class":"new_event"}]}]}},{"request_id":"openai-02-2995cf0eb3246767","response":{"events":[{"event_id":"g011","decision":"publish","items":[{"title":"OpenAI、脆弱性の検証から修正案作成までをつなぐ「Daybreak」を発表","information_complete":true,"summary_points":[{"text":"Daybreakは複数のAIエージェントがWebアプリやコードベースの脆弱性を調査し、悪用可能性を検証する防御スタックとして発表された。","evidence_ids":["e005"],"source_fact_ids":["e005:f03","e005:f06","e005:f07","e005:f08"]},{"text":"データ侵害の被害額増加と、脅威の検出から封じ込めまでに長時間を要する状況を背景に、脆弱性が放置される期間の短縮を狙う。","evidence_ids":["e005"],"source_fact_ids":["e005:f05"]},{"text":"Defense Factoryは検証結果や第三者ツールの指摘から根本原因を特定し、修正パッチを生成するが、本番反映には人間のエンジニアによる確認と承認が必要となる。","evidence_ids":["e005"],"source_fact_ids":["e005:f11","e005:f12","e005:f13","e005:f14"]}],"topic_value_class":"risk_or_safety_signal","priority_class":"priority","change_class":"new_event"}]}]}},{"request_id":"openai-03-cd57cac774a203e7","response":{"events":[{"event_id":"g018","decision":"no_material_update","items":[]},{"event_id":"g016","decision":"publish","items":[{"title":"OpenAIのCosts API、組織コストデータの反映遅延が継続","information_complete":true,"summary_points":[{"text":"OpenAIは11月13日午前11時10分（米東部時間）、Costs APIへのOrganizationコストデータ公開が遅れる障害を特定した。","evidence_ids":["e005"],"source_fact_ids":["e005:f05","e005:f06","e005:f07"]},{"text":"11月14日午前0時31分（米東部時間）に状況が更新された。","evidence_ids":["e005"],"source_fact_ids":["e005:f01"]},{"text":"更新時点でもコストデータの遅延が見込まれ、影響を受けたサービスの復旧を確認するため監視中だった。","evidence_ids":["e005"],"source_fact_ids":["e005:f02","e005:f08"]},{"text":"影響はCosts APIの組織コストデータ公開に限られ、APIとChatGPTの利用自体には影響しなかった。","evidence_ids":["e005"],"source_fact_ids":["e005:f03","e005:f04"]}],"topic_value_class":"operational_status_change","priority_class":"standard","change_class":"new_event"}]}]}},{"request_id":"softbank-01-1d5e180d2c9e80c7","response":{"events":[{"event_id":"g002","decision":"no_material_update","items":[]}]}},{"request_id":"honda-01-4b40f175dffa456e","response":{"events":[{"event_id":"g003","decision":"publish","items":[{"title":"Honda、3車種で操舵支援ソフトのリコール","information_complete":true,"summary_points":[{"text":"電子パワーステアリングのソフトウェア不具合により、警告なしに操舵支援を失い、衝突リスクが高まる恐れがある。","evidence_ids":["e002"],"source_fact_ids":["e002:f01"]},{"text":"対象は2021〜2025年式のAcura TLX、Acura MDX、Honda Pilotである。","evidence_ids":["e002"],"source_fact_ids":["e002:f02","e002:f03"]},{"text":"対象台数はPilotが38万3,110台、MDXが17万7,100台、TLXが7万5,598台とされる。","evidence_ids":["e002"],"source_fact_ids":["e002:f06"]},{"text":"調査では2026年2月に特定の運転条件で不具合が起きることを確認した。","evidence_ids":["e002"],"source_fact_ids":["e002:f11"]},{"text":"2022年5月22日から2026年10月22日までに保証請求146件と負傷報告1件を把握した。","evidence_ids":["e002"],"source_fact_ids":["e002:f13","e002:f14"]},{"text":"所有者とリース利用者への通知は2026年12月14日を予定する。","evidence_ids":["e002"],"source_fact_ids":["e002:f15"]}],"topic_value_class":"risk_or_safety_signal","priority_class":"priority","change_class":"new_event"}]},{"event_id":"g008","decision":"publish","items":[{"title":"Honda、通期営業利益見通しを引き上げ","information_complete":true,"summary_points":[{"text":"Hondaは2027年3月期の営業利益見通しを6,500億円から7,800億円へ引き上げた。","evidence_ids":["e006"],"source_fact_ids":["e006:f02"]},{"text":"見通しの引き上げは2026年11月10日に発表され、北米のハイブリッド需要と二輪事業がEV再編費用を補った。","evidence_ids":["e006"],"source_fact_ids":["e006:f06"]},{"text":"2026年7〜9月期のEV関連再編費用は4,848億円だった。","evidence_ids":["e006"],"source_fact_ids":["e006:f07"]},{"text":"同四半期の営業利益は前年同期比39%減の1,180億円で、記事が引用した市場予想中央値2,500億円を下回った。","evidence_ids":["e006"],"source_fact_ids":["e006:f08"]},{"text":"2026年4〜9月期の営業利益は6,487億円だった。","evidence_ids":["e006"],"source_fact_ids":["e006:f03","e006:f09"]},{"text":"中国需要の弱さから世界販売見通しは7%減の316万台へ下方修正した。","evidence_ids":["e006"],"source_fact_ids":["e006:f11"]}],"topic_value_class":"market_or_financial_impact","priority_class":"priority","change_class":"new_event"}]}]}},{"request_id":"f1-01-272515c685e88be7","response":{"events":[{"event_id":"g003","decision":"publish","items":[{"title":"F1王者アントネッリ、イタリア大統領に署名ヘルメットを贈呈","information_complete":true,"summary_points":[{"text":"2026年F1王者アンドレア・キミ・アントネッリは11月13日、ローマでセルジョ・マッタレッラ大統領と面会し、署名入りMercedesヘルメットを贈って2027年イタリアGPへ招待した。","evidence_ids":["e001"],"source_fact_ids":["e001:f01","e001:f02","e001:f03","e001:f05"]},{"text":"アントネッリはイタリア人として73年ぶりのF1世界王者となった。","evidence_ids":["e001"],"source_fact_ids":["e001:f06"]},{"text":"イタリア人ドライバーの前回の王者は、1953年に2連覇したAlberto Ascariだった。","evidence_ids":["e001"],"source_fact_ids":["e001:f12"]},{"text":"2027年シーズンはアントネッリがタイトル防衛に挑む年となる。","evidence_ids":["e001"],"source_fact_ids":["e001:f13"]}],"topic_value_class":"cultural_or_audience_signal","priority_class":"standard","change_class":"new_event"}]}]}},{"request_id":"spacex-01-0acd5b3dc3755eeb","response":{"events":[{"event_id":"g005","decision":"no_material_update","items":[]},{"event_id":"g006","decision":"no_material_update","items":[]},{"event_id":"g007","decision":"no_material_update","items":[]}]}},{"request_id":"japan_economy-01-1fff7194dd5a6530","response":{"events":[{"event_id":"g003","decision":"publish","items":[{"title":"日経平均、急落後に6万1,142円へ回復","information_complete":true,"summary_points":[{"text":"日経平均は2026年11月6日に前日比3,643円安の5万7,434円で取引を終え、約半年ぶりに6万円を下回った。","evidence_ids":["e004"],"source_fact_ids":["e004:f01"]},{"text":"米国の半導体株指数は1日で12%下落した。","evidence_ids":["e004"],"source_fact_ids":["e004:f02"]},{"text":"翌週に買い戻しが進み、日経平均は11月13日に6万1,142円まで戻した。","evidence_ids":["e004"],"source_fact_ids":["e004:f03"]},{"text":"記事が参照したAP集計では、11月15日午前5時28分時点の米下院獲得議席は民主党256、共和党169で、残り10議席は未確定だった。","evidence_ids":["e004"],"source_fact_ids":["e004:f05"]}],"topic_value_class":"market_or_financial_impact","priority_class":"priority","change_class":"new_event"}]},{"event_id":"g002","decision":"publish","items":[{"title":"キオクシア、好決算発表後に株価1万円割れ","information_complete":true,"summary_points":[{"text":"キオクシアの2026年4〜9月期は売上収益4兆2,472億円、営業利益3兆2,647億円、純利益2兆1,979億円だった。","evidence_ids":["e005"],"source_fact_ids":["e005:f06"]},{"text":"上場後初の中間配当として1株90円を発表した。","evidence_ids":["e005"],"source_fact_ids":["e005:f07"]},{"text":"2026年10〜12月期見通しは売上収益、営業利益、純利益が市場予想を下回り、前四半期比でほぼ横ばいだった。","evidence_ids":["e005"],"source_fact_ids":["e005:f08"]},{"text":"米国企業の決算と中間選挙を受けて投資家心理が悪化したと記事は説明している。","evidence_ids":["e005"],"source_fact_ids":["e005:f09"]},{"text":"決算前に1万5,000円前後だった株価は発表後に1万円を割り込んだ。","evidence_ids":["e005"],"source_fact_ids":["e005:f10"]},{"text":"日経平均は2026年6月の7万2,000円台から一時5万円台へ下落した。","evidence_ids":["e005"],"source_fact_ids":["e005:f12"]}],"topic_value_class":"market_or_financial_impact","priority_class":"priority","change_class":"new_event"}]},{"event_id":"g004","decision":"no_material_update","items":[]}]}},{"request_id":"yoasobi_ikuta-01-f6fadb35b7684cfe","response":{"events":[{"event_id":"g005","decision":"publish","items":[{"title":"YOASOBI、第77回NHK紅白歌合戦への出場決定","information_complete":true,"summary_points":[{"text":"第77回NHK紅白歌合戦の紅組出場者一覧にYOASOBIが含まれた。","evidence_ids":["e006"],"source_fact_ids":["e006:f03"]},{"text":"出場歌手発表会見の模様はライブ配信され、11月13日23時45分から会見特番も放送された。","evidence_ids":["e006"],"source_fact_ids":["e006:f05"]},{"text":"出場歌手は紅組20組、白組21組で、初出場は紅組2組、白組5組だった。","evidence_ids":["e006"],"source_fact_ids":["e006:f06"]},{"text":"紅白歌合戦は12月31日19時20分から23時45分まで放送予定である。","evidence_ids":["e006"],"source_fact_ids":["e006:f08"]}],"topic_value_class":"cultural_or_audience_signal","priority_class":"priority","change_class":"new_event"}]}]}},{"request_id":"north_america-01-3d0e7a5f29e407f7","response":{"events":[{"event_id":"g007","decision":"publish","items":[{"title":"英・加・ノルウェーの公的投資機関、気候投資で連携","information_complete":true,"summary_points":[{"text":"英国BII、FinDev Canada、ノルウェーNorfundはCOP31で「10by30」イニシアチブの覚書に署名した。","evidence_ids":["e001"],"source_fact_ids":["e001:f04","e001:f07"]},{"text":"3機関は2030年までに少なくとも100億ドルの気候・エネルギー転換投資を支援する目標を掲げた。","evidence_ids":["e001"],"source_fact_ids":["e001:f01","e001:f06"]},{"text":"100億ドルには民間から動員する資金が含まれ、新規の政府資金100億ドルを意味しない。","evidence_ids":["e001"],"source_fact_ids":["e001:f02"]},{"text":"BIIは2025年の新規コミットメントの59%に当たる10.7億ポンドをアフリカへ配分した。","evidence_ids":["e001"],"source_fact_ids":["e001:f09"]},{"text":"FinDev Canadaは2026年6月までに27.2億ドルをコミットし、投資の47%を気候金融に分類した。","evidence_ids":["e001"],"source_fact_ids":["e001:f12"]}],"topic_value_class":"decision_or_policy","priority_class":"standard","change_class":"new_event"}]},{"event_id":"g001","decision":"publish","items":[{"title":"米生産者物価、10月は前年比6.5%　Fed高官が利上げ示唆","information_complete":true,"summary_points":[{"text":"米生産者物価指数は2026年10月に前年同月比6.5%上昇し、前月比では0.3%上昇した。","evidence_ids":["e003"],"source_fact_ids":["e003:f06"]},{"text":"サービス価格上昇の80%超はトラック貨物輸送が占めた。","evidence_ids":["e003"],"source_fact_ids":["e003:f07"]},{"text":"San Francisco連銀のMary Daly総裁は、インフレを2%へ持続的に戻す必要があり、利上げが必要になる可能性が高いと述べた。","evidence_ids":["e003"],"source_fact_ids":["e003:f08","e003:f09"]},{"text":"Fedは2026年9月に政策金利を0.25ポイント引き上げて3.75〜4.00%とし、10月会合では追加利上げを見送った。","evidence_ids":["e003"],"source_fact_ids":["e003:f09"]},{"text":"消費者物価は前月比0.4%、コア指数は3カ月連続で0.3%上昇した。","evidence_ids":["e003"],"source_fact_ids":["e003:f11","e003:f12"]}],"topic_value_class":"market_or_financial_impact","priority_class":"priority","change_class":"new_event"}]},{"event_id":"g004","decision":"no_material_update","items":[]},{"event_id":"g006","decision":"publish","items":[{"title":"Fed、2027年決済サービス料金を平均1.4%引き上げへ","information_complete":true,"summary_points":[{"text":"米連邦準備制度は銀行・信用組合向け決済サービスの2027年料金を発表した。","evidence_ids":["e008"],"source_fact_ids":["e008:f01"]},{"text":"2027年は実費とみなし費用の101.5%を回収する見込みである。","evidence_ids":["e008"],"source_fact_ids":["e008:f03"]},{"text":"既存の成熟したサービスは平均1.4%の値上げとなる。","evidence_ids":["e008"],"source_fact_ids":["e008:f04"]},{"text":"2027年のFOMC会合日程も発表され、年間8回開催する。","evidence_ids":["e008"],"source_fact_ids":["e008:f05","e008:f06"]},{"text":"10月26〜27日の会合は金融政策の討議に充てられ、投票は予定されていない。","evidence_ids":["e008"],"source_fact_ids":["e008:f07"]}],"topic_value_class":"decision_or_policy","priority_class":"standard","change_class":"new_event"}]}]}}]}
+{
+  "contract": "night-signal-cloud-review-correction-v1",
+  "issue_date": "2026-11-15",
+  "evidence_sha256": "6c47efd8c89cc75036c8d2cd8ccb93cf9a5078a1acf4337f28d3397e272b491e",
+  "cloud_handoff": {
+    "execution_surface": "chatgpt-web-scheduled-task",
+    "reviewed_at": "2026-11-15T20:34:26.864+09:00",
+    "correction_attempt": 1
+  },
+  "responses": [
+    {
+      "request_id": "openai-01-54e7647dd5106abb",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "GPT-6 Cyber、長文入力時の料金体系を確認",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "GPT-6 Cyberは2026年11月5日に公開され、100万トークン当たりの料金は入力20ドル、出力100ドルだった。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f01"
+                    ]
+                  },
+                  {
+                    "text": "11月12日の基調講演は1週間前に公開済みのモデルを再利用しており、運用上の新情報は料金表の詳細にある。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f05"
+                    ]
+                  },
+                  {
+                    "text": "記事の料金表では、入力272Kトークン未満は入力20ドル・出力100ドル、超過時は入力40ドル・出力150ドルとされる。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f15"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-02-2995cf0eb3246767",
+      "response": {
+        "events": [
+          {
+            "event_id": "g011",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、脆弱性の検証から修正案作成までをつなぐ「Daybreak」を発表",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Daybreakは複数のAIエージェントがWebアプリやコードベースの脆弱性を調査し、悪用可能性を検証する防御スタックとして発表された。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f03",
+                      "e005:f06",
+                      "e005:f07",
+                      "e005:f08"
+                    ]
+                  },
+                  {
+                    "text": "データ侵害の被害額増加と、脅威の検出から封じ込めまでに長時間を要する状況を背景に、脆弱性が放置される期間の短縮を狙う。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f05"
+                    ]
+                  },
+                  {
+                    "text": "Defense Factoryは検証結果や第三者ツールの指摘から根本原因を特定し、修正パッチを生成するが、本番反映には人間のエンジニアによる確認と承認が必要となる。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f11",
+                      "e005:f12",
+                      "e005:f13",
+                      "e005:f14"
+                    ]
+                  }
+                ],
+                "topic_value_class": "risk_or_safety_signal",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-03-cd57cac774a203e7",
+      "response": {
+        "events": [
+          {
+            "event_id": "g018",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g016",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAIのCosts API、組織コストデータの反映遅延が継続",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "OpenAIは11月13日午前11時10分（米東部時間）、Costs APIへのOrganizationコストデータ公開が遅れる障害を特定した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f05",
+                      "e005:f06",
+                      "e005:f07"
+                    ]
+                  },
+                  {
+                    "text": "記事は米東部時間11月14日12:31 a.m.に更新され、障害の監視継続を伝えた。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e005:f02"
+                    ]
+                  },
+                  {
+                    "text": "更新時点でもコストデータの遅延が見込まれ、影響を受けたサービスの復旧を確認するため監視中だった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f02",
+                      "e005:f08"
+                    ]
+                  },
+                  {
+                    "text": "影響はCosts APIの組織コストデータ公開に限られ、APIとChatGPTの利用自体には影響しなかった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f03",
+                      "e005:f04"
+                    ]
+                  }
+                ],
+                "topic_value_class": "operational_status_change",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "softbank-01-1d5e180d2c9e80c7",
+      "response": {
+        "events": [
+          {
+            "event_id": "g002",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "honda-01-4b40f175dffa456e",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Honda、3車種で操舵支援ソフトのリコール",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "電子パワーステアリングのソフトウェア不具合により、警告なしに操舵支援を失い、衝突リスクが高まる恐れがある。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01"
+                    ]
+                  },
+                  {
+                    "text": "対象は2021〜2025年式のAcura TLX、Acura MDX、Honda Pilotである。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f02",
+                      "e002:f03"
+                    ]
+                  },
+                  {
+                    "text": "対象台数はPilotが383,110台、MDXが177,100台、TLXが75,598台。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f06"
+                    ]
+                  },
+                  {
+                    "text": "調査では2026年2月に特定の運転条件で不具合が起きることを確認した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f11"
+                    ]
+                  },
+                  {
+                    "text": "2022年5月22日から2026年10月22日までに保証請求146件と負傷報告1件を把握した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f13",
+                      "e002:f14"
+                    ]
+                  },
+                  {
+                    "text": "所有者とリース利用者への通知は2026年12月14日を予定する。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f15"
+                    ]
+                  },
+                  {
+                    "text": "保証請求と負傷報告は2022年5月22日から2026年10月22日までに提出された。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f14"
+                    ]
+                  }
+                ],
+                "topic_value_class": "risk_or_safety_signal",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g008",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Honda、通期営業利益見通しを引き上げ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Hondaは2027年度の営業利益見通しを6,500億円から7,800億円へ引き上げた。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f02"
+                    ]
+                  },
+                  {
+                    "text": "見通しの引き上げは2026年11月10日に発表され、北米のハイブリッド需要と二輪事業がEV再編費用を補った。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f06"
+                    ]
+                  },
+                  {
+                    "text": "EV関連の再編費用として4,848億円を計上した。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f07"
+                    ]
+                  },
+                  {
+                    "text": "四半期営業利益は前年同期比39%減の1,180億円となり、記事が引用した市場予想中央値2,500億円を下回った。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f08"
+                    ]
+                  },
+                  {
+                    "text": "上半期の営業利益は6,487億円だった。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f03",
+                      "e006:f09"
+                    ]
+                  },
+                  {
+                    "text": "中国需要の弱さから世界販売見通しは7%減の316万台へ下方修正した。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f11"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-01-272515c685e88be7",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "F1王者アントネッリ、イタリア大統領に署名ヘルメットを贈呈",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "2026年F1王者アンドレア・キミ・アントネッリは11月13日、ローマでセルジョ・マッタレッラ大統領と面会し、署名入りMercedesヘルメットを贈って2027年イタリアGPへ招待した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01",
+                      "e001:f02",
+                      "e001:f03",
+                      "e001:f05"
+                    ]
+                  },
+                  {
+                    "text": "記事はイタリア人のF1世界王者が1953年以来だったと説明している。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f06",
+                      "e001:f12"
+                    ]
+                  },
+                  {
+                    "text": "イタリア人ドライバーの前回の王者は、1953年に2連覇したAlberto Ascariだった。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f12"
+                    ]
+                  },
+                  {
+                    "text": "2027年シーズンはアントネッリがタイトル防衛に挑む年となる。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f13"
+                    ]
+                  }
+                ],
+                "topic_value_class": "cultural_or_audience_signal",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "spacex-01-0acd5b3dc3755eeb",
+      "response": {
+        "events": [
+          {
+            "event_id": "g005",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "japan_economy-01-1fff7194dd5a6530",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "日経平均、急落後に6万1,142円へ回復",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "日経平均は2026年11月6日に前日比3,643円安の5万7,434円で取引を終え、約半年ぶりに6万円を下回った。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f01"
+                    ]
+                  },
+                  {
+                    "text": "米国の半導体株指数は1日で12%下落した。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f02"
+                    ]
+                  },
+                  {
+                    "text": "記事が参照したAP集計は米下院選の獲得議席を民主党256、共和党169と報じ、残る10議席を別に示した。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f05"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "キオクシア、好決算発表後に株価1万円割れ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "記事によると、4～9月期の売上収益は4兆2472億円、営業利益は3兆2647億円、純利益は2兆1979億円だった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f06"
+                    ]
+                  },
+                  {
+                    "text": "上場後初の中間配当として1株90円を発表した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f07"
+                    ]
+                  },
+                  {
+                    "text": "10～12月期見通しは売上収益・営業利益・純利益が市場予想を下回り、前四半期比でほぼ横ばいだった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f08"
+                    ]
+                  },
+                  {
+                    "text": "米国企業の決算と中間選挙を受けて投資家心理が悪化したと記事は説明している。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f09"
+                    ]
+                  },
+                  {
+                    "text": "決算前に1万5,000円前後だった株価は発表後に1万円を割り込んだ。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f10"
+                    ]
+                  },
+                  {
+                    "text": "記事によると、今年6月に7万2000円台だった日経平均は一時5万円台まで下落した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f12"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g004",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "yoasobi_ikuta-01-f6fadb35b7684cfe",
+      "response": {
+        "events": [
+          {
+            "event_id": "g005",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "YOASOBI、第77回NHK紅白歌合戦への出場決定",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "出場歌手発表会見の模様はライブ配信され、11月13日23時45分から会見特番も放送された。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f05"
+                    ]
+                  },
+                  {
+                    "text": "出場歌手は紅組20組、白組21組で、初出場は紅組2組、白組5組だった。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f06"
+                    ]
+                  },
+                  {
+                    "text": "第77回紅白の放送日時として12月31日19時20分～23時45分が案内された。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f08"
+                    ]
+                  }
+                ],
+                "topic_value_class": "cultural_or_audience_signal",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "north_america-01-3d0e7a5f29e407f7",
+      "response": {
+        "events": [
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "BII・FinDev Canada・Norfund、気候投資で連携",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "英国BII、FinDev Canada、ノルウェーNorfundはCOP31で「10by30」イニシアチブの覚書に署名した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f04",
+                      "e001:f07"
+                    ]
+                  },
+                  {
+                    "text": "3機関は2030年までに少なくとも100億ドルの気候・エネルギー転換投資を支援する目標を掲げた。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01",
+                      "e001:f06"
+                    ]
+                  },
+                  {
+                    "text": "100億ドルには民間から動員する資金が含まれ、新規の政府資金100億ドルを意味しない。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f02"
+                    ]
+                  },
+                  {
+                    "text": "BIIは2025年の新規コミットメントの59%に当たる10.7億ポンドをアフリカへ配分した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f09"
+                    ]
+                  },
+                  {
+                    "text": "FinDev Canadaは2026年6月までに27.2億ドルをコミットし、投資の47%を気候金融に分類した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f12"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "米生産者物価、10月は前年比6.5%　Fed高官が利上げ示唆",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "米生産者物価指数は2026年10月に前年同月比6.5%上昇し、前月比では0.3%上昇した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f06"
+                    ]
+                  },
+                  {
+                    "text": "サービス価格上昇の80%超はトラック貨物輸送が占めた。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f07"
+                    ]
+                  },
+                  {
+                    "text": "San Francisco連銀のMary Daly総裁は、インフレを2%へ持続的に戻す必要があり、利上げが必要になる可能性が高いと述べた。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f08",
+                      "e003:f09"
+                    ]
+                  },
+                  {
+                    "text": "Fedは前月に追加利上げを見送り、直前に政策金利を3.75～4.00%へ引き上げていた。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f09"
+                    ]
+                  },
+                  {
+                    "text": "消費者物価は前月比0.4%、コア指数は3カ月連続で0.3%上昇した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f11",
+                      "e003:f12"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g004",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Fed、2027年決済サービス料金を平均1.4%引き上げへ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "米連邦準備制度は銀行・信用組合向け決済サービスの2027年料金を発表した。",
+                    "evidence_ids": [
+                      "e008"
+                    ],
+                    "source_fact_ids": [
+                      "e008:f01"
+                    ]
+                  },
+                  {
+                    "text": "2027年は実費とみなし費用の101.5%を回収する見込みである。",
+                    "evidence_ids": [
+                      "e008"
+                    ],
+                    "source_fact_ids": [
+                      "e008:f03"
+                    ]
+                  },
+                  {
+                    "text": "既存の成熟したサービスは平均1.4%の値上げとなる。",
+                    "evidence_ids": [
+                      "e008"
+                    ],
+                    "source_fact_ids": [
+                      "e008:f04"
+                    ]
+                  },
+                  {
+                    "text": "2027年のFOMC会合日程も発表され、年間8回開催する。",
+                    "evidence_ids": [
+                      "e008"
+                    ],
+                    "source_fact_ids": [
+                      "e008:f05",
+                      "e008:f06"
+                    ]
+                  },
+                  {
+                    "text": "会合は金融政策の討議に充てられ、投票は予定されていない。",
+                    "evidence_ids": [
+                      "e008"
+                    ],
+                    "source_fact_ids": [
+                      "e008:f07"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "manual_revision": {
+    "surface": "codex",
+    "reason": "deterministic publisher rejected 11 items in Web correction; reviewed source facts and repaired only rejected entries",
+    "previous_correction_sha": "d1a84f1f0c78cfc126868427306c6fe6b80442c2"
+  }
+}
