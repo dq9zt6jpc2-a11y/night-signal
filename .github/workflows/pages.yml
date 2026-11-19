@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       issue_date:
-        description: "Today's JST NIGHT SIGNAL issue date. Empty uses today's date."
+        description: "JST issue date. A static redeploy can target the currently public committed issue."
         required: false
         type: string
       redeploy_published:
@@ -46,18 +46,23 @@ jobs:
           REDEPLOY_PUBLISHED: ${{ inputs.redeploy_published || 'false' }}
           DEPLOY_EDITED_FINAL_EVIDENCE: ${{ inputs.deploy_edited_final_evidence || 'false' }}
         run: |
-          ISSUE_DATE="$(python3 scripts/night_signal_publish.py --resolve-issue-date --event-name "$GITHUB_EVENT_NAME" --requested-issue-date "${REQUESTED_ISSUE_DATE:-}")"
-          # Initial publication requires committed evening-fresh state. An
-          # explicit static redeploy first proves that the same issue is already
-          # public, then reuses it without collection or model work.
-          REDEPLOY_ARGS=()
           if [[ "$REDEPLOY_PUBLISHED" == "true" ]]; then
-            REDEPLOY_ARGS+=(--redeploy-published)
+            ISSUE_DATE="${REQUESTED_ISSUE_DATE:?Specify the issue date for a static redeploy}"
+            [[ "$DEPLOY_EDITED_FINAL_EVIDENCE" != "true" ]]
+            [[ "$ISSUE_DATE" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]
+            [[ "$(cat .night-signal-issue-date)" == "$ISSUE_DATE" ]]
+            git diff --exit-code HEAD -- site
+            python3 scripts/publication_audit.py "$ISSUE_DATE" --public-date-only
+            PUBLIC_ROOT="$(curl -fsSL --max-time 20 'https://dq9zt6jpc2-a11y.github.io/night-signal/')"
+            [[ "$PUBLIC_ROOT" == *"NIGHT SIGNAL | $ISSUE_DATE"* ]]
+          else
+            ISSUE_DATE="$(python3 scripts/night_signal_publish.py --resolve-issue-date --event-name "$GITHUB_EVENT_NAME" --requested-issue-date "${REQUESTED_ISSUE_DATE:-}")"
+            REDEPLOY_ARGS=()
+            if [[ "$DEPLOY_EDITED_FINAL_EVIDENCE" == "true" ]]; then
+              REDEPLOY_ARGS+=(--deploy-edited-final-evidence)
+            fi
+            python3 scripts/night_signal_publish.py "$ISSUE_DATE" --deploy-existing "${REDEPLOY_ARGS[@]}" --verification-profile deploy
           fi
-          if [[ "$DEPLOY_EDITED_FINAL_EVIDENCE" == "true" ]]; then
-            REDEPLOY_ARGS+=(--deploy-edited-final-evidence)
-          fi
-          python3 scripts/night_signal_publish.py "$ISSUE_DATE" --deploy-existing "${REDEPLOY_ARGS[@]}" --verification-profile deploy
           cp .nojekyll site/.nojekyll
           echo "ISSUE_DATE=$ISSUE_DATE" >> "$GITHUB_ENV"
 
@@ -76,10 +81,16 @@ jobs:
         uses: actions/deploy-pages@v5
 
       - name: Audit published issue content
+        env:
+          REDEPLOY_PUBLISHED: ${{ inputs.redeploy_published }}
         run: |
           ISSUE_DATE="${ISSUE_DATE:?missing ISSUE_DATE}"
+          AUDIT_ARGS=(--public-content-only)
+          if [[ "$REDEPLOY_PUBLISHED" == "true" ]]; then
+            AUDIT_ARGS+=(--static-correction)
+          fi
           for attempt in 1 2 3 4 5 6 7 8 9 10; do
-            if python3 scripts/night_signal_publish.py "$ISSUE_DATE" --public-audit; then
+            if python3 scripts/publication_audit.py "$ISSUE_DATE" "${AUDIT_ARGS[@]}"; then
               exit 0
             fi
             echo "Public content not current yet; retry ${attempt}/10"

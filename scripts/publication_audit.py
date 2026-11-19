@@ -23,10 +23,11 @@ ROOT = Path(__file__).resolve().parents[1]
 PUBLIC_ROOT = "https://dq9zt6jpc2-a11y.github.io/night-signal/"
 PUBLIC_CONTENT_ONLY_FLAG = "--public-content-only"
 PUBLIC_DATE_ONLY_FLAG = "--public-date-only"
+STATIC_CORRECTION_FLAG = "--static-correction"
 
 
 def issue_date_from_args() -> str:
-    args = [arg for arg in sys.argv[1:] if arg not in {PUBLIC_CONTENT_ONLY_FLAG, PUBLIC_DATE_ONLY_FLAG}]
+    args = [arg for arg in sys.argv[1:] if arg not in {PUBLIC_CONTENT_ONLY_FLAG, PUBLIC_DATE_ONLY_FLAG, STATIC_CORRECTION_FLAG}]
     if args:
         return args[0]
     return jst_today()
@@ -158,7 +159,7 @@ def main() -> int:
         print(f"PUBLIC DATED ISSUE FOUND: {issue_date}")
         return 0
     eligible_dates = timing.eligible_latest_issue_dates()
-    if issue_date not in eligible_dates:
+    if issue_date not in eligible_dates and STATIC_CORRECTION_FLAG not in sys.argv[1:]:
         fail(
             "refusing ineligible publication audit: "
             f"{issue_date} not in {sorted(eligible_dates)}"
