@@ -92,7 +92,7 @@
     ],
     "YOASOBI / 幾田りら": [
       {"label": "YOASOBI official", "url": "https://www.yoasobi-music.jp/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "depth_topic_ids": ["official_release", "staff_social_x_instagram", "live_tour_performance", "music_release_chart_tieup"]},
-      {"label": "Ikuta Lilas official", "url": "https://www.ikuralilas.com/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "depth_topic_ids": ["official_release", "staff_social_x_instagram", "live_tour_performance", "music_release_chart_tieup"]},
+      {"label": "Ikuta Lilas official", "url": "https://lilasikuta.jp/news/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "depth_topic_ids": ["official_release", "staff_social_x_instagram", "live_tour_performance", "music_release_chart_tieup"]},
       {"label": "Billboard Japan", "url": "https://www.billboard-japan.com/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "specialist_media", "depth_topic_ids": ["music_release_chart_tieup"]},
       {"label": "Natalie Music", "url": "https://natalie.mu/music", "source_role": "independent_media_or_data", "channel": "web", "source_class": "specialist_media", "depth_topic_ids": ["official_release", "live_tour_performance", "music_release_chart_tieup"]},
       {"label": "New York Post YOASOBI coverage", "url": "https://nypost.com/2026/04/21/ticket-sales/yoasobi-american-dream-tour-2026-where-to-buy-tickets-best-prices/", "source_role": "independent_media_or_data", "channel": "web", "source_class": "major_media"},
