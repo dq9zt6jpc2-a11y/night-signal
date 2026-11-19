@@ -186,3 +186,9 @@ jobs:
           fi
           echo "Pre-deadline checkpoint: stage=${{ steps.final.outputs.stage }}."
           echo "A later watchdog or Web-owner heartbeat may still complete the same checkpoints."
+
+      - name: Detect a missed issue across JST midnight
+        if: ${{ always() && github.event_name == 'schedule' }}
+        run: |
+          PREVIOUS_ISSUE_DATE="$(TZ=Asia/Tokyo date --date=yesterday +%F)"
+          python3 scripts/publication_audit.py "$PREVIOUS_ISSUE_DATE" --public-date-only

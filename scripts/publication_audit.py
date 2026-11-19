@@ -22,10 +22,11 @@ import publication_timing as timing
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC_ROOT = "https://dq9zt6jpc2-a11y.github.io/night-signal/"
 PUBLIC_CONTENT_ONLY_FLAG = "--public-content-only"
+PUBLIC_DATE_ONLY_FLAG = "--public-date-only"
 
 
 def issue_date_from_args() -> str:
-    args = [arg for arg in sys.argv[1:] if arg != PUBLIC_CONTENT_ONLY_FLAG]
+    args = [arg for arg in sys.argv[1:] if arg not in {PUBLIC_CONTENT_ONLY_FLAG, PUBLIC_DATE_ONLY_FLAG}]
     if args:
         return args[0]
     return jst_today()
@@ -148,6 +149,14 @@ def ensure_public_url(issue_date: str) -> None:
 
 def main() -> int:
     issue_date = issue_date_from_args()
+    if PUBLIC_DATE_ONLY_FLAG in sys.argv[1:]:
+        if datetime.strptime(issue_date, "%Y-%m-%d").date().isoformat() != issue_date:
+            fail(f"invalid issue date: {issue_date}")
+        dated_html = read_public(f"{PUBLIC_ROOT}{issue_date}/index.html")
+        if f"NIGHT SIGNAL | {issue_date}" not in dated_html:
+            fail(f"public dated issue does not show {issue_date}")
+        print(f"PUBLIC DATED ISSUE FOUND: {issue_date}")
+        return 0
     eligible_dates = timing.eligible_latest_issue_dates()
     if issue_date not in eligible_dates:
         fail(
