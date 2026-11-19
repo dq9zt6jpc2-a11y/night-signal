@@ -2489,7 +2489,7 @@ def numeric_literals(value: str) -> set[float]:
 
 def normalized_scaled_numbers(value: str) -> tuple[set[float], str]:
     pattern = re.compile(
-        r"(?<![\d.])((?:\d[\d,]*(?:\.\d+)?\s*(?:兆|億|万|千)\s*)+)"
+        r"(?<![\d.])((?:\d[\d,]*(?:\.\d+)?\s*(?:兆|億|万|千))+)([0-9][0-9,]*)?"
     )
     scale = {"兆": 1e12, "億": 1e8, "万": 1e4, "千": 1e3}
     numbers: set[float] = set()
@@ -2502,7 +2502,7 @@ def normalized_scaled_numbers(value: str) -> tuple[set[float], str]:
                     r"(\d[\d,]*(?:\.\d+)?)\s*(兆|億|万|千)",
                     match.group(1),
                 )
-            )
+            ) + float((match.group(2) or "0").replace(",", ""))
         )
         stripped[match.start() : match.end()] = " " * (match.end() - match.start())
     english_pattern = re.compile(
@@ -6337,6 +6337,10 @@ def self_test() -> None:
         fail("localized decimal commas accepted a different number")
     if numeric_claims("7,5%と1,491,932件") != {7.5, 1491932.0}:
         fail("decimal-comma normalization altered a thousands separator")
+    if numeric_claims("対象は103万3632台") != {1033632.0}:
+        fail("Japanese vehicle count split at the ten-thousand unit")
+    if numeric_claims("103万台、3632台") != {1030000.0, 3632.0}:
+        fail("independent counts were incorrectly joined")
     short_year_record = {
         **english_record,
         "title": "世帯平均所得は25年調査で増加",
