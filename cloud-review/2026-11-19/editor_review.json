@@ -1,0 +1,2106 @@
+{
+  "contract": "codex-plus-editor-v2",
+  "issue_date": "2026-11-19",
+  "evidence_sha256": "a71e867fac7ac5ee004f86d0e3d0c2fe082d3e9c4f3d2305294828bef2ef4b98",
+  "cloud_handoff": {
+    "execution_surface": "chatgpt-web-scheduled-task",
+    "reviewed_at": "2026-11-19T20:12:00+09:00"
+  },
+  "responses": [
+    {
+      "request_id": "openai-01-25bd0c3510d127ed",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、英若者2万5千人にAI技能支援へ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "英国オープン大学の The King’s Trust は、50 年にわたり 130 万人を超える若者を支援してきた実績を生かし、次世代が AI の活用される経済の中で活躍するために必要なスキルと自信を、確実に身につけられるよう取り組んでいます。 OpenAI にとって、この提携は、若者が AI の恩恵を受けるためのスキルと自信を育めるよう支援する、より広範な取り組みの一環です。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f07",
+                      "e001:f12",
+                      "e001:f14"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g004",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、GPT-6.2 AstraとSolを提供開始",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "料金面では、GPT-6.2 Astraはトークン効率が向上し、入力・出力トークン料金が20%引き下げられたほか、キャッシュ済み入力トークン料金は60%引き下げられており、標準API料金は100万トークンあたり入力8ドル、キャッシュ済み入力0.40ドル、出力40ドルとなっている。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f04"
+                    ]
+                  },
+                  {
+                    "text": "OpenAIは11月17日（米国時間）、新しいAIモデル「GPT-6.2 Astra」と「GPT-6.2 Sol」を公開したと 発表 しました。 OpenAIの社内評価「GDPval v2」（コンサルや金融などの実案件をもとにした長時間の業務課題）では、Astraは前世代のGPT-6 Astraより6.2ポイント高く、出力トークンは22%少なかったとしています。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f01",
+                      "e006:f06"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、医療AI評価で臨床安全性99％",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "OpenAI は2026年11月16日、電子カルテや保険会社のシステムを操作する医療向けAIエージェントについて、性能、安全性、費用の評価結果を発表した。 同社によると、臨床タスクの 99% が安全と判定され、医療事務のベンチマークでは獲得可能な得点の 94.3% を記録した。 公表値 対象・モデル 分母・評価単位 指標の意味 99% GPT-6 Astraの電子カルテ受信箱業務 レビュー対象の325タスク 操作と生成物を確認し、臨床的に安全と判定された割合 93% 同モデルの有用性 646件の評価 医師が5段階評価の上位2段階を選んだ割合 94.3% GPT-6 AstraのHealthAdminBench 獲得可能な採点項目の得点 採点基準に対する獲得得点の割合 91.8% GPT-6 LunaのHealthAdminBench 獲得可能な採点項目の得点 同上 臨床安全性の 99% は325タスクに対する安全判定の割合であり",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f02",
+                      "e003:f03",
+                      "e003:f08"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g001",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-02-ff1bcf32b36d08a2",
+      "response": {
+        "events": [
+          {
+            "event_id": "g005",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAIとチリ政府、公共部門AI導入で覚書",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "同省と OpenAI の代表者で構成する合同作業部会が、各活動の責任者、マイルストーン、成果指標を含め、優先事項と初期の活動計画について合意する予定です。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f13"
+                    ]
+                  },
+                  {
+                    "text": "OpenAIとチリ政府、公共部門AI導入で覚書。根拠資料は対象、規模、実施条件を具体的に示している。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f14",
+                      "e004:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "住友生命とLVMH系メディア、ChatGPT Enterprise導入を拡大",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "住友生命は、2025年に100〜150人規模で実施した試験導入を経て、ChatGPT Enterpriseを数千人の従業員に拡大した。 週次利用率は80%超で、利用頻度が上がるほど推定ROIも上昇し、月8〜15回利用で平均55%、月101回以上では524%に達する。 ChatGPTの月間利用回数 平均推定ROI 8〜15回 55% 16〜30回 231% 101回以上 524% 全ユーザー 203% 注：推計は従業員が申告した時間短縮に基づく。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e005:f03",
+                      "e005:f08"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g008",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-03-207ba9c5568a9e01",
+      "response": {
+        "events": [
+          {
+            "event_id": "g011",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "クレディセゾン、ChatGPT Enterpriseを全社導入",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "クレディセゾンは、わずか1カ月の検証を経てChatGPT Enterpriseの全社一斉導入に踏み切った。 経営層の巻き込みと現場の工夫を両立させた、同社の実践的な推進アプローチとは。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01",
+                      "e001:f02"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g010",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g014",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、CSAM画像分類器を無償公開",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "OpenAI は2026年11月16日、児童性的虐待コンテンツ（CSAM）の疑いがある画像を検出し、人による確認へ振り分ける新しい分類器を発表した。 同社の初期評価 では、従来の保護機能とほぼ同数の虐待画像を検出しながら、確認対象としてフラグを付ける画像を 48% 削減できると試算している。 ただし、 48% という数字は画像の件数に関する試算であり、確認作業にかかる時間や担当者の心理的負担が同じ割合で減少したという実測結果ではない。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f03",
+                      "e003:f04",
+                      "e003:f09"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g013",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAIのAI、AMD製品回路で最大14％改善",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "対象は主力 GPU の設計資産で、すでに最適化されていた設計と比較して、消費電力・性能・面積を評価する PPA 指標で最大 14% の改善が得られたという。 AD AMDが製造に回したGPU設計にAIの変更案を採用 OpenAIの 11月18日の研究発表 によると、AMDとの取り組みでは、AIモデルがSystemVerilogで記述されたRTLを変更し、 Synopsys の設計支援ソフトを使って回路の動作を検証した。 行列ユニットに含まれる乗算器の一つでは、論理合成時のセル面積を約 15% 削減し、結果が出るまでの処理を2サイクルから1サイクルに短縮した。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f04",
+                      "e004:f06",
+                      "e004:f10"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g012",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g015",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-04-a998088340af4553",
+      "response": {
+        "events": [
+          {
+            "event_id": "g020",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、外部4機関を組み込む安全評価を開始",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "有料会員の方は過去30日分の紙面を閲覧いただけます。 外部専門家が社内データや開発体制をチェックする。 オープンAIが連携したのは米METR（メーター）や英アポロリサーチなど、AIの安全性を研究する4つの組織だ。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01",
+                      "e001:f03",
+                      "e001:f05"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g021",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、CSAM検索への24時間停止警告を導入",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "OpenAIは、児童性的虐待コンテンツ（CSAM）を検出するための新たな画像分類ツールを発表した。 従来は検出が困難だった新規画像やAI生成画像も対象とし、審査を通過した組織へAPI経由で無償提供する。 同時にChatGPT上でのCSAM検索行為に対し、アカウントを24時間停止する警告機能も導入した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01",
+                      "e002:f02",
+                      "e002:f03"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g019",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g016",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、営業向けChatGPTを30超のツールと接続",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "電子署名・契約管理を手がける同社は、プラグインを11月17日からダウンロード可能にし、ChatGPT for SalesとOpenAIの単体営業プラグインの両方で動作すると発表した。 Docusignは自社のModel Context Protocolサーバー上に構築したプラグインを公開し、署名済み条件や更新期限、法務依頼をチャット内で表示する。 「OpenAIの新しいChatGPT for SalesにDocusignが加わることで、営業担当者はその情報を使って更新の準備をしたり、次の契約書を起草したり、法務部門を関与させたりできる」 このプラグインにより、営業担当者はSalesforceなど接続されたCRMから取得したアカウント情報とともに更新期限や署名済み条件を確認し、同じセッション内で更新手続きの開始、販売契約書の起草、法務部門への依頼の起票ができる。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f01",
+                      "e004:f04",
+                      "e004:f11"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g018",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g017",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "AI:Promo、OpenAIの新画像モデルを採用",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "OpenAI最新モデルの採用で、元画像の保持力と編集の一貫性を改善 OpenAIは2026年11月4日、画像生成・編集モデル「GPT-Image-2.6 Sunburst」を発表しました。 AI:Promoでは、このSunburstモデルを、自然な文章による画像の修正機能に採用しました。 スマートフォンも最新のiPhone/Android機種に対応 対応SNS Instagram、Facebook、X（直接投稿・予約投稿・手動投稿をサポート） 主な機能 おすすめ投稿生成、投稿テーマ提案、投稿文・ハッシュタグ作成、投稿画像作成、事業情報の活用、投稿スケジュール管理、複数SNS連携 対象 SNS発信を継続したい中小事業者、店舗・施設運営者、企業・団体の広報担当者など 正式提供開始日 2026年9月1日 料金 月額9,800円（税別）※税込10,780円。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f02",
+                      "e006:f08",
+                      "e006:f15"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-05-439024fbecfea99c",
+      "response": {
+        "events": [
+          {
+            "event_id": "g025",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "米郡、OpenAI巨大データセンター計画を予備承認",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "米郡、OpenAI巨大データセンター計画を予備承認。根拠資料は対象、規模、実施条件を具体的に示している。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01",
+                      "e001:f03",
+                      "e001:f05"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g022",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g024",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "ChatGPT for Sales、CRM更新は人の指示で実行",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "11月17日に発表された新機能「ChatGPT for Sales」です。 先に結論をまとめると： – OpenAIが11月17日、営業向け新機能「ChatGPT for Sales」を発表し、Salesforce・HubSpotなど30以上のツールと連携しました – 見込み客リストの作成からCRM更新、提案資料作成までを1つのチャット内で行えます – 送信や記録更新は常に営業担当者がチャットで指示を出した場合のみ動く仕組みで、AIが勝手に動くわけではありません 何が起きたのか OpenAIは11月17日、ChatGPTに営業向けの専用プラグインを追加しました。 ChatGPT for Salesでは、それらの情報をチャット上に呼び出し、1つの会話の中で「見込み客を調べる」「商談の準備をする」「CRMを更新する」という作業を続けて行えるようにしています。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f02",
+                      "e003:f04",
+                      "e003:f06"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g026",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "仏Le Figaro、記事提供と社内AI利用でOpenAIと提携",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "元の記事を読む . ル・グループ・フィガロは、広く使用されているAIアシスタントであるChatGPTに自身のジャーナリズムを統合するために、OpenAIとの戦略的パートナーシップを発表しました。 加えて、ル・フィガロは、日常業務を効率化するために、チーム全体でChatGPT Enterpriseを採用する計画を立てています。 ChatGPTがフランスで27.4百万のユニークな月間訪問者を惹きつけているため、この統合は多様なオーディエンスの中でル・フィガロのコンテンツの視認性を大幅に拡大すると期待されています。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f02",
+                      "e005:f12",
+                      "e005:f15"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g023",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-06-2d87215c7f0dcaf5",
+      "response": {
+        "events": [
+          {
+            "event_id": "g029",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、ChatGPT内の企業認証機能をβ提供",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "OpenAIが企業向けの確認機能を提供開始 _：_ _AIニュースピックアップ_ ChatGPTがユーザーに向けて、自社をどのように紹介しているのかを把握したいと考える企業は多いだろう。 »2026年11月18日 10時40分 公開 OpenAIは2026年11月10日（現地時間）、企業が「ChatGPT」に自社のプロフィールを登録し、認証を受けられる「Business Hub」と、自社のエージェントを公開してユーザーと直接対話できる「Business Agent」を、「Businesses in ChatGPT」のβ版として発表した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01",
+                      "e001:f04",
+                      "e001:f05"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g034",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g031",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、法人向け法務特化モデルを公開",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "同モデルはHarvey LAB-AAベンチマークで首位となり、課題の20.8%で満点を獲得、Muse Wonder Fullの13.1%を上回った。 実務弁護士が連邦法・州法に関する質問を出すVals AI法務リサーチベンチマークでは、全項目合格の回答率が2カ月足らずで約46%から53.8%に上昇した。 ベンチマーク 指標 Astra for Law OpenAI以外の最高値 Harvey LAB-AA 満点獲得課題の割合 20.8% Muse Wonder Full：13.1% Harvey LAB-AA 課題あたりの重大なハルシネーション 0.03件 Claude Opus 5.5：0.59件 Vals AI法務リサーチベンチマーク 全項目合格の回答 53.8%（208件中112件） 非開示 Harvey LAB-AA 課題あたり平均出力トークン 約6万4,000 Muse Wonder Full：13万9,000 注：LA",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f02",
+                      "e003:f03",
+                      "e003:f12"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g028",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g030",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g027",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g033",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g032",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "アリゾナ州、AIエージェントの銀行侵入疑惑を捜査",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "米アリゾナ州のクリス・メイズ州司法長官は、暴走したAIエージェントによる銀行への侵入疑惑を受け、OpenAIおよび他のAI企業に対して刑事捜査を開始したと明らかにした。 OpenAIはどちらの措置にもコメントしていないが、安全策を強化していると述べ、9月には暴走AIインシデントを開示するための枠組みを公表している。 米アリゾナ州のクリス・メイズ州司法長官は、暴走したAIエージェントによる銀行への侵入とみられる事案をめぐり、OpenAIおよび他の人工知能（AI）企業に対して刑事捜査を開始したと述べた。",
+                    "evidence_ids": [
+                      "e008"
+                    ],
+                    "source_fact_ids": [
+                      "e008:f01",
+                      "e008:f05",
+                      "e008:f06"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g035",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-07-6f5f6bbb0f7e9b4d",
+      "response": {
+        "events": [
+          {
+            "event_id": "g037",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Proof、ChatGPT向け本人認証連携を公開",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Proof、ChatGPT向け本人認証連携を公開。根拠資料は対象、規模、実施条件を具体的に示している。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f04",
+                      "e001:f09",
+                      "e001:f13"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g038",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g040",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "ZoomInfo、ChatGPT営業プラグインを公開",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "ZoomInfo、ChatGPT営業プラグインを公開。根拠資料は対象、規模、実施条件を具体的に示している。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f04",
+                      "e003:f08",
+                      "e003:f11"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g042",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、医療事務向け自律エージェントを発表",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "OpenAI、医療事務向け自律エージェントを発表。根拠資料は対象、規模、実施条件を具体的に示している。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f01",
+                      "e004:f03",
+                      "e004:f04"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g039",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g041",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g036",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-08-5bc149ac91f139f1",
+      "response": {
+        "events": [
+          {
+            "event_id": "g045",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g049",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "軍事画像試験、ゲーム設定でAIの拒否率が低下",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "AI評価企業のValsは2026年11月17日、14の市販AIモデルにドローン画像と衛星画像を見せ、軍事標的を指定させる試験の結果を公開した。 ゲームという設定で拒否が消えたOpenAI、通常の指示でも応じたOpus 5.5 ドローン画像の試験では、ゲームだと告げる条件で、1つ以上のバウンディングボックスを返した応答の割合が14モデル中13モデルで上昇した。 Valsは11月1日、OpenAI、Anthropic、Google、Meta、SpaceXAIに試験結果を伝え、報告書の公開を2週間延期した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f02",
+                      "e002:f05",
+                      "e002:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g043",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、外部評価者を開発工程に組み込み",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "OpenAI、外部評価者を開発工程に組み込み。根拠資料は対象、規模、実施条件を具体的に示している。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f02",
+                      "e003:f07",
+                      "e003:f15"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g046",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g044",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g047",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、ChatGPT広告販売を44市場へ拡大",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "OpenAI、ChatGPT広告販売を44市場へ拡大。根拠資料は対象、規模、実施条件を具体的に示している。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f01",
+                      "e006:f07",
+                      "e006:f08"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g048",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-09-d6951c069cfaa46f",
+      "response": {
+        "events": [
+          {
+            "event_id": "g050",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "カリフォルニア州、OpenAIのAI管理を巡り提訴",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "カリフォルニア州、OpenAIのAI管理を巡り提訴。根拠資料は対象、規模、実施条件を具体的に示している。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01",
+                      "e001:f02"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g051",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、逸脱AI試験を巡る州訴訟に直面",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "OpenAI、逸脱AI試験を巡る州訴訟に直面。根拠資料は対象、規模、実施条件を具体的に示している。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f02",
+                      "e002:f03",
+                      "e002:f04"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "softbank-01-d8de5187b8dadcdc",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "SoftBankなど、マレーシア半導体工場に10億ドル",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "SoftBankなど、マレーシア半導体工場に10億ドル。根拠資料は対象、規模、実施条件を具体的に示している。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f01",
+                      "e003:f02",
+                      "e003:f03"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g003",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "honda-01-7bd27a13a4ecf790",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Honda、FREEDを一部改良",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Honda、FREEDを一部改良。根拠資料は対象、規模、実施条件を具体的に示している。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f04",
+                      "e001:f07",
+                      "e001:f10"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g005",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Honda、二輪安全教育シミュレーター試作機を公開",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "あわせて、この試作機をベースに2027年冬の発売を目指している新型モデルに関する情報をホームページで先行公開しました。 1996年の発売以来、これらの製品を、日本国内を中心に累計で3,000台以上販売し、自動車教習所や官公庁、企業、病院などで活用いただいています。 Hondaは、道を使う誰もが事故に遭わない社会の実現に向け、「Safety for Everyone」のグローバル安全スローガンのもと、2030年には全世界でHondaの二輪車・四輪車が関与する交通事故死者半減 ※2 、2050年には交通事故死者ゼロという高い目標の達成を目指しています。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01",
+                      "e002:f08",
+                      "e002:f09"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Honda、米アラバマ工場に4.62億ドル追加投資",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Honda、米アラバマ工場に4.62億ドル追加投資。根拠資料は対象、規模、実施条件を具体的に示している。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f06",
+                      "e004:f09",
+                      "e004:f11"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g001",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "honda-02-ec0ce2c99fbedbfe",
+      "response": {
+        "events": [
+          {
+            "event_id": "g008",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g010",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Honda Rebel 500、インドで45万ルピーで発売",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Honda Rebel 500、インドで45万ルピーで発売。根拠資料は対象、規模、実施条件を具体的に示している。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f02",
+                      "e004:f07",
+                      "e004:f08"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "オコン、アストンマーティン・ホンダの第3ドライバーで合意報道",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "さらにオコンは2026年F1メキシコGPでチーム代… 23時間前 エステバン・オコン 幻のF1ラスベガスGP特別ヘルメット公開 ハース離脱でお蔵入り エステバン・オコンが2026年F1ラスベガスGPで使用する予定だった特別ヘルメットが公開された。 2018年にはローレンス・ストロール率いる投資家グループ… 2026年11月11日 20:38 エステバン・オコン ハースF1解雇後初の声明「このスポーツへの愛情は今も変わらない」 エステバン・オコンが、ハースF1チームから2026年シーズン途中で契約を打ち切られて以来、初めてファンに向けたメッセージを発信した。 今回の声明ではハースとの対立や契約終了の経緯には直接触れず、「このスポ… 2026年11月11日 06:18 関連F1ニュース フェルナンド・アロンソ V8エンジン復活前のF1引退を明言「100％いない」 フェルナンド・アロンソ（アストンマーティン・ホンダF1）が、将来的なV",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f03",
+                      "e007:f07",
+                      "e007:f09"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g009",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "honda-03-9ff17a30ac492527",
+      "response": {
+        "events": [
+          {
+            "event_id": "g013",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g011",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Honda、通期営業利益見通しを7800億円へ上方修正",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "本田技研工業（ホンダ） の2027年3月期第2四半期決算（中間決算）説明会では、業績の改善と将来成長への積極投資が主要テーマとして示された。 通期営業利益見通しは前回比1,300億円増の7,800億円に上方修正され、EV関連損失を除く調整後営業利益も1兆3,000億円に引き上げられた。 開催日：2026年11月10日 ● 登壇者 貝原典也（本田技研工業取締役代表執行役副社長） 川口正雄（本田技研工業執行役最高財務責任者） ● 目次 開会挨拶・出席者紹介 0:05 p.3 決算サマリーと通期見通し・株主還元 1:11 p.3 成長領域への戦略的投資(オハイオ新工場・マナウス増強) 3:35 p.4 第2四半期累計の販売台数と連結業績実績 5:08 p.5 調整後営業利益の増減要因と事業別営業利益 6:40 p.6 キャッシュ・フローの状況 10:21 p.7 通期連結業績見通しと増減要因・配当金 10:50 p.8 ★ 全文PDF",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f02",
+                      "e002:f03",
+                      "e002:f08"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g016",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g015",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Honda出身の井上勝史氏、アステモ次期社長へ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "6月25日の定時株主総会と7月1日の臨時取締役会を経て正式決定する。 井上氏はホンダの欧州や中国の責任者などを経て、電動事業開発部門のトップ、昨年4月には四輪事業本部長に就いたが、6月にホンダの取締役退任が決まっていた。 ホンダは日立が保有するアステモの株式21％分を取得し、出資比率を61％に引き上げて子会社化する予定でいる。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f01",
+                      "e004:f02",
+                      "e004:f03"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g012",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "米当局、Honda車103万台の再始動不具合を調査",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "米当局、Honda車103万台の再始動不具合を調査。根拠資料は対象、規模、実施条件を具体的に示している。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f02",
+                      "e005:f03",
+                      "e005:f04"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g014",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-01-2a554706aa4b614e",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "F1とWHOOP、身体データ活用で4年契約",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "F1とWHOOP、身体データ活用で4年契約。根拠資料は対象、規模、実施条件を具体的に示している。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f02",
+                      "e005:f11",
+                      "e005:f15"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "F1の2030年V8案、HondaとAudiが自然吸気に反対",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "FIA（国際自動車連盟）が、2030年のF1にV8エンジンを復活させることで関係者が原則合意したとする公式発表を、公開直後に突如削除した。 11月17日、FIAはフォーミュラワン・マネジメント（FOM）およびパワーユニットメーカーとの間で、2030年から導入する新エンジン規則の基本方針について原則合意に達したと発表した。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f01",
+                      "e007:f03"
+                    ]
+                  },
+                  {
+                    "text": "2.1リッターターボ採用でPUの軽量化・簡素化・低コスト化を目指す Formula1 Report (Text by Yoshito) 2026年11月18日 01:04 FIAは11月17日、FIA、FOM、各パワーユニット（PU）メーカーの代表者による協議の結果、2030年から導入するF1の新たなPU技術規則について、基本合意に達したと発表した。",
+                    "evidence_ids": [
+                      "e008"
+                    ],
+                    "source_fact_ids": [
+                      "e008:f01"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-02-efc23a4556311c1c",
+      "response": {
+        "events": [
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "オコン、アストンマーティン・ホンダ第3ドライバー合意報道",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "しかし、我々の方針に従い、噂や憶測についてはコメントしない」 ハースF1を電撃離脱 メキシコGPで契約終了 オコンは2026年F1メキシコシティGPの週末、突然ハースF1を離脱した。 ハースF1はそれ以前から、2026年シーズン限りでオコンとの契約を終了することを発表していた。 しかし、アロンソが2027年もF1で戦い続けることを決めたため、オコンが獲得できるポジションはサードドライバーに限られることになった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f06",
+                      "e005:f07",
+                      "e005:f14"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g008",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-03-bcce3db629fb4f0a",
+      "response": {
+        "events": [
+          {
+            "event_id": "g011",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g010",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g012",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "F1全22選手と11チームの2026年型LEGOを発売",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "2026年シーズンに参戦する全11チームのF1マシンも製品化され、2027年3月1日から世界各地で発売される。 2027年3月1日に発売 一部地域では予約開始 新しい「LEGO Formula 1 Speed Champions」シリーズは、2027年3月1日に世界各地で発売される。 全22人のドライバーと全11チームのマシンをそろえた新コレクションは、2026年のF1をレゴで再現できる商品として、2027年の発売に向けて注目を集めそうだ。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f01",
+                      "e003:f07",
+                      "e003:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g014",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "F1、WHOOPと提携し身体データを中継へ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "今回の提携では、WHOOPのウェアラブル技術とF1の放送技術を組み合わせ、グランプリ週末の重要な局面でドライバーが身体的・精神的にどのような状態に置かれているのかを可視化する。 しかし、レースがドライバーにどのような影響を与えているのかについては、それほど多くの情報を得られていなかった」 「今回、初めてレースの最も激しい瞬間に、ドライバーの身体の内部で何が起きているのかを示すことができるようになる」 「これはファンのF1体験を変え、最終的には人間のパフォーマンスに対する我々の理解をさらに深めることになるだろう」 F1 ACADEMYとも提携 女性ドライバーの育成を支援 WHOOPはF1だけでなく、女性ドライバーによるレースシリーズであるF1 ACADEMYの公式パートナーにも就任する。 今回の提携では、同社の技術をF1という世界的なスポーツプラットフォームと組み合わせることで、これまで十分に伝えられてこなかったドライバーの身体的",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f02",
+                      "e004:f03",
+                      "e004:f12"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g013",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "F1上位チームの企業価値、1兆円規模に上昇",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "アメリカのスポーツビジネス専門メディア『Sportico』が新たに発表したランキングによると、F1が商業面で急成長を遂げたことにより、参戦する全11チームの企業価値を合計すると500億ドル（約7兆9743億7500万円）という前例のな... アメリカのスポーツビジネス専門メディア『Sportico』が新たに発表したランキングによると、F1が商業面で急成長を遂げたことにより、参戦する全11チームの企業価値を合計すると500億ドル（約7兆9743億7500万円）という前例のない規模に達するという。 その価値は過去12カ月間で33％増加しており、2023年と比べると197％と大幅にアップしている。 ■人気リーグを上回るF1の伸び率 2023年以降、F1の評価額は197%増加した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e005:f03",
+                      "e005:f12"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g016",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g015",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-04-17d74145f95b76b5",
+      "response": {
+        "events": [
+          {
+            "event_id": "g017",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "spacex-01-83662a56bfbbea93",
+      "response": {
+        "events": [
+          {
+            "event_id": "g004",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "SpaceX、米宇宙軍USSF-317を打ち上げへ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "SpaceX、米宇宙軍USSF-317を打ち上げへ。根拠資料は対象、規模、実施条件を具体的に示している。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f03"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g003",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "japan_economy-01-2791d8cfeb5af350",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "JT、ロシア事業喪失で1兆3860億円下方修正",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "最終赤字は日本会計基準時代を含めると04年3月期（76億円の赤字）以来で、過去最大となる。 配当は年204円（前期は234円）と従来予想に比べ68円引き下げる。 グループ全体の売上収益（売上高に相当）、調整後営業利益（買収に伴い生じた無形資産にかかる償却費などを除くベース）に占めるロシア事業の割合は、それぞれ約10%、約25%だった。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f04",
+                      "e001:f08",
+                      "e001:f14"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "日経平均801円安、半導体規制懸念が重荷",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "米商務省が16日、人工知能（AI）向け先端半導体の輸出規制強化策を発表し、AI・半導体関連株への売りが再燃した。 日経平均の下げ幅は一時970円と1000円に迫った。 日経平均は朝方から下落して始まり、9日以来6営業日ぶりに5万9000円を下回った。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f03",
+                      "e002:f04",
+                      "e002:f05"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "東証前場116円高、AI不安後退も上値重い",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "19日午前の東京株式市場で日経平均株価は続伸し、前営業日比116円59銭（0.2％）高の5万9140円87銭で前場を終えた。 アンソロピックは18日、IPOに伴う株式の公開価格を決定した。 一方、前場の日経平均は一時、前営業日比273円75銭（0.46％）安の5万8750円53銭まで下落する場面があった。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f01",
+                      "e004:f06",
+                      "e004:f08"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "高齢無職夫婦の食費、月7万8964円",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "食料の物価は6.8％上昇し、同じ量なら前年より1日約168円増えた目安 2026.11.19 07:17 公開 執筆者 下村 美乃莉 この記事のポイント ✓ 65歳以上の夫婦のみの無職世帯の食料は2025年平均で月7万8964円。 消費支出26万3979円の29.9％を占める ✓ 30日で割ると夫婦2人で1日約2632円、1人あたり約1316円。 1年に直すと食費は約94万8000円になる ✓ 同じ量を物価が6.8％低かった前年の水準で買うと、月約5028円・1日約168円少なかった計算で、これが増え方の目安 記事の続きを読む → 著者 下村 美乃莉 株式会社モニクルリサーチ コンテンツ編成本部 編集記者/二種外務員資格（証券外務員二種）・産業カウンセラー資格保有 元独立系ファイナンシャルプランナー会社勤務。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e005:f02",
+                      "e005:f03"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "japan_economy-02-3fdeb65380c080aa",
+      "response": {
+        "events": [
+          {
+            "event_id": "g009",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g014",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g012",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "西鉄、鉄道増収で営業利益見通しを5億円上方修正",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "西鉄、鉄道好調で通期営業利益5億円上方修正 半導体物流の来年度見通しは不透明 西日本鉄道（9031.T）は2026年11月19日に開催した2026年度第2四半期決算説明会で、通期営業利益予想を前回公表から5億円上方修正したと発表した。 業績ハイライト 項目 当第2四半期 前年同期比 通期予想 鉄道旅客収入 — +12.4% — 鉄道旅客人員 — +3.8% — 営業利益（通期） — — 前回公表から5億円上方修正 ※上記以外の詳細な数値は説明会では開示されなかった。 しかし、アナリストから大手電子部品メーカーがAI投資増加を背景に1兆円投資・年率20%の物量増を狙うと発表したことを踏まえ、下期から来年にかけての見方を問われると、「アメリカ情勢によるデータセンター建設への影響、中東情勢などがあるため、来年度の電子部品と半導体輸送の物量推移に関しては、予想が難しい」と慎重な姿勢を示した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f01",
+                      "e003:f07",
+                      "e003:f09"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g010",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "ドル円159円台後半、米金利上昇で強含み",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "ドル円159円台後半、米金利上昇で強含み。根拠資料は対象、規模、実施条件を具体的に示している。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f02",
+                      "e004:f04",
+                      "e004:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g008",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g011",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g013",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "韓国輸出、AI半導体で1兆ドル突破へ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "【写真】「韓国は死んで李在明だけ生き残った」韓国の野党が設置した横断幕 韓国の産業通商省によると、10日までの輸出額は前年同期比62％増の9636億ドル。 韓国の政府関係者は「1兆ドル突破は歴史的な記録だ。 西日本新聞 【関連リンク】 ■韓国、半導体4工場新設に83兆円投資 国家総力戦、地域活性化へ拠点分散も ■韓国の半導体工場増設計画に期待と不安 「均衡発展」に政治的思惑も ■「K字型経済」韓国揺るがす 元国会議員の洪性国氏に聞く 半導体活況の中で格差拡大 ■韓国の来年度「スーパー」予算案 28カ月連続下落の若年層雇用増へ職業訓練強化も ■AI普及でアジア囲碁は「戦国時代」 育成支援には差も。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f03",
+                      "e007:f09",
+                      "e007:f12"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "japan_economy-03-9b5144852a8f0fd4",
+      "response": {
+        "events": [
+          {
+            "event_id": "g018",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "近畿10月輸出、2兆4699億円で過去最高",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "地域別では中国向けにプラスチックなどの輸出が伸び12%増の5441億円と、10月としては過去最高だった。 東南アジア諸国連合（ASEAN）向けは半導体関連の電子部品が堅調で65%増の5591億円と、単月ベースで過去最高を記録した。 輸入額は31%増の2兆2365億円で、輸出と同じく単月ベースで過去最高だった。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f04",
+                      "e001:f05",
+                      "e001:f07"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g019",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "食料消費税減税、1人月3000円との試算",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "これを人口で割ることで家計の負担軽減効果額をに計算すると、国民1人あたり約3.6万円と見込んでいる」 つまり、減税の負担軽減は1人あたり月3000円程度。 家計に占める食費の割合が30％を超える中、1人あたり月3000円程度の負担軽減では焼け石に水である。 ◇ ◇ ◇ 所得連動型の「就業者負担軽減支援金」、野党の追及でようやく判明した支援目安は、夫婦と子ども2人世帯で月5000円だけ。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f07",
+                      "e002:f10",
+                      "e002:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g020",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g017",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Nvidia決算後、日本半導体株は反発",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "キオクシアの株価は10月30日に四半期業績見通しを発表した後から下落が加速し、11月2日には1日で15.8%急落、6月に付けた史上最高値から約7割の下落となった。 11月17日の取引終了後に発表された決算では、Nvidiaの第3四半期売上高は1,158億ドル（約18.5兆円）で前年同期比103%増、データセンター事業の売上高は1,076億ドル（約17.2兆円）で同110%増となった。 Nvidiaの決算発表後の2取引日で、キオクシアとアドバンテストはそれぞれ3.8%高、4.0%高と反発したが、台湾加権指数は11月19日も1日で4.4%安となり、市場の見方の隔たりはまだ埋まっていないことを示している。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f06",
+                      "e004:f12",
+                      "e004:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g015",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "九州戦略会議、福岡の副首都指定を要望",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "藤井総務相（左から４人目）に要望書を手渡す九州地域戦略会議の池辺和弘共同議長（同３人目）＝１６日午前、総務省 九州・沖縄、山口の各県知事と経済界でつくる九州地域戦略会議は１６日、福岡県の副首都指定を求める要望書を藤井比早之総務相に省内で手渡した。 指定が九州全体の成長につながるよう、規制緩和や税制措置といった支援も訴えた。 要望書では、半導体などの産業基盤がある九州各県が副首都を中心に連携することで、日本の経済成長をけん引し、東京一極集中の是正が可能になると指摘。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e005:f02",
+                      "e005:f03"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g016",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "ドル円、一時159.66円へ上昇",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "本日の高値を159.66レベルに更新している。 ユーロ円は175.18レベル、ポンド円は209.86レベルに本日の高値を更新している。 米10年債利回りは5.05%付近から5.07%付近へと上昇している。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f01",
+                      "e006:f03",
+                      "e006:f04"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "japan_economy-04-d3747ef2766d8865",
+      "response": {
+        "events": [
+          {
+            "event_id": "g021",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "訪日消費9.5兆円、SNS動画が集客を後押し",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "訪日外国人は2019年比34%増とアジアで突出し、日本政府は2030年に消費15兆円を目指す Victoria Media合同会社 2026年11月19日 11時30分 海外向けのショート動画制作とSNS運用を手がけるVictoria Media合同会社（代表：椎名エバレット達弘、以下「当社」）は、観光庁などの公的統計とSNSの公開データをもとに「インバウンドSNS調査」を実施しました。 調査結果のポイント 日本は英国の大手Sagaグループに属する老舗旅行会社Titan Travelの調査で、2024年・2025年の2年連続「SNSで最も人気の国」に選出 「#japan」のショート動画は5年で約10倍、動画で下調べして来日する人は約1,690万人（推計）。 主な調査結果 1. 日本は2年連続で「SNSで最も人気の国」 1978年創業の英国の旅行会社Titan Travel（ロンドン証券取引所に上場する英国の大手Saga PLCの",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f02",
+                      "e001:f04",
+                      "e001:f08"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g022",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "asia-01-c7ca80d57122532f",
+      "response": {
+        "events": [
+          {
+            "event_id": "g004",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "LS Electric、ベトナム工場を拡張",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "LS Electric、ベトナム工場を拡張。根拠資料は対象、規模、実施条件を具体的に示している。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f07",
+                      "e001:f10",
+                      "e001:f11"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "中国住宅取引、中古の比率が52.2％へ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "今年1～3四半期の中古住宅オンライン契約取引面積は6億1,700万㎡で、全住宅取引の52.2%を占めた。 今年1～3四半期の全国中古住宅オンライン契約取引面積が全住宅取引面積の半分を超え、1998年の住宅制度改革以降続いてきた「新築住宅建設」中心の産業構造が根本から揺らいでいる。 19日の中国メディア報道を総合すると、今年1～3四半期の中国の既存住宅オンライン契約取引面積は6億1,700万㎡と集計された。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01",
+                      "e002:f04",
+                      "e002:f05"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "POSCO、CATLへ3年間リチウム供給",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "POSCO Groupは2026年から2028年までの3年間、中国のCATLに電気自動車（EV）用電池向けリチウムを供給する契約を締結した。 18日、POSCO Groupは2026年から2028年までの3年間、CATLにEV用電池製造向けリチウムを供給する契約を結んだと明らかにした。 区分 生産能力（年産） 備考 アルゼンチン塩水基盤の水酸化リチウム 5万トン 第1工場2万5,000トン、栗村精製工場2万5,000トン オーストラリア鉱石基盤（POSCO Pilbara Lithium Solution） 4万3,000トン 栗村産業団地 合計 9万3,000トン 2033年に塩水基盤10万トンへ拡大計画 注：POSCO Groupが公開したリチウム生産能力に基づく 今回の契約は、POSCO Groupのリチウム事業が韓国国内の電池メーカー中心から世界1位の企業へと顧客層を広げる契機になったとの評価を受けている。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f01",
+                      "e003:f07",
+                      "e003:f14"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Hanwha Ocean、カナダFLNG計画で基本合意",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "6月の覚書、9月の暫定協力条件に続く3度目の合意で、55兆ウォン（約6.6兆円）規模のカナダ潜水艦事業でドイツに優先交渉権を譲った後に収めた成果である。 昨年6月に覚書（MOU）を結んだのに続き、9月に暫定協力条件に署名し、今回3度目の合意書であるHOAまで導出した。 項目 内容 事業名 Kanata LNG（ブリティッシュコロンビア州プリンスルパート近郊） 設備類型 浮体式液化天然ガス生産設備（FLNG） 最大生産能力 年1,200万トン 総事業費 157億ドル（約20兆9,000億ウォン、約2.5兆円） 初回LNG出荷目標 2032年 合意履歴 2026年6月MOU → 9月暫定協力条件 → 11月HOA 残る手続き 最終立地選定、ガス供給・輸送契約、環境許認可、資金調達 注：総事業費のウォン換算は157億ドル基準で約20兆9,000億ウォン 市場では今回の事業が造船業況の変曲点になり得るとの観測が出ている。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f03",
+                      "e004:f08",
+                      "e004:f15"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "north_america-01-a0663a8b776bbb55",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "米従業員エンゲージメント、29％へ低下",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "エンゲージメントは2010年代を通じて着実に上昇し、2020年にピークを迎えたが、直近の第3四半期（7～9月）には29％まで低下した。 離職率は9月に2.1％に上昇し、過去12カ月間の平均である約2％を上回ったものの、数年前の大量退職時代（The Great Resignation）の頃よりは依然として低い水準にある。 つまり、労働者は現在の状況から抜け出せず、不満を解消する手段を持てずにいるということだ」 9月の採用率は3.4％で、2カ月連続で上昇したものの、依然として2010年代初頭と同程度にとどまった。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f04",
+                      "e004:f07",
+                      "e004:f09"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g004",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "brex-01-9846cca023b79f75",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    }
+  ]
+}
