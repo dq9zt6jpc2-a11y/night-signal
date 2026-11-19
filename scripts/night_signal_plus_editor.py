@@ -314,6 +314,18 @@ def prepare_packet(
             flush=True,
         )
     requests = review_requests(issue_date, evidence, state_root)
+    coverage_by_category = {}
+    for label, entry in evidence["categories"].items():
+        discovery_checks = entry.get("discovery_checks", [])
+        coverage_by_category[label] = {
+            "collected_records": len(entry.get("records", [])),
+            "discovery_checks": len(discovery_checks),
+            "candidate_events": sum(
+                len(request["payload"].get("events", []))
+                for request in requests
+                if request["category"] == label
+            ),
+        }
     evidence_hash = evidence_store.bundle_sha256(evidence_path)
     packet = {
         "contract": PACKET_CONTRACT,
@@ -338,6 +350,13 @@ def prepare_packet(
             "every_summary_point_requires_source_fact_ids": True,
             "every_required_source_fact_must_be_covered": True,
             "every_published_item_requires_information_complete": True,
+            "summary_review_steps": [
+                "Read current article body facts first. Separate the actual event, attribution, dates, numbers, scope, and conditions before writing the title.",
+                "Write one independently supported assertion per point. Cite only the Evidence and source fact IDs that support that exact statement. Split clauses supported by different facts.",
+                "Keep each amount, currency, unit, date, time zone and comparison basis traceable to a cited fact. Keep plans, reports, approvals and completed actions distinct. Do not add arithmetic, causation or a market high unless the cited text explicitly supports it.",
+                "Omit unrelated live quote widgets, navigation and generic filler. Before submission, compare the draft back to all material body facts and confirm that each required fact is represented in an actual sentence.",
+                "Where a fact list overflowed, inspect available body text for omitted material qualifiers. Never cite a missing fact ID or present a missing qualifier as verified.",
+            ],
             "allowed_topic_value_classes": sorted(core.ALLOWED_TOPIC_VALUES),
             "one_point_only_for_one_distinct_supported_delta": True,
             "omit_generic_background_but_retain_current_source_context": True,
@@ -355,6 +374,7 @@ def prepare_packet(
         "requests": [public_request(request) for request in requests],
         "metrics": {
             "categories": len(core.category_contracts()),
+            "coverage_by_category": coverage_by_category,
             "requests": len(requests),
             "candidate_events": sum(
                 len(request["payload"].get("events", [])) for request in requests
