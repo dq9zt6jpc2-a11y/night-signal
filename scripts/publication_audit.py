@@ -143,9 +143,13 @@ def ensure_public_url(issue_date: str) -> None:
     if expected not in dated_html:
         fail(f"public dated issue does not show {issue_date}")
 
-    missing_titles = [title for title in local_card_titles(issue_date) if title not in root_html]
+    titles = local_card_titles(issue_date)
+    missing_titles = [
+        title for title in titles
+        if title not in visible_text(root_html) or title not in visible_text(dated_html)
+    ]
     if missing_titles:
-        fail("public root date is current but content is stale; missing local titles: " + "; ".join(missing_titles))
+        fail("public issue date is current but root or dated content is stale; missing local titles: " + "; ".join(missing_titles))
 
 
 def main() -> int:
