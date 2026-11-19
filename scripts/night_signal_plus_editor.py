@@ -317,7 +317,14 @@ def prepare_packet(
     coverage_by_category = {}
     for label, entry in evidence["categories"].items():
         discovery_checks = entry.get("discovery_checks", [])
+        source_checks_by_channel: dict[str, dict[str, int]] = {}
+        for check in entry.get("source_checks", []):
+            channel = str(check.get("channel") or "unknown")
+            status = str(check.get("slot_state") or "unknown")
+            states = source_checks_by_channel.setdefault(channel, {})
+            states[status] = states.get(status, 0) + 1
         coverage_by_category[label] = {
+            "source_checks_by_channel": source_checks_by_channel,
             "collected_records": len(entry.get("records", [])),
             "discovery_checks": len(discovery_checks),
             "candidate_events": sum(
