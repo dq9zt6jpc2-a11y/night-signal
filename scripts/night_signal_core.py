@@ -2508,7 +2508,7 @@ def normalized_scaled_numbers(value: str) -> tuple[set[float], str]:
         stripped[match.start() : match.end()] = " " * (match.end() - match.start())
     english_pattern = re.compile(
         r"(?<![\d.])(\d[\d,]*(?:\.\d+)?)\s*[-–—]?\s*"
-        r"(trillion|billion|million|thousand)\b",
+        r"(trillion|billion|million|thousand|lakhs?|crores?)\b",
         re.I,
     )
     english_scale = {
@@ -2516,6 +2516,10 @@ def normalized_scaled_numbers(value: str) -> tuple[set[float], str]:
         "billion": 1e9,
         "million": 1e6,
         "thousand": 1e3,
+        "lakh": 1e5,
+        "lakhs": 1e5,
+        "crore": 1e7,
+        "crores": 1e7,
     }
     for match in english_pattern.finditer(value):
         numbers.add(
@@ -6338,6 +6342,10 @@ def self_test() -> None:
         fail("localized decimal commas accepted a different number")
     if numeric_claims("7,5%と1,491,932件") != {7.5, 1491932.0}:
         fail("decimal-comma normalization altered a thousands separator")
+    if numeric_claims("Rs 5.12 lakh") != numeric_claims("51万2000ルピー"):
+        fail("Indian price did not match its Japanese rendering")
+    if numeric_claims("2 crores and 4 lakhs") != {20000000.0, 400000.0}:
+        fail("Indian scale words lost their place values")
     if numeric_claims("対象は103万3632台") != {1033632.0}:
         fail("Japanese vehicle count split at the ten-thousand unit")
     if numeric_claims("103万台、3632台") != {1030000.0, 3632.0}:
