@@ -1521,6 +1521,7 @@ ARTICLE_REQUIRED_FACT_TAIL_RE = re.compile(
     r"Complete profile|Before downloading the whitepaper|"
     r"(?:Follow|Connect with) [^。.!?]{0,80}? on LinkedIn|"
     r"商品ページ|TV放送[＆&]タイムスケジュール|"
+    r"[（(]了[）)]\s*(?:時事通信\s*)?(?:最近見た銘柄|ヘッドライン|マーケット指標)|"
     r"コメントを読む|本記事はニュース提供社|"
     r"すべてのコンテンツの著作権|"
     r"(?:株式会社|有限公司)\s*概要|"
@@ -6341,6 +6342,11 @@ def self_test() -> None:
         fail("Japanese vehicle count split at the ten-thousand unit")
     if numeric_claims("103万台、3632台") != {1030000.0, 3632.0}:
         fail("independent counts were incorrectly joined")
+    market_widget = "（了） 時事通信 最近見た銘柄 ヘッドライン マーケット指標"
+    if not ARTICLE_REQUIRED_FACT_TAIL_RE.search(market_widget):
+        fail("market widget after the article footer became required summary content")
+    if ARTICLE_REQUIRED_FACT_TAIL_RE.search("外為市場のマーケット指標が上昇した。"):
+        fail("market news body was mistaken for a market widget")
     short_year_record = {
         **english_record,
         "title": "世帯平均所得は25年調査で増加",
