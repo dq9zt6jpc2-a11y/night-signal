@@ -167,7 +167,7 @@ REALIZED_MATERIAL_CHANGE_RE = re.compile(
 ROUTINE_INVESTMENT_COMMENTARY_RE = re.compile(
     r"(株価評価|株価予想|株価見通し|テクニカル(?:分析|動向)|"
     r"買い時|売り時|投資妙味|投資家にとって(?:好機|魅力)|"
-    r"目標株価|投資判断|チャート分析|MACD|RSI|"
+    r"目標株価|投資判断|チャート分析|(?<![A-Za-z])(?:MACD|RSI)(?![A-Za-z])|"
     r"\b(?:technical analysis|price target|buy rating|sell rating|"
     r"buying opportunity|stock outlook|stock rating|valuation shifts?|price attractiveness|"
     r"time to sell|stock investors?|investment will be worth)\b)",
