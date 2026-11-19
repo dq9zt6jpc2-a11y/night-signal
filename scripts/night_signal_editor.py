@@ -742,6 +742,7 @@ def semantically_merge_event_groups(
     )
     merged: list[list[dict[str, Any]]] = []
     topic_index: dict[str, set[int]] = {}
+    music_milestone_index: dict[tuple[str, float], int] = {}
     for group in ordered:
         topics = {
             str(topic_id)
@@ -749,12 +750,23 @@ def semantically_merge_event_groups(
             for topic_id in record.get("watch_topic_ids", [])
             if str(topic_id)
         } or {"__unmapped__"}
+        milestones = set()
+        if category.get("label") == "YOASOBI / 幾田りら":
+            for record in group:
+                title = core.record_public_title(record)
+                song = re.search(r"「([^」]+)」", title)
+                count = re.search(r"累積再生数?\s*([0-9][0-9,万億千]*)\s*回\s*(?:を)?突破", title)
+                if song and count:
+                    milestones.update(
+                        (song.group(1).strip(), value)
+                        for value in core.numeric_claims(count.group(1))
+                    )
         candidate_indexes = sorted(
             {
                 index
                 for topic in topics
                 for index in topic_index.get(topic, set())
-            }
+            } | {music_milestone_index[key] for key in milestones if key in music_milestone_index}
         )
         matching_index = next(
             (
@@ -773,6 +785,8 @@ def semantically_merge_event_groups(
             merged.append(list(group))
         else:
             merged[matching_index].extend(group)
+        for key in milestones:
+            music_milestone_index[key] = matching_index
         for topic in topics:
             topic_index.setdefault(topic, set()).add(matching_index)
     return merged
