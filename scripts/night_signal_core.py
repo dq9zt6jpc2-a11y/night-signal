@@ -2138,7 +2138,12 @@ def record_is_low_importance_routine(
     if re.search(r"\bmembers? profile\b|メンバー紹介", title, re.I):
         return True
     if ROUTINE_PERSONAL_LIFESTYLE_RE.search(title):
-        return True
+        music_streaming_milestone = (
+            category.get("label") == "YOASOBI / 幾田りら"
+            and re.search(r"累積再生数?\s*[0-9０-９][0-9０-９,，.．万億]*\s*回\s*(?:を)?突破", title)
+        )
+        if not music_streaming_milestone:
+            return True
     if (
         ROUTINE_MARKET_TICK_RE.search(title)
         and not ROUTINE_MARKET_EXCEPTION_RE.search(title)
