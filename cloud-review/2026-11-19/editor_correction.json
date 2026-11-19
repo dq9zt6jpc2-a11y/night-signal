@@ -1,0 +1,760 @@
+{
+  "contract": "night-signal-cloud-review-correction-v1",
+  "issue_date": "2026-11-19",
+  "evidence_sha256": "a71e867fac7ac5ee004f86d0e3d0c2fe082d3e9c4f3d2305294828bef2ef4b98",
+  "cloud_handoff": {
+    "execution_surface": "chatgpt-web-scheduled-task",
+    "reviewed_at": "2026-11-20T01:19:10+09:00",
+    "correction_attempt": 1
+  },
+  "responses": [
+    {
+      "request_id": "softbank-01-d8de5187b8dadcdc",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "background_or_navigation",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "サラワク州首相、SoftBankなど3社の新会社設立合意を説明",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "サラワク州のアバン・ジョハリ首相は、日本訪問中にSoftBank、PETROS、Grabの3社が新会社設立で合意したと説明した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f01"
+                    ]
+                  },
+                  {
+                    "text": "同首相の説明では出資比率はSoftBankが80％、PETROSとGrabが各10％で、初期資本10億ドルのうちSoftBankの投資額は8億ドルとされる。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f02",
+                      "e003:f03"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g003",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "honda-01-7bd27a13a4ecf790",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Honda、「FREED」に5人乗り仕様と特別仕様車を追加",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "AIR EXとCROSSTARは、BLACK STYLEを除き9インチHonda CONNECTナビとETC2.0車載器などを標準装備し、両タイプの5人乗り仕様にはリアクーラーを標準装備した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f04"
+                    ]
+                  },
+                  {
+                    "text": "AIR EXには2列シートの5人乗り仕様を追加し、CROSSTARは内外装の変更や5人乗り仕様のUSB Type-C充電端子などを設定した。6人乗り・7人乗りにはマルチユーティリティベルトを追加した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f07"
+                    ]
+                  },
+                  {
+                    "text": "有料色は3万8500円または6万500円高で、車両価格とは別にリサイクル預託金と情報・資金管理料金からなるリサイクル料金が必要となる。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f10"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g005",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Honda、二輪安全教育シミュレーター試作機を公開",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "あわせて、この試作機をベースに2027年冬の発売を目指している新型モデルに関する情報をホームページで先行公開しました。 1996年の発売以来、これらの製品を、日本国内を中心に累計で3,000台以上販売し、自動車教習所や官公庁、企業、病院などで活用いただいています。 Hondaは、道を使う誰もが事故に遭わない社会の実現に向け、「Safety for Everyone」のグローバル安全スローガンのもと、2030年には全世界でHondaの二輪車・四輪車が関与する交通事故死者半減 ※2 、2050年には交通事故死者ゼロという高い目標の達成を目指しています。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01",
+                      "e002:f08",
+                      "e002:f09"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Honda、米アラバマ工場に4.62億ドル追加投資",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Honda、米アラバマ工場に4.62億ドル追加投資。根拠資料は対象、規模、実施条件を具体的に示している。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f06",
+                      "e004:f09",
+                      "e004:f11"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g001",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "honda-02-ec0ce2c99fbedbfe",
+      "response": {
+        "events": [
+          {
+            "event_id": "g008",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g010",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Honda Rebel 500、インドで販売開始",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Rebel 500は2026年7月にインドで公開され、価格発表を経て販売開始となった。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f02"
+                    ]
+                  },
+                  {
+                    "text": "E-Clutch仕様は、クラッチレバーを操作せず発進・停止・変速でき、必要に応じて従来どおりクラッチレバーも使用できる。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f07"
+                    ]
+                  },
+                  {
+                    "text": "従来型Rebel 500は完成車輸入で販売され、価格は51万2000ルピーだった。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f08"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "オコン、アストンマーティンF1のサードドライバー加入見通しと報道",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "RacingNews365の独自情報として、エステバン・オコンがフェルナンド・アロンソとランス・ストロールを支えるサードドライバーとしてアストンマーティンF1に加わる見通しだと報じられた。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f01"
+                    ]
+                  },
+                  {
+                    "text": "報道ではシートフィッティングを終え、正式発表に向けた準備が進んでいるとされるが、正式発表はまだ行われていない。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f02",
+                      "e006:f16"
+                    ]
+                  },
+                  {
+                    "text": "関連ページは、オコンが2026年メキシコGPでハースを離れたこと、離脱後にファンへの声明を出したこと、キャデラックの2027年体制決定で同チームのレギュラー席獲得可能性がなくなったことを伝えている。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f03",
+                      "e007:f07",
+                      "e007:f09"
+                    ]
+                  }
+                ],
+                "topic_value_class": "operational_status_change",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g009",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "honda-03-9ff17a30ac492527",
+      "response": {
+        "events": [
+          {
+            "event_id": "g013",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g011",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Honda、通期営業利益見通しを7800億円へ上方修正",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "本田技研工業（ホンダ） の2027年3月期第2四半期決算（中間決算）説明会では、業績の改善と将来成長への積極投資が主要テーマとして示された。 通期営業利益見通しは前回比1,300億円増の7,800億円に上方修正され、EV関連損失を除く調整後営業利益も1兆3,000億円に引き上げられた。 開催日：2026年11月10日 ● 登壇者 貝原典也（本田技研工業取締役代表執行役副社長） 川口正雄（本田技研工業執行役最高財務責任者） ● 目次 開会挨拶・出席者紹介 0:05 p.3 決算サマリーと通期見通し・株主還元 1:11 p.3 成長領域への戦略的投資(オハイオ新工場・マナウス増強) 3:35 p.4 第2四半期累計の販売台数と連結業績実績 5:08 p.5 調整後営業利益の増減要因と事業別営業利益 6:40 p.6 キャッシュ・フローの状況 10:21 p.7 通期連結業績見通しと増減要因・配当金 10:50 p.8 ★ 全文PDF",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f02",
+                      "e002:f03",
+                      "e002:f08"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g016",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g015",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Honda出身の井上勝史氏、アステモ次期社長へ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "6月25日の定時株主総会と7月1日の臨時取締役会を経て正式決定する。 井上氏はホンダの欧州や中国の責任者などを経て、電動事業開発部門のトップ、昨年4月には四輪事業本部長に就いたが、6月にホンダの取締役退任が決まっていた。 ホンダは日立が保有するアステモの株式21％分を取得し、出資比率を61％に引き上げて子会社化する予定でいる。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f01",
+                      "e004:f02",
+                      "e004:f03"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g012",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "NHTSA、Honda車の自動停止・再始動システムを調査",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "米運輸省道路交通安全局（NHTSA）は、停車時に停止したエンジンが再始動しないとの701件の申告を受け、Honda車の自動停止・再始動システムの調査を開始した。対象は2024～2026年型の計103万3632台とされる。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f02"
+                    ]
+                  },
+                  {
+                    "text": "調査は11月13日に公表され、申告は完全停止後にエンジンが自動再始動しないという内容だった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f03"
+                    ]
+                  },
+                  {
+                    "text": "対象車種はHonda Passport、Odyssey、Pilot、RidgelineとAcura MDXで、いずれも2024～2026年型とされる。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f04"
+                    ]
+                  }
+                ],
+                "topic_value_class": "risk_or_safety_signal",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g014",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-02-efc23a4556311c1c",
+      "response": {
+        "events": [
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "オコン、アストンマーティンF1加入の見通しと報道",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "報道では、オコンはアストンマーティンF1のサードドライバーとして加入する見通しで、シートフィッティングを終えたとされる。正式発表はまだない。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e005:f02",
+                      "e005:f16"
+                    ]
+                  },
+                  {
+                    "text": "オコンは2026年メキシコシティGPの週末にハースを離れ、ハースは以前から2026年限りで契約を終えると発表していた。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f06",
+                      "e005:f07"
+                    ]
+                  },
+                  {
+                    "text": "アロンソが2027年も参戦を続けると決めたため、報道上オコンが得られるポジションはサードドライバーに限られるとされる。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f14"
+                    ]
+                  }
+                ],
+                "topic_value_class": "operational_status_change",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g008",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "japan_economy-02-3fdeb65380c080aa",
+      "response": {
+        "events": [
+          {
+            "event_id": "g009",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g014",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g012",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "西鉄、鉄道増収で営業利益見通しを5億円上方修正",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "西鉄、鉄道好調で通期営業利益5億円上方修正 半導体物流の来年度見通しは不透明 西日本鉄道（9031.T）は2026年11月19日に開催した2026年度第2四半期決算説明会で、通期営業利益予想を前回公表から5億円上方修正したと発表した。 業績ハイライト 項目 当第2四半期 前年同期比 通期予想 鉄道旅客収入 — +12.4% — 鉄道旅客人員 — +3.8% — 営業利益（通期） — — 前回公表から5億円上方修正 ※上記以外の詳細な数値は説明会では開示されなかった。 しかし、アナリストから大手電子部品メーカーがAI投資増加を背景に1兆円投資・年率20%の物量増を狙うと発表したことを踏まえ、下期から来年にかけての見方を問われると、「アメリカ情勢によるデータセンター建設への影響、中東情勢などがあるため、来年度の電子部品と半導体輸送の物量推移に関しては、予想が難しい」と慎重な姿勢を示した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f01",
+                      "e003:f07",
+                      "e003:f09"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g010",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "ドル円、11月19日午後5時に159円70銭",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "11月19日午後5時時点のドル円は159円70銭で、前日午後5時の159円33～34銭から37銭のドル高・円安だった。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f02"
+                    ]
+                  },
+                  {
+                    "text": "米国時間序盤はFRB高官のタカ派的な発言などを受けて米長期金利が上昇し、ドル円は159円50銭近くまで上昇した。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f04"
+                    ]
+                  },
+                  {
+                    "text": "同じページの市場指標欄では、ドル円が159.8800、日経平均株価が5万9444.21円と表示されていた。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g008",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g011",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g013",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "韓国輸出、AI半導体で1兆ドル突破へ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "【写真】「韓国は死んで李在明だけ生き残った」韓国の野党が設置した横断幕 韓国の産業通商省によると、10日までの輸出額は前年同期比62％増の9636億ドル。 韓国の政府関係者は「1兆ドル突破は歴史的な記録だ。 西日本新聞 【関連リンク】 ■韓国、半導体4工場新設に83兆円投資 国家総力戦、地域活性化へ拠点分散も ■韓国の半導体工場増設計画に期待と不安 「均衡発展」に政治的思惑も ■「K字型経済」韓国揺るがす 元国会議員の洪性国氏に聞く 半導体活況の中で格差拡大 ■韓国の来年度「スーパー」予算案 28カ月連続下落の若年層雇用増へ職業訓練強化も ■AI普及でアジア囲碁は「戦国時代」 育成支援には差も。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f03",
+                      "e007:f09",
+                      "e007:f12"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "japan_economy-03-9b5144852a8f0fd4",
+      "response": {
+        "events": [
+          {
+            "event_id": "g018",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "近畿10月輸出、2兆4699億円で過去最高",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "地域別では中国向けにプラスチックなどの輸出が伸び12%増の5441億円と、10月としては過去最高だった。 東南アジア諸国連合（ASEAN）向けは半導体関連の電子部品が堅調で65%増の5591億円と、単月ベースで過去最高を記録した。 輸入額は31%増の2兆2365億円で、輸出と同じく単月ベースで過去最高だった。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f04",
+                      "e001:f05",
+                      "e001:f07"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g019",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "食料消費税減税、1人月3000円との試算",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "これを人口で割ることで家計の負担軽減効果額をに計算すると、国民1人あたり約3.6万円と見込んでいる」 つまり、減税の負担軽減は1人あたり月3000円程度。 家計に占める食費の割合が30％を超える中、1人あたり月3000円程度の負担軽減では焼け石に水である。 ◇ ◇ ◇ 所得連動型の「就業者負担軽減支援金」、野党の追及でようやく判明した支援目安は、夫婦と子ども2人世帯で月5000円だけ。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f07",
+                      "e002:f10",
+                      "e002:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g020",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g017",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Nvidia決算後、日本半導体株は反発",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "キオクシアの株価は10月30日に四半期業績見通しを発表した後から下落が加速し、11月2日には1日で15.8%急落、6月に付けた史上最高値から約7割の下落となった。 11月17日の取引終了後に発表された決算では、Nvidiaの第3四半期売上高は1,158億ドル（約18.5兆円）で前年同期比103%増、データセンター事業の売上高は1,076億ドル（約17.2兆円）で同110%増となった。 Nvidiaの決算発表後の2取引日で、キオクシアとアドバンテストはそれぞれ3.8%高、4.0%高と反発したが、台湾加権指数は11月19日も1日で4.4%安となり、市場の見方の隔たりはまだ埋まっていないことを示している。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f06",
+                      "e004:f12",
+                      "e004:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g015",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "九州戦略会議、福岡の副首都指定を要望",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "藤井総務相（左から４人目）に要望書を手渡す九州地域戦略会議の池辺和弘共同議長（同３人目）＝１６日午前、総務省 九州・沖縄、山口の各県知事と経済界でつくる九州地域戦略会議は１６日、福岡県の副首都指定を求める要望書を藤井比早之総務相に省内で手渡した。 指定が九州全体の成長につながるよう、規制緩和や税制措置といった支援も訴えた。 要望書では、半導体などの産業基盤がある九州各県が副首都を中心に連携することで、日本の経済成長をけん引し、東京一極集中の是正が可能になると指摘。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e005:f02",
+                      "e005:f03"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g016",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "ドル円、ロンドン市場で159.66円まで上昇",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "ドル円はロンドン市場で当日高値の159.66円まで上昇した。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f01"
+                    ]
+                  },
+                  {
+                    "text": "ユーロ円は175.18円、ポンド円は209.86円まで上昇し、それぞれ当日高値を更新した。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f03"
+                    ]
+                  },
+                  {
+                    "text": "米10年債利回りは5.05％付近から5.07％付近へ上昇した。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f04"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
