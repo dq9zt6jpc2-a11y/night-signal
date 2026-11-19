@@ -682,7 +682,7 @@ def prepare(
                         sys.executable,
                         "scripts/publication_audit.py",
                         issue_date,
-                        "--public-content-only",
+                        "--public-date-only",
                     ]
                 )
             if deploy_edited_final_evidence and not issue_matches_evidence(issue_date):
@@ -779,8 +779,8 @@ def main() -> int:
         "--redeploy-published",
         action="store_true",
         help=(
-            "redeploy an already-public matching issue without recollection; requires "
-            "--deploy-existing and a passing public-content audit"
+            "redeploy an already-public issue without recollection; requires "
+            "--deploy-existing and an existing public dated issue"
         ),
     )
     parser.add_argument(
