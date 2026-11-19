@@ -2200,6 +2200,13 @@ def record_title_has_material_change(
         record.get("excerpt") or record.get("evidence") or "",
         2400,
     )
+    if (
+        category.get("label") == "YOASOBI / 幾田りら"
+        and re.search(r"\bYOASOBI\b.{0,100}\b(?:to return|to perform|to hold)\b.{0,100}\btour\b", title, re.I)
+        and re.search(r"\bwill (?:hold|perform)\b.{0,160}\bstadium\b.{0,80}\bon\s+[A-Za-z]+\s+\d{1,2},\s+20\d{2}", excerpt, re.I)
+        and record_evidence_depth(title, record) == "body"
+    ):
+        return True
     return bool(
         REALIZED_MATERIAL_CHANGE_RE.search(title)
         or MATERIAL_RESULT_TITLE_RE.search(title)
