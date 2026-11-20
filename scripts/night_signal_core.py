@@ -3076,7 +3076,7 @@ def dated_index_links(raw: bytes, index_url: str, article_prefix: str, issue_dat
         raw.decode("utf-8", errors="replace"),
         re.I | re.S,
     ):
-        url = urllib.parse.urljoin(index_url, match.group(1))
+        url = urllib.parse.urljoin(index_url, html.unescape(match.group(1)))
         parsed = urllib.parse.urlsplit(url)
         if parsed.netloc != origin or not parsed.path.startswith(article_prefix) or url in seen:
             continue
@@ -3110,6 +3110,54 @@ def fetch_index_articles(source: dict[str, Any], issue_date: str) -> list[dict[s
         if record_evidence_depth(title, record) == "body":
             records.append(record)
     return records
+
+
+def parse_completed_score_cards(
+    raw: bytes, source: dict[str, Any], issue_date: str
+) -> list[dict[str, Any]]:
+    """Adapt a dated official score-card feed to ordinary editorial Evidence."""
+    records = []
+    markup = raw.decode("utf-8", errors="replace")
+    for anchor in re.finditer(r'<a\b[^>]*\bhref="([^"]+)"[^>]*>(.*?)</a>', markup, re.S | re.I):
+        href, body = anchor.groups()
+        link = urllib.parse.urljoin(str(source["url"]), html.unescape(href))
+        parsed = urllib.parse.urlsplit(link)
+        if parsed.scheme != "https" or parsed.hostname != source["result_detail_host"]:
+            continue
+        played = re.search(r"<strong>\s*(20\d{2}\.\d{2}\.\d{2})\s*</strong>", body)
+        score = re.search(r'<span class="c-(win|lose)">\s*(\d{1,3})\s*</span>\s*[-–]\s*(\d{1,3})', body)
+        opponent = re.search(r'class="p-stats__club"[^>]*>\s*<img[^>]*\balt="([^"]+)"', body)
+        venue = re.search(r">\s*(HOME|AWAY)\s*</span>", body)
+        if not (played and score and opponent and venue):
+            continue
+        day = played.group(1).replace(".", "-")
+        if not valid_date(day, issue_date):
+            continue
+        state, team_score, opponent_score = score.groups()
+        if ((int(team_score) > int(opponent_score)) != (state == "win")
+                or team_score == opponent_score):
+            continue
+        team = str(source["result_team"])
+        rival = html.unescape(opponent.group(1)).strip()
+        result = "勝利" if state == "win" else "敗戦"
+        location = "ホーム" if venue.group(1) == "HOME" else "アウェー"
+        day_text = date.fromisoformat(day).strftime("%Y年%m月%d日")
+        title = f"{team}対{rival}の試合結果"
+        fact = f"{team}は{day_text}、{location}で{rival}と対戦し、{team_score}対{opponent_score}で{result}した。"
+        records.append({
+            **source, "url": link, "publisher_url": source["url"],
+            "published_date": day, "title": title, "excerpt": fact,
+            "evidence": fact, "observed": True, "verification_method": "direct_fetch",
+        })
+    return records
+
+
+def fetch_completed_results(source: dict[str, Any], issue_date: str) -> list[dict[str, Any]]:
+    try:
+        raw, _, _ = request_bytes(str(source["url"]), timeout=12)
+    except (OSError, TimeoutError, urllib.error.URLError, ValueError):
+        return []
+    return parse_completed_score_cards(raw, source, issue_date)
 
 
 def fetch_source(source: dict[str, Any]) -> dict[str, Any]:
@@ -5633,7 +5681,14 @@ def collect_evidence(issue_date: str) -> dict[str, Any]:
             for source in flat_sources
             if source.get("article_path_prefix") and source.get("source_class") == "official"
         ]
+        result_futures = [
+            executor.submit(fetch_completed_results, source, issue_date)
+            for source in flat_sources
+            if source.get("result_team") and source.get("result_detail_host")
+            and source.get("source_class") == "official"
+        ]
         fetched = [future.result() for future in source_futures]
+        fetched.extend(record for future in result_futures for record in future.result())
         fetched.extend(record for future in index_futures for record in future.result())
         news_results = [future.result() for future in news_futures]
     records_by_category: dict[str, list[dict[str, Any]]] = {
@@ -6466,6 +6521,27 @@ def self_test() -> None:
     window = article_source_window(article_with_links)
     if "技術開発" not in window or "安田氏" in window:
         fail("related-link text contaminated article-body evidence")
+    score_feed = (
+        '<a href="https://example.invalid/game?id=1&amp;tab=4">'
+        '<span>HOME</span><strong>2026.11.18</strong>'
+        '<span class="c-win">98</span> - 71'
+        '<span class="p-stats__club"><img alt="対戦相手"></span></a>'
+    )
+    score_source = {
+        "url": "https://team.example.invalid/stats/",
+        "result_team": "テストチーム",
+        "result_detail_host": "example.invalid",
+    }
+    score_records = parse_completed_score_cards(score_feed.encode(), score_source, "2026-11-20")
+    if len(score_records) != 1 or "98対71で勝利" not in score_records[0]["excerpt"]:
+        fail("official completed result was lost or its score changed")
+    if not score_records[0]["url"].endswith("?id=1&tab=4"):
+        fail("HTML-escaped query parameters corrupted the official result link")
+    for wrong_score in ("69", "71"):
+        if parse_completed_score_cards(score_feed.replace("98", wrong_score).encode(), score_source, "2026-11-20"):
+            fail("inconsistent or tied data was recorded as an official win")
+    if parse_completed_score_cards(score_feed.encode(), score_source, "2026-11-21"):
+        fail("old completed result was reintroduced after the issue window")
     market_widget = "（了） 時事通信 最近見た銘柄 ヘッドライン マーケット指標"
     if not ARTICLE_REQUIRED_FACT_TAIL_RE.search(market_widget):
         fail("market widget after the article footer became required summary content")
