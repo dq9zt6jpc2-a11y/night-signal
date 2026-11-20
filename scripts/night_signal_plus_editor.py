@@ -358,6 +358,7 @@ def prepare_packet(
             "every_required_source_fact_must_be_covered": True,
             "every_published_item_requires_information_complete": True,
             "summary_review_steps": [
+                "Before accepting an event, identify what changed in the issue window and where the article body establishes when it changed. A recently republished article, related link, past reporting period, or a planned effective date cannot establish a new announcement. Keep historical details only as context for a supported current change.",
                 "Read current article body facts first. Separate the actual event, attribution, dates, numbers, scope, and conditions before writing the title.",
                 "Each summary point must be an object with nonempty text, evidence_ids, and source_fact_ids. Replace any point that merely repeats the headline with a concrete additional fact from the cited body.",
                 "Write one independently supported assertion per point. Cite only the Evidence and source fact IDs that support that exact statement. Split clauses supported by different facts.",
