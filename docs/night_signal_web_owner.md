@@ -99,7 +99,7 @@ page offline. If the review exists and feedback is absent at the 20:30 recovery 
 responses once with cloud_handoff.recovery_attempt=1 and a refreshed reviewed_at
 to retrigger deterministic publication; if recovery_attempt is already 1, stop.
 Do not perform another editorial review. If feedback status is failed and
-failed_stage is apply or gates, read validator_log_tail and correct every named
+failed_stage is apply or gates, use the complete rejected_requests array when present, with validator_log_tail for context, and correct every named
 rejected request/event in one bounded pass. Do not rewrite the large
 editor_review.json. Create only
 cloud-review/ISSUE_DATE/editor_correction.json on the existing review branch:
