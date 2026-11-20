@@ -4,7 +4,7 @@
   "evidence_sha256": "029f5b225f3b55a65e02d88023c6dce15b5d907dd0e0c3e338136177e4705787",
   "cloud_handoff": {
     "execution_surface": "chatgpt-web-scheduled-task",
-    "reviewed_at": "2026-11-20T20:32:06+09:00",
+    "reviewed_at": "2026-11-20T23:52:35+09:00",
     "correction_attempt": 1
   },
   "responses": [
@@ -121,57 +121,8 @@
           },
           {
             "event_id": "g016",
-            "decision": "publish",
-            "items": [
-              {
-                "title": "Le Groupe Figaro、記事のChatGPT統合と社内導入でOpenAIと提携",
-                "information_complete": true,
-                "summary_points": [
-                  {
-                    "text": "Le Groupe FigaroはOpenAIとの提携を発表し、現在・過去の記事を要約・抜粋と原記事へのリンク付きでChatGPTから利用できるようにする。",
-                    "evidence_ids": [
-                      "e005"
-                    ],
-                    "source_fact_ids": [
-                      "e005:f02",
-                      "e005:f03"
-                    ]
-                  },
-                  {
-                    "text": "対象はニュース、ビジネス、文化、ライフスタイルで、現在の記事とアーカイブを含む。",
-                    "evidence_ids": [
-                      "e005"
-                    ],
-                    "source_fact_ids": [
-                      "e005:f04"
-                    ]
-                  },
-                  {
-                    "text": "同社は編集上の独立性とコンテンツ管理権を維持し、AI憲章と編集基準を守りながら、チーム全体へのChatGPT Enterprise導入と業務・読者サービスでの追加活用を検討する。",
-                    "evidence_ids": [
-                      "e005"
-                    ],
-                    "source_fact_ids": [
-                      "e005:f10",
-                      "e005:f12",
-                      "e005:f13"
-                    ]
-                  },
-                  {
-                    "text": "記事は、ChatGPTのフランスでの月間ユニーク訪問者を2740万人とし、この統合によるLe Figaroコンテンツの認知拡大を見込んでいる。",
-                    "evidence_ids": [
-                      "e005"
-                    ],
-                    "source_fact_ids": [
-                      "e005:f15"
-                    ]
-                  }
-                ],
-                "topic_value_class": "operational_status_change",
-                "priority_class": "priority",
-                "change_class": "new_event"
-              }
-            ]
+            "decision": "insufficient_evidence",
+            "items": []
           },
           {
             "event_id": "g011",
@@ -322,57 +273,8 @@
           },
           {
             "event_id": "g002",
-            "decision": "publish",
-            "items": [
-              {
-                "title": "アジアAI・半導体株安、SoftBank Group株は16.16％安",
-                "information_complete": true,
-                "summary_points": [
-                  {
-                    "text": "記事は、Anthropicの上場を受け、アジアのAI・半導体関連株に売りが広がったと報じた。",
-                    "evidence_ids": [
-                      "e005"
-                    ],
-                    "source_fact_ids": [
-                      "e005:f01"
-                    ]
-                  },
-                  {
-                    "text": "SoftBank Group株は11月20日に16.16％下落した。",
-                    "evidence_ids": [
-                      "e005"
-                    ],
-                    "source_fact_ids": [
-                      "e005:f02"
-                    ]
-                  },
-                  {
-                    "text": "東京エレクトロンは7.19％、レーザーテックは6.75％、ルネサスエレクトロニクスは6.71％下落し、SK hynixとSamsung Electronicsも各6.0％、4.7％下落した。",
-                    "evidence_ids": [
-                      "e005"
-                    ],
-                    "source_fact_ids": [
-                      "e005:f07",
-                      "e005:f09"
-                    ]
-                  },
-                  {
-                    "text": "CNBCは、SoftBank GroupがOpenAIへ大型投資を行う中、市場の警戒感が強まった動きだとの見方を報じた。",
-                    "evidence_ids": [
-                      "e005"
-                    ],
-                    "source_fact_ids": [
-                      "e005:f04",
-                      "e005:f05",
-                      "e005:f06"
-                    ]
-                  }
-                ],
-                "topic_value_class": "market_or_financial_impact",
-                "priority_class": "priority",
-                "change_class": "new_event"
-              }
-            ]
+            "decision": "insufficient_evidence",
+            "items": []
           },
           {
             "event_id": "g005",
@@ -447,46 +349,8 @@
           },
           {
             "event_id": "g004",
-            "decision": "publish",
-            "items": [
-              {
-                "title": "HRC、2027年1月1日付で安田啓一氏が社長就任へ",
-                "information_complete": true,
-                "summary_points": [
-                  {
-                    "text": "HRCは、2027年1月1日付で安田啓一氏が代表取締役社長に就任すると発表している。",
-                    "evidence_ids": [
-                      "e009"
-                    ],
-                    "source_fact_ids": [
-                      "e009:f02"
-                    ]
-                  },
-                  {
-                    "text": "同日付で渡辺康治氏は退任する。",
-                    "evidence_ids": [
-                      "e009"
-                    ],
-                    "source_fact_ids": [
-                      "e009:f03"
-                    ]
-                  },
-                  {
-                    "text": "渡辺氏は2020年当時にHondaの第4期F1活動終了を発表し、その後HRC社長としてRed Bullへの供給継続を担った。",
-                    "evidence_ids": [
-                      "e008"
-                    ],
-                    "source_fact_ids": [
-                      "e008:f01",
-                      "e008:f02"
-                    ]
-                  }
-                ],
-                "topic_value_class": "operational_status_change",
-                "priority_class": "priority",
-                "change_class": "new_event"
-              }
-            ]
+            "decision": "insufficient_evidence",
+            "items": []
           }
         ]
       }
@@ -550,47 +414,8 @@
           },
           {
             "event_id": "g001",
-            "decision": "publish",
-            "items": [
-              {
-                "title": "Crawford、Las Vegas GPのFP1でAlonsoに代走",
-                "information_complete": true,
-                "summary_points": [
-                  {
-                    "text": "Aston Martinは、Jak CrawfordをLas Vegas GP木曜FP1でFernando Alonsoに代えて起用すると発表した。Crawfordにとって今季5回目のFP1となる。",
-                    "evidence_ids": [
-                      "e004"
-                    ],
-                    "source_fact_ids": [
-                      "e004:f02",
-                      "e004:f04"
-                    ]
-                  },
-                  {
-                    "text": "Crawfordは日本GPとベルギーGPでもAlonsoの代役を務め、直近のメキシコGPではマシントラブルで停止した。",
-                    "evidence_ids": [
-                      "e004"
-                    ],
-                    "source_fact_ids": [
-                      "e004:f03",
-                      "e004:f05"
-                    ]
-                  },
-                  {
-                    "text": "記事は、Alonsoが2027年1月にAston MartinでDakar Rallyへ参戦すると発表しており、同週末のFP1欠場が判明した3人目のドライバーだと報じている。",
-                    "evidence_ids": [
-                      "e004"
-                    ],
-                    "source_fact_ids": [
-                      "e004:f11"
-                    ]
-                  }
-                ],
-                "topic_value_class": "material_schedule_change",
-                "priority_class": "priority",
-                "change_class": "new_event"
-              }
-            ]
+            "decision": "insufficient_evidence",
+            "items": []
           },
           {
             "event_id": "g005",
@@ -728,12 +553,20 @@
                     ]
                   },
                   {
-                    "text": "TBSは下落要因をAnthropicの上場とし、米国市場で買い材料が出尽くしたとの見方から幅広く売られた流れが東京市場にも波及したと報じた。",
+                    "text": "記事は、日経平均下落の要因をAI開発大手Anthropicの上場としている。",
                     "evidence_ids": [
                       "e007"
                     ],
                     "source_fact_ids": [
-                      "e007:f03",
+                      "e007:f03"
+                    ]
+                  },
+                  {
+                    "text": "米国市場では、AI開発の進展という買い材料が出尽くしたとの見方から幅広い銘柄が売られ、その流れを受けて東京市場でもAI・半導体銘柄が売られた。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
                       "e007:f04",
                       "e007:f05"
                     ]
@@ -1033,49 +866,8 @@
           },
           {
             "event_id": "g003",
-            "decision": "publish",
-            "items": [
-              {
-                "title": "Sila、Panasonic Energy北米法人向け負極材供給を発表",
-                "information_complete": true,
-                "summary_points": [
-                  {
-                    "text": "Silaの発表では、Panasonic Energy Corporation of North Americaとの契約は複数年で、長期的な商業関係の一環として将来の取引額が10億ドルを超える可能性がある。",
-                    "evidence_ids": [
-                      "e005"
-                    ],
-                    "source_fact_ids": [
-                      "e005:f01",
-                      "e005:f06"
-                    ]
-                  },
-                  {
-                    "text": "SilaはWashington州Moses Lake工場からTitan Siliconシリコン・カーボン負極材を供給し、顧客認定後に出荷と増産を進める。Panasonic Energy北米法人のCEOは、同工場が着工から生産開始まで進展したと述べた。",
-                    "evidence_ids": [
-                      "e005"
-                    ],
-                    "source_fact_ids": [
-                      "e005:f02",
-                      "e005:f06",
-                      "e005:f10"
-                    ]
-                  },
-                  {
-                    "text": "増産に伴い同工場で製造・建設関連の雇用を約500人追加する見込みで、両社は知的財産分野でも協力する。",
-                    "evidence_ids": [
-                      "e005"
-                    ],
-                    "source_fact_ids": [
-                      "e005:f09",
-                      "e005:f13"
-                    ]
-                  }
-                ],
-                "topic_value_class": "operational_status_change",
-                "priority_class": "priority",
-                "change_class": "new_event"
-              }
-            ]
+            "decision": "insufficient_evidence",
+            "items": []
           },
           {
             "event_id": "g005",
