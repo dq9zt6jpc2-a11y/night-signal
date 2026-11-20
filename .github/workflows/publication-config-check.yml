@@ -1,0 +1,19 @@
+name: Check NIGHT SIGNAL publication configuration
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+      - 'config/night_signal_operations.json'
+      - 'scripts/publication_*.py'
+
+permissions:
+  contents: read
+
+jobs:
+  publication-config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Check the publication schedule against the operating policy
+        run: python3 scripts/publication_schedule_audit.py
