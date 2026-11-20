@@ -3828,6 +3828,25 @@ def record_is_delayed_untrusted_recap(
     )
 
 
+def expired_plan_claim(text: str, issue_date: str) -> bool:
+    """Detect a dated plan whose stated execution is already in the past."""
+    issue_day = date.fromisoformat(issue_date)
+    for sentence in re.split(r"[。！？]", text):
+        if not re.search(
+            r"(?:を|に|付で|から)(?:正式に)?(?:開催|開始|発売|配信|発表|決定|就任|施行|稼働|完了)(?:する(?:予定(?:だ|です)?)?|予定(?:だ|です)?)(?:[。\s]|$)"
+            r"|(?:正式決定する|正式に決定する|就任予定だ)(?:[。\s]|$)",
+            sentence,
+        ):
+            continue
+        # An explicit rescheduling or new decision can itself be the update.
+        if re.search(r"延期|前倒し|撤回|中止|再開|改めて|予定だった|予定されていた", sentence):
+            continue
+        dates = explicit_title_event_dates(sentence, issue_day)
+        if dates and all((issue_day - event_date).days > 7 for event_date in dates):
+            return True
+    return False
+
+
 def record_document_is_current(record: dict[str, Any], issue_date: str) -> bool:
     try:
         issue_day = date.fromisoformat(issue_date)
@@ -5338,6 +5357,7 @@ def normalize_result(
         ]
         rejection_checks = [
             ("invalid_summary_point", invalid_point_shape),
+            ("expired_plan_claim", any(expired_plan_claim(fact, issue_date) for fact in facts)),
             ("unsupported_summary_point", bool(unsupported_facts)),
             (
                 "invalid_source_fact_id",
@@ -7738,6 +7758,20 @@ def self_test() -> None:
             "Markdown Content: お問い合わせ 調査部 E-mail: report@example.com TEL: 03-0000-0000"
         ),
     }
+    for stale_plan in (
+        "6月25日の株主総会と7月1日の取締役会を経て正式決定する。",
+        "製品を7月1日に発売する。",
+        "制度を7月1日に施行する予定。",
+    ):
+        if not expired_plan_claim(stale_plan, "2026-11-20"):
+            fail("an expired plan passed as a current statement")
+    for current_update in (
+        "7月1日に発売した製品を11月20日に改良した。",
+        "7月1日に発売予定だった製品を12月1日に発売する。",
+        "製品を12月1日に発売する。",
+    ):
+        if expired_plan_claim(current_update, "2026-11-20"):
+            fail("historical context or a future plan was incorrectly blocked")
     appointment = {
         "title": "アステモ、新社長にホンダ四輪本部長の井上勝史氏",
         "excerpt": "6月25日の定時株主総会と7月1日の臨時取締役会を経て正式決定する。",
