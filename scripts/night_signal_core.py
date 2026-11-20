@@ -2211,6 +2211,7 @@ def record_title_has_material_change(
     return bool(
         REALIZED_MATERIAL_CHANGE_RE.search(title)
         or MATERIAL_RESULT_TITLE_RE.search(title)
+        or (re.search(r"オールスター|ALL[ -]STAR", title, re.I) and "選出" in title)
         or ACTUAL_EARNINGS_EVENT_RE.search(title)
         or (
             category.get("allow_sports_results", False)
@@ -3064,6 +3065,51 @@ def source_search_fallback(source: dict[str, Any]) -> dict[str, Any]:
             f"検索語: {used_query}。検索結果: {excerpt[:500]}"
         ),
     }
+
+
+def dated_index_links(raw: bytes, index_url: str, article_prefix: str, issue_date: str):
+    """Read dated same-origin article links from a registered official index."""
+    origin = urllib.parse.urlsplit(index_url).netloc
+    seen: set[str] = set()
+    for match in re.finditer(
+        r"""<a\b[^>]*\bhref=["']([^"']+)["'][^>]*>(.*?)</a\s*>""",
+        raw.decode("utf-8", errors="replace"),
+        re.I | re.S,
+    ):
+        url = urllib.parse.urljoin(index_url, match.group(1))
+        parsed = urllib.parse.urlsplit(url)
+        if parsed.netloc != origin or not parsed.path.startswith(article_prefix) or url in seen:
+            continue
+        markup = match.group(2)
+        posted = re.search(r"<time\b[^>]*>\s*(20\d{2}[-/.]\d{2}[-/.]\d{2})", markup, re.I)
+        heading = re.search(r"<h[2-4]\b[^>]*>(.*?)</h[2-4]>", markup, re.I | re.S)
+        if not posted or not heading:
+            continue
+        day = re.sub(r"[/.]", "-", posted.group(1))
+        if not valid_date(day, issue_date):
+            continue
+        seen.add(url)
+        yield url, day, compact_text(re.sub(r"<[^>]+>", "", heading.group(1)), 180)
+
+
+def fetch_index_articles(source: dict[str, Any], issue_date: str) -> list[dict[str, Any]]:
+    index_url = str(source["url"])
+    try:
+        raw, _, _ = request_bytes(index_url, timeout=12)
+    except (OSError, TimeoutError, urllib.error.URLError, ValueError):
+        return []
+    records = []
+    for url, day, title in list(dated_index_links(
+        raw, index_url, str(source["article_path_prefix"]), issue_date
+    ))[:12]:
+        fetched = fetch_source({**source, "url": url})
+        if fetched.get("verification_method") not in {"direct_fetch", "reader_fetch"}:
+            continue
+        record = {**fetched, "title": title, "published_date": day}
+        record["excerpt"] = article_source_window(record)
+        if record_evidence_depth(title, record) == "body":
+            records.append(record)
+    return records
 
 
 def fetch_source(source: dict[str, Any]) -> dict[str, Any]:
@@ -5582,7 +5628,13 @@ def collect_evidence(issue_date: str) -> dict[str, Any]:
             for category in contracts
         ]
         source_futures = [executor.submit(fetch_source, source) for source in flat_sources]
+        index_futures = [
+            executor.submit(fetch_index_articles, source, issue_date)
+            for source in flat_sources
+            if source.get("article_path_prefix") and source.get("source_class") == "official"
+        ]
         fetched = [future.result() for future in source_futures]
+        fetched.extend(record for future in index_futures for record in future.result())
         news_results = [future.result() for future in news_futures]
     records_by_category: dict[str, list[dict[str, Any]]] = {
         str(category["label"]): [] for category in contracts
