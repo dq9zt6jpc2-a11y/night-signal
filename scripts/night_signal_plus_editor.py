@@ -546,6 +546,34 @@ def merge_within_event_boundaries(
     return merged
 
 
+def unreported_official_result_urls(
+    requests: list[dict[str, Any]], cards: list[dict[str, Any]]
+) -> list[str]:
+    """Identify fresh, verified result candidates absent from selected cards."""
+    cited = {
+        str(source.get("url"))
+        for card in cards
+        for source in card.get("detail", {}).get("sources", [])
+    }
+    missing = set()
+    for request in requests:
+        new_event_ids = {
+            str(event.get("id"))
+            for event in request.get("payload", {}).get("events", [])
+            if not event.get("previous_updates")
+        }
+        missing.update(
+            str(record["url"])
+            for record in request.get("_records", [])
+            if record.get("result_team")
+            and record.get("source_class") == "official"
+            and record.get("url")
+            and str(record.get("_editor_event_id")) in new_event_ids
+            and str(record["url"]) not in cited
+        )
+    return sorted(missing)
+
+
 def category_review_audit(
     evidence: dict[str, Any],
     requests: list[dict[str, Any]],
@@ -659,9 +687,11 @@ def category_review_audit(
             and bool(check.get("fallback_attempted"))
             for check in discovery_checks
         )
-        final_cards = len(cards_by_category.get(label, []))
+        category_cards = cards_by_category.get(label, [])
+        missing_official_results = unreported_official_result_urls(category_requests, category_cards)
+        final_cards = len(category_cards)
         low_count = final_cards <= 1
-        recall_risk = bool(
+        recall_risk = bool(missing_official_results) or bool(
             candidate_events >= 4
             and body_events_without_previous_updates >= 3
             and no_material_body_events_without_previous_updates >= 2
@@ -719,6 +749,7 @@ def category_review_audit(
                     else "not_low_count"
                 ),
                 "recall_risk": recall_risk,
+                "unreported_official_result_urls": missing_official_results,
                 "needs_follow_up": needs_follow_up,
             }
         )
@@ -874,6 +905,23 @@ def apply_review(
 
 
 def self_test() -> None:
+    result_url = "https://example.invalid/result"
+    result_request = {
+        "payload": {"events": [{"id": "g001", "previous_updates": []}]},
+        "_records": [{
+            "_editor_event_id": "g001", "url": result_url,
+            "result_team": "Test team", "source_class": "official",
+        }],
+    }
+    if unreported_official_result_urls([result_request], []) != [result_url]:
+        fail("a single omitted official result did not trigger recall review")
+    result_card = {"detail": {"sources": [{"url": result_url}]}}
+    if unreported_official_result_urls([result_request], [result_card]):
+        fail("a published official result was flagged as missing")
+    result_request["payload"]["events"][0]["previous_updates"] = [{"title": "Archived result"}]
+    if unreported_official_result_urls([result_request], []):
+        fail("an archived result triggered a new-publication recall review")
+
     payload = {
         "category": "OpenAI",
         "events": [{"id": "g001", "previous_updates": [], "evidence": []}],
