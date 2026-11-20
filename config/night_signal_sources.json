@@ -129,7 +129,7 @@
       {"label": "Federal Reserve YouTube", "url": "https://www.youtube.com/federalreserve", "source_role": "social_or_video_signal", "channel": "youtube", "source_class": "youtube_video"}
     ],
     "宇都宮ブレックス": [
-      {"label": "Utsunomiya Brex News", "url": "https://www.utsunomiyabrex.com/news/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "depth_topic_ids": ["club_roster_staff", "bleague_games_schedule", "media_press_video"]},
+      {"label": "Utsunomiya Brex News", "url": "https://www.utsunomiyabrex.com/news/", "article_path_prefix": "/news/detail/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "depth_topic_ids": ["club_roster_staff", "bleague_games_schedule", "media_press_video"]},
       {"label": "B.League official", "url": "https://www.bleague.jp/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "depth_topic_ids": ["bleague_games_schedule", "arena_regional_admin"]},
       {"label": "B.League B.PREMIER", "url": "https://www.bleague.jp/new-bleague/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "depth_topic_ids": ["arena_regional_admin"]},
       {"label": "Utsunomiya City official", "url": "https://www.city.utsunomiya.lg.jp/", "source_role": "primary_or_official", "channel": "web", "source_class": "official", "depth_topic_ids": ["arena_regional_admin"]},
