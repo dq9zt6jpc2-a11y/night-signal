@@ -4,7 +4,7 @@
   "evidence_sha256": "029f5b225f3b55a65e02d88023c6dce15b5d907dd0e0c3e338136177e4705787",
   "cloud_handoff": {
     "execution_surface": "chatgpt-web-scheduled-task",
-    "reviewed_at": "2026-11-20T23:55:30+09:00",
+    "reviewed_at": "2026-11-20T23:57:45+09:00",
     "correction_attempt": 1
   },
   "responses": [
@@ -1154,15 +1154,6 @@
                     ],
                     "source_fact_ids": [
                       "e005:f06"
-                    ]
-                  },
-                  {
-                    "text": "契約期間は複数年にわたる。",
-                    "evidence_ids": [
-                      "e005"
-                    ],
-                    "source_fact_ids": [
-                      "e005:f01"
                     ]
                   },
                   {
