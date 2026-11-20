@@ -1,7 +1,7 @@
 {
   "contract": "night-signal-cloud-owner-status-v1",
-  "issue_date": "2026-11-15",
+  "issue_date": "2026-11-20",
   "role": "recovery",
-  "checked_at": "2026-11-15T20:34:35.070+09:00",
-  "outcome": "correction_submitted"
+  "checked_at": "2026-11-20T20:28:59+09:00",
+  "outcome": "started"
 }
