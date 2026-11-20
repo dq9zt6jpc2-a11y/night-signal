@@ -4,7 +4,7 @@
   "evidence_sha256": "029f5b225f3b55a65e02d88023c6dce15b5d907dd0e0c3e338136177e4705787",
   "cloud_handoff": {
     "execution_surface": "chatgpt-web-scheduled-task",
-    "reviewed_at": "2026-11-20T23:52:35+09:00",
+    "reviewed_at": "2026-11-20T23:55:30+09:00",
     "correction_attempt": 1
   },
   "responses": [
@@ -121,8 +121,90 @@
           },
           {
             "event_id": "g016",
-            "decision": "insufficient_evidence",
-            "items": []
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Le Groupe Figaro、記事のChatGPT統合と社内利用でOpenAIと提携",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Le Groupe Figaroは、ChatGPTへ自社のジャーナリズムを統合する戦略的提携をOpenAIと結んだ。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f02"
+                    ]
+                  },
+                  {
+                    "text": "Le Figaroの記事は、要約・抜粋と原記事へのリンクを伴ってChatGPTで利用可能になる。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f03"
+                    ]
+                  },
+                  {
+                    "text": "対象は現在の記事とアーカイブで、ニュース、ビジネス、文化、ライフスタイルを含む。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f04"
+                    ]
+                  },
+                  {
+                    "text": "Le Figaroはコンテンツの編集上の独立性と管理権を維持する。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f10"
+                    ]
+                  },
+                  {
+                    "text": "Le Figaroは、チーム全体でChatGPT Enterpriseを採用する計画だ。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f12"
+                    ]
+                  },
+                  {
+                    "text": "同社は、AI憲章と編集基準を守りながら、業務と読者サービスでOpenAI技術の追加活用を検討する。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f13"
+                    ]
+                  },
+                  {
+                    "text": "記事は、フランスでのChatGPTの月間ユニーク訪問者数を27.4 millionとしている。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f15"
+                    ]
+                  },
+                  {
+                    "text": "記事は、この統合によりLe Figaroコンテンツの視認性が大幅に拡大すると見込んでいる。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f15"
+                    ]
+                  }
+                ],
+                "topic_value_class": "operational_status_change",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
           },
           {
             "event_id": "g011",
@@ -273,8 +355,82 @@
           },
           {
             "event_id": "g002",
-            "decision": "insufficient_evidence",
-            "items": []
+            "decision": "publish",
+            "items": [
+              {
+                "title": "SoftBank Group株、20日に16.16%安",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Anthropicの上場を受け、アジアのAI・半導体関連株に売りが広がった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01"
+                    ]
+                  },
+                  {
+                    "text": "SoftBank Group株は20日に16.16%安となった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f02"
+                    ]
+                  },
+                  {
+                    "text": "東京エレクトロンは7.19%安だった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f07"
+                    ]
+                  },
+                  {
+                    "text": "レーザーテックは6.75%安、Renesas Electronicsは6.71%安だった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f07"
+                    ]
+                  },
+                  {
+                    "text": "SK hynixは6.0%安、Samsung Electronicsは4.7%安だった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f09"
+                    ]
+                  },
+                  {
+                    "text": "CNBCは、SoftBank Groupへの市場の警戒感が強まったことを映す動きだと報じた。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f05"
+                    ]
+                  },
+                  {
+                    "text": "記事は、OpenAIへの巨額投資が重荷になっているとの見方を紹介した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f04",
+                      "e005:f06"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
           },
           {
             "event_id": "g005",
@@ -349,8 +505,63 @@
           },
           {
             "event_id": "g004",
-            "decision": "insufficient_evidence",
-            "items": []
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Honda/HRC、安田啓一氏を2027年1月1日付社長に",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "関連リンクは、Honda/HRCが安田啓一氏を2027年1月1日付で代表取締役社長にすると伝えている。",
+                    "evidence_ids": [
+                      "e009"
+                    ],
+                    "source_fact_ids": [
+                      "e009:f02"
+                    ]
+                  },
+                  {
+                    "text": "同じ関連リンクは、渡辺康治氏が退任すると伝えている。",
+                    "evidence_ids": [
+                      "e009"
+                    ],
+                    "source_fact_ids": [
+                      "e009:f03"
+                    ]
+                  },
+                  {
+                    "text": "渡辺氏は2020年当時、Hondaの第4期F1活動を2021年で終了すると発表した。",
+                    "evidence_ids": [
+                      "e008"
+                    ],
+                    "source_fact_ids": [
+                      "e008:f01"
+                    ]
+                  },
+                  {
+                    "text": "渡辺氏はその後、新生HRCの社長に就任した。",
+                    "evidence_ids": [
+                      "e008"
+                    ],
+                    "source_fact_ids": [
+                      "e008:f02"
+                    ]
+                  },
+                  {
+                    "text": "HRCはRed Bull F1への供給を継続し、Max Verstappenの4連覇を支えた。",
+                    "evidence_ids": [
+                      "e008"
+                    ],
+                    "source_fact_ids": [
+                      "e008:f02"
+                    ]
+                  }
+                ],
+                "topic_value_class": "operational_status_change",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
           }
         ]
       }
@@ -414,8 +625,72 @@
           },
           {
             "event_id": "g001",
-            "decision": "insufficient_evidence",
-            "items": []
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Aston Martin、木曜FP1にJak Crawfordを起用",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Fernando AlonsoはLas Vegas Grand PrixのFP1を欠場する。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f02"
+                    ]
+                  },
+                  {
+                    "text": "Aston Martinは木曜のFP1でJak CrawfordをAlonsoの代役に起用する。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f04"
+                    ]
+                  },
+                  {
+                    "text": "Crawfordにとって今季5回目のFP1出走となる。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f04"
+                    ]
+                  },
+                  {
+                    "text": "Crawfordは日本GPとベルギーGPのFP1でもAlonsoの代役を務めた。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f05"
+                    ]
+                  },
+                  {
+                    "text": "記事は、Alonsoが1月のDakar RallyにAston Martinで参戦すると発表したと伝えている。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f11"
+                    ]
+                  },
+                  {
+                    "text": "記事は、Alonsoが同週末のFP1を欠場すると判明した3人目のドライバーだとしている。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f11"
+                    ]
+                  }
+                ],
+                "topic_value_class": "material_schedule_change",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
           },
           {
             "event_id": "g005",
@@ -866,8 +1141,90 @@
           },
           {
             "event_id": "g003",
-            "decision": "insufficient_evidence",
-            "items": []
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Sila、Panasonic Energy北米法人と商業オフテイク契約",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "SilaはPanasonic Energy Corporation of North Americaとの商業オフテイク契約を発表した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f06"
+                    ]
+                  },
+                  {
+                    "text": "契約期間は複数年にわたる。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01"
+                    ]
+                  },
+                  {
+                    "text": "Silaは、長期的な商業関係の一環として将来の取引額が10億米ドルを超える可能性があるとしている。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01"
+                    ]
+                  },
+                  {
+                    "text": "SilaはWashington州Moses Lake工場からTitan Siliconシリコン・カーボン負極材を供給する。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f02"
+                    ]
+                  },
+                  {
+                    "text": "SilaのCEOは、同工場が顧客認定後に主要顧客へ材料を供給できる状態になったと述べた。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f06"
+                    ]
+                  },
+                  {
+                    "text": "Panasonic Energy北米法人のCEOは、同工場が着工から生産開始まで進展したと述べた。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f10"
+                    ]
+                  },
+                  {
+                    "text": "Silaは、本契約などに対応する増産に伴い、同工場で製造・建設関連の雇用が約500人増えると見込んでいる。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f13"
+                    ]
+                  },
+                  {
+                    "text": "SilaとPanasonicは知的財産分野でも協力する。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f09"
+                    ]
+                  }
+                ],
+                "topic_value_class": "operational_status_change",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
           },
           {
             "event_id": "g005",
