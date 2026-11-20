@@ -50,6 +50,26 @@ def read_tail(path: Path) -> str:
     return text[-MAX_LOG_CHARS:]
 
 
+def read_rejected_requests(path: Path) -> list[dict[str, Any]]:
+    # The final JSON can exceed the display log tail. Parse the complete log.
+    marker = "review responses failed deterministic validation: "
+    try:
+        with path.open(encoding="utf-8", errors="replace") as stream:
+            for line in stream:
+                _, separator, payload = line.partition(marker)
+                if not separator:
+                    continue
+                try:
+                    value = json.loads(payload)
+                except json.JSONDecodeError:
+                    continue
+                if isinstance(value, dict) and isinstance(value.get("rejected_requests"), list):
+                    return [item for item in value["rejected_requests"] if isinstance(item, dict)]
+    except OSError:
+        pass
+    return []
+
+
 def read_recall_risk_categories(path: Path | None) -> list[str]:
     if path is None:
         return []
@@ -94,6 +114,10 @@ def build_feedback(
         "failed_stage": failed_stage,
         "step_outcomes": step_outcomes,
         "validator_log_tail": log_tail,
+        "rejected_requests": (
+            read_rejected_requests(log_directory / "apply.log")
+            if failed_stage == "apply" else []
+        ),
         "recall_risk_categories": read_recall_risk_categories(receipt_path),
         "recovery_contract": (
             "reuse the same Evidence; change only named rejected request/event entries"
@@ -188,6 +212,13 @@ def self_test() -> None:
     with tempfile.TemporaryDirectory() as temporary_directory:
         directory = Path(temporary_directory)
         (directory / "apply.log").write_text("first\nexact validator reason\n", encoding="utf-8")
+        rejected = [{"request_id": "test-request", "detail": "x" * (MAX_LOG_CHARS + 1)}]
+        with (directory / "apply.log").open("a", encoding="utf-8") as stream:
+            stream.write(
+                "review responses failed deterministic validation: "
+                + json.dumps({"rejected_requests": rejected})
+                + "\nexact validator reason\n"
+            )
         receipt_path = directory / "plus_review_receipt.json"
         receipt_path.write_text(
             json.dumps({"recall_risk_categories": ["OpenAI", "北米経済"]}),
@@ -209,6 +240,8 @@ def self_test() -> None:
             fail("bounded recovery attempt was not preserved")
         if "exact validator reason" not in feedback["validator_log_tail"]:
             fail("validator failure detail was not preserved")
+        if feedback["rejected_requests"] != rejected:
+            fail("complete rejection details were lost after log truncation")
         if feedback["recall_risk_categories"] != ["OpenAI", "北米経済"]:
             fail("recall-risk categories were not preserved")
     print("NIGHT SIGNAL CLOUD FEEDBACK SELF-TEST PASSED")
