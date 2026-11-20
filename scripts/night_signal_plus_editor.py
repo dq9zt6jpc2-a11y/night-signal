@@ -359,6 +359,7 @@ def prepare_packet(
             "every_published_item_requires_information_complete": True,
             "summary_review_steps": [
                 "Read current article body facts first. Separate the actual event, attribution, dates, numbers, scope, and conditions before writing the title.",
+                "Each summary point must be an object with nonempty text, evidence_ids, and source_fact_ids. Replace any point that merely repeats the headline with a concrete additional fact from the cited body.",
                 "Write one independently supported assertion per point. Cite only the Evidence and source fact IDs that support that exact statement. Split clauses supported by different facts.",
                 "Keep each amount, currency, unit, date, time zone and comparison basis traceable to a cited fact. Keep plans, reports, approvals and completed actions distinct. Do not add arithmetic, causation or a market high unless the cited text explicitly supports it.",
                 "Omit unrelated live quote widgets, navigation and generic filler. Before submission, compare the draft back to all material body facts and confirm that each required fact is represented in an actual sentence.",

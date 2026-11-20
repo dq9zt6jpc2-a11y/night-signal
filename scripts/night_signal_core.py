@@ -5062,8 +5062,10 @@ def normalize_result(
         ] = []
         seen_point_texts: set[str] = set()
         invalid_point_shape = False
-        for raw_point in item.get("summary_points", []):
+        invalid_summary_points: list[dict[str, Any]] = []
+        for index, raw_point in enumerate(item.get("summary_points", []), start=1):
             if not isinstance(raw_point, dict):
+                invalid_summary_points.append({"point": index, "reason": "expected_object"})
                 invalid_point_shape = True
                 continue
             text = compact_text(str(raw_point.get("text", "")), 500)
@@ -5086,10 +5088,20 @@ def normalize_result(
                 or not point_ids
                 or (require_source_fact_coverage and not source_fact_ids)
             ):
+                invalid_summary_points.append({
+                    "point": index,
+                    "text": text,
+                    "reason": "missing_text_or_citations",
+                })
                 invalid_point_shape = True
                 continue
             normalized_texts = state_contract.normalize_material_facts(title, [text])
             if not normalized_texts:
+                invalid_summary_points.append({
+                    "point": index,
+                    "text": text,
+                    "reason": "no_material_fact_after_normalization",
+                })
                 invalid_point_shape = True
                 continue
             for normalized_text in normalized_texts:
@@ -5194,6 +5206,7 @@ def normalize_result(
                         "phase": "invalid_summary_points_rejected",
                         "category": category.get("label"),
                         "title": title,
+                        "points": invalid_summary_points,
                     },
                     ensure_ascii=False,
                 ),
