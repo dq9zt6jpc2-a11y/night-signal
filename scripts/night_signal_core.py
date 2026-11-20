@@ -3841,6 +3841,17 @@ def record_document_is_current(record: dict[str, Any], issue_date: str) -> bool:
         return False
     lead = reader_facing_text(str(record.get("excerpt", "")), 520)
     lead_dates = explicit_title_event_dates(lead, issue_day)
+    # A refreshed article date must not make an expired approval plan new.
+    if re.search(r"新社長|次期社長|社長就任|社長交代", str(record.get("title", ""))):
+        for sentence in re.split(r"[。！？]", lead):
+            if not re.search(r"株主総会.*取締役会.*(?:正式決定|正式に決定|就任予定)", sentence):
+                continue
+            approval_dates = explicit_title_event_dates(sentence, issue_day)
+            if len(approval_dates) >= 2 and all(
+                (issue_day - approval_date).days > 7
+                for approval_date in approval_dates
+            ):
+                return False
     if (
         not title_dates
         and RECAP_EXPLAINER_RE.search(str(record.get("title", "")))
@@ -7719,6 +7730,18 @@ def self_test() -> None:
             "Markdown Content: お問い合わせ 調査部 E-mail: report@example.com TEL: 03-0000-0000"
         ),
     }
+    appointment = {
+        "title": "アステモ、新社長にホンダ四輪本部長の井上勝史氏",
+        "excerpt": "6月25日の定時株主総会と7月1日の臨時取締役会を経て正式決定する。",
+        "published_date": "2026-11-18",
+    }
+    if record_document_is_current(appointment, "2026-11-20"):
+        fail("expired appointment approvals passed on a refreshed article date")
+    if not record_document_is_current(
+        {**appointment, "excerpt": "12月1日の株主総会と12月2日の取締役会を経て正式決定する。"},
+        "2026-11-20",
+    ):
+        fail("upcoming appointment approvals were treated as expired")
     if record_document_is_current(stale_pdf_record, "2099-07-02"):
         fail("stale embedded document date passed current Evidence validation")
     stale_rebroadcast = {
