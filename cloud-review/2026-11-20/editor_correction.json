@@ -1,0 +1,1094 @@
+{
+  "contract": "night-signal-cloud-review-correction-v1",
+  "issue_date": "2026-11-20",
+  "evidence_sha256": "029f5b225f3b55a65e02d88023c6dce15b5d907dd0e0c3e338136177e4705787",
+  "cloud_handoff": {
+    "execution_surface": "chatgpt-web-scheduled-task",
+    "reviewed_at": "2026-11-20T20:32:06+09:00",
+    "correction_attempt": 1
+  },
+  "responses": [
+    {
+      "request_id": "openai-03-1944c0ac89bbfcf3",
+      "response": {
+        "events": [
+          {
+            "event_id": "g012",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g015",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "アリゾナ州、OpenAIなどを巡る刑事捜査を開始",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "アリゾナ州のクリス・メイズ司法長官は、「制御を逸脱したAIエージェントによる銀行侵入の疑い」を中心にOpenAIなどを捜査していると説明した。捜査開始は起訴を意味しない。",
+                    "evidence_ids": [
+                      "e002",
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01",
+                      "e002:f02",
+                      "e006:f01"
+                    ]
+                  },
+                  {
+                    "text": "OpenAIはコメント要請に応じず、別の訴訟への回答ではHugging Face事案後に技術報告、独立報告、影響先への通知、安全策強化を行ったと説明している。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f05",
+                      "e002:f10",
+                      "e002:f11"
+                    ]
+                  },
+                  {
+                    "text": "本人確認上の脅威に直面した企業のうち、年間売上10億ドル以上では57.1％、5000万～2億5000万ドルでは32.4％が敵対的ボットやエージェントによる事案・損失を報告したとの調査も示された。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f12",
+                      "e002:f13"
+                    ]
+                  }
+                ],
+                "topic_value_class": "risk_or_safety_signal",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g013",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g010",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "非公式韓国試験、GPT-6.2 AstraとGemini 4 Neonが満点",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "個人開発者が公開した2027学年度韓国大学修学能力試験の非公式評価で、GPT-6.2 AstraとGemini 4 Neonは450点満点、GPT-6.2 Solは449.6点だった。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f01",
+                      "e004:f04",
+                      "e004:f09"
+                    ]
+                  },
+                  {
+                    "text": "Claude Opus 5.5とFable 5.2は449.3点、韓国勢最高のK-Exaone 2.5は414.7点だった。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f02",
+                      "e004:f10",
+                      "e004:f11"
+                    ]
+                  },
+                  {
+                    "text": "評価は外部ツールを使わずAPIのみで実施され、公式サービス上の利用環境とは結果が異なる可能性がある。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f03",
+                      "e004:f13",
+                      "e004:f15",
+                      "e004:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g016",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Le Groupe Figaro、記事のChatGPT統合と社内導入でOpenAIと提携",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Le Groupe FigaroはOpenAIとの提携を発表し、現在・過去の記事を要約・抜粋と原記事へのリンク付きでChatGPTから利用できるようにする。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f02",
+                      "e005:f03"
+                    ]
+                  },
+                  {
+                    "text": "対象はニュース、ビジネス、文化、ライフスタイルで、現在の記事とアーカイブを含む。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f04"
+                    ]
+                  },
+                  {
+                    "text": "同社は編集上の独立性とコンテンツ管理権を維持し、AI憲章と編集基準を守りながら、チーム全体へのChatGPT Enterprise導入と業務・読者サービスでの追加活用を検討する。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f10",
+                      "e005:f12",
+                      "e005:f13"
+                    ]
+                  },
+                  {
+                    "text": "記事は、ChatGPTのフランスでの月間ユニーク訪問者を2740万人とし、この統合によるLe Figaroコンテンツの認知拡大を見込んでいる。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f15"
+                    ]
+                  }
+                ],
+                "topic_value_class": "operational_status_change",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g011",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "イエロ、Businesses in ChatGPTの登録支援を開始",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "イエロ株式会社は、OpenAIの企業・店舗向け機能「Businesses in ChatGPT」について、事業者の登録手続き、プロフィール設定、情報最適化を支援するサービスを開始した。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f01",
+                      "e007:f02"
+                    ]
+                  },
+                  {
+                    "text": "Businesses in ChatGPTは、企業や店舗がChatGPT上で自社情報を登録・管理し、ユーザーとの接点を整える機能と説明されている。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f03"
+                    ]
+                  }
+                ],
+                "topic_value_class": "operational_status_change",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g014",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "softbank-01-cbe06cf0fca22857",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Xiaomi 18 Pro Max、SoftBankのSIMフリー販売対象に",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "販売端末はSIMフリーのオープンマーケットモデルで、SoftBank向けアプリはプリインストールされず、商品仕様もオープンマーケットモデルと同じとなる。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01",
+                      "e001:f03"
+                    ]
+                  },
+                  {
+                    "text": "初期不良交換と修理はメーカーが対応し、SoftBankのeSIMを移行する場合は機種変更手数料が発生する。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f04",
+                      "e001:f05"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g001",
+            "decision": "background_or_navigation",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "SoftBank主導、Agile Robotsが5億ドル調達",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Agile RobotsはシリーズFで5億ドルを調達し、評価額は85億ドルとなった。SoftBank Groupが主導し、NVIDIAやHitachi Groupなどが参加した。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f01",
+                      "e004:f02"
+                    ]
+                  },
+                  {
+                    "text": "資金はグローバル展開、生産能力、主要市場での事業拡大に使う。ドイツの新拠点は脚式・車輪式ヒューマノイドを年最大1万台生産できるとしている。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f08",
+                      "e004:f09",
+                      "e004:f10"
+                    ]
+                  },
+                  {
+                    "text": "同社は2018年にDLRから独立し、自動車、家電、物流などの顧客向けに2万件の産業用ロボット・ソリューションを展開してきた。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f14",
+                      "e004:f15"
+                    ]
+                  },
+                  {
+                    "text": "同社は、フィジカルAIが建設、移動、ものづくりを根本的に変えるとの見方を示し、研究室から産業生産へ移して物流、自動車、電子機器、製造業に導入していると説明した。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f06",
+                      "e004:f07"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "アジアAI・半導体株安、SoftBank Group株は16.16％安",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "記事は、Anthropicの上場を受け、アジアのAI・半導体関連株に売りが広がったと報じた。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01"
+                    ]
+                  },
+                  {
+                    "text": "SoftBank Group株は11月20日に16.16％下落した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f02"
+                    ]
+                  },
+                  {
+                    "text": "東京エレクトロンは7.19％、レーザーテックは6.75％、ルネサスエレクトロニクスは6.71％下落し、SK hynixとSamsung Electronicsも各6.0％、4.7％下落した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f07",
+                      "e005:f09"
+                    ]
+                  },
+                  {
+                    "text": "CNBCは、SoftBank GroupがOpenAIへ大型投資を行う中、市場の警戒感が強まった動きだとの見方を報じた。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f04",
+                      "e005:f05",
+                      "e005:f06"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g005",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "honda-01-7ead7e9658b64e50",
+      "response": {
+        "events": [
+          {
+            "event_id": "g005",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Honda、アラバマ工場に4.62億ドル追加投資",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "投資にはハイブリッドエンジンの生産拡大と、複数車種を同じラインで生産できる新組立ラインが含まれる。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01"
+                    ]
+                  }
+                ],
+                "topic_value_class": "operational_status_change",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g003",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "HRC、2027年1月1日付で安田啓一氏が社長就任へ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "HRCは、2027年1月1日付で安田啓一氏が代表取締役社長に就任すると発表している。",
+                    "evidence_ids": [
+                      "e009"
+                    ],
+                    "source_fact_ids": [
+                      "e009:f02"
+                    ]
+                  },
+                  {
+                    "text": "同日付で渡辺康治氏は退任する。",
+                    "evidence_ids": [
+                      "e009"
+                    ],
+                    "source_fact_ids": [
+                      "e009:f03"
+                    ]
+                  },
+                  {
+                    "text": "渡辺氏は2020年当時にHondaの第4期F1活動終了を発表し、その後HRC社長としてRed Bullへの供給継続を担った。",
+                    "evidence_ids": [
+                      "e008"
+                    ],
+                    "source_fact_ids": [
+                      "e008:f01",
+                      "e008:f02"
+                    ]
+                  }
+                ],
+                "topic_value_class": "operational_status_change",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-01-c275633ca2e8d46b",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "F1、WHOOPと複数年パートナー契約",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "WHOOPはF1の公式パートナーとなり、ドライバーなどの身体パフォーマンスを物語化する取り組みを進める。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01"
+                    ]
+                  }
+                ],
+                "topic_value_class": "cultural_or_audience_signal",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              },
+              {
+                "title": "Nike、2027年からF1公式アパレル供給者に",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Nikeは2027年シーズンからF1の選手・スタッフ向け公式アパレルとユニフォームを供給する長期契約を結んだ。契約条件は非公表だ。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f01",
+                      "e006:f02"
+                    ]
+                  },
+                  {
+                    "text": "F1とNikeは靴・衣料・アクセサリーを展開し、追加商品や体験を2027年シーズン以降に発表する予定だ。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f03",
+                      "e006:f06"
+                    ]
+                  }
+                ],
+                "topic_value_class": "cultural_or_audience_signal",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Crawford、Las Vegas GPのFP1でAlonsoに代走",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Aston Martinは、Jak CrawfordをLas Vegas GP木曜FP1でFernando Alonsoに代えて起用すると発表した。Crawfordにとって今季5回目のFP1となる。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f02",
+                      "e004:f04"
+                    ]
+                  },
+                  {
+                    "text": "Crawfordは日本GPとベルギーGPでもAlonsoの代役を務め、直近のメキシコGPではマシントラブルで停止した。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f03",
+                      "e004:f05"
+                    ]
+                  },
+                  {
+                    "text": "記事は、Alonsoが2027年1月にAston MartinでDakar Rallyへ参戦すると発表しており、同週末のFP1欠場が判明した3人目のドライバーだと報じている。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f11"
+                    ]
+                  }
+                ],
+                "topic_value_class": "material_schedule_change",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g005",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "japan_economy-01-214043e6b3889571",
+      "response": {
+        "events": [
+          {
+            "event_id": "g005",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "三井化学、JSR買収総額1兆8400億円　のれん約9000億円",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "三井化学によるJSR買収総額は1兆8400億円で、自社の企業価値を上回る。買収により約9000億円ののれんが発生し、負債も増える見通しだ。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f02",
+                      "e001:f03",
+                      "e001:f04"
+                    ]
+                  },
+                  {
+                    "text": "株価は買収公表直前の11月2日終値から20％下落し、同期間の日経平均の6％安を上回った。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f05",
+                      "e001:f06"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g004",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "日本の10月コア消費者物価、前年同月比2.2％上昇",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "総務省が11月20日に発表した10月の生鮮食品を除く総合指数は前年同月比2.2％上昇し、政府・日銀の物価安定目標である2％を2カ月連続で上回った。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f04",
+                      "e002:f05"
+                    ]
+                  },
+                  {
+                    "text": "AI投資拡大による半導体価格の高騰が携帯電話機などへ波及し、デジタル関連製品は前年同月比1割超上昇した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01",
+                      "e002:f02"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g001",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "日経平均、3007円56銭安の5万6436円65銭",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "11月20日の日経平均終値は前日比3007円56銭安の5万6436円65銭で、終値の下げ幅は過去5番目、今年4月以来の水準となった。",
+                    "evidence_ids": [
+                      "e008"
+                    ],
+                    "source_fact_ids": [
+                      "e008:f01",
+                      "e008:f03"
+                    ]
+                  },
+                  {
+                    "text": "前日の米国市場の流れを引き継ぎ、AI・半導体関連を中心に幅広い銘柄が売られ、東京市場は全面安となった。",
+                    "evidence_ids": [
+                      "e008"
+                    ],
+                    "source_fact_ids": [
+                      "e008:f02"
+                    ]
+                  },
+                  {
+                    "text": "TBSは下落要因をAnthropicの上場とし、米国市場で買い材料が出尽くしたとの見方から幅広く売られた流れが東京市場にも波及したと報じた。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f03",
+                      "e007:f04",
+                      "e007:f05"
+                    ]
+                  },
+                  {
+                    "text": "市場関係者は、AI企業の収益力への注目が高まり、AI銘柄の選別が始まったと述べた。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f06"
+                    ]
+                  },
+                  {
+                    "text": "Anthropic株は公開価格を17％上回る97.17ドルで11月19日の取引を終えた。",
+                    "evidence_ids": [
+                      "e008"
+                    ],
+                    "source_fact_ids": [
+                      "e008:f04"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "japan_economy-02-6472a7c7cdd41528",
+      "response": {
+        "events": [
+          {
+            "event_id": "g015",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g014",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g010",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g011",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "日本株、週間でTOPIX6.8％安　AI資金調達懸念が重荷",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "AI関連企業では9月下旬以降、設備投資の規模拡大に伴う資金需要の増加などから、資金調達コストが大幅に上昇した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f03"
+                    ]
+                  },
+                  {
+                    "text": "データセンター建設が足踏みするとの警戒感が強まり、第3週の日本株は大幅安となった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f04"
+                    ]
+                  },
+                  {
+                    "text": "第3週のTOPIXは6.8％安で今年最大、日経平均は7.7％安で今年2番目の下落率となった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f05"
+                    ]
+                  },
+                  {
+                    "text": "市場関係者は、感謝祭前後の流動性低下や戻り売りを下押し要因とする一方、金利低下などで資金繰り懸念が和らげば反発余地もあるとみている。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f06",
+                      "e005:f07",
+                      "e005:f09",
+                      "e005:f10",
+                      "e005:f15"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "60代前半世帯、教育・仕送り減でも支出差は月4万円",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "2025年家計調査の平均では、夫50～54歳世帯の消費支出は月39万9715円、60～64歳世帯は35万9527円で、差は4万188円だった。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f01",
+                      "e006:f02",
+                      "e006:f03"
+                    ]
+                  },
+                  {
+                    "text": "教育費と仕送りは月4万6893円減る一方、その他支出は6705円増え、60～64歳世帯では交際費が9251円、住居費が6117円多かった。世帯人員や有業人員が異なる平均同士の比較である。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f03",
+                      "e006:f04"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g013",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "ドル円、一時158.81円　米10年債利回り5％割れ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "ロンドン市場でドル円は一時158.81円まで下落し、米10年債利回りは5％を割って4.98％台へ低下した。",
+                    "evidence_ids": [
+                      "e008"
+                    ],
+                    "source_fact_ids": [
+                      "e008:f01",
+                      "e008:f02"
+                    ]
+                  },
+                  {
+                    "text": "ユーロドルは1.0970台、ポンドドルは1.3110台へ上昇し、記事時点ではドル円158.83、ユーロ円174.37、ポンド円208.27だった。",
+                    "evidence_ids": [
+                      "e008"
+                    ],
+                    "source_fact_ids": [
+                      "e008:f03",
+                      "e008:f04",
+                      "e008:f06"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g012",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "north_america-01-88872c2a9645334c",
+      "response": {
+        "events": [
+          {
+            "event_id": "g004",
+            "decision": "background_or_navigation",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Colliers調査、カナダ不動産でラストマイル物流を22％が選好",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Colliersの2027年世界投資家調査は35カ国1170人超を対象とし、カナダが引き続き国際資本を引きつけているとした。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f03"
+                    ]
+                  },
+                  {
+                    "text": "米国からカナダ商業不動産への投資は堅調で、欧州・中東の一部投資家も分散先としてカナダを検討している。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f04"
+                    ]
+                  },
+                  {
+                    "text": "選好はラストマイル物流22％、製造・産業団地20％、大型店舗・倉庫18％で、カナダ投資家の小売選好は食品スーパー併設型35％、近隣型32％だった。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f05",
+                      "e002:f06"
+                    ]
+                  },
+                  {
+                    "text": "電力、光回線、許認可へのアクセスが立地・テナントと並ぶ投資条件になり、記事はデータセンター周辺用途のカナダ市場への波及を注視すべき動きとしている。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f13",
+                      "e002:f14"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g001",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "米物価3.7％、多くの業種で賃金の伸びが下回る",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "米消費者物価は2026年9月までの12カ月で3.7％上昇し、FOMC議事要旨は多くの業種で賃金上昇が物価上昇に遅れたと記した。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f06",
+                      "e004:f07"
+                    ]
+                  },
+                  {
+                    "text": "FOMC議事要旨では、データセンター建設など技能人材が不足する分野で賃金プレミアムが生じた一方、総賃金指標への影響は大きくないとされた。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f09"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Sila、Panasonic Energy北米法人向け負極材供給を発表",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Silaの発表では、Panasonic Energy Corporation of North Americaとの契約は複数年で、長期的な商業関係の一環として将来の取引額が10億ドルを超える可能性がある。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e005:f06"
+                    ]
+                  },
+                  {
+                    "text": "SilaはWashington州Moses Lake工場からTitan Siliconシリコン・カーボン負極材を供給し、顧客認定後に出荷と増産を進める。Panasonic Energy北米法人のCEOは、同工場が着工から生産開始まで進展したと述べた。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f02",
+                      "e005:f06",
+                      "e005:f10"
+                    ]
+                  },
+                  {
+                    "text": "増産に伴い同工場で製造・建設関連の雇用を約500人追加する見込みで、両社は知的財産分野でも協力する。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f09",
+                      "e005:f13"
+                    ]
+                  }
+                ],
+                "topic_value_class": "operational_status_change",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g005",
+            "decision": "background_or_navigation",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    }
+  ]
+}
