@@ -1605,8 +1605,9 @@ def article_source_window(record: dict[str, Any]) -> str:
     author_close = raw.find("閉じる", author_expander, min(len(raw), start + 3000))
     if author_expander >= 0 and author_close > author_expander:
         start = author_close + len("閉じる")
-    end = len(raw)
-    for match in ARTICLE_CONTENT_END_RE.finditer(raw, max(0, start + 120)):
+    related_links = raw.find("【関連リンク】", start)
+    end = related_links if related_links >= 0 else len(raw)
+    for match in ARTICLE_CONTENT_END_RE.finditer(raw, max(0, start + 120), end):
         end = match.start()
         break
     return raw[start:end].strip(" -–—|｜")
@@ -6386,6 +6387,13 @@ def self_test() -> None:
         fail("Japanese vehicle count split at the ten-thousand unit")
     if numeric_claims("103万台、3632台") != {1030000.0, 3632.0}:
         fail("independent counts were incorrectly joined")
+    article_with_links = {"title": "渡辺氏インタビュー", "excerpt": (
+        "渡辺氏インタビュー 今季の技術開発と体制を振り返った。"
+        "【関連リンク】安田氏が社長に就任へ。"
+    )}
+    window = article_source_window(article_with_links)
+    if "技術開発" not in window or "安田氏" in window:
+        fail("related-link text contaminated article-body evidence")
     market_widget = "（了） 時事通信 最近見た銘柄 ヘッドライン マーケット指標"
     if not ARTICLE_REQUIRED_FACT_TAIL_RE.search(market_widget):
         fail("market widget after the article footer became required summary content")
