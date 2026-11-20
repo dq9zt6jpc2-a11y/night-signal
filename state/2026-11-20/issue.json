@@ -1143,57 +1143,6 @@
       }
     },
     {
-      "watch_topic_id": "china_sales",
-      "title": "Honda出身の井上勝史氏、アステモ次期社長へ",
-      "summary": "井上勝史氏の社長就任は6月25日の株主総会と7月1日の臨時取締役会を経て正式決定する。 井上氏はHondaの欧州・中国責任者、電動事業開発部門トップ、四輪事業本部長などを歴任した。 Hondaは日立保有のアステモ株21％を取得して出資比率を61％へ高め、子会社化する予定だ。",
-      "section_id": "honda",
-      "category": "Honda",
-      "source_published_date": "2026-11-18",
-      "topic_value_class": "operational_status_change",
-      "priority_class": "priority",
-      "change_class": "new_event",
-      "detail": {
-        "slug": "auto-d83b7197e6f3-2026-11-20.html",
-        "sources": [
-          {
-            "label": "netdenjd.com",
-            "url": "https://www.netdenjd.com/archives/669398"
-          }
-        ],
-        "summary": "井上勝史氏の社長就任は6月25日の株主総会と7月1日の臨時取締役会を経て正式決定する。 井上氏はHondaの欧州・中国責任者、電動事業開発部門トップ、四輪事業本部長などを歴任した。 Hondaは日立保有のアステモ株21％を取得して出資比率を61％へ高め、子会社化する予定だ。",
-        "summary_basis": {
-          "confirmed_facts": [
-            "井上勝史氏の社長就任は6月25日の株主総会と7月1日の臨時取締役会を経て正式決定する。",
-            "井上氏はHondaの欧州・中国責任者、電動事業開発部門トップ、四輪事業本部長などを歴任した。",
-            "Hondaは日立保有のアステモ株21％を取得して出資比率を61％へ高め、子会社化する予定だ。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "井上勝史氏の社長就任は6月25日の株主総会と7月1日の臨時取締役会を経て正式決定する。",
-              "source_urls": [
-                "https://www.netdenjd.com/archives/669398"
-              ]
-            },
-            {
-              "fact": "井上氏はHondaの欧州・中国責任者、電動事業開発部門トップ、四輪事業本部長などを歴任した。",
-              "source_urls": [
-                "https://www.netdenjd.com/archives/669398"
-              ]
-            },
-            {
-              "fact": "Hondaは日立保有のアステモ株21％を取得して出資比率を61％へ高め、子会社化する予定だ。",
-              "source_urls": [
-                "https://www.netdenjd.com/archives/669398"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-11-18"
-          ]
-        }
-      }
-    },
-    {
       "watch_topic_id": "race_schedule_results",
       "title": "F1、WHOOPと複数年パートナー契約",
       "summary": "WHOOPはF1の公式パートナーとなり、ドライバーなどの身体パフォーマンスを物語化する取り組みを進める。",
