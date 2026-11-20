@@ -362,6 +362,7 @@ def prepare_packet(
                 "Each summary point must be an object with nonempty text, evidence_ids, and source_fact_ids. Replace any point that merely repeats the headline with a concrete additional fact from the cited body.",
                 "Write one independently supported assertion per point. Cite only the Evidence and source fact IDs that support that exact statement. Split clauses supported by different facts.",
                 "Keep each amount, currency, unit, date, time zone and comparison basis traceable to a cited fact. Keep plans, reports, approvals and completed actions distinct. Do not add arithmetic, causation or a market high unless the cited text explicitly supports it.",
+                "When a body-supported event has one failed claim, repair that claim using its cited body fact, or remove only the unsupported clause while retaining the verified event and its required facts. Do not replace a body-supported event with insufficient_evidence merely because its draft failed validation.",
                 "Omit unrelated live quote widgets, navigation and generic filler. Before submission, compare the draft back to all material body facts and confirm that each required fact is represented in an actual sentence.",
                 "Where a fact list overflowed, inspect available body text for omitted material qualifiers. Never cite a missing fact ID or present a missing qualifier as verified.",
             ],
