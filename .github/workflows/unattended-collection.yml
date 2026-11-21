@@ -195,3 +195,14 @@ jobs:
           echo "Evidence and every distinct candidate event are ready on the immutable cloud handoff branch."
           echo "Repository model API requests: 0"
           echo "Additional paid API requests: 0"
+
+      - name: Fail a late run if the issue still has no verified public page
+        if: ${{ always() && env.ISSUE_DATE != '' }}
+        run: |
+          NOW_JST="$(TZ=Asia/Tokyo date +%F)"
+          DEADLINE_ACTION="$(python3 scripts/publication_timing.py --decision --event-name schedule)"
+          if [[ "$ISSUE_DATE" < "$NOW_JST" ]]; then
+            python3 scripts/publication_audit.py "$ISSUE_DATE" --public-date-only
+          elif [[ "$DEADLINE_ACTION" == "missed" ]]; then
+            python3 scripts/publication_audit.py "$ISSUE_DATE"
+          fi
