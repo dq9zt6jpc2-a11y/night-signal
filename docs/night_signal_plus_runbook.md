@@ -2,7 +2,7 @@
 
 ## Objective and fixed priorities
 
-Publish the current JST issue automatically by 22:30 every evening. Keep the
+The service objective is automatic Web publication by 19:00 JST daily, without manual intervention. The current 22:30 operations cutoff is used to detect an unresolved failure. Publication after 19:00 is late. Keep the
 existing 16:45 final Evidence collection window. The priority order is:
 
 1. coverage of every configured category and watch topic;
