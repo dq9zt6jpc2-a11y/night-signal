@@ -288,6 +288,7 @@ def self_test() -> None:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--decision", action="store_true")
+    parser.add_argument("--issue-deadline", metavar="YYYY-MM-DD")
     parser.add_argument("--near-window-wait-seconds", action="store_true")
     parser.add_argument("--max-wait-minutes", type=int, default=30)
     parser.add_argument("--event-name", default="schedule")
@@ -311,6 +312,13 @@ def main() -> int:
                 max_wait_minutes=args.max_wait_minutes,
             )
         )
+        return 0
+    if args.issue_deadline:
+        zone = ZoneInfo(policy.timezone)
+        issue_date = datetime.strptime(args.issue_deadline, "%Y-%m-%d").date()
+        deadline = datetime.combine(issue_date, policy.publication_deadline, tzinfo=zone)
+        now = datetime.fromisoformat(args.now) if args.now else datetime.now(zone)
+        print("missed" if now >= deadline else "pending")
         return 0
     if args.decision:
         now = (

@@ -74,6 +74,15 @@ jobs:
           ISSUE_DATE="$(python3 scripts/night_signal_publish.py --resolve-issue-date --event-name "$GITHUB_EVENT_NAME" --requested-issue-date "${REQUESTED_ISSUE_DATE:-}")"
           echo "ISSUE_DATE=$ISSUE_DATE" >> "$GITHUB_ENV"
 
+      - name: Record the issue date for the completion watchdog
+        run: printf '%s\n' "$ISSUE_DATE" > "$RUNNER_TEMP/collection-issue-date"
+
+      - uses: actions/upload-artifact@v7.0.1
+        with:
+          name: collection-issue-date
+          path: ${{ runner.temp }}/collection-issue-date
+          retention-days: 3
+
       - name: Evaluate final collection window
         id: timing
         run: |
@@ -200,7 +209,7 @@ jobs:
         if: ${{ always() && env.ISSUE_DATE != '' }}
         run: |
           NOW_JST="$(TZ=Asia/Tokyo date +%F)"
-          DEADLINE_ACTION="$(python3 scripts/publication_timing.py --decision --event-name schedule)"
+          DEADLINE_ACTION="$(python3 scripts/publication_timing.py --issue-deadline "$ISSUE_DATE")"
           if [[ "$ISSUE_DATE" < "$NOW_JST" ]]; then
             python3 scripts/publication_audit.py "$ISSUE_DATE" --public-date-only
           elif [[ "$DEADLINE_ACTION" == "missed" ]]; then
