@@ -88,6 +88,10 @@ jobs:
             --github-output "$GITHUB_OUTPUT" \
             | tee "$RUNNER_TEMP/initial-operational-audit.json"
 
+      - name: Report the dates still missing from the archive
+        if: ${{ github.event_name == 'schedule' || github.event.workflow_run.name == 'NIGHT SIGNAL Evidence Collection' }}
+        run: python3 scripts/night_signal_archive_gaps.py >> "$GITHUB_STEP_SUMMARY"
+
       - name: Reuse the same review for one deterministic recovery
         id: recovery
         continue-on-error: true
@@ -140,8 +144,7 @@ jobs:
             echo "The bounded reviewed-publication recovery did not appear." >&2
             exit 1
           fi
-          echo "Watching reviewed-publication recovery run $RUN_ID."
-          gh run watch "$RUN_ID" --exit-status
+          echo "Recovery run $RUN_ID will trigger the final audit upon completion."
 
       - name: Re-audit after any bounded recovery
         id: final
