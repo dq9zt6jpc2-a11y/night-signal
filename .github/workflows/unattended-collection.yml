@@ -178,7 +178,7 @@ jobs:
             state/${{ env.ISSUE_DATE }}/editor_packet.json
             state/${{ env.ISSUE_DATE }}/source_gap_report.json
           if-no-files-found: error
-          retention-days: 3
+          retention-days: 14
           compression-level: 6
 
       - name: Preserve pre-editor source diagnostics after a failed collection stage
