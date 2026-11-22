@@ -152,6 +152,16 @@ def ensure_public_url(issue_date: str) -> None:
         fail("public issue date is current but root or dated content is stale; missing local titles: " + "; ".join(missing_titles))
 
 
+    local_issue = ROOT / "site" / issue_date
+    local_index = (local_issue / "index.html").read_text(encoding="utf-8")
+    if dated_html != local_index:
+        fail(f"public dated issue differs from the verified build: {issue_date}")
+    for detail in sorted(set(re.findall(r'href="(details/[a-zA-Z0-9_.-]+\.html)"', local_index))):
+        expected_detail = (local_issue / detail).read_text(encoding="utf-8")
+        if read_public(f"{PUBLIC_ROOT}{issue_date}/{detail}") != expected_detail:
+            fail(f"public detail differs from the verified build: {detail}")
+
+
 def main() -> int:
     issue_date = issue_date_from_args()
     if PUBLIC_DATE_ONLY_FLAG in sys.argv[1:]:

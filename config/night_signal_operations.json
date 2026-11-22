@@ -27,6 +27,7 @@
   },
   "reliability_report_retention_days": 30,
   "publication_watchdog_heartbeats_jst": [
+    "13:23",
     "16:30",
     "17:45",
     "18:45",
