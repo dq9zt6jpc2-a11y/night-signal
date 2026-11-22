@@ -191,6 +191,33 @@ the title. Do not add a minimum length, historical background, common knowledge,
 predictions, generic importance, or paraphrase repetition. Never omit a supported
 number, date, scope, condition, reason, or result merely to shorten the summary.
 
+### Resume interrupted editing from saved responses
+
+When a complete review does not yet exist, finish and save one manifest part
+at a time. Use the existing issue review branch and write completed parts only to
+`cloud-review/ISSUE_DATE/checkpoints/part-N.json`. Creating or updating this
+path does not trigger publication. Include the issue date, exact Evidence SHA-256,
+exact manifest commit SHA, current runbook blob SHA, part path from the manifest
+and the regular response entries for every request in the part. A part is
+complete only after every event in its requests has one reviewed decision and
+each accepted summary passes the checks below. Do not save a placeholder part.
+
+On continuation, inspect those checkpoint paths before editing. Reuse a checkpoint
+only when all identifiers match the current immutable material and runbook, and
+its request and event IDs match that part exactly without duplicates. If a
+checkpoint is absent, invalid or for another version, complete that part. Use
+the current file SHA for an update, and after any conflict read the latest file
+again. If it now contains a valid checkpoint, retain it. Use the normal owner
+liveness record to distinguish a live peer from a stopped run before taking
+over. Save a checkpoint as soon as its part is complete, before reading more
+parts or waiting on another operation.
+
+Before writing `editor_review.json`, merge compatible responses in manifest
+order and recheck the entire issue for omission, duplicates and consistency.
+Do not publish from a checkpoint. Submit only the full review through the
+existing exact validation and release path. Any later correction remains scoped
+to the rejected requests reported by that validation.
+
 Before saving a review or correction, check each accepted event against the
 exact source passages in both directions.
 
