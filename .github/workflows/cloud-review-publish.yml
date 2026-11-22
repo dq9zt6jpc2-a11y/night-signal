@@ -298,6 +298,15 @@ jobs:
             python3 scripts/publication_audit.py "$ISSUE_DATE"
           } 2>&1 | tee "$RUNNER_TEMP/verify.log"
 
+      - name: Preserve reader-side verification evidence
+        if: ${{ always() && steps.verify.outcome != 'skipped' }}
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: night-signal-reader-verification-${{ env.ISSUE_DATE }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/verify.log
+          if-no-files-found: warn
+          retention-days: 90
+
       - name: Publish compact success or validator feedback for recovery
         if: ${{ always() && env.ISSUE_DATE != '' }}
         continue-on-error: true
