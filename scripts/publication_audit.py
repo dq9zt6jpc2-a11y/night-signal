@@ -8,6 +8,8 @@ public URL/content alignment.
 
 from __future__ import annotations
 
+import hashlib
+import json
 import subprocess
 import sys
 import re
@@ -152,6 +154,8 @@ def ensure_public_url(issue_date: str) -> None:
         fail("public issue date is current but root or dated content is stale; missing local titles: " + "; ".join(missing_titles))
 
 
+    if root_html != read_local(ROOT / "site" / "index.html"):
+        fail(f"public root differs from the verified build: {issue_date}")
     local_issue = ROOT / "site" / issue_date
     local_index = (local_issue / "index.html").read_text(encoding="utf-8")
     if dated_html != local_index:
@@ -185,6 +189,22 @@ def main() -> int:
         ensure_clean_worktree()
         ensure_pushed_to_origin()
     ensure_public_url(issue_date)
+    zone = ZoneInfo("Asia/Tokyo")
+    confirmed_at = datetime.now(zone)
+    deadline = datetime.combine(
+        datetime.strptime(issue_date, "%Y-%m-%d").date(),
+        timing.load_policy().publication_deadline,
+        tzinfo=zone,
+    )
+    print(json.dumps({
+        "issue_date": issue_date,
+        "confirmed_at": confirmed_at.isoformat(),
+        "deadline": deadline.isoformat(),
+        "confirmed_by_deadline": confirmed_at <= deadline,
+        "root_sha256": hashlib.sha256(
+            (ROOT / "site" / "index.html").read_bytes()
+        ).hexdigest(),
+    }))
     print(f"PUBLICATION AUDIT PASSED: {issue_date}")
     return 0
 
