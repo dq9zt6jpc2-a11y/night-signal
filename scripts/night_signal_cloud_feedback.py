@@ -197,7 +197,9 @@ def run_gh(arguments: list[str], *, check: bool = True) -> subprocess.CompletedP
     return result
 
 
-def publish_feedback(issue_date: str, feedback: dict[str, Any]) -> dict[str, Any]:
+def publish_feedback(
+    issue_date: str, feedback: dict[str, Any], preflight_sha: str = ""
+) -> dict[str, Any]:
     repository = os.getenv("GITHUB_REPOSITORY", "").strip()
     if not repository:
         repository = run_gh(
@@ -205,6 +207,11 @@ def publish_feedback(issue_date: str, feedback: dict[str, Any]) -> dict[str, Any
         ).stdout.strip()
     branch = f"{BRANCH_PREFIX}{issue_date}"
     path = f"cloud-feedback/{issue_date}/status.json"
+    if preflight_sha:
+        if len(preflight_sha) != 40 or any(char not in "0123456789abcdef" for char in preflight_sha):
+            fail("invalid preflight commit SHA")
+        path = f"cloud-feedback/{issue_date}/preflight/{preflight_sha}.json"
+        feedback = {**feedback, "preflight_sha": preflight_sha}
     ref_path = f"repos/{repository}/git/ref/heads/{branch}"
     branch_result = run_gh(["api", ref_path], check=False)
     if branch_result.returncode != 0:
@@ -320,6 +327,7 @@ def main() -> int:
     parser.add_argument("--receipt-path", type=Path)
     parser.add_argument("--step", action="append", default=[])
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--preflight-sha", default="")
     parser.add_argument("--publish", action="store_true")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
@@ -352,7 +360,7 @@ def main() -> int:
         )
     result: dict[str, Any] = {"feedback": feedback}
     if args.publish:
-        result["publication"] = publish_feedback(args.issue_date, feedback)
+        result["publication"] = publish_feedback(args.issue_date, feedback, args.preflight_sha)
     print(json.dumps(result, ensure_ascii=False))
     return 0
 

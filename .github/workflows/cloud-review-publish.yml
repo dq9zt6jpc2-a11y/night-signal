@@ -1,12 +1,14 @@
 name: Publish reviewed NIGHT SIGNAL
-run-name: "${{ inputs.validation_only && 'Preflight NIGHT SIGNAL' || 'Publish reviewed NIGHT SIGNAL' }} ${{ inputs.issue_date || github.ref_name }}"
+run-name: "${{ (inputs.validation_only || startsWith(github.ref_name, 'night-signal-preflight-')) && 'Preflight NIGHT SIGNAL' || 'Publish reviewed NIGHT SIGNAL' }} ${{ inputs.issue_date || github.ref_name }}"
 
 on:
   push:
     branches:
       - "night-signal-review-*"
+      - "night-signal-preflight-*"
     paths:
       - "cloud-review/**/editor_review.json"
+      - "cloud-preflight/**/editor_draft.json"
       - "cloud-review/**/editor_correction.json"
   workflow_dispatch:
     inputs:
@@ -40,6 +42,8 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     timeout-minutes: 105
+    env:
+      VALIDATION_ONLY: ${{ inputs.validation_only || startsWith(github.ref_name, 'night-signal-preflight-') }}
     steps:
       - name: Checkout trusted main
         uses: actions/checkout@v5
@@ -54,7 +58,12 @@ jobs:
           REQUESTED_REVIEW_REF: ${{ inputs.review_ref || '' }}
           RECOVERY_ATTEMPT: ${{ inputs.recovery_attempt || '0' }}
         run: |
-          if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+          DRAFT_REF=""
+          if [[ "$GITHUB_EVENT_NAME" == "push" && "$GITHUB_REF_NAME" == night-signal-preflight-* ]]; then
+            DRAFT_REF="$GITHUB_REF_NAME"
+            ISSUE_DATE="${DRAFT_REF#night-signal-preflight-}"
+            REVIEW_REF="night-signal-review-$ISSUE_DATE"
+          elif [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
             REVIEW_REF="$GITHUB_REF_NAME"
             ISSUE_DATE="${REVIEW_REF#night-signal-review-}"
           else
@@ -69,6 +78,13 @@ jobs:
             echo "Review ref is not bound to issue date: $REVIEW_REF" >&2
             exit 1
           fi
+          if [[ -n "$DRAFT_REF" ]]; then
+            git fetch --no-tags origin "$GITHUB_SHA"
+            git show "$GITHUB_SHA:cloud-preflight/$ISSUE_DATE/editor_draft.json" \
+              > "$RUNNER_TEMP/editor_review.json"
+            echo "DRAFT_SHA=$GITHUB_SHA" >> "$GITHUB_ENV"
+            echo "CORRECTION_PATH=" >> "$GITHUB_ENV"
+          else
           git fetch --no-tags origin \
             "refs/heads/$REVIEW_REF:refs/remotes/origin/$REVIEW_REF"
           git show \
@@ -81,6 +97,7 @@ jobs:
           else
             echo "CORRECTION_PATH=" >> "$GITHUB_ENV"
           fi
+          fi
           echo "ISSUE_DATE=$ISSUE_DATE" >> "$GITHUB_ENV"
           echo "REVIEW_REF=$REVIEW_REF" >> "$GITHUB_ENV"
           echo "RECOVERY_ATTEMPT=$RECOVERY_ATTEMPT" >> "$GITHUB_ENV"
@@ -88,8 +105,6 @@ jobs:
 
       - name: Stop when this exact issue is already verified live
         id: already_public
-        env:
-          VALIDATION_ONLY: ${{ inputs.validation_only || false }}
         run: |
           if [[ "$VALIDATION_ONLY" == "true" ]]; then
             echo "published=false" >> "$GITHUB_OUTPUT"
@@ -152,7 +167,7 @@ jobs:
           } 2>&1 | tee "$RUNNER_TEMP/gates.log"
 
       - name: Preserve preflight diagnostics
-        if: ${{ always() && inputs.validation_only }}
+        if: ${{ always() && env.VALIDATION_ONLY == 'true' }}
         uses: actions/upload-artifact@v7.0.1
         with:
           name: night-signal-preflight-${{ env.ISSUE_DATE }}-${{ github.run_id }}
@@ -162,9 +177,24 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
+      - name: Save the draft result for the editor
+        if: ${{ always() && env.DRAFT_SHA != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          WORKFLOW_STATUS: ${{ job.status }}
+        run: |
+          python3 scripts/night_signal_cloud_feedback.py "$ISSUE_DATE" \
+            --run-url "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" \
+            --workflow-status "$WORKFLOW_STATUS" \
+            --log-directory "$RUNNER_TEMP" \
+            --step "restore=${{ steps.restore.outcome }}" \
+            --step "apply=${{ steps.apply.outcome }}" \
+            --step "gates=${{ steps.gates.outcome }}" \
+            --preflight-sha "$DRAFT_SHA" --publish
+
       - name: Require the same trusted main before committing
         id: base_guard
-        if: ${{ !inputs.validation_only && steps.already_public.outputs.published != 'true' }}
+        if: ${{ env.VALIDATION_ONLY != 'true' && steps.already_public.outputs.published != 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -329,7 +359,7 @@ jobs:
           retention-days: 90
 
       - name: Publish compact success or validator feedback for recovery
-        if: ${{ always() && !inputs.validation_only && env.ISSUE_DATE != '' }}
+        if: ${{ always() && env.VALIDATION_ONLY != 'true' && env.ISSUE_DATE != '' }}
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
