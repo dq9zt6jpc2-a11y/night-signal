@@ -4,6 +4,7 @@
 from datetime import date, datetime, timedelta
 
 from publication_timing import ROOT, load_policy
+from sync_site import ARCHIVED_PREVIOUS_ISSUES
 from zoneinfo import ZoneInfo
 
 # Begin continuity checks with the incident that introduced this audit.
@@ -20,9 +21,23 @@ def missing_dates(site, first, today):
 
 if __name__ == "__main__":
     today = datetime.now(ZoneInfo(load_policy().timezone)).date()
-    gaps = list(missing_dates(ROOT / "site", FIRST_TRACKED_ISSUE, today))
-    print("### Historical issues missing from the production tree")
+    site = ROOT / "site"
+    retained = sorted(
+        path.parent.name
+        for path in site.glob("????-??-??/index.html")
+        if path.is_file()
+    )
+    retention_floor = (
+        retained[-(ARCHIVED_PREVIOUS_ISSUES + 1)]
+        if len(retained) >= ARCHIVED_PREVIOUS_ISSUES + 1 else ""
+    )
+    gaps = list(missing_dates(site, FIRST_TRACKED_ISSUE, today))
+    print("### Missing issues inside the retained archive window")
     for issue in gaps:
-        print(f"- {issue}")
-    if not gaps:
-        print("No missing archive files.")
+        if issue >= retention_floor:
+            print(f"- {issue}")
+    if retention_floor:
+        print("### Older dates requiring publication records to establish status")
+        for issue in gaps:
+            if issue < retention_floor:
+                print(f"- {issue}")
