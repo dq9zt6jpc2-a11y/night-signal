@@ -135,7 +135,7 @@ def local_card_titles(issue_date: str) -> list[str]:
     return titles
 
 
-def ensure_public_url(issue_date: str) -> None:
+def ensure_public_url(issue_date: str) -> dict[str, str]:
     root_html = read_public(PUBLIC_ROOT)
     dated_html = read_public(f"{PUBLIC_ROOT}{issue_date}/index.html")
     expected = f"NIGHT SIGNAL | {issue_date}"
@@ -160,10 +160,16 @@ def ensure_public_url(issue_date: str) -> None:
     local_index = (local_issue / "index.html").read_text(encoding="utf-8")
     if dated_html != local_index:
         fail(f"public dated issue differs from the verified build: {issue_date}")
+    files = {
+        "index.html": hashlib.sha256(root_html.encode()).hexdigest(),
+        f"{issue_date}/index.html": hashlib.sha256(dated_html.encode()).hexdigest(),
+    }
     for detail in sorted(set(re.findall(r'href="(details/[a-zA-Z0-9_.-]+\.html)"', local_index))):
         expected_detail = (local_issue / detail).read_text(encoding="utf-8")
         if read_public(f"{PUBLIC_ROOT}{issue_date}/{detail}") != expected_detail:
             fail(f"public detail differs from the verified build: {detail}")
+        files[f"{issue_date}/{detail}"] = hashlib.sha256(expected_detail.encode()).hexdigest()
+    return files
 
 
 def main() -> int:
@@ -188,7 +194,7 @@ def main() -> int:
     if not public_content_only():
         ensure_clean_worktree()
         ensure_pushed_to_origin()
-    ensure_public_url(issue_date)
+    verified_files = ensure_public_url(issue_date)
     zone = ZoneInfo("Asia/Tokyo")
     confirmed_at = datetime.now(zone)
     deadline = datetime.combine(
@@ -201,9 +207,8 @@ def main() -> int:
         "confirmed_at": confirmed_at.isoformat(),
         "deadline": deadline.isoformat(),
         "confirmed_by_deadline": confirmed_at <= deadline,
-        "root_sha256": hashlib.sha256(
-            (ROOT / "site" / "index.html").read_bytes()
-        ).hexdigest(),
+        "root_sha256": verified_files["index.html"],
+        "verified_files_sha256": verified_files,
     }))
     print(f"PUBLICATION AUDIT PASSED: {issue_date}")
     return 0
