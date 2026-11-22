@@ -1,0 +1,1521 @@
+{
+  "issue_date": "2026-11-22",
+  "cards": [
+    {
+      "watch_topic_id": "product_release",
+      "title": "OpenAI、Daybreakのアクセス制御をAPI・Codexへ導入",
+      "summary": "OpenAIはAPIとCodexに、Daybreak（旧Trusted Access for Cyber）のアクセス制御を導入する。 対象となる全API組織とChatGPT／CodexワークスペースでDaybreakのアクセス制御が利用可能になった。 Daybreak の利用承認は、承認を受けたお客様に雇用されている人員、またはそのお客様のために業務を行う人員を対象とします。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-22",
+      "topic_value_class": "risk_or_safety_signal",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-a2b576d73d7c-2026-11-22.html",
+        "sources": [
+          {
+            "label": "help.openai.com",
+            "url": "https://help.openai.com/ja-jp/articles/20001532-openai-daybreak-migration-org-consolidation-guide"
+          }
+        ],
+        "summary": "OpenAIはAPIとCodexに、Daybreak（旧Trusted Access for Cyber）のアクセス制御を導入する。 対象となる全API組織とChatGPT／CodexワークスペースでDaybreakのアクセス制御が利用可能になった。 Daybreak の利用承認は、承認を受けたお客様に雇用されている人員、またはそのお客様のために業務を行う人員を対象とします。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "OpenAIはAPIとCodexに、Daybreak（旧Trusted Access for Cyber）のアクセス制御を導入する。",
+            "対象となる全API組織とChatGPT／CodexワークスペースでDaybreakのアクセス制御が利用可能になった。",
+            "Daybreak の利用承認は、承認を受けたお客様に雇用されている人員、またはそのお客様のために業務を行う人員を対象とします。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "OpenAIはAPIとCodexに、Daybreak（旧Trusted Access for Cyber）のアクセス制御を導入する。",
+              "source_urls": [
+                "https://help.openai.com/ja-jp/articles/20001532-openai-daybreak-migration-org-consolidation-guide"
+              ]
+            },
+            {
+              "fact": "対象となる全API組織とChatGPT／CodexワークスペースでDaybreakのアクセス制御が利用可能になった。",
+              "source_urls": [
+                "https://help.openai.com/ja-jp/articles/20001532-openai-daybreak-migration-org-consolidation-guide"
+              ]
+            },
+            {
+              "fact": "Daybreak の利用承認は、承認を受けたお客様に雇用されている人員、またはそのお客様のために業務を行う人員を対象とします。",
+              "source_urls": [
+                "https://help.openai.com/ja-jp/articles/20001532-openai-daybreak-migration-org-consolidation-guide"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-22"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "product_release",
+      "title": "インドのChatGPT Go、1年間無料期間後の更新条件を案内",
+      "summary": "更新日: 2 hours ago 概要 ChatGPT Go の 1 年間の無料期間は、サブスクリプションに表示されている日付に終了します。 継続を希望しない場合は、更新日の少なくとも 24 時間前までに、 サブスクリプションの申込先で解約 してください。 更新条件の確認 サブスクリプションの申込先（ChatGPT、Google Play、Apple）で契約内容を確認されください。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-22",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-485cbe8ab743-2026-11-22.html",
+        "sources": [
+          {
+            "label": "help.openai.com",
+            "url": "https://help.openai.com/ja-jp/articles/20001631-chatgpt-go-india-trial-renewals-and-continuation-offers"
+          }
+        ],
+        "summary": "更新日: 2 hours ago 概要 ChatGPT Go の 1 年間の無料期間は、サブスクリプションに表示されている日付に終了します。 継続を希望しない場合は、更新日の少なくとも 24 時間前までに、 サブスクリプションの申込先で解約 してください。 更新条件の確認 サブスクリプションの申込先（ChatGPT、Google Play、Apple）で契約内容を確認されください。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "更新日: 2 hours ago 概要 ChatGPT Go の 1 年間の無料期間は、サブスクリプションに表示されている日付に終了します。",
+            "継続を希望しない場合は、更新日の少なくとも 24 時間前までに、 サブスクリプションの申込先で解約 してください。",
+            "更新条件の確認 サブスクリプションの申込先（ChatGPT、Google Play、Apple）で契約内容を確認されください。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "更新日: 2 hours ago 概要 ChatGPT Go の 1 年間の無料期間は、サブスクリプションに表示されている日付に終了します。",
+              "source_urls": [
+                "https://help.openai.com/ja-jp/articles/20001631-chatgpt-go-india-trial-renewals-and-continuation-offers"
+              ]
+            },
+            {
+              "fact": "継続を希望しない場合は、更新日の少なくとも 24 時間前までに、 サブスクリプションの申込先で解約 してください。",
+              "source_urls": [
+                "https://help.openai.com/ja-jp/articles/20001631-chatgpt-go-india-trial-renewals-and-continuation-offers"
+              ]
+            },
+            {
+              "fact": "更新条件の確認 サブスクリプションの申込先（ChatGPT、Google Play、Apple）で契約内容を確認されください。",
+              "source_urls": [
+                "https://help.openai.com/ja-jp/articles/20001631-chatgpt-go-india-trial-renewals-and-continuation-offers"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-22"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "product_release",
+      "title": "ChatGPT Business、対象オーナーへ月最大50ドルの広告クレジット",
+      "summary": "対象のChatGPT Businessワークスペースのオーナーは、ChatGPT広告に使えるクレジットを毎月最大50ドル受け取れる。 たとえば、丸 1 か月分の対象シート料金として 200 ドルをお支払いいただいた場合、ワークスペースに 50 ドル分の広告クレジットが付与されます。 たとえば、50 ドル分のクレジットがあり、対象の広告費が 55 ドル発生した場合、50 ドル分はクレジットでまかなわれ、残りの 5 ドルが請求されます。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-7b883c70a43e-2026-11-22.html",
+        "sources": [
+          {
+            "label": "help.openai.com",
+            "url": "https://help.openai.com/ja-jp/articles/20001633-claiming-ad-credits-with-chatgpt-business"
+          }
+        ],
+        "summary": "対象のChatGPT Businessワークスペースのオーナーは、ChatGPT広告に使えるクレジットを毎月最大50ドル受け取れる。 たとえば、丸 1 か月分の対象シート料金として 200 ドルをお支払いいただいた場合、ワークスペースに 50 ドル分の広告クレジットが付与されます。 たとえば、50 ドル分のクレジットがあり、対象の広告費が 55 ドル発生した場合、50 ドル分はクレジットでまかなわれ、残りの 5 ドルが請求されます。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "対象のChatGPT Businessワークスペースのオーナーは、ChatGPT広告に使えるクレジットを毎月最大50ドル受け取れる。",
+            "たとえば、丸 1 か月分の対象シート料金として 200 ドルをお支払いいただいた場合、ワークスペースに 50 ドル分の広告クレジットが付与されます。",
+            "たとえば、50 ドル分のクレジットがあり、対象の広告費が 55 ドル発生した場合、50 ドル分はクレジットでまかなわれ、残りの 5 ドルが請求されます。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "対象のChatGPT Businessワークスペースのオーナーは、ChatGPT広告に使えるクレジットを毎月最大50ドル受け取れる。",
+              "source_urls": [
+                "https://help.openai.com/ja-jp/articles/20001633-claiming-ad-credits-with-chatgpt-business"
+              ]
+            },
+            {
+              "fact": "たとえば、丸 1 か月分の対象シート料金として 200 ドルをお支払いいただいた場合、ワークスペースに 50 ドル分の広告クレジットが付与されます。",
+              "source_urls": [
+                "https://help.openai.com/ja-jp/articles/20001633-claiming-ad-credits-with-chatgpt-business"
+              ]
+            },
+            {
+              "fact": "たとえば、50 ドル分のクレジットがあり、対象の広告費が 55 ドル発生した場合、50 ドル分はクレジットでまかなわれ、残りの 5 ドルが請求されます。",
+              "source_urls": [
+                "https://help.openai.com/ja-jp/articles/20001633-claiming-ad-credits-with-chatgpt-business"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "math_research",
+      "title": "GPT-6.2 Astra、韓国大学修学能力試験の非公式評価で満点",
+      "summary": "順天郷大学校コンピューターソフトウェア工学科のク・ユギョム氏が公開した「2027学年度修学能力試験 大規模言語モデル（LLM）解答ダッシュボード」によると、OpenAIの「GPT-6.2 Astra」とGoogleの「Gemini 4 Neon」が450点満点で首位に並んだ。 OpenAIの「GPT-6.2 Sol」が449.6点で続き、Anthropicの「Claude Opus 5.5」と「Claude Fable 5.2」はそろって449.3点を獲得した。 公開ダッシュボードではGPT-6.2 AstraとGemini 4 Neonが450.0点、GPT-6.2 Solが449.6点、K-Exaone 2.5が韓国勢最高の414.7点だった。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-20",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-12be0bc69903-2026-11-22.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/5b37be38-82c6-4188-ba69-ee91f72d357c"
+          }
+        ],
+        "summary": "順天郷大学校コンピューターソフトウェア工学科のク・ユギョム氏が公開した「2027学年度修学能力試験 大規模言語モデル（LLM）解答ダッシュボード」によると、OpenAIの「GPT-6.2 Astra」とGoogleの「Gemini 4 Neon」が450点満点で首位に並んだ。 OpenAIの「GPT-6.2 Sol」が449.6点で続き、Anthropicの「Claude Opus 5.5」と「Claude Fable 5.2」はそろって449.3点を獲得した。 公開ダッシュボードではGPT-6.2 AstraとGemini 4 Neonが450.0点、GPT-6.2 Solが449.6点、K-Exaone 2.5が韓国勢最高の414.7点だった。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "順天郷大学校コンピューターソフトウェア工学科のク・ユギョム氏が公開した「2027学年度修学能力試験 大規模言語モデル（LLM）解答ダッシュボード」によると、OpenAIの「GPT-6.2 Astra」とGoogleの「Gemini 4 Neon」が450点満点で首位に並んだ。",
+            "OpenAIの「GPT-6.2 Sol」が449.6点で続き、Anthropicの「Claude Opus 5.5」と「Claude Fable 5.2」はそろって449.3点を獲得した。",
+            "公開ダッシュボードではGPT-6.2 AstraとGemini 4 Neonが450.0点、GPT-6.2 Solが449.6点、K-Exaone 2.5が韓国勢最高の414.7点だった。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "順天郷大学校コンピューターソフトウェア工学科のク・ユギョム氏が公開した「2027学年度修学能力試験 大規模言語モデル（LLM）解答ダッシュボード」によると、OpenAIの「GPT-6.2 Astra」とGoogleの「Gemini 4 Neon」が450点満点で首位に並んだ。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/5b37be38-82c6-4188-ba69-ee91f72d357c"
+              ]
+            },
+            {
+              "fact": "OpenAIの「GPT-6.2 Sol」が449.6点で続き、Anthropicの「Claude Opus 5.5」と「Claude Fable 5.2」はそろって449.3点を獲得した。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/5b37be38-82c6-4188-ba69-ee91f72d357c"
+              ]
+            },
+            {
+              "fact": "公開ダッシュボードではGPT-6.2 AstraとGemini 4 Neonが450.0点、GPT-6.2 Solが449.6点、K-Exaone 2.5が韓国勢最高の414.7点だった。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/5b37be38-82c6-4188-ba69-ee91f72d357c"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-20"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "ipo_financing",
+      "title": "米下院、MicrosoftとByteDanceのAI契約交渉について説明要請",
+      "summary": "米下院中国特別委員会は11月18日、MicrosoftにByteDanceとの交渉内容を超党派の委員へ説明するよう求めた。 委員長は、Microsoftが米国防総省と契約していることを理由に、ByteDanceへAIツールを販売すべきでないと述べた。 11月21日の記事時点でMicrosoftとByteDanceの交渉は成立しておらず、取引条件と議会説明後の扱いも確定していない。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-99fe98137715-2026-11-22.html",
+        "sources": [
+          {
+            "label": "news.yahoo.co.jp",
+            "url": "https://news.yahoo.co.jp/articles/fda106899c57b81b7938dc71a0cdca8d7611461a?page=2"
+          }
+        ],
+        "summary": "米下院中国特別委員会は11月18日、MicrosoftにByteDanceとの交渉内容を超党派の委員へ説明するよう求めた。 委員長は、Microsoftが米国防総省と契約していることを理由に、ByteDanceへAIツールを販売すべきでないと述べた。 11月21日の記事時点でMicrosoftとByteDanceの交渉は成立しておらず、取引条件と議会説明後の扱いも確定していない。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "米下院中国特別委員会は11月18日、MicrosoftにByteDanceとの交渉内容を超党派の委員へ説明するよう求めた。",
+            "委員長は、Microsoftが米国防総省と契約していることを理由に、ByteDanceへAIツールを販売すべきでないと述べた。",
+            "11月21日の記事時点でMicrosoftとByteDanceの交渉は成立しておらず、取引条件と議会説明後の扱いも確定していない。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "米下院中国特別委員会は11月18日、MicrosoftにByteDanceとの交渉内容を超党派の委員へ説明するよう求めた。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/fda106899c57b81b7938dc71a0cdca8d7611461a?page=2"
+              ]
+            },
+            {
+              "fact": "委員長は、Microsoftが米国防総省と契約していることを理由に、ByteDanceへAIツールを販売すべきでないと述べた。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/fda106899c57b81b7938dc71a0cdca8d7611461a?page=2"
+              ]
+            },
+            {
+              "fact": "11月21日の記事時点でMicrosoftとByteDanceの交渉は成立しておらず、取引条件と議会説明後の扱いも確定していない。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/fda106899c57b81b7938dc71a0cdca8d7611461a?page=2"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "ipo_financing",
+      "title": "Oracle、OpenAI向けインフラ契約の必要資金を全額確保",
+      "summary": "11月初旬に約200億ドル（約3兆2,000億円）の最終調達を実施し、今回の投資サイクルで資金調達を終えた初のハイパースケーラーになったと説明している。 【画像解説と記事全文はこちら】オラクルの資金手当て、現在地 オラクルは11月20日（現地時間）、OpenAIとのインフラ契約を履行するために必要な資金はすべて調達済みだと明らかにした。 ロイター通信によると、11月初旬の資金調達は約200億ドルで、株式が約100億ドル、債券が約100億ドルだった。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-d52d1bbb98b5-2026-11-22.html",
+        "sources": [
+          {
+            "label": "news.yahoo.co.jp",
+            "url": "https://news.yahoo.co.jp/articles/866ed841e36ad71919e730332544cbd0763b94e6"
+          }
+        ],
+        "summary": "11月初旬に約200億ドル（約3兆2,000億円）の最終調達を実施し、今回の投資サイクルで資金調達を終えた初のハイパースケーラーになったと説明している。 【画像解説と記事全文はこちら】オラクルの資金手当て、現在地 オラクルは11月20日（現地時間）、OpenAIとのインフラ契約を履行するために必要な資金はすべて調達済みだと明らかにした。 ロイター通信によると、11月初旬の資金調達は約200億ドルで、株式が約100億ドル、債券が約100億ドルだった。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "11月初旬に約200億ドル（約3兆2,000億円）の最終調達を実施し、今回の投資サイクルで資金調達を終えた初のハイパースケーラーになったと説明している。",
+            "【画像解説と記事全文はこちら】オラクルの資金手当て、現在地 オラクルは11月20日（現地時間）、OpenAIとのインフラ契約を履行するために必要な資金はすべて調達済みだと明らかにした。",
+            "ロイター通信によると、11月初旬の資金調達は約200億ドルで、株式が約100億ドル、債券が約100億ドルだった。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "11月初旬に約200億ドル（約3兆2,000億円）の最終調達を実施し、今回の投資サイクルで資金調達を終えた初のハイパースケーラーになったと説明している。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/866ed841e36ad71919e730332544cbd0763b94e6"
+              ]
+            },
+            {
+              "fact": "【画像解説と記事全文はこちら】オラクルの資金手当て、現在地 オラクルは11月20日（現地時間）、OpenAIとのインフラ契約を履行するために必要な資金はすべて調達済みだと明らかにした。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/866ed841e36ad71919e730332544cbd0763b94e6"
+              ]
+            },
+            {
+              "fact": "ロイター通信によると、11月初旬の資金調達は約200億ドルで、株式が約100億ドル、債券が約100億ドルだった。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/866ed841e36ad71919e730332544cbd0763b94e6"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "enterprise_infrastructure",
+      "title": "BlueMedia、ChatGPT Adsとの提携を開始",
+      "summary": "BlueMediaはChatGPT Adsとの提携を正式に開始した。 記事によると、ChatGPT Adsは2月の米国開始後、北米・欧州・アジア・オセアニア・中東・北アフリカの89超の市場へ拡大した。 BlueMediaは最初のブランド顧客向けキャンペーンを開始し、初期データでは業界平均を上回ったとしている。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-20",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-66797c330e7a-2026-11-22.html",
+        "sources": [
+          {
+            "label": "en.antaranews.com",
+            "url": "https://en.antaranews.com/news/444103/from-ai-native-advertising-to-marketing-system-delivery-bluemedia-launches-partnership-with-chatgpt-ads"
+          }
+        ],
+        "summary": "BlueMediaはChatGPT Adsとの提携を正式に開始した。 記事によると、ChatGPT Adsは2月の米国開始後、北米・欧州・アジア・オセアニア・中東・北アフリカの89超の市場へ拡大した。 BlueMediaは最初のブランド顧客向けキャンペーンを開始し、初期データでは業界平均を上回ったとしている。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "BlueMediaはChatGPT Adsとの提携を正式に開始した。",
+            "記事によると、ChatGPT Adsは2月の米国開始後、北米・欧州・アジア・オセアニア・中東・北アフリカの89超の市場へ拡大した。",
+            "BlueMediaは最初のブランド顧客向けキャンペーンを開始し、初期データでは業界平均を上回ったとしている。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "BlueMediaはChatGPT Adsとの提携を正式に開始した。",
+              "source_urls": [
+                "https://en.antaranews.com/news/444103/from-ai-native-advertising-to-marketing-system-delivery-bluemedia-launches-partnership-with-chatgpt-ads"
+              ]
+            },
+            {
+              "fact": "記事によると、ChatGPT Adsは2月の米国開始後、北米・欧州・アジア・オセアニア・中東・北アフリカの89超の市場へ拡大した。",
+              "source_urls": [
+                "https://en.antaranews.com/news/444103/from-ai-native-advertising-to-marketing-system-delivery-bluemedia-launches-partnership-with-chatgpt-ads"
+              ]
+            },
+            {
+              "fact": "BlueMediaは最初のブランド顧客向けキャンペーンを開始し、初期データでは業界平均を上回ったとしている。",
+              "source_urls": [
+                "https://en.antaranews.com/news/444103/from-ai-native-advertising-to-marketing-system-delivery-bluemedia-launches-partnership-with-chatgpt-ads"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-20"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "ipo_financing",
+      "title": "カリフォルニア大学、年120万ドルでOpenAIと10キャンパス契約",
+      "summary": "カリフォルニア大学は、10キャンパスを対象に年120万ドルのOpenAI契約を結び、アクセス拡大とデータ保護強化を掲げた。 Academic Councilは、契約締結前の10月21日に計画を知ったとしている。 大学は11月19日、追加費用なしのAIリテラシー研修と職員訓練も契約に含むと発表した。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-387adefdf992-2026-11-22.html",
+        "sources": [
+          {
+            "label": "superpowerdaily.com",
+            "url": "https://superpowerdaily.com/posts/uc-signs-1-2-million-a-year-openai-deal-despite-faculty-calls-for-delay"
+          }
+        ],
+        "summary": "カリフォルニア大学は、10キャンパスを対象に年120万ドルのOpenAI契約を結び、アクセス拡大とデータ保護強化を掲げた。 Academic Councilは、契約締結前の10月21日に計画を知ったとしている。 大学は11月19日、追加費用なしのAIリテラシー研修と職員訓練も契約に含むと発表した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "カリフォルニア大学は、10キャンパスを対象に年120万ドルのOpenAI契約を結び、アクセス拡大とデータ保護強化を掲げた。",
+            "Academic Councilは、契約締結前の10月21日に計画を知ったとしている。",
+            "大学は11月19日、追加費用なしのAIリテラシー研修と職員訓練も契約に含むと発表した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "カリフォルニア大学は、10キャンパスを対象に年120万ドルのOpenAI契約を結び、アクセス拡大とデータ保護強化を掲げた。",
+              "source_urls": [
+                "https://superpowerdaily.com/posts/uc-signs-1-2-million-a-year-openai-deal-despite-faculty-calls-for-delay"
+              ]
+            },
+            {
+              "fact": "Academic Councilは、契約締結前の10月21日に計画を知ったとしている。",
+              "source_urls": [
+                "https://superpowerdaily.com/posts/uc-signs-1-2-million-a-year-openai-deal-despite-faculty-calls-for-delay"
+              ]
+            },
+            {
+              "fact": "大学は11月19日、追加費用なしのAIリテラシー研修と職員訓練も契約に含むと発表した。",
+              "source_urls": [
+                "https://superpowerdaily.com/posts/uc-signs-1-2-million-a-year-openai-deal-despite-faculty-calls-for-delay"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "enterprise_infrastructure",
+      "title": "LVMHメディア部門、OpenAIと17媒体を対象に戦略提携",
+      "summary": "LVMHグループのメディア部門とOpenAIは11月16日、同部門の媒体を対象とする戦略契約を締結した。 対象部門は17ブランド、従業員1,800人で、うち約700人がジャーナリストだ。 LVMH株は11月21日11時32分（中央欧州時間）、Lang & Schwarzで379.73ユーロだった。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "operational_status_change",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-211217a292c6-2026-11-22.html",
+        "sources": [
+          {
+            "label": "ad-hoc-news.de",
+            "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/lvmh-stock-media-division-signs-strategic-openai-partnership/70542140"
+          }
+        ],
+        "summary": "LVMHグループのメディア部門とOpenAIは11月16日、同部門の媒体を対象とする戦略契約を締結した。 対象部門は17ブランド、従業員1,800人で、うち約700人がジャーナリストだ。 LVMH株は11月21日11時32分（中央欧州時間）、Lang & Schwarzで379.73ユーロだった。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "LVMHグループのメディア部門とOpenAIは11月16日、同部門の媒体を対象とする戦略契約を締結した。",
+            "対象部門は17ブランド、従業員1,800人で、うち約700人がジャーナリストだ。",
+            "LVMH株は11月21日11時32分（中央欧州時間）、Lang & Schwarzで379.73ユーロだった。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "LVMHグループのメディア部門とOpenAIは11月16日、同部門の媒体を対象とする戦略契約を締結した。",
+              "source_urls": [
+                "https://www.ad-hoc-news.de/boerse/news/corporate-news/lvmh-stock-media-division-signs-strategic-openai-partnership/70542140"
+              ]
+            },
+            {
+              "fact": "対象部門は17ブランド、従業員1,800人で、うち約700人がジャーナリストだ。",
+              "source_urls": [
+                "https://www.ad-hoc-news.de/boerse/news/corporate-news/lvmh-stock-media-division-signs-strategic-openai-partnership/70542140"
+              ]
+            },
+            {
+              "fact": "LVMH株は11月21日11時32分（中央欧州時間）、Lang & Schwarzで379.73ユーロだった。",
+              "source_urls": [
+                "https://www.ad-hoc-news.de/boerse/news/corporate-news/lvmh-stock-media-division-signs-strategic-openai-partnership/70542140"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "enterprise_infrastructure",
+      "title": "OpenAI、内部推論抽出攻撃の成功率を0.2％へ低減",
+      "summary": "OpenAI は2026年11月20日、AIモデルの内部推論を不正に抽出する攻撃への対策を強化し、社内試験で攻撃成功率がGPT-6 Astraの 54.0% からGPT-6.2 Astraの 0.2% に低下したと 発表した 。 特に、過去のリクエストから内部推論を抽出する攻撃では、GPT-6 Astraの 54.0% に対してGPT-6.2 Astraは 0.2% となり、大幅な改善が見られた。 公表主体・資料 公表値 測定対象と条件 公表値から判断できないこと OpenAIの抽出耐性評価 （2026年11月20日） 0.2% 社内試験。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "risk_or_safety_signal",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-569cf9e69744-2026-11-22.html",
+        "sources": [
+          {
+            "label": "xenospectrum.com",
+            "url": "https://xenospectrum.com/openai-gpt-distillation-defense-metrics/"
+          }
+        ],
+        "summary": "OpenAI は2026年11月20日、AIモデルの内部推論を不正に抽出する攻撃への対策を強化し、社内試験で攻撃成功率がGPT-6 Astraの 54.0% からGPT-6.2 Astraの 0.2% に低下したと 発表した 。 特に、過去のリクエストから内部推論を抽出する攻撃では、GPT-6 Astraの 54.0% に対してGPT-6.2 Astraは 0.2% となり、大幅な改善が見られた。 公表主体・資料 公表値 測定対象と条件 公表値から判断できないこと OpenAIの抽出耐性評価 （2026年11月20日） 0.2% 社内試験。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "OpenAI は2026年11月20日、AIモデルの内部推論を不正に抽出する攻撃への対策を強化し、社内試験で攻撃成功率がGPT-6 Astraの 54.0% からGPT-6.2 Astraの 0.2% に低下したと 発表した 。",
+            "特に、過去のリクエストから内部推論を抽出する攻撃では、GPT-6 Astraの 54.0% に対してGPT-6.2 Astraは 0.2% となり、大幅な改善が見られた。",
+            "公表主体・資料 公表値 測定対象と条件 公表値から判断できないこと OpenAIの抽出耐性評価 （2026年11月20日） 0.2% 社内試験。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "OpenAI は2026年11月20日、AIモデルの内部推論を不正に抽出する攻撃への対策を強化し、社内試験で攻撃成功率がGPT-6 Astraの 54.0% からGPT-6.2 Astraの 0.2% に低下したと 発表した 。",
+              "source_urls": [
+                "https://xenospectrum.com/openai-gpt-distillation-defense-metrics/"
+              ]
+            },
+            {
+              "fact": "特に、過去のリクエストから内部推論を抽出する攻撃では、GPT-6 Astraの 54.0% に対してGPT-6.2 Astraは 0.2% となり、大幅な改善が見られた。",
+              "source_urls": [
+                "https://xenospectrum.com/openai-gpt-distillation-defense-metrics/"
+              ]
+            },
+            {
+              "fact": "公表主体・資料 公表値 測定対象と条件 公表値から判断できないこと OpenAIの抽出耐性評価 （2026年11月20日） 0.2% 社内試験。",
+              "source_urls": [
+                "https://xenospectrum.com/openai-gpt-distillation-defense-metrics/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "ai_infrastructure",
+      "title": "Anthropic上場後の売りでSoftBank Group株が16.16％下落",
+      "summary": "Anthropicの上場を受け、アジアのAI・半導体関連株に売りが広がった。 SoftBank Group株は20日に16.16%安となり、東京エレクトロンやSK hynixなど日韓の主要銘柄も下落した。 NVIDIAに部品を供給するSK hynixとSamsung Electronicsは、それぞれ6.0%、4.7%下落した。",
+      "section_id": "softbank",
+      "category": "SoftBank",
+      "source_published_date": "2026-11-20",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-a97166d78e7e-2026-11-22.html",
+        "sources": [
+          {
+            "label": "digitaltoday.co.kr",
+            "url": "https://www.digitaltoday.co.kr/jp/view/128876/anthropic-listing-triggers-asia-tech-selloff-softbank-slumps-16-percent"
+          }
+        ],
+        "summary": "Anthropicの上場を受け、アジアのAI・半導体関連株に売りが広がった。 SoftBank Group株は20日に16.16%安となり、東京エレクトロンやSK hynixなど日韓の主要銘柄も下落した。 NVIDIAに部品を供給するSK hynixとSamsung Electronicsは、それぞれ6.0%、4.7%下落した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Anthropicの上場を受け、アジアのAI・半導体関連株に売りが広がった。",
+            "SoftBank Group株は20日に16.16%安となり、東京エレクトロンやSK hynixなど日韓の主要銘柄も下落した。",
+            "NVIDIAに部品を供給するSK hynixとSamsung Electronicsは、それぞれ6.0%、4.7%下落した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Anthropicの上場を受け、アジアのAI・半導体関連株に売りが広がった。",
+              "source_urls": [
+                "https://www.digitaltoday.co.kr/jp/view/128876/anthropic-listing-triggers-asia-tech-selloff-softbank-slumps-16-percent"
+              ]
+            },
+            {
+              "fact": "SoftBank Group株は20日に16.16%安となり、東京エレクトロンやSK hynixなど日韓の主要銘柄も下落した。",
+              "source_urls": [
+                "https://www.digitaltoday.co.kr/jp/view/128876/anthropic-listing-triggers-asia-tech-selloff-softbank-slumps-16-percent"
+              ]
+            },
+            {
+              "fact": "NVIDIAに部品を供給するSK hynixとSamsung Electronicsは、それぞれ6.0%、4.7%下落した。",
+              "source_urls": [
+                "https://www.digitaltoday.co.kr/jp/view/128876/anthropic-listing-triggers-asia-tech-selloff-softbank-slumps-16-percent"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-20"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_sales",
+      "title": "Honda、新型SUV「AVANCIER」を世界初公開",
+      "summary": "Hondaは11月20日、次世代ハイブリッドシステムを採用する新型SUV「AVANCIER」を世界初公開した。 AVANCIERは新Hマークをハイブリッド車として初採用し、新プラットフォームと「Honda Hybrid」を初搭載する。 HondaはAVANCIERを皮切りに、「Honda Hybrid」搭載車を2029年度までに世界で15車種投入する計画だ。",
+      "section_id": "honda",
+      "category": "Honda",
+      "source_published_date": "2026-11-20",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-87c9a535914f-2026-11-22.html",
+        "sources": [
+          {
+            "label": "global.honda",
+            "url": "https://global.honda/jp/news/2026/4261120.html"
+          }
+        ],
+        "summary": "Hondaは11月20日、次世代ハイブリッドシステムを採用する新型SUV「AVANCIER」を世界初公開した。 AVANCIERは新Hマークをハイブリッド車として初採用し、新プラットフォームと「Honda Hybrid」を初搭載する。 HondaはAVANCIERを皮切りに、「Honda Hybrid」搭載車を2029年度までに世界で15車種投入する計画だ。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Hondaは11月20日、次世代ハイブリッドシステムを採用する新型SUV「AVANCIER」を世界初公開した。",
+            "AVANCIERは新Hマークをハイブリッド車として初採用し、新プラットフォームと「Honda Hybrid」を初搭載する。",
+            "HondaはAVANCIERを皮切りに、「Honda Hybrid」搭載車を2029年度までに世界で15車種投入する計画だ。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Hondaは11月20日、次世代ハイブリッドシステムを採用する新型SUV「AVANCIER」を世界初公開した。",
+              "source_urls": [
+                "https://global.honda/jp/news/2026/4261120.html"
+              ]
+            },
+            {
+              "fact": "AVANCIERは新Hマークをハイブリッド車として初採用し、新プラットフォームと「Honda Hybrid」を初搭載する。",
+              "source_urls": [
+                "https://global.honda/jp/news/2026/4261120.html"
+              ]
+            },
+            {
+              "fact": "HondaはAVANCIERを皮切りに、「Honda Hybrid」搭載車を2029年度までに世界で15車種投入する計画だ。",
+              "source_urls": [
+                "https://global.honda/jp/news/2026/4261120.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-20"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_sales",
+      "title": "太田格之進、2026年スーパーフォーミュラ王者に",
+      "summary": "太田格之進は1999年生まれで、2018年にHondaの育成スカラシップを獲得し、JAF-F4でシーズン5勝を挙げた。 太田は2019年のFIA-F4でポールポジション3回、優勝2回を記録し、JAF-F4日本一決定戦も制した。 2026年はDOCOMO TEAM DANDELION RACINGから参戦し、鈴鹿の第11戦で自身初のスーパーフォーミュラ王座を獲得した。",
+      "section_id": "honda",
+      "category": "Honda",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-210642336b30-2026-11-22.html",
+        "sources": [
+          {
+            "label": "global.honda",
+            "url": "https://global.honda/jp/topics/2026/c_2026-11-21.html"
+          }
+        ],
+        "summary": "太田格之進は1999年生まれで、2018年にHondaの育成スカラシップを獲得し、JAF-F4でシーズン5勝を挙げた。 太田は2019年のFIA-F4でポールポジション3回、優勝2回を記録し、JAF-F4日本一決定戦も制した。 2026年はDOCOMO TEAM DANDELION RACINGから参戦し、鈴鹿の第11戦で自身初のスーパーフォーミュラ王座を獲得した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "太田格之進は1999年生まれで、2018年にHondaの育成スカラシップを獲得し、JAF-F4でシーズン5勝を挙げた。",
+            "太田は2019年のFIA-F4でポールポジション3回、優勝2回を記録し、JAF-F4日本一決定戦も制した。",
+            "2026年はDOCOMO TEAM DANDELION RACINGから参戦し、鈴鹿の第11戦で自身初のスーパーフォーミュラ王座を獲得した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "太田格之進は1999年生まれで、2018年にHondaの育成スカラシップを獲得し、JAF-F4でシーズン5勝を挙げた。",
+              "source_urls": [
+                "https://global.honda/jp/topics/2026/c_2026-11-21.html"
+              ]
+            },
+            {
+              "fact": "太田は2019年のFIA-F4でポールポジション3回、優勝2回を記録し、JAF-F4日本一決定戦も制した。",
+              "source_urls": [
+                "https://global.honda/jp/topics/2026/c_2026-11-21.html"
+              ]
+            },
+            {
+              "fact": "2026年はDOCOMO TEAM DANDELION RACINGから参戦し、鈴鹿の第11戦で自身初のスーパーフォーミュラ王座を獲得した。",
+              "source_urls": [
+                "https://global.honda/jp/topics/2026/c_2026-11-21.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "market_price_reaction",
+      "title": "HRC、ステファン・ブラドルを2027年スポーティングコーディネーターに任命",
+      "summary": "Hondaの開発・テストライダーを務めたステファン・ブラドルは、MotoGPライダーの現場支援とHRC指導体制の強化を担う新職へ移る。 2027年のHondaファクトリー体制にはファビオ・クアルタラロとディオゴ・モレイラが加わる。 ブラドルは開発ライダーからHondaのスポーティング体制を担う役割へ移行する。",
+      "section_id": "honda",
+      "category": "Honda",
+      "source_published_date": "2026-11-20",
+      "topic_value_class": "operational_status_change",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-7a9e84387b38-2026-11-22.html",
+        "sources": [
+          {
+            "label": "motogp.com",
+            "url": "https://www.motogp.com/en/news/2026/11/20/stefan-bradl-appointed-hrc-sporting-coordinator-for-2027/1234379"
+          }
+        ],
+        "summary": "Hondaの開発・テストライダーを務めたステファン・ブラドルは、MotoGPライダーの現場支援とHRC指導体制の強化を担う新職へ移る。 2027年のHondaファクトリー体制にはファビオ・クアルタラロとディオゴ・モレイラが加わる。 ブラドルは開発ライダーからHondaのスポーティング体制を担う役割へ移行する。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Hondaの開発・テストライダーを務めたステファン・ブラドルは、MotoGPライダーの現場支援とHRC指導体制の強化を担う新職へ移る。",
+            "2027年のHondaファクトリー体制にはファビオ・クアルタラロとディオゴ・モレイラが加わる。",
+            "ブラドルは開発ライダーからHondaのスポーティング体制を担う役割へ移行する。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Hondaの開発・テストライダーを務めたステファン・ブラドルは、MotoGPライダーの現場支援とHRC指導体制の強化を担う新職へ移る。",
+              "source_urls": [
+                "https://www.motogp.com/en/news/2026/11/20/stefan-bradl-appointed-hrc-sporting-coordinator-for-2027/1234379"
+              ]
+            },
+            {
+              "fact": "2027年のHondaファクトリー体制にはファビオ・クアルタラロとディオゴ・モレイラが加わる。",
+              "source_urls": [
+                "https://www.motogp.com/en/news/2026/11/20/stefan-bradl-appointed-hrc-sporting-coordinator-for-2027/1234379"
+              ]
+            },
+            {
+              "fact": "ブラドルは開発ライダーからHondaのスポーティング体制を担う役割へ移行する。",
+              "source_urls": [
+                "https://www.motogp.com/en/news/2026/11/20/stefan-bradl-appointed-hrc-sporting-coordinator-for-2027/1234379"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-20"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "fia_regulation_development",
+      "title": "F1、2030年V8パワーユニット復活で基本合意",
+      "summary": "McLaren CEOのザク・ブラウンは、2030年のV8復活について「基本合意」があると認めた。 FIAは別途、2027年から常勤スチュワードを段階導入し、将来12～15人の常設プールへ拡大する方針を示した。 McLarenは自社製パワーユニットを開発せず、Mercedes HPPとの提携を続ける方針だ。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-11-20",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-ac4199b807cf-2026-11-22.html",
+        "sources": [
+          {
+            "label": "motorsport.com",
+            "url": "https://www.motorsport.com/f1/news/zak-brown-confirms-agreement-in-principle-on-f1s-v8-return-after-deleted-fia-posts/10875816/"
+          }
+        ],
+        "summary": "McLaren CEOのザク・ブラウンは、2030年のV8復活について「基本合意」があると認めた。 FIAは別途、2027年から常勤スチュワードを段階導入し、将来12～15人の常設プールへ拡大する方針を示した。 McLarenは自社製パワーユニットを開発せず、Mercedes HPPとの提携を続ける方針だ。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "McLaren CEOのザク・ブラウンは、2030年のV8復活について「基本合意」があると認めた。",
+            "FIAは別途、2027年から常勤スチュワードを段階導入し、将来12～15人の常設プールへ拡大する方針を示した。",
+            "McLarenは自社製パワーユニットを開発せず、Mercedes HPPとの提携を続ける方針だ。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "McLaren CEOのザク・ブラウンは、2030年のV8復活について「基本合意」があると認めた。",
+              "source_urls": [
+                "https://www.motorsport.com/f1/news/zak-brown-confirms-agreement-in-principle-on-f1s-v8-return-after-deleted-fia-posts/10875816/"
+              ]
+            },
+            {
+              "fact": "FIAは別途、2027年から常勤スチュワードを段階導入し、将来12～15人の常設プールへ拡大する方針を示した。",
+              "source_urls": [
+                "https://www.motorsport.com/f1/news/zak-brown-confirms-agreement-in-principle-on-f1s-v8-return-after-deleted-fia-posts/10875816/"
+              ]
+            },
+            {
+              "fact": "McLarenは自社製パワーユニットを開発せず、Mercedes HPPとの提携を続ける方針だ。",
+              "source_urls": [
+                "https://www.motorsport.com/f1/news/zak-brown-confirms-agreement-in-principle-on-f1s-v8-return-after-deleted-fia-posts/10875816/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-20"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "race_schedule_results",
+      "title": "Nike、2027年からF1公式アパレル・ユニフォーム供給者に",
+      "summary": "2027年からの長期契約 オートスポーツweb 2026年11月21日 11時43分 F1は、2027年にスポーツ関連ブランド、NIKE／ナイキをオフィシャルパートナーに迎え、長期的なパートナーシップ契約の下、同社がF1のオフィシャル・アパレル＆ユニフォームサプライヤーに就任することを発表した。 この契約により、ナイキは、スタイル、パフォーマンス、ライフスタイルに焦点を当てたカプセルコレクションとして、フットウェア、アパレル、アクセサリーを展開するほか、パフォーマンス面の革新や、次世代のアスリートとファンに向けたレースウイークエンドの体験も提供するということだ。 さらにファンは、『Formula 1 x Nike』のアパレル／スポーツウェアコレクションを入手することができ、第一弾として、ラスベガスGPの週末に、「ラスベガスGP × Nike」カプセルコレクションがF1ハブとナイキ・ラスベガス店で発売される。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-7eab5af4d985-2026-11-22.html",
+        "sources": [
+          {
+            "label": "topics.smt.docomo.ne.jp",
+            "url": "https://topics.smt.docomo.ne.jp/amp/article/asweb/sports/asweb-20261121_1375942"
+          }
+        ],
+        "summary": "2027年からの長期契約 オートスポーツweb 2026年11月21日 11時43分 F1は、2027年にスポーツ関連ブランド、NIKE／ナイキをオフィシャルパートナーに迎え、長期的なパートナーシップ契約の下、同社がF1のオフィシャル・アパレル＆ユニフォームサプライヤーに就任することを発表した。 この契約により、ナイキは、スタイル、パフォーマンス、ライフスタイルに焦点を当てたカプセルコレクションとして、フットウェア、アパレル、アクセサリーを展開するほか、パフォーマンス面の革新や、次世代のアスリートとファンに向けたレースウイークエンドの体験も提供するということだ。 さらにファンは、『Formula 1 x Nike』のアパレル／スポーツウェアコレクションを入手することができ、第一弾として、ラスベガスGPの週末に、「ラスベガスGP × Nike」カプセルコレクションがF1ハブとナイキ・ラスベガス店で発売される。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "2027年からの長期契約 オートスポーツweb 2026年11月21日 11時43分 F1は、2027年にスポーツ関連ブランド、NIKE／ナイキをオフィシャルパートナーに迎え、長期的なパートナーシップ契約の下、同社がF1のオフィシャル・アパレル＆ユニフォームサプライヤーに就任することを発表した。",
+            "この契約により、ナイキは、スタイル、パフォーマンス、ライフスタイルに焦点を当てたカプセルコレクションとして、フットウェア、アパレル、アクセサリーを展開するほか、パフォーマンス面の革新や、次世代のアスリートとファンに向けたレースウイークエンドの体験も提供するということだ。",
+            "さらにファンは、『Formula 1 x Nike』のアパレル／スポーツウェアコレクションを入手することができ、第一弾として、ラスベガスGPの週末に、「ラスベガスGP × Nike」カプセルコレクションがF1ハブとナイキ・ラスベガス店で発売される。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "2027年からの長期契約 オートスポーツweb 2026年11月21日 11時43分 F1は、2027年にスポーツ関連ブランド、NIKE／ナイキをオフィシャルパートナーに迎え、長期的なパートナーシップ契約の下、同社がF1のオフィシャル・アパレル＆ユニフォームサプライヤーに就任することを発表した。",
+              "source_urls": [
+                "https://topics.smt.docomo.ne.jp/amp/article/asweb/sports/asweb-20261121_1375942"
+              ]
+            },
+            {
+              "fact": "この契約により、ナイキは、スタイル、パフォーマンス、ライフスタイルに焦点を当てたカプセルコレクションとして、フットウェア、アパレル、アクセサリーを展開するほか、パフォーマンス面の革新や、次世代のアスリートとファンに向けたレースウイークエンドの体験も提供するということだ。",
+              "source_urls": [
+                "https://topics.smt.docomo.ne.jp/amp/article/asweb/sports/asweb-20261121_1375942"
+              ]
+            },
+            {
+              "fact": "さらにファンは、『Formula 1 x Nike』のアパレル／スポーツウェアコレクションを入手することができ、第一弾として、ラスベガスGPの週末に、「ラスベガスGP × Nike」カプセルコレクションがF1ハブとナイキ・ラスベガス店で発売される。",
+              "source_urls": [
+                "https://topics.smt.docomo.ne.jp/amp/article/asweb/sports/asweb-20261121_1375942"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "race_schedule_results",
+      "title": "FIA、ラスベガスGP練習走行の審議結果を公表",
+      "summary": "スチュワードは映像、テレメトリー、無線、車載映像と当事者の説明を検討した。 状況を考慮し、スチュワードはマックス・フェルスタッペンへのドライバー警告が妥当と判断した。 別件の審議では、安全なリリースには確実な通信と通信障害時の予備手段が必要だと指摘した。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-2a948daad1e6-2026-11-22.html",
+        "sources": [
+          {
+            "label": "planetf1.com",
+            "url": "https://www.planetf1.com/news/max-verstappen-fia-george-russell-las-vegas-grand-prix-2026-fp3"
+          },
+          {
+            "label": "planetf1.com",
+            "url": "https://www.planetf1.com/news/fia-las-vegas-grand-prix-2026-investigation-double"
+          }
+        ],
+        "summary": "スチュワードは映像、テレメトリー、無線、車載映像と当事者の説明を検討した。 状況を考慮し、スチュワードはマックス・フェルスタッペンへのドライバー警告が妥当と判断した。 別件の審議では、安全なリリースには確実な通信と通信障害時の予備手段が必要だと指摘した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "スチュワードは映像、テレメトリー、無線、車載映像と当事者の説明を検討した。",
+            "状況を考慮し、スチュワードはマックス・フェルスタッペンへのドライバー警告が妥当と判断した。",
+            "別件の審議では、安全なリリースには確実な通信と通信障害時の予備手段が必要だと指摘した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "スチュワードは映像、テレメトリー、無線、車載映像と当事者の説明を検討した。",
+              "source_urls": [
+                "https://www.planetf1.com/news/max-verstappen-fia-george-russell-las-vegas-grand-prix-2026-fp3"
+              ]
+            },
+            {
+              "fact": "状況を考慮し、スチュワードはマックス・フェルスタッペンへのドライバー警告が妥当と判断した。",
+              "source_urls": [
+                "https://www.planetf1.com/news/max-verstappen-fia-george-russell-las-vegas-grand-prix-2026-fp3"
+              ]
+            },
+            {
+              "fact": "別件の審議では、安全なリリースには確実な通信と通信障害時の予備手段が必要だと指摘した。",
+              "source_urls": [
+                "https://www.planetf1.com/news/fia-las-vegas-grand-prix-2026-investigation-double"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "race_schedule_results",
+      "title": "フェルスタッペン、首位交代35回のラスベガスGPを制す",
+      "summary": "0.639秒差の2位にランド・ノリス、1.529秒差の3位にオスカー・ピアストリが続き、マクラーレンが今シーズン初のダブル表彰台を獲得した。 オスカー・ピアストリ（マクラーレン MCL40）とランド・ノリス（マクラーレン MCL40）とフランコ・コラピント（アルピーヌ A526）、2026年11月21日（土） F1ラスベガスGP 決勝（ラスベガス市街地コース） Courtesy Of McLaren 波乱続出、ハジャーはウイング脱落で後退 波乱はスタート前から始まっていた。 チームメイトのフランコ・コラピントが6位に続き、アルピーヌは2台で18ポイントを獲得した。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-11-22",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-7291c3cb31ed-2026-11-22.html",
+        "sources": [
+          {
+            "label": "formula1-data.com",
+            "url": "https://formula1-data.com/article/las-vegas-race-digest-2026"
+          }
+        ],
+        "summary": "0.639秒差の2位にランド・ノリス、1.529秒差の3位にオスカー・ピアストリが続き、マクラーレンが今シーズン初のダブル表彰台を獲得した。 オスカー・ピアストリ（マクラーレン MCL40）とランド・ノリス（マクラーレン MCL40）とフランコ・コラピント（アルピーヌ A526）、2026年11月21日（土） F1ラスベガスGP 決勝（ラスベガス市街地コース） Courtesy Of McLaren 波乱続出、ハジャーはウイング脱落で後退 波乱はスタート前から始まっていた。 チームメイトのフランコ・コラピントが6位に続き、アルピーヌは2台で18ポイントを獲得した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "0.639秒差の2位にランド・ノリス、1.529秒差の3位にオスカー・ピアストリが続き、マクラーレンが今シーズン初のダブル表彰台を獲得した。",
+            "オスカー・ピアストリ（マクラーレン MCL40）とランド・ノリス（マクラーレン MCL40）とフランコ・コラピント（アルピーヌ A526）、2026年11月21日（土） F1ラスベガスGP 決勝（ラスベガス市街地コース） Courtesy Of McLaren 波乱続出、ハジャーはウイング脱落で後退 波乱はスタート前から始まっていた。",
+            "チームメイトのフランコ・コラピントが6位に続き、アルピーヌは2台で18ポイントを獲得した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "0.639秒差の2位にランド・ノリス、1.529秒差の3位にオスカー・ピアストリが続き、マクラーレンが今シーズン初のダブル表彰台を獲得した。",
+              "source_urls": [
+                "https://formula1-data.com/article/las-vegas-race-digest-2026"
+              ]
+            },
+            {
+              "fact": "オスカー・ピアストリ（マクラーレン MCL40）とランド・ノリス（マクラーレン MCL40）とフランコ・コラピント（アルピーヌ A526）、2026年11月21日（土） F1ラスベガスGP 決勝（ラスベガス市街地コース） Courtesy Of McLaren 波乱続出、ハジャーはウイング脱落で後退 波乱はスタート前から始まっていた。",
+              "source_urls": [
+                "https://formula1-data.com/article/las-vegas-race-digest-2026"
+              ]
+            },
+            {
+              "fact": "チームメイトのフランコ・コラピントが6位に続き、アルピーヌは2台で18ポイントを獲得した。",
+              "source_urls": [
+                "https://formula1-data.com/article/las-vegas-race-digest-2026"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-22"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "dragon_iss",
+      "title": "SpaceX、米宇宙軍の機密ミッションUSSF-317を打ち上げ",
+      "summary": "Falcon 9はヴァンデンバーグ宇宙軍基地の第4東発射施設からUSSF-317に臨んだ。 USSF-317は午後8時20分に同発射施設から打ち上げられた。 打ち上げには機体番号B1100のFalcon 9第1段が使われた。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-11-20",
+      "topic_value_class": "operational_status_change",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-91a23b7f81cd-2026-11-22.html",
+        "sources": [
+          {
+            "label": "spaceflightnow.com",
+            "url": "https://spaceflightnow.com/2026/11/19/live-coverage-spacex-to-launch-classified-payload-for-the-u-s-space-force-2/"
+          }
+        ],
+        "summary": "Falcon 9はヴァンデンバーグ宇宙軍基地の第4東発射施設からUSSF-317に臨んだ。 USSF-317は午後8時20分に同発射施設から打ち上げられた。 打ち上げには機体番号B1100のFalcon 9第1段が使われた。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Falcon 9はヴァンデンバーグ宇宙軍基地の第4東発射施設からUSSF-317に臨んだ。",
+            "USSF-317は午後8時20分に同発射施設から打ち上げられた。",
+            "打ち上げには機体番号B1100のFalcon 9第1段が使われた。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Falcon 9はヴァンデンバーグ宇宙軍基地の第4東発射施設からUSSF-317に臨んだ。",
+              "source_urls": [
+                "https://spaceflightnow.com/2026/11/19/live-coverage-spacex-to-launch-classified-payload-for-the-u-s-space-force-2/"
+              ]
+            },
+            {
+              "fact": "USSF-317は午後8時20分に同発射施設から打ち上げられた。",
+              "source_urls": [
+                "https://spaceflightnow.com/2026/11/19/live-coverage-spacex-to-launch-classified-payload-for-the-u-s-space-force-2/"
+              ]
+            },
+            {
+              "fact": "打ち上げには機体番号B1100のFalcon 9第1段が使われた。",
+              "source_urls": [
+                "https://spaceflightnow.com/2026/11/19/live-coverage-spacex-to-launch-classified-payload-for-the-u-s-space-force-2/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-20"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "official_launch_manifest",
+      "title": "SpaceXのTerafab計画、テキサス州の公文書開示訴訟で争点に",
+      "summary": "グライムズ郡委員会は6月3日、SpaceXのTerafab提案を4対1で承認した。 テキサス州司法長官室は7月と8月、特定情報を除きグライムズ郡の記録を開示するよう2件の判断を出した。 SpaceXは記録開示への異議で、施設へのテロ攻撃を可能にする情報や、税制優遇・開発承認を求める手法に関する営業秘密が明らかになると主張した。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "risk_or_safety_signal",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-5216ee3baf82-2026-11-22.html",
+        "sources": [
+          {
+            "label": "thetexan.news",
+            "url": "https://thetexan.news/issues/texas-taxes-spending/grimes-county-spacex-agreement-under-scrutiny-as-terafab-litigation-continues/article_422368b1-2658-4140-81be-ba449e5d3066.html"
+          }
+        ],
+        "summary": "グライムズ郡委員会は6月3日、SpaceXのTerafab提案を4対1で承認した。 テキサス州司法長官室は7月と8月、特定情報を除きグライムズ郡の記録を開示するよう2件の判断を出した。 SpaceXは記録開示への異議で、施設へのテロ攻撃を可能にする情報や、税制優遇・開発承認を求める手法に関する営業秘密が明らかになると主張した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "グライムズ郡委員会は6月3日、SpaceXのTerafab提案を4対1で承認した。",
+            "テキサス州司法長官室は7月と8月、特定情報を除きグライムズ郡の記録を開示するよう2件の判断を出した。",
+            "SpaceXは記録開示への異議で、施設へのテロ攻撃を可能にする情報や、税制優遇・開発承認を求める手法に関する営業秘密が明らかになると主張した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "グライムズ郡委員会は6月3日、SpaceXのTerafab提案を4対1で承認した。",
+              "source_urls": [
+                "https://thetexan.news/issues/texas-taxes-spending/grimes-county-spacex-agreement-under-scrutiny-as-terafab-litigation-continues/article_422368b1-2658-4140-81be-ba449e5d3066.html"
+              ]
+            },
+            {
+              "fact": "テキサス州司法長官室は7月と8月、特定情報を除きグライムズ郡の記録を開示するよう2件の判断を出した。",
+              "source_urls": [
+                "https://thetexan.news/issues/texas-taxes-spending/grimes-county-spacex-agreement-under-scrutiny-as-terafab-litigation-continues/article_422368b1-2658-4140-81be-ba449e5d3066.html"
+              ]
+            },
+            {
+              "fact": "SpaceXは記録開示への異議で、施設へのテロ攻撃を可能にする情報や、税制優遇・開発承認を求める手法に関する営業秘密が明らかになると主張した。",
+              "source_urls": [
+                "https://thetexan.news/issues/texas-taxes-spending/grimes-county-spacex-agreement-under-scrutiny-as-terafab-litigation-continues/article_422368b1-2658-4140-81be-ba449e5d3066.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "official_launch_manifest",
+      "title": "フィリピン政府、SpaceXの商業ロケット打ち上げ誘致に意欲",
+      "summary": "フィリピン大統領は、西太平洋上の立地がロケット打ち上げに適するとし、SpaceXが同国での事業拡大を検討することに期待を示した。 一方、大統領は2島の開発報道について詳細を把握しておらず、具体的な取り決めはないと述べた。 駐米フィリピン大使は、マスク氏が1～2島への投資・開発を検討しているとの情報に言及した。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-11-20",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-2e6351374410-2026-11-22.html",
+        "sources": [
+          {
+            "label": "tribune.net.ph",
+            "url": "https://tribune.net.ph/2026/11/20/bbm-phl-eyes-spacex-deal-to-host-commercial-rocket-launches"
+          }
+        ],
+        "summary": "フィリピン大統領は、西太平洋上の立地がロケット打ち上げに適するとし、SpaceXが同国での事業拡大を検討することに期待を示した。 一方、大統領は2島の開発報道について詳細を把握しておらず、具体的な取り決めはないと述べた。 駐米フィリピン大使は、マスク氏が1～2島への投資・開発を検討しているとの情報に言及した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "フィリピン大統領は、西太平洋上の立地がロケット打ち上げに適するとし、SpaceXが同国での事業拡大を検討することに期待を示した。",
+            "一方、大統領は2島の開発報道について詳細を把握しておらず、具体的な取り決めはないと述べた。",
+            "駐米フィリピン大使は、マスク氏が1～2島への投資・開発を検討しているとの情報に言及した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "フィリピン大統領は、西太平洋上の立地がロケット打ち上げに適するとし、SpaceXが同国での事業拡大を検討することに期待を示した。",
+              "source_urls": [
+                "https://tribune.net.ph/2026/11/20/bbm-phl-eyes-spacex-deal-to-host-commercial-rocket-launches"
+              ]
+            },
+            {
+              "fact": "一方、大統領は2島の開発報道について詳細を把握しておらず、具体的な取り決めはないと述べた。",
+              "source_urls": [
+                "https://tribune.net.ph/2026/11/20/bbm-phl-eyes-spacex-deal-to-host-commercial-rocket-launches"
+              ]
+            },
+            {
+              "fact": "駐米フィリピン大使は、マスク氏が1～2島への投資・開発を検討しているとの情報に言及した。",
+              "source_urls": [
+                "https://tribune.net.ph/2026/11/20/bbm-phl-eyes-spacex-deal-to-host-commercial-rocket-launches"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-20"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "employment_consumption",
+      "title": "10月の全国コアCPI、前年同月比2.2％上昇",
+      "summary": "9月に2.4%下落していた電気代が1.6%上昇し、都市ガス代は伸びが0.2%から5.3%に拡大した。 生鮮食品は6.3%上昇と9月の2.1%上昇から大幅に上がった。 総務省が発表した10月の全国消費者物価指数は、価格の変動が大きい生鮮食品を除く総合が102.9と、前の年の同じ月と比べて2.2%上昇しました。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-11-20",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-53b6cd07fd93-2026-11-22.html",
+        "sources": [
+          {
+            "label": "nikkei.com",
+            "url": "https://www.nikkei.com/article/DGXZQOUA169NP0W6A111C2000000/"
+          },
+          {
+            "label": "newsdig.tbs.co.jp",
+            "url": "https://newsdig.tbs.co.jp/articles/withbloomberg/3100316?display=1"
+          }
+        ],
+        "summary": "9月に2.4%下落していた電気代が1.6%上昇し、都市ガス代は伸びが0.2%から5.3%に拡大した。 生鮮食品は6.3%上昇と9月の2.1%上昇から大幅に上がった。 総務省が発表した10月の全国消費者物価指数は、価格の変動が大きい生鮮食品を除く総合が102.9と、前の年の同じ月と比べて2.2%上昇しました。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "9月に2.4%下落していた電気代が1.6%上昇し、都市ガス代は伸びが0.2%から5.3%に拡大した。",
+            "生鮮食品は6.3%上昇と9月の2.1%上昇から大幅に上がった。",
+            "総務省が発表した10月の全国消費者物価指数は、価格の変動が大きい生鮮食品を除く総合が102.9と、前の年の同じ月と比べて2.2%上昇しました。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "9月に2.4%下落していた電気代が1.6%上昇し、都市ガス代は伸びが0.2%から5.3%に拡大した。",
+              "source_urls": [
+                "https://www.nikkei.com/article/DGXZQOUA169NP0W6A111C2000000/"
+              ]
+            },
+            {
+              "fact": "生鮮食品は6.3%上昇と9月の2.1%上昇から大幅に上がった。",
+              "source_urls": [
+                "https://www.nikkei.com/article/DGXZQOUA169NP0W6A111C2000000/"
+              ]
+            },
+            {
+              "fact": "総務省が発表した10月の全国消費者物価指数は、価格の変動が大きい生鮮食品を除く総合が102.9と、前の年の同じ月と比べて2.2%上昇しました。",
+              "source_urls": [
+                "https://newsdig.tbs.co.jp/articles/withbloomberg/3100316?display=1"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-20"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "investment_policy_markets",
+      "title": "米AI株急落でリスク回避、Nasdaqは5％安",
+      "summary": "19日上場のアンソロピックの大幅安などを背景に人工知能（AI）関連が軒並み売られた。 米市場でナスダック総合株価指数は前日比5%安と大きく下げた。 半導体株指数は米半導体 エヌビディア の急落が響き1割下げた。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-4f19ea53a7f1-2026-11-22.html",
+        "sources": [
+          {
+            "label": "nikkei.com",
+            "url": "https://www.nikkei.com/article/DGXZQOUB211CX0R21C26A1000000/"
+          }
+        ],
+        "summary": "19日上場のアンソロピックの大幅安などを背景に人工知能（AI）関連が軒並み売られた。 米市場でナスダック総合株価指数は前日比5%安と大きく下げた。 半導体株指数は米半導体 エヌビディア の急落が響き1割下げた。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "19日上場のアンソロピックの大幅安などを背景に人工知能（AI）関連が軒並み売られた。",
+            "米市場でナスダック総合株価指数は前日比5%安と大きく下げた。",
+            "半導体株指数は米半導体 エヌビディア の急落が響き1割下げた。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "19日上場のアンソロピックの大幅安などを背景に人工知能（AI）関連が軒並み売られた。",
+              "source_urls": [
+                "https://www.nikkei.com/article/DGXZQOUB211CX0R21C26A1000000/"
+              ]
+            },
+            {
+              "fact": "米市場でナスダック総合株価指数は前日比5%安と大きく下げた。",
+              "source_urls": [
+                "https://www.nikkei.com/article/DGXZQOUB211CX0R21C26A1000000/"
+              ]
+            },
+            {
+              "fact": "半導体株指数は米半導体 エヌビディア の急落が響き1割下げた。",
+              "source_urls": [
+                "https://www.nikkei.com/article/DGXZQOUB211CX0R21C26A1000000/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "investment_policy_markets",
+      "title": "卵の平均小売価格、10月に1パック312円で過去最高",
+      "summary": "1パック312円で過去最高に…鳥インフルの影響懸念も 養鶏場のエサ代の高騰などを受け上昇している卵の価格。 平均小売価格は10月に1パック当たり312円と過去最高を更新し、11月も高止まりしている。 本当に上がっているんだなと」 初の値上げも「何とかサービス変えずに頑張りたい」 こうした影響を受け、店は10月、開店以降初めて看板メニューのラーメンを950円から990円に値上げ。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-11-22",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-7f87e53d854f-2026-11-22.html",
+        "sources": [
+          {
+            "label": "news.yahoo.co.jp",
+            "url": "https://news.yahoo.co.jp/articles/2bacb9e42c0cf84d526e8ea05c9cfa62150ffaef"
+          }
+        ],
+        "summary": "1パック312円で過去最高に…鳥インフルの影響懸念も 養鶏場のエサ代の高騰などを受け上昇している卵の価格。 平均小売価格は10月に1パック当たり312円と過去最高を更新し、11月も高止まりしている。 本当に上がっているんだなと」 初の値上げも「何とかサービス変えずに頑張りたい」 こうした影響を受け、店は10月、開店以降初めて看板メニューのラーメンを950円から990円に値上げ。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "1パック312円で過去最高に…鳥インフルの影響懸念も 養鶏場のエサ代の高騰などを受け上昇している卵の価格。",
+            "平均小売価格は10月に1パック当たり312円と過去最高を更新し、11月も高止まりしている。",
+            "本当に上がっているんだなと」 初の値上げも「何とかサービス変えずに頑張りたい」 こうした影響を受け、店は10月、開店以降初めて看板メニューのラーメンを950円から990円に値上げ。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "1パック312円で過去最高に…鳥インフルの影響懸念も 養鶏場のエサ代の高騰などを受け上昇している卵の価格。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/2bacb9e42c0cf84d526e8ea05c9cfa62150ffaef"
+              ]
+            },
+            {
+              "fact": "平均小売価格は10月に1パック当たり312円と過去最高を更新し、11月も高止まりしている。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/2bacb9e42c0cf84d526e8ea05c9cfa62150ffaef"
+              ]
+            },
+            {
+              "fact": "本当に上がっているんだなと」 初の値上げも「何とかサービス変えずに頑張りたい」 こうした影響を受け、店は10月、開店以降初めて看板メニューのラーメンを950円から990円に値上げ。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/2bacb9e42c0cf84d526e8ea05c9cfa62150ffaef"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-22"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "employment_consumption",
+      "title": "7～9月の訪日消費額、2兆2,076億円で同期最高",
+      "summary": "【写真を見る】消費額は過去最高9.8兆円へ 量から質へ転換するインバウンド市場 ■はじめに〜訪日客数は2期連続減も消費額は伸び率回復、近隣市場と単価が下支え 前稿では、2026年4-6月期について、中国の6割減に加え、イラン情勢の影響などで欧州からの訪日客も減少に転じ、訪日外客数がコロナ禍後初めて前年割れ（前年同期比▲5.3％）となる一方、単価の上昇に支えられて消費額は前年同期をわずかに上回り（同+0.3％）、第2四半期として過去最高を更新した状況を報告した。 訪日外客数は964万人（前年同期比▲4.8％）と2四半期連続で前年を下回った一方、消費額は2兆2,076億円（同+3.2％）と7-9月期として過去最高を更新した。 1人当たり旅行支出が23.4万円（同+6.1％）へと上昇して客数の減少を補った形であり、前期にほぼ横ばいだった消費額の伸び率も持ち直した。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-e831cfc48746-2026-11-22.html",
+        "sources": [
+          {
+            "label": "news.yahoo.co.jp",
+            "url": "https://news.yahoo.co.jp/articles/46f1d52c03a32099f2bf654fb7c4f56bd09abaec"
+          }
+        ],
+        "summary": "【写真を見る】消費額は過去最高9.8兆円へ 量から質へ転換するインバウンド市場 ■はじめに〜訪日客数は2期連続減も消費額は伸び率回復、近隣市場と単価が下支え 前稿では、2026年4-6月期について、中国の6割減に加え、イラン情勢の影響などで欧州からの訪日客も減少に転じ、訪日外客数がコロナ禍後初めて前年割れ（前年同期比▲5.3％）となる一方、単価の上昇に支えられて消費額は前年同期をわずかに上回り（同+0.3％）、第2四半期として過去最高を更新した状況を報告した。 訪日外客数は964万人（前年同期比▲4.8％）と2四半期連続で前年を下回った一方、消費額は2兆2,076億円（同+3.2％）と7-9月期として過去最高を更新した。 1人当たり旅行支出が23.4万円（同+6.1％）へと上昇して客数の減少を補った形であり、前期にほぼ横ばいだった消費額の伸び率も持ち直した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "【写真を見る】消費額は過去最高9.8兆円へ 量から質へ転換するインバウンド市場 ■はじめに〜訪日客数は2期連続減も消費額は伸び率回復、近隣市場と単価が下支え 前稿では、2026年4-6月期について、中国の6割減に加え、イラン情勢の影響などで欧州からの訪日客も減少に転じ、訪日外客数がコロナ禍後初めて前年割れ（前年同期比▲5.3％）となる一方、単価の上昇に支えられて消費額は前年同期をわずかに上回り（同+0.3％）、第2四半期として過去最高を更新した状況を報告した。",
+            "訪日外客数は964万人（前年同期比▲4.8％）と2四半期連続で前年を下回った一方、消費額は2兆2,076億円（同+3.2％）と7-9月期として過去最高を更新した。",
+            "1人当たり旅行支出が23.4万円（同+6.1％）へと上昇して客数の減少を補った形であり、前期にほぼ横ばいだった消費額の伸び率も持ち直した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "【写真を見る】消費額は過去最高9.8兆円へ 量から質へ転換するインバウンド市場 ■はじめに〜訪日客数は2期連続減も消費額は伸び率回復、近隣市場と単価が下支え 前稿では、2026年4-6月期について、中国の6割減に加え、イラン情勢の影響などで欧州からの訪日客も減少に転じ、訪日外客数がコロナ禍後初めて前年割れ（前年同期比▲5.3％）となる一方、単価の上昇に支えられて消費額は前年同期をわずかに上回り（同+0.3％）、第2四半期として過去最高を更新した状況を報告した。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/46f1d52c03a32099f2bf654fb7c4f56bd09abaec"
+              ]
+            },
+            {
+              "fact": "訪日外客数は964万人（前年同期比▲4.8％）と2四半期連続で前年を下回った一方、消費額は2兆2,076億円（同+3.2％）と7-9月期として過去最高を更新した。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/46f1d52c03a32099f2bf654fb7c4f56bd09abaec"
+              ]
+            },
+            {
+              "fact": "1人当たり旅行支出が23.4万円（同+6.1％）へと上昇して客数の減少を補った形であり、前期にほぼ横ばいだった消費額の伸び率も持ち直した。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/46f1d52c03a32099f2bf654fb7c4f56bd09abaec"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_macro_policy",
+      "title": "中国・ASEAN法務フォーラム、常設事務局とAI法研究連盟を発足",
+      "summary": "第8回中国・ASEAN法務協力フォーラムが重慶で開幕した。 フォーラムには法務当局者、裁判官、専門家が参加した。 参加者は、企業による現地法への対応と商事紛争の解決を支える司法協力を議論した。 主催者によると、2026年の最初の三四半期の重慶とASEANの貿易額は1164.1億元だった。 同期間の貿易額は前年同期比17％増だった。 開催年は中国・ASEAN対話関係35周年、包括的戦略パートナーシップ樹立5周年に当たる。",
+      "section_id": "asia",
+      "category": "アジア経済",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-1b8a1085782f-2026-11-22.html",
+        "sources": [
+          {
+            "label": "prnewswire.com",
+            "url": "https://www.prnewswire.com/apac/news-releases/chinaasean-legal-forum-launches-secretariat-and-ai-research-alliance-in-chongqing-302947195.html"
+          }
+        ],
+        "summary": "第8回中国・ASEAN法務協力フォーラムが重慶で開幕した。 フォーラムには法務当局者、裁判官、専門家が参加した。 参加者は、企業による現地法への対応と商事紛争の解決を支える司法協力を議論した。 主催者によると、2026年の最初の三四半期の重慶とASEANの貿易額は1164.1億元だった。 同期間の貿易額は前年同期比17％増だった。 開催年は中国・ASEAN対話関係35周年、包括的戦略パートナーシップ樹立5周年に当たる。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "第8回中国・ASEAN法務協力フォーラムが重慶で開幕した。",
+            "フォーラムには法務当局者、裁判官、専門家が参加した。",
+            "参加者は、企業による現地法への対応と商事紛争の解決を支える司法協力を議論した。",
+            "主催者によると、2026年の最初の三四半期の重慶とASEANの貿易額は1164.1億元だった。",
+            "同期間の貿易額は前年同期比17％増だった。",
+            "開催年は中国・ASEAN対話関係35周年、包括的戦略パートナーシップ樹立5周年に当たる。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "第8回中国・ASEAN法務協力フォーラムが重慶で開幕した。",
+              "source_urls": [
+                "https://www.prnewswire.com/apac/news-releases/chinaasean-legal-forum-launches-secretariat-and-ai-research-alliance-in-chongqing-302947195.html"
+              ]
+            },
+            {
+              "fact": "フォーラムには法務当局者、裁判官、専門家が参加した。",
+              "source_urls": [
+                "https://www.prnewswire.com/apac/news-releases/chinaasean-legal-forum-launches-secretariat-and-ai-research-alliance-in-chongqing-302947195.html"
+              ]
+            },
+            {
+              "fact": "参加者は、企業による現地法への対応と商事紛争の解決を支える司法協力を議論した。",
+              "source_urls": [
+                "https://www.prnewswire.com/apac/news-releases/chinaasean-legal-forum-launches-secretariat-and-ai-research-alliance-in-chongqing-302947195.html"
+              ]
+            },
+            {
+              "fact": "主催者によると、2026年の最初の三四半期の重慶とASEANの貿易額は1164.1億元だった。",
+              "source_urls": [
+                "https://www.prnewswire.com/apac/news-releases/chinaasean-legal-forum-launches-secretariat-and-ai-research-alliance-in-chongqing-302947195.html"
+              ]
+            },
+            {
+              "fact": "同期間の貿易額は前年同期比17％増だった。",
+              "source_urls": [
+                "https://www.prnewswire.com/apac/news-releases/chinaasean-legal-forum-launches-secretariat-and-ai-research-alliance-in-chongqing-302947195.html"
+              ]
+            },
+            {
+              "fact": "開催年は中国・ASEAN対話関係35周年、包括的戦略パートナーシップ樹立5周年に当たる。",
+              "source_urls": [
+                "https://www.prnewswire.com/apac/news-releases/chinaasean-legal-forum-launches-secretariat-and-ai-research-alliance-in-chongqing-302947195.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "us_markets_fund_flows_rates",
+      "title": "Nasdaq、11月20日に5.28％急落",
+      "summary": "11月20日の北米市場では株式が引けにかけて大幅安となった。 Anthropic株は上場2日目に9.1％安の88.30ドルとなったが、83ドルの公開価格は上回った。 1年先インフレ期待は速報の4.3％、10月の4.7％から3.7％へ低下した。",
+      "section_id": "north_america",
+      "category": "北米経済",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-515dcb17e3b4-2026-11-22.html",
+        "sources": [
+          {
+            "label": "investinglive.com",
+            "url": "https://investinglive.com/news/investinglive-americas-fx-news-wrap-20-nov-stocks-get-hammered-as-nasdaq-plunges-5-28/"
+          }
+        ],
+        "summary": "11月20日の北米市場では株式が引けにかけて大幅安となった。 Anthropic株は上場2日目に9.1％安の88.30ドルとなったが、83ドルの公開価格は上回った。 1年先インフレ期待は速報の4.3％、10月の4.7％から3.7％へ低下した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "11月20日の北米市場では株式が引けにかけて大幅安となった。",
+            "Anthropic株は上場2日目に9.1％安の88.30ドルとなったが、83ドルの公開価格は上回った。",
+            "1年先インフレ期待は速報の4.3％、10月の4.7％から3.7％へ低下した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "11月20日の北米市場では株式が引けにかけて大幅安となった。",
+              "source_urls": [
+                "https://investinglive.com/news/investinglive-americas-fx-news-wrap-20-nov-stocks-get-hammered-as-nasdaq-plunges-5-28/"
+              ]
+            },
+            {
+              "fact": "Anthropic株は上場2日目に9.1％安の88.30ドルとなったが、83ドルの公開価格は上回った。",
+              "source_urls": [
+                "https://investinglive.com/news/investinglive-americas-fx-news-wrap-20-nov-stocks-get-hammered-as-nasdaq-plunges-5-28/"
+              ]
+            },
+            {
+              "fact": "1年先インフレ期待は速報の4.3％、10月の4.7％から3.7％へ低下した。",
+              "source_urls": [
+                "https://investinglive.com/news/investinglive-americas-fx-news-wrap-20-nov-stocks-get-hammered-as-nasdaq-plunges-5-28/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "north_america_investment_policy",
+      "title": "Nasdaqの金融犯罪対策AI、850顧客が利用し70社が有料化",
+      "summary": "Nasdaqの金融犯罪管理顧客2,800社のうち850社がエージェント型AIを利用し、70社が有料契約している。 AxiomSLの対象は買収時の55カ国・110規制当局から66カ国・174規制当局へ拡大した。 Nasdaqの指数事業は直近四半期に39％成長した。",
+      "section_id": "north_america",
+      "category": "北米経済",
+      "source_published_date": "2026-11-22",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-3ef6f3bda20d-2026-11-22.html",
+        "sources": [
+          {
+            "label": "tradingview.com",
+            "url": "https://www.tradingview.com/news/marketbeat:d1fba2268094b:0-nasdaq-starts-charging-for-financial-crime-ai-agents-as-850-customers-sign-on/"
+          }
+        ],
+        "summary": "Nasdaqの金融犯罪管理顧客2,800社のうち850社がエージェント型AIを利用し、70社が有料契約している。 AxiomSLの対象は買収時の55カ国・110規制当局から66カ国・174規制当局へ拡大した。 Nasdaqの指数事業は直近四半期に39％成長した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Nasdaqの金融犯罪管理顧客2,800社のうち850社がエージェント型AIを利用し、70社が有料契約している。",
+            "AxiomSLの対象は買収時の55カ国・110規制当局から66カ国・174規制当局へ拡大した。",
+            "Nasdaqの指数事業は直近四半期に39％成長した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Nasdaqの金融犯罪管理顧客2,800社のうち850社がエージェント型AIを利用し、70社が有料契約している。",
+              "source_urls": [
+                "https://www.tradingview.com/news/marketbeat:d1fba2268094b:0-nasdaq-starts-charging-for-financial-crime-ai-agents-as-850-customers-sign-on/"
+              ]
+            },
+            {
+              "fact": "AxiomSLの対象は買収時の55カ国・110規制当局から66カ国・174規制当局へ拡大した。",
+              "source_urls": [
+                "https://www.tradingview.com/news/marketbeat:d1fba2268094b:0-nasdaq-starts-charging-for-financial-crime-ai-agents-as-850-customers-sign-on/"
+              ]
+            },
+            {
+              "fact": "Nasdaqの指数事業は直近四半期に39％成長した。",
+              "source_urls": [
+                "https://www.tradingview.com/news/marketbeat:d1fba2268094b:0-nasdaq-starts-charging-for-financial-crime-ai-agents-as-850-customers-sign-on/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-22"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "north_america_investment_policy",
+      "title": "Silaとパナソニック・エナジー北米、長期オフテイク契約",
+      "summary": "本契約は複数年にわたるもので、長期的な商業関係の一環として、将来的に10億米ドルを超える取引となる可能性があります。 パナソニック・エナジー・オブ・ノースアメリカのCEOである高本泰明氏は、「モーゼスレイクでのシラの急速な進展、すなわち着工から生産開始に至るまでの取り組みは、非常に素晴らしいものです。 また、シラが本契約およびその他の商業契約に対応するために生産を拡大することに伴い、ワシントン州モーゼスレイクの工場で製造・建設関連の雇用が約500人追加で創出されると見込まれています。",
+      "section_id": "north_america",
+      "category": "北米経済",
+      "source_published_date": "2026-11-20",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-74f36c0c3057-2026-11-22.html",
+        "sources": [
+          {
+            "label": "the-miyanichi.co.jp",
+            "url": "https://www.the-miyanichi.co.jp/pressrelease/prwire/1273055.html"
+          }
+        ],
+        "summary": "本契約は複数年にわたるもので、長期的な商業関係の一環として、将来的に10億米ドルを超える取引となる可能性があります。 パナソニック・エナジー・オブ・ノースアメリカのCEOである高本泰明氏は、「モーゼスレイクでのシラの急速な進展、すなわち着工から生産開始に至るまでの取り組みは、非常に素晴らしいものです。 また、シラが本契約およびその他の商業契約に対応するために生産を拡大することに伴い、ワシントン州モーゼスレイクの工場で製造・建設関連の雇用が約500人追加で創出されると見込まれています。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "本契約は複数年にわたるもので、長期的な商業関係の一環として、将来的に10億米ドルを超える取引となる可能性があります。",
+            "パナソニック・エナジー・オブ・ノースアメリカのCEOである高本泰明氏は、「モーゼスレイクでのシラの急速な進展、すなわち着工から生産開始に至るまでの取り組みは、非常に素晴らしいものです。",
+            "また、シラが本契約およびその他の商業契約に対応するために生産を拡大することに伴い、ワシントン州モーゼスレイクの工場で製造・建設関連の雇用が約500人追加で創出されると見込まれています。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "本契約は複数年にわたるもので、長期的な商業関係の一環として、将来的に10億米ドルを超える取引となる可能性があります。",
+              "source_urls": [
+                "https://www.the-miyanichi.co.jp/pressrelease/prwire/1273055.html"
+              ]
+            },
+            {
+              "fact": "パナソニック・エナジー・オブ・ノースアメリカのCEOである高本泰明氏は、「モーゼスレイクでのシラの急速な進展、すなわち着工から生産開始に至るまでの取り組みは、非常に素晴らしいものです。",
+              "source_urls": [
+                "https://www.the-miyanichi.co.jp/pressrelease/prwire/1273055.html"
+              ]
+            },
+            {
+              "fact": "また、シラが本契約およびその他の商業契約に対応するために生産を拡大することに伴い、ワシントン州モーゼスレイクの工場で製造・建設関連の雇用が約500人追加で創出されると見込まれています。",
+              "source_urls": [
+                "https://www.the-miyanichi.co.jp/pressrelease/prwire/1273055.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-20"
+          ]
+        }
+      }
+    }
+  ],
+  "coverage_manifest": {
+    "contract_version": "2026-07-11.02",
+    "date": "2026-11-22",
+    "collection_completed_at_jst": "2026-11-22T19:33:29+09:00",
+    "collection_mode": "web_evidence_plus_review",
+    "evidence_sha256": "d3f2489748bcf1c260ced89fb08e8f4f461cee853cefcff685c5d588d3b1a900",
+    "editor_contract_sha256": "d6c3ebf3edf97dd3dff4a22b78881bb748af6ce2d29e7417f703b37f53bce819"
+  }
+}
