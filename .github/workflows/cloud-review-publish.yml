@@ -1,5 +1,5 @@
 name: Publish reviewed NIGHT SIGNAL
-run-name: Publish reviewed NIGHT SIGNAL ${{ inputs.issue_date || github.ref_name }}
+run-name: "${{ inputs.validation_only && 'Preflight NIGHT SIGNAL' || 'Publish reviewed NIGHT SIGNAL' }} ${{ inputs.issue_date || github.ref_name }}"
 
 on:
   push:
@@ -18,6 +18,10 @@ on:
         description: "Review branch named night-signal-review-YYYY-MM-DD."
         required: true
         type: string
+      validation_only:
+        description: "Run the editorial and release checks without publishing."
+        type: boolean
+        default: false
       recovery_attempt:
         description: "Bounded deterministic base-race recovery attempt."
         required: false
@@ -84,7 +88,13 @@ jobs:
 
       - name: Stop when this exact issue is already verified live
         id: already_public
+        env:
+          VALIDATION_ONLY: ${{ inputs.validation_only || false }}
         run: |
+          if [[ "$VALIDATION_ONLY" == "true" ]]; then
+            echo "published=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           if [[ -n "$CORRECTION_PATH" ]]; then
             echo "published=false" >> "$GITHUB_OUTPUT"
             echo "Correction overlay requires a same-day rebuild."
@@ -141,9 +151,20 @@ jobs:
             python3 scripts/publication_schedule_audit.py
           } 2>&1 | tee "$RUNNER_TEMP/gates.log"
 
+      - name: Preserve preflight diagnostics
+        if: ${{ always() && inputs.validation_only }}
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: night-signal-preflight-${{ env.ISSUE_DATE }}-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/apply.log
+            ${{ runner.temp }}/gates.log
+          if-no-files-found: warn
+          retention-days: 14
+
       - name: Require the same trusted main before committing
         id: base_guard
-        if: ${{ steps.already_public.outputs.published != 'true' }}
+        if: ${{ !inputs.validation_only && steps.already_public.outputs.published != 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -308,7 +329,7 @@ jobs:
           retention-days: 90
 
       - name: Publish compact success or validator feedback for recovery
-        if: ${{ always() && env.ISSUE_DATE != '' }}
+        if: ${{ always() && !inputs.validation_only && env.ISSUE_DATE != '' }}
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}

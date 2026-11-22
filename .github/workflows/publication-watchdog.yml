@@ -32,6 +32,7 @@ concurrency:
 
 jobs:
   audit_recover:
+    if: ${{ github.event_name != 'workflow_run' || !startsWith(github.event.workflow_run.display_title, 'Preflight NIGHT SIGNAL ') }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
