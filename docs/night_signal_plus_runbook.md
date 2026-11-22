@@ -2,8 +2,8 @@
 
 ## Objective and fixed priorities
 
-The service objective is automatic Web publication by 19:00 JST daily, without manual intervention. The current 22:30 operations cutoff is used to detect an unresolved failure. Publication after 19:00 is late. Keep the
-existing 16:45 final Evidence collection window. The priority order is:
+The service objective is automatic Web publication by 19:00 JST daily, without manual intervention. Publication after 19:00 is late. Keep the
+existing 13:15 final Evidence collection window. The priority order is:
 
 1. coverage of every configured category and watch topic;
 2. evidence grounding, novelty precision, and complete Japanese summaries;
@@ -39,7 +39,7 @@ python3 scripts/night_signal_review_artifact.py "$ISSUE_DATE"
 It inspects `unattended-collection.yml` once, watches one queued/active owner
 instead of duplicating it, restores the newest valid final artifact, and dispatches
 exactly one collector only when neither exists. It validates the issue date,
-16:45 JST cutoff, packet contract, and Evidence hash before installing files.
+13:15 JST cutoff, packet contract, and Evidence hash before installing files.
 Then run:
 
 ```text
@@ -262,7 +262,7 @@ dated public URLs show the same current date.
   reuse a SHA from an earlier run. On a SHA or ref conflict, refetch and retry
   only that heartbeat once. Neither task may pause, delete, or edit its own
   recurring schedule.
-- The 19:30 Work-mode Web task is the cloud owner and the 20:30 Work-mode Web task is an audit-first
+- The 16:00 Work-mode Web task is the cloud owner and the 17:00 Work-mode Web task is an audit-first
   recovery heartbeat. A successful earlier review/publication must not be
   repeated. Immediately after its write-permission canary, either task must stop
   with `feedback_success` when both `.night-signal-issue-date` and

@@ -224,9 +224,9 @@ def self_test() -> None:
         raise SystemExit("runtime budget must match the workflow timeout")
     if policy.schedule_delay_contingency_minutes != policy.runtime_budget_minutes:
         raise SystemExit("schedule delay contingency must cover one full runtime budget")
-    if policy.final_collection_not_before != time(16, 45):
-        raise SystemExit("final collection window must be derived as 16:45 JST")
-    if policy.latest_full_collection_start != time(17, 15):
+    if policy.final_collection_not_before != time(13, 15):
+        raise SystemExit("final collection window must be derived as 13:15 JST")
+    if policy.latest_full_collection_start != time(13, 45):
         raise SystemExit("latest full collection start must preserve the runtime budget")
     if not any(
         value > policy.latest_full_collection_start
@@ -235,11 +235,11 @@ def self_test() -> None:
         raise SystemExit("schedule needs one checkpoint-only recovery heartbeat")
     zone = ZoneInfo(policy.timezone)
     cases = {
-        "2099-01-01T16:44:00+09:00": "wait",
-        "2099-01-01T16:45:00+09:00": "run",
-        "2099-01-01T18:59:00+09:00": "run",
-        "2099-01-01T19:00:00+09:00": "run",
-        "2099-01-01T22:30:00+09:00": "missed",
+        "2099-01-01T13:14:00+09:00": "wait",
+        "2099-01-01T13:15:00+09:00": "run",
+        "2099-01-01T15:29:00+09:00": "run",
+        "2099-01-01T15:30:00+09:00": "run",
+        "2099-01-01T19:00:00+09:00": "missed",
     }
     for raw, expected in cases.items():
         actual = scheduled_decision(datetime.fromisoformat(raw).astimezone(zone), policy)
@@ -247,7 +247,7 @@ def self_test() -> None:
             raise SystemExit(f"timing decision mismatch: {raw}: {actual} != {expected}")
     if decision(datetime.now(zone), "workflow_dispatch", policy) != "run":
         raise SystemExit("manual recovery must not be mistaken for a scheduled heartbeat")
-    missed = datetime.fromisoformat("2099-01-01T22:45:00+09:00").astimezone(zone)
+    missed = datetime.fromisoformat("2099-01-01T19:15:00+09:00").astimezone(zone)
     if workflow_decision(
         missed,
         "schedule",
@@ -263,23 +263,23 @@ def self_test() -> None:
     ) != "missed":
         raise SystemExit("deadline audit no longer reports a missed publication SLA")
     if near_window_wait_seconds(
-        datetime.fromisoformat("2099-01-01T16:17:00+09:00"), policy
+        datetime.fromisoformat("2099-01-01T12:47:00+09:00"), policy
     ) != 28 * 60:
-        raise SystemExit("near-window runner was not retained until 16:45")
+        raise SystemExit("near-window runner was not retained until 13:15")
     if near_window_wait_seconds(
-        datetime.fromisoformat("2099-01-01T16:14:59+09:00"), policy
+        datetime.fromisoformat("2099-01-01T12:44:59+09:00"), policy
     ) != 0:
         raise SystemExit("early runner was retained beyond the bounded wait")
     if near_window_wait_seconds(
-        datetime.fromisoformat("2099-01-01T16:45:00+09:00"), policy
+        datetime.fromisoformat("2099-01-01T13:15:00+09:00"), policy
     ) != 0:
         raise SystemExit("on-window runner should not sleep")
     if not scheduled_fresh_collection_allowed(
-        datetime.fromisoformat("2099-01-01T17:15:00+09:00"), policy
+        datetime.fromisoformat("2099-01-01T13:45:00+09:00"), policy
     ):
         raise SystemExit("on-budget final collection was rejected")
     if scheduled_fresh_collection_allowed(
-        datetime.fromisoformat("2099-01-01T17:16:00+09:00"), policy
+        datetime.fromisoformat("2099-01-01T13:46:00+09:00"), policy
     ):
         raise SystemExit("late checkpoint recovery could start a full collection")
     print("PUBLICATION TIMING SELF-TEST PASSED")

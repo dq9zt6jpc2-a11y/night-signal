@@ -1,7 +1,7 @@
 {
   "timezone": "Asia/Tokyo",
-  "publication_deadline": "22:30",
-  "collection_window_anchor": "19:00",
+  "publication_deadline": "19:00",
+  "collection_window_anchor": "15:30",
   "build_timeout_minutes": 70,
   "pages_timeout_minutes": 20,
   "workflow_overhead_budget_minutes": 15,
@@ -9,16 +9,16 @@
   "observed_schedule_delay_minutes": 205,
   "schedule_delay_contingency_minutes": 105,
   "schedule_heartbeats_jst": [
-    "11:27",
-    "14:27",
-    "15:27",
-    "16:17",
-    "16:47",
-    "17:17"
+    "07:57",
+    "10:57",
+    "11:57",
+    "12:47",
+    "13:17",
+    "13:47"
   ],
   "editor_owner_heartbeats_jst": [
-    "19:30",
-    "20:30"
+    "16:00",
+    "17:00"
   ],
   "editor_owner_activation": {
     "persistent_github_write_permission": true,
@@ -27,9 +27,9 @@
   },
   "reliability_report_retention_days": 30,
   "publication_watchdog_heartbeats_jst": [
-    "20:00",
-    "21:15",
-    "22:15",
-    "22:45"
+    "16:30",
+    "17:45",
+    "18:45",
+    "19:15"
   ]
 }

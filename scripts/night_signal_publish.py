@@ -416,20 +416,20 @@ def self_test() -> None:
         pass
     else:
         fail("stale issue date must never be publishable as latest")
-    recovery_now = datetime.fromisoformat("2099-01-02T02:00:00+09:00")
+    recovery_now = datetime.fromisoformat("2099-01-02T22:30:00+09:00")
     require_jst_current_issue("2099-01-01", now=recovery_now)
     try:
         require_jst_current_issue(
             "2099-01-01",
-            now=datetime.fromisoformat("2099-01-02T16:45:00+09:00"),
+            now=datetime.fromisoformat("2099-01-02T13:15:00+09:00"),
         )
     except SystemExit:
         pass
     else:
         fail("previous issue recovery overlapped the current collection window")
-    current = datetime.fromisoformat("2099-01-01T18:50:00+09:00")
+    current = datetime.fromisoformat("2099-01-01T15:20:00+09:00")
     fresh = {
-        "collection_completed_at_jst": "2099-01-01T17:20:00+09:00",
+        "collection_completed_at_jst": "2099-01-01T13:50:00+09:00",
         "collection_mode": "github_models_unattended",
     }
     result = validate_collection_freshness(
@@ -441,10 +441,10 @@ def self_test() -> None:
     if not result["evening_refresh"]:
         fail("fresh evening collection was rejected")
     expired_evening = {
-        "collection_completed_at_jst": "2099-01-01T17:20:00+09:00",
+        "collection_completed_at_jst": "2099-01-01T13:50:00+09:00",
         "collection_mode": "github_models_unattended",
     }
-    expired_now = datetime.fromisoformat("2099-01-01T22:30:00+09:00")
+    expired_now = datetime.fromisoformat("2099-01-01T19:00:00+09:00")
     try:
         validate_collection_freshness(
             expired_evening,
@@ -466,7 +466,7 @@ def self_test() -> None:
     if not redeploy_result["evening_refresh"]:
         fail("a verified published issue could not be redeployed")
     stale = dict(fresh)
-    stale["collection_completed_at_jst"] = "2099-01-01T16:44:00+09:00"
+    stale["collection_completed_at_jst"] = "2099-01-01T13:14:00+09:00"
     try:
         validate_collection_freshness(
             stale,
@@ -479,35 +479,35 @@ def self_test() -> None:
     else:
         fail("pre-final collection must not pass final deployment")
     reusable = {
-        "checked_at_jst": "2099-01-01T17:20:00+09:00",
+        "checked_at_jst": "2099-01-01T13:50:00+09:00",
         "collector_contract_version": evidence_store.collector_contract_version(),
     }
     if not evidence_reusable(
         reusable,
         "2099-01-01",
-        now=datetime.fromisoformat("2099-01-01T18:50:00+09:00"),
+        now=datetime.fromisoformat("2099-01-01T15:20:00+09:00"),
     ):
         fail("fresh same-date Evidence was not reusable")
     if not evidence_reusable(
         reusable,
         "2099-01-01",
-        now=datetime.fromisoformat("2099-01-01T18:50:00+09:00"),
+        now=datetime.fromisoformat("2099-01-01T15:20:00+09:00"),
         require_final=True,
     ):
         fail("scheduled recovery could not reuse final same-date Evidence")
     if evidence_reusable(
         {
-            "checked_at_jst": "2099-01-01T15:29:00+09:00",
+            "checked_at_jst": "2099-01-01T11:59:00+09:00",
             "collector_contract_version": evidence_store.collector_contract_version(),
         },
         "2099-01-01",
-        now=datetime.fromisoformat("2099-01-01T18:50:00+09:00"),
+        now=datetime.fromisoformat("2099-01-01T15:20:00+09:00"),
         require_final=True,
     ):
         fail("scheduled recovery reused pre-final Evidence")
     for rejected_date, rejected_now in (
-        ("2098-12-31", "2099-01-01T18:50:00+09:00"),
-        ("2099-01-01", "2099-01-01T22:30:00+09:00"),
+        ("2098-12-31", "2099-01-01T15:20:00+09:00"),
+        ("2099-01-01", "2099-01-01T19:00:00+09:00"),
     ):
         if evidence_reusable(
             reusable,
@@ -518,45 +518,45 @@ def self_test() -> None:
     if not evidence_reusable(
         reusable,
         "2099-01-01",
-        now=datetime.fromisoformat("2099-01-01T22:30:00+09:00"),
+        now=datetime.fromisoformat("2099-01-01T19:00:00+09:00"),
         allow_expired_final=True,
     ):
         fail("explicit published re-edit could not reuse final same-day Evidence")
     if evidence_reusable(
         {
-            "checked_at_jst": "2099-01-01T15:29:00+09:00",
+            "checked_at_jst": "2099-01-01T11:59:00+09:00",
             "collector_contract_version": evidence_store.collector_contract_version(),
         },
         "2099-01-01",
-        now=datetime.fromisoformat("2099-01-01T22:30:00+09:00"),
+        now=datetime.fromisoformat("2099-01-01T19:00:00+09:00"),
         allow_expired_final=True,
     ):
         fail("published re-edit reused pre-final Evidence")
     if not evidence_reusable(
         {
-            "checked_at_jst": "2099-01-01T15:29:00+09:00",
+            "checked_at_jst": "2099-01-01T11:59:00+09:00",
             "collector_contract_version": evidence_store.collector_contract_version(),
         },
         "2099-01-01",
-        now=datetime.fromisoformat("2099-01-01T17:20:00+09:00"),
+        now=datetime.fromisoformat("2099-01-01T13:50:00+09:00"),
     ):
         fail("same-day Evidence could not be reused before final publication validation")
     if not evidence_reusable(
         {
-            "checked_at_jst": "2099-01-01T22:45:00+09:00",
+            "checked_at_jst": "2099-01-01T19:15:00+09:00",
             "collector_contract_version": evidence_store.collector_contract_version(),
         },
         "2099-01-01",
-        now=datetime.fromisoformat("2099-01-02T03:00:00+09:00"),
+        now=datetime.fromisoformat("2099-01-02T23:30:00+09:00"),
     ):
         fail("final previous-day Evidence could not be reused for overnight recovery")
     if evidence_reusable(
         {
-            "checked_at_jst": "2099-01-01T22:45:00+09:00",
+            "checked_at_jst": "2099-01-01T19:15:00+09:00",
             "collector_contract_version": evidence_store.collector_contract_version(),
         },
         "2099-01-01",
-        now=datetime.fromisoformat("2099-01-02T16:45:00+09:00"),
+        now=datetime.fromisoformat("2099-01-02T13:15:00+09:00"),
     ):
         fail("previous-day Evidence overlapped the current collection window")
     print("NIGHT SIGNAL PUBLISH SELF-TEST PASSED")

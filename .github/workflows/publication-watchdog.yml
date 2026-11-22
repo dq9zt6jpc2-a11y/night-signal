@@ -9,11 +9,11 @@ on:
     types:
       - completed
   schedule:
-    # Check the primary editor before the 20:30 JST recovery editor.
-    - cron: "00 11 * * *"
-    - cron: "15 12 * * *"
-    - cron: "15 13 * * *"
-    - cron: "45 13 * * *"
+    # Check the primary editor before the 17:00 JST recovery editor.
+    - cron: "30 07 * * *"
+    - cron: "45 08 * * *"
+    - cron: "45 09 * * *"
+    - cron: "15 10 * * *"
   workflow_dispatch:
     inputs:
       issue_date:
@@ -191,13 +191,13 @@ jobs:
             exit 1
           fi
           NOW_JST="$(TZ=Asia/Tokyo date +%H%M)"
-          if [[ "$STAGE" == "review_missing_owner_heartbeat_missing" && "$NOW_JST" -ge 2000 ]]; then
+          if [[ "$STAGE" == "review_missing_owner_heartbeat_missing" && "$NOW_JST" -ge 1630 ]]; then
             echo "NIGHT SIGNAL Web owner did not prove GitHub access at the scheduled checkpoint." >&2
             echo "stage=$STAGE" >&2
             echo "No Evidence recollection or model review was repeated." >&2
             exit 1
           fi
-          if [[ "$STAGE" == "review_missing_after_owner_heartbeat" && "$NOW_JST" -ge 2100 ]]; then
+          if [[ "$STAGE" == "review_missing_after_owner_heartbeat" && "$NOW_JST" -ge 1730 ]]; then
             echo "NIGHT SIGNAL Web owner started but did not submit a review by the recovery checkpoint." >&2
             echo "stage=$STAGE" >&2
             echo "No Evidence recollection or model review was repeated." >&2
