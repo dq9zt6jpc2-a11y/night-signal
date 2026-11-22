@@ -79,7 +79,7 @@ def main() -> int:
     if "contents: write" not in collection:
         fail("Evidence collection cannot publish the isolated cloud handoff")
     if "--near-window-wait-seconds" not in collection:
-        fail("near-window scheduled runners are still discarded before 16:45")
+        fail("near-window scheduled runners are still discarded before 13:15")
     if "timeout-minutes: 105" not in collection:
         fail("Evidence owner timeout does not cover bounded waiting plus collection")
     if "models: read" in collection or "models.github.ai" in collection:
@@ -172,8 +172,8 @@ def main() -> int:
         "change only the named request/event",
         "do not recollect or re-review",
         "topic_value_class` must be one of",
-        "19:30 Work-mode Web task",
-        "20:30 Work-mode Web task",
+        "16:00 Work-mode Web task",
+        "17:00 Work-mode Web task",
         "official OpenAI",
     ):
         if required.casefold() not in runbook.casefold():
@@ -207,8 +207,8 @@ def main() -> int:
 
     operations = json.loads(OPERATIONS_POLICY.read_text(encoding="utf-8"))
     owner_heartbeats = operations.get("editor_owner_heartbeats_jst")
-    if owner_heartbeats != ["19:30", "20:30"]:
-        fail("Web-owner heartbeat policy must contain only 19:30 and 20:30 JST")
+    if owner_heartbeats != ["16:00", "17:00"]:
+        fail("Web-owner heartbeat policy must contain only 16:00 and 17:00 JST")
     owner_activation = operations.get("editor_owner_activation", {})
     if owner_activation != {
         "persistent_github_write_permission": True,
@@ -219,7 +219,7 @@ def main() -> int:
     if operations.get("reliability_report_retention_days") != 30:
         fail("operational reliability history must be retained for 30 days")
     watchdog_heartbeats = operations.get("publication_watchdog_heartbeats_jst")
-    if watchdog_heartbeats != ["20:00", "21:15", "22:15", "22:45"]:
+    if watchdog_heartbeats != ["16:30", "17:45", "18:45", "19:15"]:
         fail("publication watchdog policy drifted from the bounded recovery window")
     expected_watchdog_minutes = sorted(
         timing.minutes(timing.parse_clock(value)) for value in watchdog_heartbeats

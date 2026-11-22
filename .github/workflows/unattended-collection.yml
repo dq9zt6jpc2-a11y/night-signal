@@ -8,12 +8,12 @@ on:
         required: false
         type: string
   schedule:
-    - cron: "27 02 * * *"
-    - cron: "27 05 * * *"
-    - cron: "27 06 * * *"
-    - cron: "17 07 * * *"
-    - cron: "47 07 * * *"
-    - cron: "17 08 * * *"
+    - cron: "57 22 * * *"
+    - cron: "57 01 * * *"
+    - cron: "57 02 * * *"
+    - cron: "47 03 * * *"
+    - cron: "17 04 * * *"
+    - cron: "47 04 * * *"
 
 permissions:
   contents: write
