@@ -70,6 +70,28 @@ def read_rejected_requests(path: Path) -> list[dict[str, Any]]:
     return []
 
 
+def read_summary_diagnostics(path: Path) -> list[dict[str, Any]]:
+    phases = {
+        "invalid_summary_points_rejected",
+        "unsupported_summary_points_rejected",
+        "normalized_item_rejected",
+    }
+    records = []
+    if not path.is_file():
+        return records
+    with path.open(encoding="utf-8", errors="replace") as stream:
+        for line in stream:
+            if not line.startswith("{"):
+                continue
+            try:
+                entry = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if isinstance(entry, dict) and entry.get("phase") in phases:
+                records.append(entry)
+    return records
+
+
 def read_recall_risk_categories(path: Path | None) -> list[str]:
     if path is None:
         return []
@@ -141,6 +163,10 @@ def build_feedback(
         "validator_log_tail": log_tail,
         "rejected_requests": (
             read_rejected_requests(log_directory / "apply.log")
+            if failed_stage == "apply" else []
+        ),
+        "summary_diagnostics": (
+            read_summary_diagnostics(log_directory / "apply.log")
             if failed_stage == "apply" else []
         ),
         "recall_risk_categories": read_recall_risk_categories(receipt_path),
@@ -243,6 +269,9 @@ def self_test() -> None:
     with tempfile.TemporaryDirectory() as temporary_directory:
         directory = Path(temporary_directory)
         (directory / "apply.log").write_text("first\nexact validator reason\n", encoding="utf-8")
+        diagnostic = {"phase": "invalid_summary_points_rejected", "points": [{"reason": "missing_text_or_citations"}]}
+        with (directory / "apply.log").open("a", encoding="utf-8") as stream:
+            stream.write(json.dumps(diagnostic) + "\n")
         rejected = [{"request_id": "test-request", "detail": "x" * (MAX_LOG_CHARS + 1)}]
         with (directory / "apply.log").open("a", encoding="utf-8") as stream:
             stream.write(
@@ -271,6 +300,8 @@ def self_test() -> None:
             fail("bounded recovery attempt was not preserved")
         if "exact validator reason" not in feedback["validator_log_tail"]:
             fail("validator failure detail was not preserved")
+        if feedback["summary_diagnostics"] != [diagnostic]:
+            fail("summary diagnostics were lost after log truncation")
         if feedback["rejected_requests"] != rejected:
             fail("complete rejection details were lost after log truncation")
         if feedback["recall_risk_categories"] != ["OpenAI", "北米経済"]:
