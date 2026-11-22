@@ -1,9 +1,9 @@
 {
   "contract": "night-signal-cloud-feedback-v1",
   "issue_date": "2026-11-22",
-  "recorded_at": "2026-11-22T14:18:19.891095+00:00",
-  "workflow_run_id": "45031969579",
-  "workflow_run_url": "https://github.com/dq9zt6jpc2-a11y/night-signal/actions/runs/45031969579",
+  "recorded_at": "2026-11-22T14:22:12.571212+00:00",
+  "workflow_run_id": "45032329820",
+  "workflow_run_url": "https://github.com/dq9zt6jpc2-a11y/night-signal/actions/runs/45032329820",
   "recovery_attempt": 0,
   "status": "failed",
   "failed_stage": "apply",
@@ -20,160 +20,8 @@
     "pages_watch": "skipped",
     "verify": "skipped"
   },
-  "validator_log_tail": "{\"issue_date\": \"2026-11-22\", \"review_ref\": \"night-signal-review-2026-11-22\", \"installed_review\": \"/home/runner/work/night-signal/night-signal/state/2026-11-22/editor_review.json\", \"additional_paid_api_requests\": 0}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"OpenAI\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 33, \"grouped_events\": 32, \"publishable_source_events\": 32, \"novel_events\": 31, \"semantic_dedup_pool\": 31, \"model_candidates\": 24}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"SoftBank\", \"expanded_input_records\": 10, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 4, \"grouped_events\": 4, \"publishable_source_events\": 4, \"novel_events\": 4, \"semantic_dedup_pool\": 4, \"model_candidates\": 4}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"Honda\", \"expanded_input_records\": 15, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 7, \"grouped_events\": 7, \"publishable_source_events\": 7, \"novel_events\": 7, \"semantic_dedup_pool\": 7, \"model_candidates\": 6}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"F1\", \"expanded_input_records\": 2, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 48, \"grouped_events\": 47, \"publishable_source_events\": 46, \"novel_events\": 43, \"semantic_dedup_pool\": 43, \"model_candidates\": 13}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"SpaceX\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 18, \"grouped_events\": 18, \"publishable_source_events\": 18, \"novel_events\": 17, \"semantic_dedup_pool\": 17, \"model_candidates\": 13}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"日本経済\", \"expanded_input_records\": 6, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 27, \"grouped_events\": 27, \"publishable_source_events\": 27, \"novel_events\": 26, \"semantic_dedup_pool\": 26, \"model_candidates\": 11}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"YOASOBI / 幾田りら\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 0, \"grouped_events\": 0, \"publishable_source_events\": 0, \"novel_events\": 0, \"semantic_dedup_pool\": 0, \"model_candidates\": 0}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"アジア経済\", \"expanded_input_records\": 1, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 3, \"grouped_events\": 3, \"publishable_source_events\": 3, \"novel_events\": 3, \"semantic_dedup_pool\": 3, \"model_candidates\": 3}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"北米経済\", \"expanded_input_records\": 19, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 7, \"grouped_events\": 7, \"publishable_source_events\": 7, \"novel_events\": 7, \"semantic_dedup_pool\": 7, \"model_candidates\": 6}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"宇都宮ブレックス\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 0, \"grouped_events\": 0, \"publishable_source_events\": 0, \"novel_events\": 0, \"semantic_dedup_pool\": 0, \"model_candidates\": 0}\n{\"phase\": \"invalid_summary_points_rejected\", \"category\": \"OpenAI\", \"title\": \"米下院、MicrosoftとByteDanceのAI契約交渉について説明要請\", \"points\": [{\"point\": 3, \"text\": \"交渉成立の可否、取引条件の変更、議会説明の結果はいずれも未確定だ。\", \"reason\": \"no_material_fact_after_normalization\"}]}\n{\"phase\": \"normalized_item_rejected\", \"category\": \"OpenAI\", \"title\": \"米下院、MicrosoftとByteDanceのAI契約交渉について説明要請\", \"reasons\": [\"invalid_summary_point\"], \"fact_count\": 2}\n{\"phase\": \"invalid_summary_points_rejected\", \"category\": \"SpaceX\", \"title\": \"SpaceXのTerafab計画、テキサス州の公文書開示訴訟で争点に\", \"points\": [{\"point\": 3, \"text\": \"訴訟側は、州司法長官の7月28日判断後も郡がテキサス州情報公開法で必要な記録を開示していないと主張している。\", \"reason\": \"no_material_fact_after_normalization\"}]}\n{\"phase\": \"normalized_item_rejected\", \"category\": \"SpaceX\", \"title\": \"SpaceXのTerafab計画、テキサス州の公文書開示訴訟で争点に\", \"reasons\": [\"invalid_summary_point\"], \"fact_count\": 2}\n{\"phase\": \"unsupported_summary_points_rejected\", \"category\": \"アジア経済\", \"facts\": [\"第8回中国・ASEAN法務協力フォーラムは11月19日に重慶で開幕した。\", \"主催者によると、2026年1～9月の重慶とASEANの貿易額は1,164.1億元で前年同期比17％増だった。\"]}\n{\"phase\": \"normalized_item_rejected\", \"category\": \"アジア経済\", \"title\": \"中国・ASEAN法務協力フォーラム、重慶で開催\", \"reasons\": [\"unsupported_summary_point\"], \"fact_count\": 1}\nNIGHT SIGNAL PLUS REVIEW FAILED: review responses failed deterministic validation: {\"rejected_requests\":[{\"request_id\":\"openai-01-4fabeffcc0ef1205\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{\"g001\":\"body_evidence_cannot_be_insufficient\"},\"malformed_event_results\":0},\"missing_event_ids\":[\"g001\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{},\"rejected_items\":[],\"unpublishable_items\":[]},{\"request_id\":\"openai-02-0cb798b83c430270\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{\"g006\":\"body_evidence_cannot_be_insufficient\"},\"malformed_event_results\":0},\"missing_event_ids\":[\"g006\",\"g008\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{},\"rejected_items\":[{\"event_id\":\"g008\",\"title\":\"米下院、MicrosoftとByteDanceのAI契約交渉について説明要請\",\"reasons\":[\"invalid_summary_point\"],\"unsupported_facts\":[],\"invalid_source_fact_ids\":[],\"uncovered_source_fact_ids\":[]}],\"unpublishable_items\":[]},{\"request_id\":\"openai-03-d0276c41af6d07af\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{\"g014\":\"body_evidence_cannot_be_insufficient\",\"g019\":\"body_evidence_cannot_be_insufficient\"},\"malformed_event_results\":0},\"missing_event_ids\":[\"g014\",\"g019\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{},\"rejected_items\":[],\"unpublishable_items\":[]},{\"request_id\":\"openai-04-cdfdf0789ffd9413\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{\"g020\":\"body_evidence_cannot_be_insufficient\",\"g023\":\"body_evidence_cannot_be_insufficient\",\"g024\":\"body_evidence_cannot_be_insufficient\"},\"malformed_event_results\":0},\"missing_event_ids\":[\"g020\",\"g023\",\"g024\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{},\"rejected_items\":[],\"unpublishable_items\":[]},{\"request_id\":\"softbank-01-c030dbeab8d7478e\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{\"g004\":\"body_evidence_cannot_be_insufficient\",\"g003\":\"headline_only_requires_insufficient_evidence\"},\"malformed_event_results\":0},\"missing_event_ids\":[\"g003\",\"g004\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{},\"rejected_items\":[],\"unpublishable_items\":[]},{\"request_id\":\"honda-01-7e76a7d77b7a88a5\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{\"g003\":\"body_evidence_cannot_be_insufficient\"},\"malformed_event_results\":0},\"missing_event_ids\":[\"g003\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{},\"rejected_items\":[],\"unpublishable_items\":[]},{\"request_id\":\"spacex-02-9ec61d19318c7152\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{\"g009\":\"body_evidence_cannot_be_insufficient\"},\"malformed_event_results\":0},\"missing_event_ids\":[\"g009\",\"g010\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{},\"rejected_items\":[{\"event_id\":\"g010\",\"title\":\"SpaceXのTerafab計画、テキサス州の公文書開示訴訟で争点に\",\"reasons\":[\"invalid_summary_point\"],\"unsupported_facts\":[],\"invalid_source_fact_ids\":[],\"uncovered_source_fact_ids\":[]}],\"unpublishable_items\":[]},{\"request_id\":\"asia-01-40702250a6aaff72\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{},\"malformed_event_results\":0},\"missing_event_ids\":[\"g002\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{},\"rejected_items\":[{\"event_id\":\"g002\",\"title\":\"中国・ASEAN法務協力フォーラム、重慶で開催\",\"reasons\":[\"unsupported_summary_point\"],\"unsupported_facts\":[\"第8回中国・ASEAN法務協力フォーラムは11月19日に重慶で開幕した。\",\"主催者によると、2026年1～9月の重慶とASEANの貿易額は1,164.1億元で前年同期比17％増だった。\"],\"invalid_source_fact_ids\":[],\"uncovered_source_fact_ids\":[\"e001:f01\"]}],\"unpublishable_items\":[]}]}\n",
+  "validator_log_tail": "{\"issue_date\": \"2026-11-22\", \"review_ref\": \"night-signal-review-2026-11-22\", \"installed_review\": \"/home/runner/work/night-signal/night-signal/state/2026-11-22/editor_review.json\", \"additional_paid_api_requests\": 0}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"OpenAI\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 33, \"grouped_events\": 32, \"publishable_source_events\": 32, \"novel_events\": 31, \"semantic_dedup_pool\": 31, \"model_candidates\": 24}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"SoftBank\", \"expanded_input_records\": 10, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 4, \"grouped_events\": 4, \"publishable_source_events\": 4, \"novel_events\": 4, \"semantic_dedup_pool\": 4, \"model_candidates\": 4}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"Honda\", \"expanded_input_records\": 15, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 7, \"grouped_events\": 7, \"publishable_source_events\": 7, \"novel_events\": 7, \"semantic_dedup_pool\": 7, \"model_candidates\": 6}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"F1\", \"expanded_input_records\": 2, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 48, \"grouped_events\": 47, \"publishable_source_events\": 46, \"novel_events\": 43, \"semantic_dedup_pool\": 43, \"model_candidates\": 13}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"SpaceX\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 18, \"grouped_events\": 18, \"publishable_source_events\": 18, \"novel_events\": 17, \"semantic_dedup_pool\": 17, \"model_candidates\": 13}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"日本経済\", \"expanded_input_records\": 6, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 27, \"grouped_events\": 27, \"publishable_source_events\": 27, \"novel_events\": 26, \"semantic_dedup_pool\": 26, \"model_candidates\": 11}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"YOASOBI / 幾田りら\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 0, \"grouped_events\": 0, \"publishable_source_events\": 0, \"novel_events\": 0, \"semantic_dedup_pool\": 0, \"model_candidates\": 0}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"アジア経済\", \"expanded_input_records\": 1, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 3, \"grouped_events\": 3, \"publishable_source_events\": 3, \"novel_events\": 3, \"semantic_dedup_pool\": 3, \"model_candidates\": 3}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"北米経済\", \"expanded_input_records\": 19, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 7, \"grouped_events\": 7, \"publishable_source_events\": 7, \"novel_events\": 7, \"semantic_dedup_pool\": 7, \"model_candidates\": 6}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"宇都宮ブレックス\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 0, \"grouped_events\": 0, \"publishable_source_events\": 0, \"novel_events\": 0, \"semantic_dedup_pool\": 0, \"model_candidates\": 0}\n{\"phase\": \"invalid_summary_points_rejected\", \"category\": \"SpaceX\", \"title\": \"SpaceXのTerafab計画、テキサス州の公文書開示訴訟で争点に\", \"points\": [{\"point\": 3, \"text\": \"住民団体GCCRDは、州司法長官の7月28日判断後もグライムズ郡が州情報公開法上の記録を開示していないとして、記録公開を求める訴えを起こした。\", \"reason\": \"no_material_fact_after_normalization\"}]}\n{\"phase\": \"normalized_item_rejected\", \"category\": \"SpaceX\", \"title\": \"SpaceXのTerafab計画、テキサス州の公文書開示訴訟で争点に\", \"reasons\": [\"invalid_summary_point\"], \"fact_count\": 2}\n{\"phase\": \"unsupported_summary_points_rejected\", \"category\": \"アジア経済\", \"facts\": [\"第8回中国・ASEAN法務協力フォーラムは11月19日に重慶で開幕し、法務当局者、裁判官、専門家が司法協力と商事紛争の解決を議論した。\", \"主催者によると、重慶とASEANの2026年1～9月の貿易額は1,164.1億元、前年同期比17％増だった。\"]}\n{\"phase\": \"normalized_item_rejected\", \"category\": \"アジア経済\", \"title\": \"中国・ASEAN法務フォーラム、常設事務局とAI法研究連盟を発足\", \"reasons\": [\"unsupported_summary_point\"], \"fact_count\": 2}\nNIGHT SIGNAL PLUS REVIEW FAILED: review responses failed deterministic validation: {\"rejected_requests\":[{\"request_id\":\"spacex-02-9ec61d19318c7152\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{},\"malformed_event_results\":0},\"missing_event_ids\":[\"g010\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{},\"rejected_items\":[{\"event_id\":\"g010\",\"title\":\"SpaceXのTerafab計画、テキサス州の公文書開示訴訟で争点に\",\"reasons\":[\"invalid_summary_point\"],\"unsupported_facts\":[],\"invalid_source_fact_ids\":[],\"uncovered_source_fact_ids\":[]}],\"unpublishable_items\":[]},{\"request_id\":\"asia-01-40702250a6aaff72\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{},\"malformed_event_results\":0},\"missing_event_ids\":[\"g002\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{},\"rejected_items\":[{\"event_id\":\"g002\",\"title\":\"中国・ASEAN法務フォーラム、常設事務局とAI法研究連盟を発足\",\"reasons\":[\"unsupported_summary_point\"],\"unsupported_facts\":[\"第8回中国・ASEAN法務協力フォーラムは11月19日に重慶で開幕し、法務当局者、裁判官、専門家が司法協力と商事紛争の解決を議論した。\",\"主催者によると、重慶とASEANの2026年1～9月の貿易額は1,164.1億元、前年同期比17％増だった。\"],\"invalid_source_fact_ids\":[],\"uncovered_source_fact_ids\":[\"e001:f01\",\"e001:f02\"]}],\"unpublishable_items\":[]}]}\n",
   "rejected_requests": [
-    {
-      "request_id": "openai-01-4fabeffcc0ef1205",
-      "event_response": {
-        "missing_event_ids": [],
-        "duplicate_event_ids": [],
-        "unknown_event_ids": [],
-        "cross_event_evidence_ids": [],
-        "cross_event_source_fact_ids": [],
-        "unknown_source_fact_ids": [],
-        "invalid_event_decisions": {
-          "g001": "body_evidence_cannot_be_insufficient"
-        },
-        "malformed_event_results": 0
-      },
-      "missing_event_ids": [
-        "g001"
-      ],
-      "conflicting_event_ids": [],
-      "missing_source_fact_ids_by_event": {},
-      "rejected_items": [],
-      "unpublishable_items": []
-    },
-    {
-      "request_id": "openai-02-0cb798b83c430270",
-      "event_response": {
-        "missing_event_ids": [],
-        "duplicate_event_ids": [],
-        "unknown_event_ids": [],
-        "cross_event_evidence_ids": [],
-        "cross_event_source_fact_ids": [],
-        "unknown_source_fact_ids": [],
-        "invalid_event_decisions": {
-          "g006": "body_evidence_cannot_be_insufficient"
-        },
-        "malformed_event_results": 0
-      },
-      "missing_event_ids": [
-        "g006",
-        "g008"
-      ],
-      "conflicting_event_ids": [],
-      "missing_source_fact_ids_by_event": {},
-      "rejected_items": [
-        {
-          "event_id": "g008",
-          "title": "米下院、MicrosoftとByteDanceのAI契約交渉について説明要請",
-          "reasons": [
-            "invalid_summary_point"
-          ],
-          "unsupported_facts": [],
-          "invalid_source_fact_ids": [],
-          "uncovered_source_fact_ids": []
-        }
-      ],
-      "unpublishable_items": []
-    },
-    {
-      "request_id": "openai-03-d0276c41af6d07af",
-      "event_response": {
-        "missing_event_ids": [],
-        "duplicate_event_ids": [],
-        "unknown_event_ids": [],
-        "cross_event_evidence_ids": [],
-        "cross_event_source_fact_ids": [],
-        "unknown_source_fact_ids": [],
-        "invalid_event_decisions": {
-          "g014": "body_evidence_cannot_be_insufficient",
-          "g019": "body_evidence_cannot_be_insufficient"
-        },
-        "malformed_event_results": 0
-      },
-      "missing_event_ids": [
-        "g014",
-        "g019"
-      ],
-      "conflicting_event_ids": [],
-      "missing_source_fact_ids_by_event": {},
-      "rejected_items": [],
-      "unpublishable_items": []
-    },
-    {
-      "request_id": "openai-04-cdfdf0789ffd9413",
-      "event_response": {
-        "missing_event_ids": [],
-        "duplicate_event_ids": [],
-        "unknown_event_ids": [],
-        "cross_event_evidence_ids": [],
-        "cross_event_source_fact_ids": [],
-        "unknown_source_fact_ids": [],
-        "invalid_event_decisions": {
-          "g020": "body_evidence_cannot_be_insufficient",
-          "g023": "body_evidence_cannot_be_insufficient",
-          "g024": "body_evidence_cannot_be_insufficient"
-        },
-        "malformed_event_results": 0
-      },
-      "missing_event_ids": [
-        "g020",
-        "g023",
-        "g024"
-      ],
-      "conflicting_event_ids": [],
-      "missing_source_fact_ids_by_event": {},
-      "rejected_items": [],
-      "unpublishable_items": []
-    },
-    {
-      "request_id": "softbank-01-c030dbeab8d7478e",
-      "event_response": {
-        "missing_event_ids": [],
-        "duplicate_event_ids": [],
-        "unknown_event_ids": [],
-        "cross_event_evidence_ids": [],
-        "cross_event_source_fact_ids": [],
-        "unknown_source_fact_ids": [],
-        "invalid_event_decisions": {
-          "g004": "body_evidence_cannot_be_insufficient",
-          "g003": "headline_only_requires_insufficient_evidence"
-        },
-        "malformed_event_results": 0
-      },
-      "missing_event_ids": [
-        "g003",
-        "g004"
-      ],
-      "conflicting_event_ids": [],
-      "missing_source_fact_ids_by_event": {},
-      "rejected_items": [],
-      "unpublishable_items": []
-    },
-    {
-      "request_id": "honda-01-7e76a7d77b7a88a5",
-      "event_response": {
-        "missing_event_ids": [],
-        "duplicate_event_ids": [],
-        "unknown_event_ids": [],
-        "cross_event_evidence_ids": [],
-        "cross_event_source_fact_ids": [],
-        "unknown_source_fact_ids": [],
-        "invalid_event_decisions": {
-          "g003": "body_evidence_cannot_be_insufficient"
-        },
-        "malformed_event_results": 0
-      },
-      "missing_event_ids": [
-        "g003"
-      ],
-      "conflicting_event_ids": [],
-      "missing_source_fact_ids_by_event": {},
-      "rejected_items": [],
-      "unpublishable_items": []
-    },
     {
       "request_id": "spacex-02-9ec61d19318c7152",
       "event_response": {
@@ -183,13 +31,10 @@
         "cross_event_evidence_ids": [],
         "cross_event_source_fact_ids": [],
         "unknown_source_fact_ids": [],
-        "invalid_event_decisions": {
-          "g009": "body_evidence_cannot_be_insufficient"
-        },
+        "invalid_event_decisions": {},
         "malformed_event_results": 0
       },
       "missing_event_ids": [
-        "g009",
         "g010"
       ],
       "conflicting_event_ids": [],
@@ -228,17 +73,18 @@
       "rejected_items": [
         {
           "event_id": "g002",
-          "title": "中国・ASEAN法務協力フォーラム、重慶で開催",
+          "title": "中国・ASEAN法務フォーラム、常設事務局とAI法研究連盟を発足",
           "reasons": [
             "unsupported_summary_point"
           ],
           "unsupported_facts": [
-            "第8回中国・ASEAN法務協力フォーラムは11月19日に重慶で開幕した。",
-            "主催者によると、2026年1～9月の重慶とASEANの貿易額は1,164.1億元で前年同期比17％増だった。"
+            "第8回中国・ASEAN法務協力フォーラムは11月19日に重慶で開幕し、法務当局者、裁判官、専門家が司法協力と商事紛争の解決を議論した。",
+            "主催者によると、重慶とASEANの2026年1～9月の貿易額は1,164.1億元、前年同期比17％増だった。"
           ],
           "invalid_source_fact_ids": [],
           "uncovered_source_fact_ids": [
-            "e001:f01"
+            "e001:f01",
+            "e001:f02"
           ]
         }
       ],
