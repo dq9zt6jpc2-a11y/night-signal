@@ -243,8 +243,30 @@ def remote_json(repository: str, branch: str, path: str) -> dict[str, Any] | Non
     result = run_gh(["api", endpoint], check=False)
     if result.returncode != 0:
         error = f"{result.stdout}\n{result.stderr}".casefold()
-        if "404" in error or "not found" in error or "no commit found" in error:
-            return None
+        if "http 404" in error:
+            # A contents 404 can also mean inaccessible or an incomplete handoff.
+            # Verify the repository is readable and the exact branch is absent.
+            refs = run_gh(["api", f"repos/{repository}/git/matching-refs/heads/{branch}"])
+            try:
+                rows = json.loads(refs.stdout)
+                if not isinstance(rows, list):
+                    raise ValueError("expected a list of branch refs")
+                branch_exists = any(row["ref"] == f"refs/heads/{branch}" for row in rows)
+            except (ValueError, KeyError, TypeError) as exc:
+                fail(f"cannot verify absence of {branch}:{path}: {exc}")
+            if not branch_exists:
+                return None
+            # Some existing refs contain optional files. Check the branch tree
+            # with a separate successful read before declaring the path absent.
+            tree = run_gh(["api", f"repos/{repository}/git/trees/{branch}?recursive=1"])
+            try:
+                payload = json.loads(tree.stdout)
+                if payload["truncated"]:
+                    fail(f"cannot verify absence in truncated tree: {branch}:{path}")
+                if not any(entry["path"] == path for entry in payload["tree"]):
+                    return None
+            except (ValueError, KeyError, TypeError) as exc:
+                fail(f"cannot verify absence of {branch}:{path}: {exc}")
         fail(f"cannot inspect {branch}:{path}: {result.stderr.strip() or result.stdout.strip()}")
     try:
         envelope = json.loads(result.stdout)
