@@ -104,7 +104,15 @@ jobs:
           fi
           ACTIVE="$(gh run list --workflow unattended-collection.yml --limit 30 \
             --json status --jq '[.[] | select(.status != "completed")] | length')"
-          if [[ "$ACTIVE" == "0" ]]; then
+          if [[ "$ACTIVE" != "0" ]]; then
+            exit 0
+          fi
+          # Collection may have finished between the initial audit and the run lookup.
+          RECHECK="$RUNNER_TEMP/collection-recovery-recheck.json"
+          python3 scripts/night_signal_operational_audit.py "$ISSUE_DATE" --report-only > "$RECHECK"
+          NOW_JST="$(TZ=Asia/Tokyo date +%H%M)"
+          if [[ "$NOW_JST" -ge 1315 && "$NOW_JST" -le 1345 ]] &&
+             jq -e '.stage == "evidence_missing"' "$RECHECK" >/dev/null; then
             gh workflow run unattended-collection.yml --ref main -f "issue_date=$ISSUE_DATE"
           fi
 

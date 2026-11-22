@@ -194,12 +194,23 @@ jobs:
           compression-level: 6
 
       - name: Publish the immutable PC-independent review handoff
+        id: handoff
         if: ${{ steps.current_publication.outputs.published != 'true' && (steps.final_packet.outputs.ready == 'true' || steps.validated_evidence.outputs.ready == 'true') }}
         run: |
           python3 scripts/night_signal_cloud_handoff.py "$ISSUE_DATE" --publish
 
+      - name: Record editor handoff separately from deadline outcome
+        if: ${{ always() && steps.handoff.outcome == 'success' }}
+        run: |
+          {
+            echo "### $ISSUE_DATE: editor handoff ready"
+            echo "Handed off at $(TZ=Asia/Tokyo date -Is)."
+            echo "Input branch: night-signal-evidence-$ISSUE_DATE"
+            echo "This confirms material is ready for editing. Reader-side publication is checked separately."
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Report zero-cost collection boundary
-        if: ${{ steps.current_publication.outputs.published != 'true' && (steps.final_packet.outputs.ready == 'true' || steps.validated_evidence.outputs.ready == 'true') }}
+        if: ${{ steps.handoff.outcome == 'success' }}
         run: |
           echo "Evidence and every distinct candidate event are ready on the immutable cloud handoff branch."
           echo "Repository model API requests: 0"
