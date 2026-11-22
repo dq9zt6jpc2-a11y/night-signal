@@ -1,0 +1,1559 @@
+{
+  "contract": "codex-plus-editor-v2",
+  "issue_date": "2026-11-22",
+  "evidence_sha256": "d3f2489748bcf1c260ced89fb08e8f4f461cee853cefcff685c5d588d3b1a900",
+  "cloud_handoff": {
+    "execution_surface": "chatgpt-web-scheduled-task",
+    "reviewed_at": "2026-11-22T23:16:44+09:00"
+  },
+  "responses": [
+    {
+      "request_id": "openai-01-4fabeffcc0ef1205",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、Daybreakのアクセス制御をAPI・Codexへ導入",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "OpenAIはAPIとCodexに、Daybreak（旧Trusted Access for Cyber）のアクセス制御を導入する。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01"
+                    ]
+                  },
+                  {
+                    "text": "対象となる全API組織とChatGPT／CodexワークスペースでDaybreakのアクセス制御が利用可能になった。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f05"
+                    ]
+                  },
+                  {
+                    "text": "Daybreak の利用承認は、承認を受けたお客様に雇用されている人員、またはそのお客様のために業務を行う人員を対象とします。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f12"
+                    ]
+                  }
+                ],
+                "topic_value_class": "risk_or_safety_signal",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g005",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "インドのChatGPT Go、1年間無料期間後の更新条件を案内",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "更新日: 2 hours ago 概要 ChatGPT Go の 1 年間の無料期間は、サブスクリプションに表示されている日付に終了します。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01"
+                    ]
+                  },
+                  {
+                    "text": "継続を希望しない場合は、更新日の少なくとも 24 時間前までに、 サブスクリプションの申込先で解約 してください。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f03"
+                    ]
+                  },
+                  {
+                    "text": "更新条件の確認 サブスクリプションの申込先（ChatGPT、Google Play、Apple）で契約内容を確認されください。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f06"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g004",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "ChatGPT Business、対象オーナーへ月最大50ドルの広告クレジット",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "対象のChatGPT Businessワークスペースのオーナーは、ChatGPT広告に使えるクレジットを毎月最大50ドル受け取れる。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f01"
+                    ]
+                  },
+                  {
+                    "text": "たとえば、丸 1 か月分の対象シート料金として 200 ドルをお支払いいただいた場合、ワークスペースに 50 ドル分の広告クレジットが付与されます。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f13"
+                    ]
+                  },
+                  {
+                    "text": "たとえば、50 ドル分のクレジットがあり、対象の広告費が 55 ドル発生した場合、50 ドル分はクレジットでまかなわれ、残りの 5 ドルが請求されます。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "GPT-6.2 Astra、韓国大学修学能力試験の非公式評価で満点",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "順天郷大学校コンピューターソフトウェア工学科のク・ユギョム氏が公開した「2027学年度修学能力試験 大規模言語モデル（LLM）解答ダッシュボード」によると、OpenAIの「GPT-6.2 Astra」とGoogleの「Gemini 4 Neon」が450点満点で首位に並んだ。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f01"
+                    ]
+                  },
+                  {
+                    "text": "OpenAIの「GPT-6.2 Sol」が449.6点で続き、Anthropicの「Claude Opus 5.5」と「Claude Fable 5.2」はそろって449.3点を獲得した。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f09"
+                    ]
+                  },
+                  {
+                    "text": "公開ダッシュボードではGPT-6.2 AstraとGemini 4 Neonが450.0点、GPT-6.2 Solが449.6点、K-Exaone 2.5が韓国勢最高の414.7点だった。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f11"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g001",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-02-0cb798b83c430270",
+      "response": {
+        "events": [
+          {
+            "event_id": "g006",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "米下院、MicrosoftとByteDanceのAI契約交渉について説明要請",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "米下院中国特別委員会は11月18日、MicrosoftにByteDanceとの交渉内容を超党派の委員へ説明するよう求めた。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f09"
+                    ]
+                  },
+                  {
+                    "text": "委員長は、Microsoftが米国防総省と契約していることを理由に、ByteDanceへAIツールを販売すべきでないと述べた。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f10"
+                    ]
+                  },
+                  {
+                    "text": "交渉成立の可否、取引条件の変更、議会説明の結果はいずれも未確定だ。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f14"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Oracle、OpenAI向けインフラ契約の必要資金を全額確保",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "11月初旬に約200億ドル（約3兆2,000億円）の最終調達を実施し、今回の投資サイクルで資金調達を終えた初のハイパースケーラーになったと説明している。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01"
+                    ]
+                  },
+                  {
+                    "text": "【画像解説と記事全文はこちら】オラクルの資金手当て、現在地 オラクルは11月20日（現地時間）、OpenAIとのインフラ契約を履行するために必要な資金はすべて調達済みだと明らかにした。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f03"
+                    ]
+                  },
+                  {
+                    "text": "ロイター通信によると、11月初旬の資金調達は約200億ドルで、株式が約100億ドル、債券が約100億ドルだった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f12"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g012",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g010",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g011",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-03-d0276c41af6d07af",
+      "response": {
+        "events": [
+          {
+            "event_id": "g015",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "BlueMedia、ChatGPT Adsとの提携を開始",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "BlueMediaはChatGPT Adsとの提携を正式に開始した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01"
+                    ]
+                  },
+                  {
+                    "text": "記事によると、ChatGPT Adsは2月の米国開始後、北米・欧州・アジア・オセアニア・中東・北アフリカの89超の市場へ拡大した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f05"
+                    ]
+                  },
+                  {
+                    "text": "BlueMediaは最初のブランド顧客向けキャンペーンを開始し、初期データでは業界平均を上回ったとしている。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f13"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g018",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g017",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "カリフォルニア大学、年120万ドルでOpenAIと10キャンパス契約",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "カリフォルニア大学は、10キャンパスを対象に年120万ドルのOpenAI契約を結び、アクセス拡大とデータ保護強化を掲げた。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f03"
+                    ]
+                  },
+                  {
+                    "text": "Academic Councilは、契約締結前の10月21日に計画を知ったとしている。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f08"
+                    ]
+                  },
+                  {
+                    "text": "大学は11月19日、追加費用なしのAIリテラシー研修と職員訓練も契約に含むと発表した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f14"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g013",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g014",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g019",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g016",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-04-cdfdf0789ffd9413",
+      "response": {
+        "events": [
+          {
+            "event_id": "g020",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g021",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、内部推論抽出攻撃の成功率を0.2％へ低減",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "OpenAI は2026年11月20日、AIモデルの内部推論を不正に抽出する攻撃への対策を強化し、社内試験で攻撃成功率がGPT-6 Astraの 54.0% からGPT-6.2 Astraの 0.2% に低下したと 発表した 。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01"
+                    ]
+                  },
+                  {
+                    "text": "特に、過去のリクエストから内部推論を抽出する攻撃では、GPT-6 Astraの 54.0% に対してGPT-6.2 Astraは 0.2% となり、大幅な改善が見られた。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f08"
+                    ]
+                  },
+                  {
+                    "text": "公表主体・資料 公表値 測定対象と条件 公表値から判断できないこと OpenAIの抽出耐性評価 （2026年11月20日） 0.2% 社内試験。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f15"
+                    ]
+                  }
+                ],
+                "topic_value_class": "risk_or_safety_signal",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g022",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g023",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g024",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "softbank-01-c030dbeab8d7478e",
+      "response": {
+        "events": [
+          {
+            "event_id": "g002",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Anthropic上場後の売りでSoftBank Group株が16.16％下落",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Anthropicの上場を受け、アジアのAI・半導体関連株に売りが広がった。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01"
+                    ]
+                  },
+                  {
+                    "text": "SoftBank Group株は20日に16.16%安となり、東京エレクトロンやSK hynixなど日韓の主要銘柄も下落した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f02"
+                    ]
+                  },
+                  {
+                    "text": "NVIDIAに部品を供給するSK hynixとSamsung Electronicsは、それぞれ6.0%、4.7%下落した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f09"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g004",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "honda-01-7e76a7d77b7a88a5",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Honda、新型SUV「AVANCIER」を世界初公開",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Hondaは11月20日、次世代ハイブリッドシステムを採用する新型SUV「AVANCIER」を世界初公開した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01"
+                    ]
+                  },
+                  {
+                    "text": "AVANCIERは新Hマークをハイブリッド車として初採用し、新プラットフォームと「Honda Hybrid」を初搭載する。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f02"
+                    ]
+                  },
+                  {
+                    "text": "HondaはAVANCIERを皮切りに、「Honda Hybrid」搭載車を2029年度までに世界で15車種投入する計画だ。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f15"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "太田格之進、2026年スーパーフォーミュラ王者に",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "太田格之進は1999年生まれで、2018年にHondaの育成スカラシップを獲得し、JAF-F4でシーズン5勝を挙げた。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f14"
+                    ]
+                  },
+                  {
+                    "text": "太田は2019年のFIA-F4でポールポジション3回、優勝2回を記録し、JAF-F4日本一決定戦も制した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f15"
+                    ]
+                  },
+                  {
+                    "text": "2026年はDOCOMO TEAM DANDELION RACINGから参戦し、鈴鹿の第11戦で自身初のスーパーフォーミュラ王座を獲得した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g005",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "HRC、ステファン・ブラドルを2027年スポーティングコーディネーターに任命",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Hondaの開発・テストライダーを務めたステファン・ブラドルは、MotoGPライダーの現場支援とHRC指導体制の強化を担う新職へ移る。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f01"
+                    ]
+                  },
+                  {
+                    "text": "2027年のHondaファクトリー体制にはファビオ・クアルタラロとディオゴ・モレイラが加わる。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f06"
+                    ]
+                  },
+                  {
+                    "text": "ブラドルは開発ライダーからHondaのスポーティング体制を担う役割へ移行する。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f11"
+                    ]
+                  }
+                ],
+                "topic_value_class": "operational_status_change",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g003",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "honda-02-c53c2cfae83f5291",
+      "response": {
+        "events": [
+          {
+            "event_id": "g006",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-01-9dd4b2513c7c2a8c",
+      "response": {
+        "events": [
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "F1、2030年V8パワーユニット復活で基本合意",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "McLaren CEOのザク・ブラウンは、2030年のV8復活について「基本合意」があると認めた。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01"
+                    ]
+                  },
+                  {
+                    "text": "FIAは別途、2027年から常勤スチュワードを段階導入し、将来12～15人の常設プールへ拡大する方針を示した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f09"
+                    ]
+                  },
+                  {
+                    "text": "McLarenは自社製パワーユニットを開発せず、Mercedes HPPとの提携を続ける方針だ。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f15"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g001",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Nike、2027年からF1公式アパレル・ユニフォーム供給者に",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "2027年からの長期契約 オートスポーツweb 2026年11月21日 11時43分 F1は、2027年にスポーツ関連ブランド、NIKE／ナイキをオフィシャルパートナーに迎え、長期的なパートナーシップ契約の下、同社がF1のオフィシャル・アパレル＆ユニフォームサプライヤーに就任することを発表した。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f01"
+                    ]
+                  },
+                  {
+                    "text": "この契約により、ナイキは、スタイル、パフォーマンス、ライフスタイルに焦点を当てたカプセルコレクションとして、フットウェア、アパレル、アクセサリーを展開するほか、パフォーマンス面の革新や、次世代のアスリートとファンに向けたレースウイークエンドの体験も提供するということだ。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f02"
+                    ]
+                  },
+                  {
+                    "text": "さらにファンは、『Formula 1 x Nike』のアパレル／スポーツウェアコレクションを入手することができ、第一弾として、ラスベガスGPの週末に、「ラスベガスGP × Nike」カプセルコレクションがF1ハブとナイキ・ラスベガス店で発売される。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f03"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-02-396c702cf30be564",
+      "response": {
+        "events": [
+          {
+            "event_id": "g012",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "FIA、ラスベガスGP練習走行の審議結果を公表",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "スチュワードは映像、テレメトリー、無線、車載映像と当事者の説明を検討した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f05"
+                    ]
+                  },
+                  {
+                    "text": "状況を考慮し、スチュワードはマックス・フェルスタッペンへのドライバー警告が妥当と判断した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f10"
+                    ]
+                  },
+                  {
+                    "text": "別件の審議では、安全なリリースには確実な通信と通信障害時の予備手段が必要だと指摘した。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f06"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g009",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "フェルスタッペン、首位交代35回のラスベガスGPを制す",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "0.639秒差の2位にランド・ノリス、1.529秒差の3位にオスカー・ピアストリが続き、マクラーレンが今シーズン初のダブル表彰台を獲得した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f01"
+                    ]
+                  },
+                  {
+                    "text": "オスカー・ピアストリ（マクラーレン MCL40）とランド・ノリス（マクラーレン MCL40）とフランコ・コラピント（アルピーヌ A526）、2026年11月21日（土） F1ラスベガスGP 決勝（ラスベガス市街地コース） Courtesy Of McLaren 波乱続出、ハジャーはウイング脱落で後退 波乱はスタート前から始まっていた。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f09"
+                    ]
+                  },
+                  {
+                    "text": "チームメイトのフランコ・コラピントが6位に続き、アルピーヌは2台で18ポイントを獲得した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f12"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g007",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g010",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g011",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-03-3a3fcf61bd73652c",
+      "response": {
+        "events": [
+          {
+            "event_id": "g013",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "spacex-01-6ac46dcaffe4eaf2",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "SpaceX、米宇宙軍の機密ミッションUSSF-317を打ち上げ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Falcon 9はヴァンデンバーグ宇宙軍基地の第4東発射施設からUSSF-317に臨んだ。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f02"
+                    ]
+                  },
+                  {
+                    "text": "USSF-317は午後8時20分に同発射施設から打ち上げられた。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f08"
+                    ]
+                  },
+                  {
+                    "text": "打ち上げには機体番号B1100のFalcon 9第1段が使われた。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f11"
+                    ]
+                  }
+                ],
+                "topic_value_class": "operational_status_change",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "spacex-02-9ec61d19318c7152",
+      "response": {
+        "events": [
+          {
+            "event_id": "g010",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "SpaceXのTerafab計画、テキサス州の公文書開示訴訟で争点に",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "グライムズ郡委員会は6月3日、4対1でSpaceXのTerafab提案を承認した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f04"
+                    ]
+                  },
+                  {
+                    "text": "州司法長官室は7月と8月、特定情報を除いて郡の情報開示を認める判断を2件出した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f10"
+                    ]
+                  },
+                  {
+                    "text": "訴訟側は、州司法長官の7月28日判断後も郡がテキサス州情報公開法で必要な記録を開示していないと主張している。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f15"
+                    ]
+                  }
+                ],
+                "topic_value_class": "risk_or_safety_signal",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g012",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "フィリピン政府、SpaceXの商業ロケット打ち上げ誘致に意欲",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "フィリピン大統領は、西太平洋上の立地がロケット打ち上げに適するとし、SpaceXが同国での事業拡大を検討することに期待を示した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f06"
+                    ]
+                  },
+                  {
+                    "text": "一方、大統領は2島の開発報道について詳細を把握しておらず、具体的な取り決めはないと述べた。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f11"
+                    ]
+                  },
+                  {
+                    "text": "駐米フィリピン大使は、マスク氏が1～2島への投資・開発を検討しているとの情報に言及した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f13"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g008",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g011",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g013",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "japan_economy-01-926a91011825c1c0",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "10月の全国コアCPI、前年同月比2.2％上昇",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "9月に2.4%下落していた電気代が1.6%上昇し、都市ガス代は伸びが0.2%から5.3%に拡大した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f06"
+                    ]
+                  },
+                  {
+                    "text": "生鮮食品は6.3%上昇と9月の2.1%上昇から大幅に上がった。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f13"
+                    ]
+                  },
+                  {
+                    "text": "総務省が発表した10月の全国消費者物価指数は、価格の変動が大きい生鮮食品を除く総合が102.9と、前の年の同じ月と比べて2.2%上昇しました。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f02"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g004",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "米AI株急落でリスク回避、Nasdaqは5％安",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "19日上場のアンソロピックの大幅安などを背景に人工知能（AI）関連が軒並み売られた。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f03"
+                    ]
+                  },
+                  {
+                    "text": "米市場でナスダック総合株価指数は前日比5%安と大きく下げた。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f04"
+                    ]
+                  },
+                  {
+                    "text": "半導体株指数は米半導体 エヌビディア の急落が響き1割下げた。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f05"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "japan_economy-02-f2841bbf43228d45",
+      "response": {
+        "events": [
+          {
+            "event_id": "g011",
+            "decision": "background_or_navigation",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g010",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "卵の平均小売価格、10月に1パック312円で過去最高",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "1パック312円で過去最高に…鳥インフルの影響懸念も 養鶏場のエサ代の高騰などを受け上昇している卵の価格。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f07"
+                    ]
+                  },
+                  {
+                    "text": "平均小売価格は10月に1パック当たり312円と過去最高を更新し、11月も高止まりしている。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f08"
+                    ]
+                  },
+                  {
+                    "text": "本当に上がっているんだなと」 初の値上げも「何とかサービス変えずに頑張りたい」 こうした影響を受け、店は10月、開店以降初めて看板メニューのラーメンを950円から990円に値上げ。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f13"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g008",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "7～9月の訪日消費額、2兆2,076億円で同期最高",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "【写真を見る】消費額は過去最高9.8兆円へ 量から質へ転換するインバウンド市場 ■はじめに〜訪日客数は2期連続減も消費額は伸び率回復、近隣市場と単価が下支え 前稿では、2026年4-6月期について、中国の6割減に加え、イラン情勢の影響などで欧州からの訪日客も減少に転じ、訪日外客数がコロナ禍後初めて前年割れ（前年同期比▲5.3％）となる一方、単価の上昇に支えられて消費額は前年同期をわずかに上回り（同+0.3％）、第2四半期として過去最高を更新した状況を報告した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f03"
+                    ]
+                  },
+                  {
+                    "text": "訪日外客数は964万人（前年同期比▲4.8％）と2四半期連続で前年を下回った一方、消費額は2兆2,076億円（同+3.2％）と7-9月期として過去最高を更新した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f06"
+                    ]
+                  },
+                  {
+                    "text": "1人当たり旅行支出が23.4万円（同+6.1％）へと上昇して客数の減少を補った形であり、前期にほぼ横ばいだった消費額の伸び率も持ち直した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f07"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g009",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "asia-01-40702250a6aaff72",
+      "response": {
+        "events": [
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "中国・ASEAN法務協力フォーラム、重慶で開催",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "第8回中国・ASEAN法務協力フォーラムは11月19日に重慶で開幕した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01"
+                    ]
+                  },
+                  {
+                    "text": "主催者によると、2026年1～9月の重慶とASEANの貿易額は1,164.1億元で前年同期比17％増だった。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f05"
+                    ]
+                  },
+                  {
+                    "text": "開催年は中国・ASEAN対話関係35周年、包括的戦略パートナーシップ樹立5周年に当たる。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g003",
+            "decision": "background_or_navigation",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "north_america-01-c1f87d2a6009d76c",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Nasdaq、11月20日に5.28％急落",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "11月20日の北米市場では株式が引けにかけて大幅安となった。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f03"
+                    ]
+                  },
+                  {
+                    "text": "Anthropic株は上場2日目に9.1％安の88.30ドルとなったが、83ドルの公開価格は上回った。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f12"
+                    ]
+                  },
+                  {
+                    "text": "1年先インフレ期待は速報の4.3％、10月の4.7％から3.7％へ低下した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f14"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Nasdaqの金融犯罪対策AI、850顧客が利用し70社が有料化",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Nasdaqの金融犯罪管理顧客2,800社のうち850社がエージェント型AIを利用し、70社が有料契約している。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f01"
+                    ]
+                  },
+                  {
+                    "text": "AxiomSLの対象は買収時の55カ国・110規制当局から66カ国・174規制当局へ拡大した。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f11"
+                    ]
+                  },
+                  {
+                    "text": "Nasdaqの指数事業は直近四半期に39％成長した。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f12"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g006",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Silaとパナソニック・エナジー北米、長期オフテイク契約",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "本契約は複数年にわたるもので、長期的な商業関係の一環として、将来的に10億米ドルを超える取引となる可能性があります。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01"
+                    ]
+                  },
+                  {
+                    "text": "パナソニック・エナジー・オブ・ノースアメリカのCEOである高本泰明氏は、「モーゼスレイクでのシラの急速な進展、すなわち着工から生産開始に至るまでの取り組みは、非常に素晴らしいものです。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f09"
+                    ]
+                  },
+                  {
+                    "text": "また、シラが本契約およびその他の商業契約に対応するために生産を拡大することに伴い、ワシントン州モーゼスレイクの工場で製造・建設関連の雇用が約500人追加で創出されると見込まれています。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f12"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g005",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    }
+  ]
+}
