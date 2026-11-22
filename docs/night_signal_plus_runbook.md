@@ -191,6 +191,35 @@ the title. Do not add a minimum length, historical background, common knowledge,
 predictions, generic importance, or paraphrase repetition. Never omit a supported
 number, date, scope, condition, reason, or result merely to shorten the summary.
 
+Before saving a review or correction, check each accepted event against the
+exact source passages in both directions.
+
+1. For each summary sentence, identify the distinct new assertion and the
+   passage that supports it. Preserve the source's actor, action, legal or
+   procedural status, date, number, unit, comparison period, and qualifications
+   when material. Split a sentence if its independent assertions need
+   different evidence. Use the source's terminology if a paraphrase introduces
+   an extra implication. A citation alone does not establish support.
+2. Read the title together with each point. If a point only restates the
+   title or says that an unspecified outcome remains unknown, remove the
+   redundant point. Preserve a material uncertainty explicitly established by
+   the source, and verify that removing any point leaves its required facts
+   represented elsewhere. Preserve the reported action independently of any
+   allegation or prediction.
+3. Read the underlying event facts back against the revised text. Check
+   required IDs and material qualifiers in both the title and summary.
+   Reconfirm that each required fact remains in a supported summary point
+   after the revision. Keep details needed for the event to stand on its own.
+4. For a correction, read both `rejected_requests` and `summary_diagnostics`
+   in the latest feedback for the same issue and input. Use the precise
+   sentence and reason to choose a fix. For
+   `no_material_fact_after_normalization`, check title overlap and the
+   sentence's concrete claim. For `unsupported_summary_point`, identify
+   exactly which assertion lacks source support and repair only that assertion.
+   Check the whole corrected event again before saving. Keep accepted events
+   and all unrelated requests unchanged. If the source and validator still
+   disagree, record the exact sentence, citation and failure for diagnosis.
+
 `analysis` is optional and must never block an otherwise valid, information-
 complete news item. Include it only when at least two independent body sources
 for the same event support a useful synthesis. Keep verified facts in
