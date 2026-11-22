@@ -1,79 +1,68 @@
 {
   "contract": "night-signal-cloud-feedback-v1",
   "issue_date": "2026-11-22",
-  "recorded_at": "2026-11-22T15:44:49.961445+00:00",
-  "workflow_run_id": "45039881545",
-  "workflow_run_url": "https://github.com/dq9zt6jpc2-a11y/night-signal/actions/runs/45039881545",
+  "recorded_at": "2026-11-22T15:48:12.142560+00:00",
+  "workflow_run_id": "45040133185",
+  "workflow_run_url": "https://github.com/dq9zt6jpc2-a11y/night-signal/actions/runs/45040133185",
   "recovery_attempt": 0,
-  "status": "failed",
-  "failed_stage": "apply",
-  "first_reader_verification": null,
-  "step_outcomes": {
-    "apply": "failure",
-    "restore": "success",
-    "gates": "skipped",
-    "base_guard": "skipped",
-    "commit": "skipped",
-    "push": "skipped",
-    "pages": "skipped",
-    "pages_retry": "skipped",
-    "pages_watch": "skipped",
-    "verify": "skipped"
+  "status": "success",
+  "failed_stage": null,
+  "first_reader_verification": {
+    "issue_date": "2026-11-22",
+    "confirmed_at": "2026-11-23T00:48:11.322543+09:00",
+    "deadline": "2026-11-22T19:00:00+09:00",
+    "confirmed_by_deadline": false,
+    "root_sha256": "39fd9c9be73b2c854d78aadb9898ef21285adc547efe52a45763b59dbc40dd86",
+    "verified_files_sha256": {
+      "index.html": "39fd9c9be73b2c854d78aadb9898ef21285adc547efe52a45763b59dbc40dd86",
+      "2026-11-22/index.html": "c6ae81d194f1c77cd651d867fe4b99544a088a505565ba2e96a5822bd9875993",
+      "2026-11-22/details/auto-12be0bc69903-2026-11-22.html": "0ffe2343684d207f66f14c957bf8736894f3314c1fee4d03f7050d91d49f0424",
+      "2026-11-22/details/auto-1b8a1085782f-2026-11-22.html": "91406877ab34058854d3b5133950a709eea7e90a7a2b0624b27514d562180279",
+      "2026-11-22/details/auto-210642336b30-2026-11-22.html": "55d052faf3083127051c8b53d36c92e545e7ad0308c825e2ffcfd1060abda5ab",
+      "2026-11-22/details/auto-211217a292c6-2026-11-22.html": "1d720f426bd7b2e1342405c6a5e03704705e85f10396e5e30e04f6db2cfc6ac9",
+      "2026-11-22/details/auto-2a948daad1e6-2026-11-22.html": "5009b9cb43dee384ebc84744b53ce0f8b2697bc3f55e48e420748fe8ef62006a",
+      "2026-11-22/details/auto-2e6351374410-2026-11-22.html": "823297eb758b1ff734f00f40a0d9a081ac40f4e4a948b2a2cff673edcf7551c0",
+      "2026-11-22/details/auto-387adefdf992-2026-11-22.html": "c4d9eb4371704c1f62c2a05cc670dfa7d8ad62f2330d2295fb5b1ea2f7e6d85b",
+      "2026-11-22/details/auto-3ef6f3bda20d-2026-11-22.html": "af64de7b163bbc79345505f7eae929fbee835fa7c9d6c36978f18aa71ee96d98",
+      "2026-11-22/details/auto-485cbe8ab743-2026-11-22.html": "bbdc9b3fcd508db28a71af844b9cbf242173d3b0e38acdf60cdf51dd9ce73898",
+      "2026-11-22/details/auto-4f19ea53a7f1-2026-11-22.html": "d3313d4e595008f5308c0f81d5831d60e71b6c8b50d082e5c28cd310989d0e04",
+      "2026-11-22/details/auto-515dcb17e3b4-2026-11-22.html": "ec7547b759f709f681f779f047428b312249445be913b8b0c8c77218e442f8db",
+      "2026-11-22/details/auto-5216ee3baf82-2026-11-22.html": "407e6462918e6ee5e00382f95b9a4b738886fe9763b4444d967f6fdae68234b1",
+      "2026-11-22/details/auto-53b6cd07fd93-2026-11-22.html": "b8b6e55a40fa0fe30b368e47bfa73a3ecbec0aa7b7d1d079fbf59e565ecac8c0",
+      "2026-11-22/details/auto-569cf9e69744-2026-11-22.html": "3b5a59792a5bce59e470ac694ed10ed56e96bc354142dfe39e4bfca36f0cd194",
+      "2026-11-22/details/auto-66797c330e7a-2026-11-22.html": "40ab9239abe420305c31764afd69d5f15a9a6ec46eb8674e3d4525c6fb3a0912",
+      "2026-11-22/details/auto-7291c3cb31ed-2026-11-22.html": "8aac6ed53094d562aeef70b35456b3da9462fa021d1754b7a884991efbfda151",
+      "2026-11-22/details/auto-74f36c0c3057-2026-11-22.html": "d2358115164a69d8b74340c94f95349136b58fff67e90bae00df382365a3a19b",
+      "2026-11-22/details/auto-7a9e84387b38-2026-11-22.html": "eb9b139dad9062dcad4339e4f115290919076ade17824d94aa4ccc465da15d07",
+      "2026-11-22/details/auto-7b883c70a43e-2026-11-22.html": "db1208fc8031d43d37a0c12871ac6fe6f690cd3511459f5371ae2fd4fefdda8a",
+      "2026-11-22/details/auto-7eab5af4d985-2026-11-22.html": "257fa5d1135998426aaac4c8581446158c7c5bb980d76bee92c68f28fc3e9a75",
+      "2026-11-22/details/auto-7f87e53d854f-2026-11-22.html": "226a24f79e3bfea7164946be3a9fabee3158750eb6ffcf3533d7c4a2a1c4aa65",
+      "2026-11-22/details/auto-87c9a535914f-2026-11-22.html": "1d62f6491670386fdd9375bc99e37ae2cd274078a80939be96bd03319967c51c",
+      "2026-11-22/details/auto-91a23b7f81cd-2026-11-22.html": "b2008669960170b18c304b9d1721b8a61786ba6f246133a2f7841436d7418ee6",
+      "2026-11-22/details/auto-99fe98137715-2026-11-22.html": "fcdd03f300f67ef9561126f7009051ad75f0c2994a4ff6e76a12c649ad9ded23",
+      "2026-11-22/details/auto-a2b576d73d7c-2026-11-22.html": "789f346768a1df9cc9d49524d5f320be23c05671be90ff547f9ec44b57fea8d9",
+      "2026-11-22/details/auto-a97166d78e7e-2026-11-22.html": "4d116082769cf2bbf6e9a148e0c5539a298ae7f8a9682b9b3a8984998f6b38ad",
+      "2026-11-22/details/auto-ac4199b807cf-2026-11-22.html": "e5e4425a4d2861d05ed2851706653891ea09873ea16b9e0b79270369a8b8753d",
+      "2026-11-22/details/auto-d52d1bbb98b5-2026-11-22.html": "da8f78fe2a6dd979318635710ef153b3bf51ad95ba8df86e54f710bd8682f94d",
+      "2026-11-22/details/auto-e831cfc48746-2026-11-22.html": "b6d99b76c2064674ab5145b3ed0012eb906ceea9f82479aef4075f457abaa4d7",
+      "2026-11-22/details/policy.html": "3220ec152593c5370d9312ea23092b3073e9490af0fae08d266fa33cf4ce03fe"
+    }
   },
-  "validator_log_tail": "{\"issue_date\": \"2026-11-22\", \"review_ref\": \"night-signal-review-2026-11-22\", \"installed_review\": \"/home/runner/work/night-signal/night-signal/state/2026-11-22/editor_review.json\", \"additional_paid_api_requests\": 0}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"OpenAI\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 33, \"grouped_events\": 32, \"publishable_source_events\": 32, \"novel_events\": 31, \"semantic_dedup_pool\": 31, \"model_candidates\": 24}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"SoftBank\", \"expanded_input_records\": 10, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 4, \"grouped_events\": 4, \"publishable_source_events\": 4, \"novel_events\": 4, \"semantic_dedup_pool\": 4, \"model_candidates\": 4}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"Honda\", \"expanded_input_records\": 15, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 7, \"grouped_events\": 7, \"publishable_source_events\": 7, \"novel_events\": 7, \"semantic_dedup_pool\": 7, \"model_candidates\": 6}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"F1\", \"expanded_input_records\": 2, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 48, \"grouped_events\": 47, \"publishable_source_events\": 46, \"novel_events\": 43, \"semantic_dedup_pool\": 43, \"model_candidates\": 13}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"SpaceX\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 18, \"grouped_events\": 18, \"publishable_source_events\": 18, \"novel_events\": 17, \"semantic_dedup_pool\": 17, \"model_candidates\": 13}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"日本経済\", \"expanded_input_records\": 6, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 27, \"grouped_events\": 27, \"publishable_source_events\": 27, \"novel_events\": 26, \"semantic_dedup_pool\": 26, \"model_candidates\": 11}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"YOASOBI / 幾田りら\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 0, \"grouped_events\": 0, \"publishable_source_events\": 0, \"novel_events\": 0, \"semantic_dedup_pool\": 0, \"model_candidates\": 0}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"アジア経済\", \"expanded_input_records\": 1, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 3, \"grouped_events\": 3, \"publishable_source_events\": 3, \"novel_events\": 3, \"semantic_dedup_pool\": 3, \"model_candidates\": 3}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"北米経済\", \"expanded_input_records\": 19, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 7, \"grouped_events\": 7, \"publishable_source_events\": 7, \"novel_events\": 7, \"semantic_dedup_pool\": 7, \"model_candidates\": 6}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"宇都宮ブレックス\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 0, \"grouped_events\": 0, \"publishable_source_events\": 0, \"novel_events\": 0, \"semantic_dedup_pool\": 0, \"model_candidates\": 0}\n{\"phase\": \"unsupported_summary_points_rejected\", \"category\": \"アジア経済\", \"facts\": [\"主催者発表の2026年1～9月の重慶・ASEAN貿易額は116.41 billion yuan（人民元）だった。\"]}\n{\"phase\": \"normalized_item_rejected\", \"category\": \"アジア経済\", \"title\": \"中国・ASEAN法務フォーラム、常設事務局とAI法研究連盟を発足\", \"reasons\": [\"unsupported_summary_point\"], \"fact_count\": 5}\nNIGHT SIGNAL PLUS REVIEW FAILED: review responses failed deterministic validation: {\"rejected_requests\":[{\"request_id\":\"asia-01-40702250a6aaff72\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{},\"malformed_event_results\":0},\"missing_event_ids\":[\"g002\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{},\"rejected_items\":[{\"event_id\":\"g002\",\"title\":\"中国・ASEAN法務フォーラム、常設事務局とAI法研究連盟を発足\",\"reasons\":[\"unsupported_summary_point\"],\"unsupported_facts\":[\"主催者発表の2026年1～9月の重慶・ASEAN貿易額は116.41 billion yuan（人民元）だった。\"],\"invalid_source_fact_ids\":[],\"uncovered_source_fact_ids\":[]}],\"unpublishable_items\":[]}]}\n",
-  "rejected_requests": [
-    {
-      "request_id": "asia-01-40702250a6aaff72",
-      "event_response": {
-        "missing_event_ids": [],
-        "duplicate_event_ids": [],
-        "unknown_event_ids": [],
-        "cross_event_evidence_ids": [],
-        "cross_event_source_fact_ids": [],
-        "unknown_source_fact_ids": [],
-        "invalid_event_decisions": {},
-        "malformed_event_results": 0
-      },
-      "missing_event_ids": [
-        "g002"
-      ],
-      "conflicting_event_ids": [],
-      "missing_source_fact_ids_by_event": {},
-      "rejected_items": [
-        {
-          "event_id": "g002",
-          "title": "中国・ASEAN法務フォーラム、常設事務局とAI法研究連盟を発足",
-          "reasons": [
-            "unsupported_summary_point"
-          ],
-          "unsupported_facts": [
-            "主催者発表の2026年1～9月の重慶・ASEAN貿易額は116.41 billion yuan（人民元）だった。"
-          ],
-          "invalid_source_fact_ids": [],
-          "uncovered_source_fact_ids": []
-        }
-      ],
-      "unpublishable_items": []
-    }
-  ],
-  "summary_diagnostics": [
-    {
-      "phase": "unsupported_summary_points_rejected",
-      "category": "アジア経済",
-      "facts": [
-        "主催者発表の2026年1～9月の重慶・ASEAN貿易額は116.41 billion yuan（人民元）だった。"
-      ]
-    },
-    {
-      "phase": "normalized_item_rejected",
-      "category": "アジア経済",
-      "title": "中国・ASEAN法務フォーラム、常設事務局とAI法研究連盟を発足",
-      "reasons": [
-        "unsupported_summary_point"
-      ],
-      "fact_count": 5
-    }
-  ],
+  "step_outcomes": {
+    "apply": "success",
+    "restore": "success",
+    "gates": "success",
+    "base_guard": "success",
+    "commit": "success",
+    "push": "success",
+    "pages": "success",
+    "pages_retry": "skipped",
+    "pages_watch": "success",
+    "verify": "success"
+  },
+  "validator_log_tail": "",
+  "rejected_requests": [],
+  "summary_diagnostics": [],
   "recall_risk_categories": [],
   "recovery_contract": "reuse the same Evidence; change only named rejected request/event entries"
 }
