@@ -5105,6 +5105,26 @@ def source_fact_covered_by_summary(source_fact: str, summary_point: str) -> bool
     return state_contract.text_overlap(source_fact, summary_point) >= required_overlap
 
 
+def normalize_supported_periods(summary: str, source: str) -> str | None:
+    """Remove only month endpoints proven by an equivalent source period."""
+    quarter_counts = {"two": 2, "three": 3, "four": 4, "2": 2, "3": 3, "4": 4}
+    supported = {
+        (match["year"], quarter_counts[match["count"].lower()] * 3)
+        for match in re.finditer(
+            r"\bfirst (?P<count>two|three|four|[234]) quarters of (?P<year>20[0-9]{2})\b",
+            source, re.IGNORECASE,
+        )
+    }
+    if not supported:
+        return summary
+
+    month_range = r"(?P<year>20[0-9]{2})年\s*(?P<start>[0-9]{1,2})月?\s*[～〜–-]\s*(?P<end>[0-9]{1,2})月"
+    for match in re.finditer(month_range, summary):
+        if (match["year"], int(match["end"])) not in supported or int(match["start"]) != 1:
+            return None
+    return re.sub(month_range, lambda match: f'{match["year"]}年', summary)
+
+
 def summary_claims_supported_by_source_facts(
     summary_point: str,
     source_facts: list[dict[str, str]],
@@ -5114,12 +5134,26 @@ def summary_claims_supported_by_source_facts(
         return False
     source_text = " ".join(fact["text"] for fact in source_facts)
     source_amounts, source_without_amounts = normalized_financial_amounts(source_text)
+    normalized_summary = normalize_supported_periods(summary_point, source_text)
+    if normalized_summary is None:
+        return False
     summary_amounts, summary_without_amounts = normalized_financial_amounts(
-        summary_point
+        normalized_summary
     )
     source_numbers = numeric_claims(source_without_amounts)
     summary_numbers = numeric_claims(summary_without_amounts)
-    if any(
+    if normalized_summary != summary_point:
+        # Allow only floating-point conversion noise for a normalized period.
+        # Otherwise an unrelated near-match amount could pass the period bridge.
+        if any(
+            not any(
+                abs(number - observed) <= max(1e-8, abs(observed) * 1e-12)
+                for observed in source_numbers
+            )
+            for number in summary_numbers
+        ):
+            return False
+    elif any(
         not numeric_claim_supported(number, source_numbers, approximate=True)
         for number in summary_numbers
     ):
@@ -5816,6 +5850,21 @@ def collect_evidence(issue_date: str) -> dict[str, Any]:
 
 
 def self_test() -> None:
+    period_facts = [{
+        "text": "Trade reached 116.41 billion yuan in the first three quarters of 2026.",
+    }]
+    assert summary_claims_supported_by_source_facts(
+        "2026年1～9月の貿易額は1,164.1億元だった。", period_facts
+    )
+    for unsupported_period_claim in (
+        "2026年1～8月の貿易額は1,164.1億元だった。",
+        "2025年1～9月の貿易額は1,164.1億元だった。",
+        "2026年1～9月の貿易額は1,165億元だった。",
+        "2026年1～9月に9社が参加した。",
+    ):
+        assert not summary_claims_supported_by_source_facts(
+            unsupported_period_claim, period_facts
+        )
     original_urlopen = urllib.request.urlopen
     incomplete_calls = 0
 
