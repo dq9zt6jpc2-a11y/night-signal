@@ -4,8 +4,8 @@
   "evidence_sha256": "d3f2489748bcf1c260ced89fb08e8f4f461cee853cefcff685c5d588d3b1a900",
   "cloud_handoff": {
     "execution_surface": "chatgpt-web-scheduled-task",
-    "reviewed_at": "2026-11-23T00:39:42+09:00",
-    "correction_attempt": 2
+    "reviewed_at": "2026-11-23T00:40:32+09:00",
+    "correction_attempt": 1
   },
   "responses": [
     {
