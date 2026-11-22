@@ -86,6 +86,27 @@ def read_recall_risk_categories(path: Path | None) -> list[str]:
     )
 
 
+def reader_verification(log: Path, issue_date: str) -> dict[str, Any] | None:
+    if not log.is_file():
+        return None
+    for line in reversed(log.read_text(encoding="utf-8").splitlines()):
+        if not line.startswith("{"):
+            continue
+        try:
+            entry = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if (
+            isinstance(entry, dict)
+            and entry.get("issue_date") == issue_date
+            and isinstance(entry.get("confirmed_at"), str)
+            and isinstance(entry.get("verified_files_sha256"), dict)
+            and entry["verified_files_sha256"]
+        ):
+            return entry
+    return None
+
+
 def build_feedback(
     issue_date: str,
     *,
@@ -112,6 +133,10 @@ def build_feedback(
         "recovery_attempt": recovery_attempt,
         "status": "success" if workflow_status == "success" else "failed",
         "failed_stage": failed_stage,
+        "first_reader_verification": (
+            reader_verification(log_directory / "verify.log", issue_date)
+            if step_outcomes.get("verify") == "success" else None
+        ),
         "step_outcomes": step_outcomes,
         "validator_log_tail": log_tail,
         "rejected_requests": (
@@ -175,16 +200,22 @@ def publish_feedback(issue_date: str, feedback: dict[str, Any]) -> dict[str, Any
         )
         if created.returncode != 0 and run_gh(["api", ref_path], check=False).returncode != 0:
             fail("could not create or find the cloud feedback branch")
-    content = (
-        json.dumps(feedback, ensure_ascii=False, indent=2) + "\n"
-    ).encode("utf-8")
-    encoded = base64.b64encode(content).decode("ascii")
     contents_path = f"repos/{repository}/contents/{path}"
     for attempt in range(2):
-        existing = run_gh(
-            ["api", f"{contents_path}?ref={branch}", "--jq", ".sha"],
-            check=False,
-        )
+        existing = run_gh(["api", f"{contents_path}?ref={branch}"], check=False)
+        previous_sha = None
+        payload = dict(feedback)
+        if existing.returncode == 0:
+            envelope = json.loads(existing.stdout)
+            previous_sha = envelope["sha"]
+            previous = json.loads(base64.b64decode(envelope["content"]))
+            if previous.get("first_reader_verification"):
+                payload["first_reader_verification"] = previous["first_reader_verification"]
+        elif "HTTP 404" not in existing.stderr:
+            fail("could not read prior cloud feedback")
+        encoded = base64.b64encode(
+            (json.dumps(payload, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+        ).decode("ascii")
         arguments = [
             "api",
             "--method",
@@ -197,8 +228,8 @@ def publish_feedback(issue_date: str, feedback: dict[str, Any]) -> dict[str, Any
             "-f",
             f"branch={branch}",
         ]
-        if existing.returncode == 0 and existing.stdout.strip():
-            arguments.extend(["-f", f"sha={existing.stdout.strip()}"])
+        if previous_sha:
+            arguments.extend(["-f", f"sha={previous_sha}"])
         updated = run_gh(arguments, check=False)
         if updated.returncode == 0:
             return {"branch": branch, "path": path, "published": True}
