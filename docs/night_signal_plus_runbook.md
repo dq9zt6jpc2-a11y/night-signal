@@ -218,6 +218,19 @@ Do not publish from a checkpoint. Submit only the full review through the
 existing exact validation and release path. Any later correction remains scoped
 to the rejected requests reported by that validation.
 
+For a complete initial review, save the draft to
+`cloud-preflight/ISSUE_DATE/editor_draft.json` on
+`night-signal-preflight-ISSUE_DATE`. Keep its commit SHA. The push starts the
+same quality checks without changing the public site. Read the exact result at
+`cloud-feedback/ISSUE_DATE/preflight/COMMIT_SHA.json` on
+`night-signal-feedback-ISSUE_DATE`. Use only the result for that SHA. If
+a result is not yet present, leave the draft intact for the next editorial
+run. If it fails on editorial content, correct only the rejected requests and
+save one revised draft. If results are missing, or the restore or infrastructure
+step failed, preserve the draft and avoid repeating model work. Submit the
+identical passing draft as the official review after confirming it is still
+the current Evidence version. The final public validation remains mandatory.
+
 Before saving a review or correction, check each accepted event against the
 exact source passages in both directions.
 
