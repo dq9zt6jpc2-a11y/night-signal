@@ -4,8 +4,8 @@
   "evidence_sha256": "d3f2489748bcf1c260ced89fb08e8f4f461cee853cefcff685c5d588d3b1a900",
   "cloud_handoff": {
     "execution_surface": "chatgpt-web-scheduled-task",
-    "reviewed_at": "2026-11-22T23:20:48+09:00",
-    "correction_attempt": 1
+    "reviewed_at": "2026-11-23T00:39:42+09:00",
+    "correction_attempt": 2
   },
   "responses": [
     {
@@ -217,12 +217,11 @@
                     ]
                   },
                   {
-                    "text": "住民団体GCCRDは、州司法長官の7月28日判断後もグライムズ郡が州情報公開法上の記録を開示していないとして、記録公開を求める訴えを起こした。",
+                    "text": "SpaceXは記録開示への異議で、施設へのテロ攻撃を可能にする情報や、税制優遇・開発承認を求める手法に関する営業秘密が明らかになると主張した。",
                     "evidence_ids": [
                       "e001"
                     ],
                     "source_fact_ids": [
-                      "e001:f13",
                       "e001:f15"
                     ]
                   }
@@ -249,26 +248,43 @@
                 "information_complete": true,
                 "summary_points": [
                   {
-                    "text": "第8回中国・ASEAN法務協力フォーラムは11月19日に重慶で開幕し、法務当局者、裁判官、専門家が司法協力と商事紛争の解決を議論した。",
+                    "text": "第8回中国・ASEAN法務協力フォーラムが重慶で開幕した。",
                     "evidence_ids": [
                       "e001"
                     ],
                     "source_fact_ids": [
-                      "e001:f01",
+                      "e001:f01"
+                    ]
+                  },
+                  {
+                    "text": "フォーラムには法務当局者、裁判官、専門家が参加した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
                       "e001:f02"
                     ]
                   },
                   {
-                    "text": "フォーラムでは常設事務局と、人工知能・法律を研究する連盟が発足した。",
+                    "text": "参加者は、企業による現地法への対応と商事紛争の解決を支える司法協力を議論した。",
                     "evidence_ids": [
                       "e001"
                     ],
                     "source_fact_ids": [
-                      "e001:f03"
+                      "e001:f02"
                     ]
                   },
                   {
-                    "text": "主催者によると、重慶とASEANの2026年1～9月の貿易額は1,164.1億元、前年同期比17％増だった。",
+                    "text": "主催者発表の2026年1～9月の重慶・ASEAN貿易額は1,164.1億元だった。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f05"
+                    ]
+                  },
+                  {
+                    "text": "同期間の貿易額は前年同期比17％増だった。",
                     "evidence_ids": [
                       "e001"
                     ],
