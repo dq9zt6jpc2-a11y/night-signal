@@ -1,0 +1,312 @@
+{
+  "issue_date": "2026-11-23",
+  "evidence_sha256": "2dc75649276a43fc962b7deaf82ca85c0a711ac29e4de0f12b66b7fe2fbd7b44",
+  "manifest_commit_sha": "c464bc7f0d37b6fb5ec99b7ab80ec94e19ae3a67",
+  "runbook_blob_sha": "38a93d73c3561311a36cea07522071745d56c5a4",
+  "part_path": "cloud-evidence/2026-11-23/requests/002.json",
+  "responses": [
+    {
+      "request_id": "openai-05-09c9e5e4827f0c3b",
+      "response": {
+        "events": [
+          {
+            "event_id": "g024",
+            "decision": "background_or_navigation",
+            "items": []
+          },
+          {
+            "event_id": "g023",
+            "decision": "duplicate_previous_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "honda-01-084c91d7d1cb2140",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Honda勢、アブダビ・デザート・チャレンジのプロローグで2、3位",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "トーシャ・シャレイナは首位から1秒差、アドリアン・ファン・ベフェレンは同僚から3秒差でプロローグを終えた。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f03",
+                      "e001:f04"
+                    ]
+                  },
+                  {
+                    "text": "シャレイナは総合2位、ファン・ベフェレンは総合3位で、両者ともHonda CRF450 RALLYを使用した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f16"
+                    ]
+                  },
+                  {
+                    "text": "2人はトップ10入りにより、第1ステージのスタート位置を選べる。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f05"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g003",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-01-3792d505ee088635",
+      "response": {
+        "events": [
+          {
+            "event_id": "g004",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "FIAとF1各陣営、2030年の2.1リッターV8ターボ枠組みに全会一致",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "FIA、Formula One Management、F1チーム、エンジンメーカーは、2030年から2.1リッターV8ターボを導入する枠組みに全会一致した。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f02"
+                    ]
+                  },
+                  {
+                    "text": "エンジンは持続可能燃料を使い、限定的なハイブリッド支援を残す一方、電動出力や最低車重、コスト上限は未確定だ。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f05",
+                      "e006:f08",
+                      "e006:f09"
+                    ]
+                  },
+                  {
+                    "text": "最終枠組みは12月10日に上海で開かれる世界モータースポーツ評議会へ提出される予定だ。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f01"
+                    ]
+                  },
+                  {
+                    "text": "Cadillacは2029年までFerrari製エンジンを使い、提案された規則に合わせて2030年に自社製パワーユニットを導入する計画だ。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f14"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "F1カタールGP、タイヤ1セットの使用を最大27周に制限",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "PirelliはカタールGPで、1セットのタイヤを連続使用できる上限を前年の25周から27周に設定した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e005:f02"
+                    ]
+                  },
+                  {
+                    "text": "制限はルサイルの中高速コーナーが前輪へ大きな負荷をかけることを踏まえた安全措置だ。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f03"
+                    ]
+                  },
+                  {
+                    "text": "57周の決勝では各車最低2回のピットストップが必要で、セーフティカー中の周回も27周に算入される。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f04"
+                    ]
+                  }
+                ],
+                "topic_value_class": "risk_or_safety_signal",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-02-610570c1bc385e8c",
+      "response": {
+        "events": [
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "FIA、ラスベガスGP練習走行の接触でフェルスタッペンに警告",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "スチュワードは両ドライバーとチームから聴取し、映像、テレメトリー、無線、車載映像を検討した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f05"
+                    ]
+                  },
+                  {
+                    "text": "スチュワードは、ブレーキング中の進路変更が求められる運転水準を下回ったとして、ドライバー警告を科した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f09",
+                      "e002:f10"
+                    ]
+                  },
+                  {
+                    "text": "別件ではコラピントが大きなエネルギーを使って追い越し、フェルスタッペンを驚かせたと認定された。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f11"
+                    ]
+                  },
+                  {
+                    "text": "コラピントとの件は追加措置なしとなった。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01",
+                      "e002:f13",
+                      "e002:f14"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g007",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-03-eb33eb857e874825",
+      "response": {
+        "events": [
+          {
+            "event_id": "g012",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g010",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g011",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g014",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g013",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    }
+  ]
+}
