@@ -1,0 +1,299 @@
+{
+  "issue_date": "2026-11-23",
+  "evidence_sha256": "2dc75649276a43fc962b7deaf82ca85c0a711ac29e4de0f12b66b7fe2fbd7b44",
+  "manifest_commit_sha": "c464bc7f0d37b6fb5ec99b7ab80ec94e19ae3a67",
+  "runbook_blob_sha": "38a93d73c3561311a36cea07522071745d56c5a4",
+  "part_path": "cloud-evidence/2026-11-23/requests/001.json",
+  "responses": [
+    {
+      "request_id": "openai-01-4a98043d7725d113",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、事前学習指標を公開し業界共通の安全上限を提案",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "11月22日、OpenAI最高科学責任者のヤクブ・パホツキ氏が事前学習の進展と安全性に関する文章を発表した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01"
+                    ]
+                  },
+                  {
+                    "text": "OpenAIはGPT-3.5から未公開の社内モデルまで、事前学習指標の推移を示した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f08"
+                    ]
+                  },
+                  {
+                    "text": "公開図では未公開の社内モデルが約0.73に達したとされた。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f11"
+                    ]
+                  },
+                  {
+                    "text": "パホツキ氏は、安全条件を満たすまでは共通上限を越えないと開発企業が約束する枠組みを提案した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f12",
+                      "e005:f13"
+                    ]
+                  },
+                  {
+                    "text": "パホツキ氏は、早ければ2027年にも事前学習の基礎研究が相次いで進展する可能性があると述べた。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f03"
+                    ]
+                  }
+                ],
+                "topic_value_class": "risk_or_safety_signal",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-02-d26e4d0882749f9c",
+      "response": {
+        "events": [
+          {
+            "event_id": "g006",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Oracle、OpenAI向けインフラ契約の必要資金を全額確保",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Oracleは11月20日、OpenAIとのインフラ契約を履行するために必要な資金をすべて調達済みだと発表した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f03"
+                    ]
+                  },
+                  {
+                    "text": "11月初旬の最終調達は約200億ドルで、株式と債券がそれぞれ約100億ドルだった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e005:f12"
+                    ]
+                  },
+                  {
+                    "text": "Oracleは2028会計年度後半のフリーキャッシュフロー黒字化を見込み、2029会計年度には300億ドル超を目標とした。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f10",
+                      "e005:f11"
+                    ]
+                  },
+                  {
+                    "text": "OracleとOpenAIは、アビリーン拠点に加えて米国内で4.5ギガワットのデータセンター容量を整備する計画だ。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f13"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-03-b1204004393d4078",
+      "response": {
+        "events": [
+          {
+            "event_id": "g011",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g014",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g012",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI音声API活用の産業通訳、約100社・1,500超の現場へ導入",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "HiLocalの産業安全通訳「hiWorker」は2026年に約100社と供給契約を結び、1,500超の産業現場へ導入された。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f01"
+                    ]
+                  },
+                  {
+                    "text": "hiWorkerは40カ国以上の労働者向けに多言語通訳を提供し、産業用語や方言、騒音環境にも対応すると説明された。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f02",
+                      "e003:f08"
+                    ]
+                  },
+                  {
+                    "text": "OpenAIは11月19日、音声エージェント向けリアルタイムモデル「GPT-Live-1.1」をAPIで公開した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f12"
+                    ]
+                  },
+                  {
+                    "text": "会話のない時間の料金は1分0.02ドルに引き下げられた。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f03",
+                      "e003:f13"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g010",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g013",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-04-f237bd5c98eb802a",
+      "response": {
+        "events": [
+          {
+            "event_id": "g022",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g021",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g015",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g020",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g016",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g018",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g019",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g017",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    }
+  ]
+}
