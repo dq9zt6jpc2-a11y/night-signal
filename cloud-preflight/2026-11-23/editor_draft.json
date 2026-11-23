@@ -4,7 +4,7 @@
   "evidence_sha256": "2dc75649276a43fc962b7deaf82ca85c0a711ac29e4de0f12b66b7fe2fbd7b44",
   "cloud_handoff": {
     "execution_surface": "chatgpt-web-scheduled-task",
-    "reviewed_at": "2026-11-23T21:22:33.488+09:00"
+    "reviewed_at": "2026-11-23T21:24:14.670+09:00"
   },
   "responses": [
     {
@@ -193,7 +193,7 @@
                 "information_complete": true,
                 "summary_points": [
                   {
-                    "text": "HiLocalの産業安全通訳「hiWorker」は2026年に約100社と供給契約を結び、1,500超の産業現場へ導入された。",
+                    "text": "HiLocalの産業安全通訳「hiWorker」は、今年約100社と供給契約を結び、1,500余りの産業現場に投入された。",
                     "evidence_ids": [
                       "e003"
                     ],
@@ -202,17 +202,16 @@
                     ]
                   },
                   {
-                    "text": "hiWorkerは40カ国以上の労働者向けに多言語通訳を提供し、産業用語や方言、騒音環境にも対応すると説明された。",
+                    "text": "OpenAIは19日、GPT-Live-1.1をAPIで公開し、アイドル時間の料金を1分0.02ドルに引き下げた。",
                     "evidence_ids": [
                       "e003"
                     ],
                     "source_fact_ids": [
-                      "e003:f02",
-                      "e003:f08"
+                      "e003:f03"
                     ]
                   },
                   {
-                    "text": "OpenAIは11月19日、音声エージェント向けリアルタイムモデル「GPT-Live-1.1」をAPIで公開した。",
+                    "text": "OpenAIは19日、音声エージェント開発用のリアルタイムモデル「GPT-Live-1.1」をAPIで公開した。",
                     "evidence_ids": [
                       "e003"
                     ],
@@ -221,13 +220,12 @@
                     ]
                   },
                   {
-                    "text": "会話のない時間の料金は1分0.02ドルに引き下げられた。",
+                    "text": "40カ国出身の労働者はQRコードで接続し、母国語で説明を受けたり質問したりできる。",
                     "evidence_ids": [
                       "e003"
                     ],
                     "source_fact_ids": [
-                      "e003:f03",
-                      "e003:f13"
+                      "e003:f02"
                     ]
                   }
                 ],
@@ -398,17 +396,6 @@
                     ],
                     "source_fact_ids": [
                       "e006:f02"
-                    ]
-                  },
-                  {
-                    "text": "エンジンは持続可能燃料を使い、限定的なハイブリッド支援を残す一方、電動出力や最低車重、コスト上限は未確定だ。",
-                    "evidence_ids": [
-                      "e006"
-                    ],
-                    "source_fact_ids": [
-                      "e006:f05",
-                      "e006:f08",
-                      "e006:f09"
                     ]
                   },
                   {
@@ -719,7 +706,7 @@
                     ]
                   }
                 ],
-                "topic_value_class": "regulation_or_policy",
+                "topic_value_class": "decision_or_policy",
                 "priority_class": "priority",
                 "change_class": "new_event"
               }
@@ -761,7 +748,7 @@
                     ]
                   }
                 ],
-                "topic_value_class": "schedule_or_plan",
+                "topic_value_class": "technical_or_product_shift",
                 "priority_class": "priority",
                 "change_class": "new_event"
               }
@@ -820,7 +807,7 @@
                     ]
                   }
                 ],
-                "topic_value_class": "regulation_or_policy",
+                "topic_value_class": "decision_or_policy",
                 "priority_class": "priority",
                 "change_class": "new_event"
               }
@@ -878,11 +865,11 @@
             "decision": "publish",
             "items": [
               {
-                "title": "ドル円が一時159.06円、ユーロ円は174.97円まで上昇",
+                "title": "ドル円はアジア市場で一時159.06付近まで上昇",
                 "information_complete": true,
                 "summary_points": [
                   {
-                    "text": "ドル円はアジア市場で一時159.06円付近まで上昇し、ロンドン市場では159円を挟んで推移した。",
+                    "text": "ドル円はアジア市場で一時159.06付近まで上昇したあと、ロンドンで159円を挟んでもみ合っている。",
                     "evidence_ids": [
                       "e004"
                     ],
@@ -891,7 +878,7 @@
                     ]
                   },
                   {
-                    "text": "ユーロ円はロンドン市場で一段高となり、一時174.97円付近まで上昇した。",
+                    "text": "ユーロ円はアジア市場で堅調に推移したあと、ロンドンで一段高となり、一時174.97付近まで上昇した。",
                     "evidence_ids": [
                       "e004"
                     ],
@@ -900,7 +887,7 @@
                     ]
                   },
                   {
-                    "text": "記事執筆時の表示値はドル円158.94円、ユーロ円174.86円だった。",
+                    "text": "USD/JPYは158.94、EUR/JPYは174.86だった。",
                     "evidence_ids": [
                       "e004"
                     ],
@@ -909,7 +896,7 @@
                     ]
                   }
                 ],
-                "topic_value_class": "market_move",
+                "topic_value_class": "market_or_financial_impact",
                 "priority_class": "priority",
                 "change_class": "new_event"
               }
@@ -966,7 +953,7 @@
             "decision": "publish",
             "items": [
               {
-                "title": "米株の高値更新に対し、評価額と証拠金融の過熱懸念",
+                "title": "米主要3指数が2026年に複数回最高値、株価評価への懸念も上昇",
                 "information_complete": true,
                 "summary_points": [
                   {
@@ -997,7 +984,7 @@
                     ]
                   }
                 ],
-                "topic_value_class": "source_backed_analysis",
+                "topic_value_class": "market_or_financial_impact",
                 "priority_class": "priority",
                 "change_class": "new_event"
               }
@@ -1010,12 +997,12 @@
           },
           {
             "event_id": "g003",
-            "decision": "insufficient_evidence",
+            "decision": "no_material_update",
             "items": []
           },
           {
             "event_id": "g004",
-            "decision": "insufficient_evidence",
+            "decision": "no_material_update",
             "items": []
           },
           {
@@ -1054,7 +1041,7 @@
                     ]
                   }
                 ],
-                "topic_value_class": "regulation_or_policy",
+                "topic_value_class": "decision_or_policy",
                 "priority_class": "priority",
                 "change_class": "new_event"
               }
