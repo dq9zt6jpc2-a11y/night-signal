@@ -7,6 +7,10 @@ on:
         description: JST issue date with a retained final Evidence artifact
         required: true
         type: string
+      sample:
+        description: Test only one real event to diagnose inference latency
+        type: boolean
+        default: false
 
 permissions:
   actions: read
@@ -35,13 +39,16 @@ jobs:
         if: vars.NIGHT_SIGNAL_WORKERS_AI_FREE_VERIFIED == 'true'
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          SAMPLE_ONLY: ${{ inputs.sample }}
           NIGHT_SIGNAL_WORKERS_AI_TOKEN: ${{ secrets.NIGHT_SIGNAL_WORKERS_AI_TOKEN }}
           ISSUE_DATE: ${{ inputs.issue_date }}
         run: |
+          args=()
+          if [[ "$SAMPLE_ONLY" == "true" ]]; then args+=(--sample); fi
           python3 scripts/night_signal_independent_editor.py \
             "state/$ISSUE_DATE/editor_packet.json" \
             "state/$ISSUE_DATE/evidence.json" \
-            "$RUNNER_TEMP/independent-editor"
+            "$RUNNER_TEMP/independent-editor" "${args[@]}"
       - name: Require a verified free account
         if: vars.NIGHT_SIGNAL_WORKERS_AI_FREE_VERIFIED != 'true'
         run: |
