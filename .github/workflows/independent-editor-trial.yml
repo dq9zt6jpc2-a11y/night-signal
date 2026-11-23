@@ -1,0 +1,56 @@
+name: NIGHT SIGNAL Independent Editor Trial
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue_date:
+        description: JST issue date with a retained final Evidence artifact
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: night-signal-independent-editor-trial
+  cancel-in-progress: false
+
+jobs:
+  trial:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Restore final Evidence without starting collection
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_DATE: ${{ inputs.issue_date }}
+        run: |
+          [[ "$ISSUE_DATE" =~ ^20[0-9]{2}-[0-9]{2}-[0-9]{2}$ ]]
+          python3 scripts/night_signal_review_artifact.py "$ISSUE_DATE" --restore-only
+      - name: Generate and validate the independent review
+        if: vars.NIGHT_SIGNAL_WORKERS_AI_FREE_VERIFIED == 'true'
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          NIGHT_SIGNAL_WORKERS_AI_TOKEN: ${{ secrets.NIGHT_SIGNAL_WORKERS_AI_TOKEN }}
+          ISSUE_DATE: ${{ inputs.issue_date }}
+        run: |
+          python3 scripts/night_signal_independent_editor.py \
+            "state/$ISSUE_DATE/editor_packet.json" \
+            "state/$ISSUE_DATE/evidence.json" \
+            "$RUNNER_TEMP/independent-editor"
+      - name: Require a verified free account
+        if: vars.NIGHT_SIGNAL_WORKERS_AI_FREE_VERIFIED != 'true'
+        run: |
+          echo "Workers AI Free plan has not been verified for this repository." >&2
+          exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: independent-editor-trial
+          path: ${{ runner.temp }}/independent-editor
+          if-no-files-found: ignore
+          retention-days: 3
