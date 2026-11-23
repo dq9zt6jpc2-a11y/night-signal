@@ -1,0 +1,22 @@
+{
+  "contract": "night-signal-cloud-feedback-v1",
+  "issue_date": "2026-11-23",
+  "recorded_at": "2026-11-23T12:26:43.574808+00:00",
+  "workflow_run_id": "45174182802",
+  "workflow_run_url": "https://github.com/dq9zt6jpc2-a11y/night-signal/actions/runs/45174182802",
+  "recovery_attempt": 0,
+  "status": "success",
+  "failed_stage": null,
+  "first_reader_verification": null,
+  "step_outcomes": {
+    "restore": "success",
+    "apply": "success",
+    "gates": "success"
+  },
+  "validator_log_tail": "",
+  "rejected_requests": [],
+  "summary_diagnostics": [],
+  "recall_risk_categories": [],
+  "recovery_contract": "reuse the same Evidence; change only named rejected request/event entries",
+  "preflight_sha": "1963c26e74159c7698fc3a1a6da3ef5db4d7d5a5"
+}
