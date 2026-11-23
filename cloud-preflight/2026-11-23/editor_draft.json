@@ -4,7 +4,7 @@
   "evidence_sha256": "2dc75649276a43fc962b7deaf82ca85c0a711ac29e4de0f12b66b7fe2fbd7b44",
   "cloud_handoff": {
     "execution_surface": "chatgpt-web-scheduled-task",
-    "reviewed_at": "2026-11-23T21:24:14.670+09:00"
+    "reviewed_at": "2026-11-23T21:25:33.240+09:00"
   },
   "responses": [
     {
@@ -953,7 +953,7 @@
             "decision": "publish",
             "items": [
               {
-                "title": "米主要3指数が2026年に複数回最高値、株価評価への懸念も上昇",
+                "title": "Nasdaq総合、S&P 500、Dow平均が2026年に複数回最高値",
                 "information_complete": true,
                 "summary_points": [
                   {
