@@ -1,0 +1,1054 @@
+{
+  "contract": "codex-plus-editor-v2",
+  "issue_date": "2026-11-23",
+  "evidence_sha256": "2dc75649276a43fc962b7deaf82ca85c0a711ac29e4de0f12b66b7fe2fbd7b44",
+  "cloud_handoff": {
+    "execution_surface": "chatgpt-web-scheduled-task",
+    "reviewed_at": "2026-11-23T21:25:33.240+09:00"
+  },
+  "responses": [
+    {
+      "request_id": "openai-01-4a98043d7725d113",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、事前学習指標を公開し業界共通の安全上限を提案",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "11月22日、OpenAI最高科学責任者のヤクブ・パホツキ氏が事前学習の進展と安全性に関する文章を発表した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01"
+                    ]
+                  },
+                  {
+                    "text": "OpenAIはGPT-3.5から未公開の社内モデルまで、事前学習指標の推移を示した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f08"
+                    ]
+                  },
+                  {
+                    "text": "公開図では未公開の社内モデルが約0.73に達したとされた。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f11"
+                    ]
+                  },
+                  {
+                    "text": "パホツキ氏は、安全条件を満たすまでは共通上限を越えないと開発企業が約束する枠組みを提案した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f12",
+                      "e005:f13"
+                    ]
+                  },
+                  {
+                    "text": "パホツキ氏は、早ければ2027年にも事前学習の基礎研究が相次いで進展する可能性があると述べた。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f03"
+                    ]
+                  }
+                ],
+                "topic_value_class": "risk_or_safety_signal",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-02-d26e4d0882749f9c",
+      "response": {
+        "events": [
+          {
+            "event_id": "g006",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Oracle、OpenAI向けインフラ契約の必要資金を全額確保",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Oracleは11月20日、OpenAIとのインフラ契約を履行するために必要な資金をすべて調達済みだと発表した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f03"
+                    ]
+                  },
+                  {
+                    "text": "11月初旬の最終調達は約200億ドルで、株式と債券がそれぞれ約100億ドルだった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e005:f12"
+                    ]
+                  },
+                  {
+                    "text": "Oracleは2028会計年度後半のフリーキャッシュフロー黒字化を見込み、2029会計年度には300億ドル超を目標とした。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f10",
+                      "e005:f11"
+                    ]
+                  },
+                  {
+                    "text": "OracleとOpenAIは、アビリーン拠点に加えて米国内で4.5ギガワットのデータセンター容量を整備する計画だ。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f13"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-03-b1204004393d4078",
+      "response": {
+        "events": [
+          {
+            "event_id": "g011",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g014",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g012",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI音声API活用の産業通訳、約100社・1,500超の現場へ導入",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "HiLocalの産業安全通訳「hiWorker」は、今年約100社と供給契約を結び、1,500余りの産業現場に投入された。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f01"
+                    ]
+                  },
+                  {
+                    "text": "OpenAIは19日、GPT-Live-1.1をAPIで公開し、アイドル時間の料金を1分0.02ドルに引き下げた。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f03"
+                    ]
+                  },
+                  {
+                    "text": "OpenAIは19日、音声エージェント開発用のリアルタイムモデル「GPT-Live-1.1」をAPIで公開した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f12"
+                    ]
+                  },
+                  {
+                    "text": "40カ国出身の労働者はQRコードで接続し、母国語で説明を受けたり質問したりできる。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f02"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g010",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g013",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-04-f237bd5c98eb802a",
+      "response": {
+        "events": [
+          {
+            "event_id": "g022",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g021",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g015",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g020",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g016",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g018",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g019",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g017",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-05-09c9e5e4827f0c3b",
+      "response": {
+        "events": [
+          {
+            "event_id": "g024",
+            "decision": "background_or_navigation",
+            "items": []
+          },
+          {
+            "event_id": "g023",
+            "decision": "duplicate_previous_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "honda-01-084c91d7d1cb2140",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Honda勢、アブダビ・デザート・チャレンジのプロローグで2、3位",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "トーシャ・シャレイナは首位から1秒差、アドリアン・ファン・ベフェレンは同僚から3秒差でプロローグを終えた。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f03",
+                      "e001:f04"
+                    ]
+                  },
+                  {
+                    "text": "シャレイナは総合2位、ファン・ベフェレンは総合3位で、両者ともHonda CRF450 RALLYを使用した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f16"
+                    ]
+                  },
+                  {
+                    "text": "2人はトップ10入りにより、第1ステージのスタート位置を選べる。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f05"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g003",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-01-3792d505ee088635",
+      "response": {
+        "events": [
+          {
+            "event_id": "g004",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "FIAとF1各陣営、2030年の2.1リッターV8ターボ枠組みに全会一致",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "FIA、Formula One Management、F1チーム、エンジンメーカーは、2030年から2.1リッターV8ターボを導入する枠組みに全会一致した。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f02"
+                    ]
+                  },
+                  {
+                    "text": "最終枠組みは12月10日に上海で開かれる世界モータースポーツ評議会へ提出される予定だ。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f01"
+                    ]
+                  },
+                  {
+                    "text": "Cadillacは2029年までFerrari製エンジンを使い、提案された規則に合わせて2030年に自社製パワーユニットを導入する計画だ。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f14"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "F1カタールGP、タイヤ1セットの使用を最大27周に制限",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "PirelliはカタールGPで、1セットのタイヤを連続使用できる上限を前年の25周から27周に設定した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e005:f02"
+                    ]
+                  },
+                  {
+                    "text": "制限はルサイルの中高速コーナーが前輪へ大きな負荷をかけることを踏まえた安全措置だ。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f03"
+                    ]
+                  },
+                  {
+                    "text": "57周の決勝では各車最低2回のピットストップが必要で、セーフティカー中の周回も27周に算入される。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f04"
+                    ]
+                  }
+                ],
+                "topic_value_class": "risk_or_safety_signal",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-02-610570c1bc385e8c",
+      "response": {
+        "events": [
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "FIA、ラスベガスGP練習走行の接触でフェルスタッペンに警告",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "スチュワードは両ドライバーとチームから聴取し、映像、テレメトリー、無線、車載映像を検討した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f05"
+                    ]
+                  },
+                  {
+                    "text": "スチュワードは、ブレーキング中の進路変更が求められる運転水準を下回ったとして、ドライバー警告を科した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f09",
+                      "e002:f10"
+                    ]
+                  },
+                  {
+                    "text": "別件ではコラピントが大きなエネルギーを使って追い越し、フェルスタッペンを驚かせたと認定された。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f11"
+                    ]
+                  },
+                  {
+                    "text": "コラピントとの件は追加措置なしとなった。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01",
+                      "e002:f13",
+                      "e002:f14"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g007",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-03-eb33eb857e874825",
+      "response": {
+        "events": [
+          {
+            "event_id": "g012",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g010",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g011",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g014",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g013",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "spacex-01-c642751c1eae3f78",
+      "response": {
+        "events": [
+          {
+            "event_id": "g005",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "SpaceX、同一発射台の打ち上げ間隔を32時間に短縮",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "SpaceXは2026年11月22日、米カリフォルニア州ヴァンデンバーグ宇宙軍基地からFalcon 9を打ち上げた。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01"
+                    ]
+                  },
+                  {
+                    "text": "NROL-136は同じ第4E発射施設からの前回打ち上げの32時間後に出発し、機密衛星を低軌道へ運んだ。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f02"
+                    ]
+                  },
+                  {
+                    "text": "Elon Musk氏は11月18日、発射塔で初めて捕捉したStarship上段Ship 42を歴史的機体として保存し、再飛行させない考えを示した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f12"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "spacex-02-760e81786b08d01a",
+      "response": {
+        "events": [
+          {
+            "event_id": "g011",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "コロンビア、刑務所の通信遮断義務を巡りStarlinkを調査",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "コロンビア情報通信技術省は、刑務所を覆う通信信号の減衰義務に違反した疑いでStarlink S.A.S.への行政調査を開始し、告発した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f02"
+                    ]
+                  },
+                  {
+                    "text": "同省はLa Picota刑務所で信号を除去または制限する義務に違反した疑いで、複数の通信事業者にも行政調査と告発を行った。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f07"
+                    ]
+                  },
+                  {
+                    "text": "違反が確認された場合、月額法定最低賃金の最大1万5,000倍の罰金、事業の一時停止、免許などの取消しがあり得る。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f09"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g009",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "ボツワナ、Starlinkの衛星直結携帯サービスを2027年初頭に全国展開へ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "コンゴ民主共和国では2026年8月、Airtelが試験などを経てアフリカ初の商用衛星直結携帯サービスを開始した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f04"
+                    ]
+                  },
+                  {
+                    "text": "ボツワナはStarlinkの衛星直結携帯サービスを導入するアフリカ2番目の国と、全国展開する最初の国を目指している。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f05"
+                    ]
+                  },
+                  {
+                    "text": "AXIAN Telecomは2026年3月初め、AST SpaceMobileと標準的な携帯電話へ4G・5Gの音声とデータを直接届ける提携を結んだ。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g010",
+            "decision": "background_or_navigation",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "japan_economy-01-ce3c7c264d2361ad",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "食料品の消費税1%案、2年後の税率復帰リスクを政権有識者が指摘",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "永濱利廣氏と片岡剛士氏は、食料品の消費税率を8%から1%へ下げる案について、価格低下を消費者が実感しやすい物価対策だと説明した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f07"
+                    ]
+                  },
+                  {
+                    "text": "永濱氏の試算では、2029年度に税率を戻すと実質GDP成長率を約0.3%押し下げる。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f13"
+                    ]
+                  },
+                  {
+                    "text": "両氏は、年5兆円規模の減税に見合う給付付き税額控除がなければ、1%から8%への復帰が景気へ悪影響を与えると指摘した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f16"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "訪日消費、2026年7～9月期に2兆2,076億円で同期間の最高更新",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "2026年4～6月期は訪日客数が前年同期比5.3%減る一方、消費額は0.3%増えて第2四半期として過去最高だった。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f03"
+                    ]
+                  },
+                  {
+                    "text": "7～9月期は訪日客数が964万人で前年同期比4.8%減り、消費額は2兆2,076億円で3.2%増えて同期間の過去最高を更新した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f06"
+                    ]
+                  },
+                  {
+                    "text": "1人当たり旅行支出は23.4万円で前年同期比6.1%増え、客数減を補った。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f07"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "ドル円はアジア市場で一時159.06付近まで上昇",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "ドル円はアジア市場で一時159.06付近まで上昇したあと、ロンドンで159円を挟んでもみ合っている。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f02"
+                    ]
+                  },
+                  {
+                    "text": "ユーロ円はアジア市場で堅調に推移したあと、ロンドンで一段高となり、一時174.97付近まで上昇した。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f03"
+                    ]
+                  },
+                  {
+                    "text": "USD/JPYは158.94、EUR/JPYは174.86だった。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f04"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g004",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "yoasobi_ikuta-01-5ec2f541f15c2348",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "asia-01-00e15846aaac7378",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "duplicate_previous_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "north_america-01-0dfd7d0f2d308ba6",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "background_or_navigation",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Nasdaq総合、S&P 500、Dow平均が2026年に複数回最高値",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Nasdaq総合、S&P 500、Dow平均は2026年に複数回最高値を更新し、AIインフラ投資、企業収益、大型IPOへの関心が支えた。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f03"
+                    ]
+                  },
+                  {
+                    "text": "記事は第1次Trump政権期の上昇率をDow平均57%、S&P 500 70%、Nasdaq総合142%としている。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f07"
+                    ]
+                  },
+                  {
+                    "text": "ドットコムバブル崩壊後、S&P 500は最終的に49%、Nasdaq総合は約78%下落した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f14"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g007",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "FRB、追加利上げを巡り内部の見解が分かれる",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "FRBは2026年9月のFOMCで約3年ぶりの利上げを決めた。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f02"
+                    ]
+                  },
+                  {
+                    "text": "Kevin Warsh氏は2006年、35歳でFRB理事に就任した。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f04"
+                    ]
+                  },
+                  {
+                    "text": "Christopher Waller理事は、より積極的な対応が必要だとして12月FOMCで0.5%の利上げを主張した。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f12"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
