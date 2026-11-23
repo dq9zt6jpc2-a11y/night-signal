@@ -227,9 +227,10 @@ same quality checks without changing the public site. Read the exact result at
 a result is not yet present, leave the draft intact for the next editorial
 run. If it fails on editorial content, correct only the rejected requests and
 save one revised draft. If results are missing, or the restore or infrastructure
-step failed, preserve the draft and avoid repeating model work. The workflow hands off the identical passing draft before the deadline if it
+step failed, preserve the draft and avoid repeating model work. The workflow hands off the identical passing draft for the current JST date if it
 is still current and an official review is absent. Check its handoff record and
-leave the official review intact. The final public validation remains mandatory.
+leave the official review intact. A post-deadline handoff remains a late issue.
+The final public validation remains mandatory.
 
 Before saving a review or correction, check each accepted event against the
 exact source passages in both directions.

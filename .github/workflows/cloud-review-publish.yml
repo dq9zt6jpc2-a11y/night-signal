@@ -210,8 +210,7 @@ jobs:
             exit 0
           fi
           if [[ "$(python3 scripts/publication_timing.py --issue-deadline "$ISSUE_DATE")" == "missed" ]]; then
-            echo "Draft validated after the release deadline; no automatic publication dispatched."
-            exit 0
+            echo "Draft validated after the release deadline; publication will be recorded as late."
           fi
           existing_ref="$(gh api "$endpoint/git/matching-refs/heads/$REVIEW_REF" | jq --arg ref "refs/heads/$REVIEW_REF" '[.[] | select(.ref == $ref)] | length')"
           if [[ "$existing_ref" == "0" ]]; then
