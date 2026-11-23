@@ -17,7 +17,7 @@ import night_signal_plus_editor as editor
 MODEL = "@cf/zai-org/glm-4.7-flash"
 MAX_INPUT_BYTES = 1_300_000
 MAX_REQUESTS = 36
-MAX_OUTPUT_TOKENS = 2048
+MAX_OUTPUT_TOKENS = 4096
 MAX_EVENTS = 75
 ROOT = Path(__file__).resolve().parents[1]
 RULES = ROOT / "docs/night_signal_plus_runbook.md"
@@ -44,6 +44,10 @@ Return one JSON object with exactly this outer structure:
 For publish, supply one or more items with title, information_complete,
 summary_points (text, evidence_ids, source_fact_ids), topic_value_class,
 priority_class, and change_class. For exclusions, return no items.
+Before choosing publish, compare the concrete decision, actor, scope and timing
+against every previous_updates entry. If it is the same change with no new material
+fact, return decision duplicate_previous_event with an empty items array. A
+guide published after the original announcement does not establish a new change.
 Use a decision permitted by the packet. Do not add a review or response envelope.
 """
     tasks = [
@@ -87,8 +91,12 @@ Use a decision permitted by the packet. Do not add a review or response envelope
         return entry
 
     if sample:
-        entry = review_one(tasks[0])
-        return {"sample_event": entry["response"]["events"][0]["event_id"], "full_issue_validated": False}
+        with ThreadPoolExecutor(max_workers=3) as pool:
+            entries = list(pool.map(review_one, tasks[:3]))
+        return {
+            "sample_events": [entry["response"]["events"][0]["event_id"] for entry in entries],
+            "full_issue_validated": False,
+        }
 
     by_request = {req["request_id"]: [] for req in requests}
     with ThreadPoolExecutor(max_workers=3) as pool:

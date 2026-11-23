@@ -8,7 +8,7 @@ on:
         required: true
         type: string
       sample:
-        description: Test only one real event to diagnose inference latency
+        description: Test a small group of real events to diagnose inference and output limits
         type: boolean
         default: false
 
