@@ -1,0 +1,813 @@
+{
+  "issue_date": "2026-11-23",
+  "cards": [
+    {
+      "watch_topic_id": "math_research",
+      "title": "OpenAI、事前学習指標を公開し業界共通の安全上限を提案",
+      "summary": "11月22日、OpenAI最高科学責任者のヤクブ・パホツキ氏が事前学習の進展と安全性に関する文章を発表した。 OpenAIはGPT-3.5から未公開の社内モデルまで、事前学習指標の推移を示した。 公開図では未公開の社内モデルが約0.73に達したとされた。 パホツキ氏は、安全条件を満たすまでは共通上限を越えないと開発企業が約束する枠組みを提案した。 パホツキ氏は、早ければ2027年にも事前学習の基礎研究が相次いで進展する可能性があると述べた。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-23",
+      "topic_value_class": "risk_or_safety_signal",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-9a9efa10f350-2026-11-23.html",
+        "sources": [
+          {
+            "label": "note.com",
+            "url": "https://note.com/trans_n_ai/n/n2b8835ad3e9c"
+          }
+        ],
+        "summary": "11月22日、OpenAI最高科学責任者のヤクブ・パホツキ氏が事前学習の進展と安全性に関する文章を発表した。 OpenAIはGPT-3.5から未公開の社内モデルまで、事前学習指標の推移を示した。 公開図では未公開の社内モデルが約0.73に達したとされた。 パホツキ氏は、安全条件を満たすまでは共通上限を越えないと開発企業が約束する枠組みを提案した。 パホツキ氏は、早ければ2027年にも事前学習の基礎研究が相次いで進展する可能性があると述べた。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "11月22日、OpenAI最高科学責任者のヤクブ・パホツキ氏が事前学習の進展と安全性に関する文章を発表した。",
+            "OpenAIはGPT-3.5から未公開の社内モデルまで、事前学習指標の推移を示した。",
+            "公開図では未公開の社内モデルが約0.73に達したとされた。",
+            "パホツキ氏は、安全条件を満たすまでは共通上限を越えないと開発企業が約束する枠組みを提案した。",
+            "パホツキ氏は、早ければ2027年にも事前学習の基礎研究が相次いで進展する可能性があると述べた。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "11月22日、OpenAI最高科学責任者のヤクブ・パホツキ氏が事前学習の進展と安全性に関する文章を発表した。",
+              "source_urls": [
+                "https://note.com/trans_n_ai/n/n2b8835ad3e9c"
+              ]
+            },
+            {
+              "fact": "OpenAIはGPT-3.5から未公開の社内モデルまで、事前学習指標の推移を示した。",
+              "source_urls": [
+                "https://note.com/trans_n_ai/n/n2b8835ad3e9c"
+              ]
+            },
+            {
+              "fact": "公開図では未公開の社内モデルが約0.73に達したとされた。",
+              "source_urls": [
+                "https://note.com/trans_n_ai/n/n2b8835ad3e9c"
+              ]
+            },
+            {
+              "fact": "パホツキ氏は、安全条件を満たすまでは共通上限を越えないと開発企業が約束する枠組みを提案した。",
+              "source_urls": [
+                "https://note.com/trans_n_ai/n/n2b8835ad3e9c"
+              ]
+            },
+            {
+              "fact": "パホツキ氏は、早ければ2027年にも事前学習の基礎研究が相次いで進展する可能性があると述べた。",
+              "source_urls": [
+                "https://note.com/trans_n_ai/n/n2b8835ad3e9c"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-23"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "ipo_financing",
+      "title": "Oracle、OpenAI向けインフラ契約の必要資金を全額確保",
+      "summary": "Oracleは11月20日、OpenAIとのインフラ契約を履行するために必要な資金をすべて調達済みだと発表した。 11月初旬の最終調達は約200億ドルで、株式と債券がそれぞれ約100億ドルだった。 Oracleは2028会計年度後半のフリーキャッシュフロー黒字化を見込み、2029会計年度には300億ドル超を目標とした。 OracleとOpenAIは、アビリーン拠点に加えて米国内で4.5ギガワットのデータセンター容量を整備する計画だ。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-d52d1bbb98b5-2026-11-23.html",
+        "sources": [
+          {
+            "label": "news.yahoo.co.jp",
+            "url": "https://news.yahoo.co.jp/articles/866ed841e36ad71919e730332544cbd0763b94e6"
+          }
+        ],
+        "summary": "Oracleは11月20日、OpenAIとのインフラ契約を履行するために必要な資金をすべて調達済みだと発表した。 11月初旬の最終調達は約200億ドルで、株式と債券がそれぞれ約100億ドルだった。 Oracleは2028会計年度後半のフリーキャッシュフロー黒字化を見込み、2029会計年度には300億ドル超を目標とした。 OracleとOpenAIは、アビリーン拠点に加えて米国内で4.5ギガワットのデータセンター容量を整備する計画だ。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Oracleは11月20日、OpenAIとのインフラ契約を履行するために必要な資金をすべて調達済みだと発表した。",
+            "11月初旬の最終調達は約200億ドルで、株式と債券がそれぞれ約100億ドルだった。",
+            "Oracleは2028会計年度後半のフリーキャッシュフロー黒字化を見込み、2029会計年度には300億ドル超を目標とした。",
+            "OracleとOpenAIは、アビリーン拠点に加えて米国内で4.5ギガワットのデータセンター容量を整備する計画だ。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Oracleは11月20日、OpenAIとのインフラ契約を履行するために必要な資金をすべて調達済みだと発表した。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/866ed841e36ad71919e730332544cbd0763b94e6"
+              ]
+            },
+            {
+              "fact": "11月初旬の最終調達は約200億ドルで、株式と債券がそれぞれ約100億ドルだった。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/866ed841e36ad71919e730332544cbd0763b94e6"
+              ]
+            },
+            {
+              "fact": "Oracleは2028会計年度後半のフリーキャッシュフロー黒字化を見込み、2029会計年度には300億ドル超を目標とした。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/866ed841e36ad71919e730332544cbd0763b94e6"
+              ]
+            },
+            {
+              "fact": "OracleとOpenAIは、アビリーン拠点に加えて米国内で4.5ギガワットのデータセンター容量を整備する計画だ。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/866ed841e36ad71919e730332544cbd0763b94e6"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "product_release",
+      "title": "OpenAI音声API活用の産業通訳、約100社・1,500超の現場へ導入",
+      "summary": "HiLocalの産業安全通訳「hiWorker」は、今年約100社と供給契約を結び、1,500余りの産業現場に投入された。 OpenAIは19日、GPT-Live-1.1をAPIで公開し、アイドル時間の料金を1分0.02ドルに引き下げた。 OpenAIは19日、音声エージェント開発用のリアルタイムモデル「GPT-Live-1.1」をAPIで公開した。 40カ国出身の労働者はQRコードで接続し、母国語で説明を受けたり質問したりできる。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-23",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-cb4af2c1d56c-2026-11-23.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/b87f0c0e-2987-4562-be4c-aa0c4c7cf0ba"
+          }
+        ],
+        "summary": "HiLocalの産業安全通訳「hiWorker」は、今年約100社と供給契約を結び、1,500余りの産業現場に投入された。 OpenAIは19日、GPT-Live-1.1をAPIで公開し、アイドル時間の料金を1分0.02ドルに引き下げた。 OpenAIは19日、音声エージェント開発用のリアルタイムモデル「GPT-Live-1.1」をAPIで公開した。 40カ国出身の労働者はQRコードで接続し、母国語で説明を受けたり質問したりできる。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "HiLocalの産業安全通訳「hiWorker」は、今年約100社と供給契約を結び、1,500余りの産業現場に投入された。",
+            "OpenAIは19日、GPT-Live-1.1をAPIで公開し、アイドル時間の料金を1分0.02ドルに引き下げた。",
+            "OpenAIは19日、音声エージェント開発用のリアルタイムモデル「GPT-Live-1.1」をAPIで公開した。",
+            "40カ国出身の労働者はQRコードで接続し、母国語で説明を受けたり質問したりできる。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "HiLocalの産業安全通訳「hiWorker」は、今年約100社と供給契約を結び、1,500余りの産業現場に投入された。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/b87f0c0e-2987-4562-be4c-aa0c4c7cf0ba"
+              ]
+            },
+            {
+              "fact": "OpenAIは19日、GPT-Live-1.1をAPIで公開し、アイドル時間の料金を1分0.02ドルに引き下げた。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/b87f0c0e-2987-4562-be4c-aa0c4c7cf0ba"
+              ]
+            },
+            {
+              "fact": "OpenAIは19日、音声エージェント開発用のリアルタイムモデル「GPT-Live-1.1」をAPIで公開した。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/b87f0c0e-2987-4562-be4c-aa0c4c7cf0ba"
+              ]
+            },
+            {
+              "fact": "40カ国出身の労働者はQRコードで接続し、母国語で説明を受けたり質問したりできる。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/b87f0c0e-2987-4562-be4c-aa0c4c7cf0ba"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-23"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "market_price_reaction",
+      "title": "Honda勢、アブダビ・デザート・チャレンジのプロローグで2、3位",
+      "summary": "トーシャ・シャレイナは首位から1秒差、アドリアン・ファン・ベフェレンは同僚から3秒差でプロローグを終えた。 シャレイナは総合2位、ファン・ベフェレンは総合3位で、両者ともHonda CRF450 RALLYを使用した。 2人はトップ10入りにより、第1ステージのスタート位置を選べる。",
+      "section_id": "honda",
+      "category": "Honda",
+      "source_published_date": "2026-11-22",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-5be2f272d2ea-2026-11-23.html",
+        "sources": [
+          {
+            "label": "honda.racing",
+            "url": "https://honda.racing/rally/post/honda-riders-launch-abu-dhabi-desert-challenge-with-strong-prologue"
+          }
+        ],
+        "summary": "トーシャ・シャレイナは首位から1秒差、アドリアン・ファン・ベフェレンは同僚から3秒差でプロローグを終えた。 シャレイナは総合2位、ファン・ベフェレンは総合3位で、両者ともHonda CRF450 RALLYを使用した。 2人はトップ10入りにより、第1ステージのスタート位置を選べる。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "トーシャ・シャレイナは首位から1秒差、アドリアン・ファン・ベフェレンは同僚から3秒差でプロローグを終えた。",
+            "シャレイナは総合2位、ファン・ベフェレンは総合3位で、両者ともHonda CRF450 RALLYを使用した。",
+            "2人はトップ10入りにより、第1ステージのスタート位置を選べる。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "トーシャ・シャレイナは首位から1秒差、アドリアン・ファン・ベフェレンは同僚から3秒差でプロローグを終えた。",
+              "source_urls": [
+                "https://honda.racing/rally/post/honda-riders-launch-abu-dhabi-desert-challenge-with-strong-prologue"
+              ]
+            },
+            {
+              "fact": "シャレイナは総合2位、ファン・ベフェレンは総合3位で、両者ともHonda CRF450 RALLYを使用した。",
+              "source_urls": [
+                "https://honda.racing/rally/post/honda-riders-launch-abu-dhabi-desert-challenge-with-strong-prologue"
+              ]
+            },
+            {
+              "fact": "2人はトップ10入りにより、第1ステージのスタート位置を選べる。",
+              "source_urls": [
+                "https://honda.racing/rally/post/honda-riders-launch-abu-dhabi-desert-challenge-with-strong-prologue"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-22"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "fia_regulation_development",
+      "title": "FIAとF1各陣営、2030年の2.1リッターV8ターボ枠組みに全会一致",
+      "summary": "FIA、Formula One Management、F1チーム、エンジンメーカーは、2030年から2.1リッターV8ターボを導入する枠組みに全会一致した。 最終枠組みは12月10日に上海で開かれる世界モータースポーツ評議会へ提出される予定だ。 Cadillacは2029年までFerrari製エンジンを使い、提案された規則に合わせて2030年に自社製パワーユニットを導入する計画だ。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-1cefd776c2ba-2026-11-23.html",
+        "sources": [
+          {
+            "label": "grandprix.com",
+            "url": "https://www.grandprix.com/news/fia-confirms-agreement-on-2-1-liter-turbo-v8-framework-for-2030.html"
+          }
+        ],
+        "summary": "FIA、Formula One Management、F1チーム、エンジンメーカーは、2030年から2.1リッターV8ターボを導入する枠組みに全会一致した。 最終枠組みは12月10日に上海で開かれる世界モータースポーツ評議会へ提出される予定だ。 Cadillacは2029年までFerrari製エンジンを使い、提案された規則に合わせて2030年に自社製パワーユニットを導入する計画だ。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "FIA、Formula One Management、F1チーム、エンジンメーカーは、2030年から2.1リッターV8ターボを導入する枠組みに全会一致した。",
+            "最終枠組みは12月10日に上海で開かれる世界モータースポーツ評議会へ提出される予定だ。",
+            "Cadillacは2029年までFerrari製エンジンを使い、提案された規則に合わせて2030年に自社製パワーユニットを導入する計画だ。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "FIA、Formula One Management、F1チーム、エンジンメーカーは、2030年から2.1リッターV8ターボを導入する枠組みに全会一致した。",
+              "source_urls": [
+                "https://www.grandprix.com/news/fia-confirms-agreement-on-2-1-liter-turbo-v8-framework-for-2030.html"
+              ]
+            },
+            {
+              "fact": "最終枠組みは12月10日に上海で開かれる世界モータースポーツ評議会へ提出される予定だ。",
+              "source_urls": [
+                "https://www.grandprix.com/news/fia-confirms-agreement-on-2-1-liter-turbo-v8-framework-for-2030.html"
+              ]
+            },
+            {
+              "fact": "Cadillacは2029年までFerrari製エンジンを使い、提案された規則に合わせて2030年に自社製パワーユニットを導入する計画だ。",
+              "source_urls": [
+                "https://www.grandprix.com/news/fia-confirms-agreement-on-2-1-liter-turbo-v8-framework-for-2030.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "race_schedule_results",
+      "title": "F1カタールGP、タイヤ1セットの使用を最大27周に制限",
+      "summary": "PirelliはカタールGPで、1セットのタイヤを連続使用できる上限を前年の25周から27周に設定した。 制限はルサイルの中高速コーナーが前輪へ大きな負荷をかけることを踏まえた安全措置だ。 57周の決勝では各車最低2回のピットストップが必要で、セーフティカー中の周回も27周に算入される。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "risk_or_safety_signal",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-a802016cdf15-2026-11-23.html",
+        "sources": [
+          {
+            "label": "gpfans.com",
+            "url": "https://www.gpfans.com/en/f1-news/1093145/f1-qatar-grand-prix-pirelli-tyre-limits-safety-pit-stops/"
+          }
+        ],
+        "summary": "PirelliはカタールGPで、1セットのタイヤを連続使用できる上限を前年の25周から27周に設定した。 制限はルサイルの中高速コーナーが前輪へ大きな負荷をかけることを踏まえた安全措置だ。 57周の決勝では各車最低2回のピットストップが必要で、セーフティカー中の周回も27周に算入される。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "PirelliはカタールGPで、1セットのタイヤを連続使用できる上限を前年の25周から27周に設定した。",
+            "制限はルサイルの中高速コーナーが前輪へ大きな負荷をかけることを踏まえた安全措置だ。",
+            "57周の決勝では各車最低2回のピットストップが必要で、セーフティカー中の周回も27周に算入される。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "PirelliはカタールGPで、1セットのタイヤを連続使用できる上限を前年の25周から27周に設定した。",
+              "source_urls": [
+                "https://www.gpfans.com/en/f1-news/1093145/f1-qatar-grand-prix-pirelli-tyre-limits-safety-pit-stops/"
+              ]
+            },
+            {
+              "fact": "制限はルサイルの中高速コーナーが前輪へ大きな負荷をかけることを踏まえた安全措置だ。",
+              "source_urls": [
+                "https://www.gpfans.com/en/f1-news/1093145/f1-qatar-grand-prix-pirelli-tyre-limits-safety-pit-stops/"
+              ]
+            },
+            {
+              "fact": "57周の決勝では各車最低2回のピットストップが必要で、セーフティカー中の周回も27周に算入される。",
+              "source_urls": [
+                "https://www.gpfans.com/en/f1-news/1093145/f1-qatar-grand-prix-pirelli-tyre-limits-safety-pit-stops/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "race_schedule_results",
+      "title": "FIA、ラスベガスGP練習走行の接触でフェルスタッペンに警告",
+      "summary": "スチュワードは両ドライバーとチームから聴取し、映像、テレメトリー、無線、車載映像を検討した。 スチュワードは、ブレーキング中の進路変更が求められる運転水準を下回ったとして、ドライバー警告を科した。 別件ではコラピントが大きなエネルギーを使って追い越し、フェルスタッペンを驚かせたと認定された。 コラピントとの件は追加措置なしとなった。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-bca1b49f286d-2026-11-23.html",
+        "sources": [
+          {
+            "label": "planetf1.com",
+            "url": "https://www.planetf1.com/news/max-verstappen-fia-george-russell-las-vegas-grand-prix-2026-fp3"
+          }
+        ],
+        "summary": "スチュワードは両ドライバーとチームから聴取し、映像、テレメトリー、無線、車載映像を検討した。 スチュワードは、ブレーキング中の進路変更が求められる運転水準を下回ったとして、ドライバー警告を科した。 別件ではコラピントが大きなエネルギーを使って追い越し、フェルスタッペンを驚かせたと認定された。 コラピントとの件は追加措置なしとなった。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "スチュワードは両ドライバーとチームから聴取し、映像、テレメトリー、無線、車載映像を検討した。",
+            "スチュワードは、ブレーキング中の進路変更が求められる運転水準を下回ったとして、ドライバー警告を科した。",
+            "別件ではコラピントが大きなエネルギーを使って追い越し、フェルスタッペンを驚かせたと認定された。",
+            "コラピントとの件は追加措置なしとなった。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "スチュワードは両ドライバーとチームから聴取し、映像、テレメトリー、無線、車載映像を検討した。",
+              "source_urls": [
+                "https://www.planetf1.com/news/max-verstappen-fia-george-russell-las-vegas-grand-prix-2026-fp3"
+              ]
+            },
+            {
+              "fact": "スチュワードは、ブレーキング中の進路変更が求められる運転水準を下回ったとして、ドライバー警告を科した。",
+              "source_urls": [
+                "https://www.planetf1.com/news/max-verstappen-fia-george-russell-las-vegas-grand-prix-2026-fp3"
+              ]
+            },
+            {
+              "fact": "別件ではコラピントが大きなエネルギーを使って追い越し、フェルスタッペンを驚かせたと認定された。",
+              "source_urls": [
+                "https://www.planetf1.com/news/max-verstappen-fia-george-russell-las-vegas-grand-prix-2026-fp3"
+              ]
+            },
+            {
+              "fact": "コラピントとの件は追加措置なしとなった。",
+              "source_urls": [
+                "https://www.planetf1.com/news/max-verstappen-fia-george-russell-las-vegas-grand-prix-2026-fp3"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "dragon_iss",
+      "title": "SpaceX、同一発射台の打ち上げ間隔を32時間に短縮",
+      "summary": "SpaceXは2026年11月22日、米カリフォルニア州ヴァンデンバーグ宇宙軍基地からFalcon 9を打ち上げた。 NROL-136は同じ第4E発射施設からの前回打ち上げの32時間後に出発し、機密衛星を低軌道へ運んだ。 Elon Musk氏は11月18日、発射塔で初めて捕捉したStarship上段Ship 42を歴史的機体として保存し、再飛行させない考えを示した。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-11-23",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-30b2700121f2-2026-11-23.html",
+        "sources": [
+          {
+            "label": "demokratis.co.id",
+            "url": "https://demokratis.co.id/en/spacex-falcon9-launch-turnaround-record"
+          }
+        ],
+        "summary": "SpaceXは2026年11月22日、米カリフォルニア州ヴァンデンバーグ宇宙軍基地からFalcon 9を打ち上げた。 NROL-136は同じ第4E発射施設からの前回打ち上げの32時間後に出発し、機密衛星を低軌道へ運んだ。 Elon Musk氏は11月18日、発射塔で初めて捕捉したStarship上段Ship 42を歴史的機体として保存し、再飛行させない考えを示した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "SpaceXは2026年11月22日、米カリフォルニア州ヴァンデンバーグ宇宙軍基地からFalcon 9を打ち上げた。",
+            "NROL-136は同じ第4E発射施設からの前回打ち上げの32時間後に出発し、機密衛星を低軌道へ運んだ。",
+            "Elon Musk氏は11月18日、発射塔で初めて捕捉したStarship上段Ship 42を歴史的機体として保存し、再飛行させない考えを示した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "SpaceXは2026年11月22日、米カリフォルニア州ヴァンデンバーグ宇宙軍基地からFalcon 9を打ち上げた。",
+              "source_urls": [
+                "https://demokratis.co.id/en/spacex-falcon9-launch-turnaround-record"
+              ]
+            },
+            {
+              "fact": "NROL-136は同じ第4E発射施設からの前回打ち上げの32時間後に出発し、機密衛星を低軌道へ運んだ。",
+              "source_urls": [
+                "https://demokratis.co.id/en/spacex-falcon9-launch-turnaround-record"
+              ]
+            },
+            {
+              "fact": "Elon Musk氏は11月18日、発射塔で初めて捕捉したStarship上段Ship 42を歴史的機体として保存し、再飛行させない考えを示した。",
+              "source_urls": [
+                "https://demokratis.co.id/en/spacex-falcon9-launch-turnaround-record"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-23"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "business_contracts",
+      "title": "コロンビア、刑務所の通信遮断義務を巡りStarlinkを調査",
+      "summary": "コロンビア情報通信技術省は、刑務所を覆う通信信号の減衰義務に違反した疑いでStarlink S.A.S.への行政調査を開始し、告発した。 同省はLa Picota刑務所で信号を除去または制限する義務に違反した疑いで、複数の通信事業者にも行政調査と告発を行った。 違反が確認された場合、月額法定最低賃金の最大1万5,000倍の罰金、事業の一時停止、免許などの取消しがあり得る。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-11-23",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-f0fb5a3762ba-2026-11-23.html",
+        "sources": [
+          {
+            "label": "colombiaone.com",
+            "url": "https://colombiaone.com/2026/11/22/colombia-investigates-starlink-and-telecommunications-operators-over-signal-in-prisons/"
+          }
+        ],
+        "summary": "コロンビア情報通信技術省は、刑務所を覆う通信信号の減衰義務に違反した疑いでStarlink S.A.S.への行政調査を開始し、告発した。 同省はLa Picota刑務所で信号を除去または制限する義務に違反した疑いで、複数の通信事業者にも行政調査と告発を行った。 違反が確認された場合、月額法定最低賃金の最大1万5,000倍の罰金、事業の一時停止、免許などの取消しがあり得る。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "コロンビア情報通信技術省は、刑務所を覆う通信信号の減衰義務に違反した疑いでStarlink S.A.S.への行政調査を開始し、告発した。",
+            "同省はLa Picota刑務所で信号を除去または制限する義務に違反した疑いで、複数の通信事業者にも行政調査と告発を行った。",
+            "違反が確認された場合、月額法定最低賃金の最大1万5,000倍の罰金、事業の一時停止、免許などの取消しがあり得る。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "コロンビア情報通信技術省は、刑務所を覆う通信信号の減衰義務に違反した疑いでStarlink S.A.S.への行政調査を開始し、告発した。",
+              "source_urls": [
+                "https://colombiaone.com/2026/11/22/colombia-investigates-starlink-and-telecommunications-operators-over-signal-in-prisons/"
+              ]
+            },
+            {
+              "fact": "同省はLa Picota刑務所で信号を除去または制限する義務に違反した疑いで、複数の通信事業者にも行政調査と告発を行った。",
+              "source_urls": [
+                "https://colombiaone.com/2026/11/22/colombia-investigates-starlink-and-telecommunications-operators-over-signal-in-prisons/"
+              ]
+            },
+            {
+              "fact": "違反が確認された場合、月額法定最低賃金の最大1万5,000倍の罰金、事業の一時停止、免許などの取消しがあり得る。",
+              "source_urls": [
+                "https://colombiaone.com/2026/11/22/colombia-investigates-starlink-and-telecommunications-operators-over-signal-in-prisons/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-23"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "business_contracts",
+      "title": "ボツワナ、Starlinkの衛星直結携帯サービスを2027年初頭に全国展開へ",
+      "summary": "コンゴ民主共和国では2026年8月、Airtelが試験などを経てアフリカ初の商用衛星直結携帯サービスを開始した。 ボツワナはStarlinkの衛星直結携帯サービスを導入するアフリカ2番目の国と、全国展開する最初の国を目指している。 AXIAN Telecomは2026年3月初め、AST SpaceMobileと標準的な携帯電話へ4G・5Gの音声とデータを直接届ける提携を結んだ。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-11-23",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-452e2d505875-2026-11-23.html",
+        "sources": [
+          {
+            "label": "technext24.com",
+            "url": "https://technext24.com/news/botswana-eyes-starlinks-satellite-to-mobile/"
+          }
+        ],
+        "summary": "コンゴ民主共和国では2026年8月、Airtelが試験などを経てアフリカ初の商用衛星直結携帯サービスを開始した。 ボツワナはStarlinkの衛星直結携帯サービスを導入するアフリカ2番目の国と、全国展開する最初の国を目指している。 AXIAN Telecomは2026年3月初め、AST SpaceMobileと標準的な携帯電話へ4G・5Gの音声とデータを直接届ける提携を結んだ。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "コンゴ民主共和国では2026年8月、Airtelが試験などを経てアフリカ初の商用衛星直結携帯サービスを開始した。",
+            "ボツワナはStarlinkの衛星直結携帯サービスを導入するアフリカ2番目の国と、全国展開する最初の国を目指している。",
+            "AXIAN Telecomは2026年3月初め、AST SpaceMobileと標準的な携帯電話へ4G・5Gの音声とデータを直接届ける提携を結んだ。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "コンゴ民主共和国では2026年8月、Airtelが試験などを経てアフリカ初の商用衛星直結携帯サービスを開始した。",
+              "source_urls": [
+                "https://technext24.com/news/botswana-eyes-starlinks-satellite-to-mobile/"
+              ]
+            },
+            {
+              "fact": "ボツワナはStarlinkの衛星直結携帯サービスを導入するアフリカ2番目の国と、全国展開する最初の国を目指している。",
+              "source_urls": [
+                "https://technext24.com/news/botswana-eyes-starlinks-satellite-to-mobile/"
+              ]
+            },
+            {
+              "fact": "AXIAN Telecomは2026年3月初め、AST SpaceMobileと標準的な携帯電話へ4G・5Gの音声とデータを直接届ける提携を結んだ。",
+              "source_urls": [
+                "https://technext24.com/news/botswana-eyes-starlinks-satellite-to-mobile/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-23"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "employment_consumption",
+      "title": "食料品の消費税1%案、2年後の税率復帰リスクを政権有識者が指摘",
+      "summary": "永濱利廣氏と片岡剛士氏は、食料品の消費税率を8%から1%へ下げる案について、価格低下を消費者が実感しやすい物価対策だと説明した。 永濱氏の試算では、2029年度に税率を戻すと実質GDP成長率を約0.3%押し下げる。 両氏は、年5兆円規模の減税に見合う給付付き税額控除がなければ、1%から8%への復帰が景気へ悪影響を与えると指摘した。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-58924d1195d7-2026-11-23.html",
+        "sources": [
+          {
+            "label": "kurashikiooya.com",
+            "url": "https://www.kurashikiooya.com/2026/11/21/%E9%AB%98%E5%B8%82%E6%94%BF%E6%A8%A9%E3%81%AE%E3%83%96%E3%83%AC%E3%83%BC%E3%83%B32%E4%BA%BA%E3%81%8C%E8%AA%9E%E3%82%8B%E3%80%8C%E9%A3%9F%E6%96%99%E5%93%81%E6%B6%88%E8%B2%BB%E7%A8%8E%E6%B8%9B%E7%A8%8E/amp/"
+          }
+        ],
+        "summary": "永濱利廣氏と片岡剛士氏は、食料品の消費税率を8%から1%へ下げる案について、価格低下を消費者が実感しやすい物価対策だと説明した。 永濱氏の試算では、2029年度に税率を戻すと実質GDP成長率を約0.3%押し下げる。 両氏は、年5兆円規模の減税に見合う給付付き税額控除がなければ、1%から8%への復帰が景気へ悪影響を与えると指摘した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "永濱利廣氏と片岡剛士氏は、食料品の消費税率を8%から1%へ下げる案について、価格低下を消費者が実感しやすい物価対策だと説明した。",
+            "永濱氏の試算では、2029年度に税率を戻すと実質GDP成長率を約0.3%押し下げる。",
+            "両氏は、年5兆円規模の減税に見合う給付付き税額控除がなければ、1%から8%への復帰が景気へ悪影響を与えると指摘した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "永濱利廣氏と片岡剛士氏は、食料品の消費税率を8%から1%へ下げる案について、価格低下を消費者が実感しやすい物価対策だと説明した。",
+              "source_urls": [
+                "https://www.kurashikiooya.com/2026/11/21/%E9%AB%98%E5%B8%82%E6%94%BF%E6%A8%A9%E3%81%AE%E3%83%96%E3%83%AC%E3%83%BC%E3%83%B32%E4%BA%BA%E3%81%8C%E8%AA%9E%E3%82%8B%E3%80%8C%E9%A3%9F%E6%96%99%E5%93%81%E6%B6%88%E8%B2%BB%E7%A8%8E%E6%B8%9B%E7%A8%8E/amp/"
+              ]
+            },
+            {
+              "fact": "永濱氏の試算では、2029年度に税率を戻すと実質GDP成長率を約0.3%押し下げる。",
+              "source_urls": [
+                "https://www.kurashikiooya.com/2026/11/21/%E9%AB%98%E5%B8%82%E6%94%BF%E6%A8%A9%E3%81%AE%E3%83%96%E3%83%AC%E3%83%BC%E3%83%B32%E4%BA%BA%E3%81%8C%E8%AA%9E%E3%82%8B%E3%80%8C%E9%A3%9F%E6%96%99%E5%93%81%E6%B6%88%E8%B2%BB%E7%A8%8E%E6%B8%9B%E7%A8%8E/amp/"
+              ]
+            },
+            {
+              "fact": "両氏は、年5兆円規模の減税に見合う給付付き税額控除がなければ、1%から8%への復帰が景気へ悪影響を与えると指摘した。",
+              "source_urls": [
+                "https://www.kurashikiooya.com/2026/11/21/%E9%AB%98%E5%B8%82%E6%94%BF%E6%A8%A9%E3%81%AE%E3%83%96%E3%83%AC%E3%83%BC%E3%83%B32%E4%BA%BA%E3%81%8C%E8%AA%9E%E3%82%8B%E3%80%8C%E9%A3%9F%E6%96%99%E5%93%81%E6%B6%88%E8%B2%BB%E7%A8%8E%E6%B8%9B%E7%A8%8E/amp/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "employment_consumption",
+      "title": "訪日消費、2026年7～9月期に2兆2,076億円で同期間の最高更新",
+      "summary": "2026年4～6月期は訪日客数が前年同期比5.3%減る一方、消費額は0.3%増えて第2四半期として過去最高だった。 7～9月期は訪日客数が964万人で前年同期比4.8%減り、消費額は2兆2,076億円で3.2%増えて同期間の過去最高を更新した。 1人当たり旅行支出は23.4万円で前年同期比6.1%増え、客数減を補った。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-dfb8a168c367-2026-11-23.html",
+        "sources": [
+          {
+            "label": "news.yahoo.co.jp",
+            "url": "https://news.yahoo.co.jp/articles/46f1d52c03a32099f2bf654fb7c4f56bd09abaec"
+          }
+        ],
+        "summary": "2026年4～6月期は訪日客数が前年同期比5.3%減る一方、消費額は0.3%増えて第2四半期として過去最高だった。 7～9月期は訪日客数が964万人で前年同期比4.8%減り、消費額は2兆2,076億円で3.2%増えて同期間の過去最高を更新した。 1人当たり旅行支出は23.4万円で前年同期比6.1%増え、客数減を補った。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "2026年4～6月期は訪日客数が前年同期比5.3%減る一方、消費額は0.3%増えて第2四半期として過去最高だった。",
+            "7～9月期は訪日客数が964万人で前年同期比4.8%減り、消費額は2兆2,076億円で3.2%増えて同期間の過去最高を更新した。",
+            "1人当たり旅行支出は23.4万円で前年同期比6.1%増え、客数減を補った。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "2026年4～6月期は訪日客数が前年同期比5.3%減る一方、消費額は0.3%増えて第2四半期として過去最高だった。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/46f1d52c03a32099f2bf654fb7c4f56bd09abaec"
+              ]
+            },
+            {
+              "fact": "7～9月期は訪日客数が964万人で前年同期比4.8%減り、消費額は2兆2,076億円で3.2%増えて同期間の過去最高を更新した。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/46f1d52c03a32099f2bf654fb7c4f56bd09abaec"
+              ]
+            },
+            {
+              "fact": "1人当たり旅行支出は23.4万円で前年同期比6.1%増え、客数減を補った。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/46f1d52c03a32099f2bf654fb7c4f56bd09abaec"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "investment_policy_markets",
+      "title": "ドル円はアジア市場で一時159.06付近まで上昇",
+      "summary": "ドル円はアジア市場で一時159.06付近まで上昇したあと、ロンドンで159円を挟んでもみ合っている。 ユーロ円はアジア市場で堅調に推移したあと、ロンドンで一段高となり、一時174.97付近まで上昇した。 USD/JPYは158.94、EUR/JPYは174.86だった。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-11-23",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-6e5e0214952f-2026-11-23.html",
+        "sources": [
+          {
+            "label": "fx.minkabu.jp",
+            "url": "https://fx.minkabu.jp/news/385169"
+          }
+        ],
+        "summary": "ドル円はアジア市場で一時159.06付近まで上昇したあと、ロンドンで159円を挟んでもみ合っている。 ユーロ円はアジア市場で堅調に推移したあと、ロンドンで一段高となり、一時174.97付近まで上昇した。 USD/JPYは158.94、EUR/JPYは174.86だった。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "ドル円はアジア市場で一時159.06付近まで上昇したあと、ロンドンで159円を挟んでもみ合っている。",
+            "ユーロ円はアジア市場で堅調に推移したあと、ロンドンで一段高となり、一時174.97付近まで上昇した。",
+            "USD/JPYは158.94、EUR/JPYは174.86だった。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "ドル円はアジア市場で一時159.06付近まで上昇したあと、ロンドンで159円を挟んでもみ合っている。",
+              "source_urls": [
+                "https://fx.minkabu.jp/news/385169"
+              ]
+            },
+            {
+              "fact": "ユーロ円はアジア市場で堅調に推移したあと、ロンドンで一段高となり、一時174.97付近まで上昇した。",
+              "source_urls": [
+                "https://fx.minkabu.jp/news/385169"
+              ]
+            },
+            {
+              "fact": "USD/JPYは158.94、EUR/JPYは174.86だった。",
+              "source_urls": [
+                "https://fx.minkabu.jp/news/385169"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-23"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "us_markets_fund_flows_rates",
+      "title": "Nasdaq総合、S&P 500、Dow平均が2026年に複数回最高値",
+      "summary": "Nasdaq総合、S&P 500、Dow平均は2026年に複数回最高値を更新し、AIインフラ投資、企業収益、大型IPOへの関心が支えた。 記事は第1次Trump政権期の上昇率をDow平均57%、S&P 500 70%、Nasdaq総合142%としている。 ドットコムバブル崩壊後、S&P 500は最終的に49%、Nasdaq総合は約78%下落した。",
+      "section_id": "north_america",
+      "category": "北米経済",
+      "source_published_date": "2026-11-23",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-6e7c04b295db-2026-11-23.html",
+        "sources": [
+          {
+            "label": "beinsure.com",
+            "url": "https://beinsure.com/news/nasdaq-composite-record-highs/"
+          }
+        ],
+        "summary": "Nasdaq総合、S&P 500、Dow平均は2026年に複数回最高値を更新し、AIインフラ投資、企業収益、大型IPOへの関心が支えた。 記事は第1次Trump政権期の上昇率をDow平均57%、S&P 500 70%、Nasdaq総合142%としている。 ドットコムバブル崩壊後、S&P 500は最終的に49%、Nasdaq総合は約78%下落した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Nasdaq総合、S&P 500、Dow平均は2026年に複数回最高値を更新し、AIインフラ投資、企業収益、大型IPOへの関心が支えた。",
+            "記事は第1次Trump政権期の上昇率をDow平均57%、S&P 500 70%、Nasdaq総合142%としている。",
+            "ドットコムバブル崩壊後、S&P 500は最終的に49%、Nasdaq総合は約78%下落した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Nasdaq総合、S&P 500、Dow平均は2026年に複数回最高値を更新し、AIインフラ投資、企業収益、大型IPOへの関心が支えた。",
+              "source_urls": [
+                "https://beinsure.com/news/nasdaq-composite-record-highs/"
+              ]
+            },
+            {
+              "fact": "記事は第1次Trump政権期の上昇率をDow平均57%、S&P 500 70%、Nasdaq総合142%としている。",
+              "source_urls": [
+                "https://beinsure.com/news/nasdaq-composite-record-highs/"
+              ]
+            },
+            {
+              "fact": "ドットコムバブル崩壊後、S&P 500は最終的に49%、Nasdaq総合は約78%下落した。",
+              "source_urls": [
+                "https://beinsure.com/news/nasdaq-composite-record-highs/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-23"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "us_prices_jobs_fed",
+      "title": "FRB、追加利上げを巡り内部の見解が分かれる",
+      "summary": "FRBは2026年9月のFOMCで約3年ぶりの利上げを決めた。 Kevin Warsh氏は2006年、35歳でFRB理事に就任した。 Christopher Waller理事は、より積極的な対応が必要だとして12月FOMCで0.5%の利上げを主張した。",
+      "section_id": "north_america",
+      "category": "北米経済",
+      "source_published_date": "2026-11-21",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-3362d5475321-2026-11-23.html",
+        "sources": [
+          {
+            "label": "news.yahoo.co.jp",
+            "url": "https://news.yahoo.co.jp/articles/b43bca46b104374ecc22caa040b850dc0411d984"
+          }
+        ],
+        "summary": "FRBは2026年9月のFOMCで約3年ぶりの利上げを決めた。 Kevin Warsh氏は2006年、35歳でFRB理事に就任した。 Christopher Waller理事は、より積極的な対応が必要だとして12月FOMCで0.5%の利上げを主張した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "FRBは2026年9月のFOMCで約3年ぶりの利上げを決めた。",
+            "Kevin Warsh氏は2006年、35歳でFRB理事に就任した。",
+            "Christopher Waller理事は、より積極的な対応が必要だとして12月FOMCで0.5%の利上げを主張した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "FRBは2026年9月のFOMCで約3年ぶりの利上げを決めた。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/b43bca46b104374ecc22caa040b850dc0411d984"
+              ]
+            },
+            {
+              "fact": "Kevin Warsh氏は2006年、35歳でFRB理事に就任した。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/b43bca46b104374ecc22caa040b850dc0411d984"
+              ]
+            },
+            {
+              "fact": "Christopher Waller理事は、より積極的な対応が必要だとして12月FOMCで0.5%の利上げを主張した。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/b43bca46b104374ecc22caa040b850dc0411d984"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-21"
+          ]
+        }
+      }
+    }
+  ],
+  "coverage_manifest": {
+    "contract_version": "2026-07-11.02",
+    "date": "2026-11-23",
+    "collection_completed_at_jst": "2026-11-23T19:01:32+09:00",
+    "collection_mode": "web_evidence_plus_review",
+    "evidence_sha256": "2dc75649276a43fc962b7deaf82ca85c0a711ac29e4de0f12b66b7fe2fbd7b44",
+    "editor_contract_sha256": "d6c3ebf3edf97dd3dff4a22b78881bb748af6ce2d29e7417f703b37f53bce819"
+  }
+}
