@@ -35,9 +35,17 @@ def run_review(packet_path: Path, evidence_path: Path, trial: Path, infer, *, sa
     if not 0 < len(requests) <= MAX_REQUESTS:
         raise ValueError("Request count exceeds the trial budget")
     rules = RULES.read_text(encoding="utf-8")
-    instructions = rules.split("## Perform one compact Web/Plus review", 1)[1].split(
-        "\n```\n", 1
+    policy = rules.split("## Perform one compact Web/Plus review", 1)[1].split(
+        "Write `state/", 1
     )[0]
+    instructions = policy + """
+Return one JSON object with exactly this outer structure:
+{"events":[{"event_id":"copy payload.events[0].id","decision":"publish","items":[]}]}
+For publish, supply one or more items with title, information_complete,
+summary_points (text, evidence_ids, source_fact_ids), topic_value_class,
+priority_class, and change_class. For exclusions, return no items.
+Use a decision permitted by the packet. Do not add a review or response envelope.
+"""
     tasks = [
         (req["request_id"], str(event["id"]), json.dumps({
             "policy": packet["policy"],
@@ -67,6 +75,9 @@ def run_review(packet_path: Path, evidence_path: Path, trial: Path, infer, *, sa
         started = monotonic()
         print(f"Starting {request_id}/{event_id}", flush=True)
         response = infer(instructions, message)
+        if not isinstance(response, dict) or not isinstance(response.get("events"), list):
+            fields = sorted(response) if isinstance(response, dict) else type(response).__name__
+            raise ValueError(f"Unexpected response fields for {request_id}/{event_id}: {fields}")
         if [event["event_id"] for event in response["events"]] != [event_id]:
             raise ValueError(f"Event accounting failed for {request_id}/{event_id}")
         entry = {"request_id": request_id, "response": response}
