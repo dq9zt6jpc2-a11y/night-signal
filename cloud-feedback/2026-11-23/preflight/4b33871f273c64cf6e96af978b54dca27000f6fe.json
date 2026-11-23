@@ -1,0 +1,331 @@
+{
+  "contract": "night-signal-cloud-feedback-v1",
+  "issue_date": "2026-11-23",
+  "recorded_at": "2026-11-23T12:23:16.223255+00:00",
+  "workflow_run_id": "45173708156",
+  "workflow_run_url": "https://github.com/dq9zt6jpc2-a11y/night-signal/actions/runs/45173708156",
+  "recovery_attempt": 0,
+  "status": "failed",
+  "failed_stage": "apply",
+  "first_reader_verification": null,
+  "step_outcomes": {
+    "restore": "success",
+    "apply": "failure",
+    "gates": "skipped"
+  },
+  "validator_log_tail": "{\"issue_date\": \"2026-11-23\", \"review_ref\": \"night-signal-review-2026-11-23\", \"installed_review\": \"/home/runner/work/night-signal/night-signal/state/2026-11-23/editor_review.json\", \"additional_paid_api_requests\": 0}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"OpenAI\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 36, \"grouped_events\": 35, \"publishable_source_events\": 35, \"novel_events\": 29, \"semantic_dedup_pool\": 29, \"model_candidates\": 24}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"SoftBank\", \"expanded_input_records\": 10, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 0, \"grouped_events\": 0, \"publishable_source_events\": 0, \"novel_events\": 0, \"semantic_dedup_pool\": 0, \"model_candidates\": 0}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"Honda\", \"expanded_input_records\": 19, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 3, \"grouped_events\": 3, \"publishable_source_events\": 3, \"novel_events\": 3, \"semantic_dedup_pool\": 3, \"model_candidates\": 3}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"F1\", \"expanded_input_records\": 1, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 48, \"grouped_events\": 47, \"publishable_source_events\": 47, \"novel_events\": 41, \"semantic_dedup_pool\": 41, \"model_candidates\": 14}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"SpaceX\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 17, \"grouped_events\": 17, \"publishable_source_events\": 17, \"novel_events\": 16, \"semantic_dedup_pool\": 16, \"model_candidates\": 11}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"日本経済\", \"expanded_input_records\": 6, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 5, \"grouped_events\": 5, \"publishable_source_events\": 5, \"novel_events\": 5, \"semantic_dedup_pool\": 5, \"model_candidates\": 5}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"YOASOBI / 幾田りら\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 1, \"grouped_events\": 1, \"publishable_source_events\": 1, \"novel_events\": 1, \"semantic_dedup_pool\": 1, \"model_candidates\": 1}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"アジア経済\", \"expanded_input_records\": 1, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 1, \"grouped_events\": 1, \"publishable_source_events\": 1, \"novel_events\": 1, \"semantic_dedup_pool\": 1, \"model_candidates\": 1}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"北米経済\", \"expanded_input_records\": 18, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 7, \"grouped_events\": 7, \"publishable_source_events\": 7, \"novel_events\": 7, \"semantic_dedup_pool\": 7, \"model_candidates\": 7}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"宇都宮ブレックス\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 0, \"grouped_events\": 0, \"publishable_source_events\": 0, \"novel_events\": 0, \"semantic_dedup_pool\": 0, \"model_candidates\": 0}\n{\"phase\": \"unsupported_summary_points_rejected\", \"category\": \"OpenAI\", \"facts\": [\"HiLocalの産業安全通訳「hiWorker」は2026年に約100社と供給契約を結び、1,500超の産業現場へ導入された。\", \"OpenAIは11月19日、音声エージェント向けリアルタイムモデル「GPT-Live-1.1」をAPIで公開した。\"]}\n{\"phase\": \"normalized_item_rejected\", \"category\": \"OpenAI\", \"title\": \"OpenAI音声API活用の産業通訳、約100社・1,500超の現場へ導入\", \"reasons\": [\"unsupported_summary_point\"], \"fact_count\": 2}\n{\"phase\": \"invalid_summary_points_rejected\", \"category\": \"F1\", \"title\": \"FIAとF1各陣営、2030年の2.1リッターV8ターボ枠組みに全会一致\", \"points\": [{\"point\": 2, \"text\": \"エンジンは持続可能燃料を使い、限定的なハイブリッド支援を残す一方、電動出力や最低車重、コスト上限は未確定だ。\", \"reason\": \"no_material_fact_after_normalization\"}]}\n{\"phase\": \"normalized_item_rejected\", \"category\": \"F1\", \"title\": \"FIAとF1各陣営、2030年の2.1リッターV8ターボ枠組みに全会一致\", \"reasons\": [\"invalid_summary_point\"], \"fact_count\": 3}\n{\"phase\": \"normalized_item_rejected\", \"category\": \"SpaceX\", \"title\": \"コロンビア、刑務所の通信遮断義務を巡りStarlinkを調査\", \"reasons\": [\"unknown_topic_value\"], \"fact_count\": 3}\n{\"phase\": \"normalized_item_rejected\", \"category\": \"SpaceX\", \"title\": \"ボツワナ、Starlinkの衛星直結携帯サービスを2027年初頭に全国展開へ\", \"reasons\": [\"unknown_topic_value\"], \"fact_count\": 3}\n{\"phase\": \"normalized_item_rejected\", \"category\": \"日本経済\", \"title\": \"食料品の消費税1%案、2年後の税率復帰リスクを政権有識者が指摘\", \"reasons\": [\"unknown_topic_value\"], \"fact_count\": 3}\n{\"phase\": \"unsupported_summary_points_rejected\", \"category\": \"日本経済\", \"facts\": [\"ユーロ円はロンドン市場で一段高となり、一時174.97円付近まで上昇した。\", \"記事執筆時の表示値はドル円158.94円、ユーロ円174.86円だった。\"]}\n{\"phase\": \"normalized_item_rejected\", \"category\": \"日本経済\", \"title\": \"ドル円が一時159.06円、ユーロ円は174.97円まで上昇\", \"reasons\": [\"unsupported_summary_point\", \"unsupported_title\", \"unknown_topic_value\"], \"fact_count\": 1}\n{\"phase\": \"normalized_item_rejected\", \"category\": \"北米経済\", \"title\": \"米株の高値更新に対し、評価額と証拠金融の過熱懸念\", \"reasons\": [\"unsupported_title\", \"unknown_topic_value\"], \"fact_count\": 3}\n{\"phase\": \"normalized_item_rejected\", \"category\": \"北米経済\", \"title\": \"FRB、追加利上げを巡り内部の見解が分かれる\", \"reasons\": [\"unknown_topic_value\"], \"fact_count\": 3}\nNIGHT SIGNAL PLUS REVIEW FAILED: review responses failed deterministic validation: {\"rejected_requests\":[{\"request_id\":\"openai-03-b1204004393d4078\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{},\"malformed_event_results\":0},\"missing_event_ids\":[\"g012\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{},\"rejected_items\":[{\"event_id\":\"g012\",\"title\":\"OpenAI音声API活用の産業通訳、約100社・1,500超の現場へ導入\",\"reasons\":[\"unsupported_summary_point\"],\"unsupported_facts\":[\"HiLocalの産業安全通訳「hiWorker」は2026年に約100社と供給契約を結び、1,500超の産業現場へ導入された。\",\"OpenAIは11月19日、音声エージェント向けリアルタイムモデル「GPT-Live-1.1」をAPIで公開した。\"],\"invalid_source_fact_ids\":[],\"uncovered_source_fact_ids\":[\"e003:f02\"]}],\"unpublishable_items\":[]},{\"request_id\":\"f1-01-3792d505ee088635\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{},\"malformed_event_results\":0},\"missing_event_ids\":[\"g003\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{},\"rejected_items\":[{\"event_id\":\"g003\",\"title\":\"FIAとF1各陣営、2030年の2.1リッターV8ターボ枠組みに全会一致\",\"reasons\":[\"invalid_summary_point\"],\"unsupported_facts\":[],\"invalid_source_fact_ids\":[],\"uncovered_source_fact_ids\":[]}],\"unpublishable_items\":[]},{\"request_id\":\"spacex-02-760e81786b08d01a\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{},\"malformed_event_results\":0},\"missing_event_ids\":[\"g009\",\"g011\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{},\"rejected_items\":[{\"event_id\":\"g011\",\"title\":\"コロンビア、刑務所の通信遮断義務を巡りStarlinkを調査\",\"reasons\":[\"unknown_topic_value\"],\"unsupported_facts\":[],\"invalid_source_fact_ids\":[],\"uncovered_source_fact_ids\":[]},{\"event_id\":\"g009\",\"title\":\"ボツワナ、Starlinkの衛星直結携帯サービスを2027年初頭に全国展開へ\",\"reasons\":[\"unknown_topic_value\"],\"unsupported_facts\":[],\"invalid_source_fact_ids\":[],\"uncovered_source_fact_ids\":[]}],\"unpublishable_items\":[]},{\"request_id\":\"japan_economy-01-ce3c7c264d2361ad\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{},\"malformed_event_results\":0},\"missing_event_ids\":[\"g001\",\"g003\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{},\"rejected_items\":[{\"event_id\":\"g001\",\"title\":\"食料品の消費税1%案、2年後の税率復帰リスクを政権有識者が指摘\",\"reasons\":[\"unknown_topic_value\"],\"unsupported_facts\":[],\"invalid_source_fact_ids\":[],\"uncovered_source_fact_ids\":[]},{\"event_id\":\"g003\",\"title\":\"ドル円が一時159.06円、ユーロ円は174.97円まで上昇\",\"reasons\":[\"unsupported_summary_point\",\"unsupported_title\",\"unknown_topic_value\"],\"unsupported_facts\":[\"ユーロ円はロンドン市場で一段高となり、一時174.97円付近まで上昇した。\",\"記事執筆時の表示値はドル円158.94円、ユーロ円174.86円だった。\"],\"invalid_source_fact_ids\":[],\"uncovered_source_fact_ids\":[]}],\"unpublishable_items\":[]},{\"request_id\":\"north_america-01-0dfd7d0f2d308ba6\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{\"g003\":\"body_evidence_cannot_be_insufficient\",\"g004\":\"body_evidence_cannot_be_insufficient\"},\"malformed_event_results\":0},\"missing_event_ids\":[\"g002\",\"g003\",\"g004\",\"g006\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{},\"rejected_items\":[{\"event_id\":\"g002\",\"title\":\"米株の高値更新に対し、評価額と証拠金融の過熱懸念\",\"reasons\":[\"unsupported_title\",\"unknown_topic_value\"],\"unsupported_facts\":[],\"invalid_source_fact_ids\":[],\"uncovered_source_fact_ids\":[]},{\"event_id\":\"g006\",\"title\":\"FRB、追加利上げを巡り内部の見解が分かれる\",\"reasons\":[\"unknown_topic_value\"],\"unsupported_facts\":[],\"invalid_source_fact_ids\":[],\"uncovered_source_fact_ids\":[]}],\"unpublishable_items\":[]}]}\n",
+  "rejected_requests": [
+    {
+      "request_id": "openai-03-b1204004393d4078",
+      "event_response": {
+        "missing_event_ids": [],
+        "duplicate_event_ids": [],
+        "unknown_event_ids": [],
+        "cross_event_evidence_ids": [],
+        "cross_event_source_fact_ids": [],
+        "unknown_source_fact_ids": [],
+        "invalid_event_decisions": {},
+        "malformed_event_results": 0
+      },
+      "missing_event_ids": [
+        "g012"
+      ],
+      "conflicting_event_ids": [],
+      "missing_source_fact_ids_by_event": {},
+      "rejected_items": [
+        {
+          "event_id": "g012",
+          "title": "OpenAI音声API活用の産業通訳、約100社・1,500超の現場へ導入",
+          "reasons": [
+            "unsupported_summary_point"
+          ],
+          "unsupported_facts": [
+            "HiLocalの産業安全通訳「hiWorker」は2026年に約100社と供給契約を結び、1,500超の産業現場へ導入された。",
+            "OpenAIは11月19日、音声エージェント向けリアルタイムモデル「GPT-Live-1.1」をAPIで公開した。"
+          ],
+          "invalid_source_fact_ids": [],
+          "uncovered_source_fact_ids": [
+            "e003:f02"
+          ]
+        }
+      ],
+      "unpublishable_items": []
+    },
+    {
+      "request_id": "f1-01-3792d505ee088635",
+      "event_response": {
+        "missing_event_ids": [],
+        "duplicate_event_ids": [],
+        "unknown_event_ids": [],
+        "cross_event_evidence_ids": [],
+        "cross_event_source_fact_ids": [],
+        "unknown_source_fact_ids": [],
+        "invalid_event_decisions": {},
+        "malformed_event_results": 0
+      },
+      "missing_event_ids": [
+        "g003"
+      ],
+      "conflicting_event_ids": [],
+      "missing_source_fact_ids_by_event": {},
+      "rejected_items": [
+        {
+          "event_id": "g003",
+          "title": "FIAとF1各陣営、2030年の2.1リッターV8ターボ枠組みに全会一致",
+          "reasons": [
+            "invalid_summary_point"
+          ],
+          "unsupported_facts": [],
+          "invalid_source_fact_ids": [],
+          "uncovered_source_fact_ids": []
+        }
+      ],
+      "unpublishable_items": []
+    },
+    {
+      "request_id": "spacex-02-760e81786b08d01a",
+      "event_response": {
+        "missing_event_ids": [],
+        "duplicate_event_ids": [],
+        "unknown_event_ids": [],
+        "cross_event_evidence_ids": [],
+        "cross_event_source_fact_ids": [],
+        "unknown_source_fact_ids": [],
+        "invalid_event_decisions": {},
+        "malformed_event_results": 0
+      },
+      "missing_event_ids": [
+        "g009",
+        "g011"
+      ],
+      "conflicting_event_ids": [],
+      "missing_source_fact_ids_by_event": {},
+      "rejected_items": [
+        {
+          "event_id": "g011",
+          "title": "コロンビア、刑務所の通信遮断義務を巡りStarlinkを調査",
+          "reasons": [
+            "unknown_topic_value"
+          ],
+          "unsupported_facts": [],
+          "invalid_source_fact_ids": [],
+          "uncovered_source_fact_ids": []
+        },
+        {
+          "event_id": "g009",
+          "title": "ボツワナ、Starlinkの衛星直結携帯サービスを2027年初頭に全国展開へ",
+          "reasons": [
+            "unknown_topic_value"
+          ],
+          "unsupported_facts": [],
+          "invalid_source_fact_ids": [],
+          "uncovered_source_fact_ids": []
+        }
+      ],
+      "unpublishable_items": []
+    },
+    {
+      "request_id": "japan_economy-01-ce3c7c264d2361ad",
+      "event_response": {
+        "missing_event_ids": [],
+        "duplicate_event_ids": [],
+        "unknown_event_ids": [],
+        "cross_event_evidence_ids": [],
+        "cross_event_source_fact_ids": [],
+        "unknown_source_fact_ids": [],
+        "invalid_event_decisions": {},
+        "malformed_event_results": 0
+      },
+      "missing_event_ids": [
+        "g001",
+        "g003"
+      ],
+      "conflicting_event_ids": [],
+      "missing_source_fact_ids_by_event": {},
+      "rejected_items": [
+        {
+          "event_id": "g001",
+          "title": "食料品の消費税1%案、2年後の税率復帰リスクを政権有識者が指摘",
+          "reasons": [
+            "unknown_topic_value"
+          ],
+          "unsupported_facts": [],
+          "invalid_source_fact_ids": [],
+          "uncovered_source_fact_ids": []
+        },
+        {
+          "event_id": "g003",
+          "title": "ドル円が一時159.06円、ユーロ円は174.97円まで上昇",
+          "reasons": [
+            "unsupported_summary_point",
+            "unsupported_title",
+            "unknown_topic_value"
+          ],
+          "unsupported_facts": [
+            "ユーロ円はロンドン市場で一段高となり、一時174.97円付近まで上昇した。",
+            "記事執筆時の表示値はドル円158.94円、ユーロ円174.86円だった。"
+          ],
+          "invalid_source_fact_ids": [],
+          "uncovered_source_fact_ids": []
+        }
+      ],
+      "unpublishable_items": []
+    },
+    {
+      "request_id": "north_america-01-0dfd7d0f2d308ba6",
+      "event_response": {
+        "missing_event_ids": [],
+        "duplicate_event_ids": [],
+        "unknown_event_ids": [],
+        "cross_event_evidence_ids": [],
+        "cross_event_source_fact_ids": [],
+        "unknown_source_fact_ids": [],
+        "invalid_event_decisions": {
+          "g003": "body_evidence_cannot_be_insufficient",
+          "g004": "body_evidence_cannot_be_insufficient"
+        },
+        "malformed_event_results": 0
+      },
+      "missing_event_ids": [
+        "g002",
+        "g003",
+        "g004",
+        "g006"
+      ],
+      "conflicting_event_ids": [],
+      "missing_source_fact_ids_by_event": {},
+      "rejected_items": [
+        {
+          "event_id": "g002",
+          "title": "米株の高値更新に対し、評価額と証拠金融の過熱懸念",
+          "reasons": [
+            "unsupported_title",
+            "unknown_topic_value"
+          ],
+          "unsupported_facts": [],
+          "invalid_source_fact_ids": [],
+          "uncovered_source_fact_ids": []
+        },
+        {
+          "event_id": "g006",
+          "title": "FRB、追加利上げを巡り内部の見解が分かれる",
+          "reasons": [
+            "unknown_topic_value"
+          ],
+          "unsupported_facts": [],
+          "invalid_source_fact_ids": [],
+          "uncovered_source_fact_ids": []
+        }
+      ],
+      "unpublishable_items": []
+    }
+  ],
+  "summary_diagnostics": [
+    {
+      "phase": "unsupported_summary_points_rejected",
+      "category": "OpenAI",
+      "facts": [
+        "HiLocalの産業安全通訳「hiWorker」は2026年に約100社と供給契約を結び、1,500超の産業現場へ導入された。",
+        "OpenAIは11月19日、音声エージェント向けリアルタイムモデル「GPT-Live-1.1」をAPIで公開した。"
+      ]
+    },
+    {
+      "phase": "normalized_item_rejected",
+      "category": "OpenAI",
+      "title": "OpenAI音声API活用の産業通訳、約100社・1,500超の現場へ導入",
+      "reasons": [
+        "unsupported_summary_point"
+      ],
+      "fact_count": 2
+    },
+    {
+      "phase": "invalid_summary_points_rejected",
+      "category": "F1",
+      "title": "FIAとF1各陣営、2030年の2.1リッターV8ターボ枠組みに全会一致",
+      "points": [
+        {
+          "point": 2,
+          "text": "エンジンは持続可能燃料を使い、限定的なハイブリッド支援を残す一方、電動出力や最低車重、コスト上限は未確定だ。",
+          "reason": "no_material_fact_after_normalization"
+        }
+      ]
+    },
+    {
+      "phase": "normalized_item_rejected",
+      "category": "F1",
+      "title": "FIAとF1各陣営、2030年の2.1リッターV8ターボ枠組みに全会一致",
+      "reasons": [
+        "invalid_summary_point"
+      ],
+      "fact_count": 3
+    },
+    {
+      "phase": "normalized_item_rejected",
+      "category": "SpaceX",
+      "title": "コロンビア、刑務所の通信遮断義務を巡りStarlinkを調査",
+      "reasons": [
+        "unknown_topic_value"
+      ],
+      "fact_count": 3
+    },
+    {
+      "phase": "normalized_item_rejected",
+      "category": "SpaceX",
+      "title": "ボツワナ、Starlinkの衛星直結携帯サービスを2027年初頭に全国展開へ",
+      "reasons": [
+        "unknown_topic_value"
+      ],
+      "fact_count": 3
+    },
+    {
+      "phase": "normalized_item_rejected",
+      "category": "日本経済",
+      "title": "食料品の消費税1%案、2年後の税率復帰リスクを政権有識者が指摘",
+      "reasons": [
+        "unknown_topic_value"
+      ],
+      "fact_count": 3
+    },
+    {
+      "phase": "unsupported_summary_points_rejected",
+      "category": "日本経済",
+      "facts": [
+        "ユーロ円はロンドン市場で一段高となり、一時174.97円付近まで上昇した。",
+        "記事執筆時の表示値はドル円158.94円、ユーロ円174.86円だった。"
+      ]
+    },
+    {
+      "phase": "normalized_item_rejected",
+      "category": "日本経済",
+      "title": "ドル円が一時159.06円、ユーロ円は174.97円まで上昇",
+      "reasons": [
+        "unsupported_summary_point",
+        "unsupported_title",
+        "unknown_topic_value"
+      ],
+      "fact_count": 1
+    },
+    {
+      "phase": "normalized_item_rejected",
+      "category": "北米経済",
+      "title": "米株の高値更新に対し、評価額と証拠金融の過熱懸念",
+      "reasons": [
+        "unsupported_title",
+        "unknown_topic_value"
+      ],
+      "fact_count": 3
+    },
+    {
+      "phase": "normalized_item_rejected",
+      "category": "北米経済",
+      "title": "FRB、追加利上げを巡り内部の見解が分かれる",
+      "reasons": [
+        "unknown_topic_value"
+      ],
+      "fact_count": 3
+    }
+  ],
+  "recall_risk_categories": [],
+  "recovery_contract": "reuse the same Evidence; change only named rejected request/event entries",
+  "preflight_sha": "4b33871f273c64cf6e96af978b54dca27000f6fe"
+}
