@@ -91,6 +91,17 @@ jobs:
           path: site
           name: github-pages-${{ github.run_attempt }}
 
+      - name: Reject a superseded reviewed site before deployment
+        if: ${{ inputs.expected_site_tree != '' }}
+        env:
+          EXPECTED_SITE_TREE: ${{ inputs.expected_site_tree }}
+        run: |
+          git fetch origin main
+          if [[ "$(git rev-parse FETCH_HEAD:site)" != "$EXPECTED_SITE_TREE" ]]; then
+            echo "A later reviewed site is ready. Refusing this stale deployment." >&2
+            exit 1
+          fi
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
