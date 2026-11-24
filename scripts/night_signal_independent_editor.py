@@ -139,7 +139,17 @@ Use a decision permitted by the packet. Do not add a review or response envelope
             if events[0].get("event_id") != event_id:
                 raise RecoverableReviewError("response identified the wrong event")
             if repeats_previous_issue(events[0], source_event.get("previous_updates", [])):
-                raise RecoverableReviewError("every submitted fact repeats a previous issue")
+                used = sorted({
+                    source_id
+                    for item in events[0].get("items", [])
+                    for point in item.get("summary_points", [])
+                    for source_id in point.get("source_fact_ids", [])
+                    if isinstance(source_id, str)
+                })
+                raise RecoverableReviewError(
+                    "every submitted fact repeats a previous issue; "
+                    f"already considered source fact IDs: {', '.join(used)}"
+                )
             return response
 
         try:
@@ -153,8 +163,11 @@ Use a decision permitted by the packet. Do not add a review or response envelope
             print(f"Retrying {request_id}/{event_id}: {reason}", flush=True)
             response = checked_response(
                 f"\nThe previous attempt failed: {reason}. Re-read the original evidence. "
-                "Return compact JSON only. If the previous issue already contains the facts, "
-                "identify a source-backed new fact or explicitly mark the event as duplicate."
+                "Return compact JSON only. Review evidence facts outside the already considered IDs. "
+                "Prioritize concrete changes in deadlines, scope, eligibility, and operating rules. "
+                "Publish if the evidence establishes a material change and cite the exact source fact IDs. "
+                "If the article adds no material change, emit duplicate_previous_event with items set to []. "
+                "Never infer a new event solely from a newer article date."
             )
         entry = {"request_id": request_id, "response": response}
         name = hashlib.sha256(f"{request_id}/{event_id}".encode()).hexdigest()
