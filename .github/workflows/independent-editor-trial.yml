@@ -7,6 +7,13 @@ on:
         description: JST issue date with a retained final Evidence artifact
         required: true
         type: string
+      sample:
+        description: Test a small group of real events to diagnose inference and output limits
+        type: boolean
+        default: false
+      history_commit:
+        description: Optional trusted main commit containing the historical comparison issues
+        type: string
 
 permissions:
   actions: read
@@ -24,6 +31,7 @@ jobs:
       - uses: actions/checkout@v5
         with:
           persist-credentials: false
+          fetch-depth: 0
       - name: Restore final Evidence without starting collection
         env:
           GH_TOKEN: ${{ github.token }}
@@ -35,13 +43,22 @@ jobs:
         if: vars.NIGHT_SIGNAL_WORKERS_AI_FREE_VERIFIED == 'true'
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          HISTORY_COMMIT: ${{ inputs.history_commit }}
+          SAMPLE_ONLY: ${{ inputs.sample }}
           NIGHT_SIGNAL_WORKERS_AI_TOKEN: ${{ secrets.NIGHT_SIGNAL_WORKERS_AI_TOKEN }}
           ISSUE_DATE: ${{ inputs.issue_date }}
         run: |
+          args=()
+          if [[ -n "$HISTORY_COMMIT" ]]; then
+            [[ "$HISTORY_COMMIT" =~ ^[0-9a-f]{40}$ ]]
+            git merge-base --is-ancestor "$HISTORY_COMMIT" origin/main
+            args+=(--history-commit "$HISTORY_COMMIT")
+          fi
+          if [[ "$SAMPLE_ONLY" == "true" ]]; then args+=(--sample); fi
           python3 scripts/night_signal_independent_editor.py \
             "state/$ISSUE_DATE/editor_packet.json" \
             "state/$ISSUE_DATE/evidence.json" \
-            "$RUNNER_TEMP/independent-editor"
+            "$RUNNER_TEMP/independent-editor" "${args[@]}"
       - name: Require a verified free account
         if: vars.NIGHT_SIGNAL_WORKERS_AI_FREE_VERIFIED != 'true'
         run: |
