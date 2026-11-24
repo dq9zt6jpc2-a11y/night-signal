@@ -1,0 +1,428 @@
+{
+  "contract": "night-signal-cloud-review-checkpoint-v1",
+  "issue_date": "2026-11-24",
+  "evidence_sha256": "124fb548bc466507dbf45069a216ca26ed9070be733bb45ead3e3a35038486bb",
+  "manifest_commit_sha": "9f724426590a77dd7e21af9176781b4245f578fa",
+  "runbook_blob_sha": "d64b7bf4c422fd21a49ac7ffff7af21d2fdd1c9a",
+  "part_path": "cloud-evidence/2026-11-24/requests/002.json",
+  "responses": [
+    {
+      "request_id": "openai-05-6597fd5b0caa7bc8",
+      "response": {
+        "events": [
+          {
+            "event_id": "g031",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g032",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、AlephをChatGPT Adsの地域独占販売代理店に指定",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Alephは対象市場で独占販売代理店となり、広告主は現地チームを通じて契約、支払い、キャンペーン支援を受けられる。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01"
+                    ]
+                  },
+                  {
+                    "text": "対象は中南米14カ国、欧州・中央アジア16カ国、中東・アフリカ10カ国、アジア太平洋4カ国だ。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f02"
+                    ]
+                  },
+                  {
+                    "text": "今回の発表は、広告キャンペーンで国をターゲットにする機能を変更しない。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f06"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g033",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g029",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "カリフォルニア大学、OpenAIと120万ドルの1年契約",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "契約は12月に始まる1年間の提携で、総額は120万ドルだ。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f01"
+                    ]
+                  },
+                  {
+                    "text": "契約は従来のOpenAIとの合意を延長するもので、大学側は春から協議していたとしている。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f02"
+                    ]
+                  },
+                  {
+                    "text": "最終合意を事前に十分相談されなかったとして、カリフォルニア大学Academic Senateのメンバーが懸念を示した。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f03"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g030",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g028",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "honda-01-29dd21576b80ba7d",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-01-cab9ee32b4a9c873",
+      "response": {
+        "events": [
+          {
+            "event_id": "g006",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "ペレス、ラスベガスGP接触でカタールGP5グリッド降格",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "ラスベガスGPではGaslyが5位、チームメイトのColapintoが6位となり、Alpineが得点を重ねた。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f02"
+                    ]
+                  },
+                  {
+                    "text": "次戦カタールGPは11月29日に開催される。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f08"
+                    ]
+                  },
+                  {
+                    "text": "通常の10秒加算に相当する処分は、Perezが接触でリタイアしたため、カタールGPの5グリッド降格へ変換された。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f04"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g004",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-02-27b78b8d395c1354",
+      "response": {
+        "events": [
+          {
+            "event_id": "g010",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g011",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Ferrari、ラスベガスGPでHamiltonとLeclercが再接触",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "38周目、Leclercが7コーナーでHamiltonの内側へ仕掛け、両車が接触してHamiltonがスピンした。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01"
+                    ]
+                  },
+                  {
+                    "text": "接触は、Mexicoで勝利を逃した1周目の争いを受けてVasseur代表が両者と非公開協議を行った2週間後に起きた。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f02"
+                    ]
+                  },
+                  {
+                    "text": "Vasseur代表は初めて両者の組み合わせの適性に疑問を示し、今季の複数の争いが協力関係を損ねたと認めた。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f12"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "FIA、2027年からF1へ常勤スチュワードを導入",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "FIAは2030年パワーユニット技術枠組みへの全会一致に加え、2027年シーズンに向けて常勤スチュワードの採用を開始した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f06"
+                    ]
+                  },
+                  {
+                    "text": "常勤化は、現在の持ち回り・非常勤制からF1の競技運営構造を変える。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f09"
+                    ]
+                  },
+                  {
+                    "text": "2030年枠組みは長期の技術規則を定め、常勤スチュワード制度は2027年から週末ごとの裁定の一貫性を高める狙いだ。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f10"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g012",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "spacex-01-cac5c0e91b475748",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "SpaceX、USSF-266打ち上げを4時間枠で予定",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "4時間の打ち上げ時間帯は午前7時55分に始まる予定だ。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f01"
+                    ]
+                  },
+                  {
+                    "text": "Falcon 9はUSSF-266ミッションを搭載する。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f02"
+                    ]
+                  },
+                  {
+                    "text": "第1段ブースターは29回目の飛行となる。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f03"
+                    ]
+                  },
+                  {
+                    "text": "段分離後、第1段は太平洋上のドローン船Of Course I Still Love Youへ着艦する予定だ。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f04"
+                    ]
+                  }
+                ],
+                "topic_value_class": "material_schedule_change",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "spacex-02-d134af70b10f7f82",
+      "response": {
+        "events": [
+          {
+            "event_id": "g009",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    }
+  ]
+}
