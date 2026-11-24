@@ -7,6 +7,7 @@ import hashlib
 import json
 import os
 import re
+import subprocess
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from threading import Lock
@@ -55,7 +56,7 @@ def repeats_previous_issue(result: dict, previous_updates: list[dict]) -> bool:
         for fact in submitted
     )
 
-def run_review(packet_path: Path, evidence_path: Path, trial: Path, infer, *, sample: bool = False) -> dict:
+def run_review(packet_path: Path, evidence_path: Path, trial: Path, infer, *, sample: bool = False, history_commit: str = "") -> dict:
     packet = editor.read_json(packet_path)
     digest = hashlib.sha256(evidence_path.read_bytes()).hexdigest()
     if packet.get("contract") != editor.PACKET_CONTRACT or packet.get("evidence_sha256") != digest:
@@ -97,11 +98,25 @@ Use a decision permitted by the packet. Do not add a review or response envelope
     state_root = trial / "state"
     issue_dir = state_root / issue_date
     issue_dir.mkdir(parents=True, exist_ok=True)
-    for prior_issue in (ROOT / "state").glob("*/issue.json"):
-        if prior_issue.parent.name < issue_date:
-            destination = state_root / prior_issue.parent.name / "issue.json"
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            destination.write_bytes(prior_issue.read_bytes())
+    if history_commit:
+        paths = subprocess.check_output(
+            ["git", "ls-tree", "-r", "--name-only", history_commit, "--", "state"],
+            cwd=ROOT, text=True,
+        ).splitlines()
+        for path in paths:
+            match = re.fullmatch(r"state/(20\d{2}-\d{2}-\d{2})/issue\.json", path)
+            if match and match[1] < issue_date:
+                destination = state_root / match[1] / "issue.json"
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                destination.write_bytes(subprocess.check_output(
+                    ["git", "show", f"{history_commit}:{path}"], cwd=ROOT,
+                ))
+    else:
+        for prior_issue in (ROOT / "state").glob("*/issue.json"):
+            if prior_issue.parent.name < issue_date:
+                destination = state_root / prior_issue.parent.name / "issue.json"
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                destination.write_bytes(prior_issue.read_bytes())
     evidence = editor.read_json(evidence_path)
     editor.evidence_store.validate_bundle(evidence, issue_date)
     editor.bind_immutable_packet_requests(packet, editor.review_requests(issue_date, evidence, state_root))
@@ -221,14 +236,17 @@ def main() -> int:
     parser.add_argument("evidence", type=Path)
     parser.add_argument("trial_directory", type=Path)
     parser.add_argument("--sample", action="store_true")
+    parser.add_argument("--history-commit", default="")
     args = parser.parse_args()
+    if args.history_commit and not re.fullmatch(r"[0-9a-f]{40}", args.history_commit):
+        parser.error("History commit must be a full Git commit SHA")
     if args.trial_directory.exists():
         parser.error("Use a new trial directory")
     account = os.environ.get("CLOUDFLARE_ACCOUNT_ID")
     token = os.environ.get("NIGHT_SIGNAL_WORKERS_AI_TOKEN")
     if not account or not token:
         parser.error("The Workers AI account ID and scoped inference token are required")
-    receipt = run_review(args.packet, args.evidence, args.trial_directory, cloudflare_inference(account, token), sample=args.sample)
+    receipt = run_review(args.packet, args.evidence, args.trial_directory, cloudflare_inference(account, token), sample=args.sample, history_commit=args.history_commit)
     print(json.dumps(receipt, ensure_ascii=False))
     return 0
 
