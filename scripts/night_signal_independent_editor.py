@@ -56,7 +56,20 @@ def repeats_previous_issue(result: dict, previous_updates: list[dict]) -> bool:
         for fact in submitted
     )
 
-def run_review(packet_path: Path, evidence_path: Path, trial: Path, infer, *, sample: bool = False, history_commit: str = "") -> dict:
+def checkpoint_matches(cached: object, checkpoint_id: str, request_id: str, event_id: str) -> bool:
+    if not isinstance(cached, dict):
+        return False
+    if cached.get("checkpoint_id") != checkpoint_id or cached.get("request_id") != request_id:
+        return False
+    response = cached.get("response")
+    events = response.get("events") if isinstance(response, dict) else None
+    return (
+        isinstance(events, list) and len(events) == 1
+        and isinstance(events[0], dict) and events[0].get("event_id") == event_id
+    )
+
+
+def run_review(packet_path: Path, evidence_path: Path, trial: Path, infer, *, sample: bool = False, history_commit: str = "", resume: Path | None = None) -> dict:
     packet = editor.read_json(packet_path)
     digest = hashlib.sha256(evidence_path.read_bytes()).hexdigest()
     if packet.get("contract") != editor.PACKET_CONTRACT or packet.get("evidence_sha256") != digest:
@@ -124,10 +137,31 @@ Use a decision permitted by the packet. Do not add a review or response envelope
     retry_lock = Lock()
     retries_left = 8
 
+    identity = hashlib.sha256()
+    for component in (
+        packet_path.read_bytes(), digest.encode(), MODEL.encode(),
+        instructions.encode(), Path(__file__).read_bytes(),
+        (ROOT / "config/night_signal_ai.json").read_bytes(), history_commit.encode(),
+    ):
+        identity.update(len(component).to_bytes(8, "big"))
+        identity.update(component)
+    checkpoint_id = identity.hexdigest()
+
     def review_one(task):
         nonlocal retries_left
         request_id, source_event, message = task
         event_id = source_event["id"]
+        name = hashlib.sha256(f"{request_id}/{event_id}".encode()).hexdigest()
+        destination = trial / "responses" / f"{name}.json"
+        if resume is not None:
+            try:
+                cached = json.loads((resume / "responses" / f"{name}.json").read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                cached = {}
+            if checkpoint_matches(cached, checkpoint_id, request_id, event_id):
+                editor.write_json_atomic(destination, cached)
+                print(f"Reused {request_id}/{event_id} from a matching checkpoint", flush=True)
+                return cached
         started = monotonic()
         print(f"Starting {request_id}/{event_id}", flush=True)
 
@@ -169,9 +203,8 @@ Use a decision permitted by the packet. Do not add a review or response envelope
                 "If the article adds no material change, emit duplicate_previous_event with items set to []. "
                 "Never infer a new event solely from a newer article date."
             )
-        entry = {"request_id": request_id, "response": response}
-        name = hashlib.sha256(f"{request_id}/{event_id}".encode()).hexdigest()
-        editor.write_json_atomic(trial / "responses" / f"{name}.json", entry)
+        entry = {"request_id": request_id, "response": response, "checkpoint_id": checkpoint_id}
+        editor.write_json_atomic(destination, entry)
         print(f"Completed {request_id}/{event_id} in {monotonic() - started:.1f}s", flush=True)
         return entry
 
@@ -248,6 +281,7 @@ def main() -> int:
     parser.add_argument("packet", type=Path)
     parser.add_argument("evidence", type=Path)
     parser.add_argument("trial_directory", type=Path)
+    parser.add_argument("--resume", type=Path)
     parser.add_argument("--sample", action="store_true")
     parser.add_argument("--history-commit", default="")
     args = parser.parse_args()
@@ -259,7 +293,7 @@ def main() -> int:
     token = os.environ.get("NIGHT_SIGNAL_WORKERS_AI_TOKEN")
     if not account or not token:
         parser.error("The Workers AI account ID and scoped inference token are required")
-    receipt = run_review(args.packet, args.evidence, args.trial_directory, cloudflare_inference(account, token), sample=args.sample, history_commit=args.history_commit)
+    receipt = run_review(args.packet, args.evidence, args.trial_directory, cloudflare_inference(account, token), sample=args.sample, history_commit=args.history_commit, resume=args.resume)
     print(json.dumps(receipt, ensure_ascii=False))
     return 0
 
