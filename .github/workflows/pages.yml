@@ -28,6 +28,7 @@ on:
         type: string
 
 permissions:
+  actions: read
   contents: read
   pages: write
   id-token: write
@@ -86,10 +87,28 @@ jobs:
           enablement: true
 
       - name: Upload artifact
+        id: upload
         uses: actions/upload-pages-artifact@v5
         with:
           path: site
           name: github-pages-${{ github.run_attempt }}
+
+      - name: Confirm uploaded artifact is visible before deploying
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARTIFACT_ID: ${{ steps.upload.outputs.artifact_id }}
+        run: |
+          [[ "$ARTIFACT_ID" =~ ^[0-9]+$ ]]
+          for attempt in $(seq 1 10); do
+            if gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/artifacts" \
+              --paginate --jq ".artifacts[] | select(.id == $ARTIFACT_ID and .expired == false) | .id" \
+              | grep -Fx "$ARTIFACT_ID"; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "Uploaded Pages artifact $ARTIFACT_ID is not visible for run $GITHUB_RUN_ID." >&2
+          exit 1
 
       - name: Reject a superseded reviewed site before deployment
         if: ${{ inputs.expected_site_tree != '' }}
