@@ -1,0 +1,573 @@
+{
+  "contract": "night-signal-cloud-review-correction-v1",
+  "issue_date": "2026-11-24",
+  "evidence_sha256": "124fb548bc466507dbf45069a216ca26ed9070be733bb45ead3e3a35038486bb",
+  "cloud_handoff": {
+    "execution_surface": "chatgpt-web-scheduled-task",
+    "reviewed_at": "2026-11-24T17:03:47+09:00",
+    "correction_attempt": 1
+  },
+  "responses": [
+    {
+      "request_id": "openai-03-1bb8b46b135b4a5f",
+      "response": {
+        "events": [
+          {
+            "event_id": "g017",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g018",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g015",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Cohesity、OpenAIのCyberモデルでITDR製品の脆弱性試験へ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Cohesityは、隔離された管理環境でOpenAIのGPT Cyber Modelsを使い、製品の潜在的なセキュリティ弱点を試験する計画を発表した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f01"
+                    ]
+                  },
+                  {
+                    "text": "同社はITDRソフトウェアの管理された試験を速やかに始め、結果を既存の開発・セキュリティ工程で評価して修正する計画だ。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f10"
+                    ]
+                  },
+                  {
+                    "text": "Cohesity Data Cloudは140超の国の顧客に利用され、Global 500の3分の2を含むと同社は説明している。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f14"
+                    ]
+                  }
+                ],
+                "topic_value_class": "risk_or_safety_signal",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g016",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAIとCisco、未修正Linuxを稼働中に守るOSS「Shirudo」を公開",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Shirudoは、恒久パッチの準備中にeBPFでエクスプロイト経路を遮断するオープンソースのランタイムだ。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f01"
+                    ]
+                  },
+                  {
+                    "text": "両社は、恒久的な修正プログラムの作成・試験中もセキュリティチームがLinuxマシンを保護できるようにする目的で公開した。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f05"
+                    ]
+                  },
+                  {
+                    "text": "プロジェクトは2026年11月23日に発表され、コードはBSD 2条項、BPFプログラムはBSDとGPLのデュアルライセンスで提供される。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f06"
+                    ]
+                  }
+                ],
+                "topic_value_class": "risk_or_safety_signal",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g019",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-02-27b78b8d395c1354",
+      "response": {
+        "events": [
+          {
+            "event_id": "g010",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g011",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Ferrari、ラスベガスGPでHamiltonとLeclercが再接触",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "38周目、Leclercが7コーナーでHamiltonの内側へ仕掛け、両車が接触してHamiltonがスピンした。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01"
+                    ]
+                  },
+                  {
+                    "text": "接触は、Mexicoで勝利を逃した1周目の争いを受けてVasseur代表が両者と非公開協議を行った2週間後に起きた。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f02"
+                    ]
+                  },
+                  {
+                    "text": "Vasseur代表は初めて両者の組み合わせの適性に疑問を示し、今季の複数の争いが協力関係を損ねたと認めた。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f12"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "FIA、2027年からF1へ常勤スチュワードを導入",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "FIAは2030年パワーユニット技術枠組みへの全会一致に加え、2027年シーズンに向けて常勤スチュワードの採用を開始した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f06"
+                    ]
+                  },
+                  {
+                    "text": "常勤化は、現在の持ち回り・非常勤制からF1の競技運営構造を変える。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f09"
+                    ]
+                  },
+                  {
+                    "text": "2030年枠組みは長期の技術規則を定め、常勤スチュワード制度は2027年から週末ごとの裁定の一貫性を高める狙いだ。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f10"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g012",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "spacex-01-cac5c0e91b475748",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "SpaceX、USSF-266打ち上げを4時間枠で予定",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "4時間の打ち上げ時間帯は午前7時55分に始まる予定だ。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f01"
+                    ]
+                  },
+                  {
+                    "text": "ロケットはUSSF 266ミッションを搭載する予定だ。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f02"
+                    ]
+                  },
+                  {
+                    "text": "第1段ブースターは29回目の飛行となる。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f03"
+                    ]
+                  },
+                  {
+                    "text": "段分離後、第1段は太平洋上のドローン船Of Course I Still Love Youへ着艦する予定だ。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f04"
+                    ]
+                  }
+                ],
+                "topic_value_class": "material_schedule_change",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "yoasobi_ikuta-01-62f8b5ad4cd063cf",
+      "response": {
+        "events": [
+          {
+            "event_id": "g002",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "asia-01-78d489928910c0f6",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "ASEAN、デジタル経済枠組み協定DEFAを11カ国で署名",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "シンガポール当局は、DEFAをASEAN初の独立した法的拘束力のあるデジタル経済協定と説明している。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01"
+                    ]
+                  },
+                  {
+                    "text": "ASEANは2023年9月に交渉を開始し、2026年5月に妥結した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f04"
+                    ]
+                  },
+                  {
+                    "text": "ASEAN全11加盟国が2026年11月14日に署名し、署名後180日で発効する日程では2027年5月13日となる。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f07"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "GRT、中国Zhenguan New Materialと最大3億元のフィルム供給基本契約",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "GRTは、出資取得を進めるZhenguan New Materialと最大3億元規模の機能性フィルム供給基本契約を結んだ。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01",
+                      "e002:f04"
+                    ]
+                  },
+                  {
+                    "text": "3億元は供給上限で、実際の売上高は個別発注によって確定する。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f02"
+                    ]
+                  },
+                  {
+                    "text": "契約は2027年6月30日までで、MLCC用離型フィルム、PET、TPUなどを供給し、2027年には揚州と欽天の新工場稼働を予定する。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f11"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g004",
+            "decision": "background_or_navigation",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "background_or_navigation",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "north_america-01-fedd3eb5d2000494",
+      "response": {
+        "events": [
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "S&P 500、週初の取引で4%超反発　12月利上げ観測は95%超",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "最初の取引だけで指数は4.0%超回復し、直前には7営業日連続で下落していた。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01"
+                    ]
+                  },
+                  {
+                    "text": "記事は、NvidiaのCEO復帰がAI拡張計画と半導体供給の継続性を示すとの受け止めが市場にあると分析した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f09"
+                    ]
+                  },
+                  {
+                    "text": "12月9日の会合では、政策金利を4.25%付近へ引き上げる確率を市場が95%超織り込んでいる。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f13"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "米住宅、売り出し1件当たり高意向買い手が3.5人で過去最低",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Zillowによると、2026年第3四半期の全米の売り出し物件1件当たり高意向買い手は平均3.5人で、前年同期比4.8%減り、2023年下半期の集計開始以来最低となった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e005:f04"
+                    ]
+                  },
+                  {
+                    "text": "Freddie Macの調査では、30年固定住宅ローン金利が2026年7月2日の週の6.43%から10月1日に7.28%へ上昇した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f07"
+                    ]
+                  },
+                  {
+                    "text": "Zillowは、住宅ローン金利上昇で比較検討する買い手が減る一方、在庫が積み上がり需要が分散したと指摘した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f05"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g005",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    }
+  ]
+}
