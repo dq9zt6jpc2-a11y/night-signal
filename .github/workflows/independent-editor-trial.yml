@@ -1,4 +1,5 @@
 name: NIGHT SIGNAL Independent Editor Trial
+run-name: ${{ inputs.watchdog_probe && format('Independent editor watchdog probe {0}', inputs.issue_date) || format('Independent editor trial {0}', inputs.issue_date) }}
 
 on:
   workflow_dispatch:
@@ -9,6 +10,10 @@ on:
         type: string
       sample:
         description: Test a small group of real events to diagnose inference and output limits
+        type: boolean
+        default: false
+      watchdog_probe:
+        description: Read-only deadline-bound trial requested by the scheduled watchdog
         type: boolean
         default: false
       resume_run_id:
@@ -53,10 +58,24 @@ jobs:
           [[ "$RESUME_RUN_ID" =~ ^[0-9]+$ ]]
           [[ "$(gh run view "$RESUME_RUN_ID" --json workflowName,status --jq '.workflowName + ":" + .status')" == "NIGHT SIGNAL Independent Editor Trial:completed" ]]
           gh run download "$RESUME_RUN_ID" --name independent-editor-trial --dir "$RUNNER_TEMP/independent-editor-resume"
+      - name: Recheck eligibility when the queued probe starts
+        id: probe_gate
+        if: inputs.watchdog_probe
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_DATE: ${{ inputs.issue_date }}
+        run: |
+          audit="$RUNNER_TEMP/queued-probe-audit.json"
+          python3 scripts/night_signal_operational_audit.py "$ISSUE_DATE" --report-only > "$audit"
+          decision="$(python3 scripts/night_signal_editor_recovery_decision.py "$audit")"
+          echo "$decision"
+          if [[ "$(jq -er .reason <<< "$decision")" == "eligible_for_independent_editor" ]]; then
+            echo "eligible=true" >> "$GITHUB_OUTPUT"
+          fi
       - name: Generate and validate the independent review
         id: generate
         timeout-minutes: 16
-        if: vars.NIGHT_SIGNAL_WORKERS_AI_FREE_VERIFIED == 'true'
+        if: vars.NIGHT_SIGNAL_WORKERS_AI_FREE_VERIFIED == 'true' && (!inputs.watchdog_probe || steps.probe_gate.outputs.eligible == 'true')
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           HISTORY_COMMIT: ${{ inputs.history_commit }}
@@ -94,7 +113,7 @@ jobs:
       - name: Identify an interrupted full trial with reusable work
         id: resume
         if: >-
-          ${{ always() && github.ref == 'refs/heads/main' && !inputs.sample &&
+          ${{ always() && github.ref == 'refs/heads/main' && !inputs.sample && !inputs.watchdog_probe &&
               inputs.resume_run_id == '' && steps.generate.outcome == 'failure' &&
               steps.save.outcome == 'success' }}
         run: |
