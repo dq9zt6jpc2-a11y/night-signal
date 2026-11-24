@@ -299,29 +299,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh run list --workflow pages.yml --limit 30 \
-            --json databaseId --jq '.[].databaseId' \
-            > "$RUNNER_TEMP/pages-before.txt"
-          gh workflow run pages.yml --ref main \
-            -f "issue_date=$ISSUE_DATE" \
-            -f deploy_edited_final_evidence=true
-          RUN_ID=""
-          for attempt in $(seq 1 24); do
-            while read -r candidate; do
-              if ! grep -qx "$candidate" "$RUNNER_TEMP/pages-before.txt"; then
-                RUN_ID="$candidate"
-                break 2
-              fi
-            done < <(
-              gh run list --workflow pages.yml --limit 10 \
-                --json databaseId --jq '.[].databaseId'
-            )
-            sleep 5
-          done
-          if [[ -z "$RUN_ID" ]]; then
-            echo "Pages dispatch did not appear within two minutes." >&2
-            exit 1
-          fi
+          RUN_ID="$(bash scripts/dispatch_reviewed_pages.sh "$ISSUE_DATE" first)"
           echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
 
       - name: Watch the one Pages run
@@ -349,29 +327,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh run list --workflow pages.yml --limit 30 \
-            --json databaseId --jq '.[].databaseId' \
-            > "$RUNNER_TEMP/pages-before-retry.txt"
-          gh workflow run pages.yml --ref main \
-            -f "issue_date=$ISSUE_DATE" \
-            -f deploy_edited_final_evidence=true
-          RUN_ID=""
-          for attempt in $(seq 1 24); do
-            while read -r candidate; do
-              if ! grep -qx "$candidate" "$RUNNER_TEMP/pages-before-retry.txt"; then
-                RUN_ID="$candidate"
-                break 2
-              fi
-            done < <(
-              gh run list --workflow pages.yml --limit 10 \
-                --json databaseId --jq '.[].databaseId'
-            )
-            sleep 5
-          done
-          if [[ -z "$RUN_ID" ]]; then
-            echo "Pages recovery dispatch did not appear within two minutes." >&2
-            exit 1
-          fi
+          RUN_ID="$(bash scripts/dispatch_reviewed_pages.sh "$ISSUE_DATE" retry)"
           gh run watch "$RUN_ID" --exit-status
 
       - name: Verify origin, root URL, and dated URL
