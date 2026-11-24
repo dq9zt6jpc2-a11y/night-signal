@@ -198,6 +198,14 @@ jobs:
             --github-output "$GITHUB_OUTPUT" \
             | tee "$RUNNER_TEMP/final-operational-audit.json"
 
+      - name: Record whether independent editing fits the deadline
+        if: ${{ always() && steps.final.outcome == 'success' && steps.initial.outputs.published != 'true' }}
+        run: |
+          set -o pipefail
+          python3 scripts/night_signal_editor_recovery_decision.py \
+            "$RUNNER_TEMP/final-operational-audit.json" \
+            | tee "$RUNNER_TEMP/editor-recovery-operational-audit.json"
+
       - name: Preserve the deterministic reliability report for 30 days
         if: ${{ always() }}
         uses: actions/upload-artifact@v7.0.1
