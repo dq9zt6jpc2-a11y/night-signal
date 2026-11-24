@@ -69,6 +69,35 @@ def checkpoint_matches(cached: object, checkpoint_id: str, request_id: str, even
     )
 
 
+def review_all_candidates(tasks, review_one, trial):
+    """Keep processing other candidates when a bounded candidate attempt fails."""
+    results = []
+    failures = []
+
+    def attempt(task):
+        try:
+            return review_one(task), None
+        except (RecoverableReviewError, TimeoutError, json.JSONDecodeError) as exc:
+            return None, {
+                "request_id": task[0],
+                "event_id": task[1]["id"],
+                "reason": str(exc),
+            }
+
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        # Workers pull the next candidate as soon as they are free. map still
+        # returns in input order so the review contract stays deterministic.
+        for result, failure in pool.map(attempt, tasks):
+            if failure is not None:
+                failures.append(failure)
+                editor.write_json_atomic(trial / "failed_candidates.json", failures)
+            else:
+                results.append(result)
+    if failures:
+        raise RecoverableReviewError(f"{len(failures)} candidates need another attempt; completed responses retained")
+    return results
+
+
 def run_review(packet_path: Path, evidence_path: Path, trial: Path, infer, *, sample: bool = False, history_commit: str = "", resume: Path | None = None) -> dict:
     packet = editor.read_json(packet_path)
     digest = hashlib.sha256(evidence_path.read_bytes()).hexdigest()
@@ -217,10 +246,8 @@ Use a decision permitted by the packet. Do not add a review or response envelope
         }
 
     by_request = {req["request_id"]: [] for req in requests}
-    with ThreadPoolExecutor(max_workers=3) as pool:
-        for start in range(0, len(tasks), 3):
-            for entry in pool.map(review_one, tasks[start:start + 3]):
-                by_request[entry["request_id"]].extend(entry["response"]["events"])
+    for entry in review_all_candidates(tasks, review_one, trial):
+        by_request[entry["request_id"]].extend(entry["response"]["events"])
     responses = [
         {"request_id": request_id, "response": {"events": events}}
         for request_id, events in by_request.items()
