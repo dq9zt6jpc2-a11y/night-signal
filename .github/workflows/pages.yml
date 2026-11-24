@@ -40,7 +40,6 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 18
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -124,10 +123,9 @@ jobs:
 
       - name: Deploy to GitHub Pages
         id: deployment
-        env:
-          GH_TOKEN: ${{ github.token }}
-          ARTIFACT_ID: ${{ steps.upload.outputs.artifact_id }}
-        run: bash scripts/deploy_pages_artifact.sh
+        uses: actions/deploy-pages@v5
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}
 
       - name: Audit published issue content
         env:
