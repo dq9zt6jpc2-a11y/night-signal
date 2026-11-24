@@ -1,6 +1,6 @@
 {
   "issue_date": "2026-11-24",
-  "evaluated_at_jst": "2026-11-24T17:04:37+09:00",
+  "evaluated_at_jst": "2026-11-24T17:07:24+09:00",
   "passed": true,
   "checks": {
     "all_categories_collected": true,
