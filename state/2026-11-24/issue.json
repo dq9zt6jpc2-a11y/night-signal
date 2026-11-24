@@ -1,0 +1,986 @@
+{
+  "issue_date": "2026-11-24",
+  "cards": [
+    {
+      "watch_topic_id": "enterprise_infrastructure",
+      "title": "GPT-6.2 Sol、ChatGPTのChatタブへ展開 GPT-5.6 Solは12月23日終了",
+      "summary": "OpenAIは23日（現地時間）、ChatGPTのChatタブでGPT-6.2 Solの提供を開始した。 GPT-5.6 Solは12月23日にChat、Work、Codexで提供を終了する。 GPT-6.2 SolはWorkとCodexへの先行投入後、数日でChatタブにも展開された。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-24",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-9ab7eb16c0c7-2026-11-24.html",
+        "sources": [
+          {
+            "label": "digitaltoday.co.kr",
+            "url": "https://www.digitaltoday.co.kr/jp/view/130072/openai-expands-gpt-6-2-sol-rollout-gpt-5-6-sol-to-exit-on-dec-23"
+          }
+        ],
+        "summary": "OpenAIは23日（現地時間）、ChatGPTのChatタブでGPT-6.2 Solの提供を開始した。 GPT-5.6 Solは12月23日にChat、Work、Codexで提供を終了する。 GPT-6.2 SolはWorkとCodexへの先行投入後、数日でChatタブにも展開された。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "OpenAIは23日（現地時間）、ChatGPTのChatタブでGPT-6.2 Solの提供を開始した。",
+            "GPT-5.6 Solは12月23日にChat、Work、Codexで提供を終了する。",
+            "GPT-6.2 SolはWorkとCodexへの先行投入後、数日でChatタブにも展開された。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "OpenAIは23日（現地時間）、ChatGPTのChatタブでGPT-6.2 Solの提供を開始した。",
+              "source_urls": [
+                "https://www.digitaltoday.co.kr/jp/view/130072/openai-expands-gpt-6-2-sol-rollout-gpt-5-6-sol-to-exit-on-dec-23"
+              ]
+            },
+            {
+              "fact": "GPT-5.6 Solは12月23日にChat、Work、Codexで提供を終了する。",
+              "source_urls": [
+                "https://www.digitaltoday.co.kr/jp/view/130072/openai-expands-gpt-6-2-sol-rollout-gpt-5-6-sol-to-exit-on-dec-23"
+              ]
+            },
+            {
+              "fact": "GPT-6.2 SolはWorkとCodexへの先行投入後、数日でChatタブにも展開された。",
+              "source_urls": [
+                "https://www.digitaltoday.co.kr/jp/view/130072/openai-expands-gpt-6-2-sol-rollout-gpt-5-6-sol-to-exit-on-dec-23"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-24"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "ipo_financing",
+      "title": "Richpanel、30日以内のサポート業務50%自動化に返金保証",
+      "summary": "Richpanelは、顧客企業のカスタマーサービス業務の50%を30日以内に自動化できなければ返金するとしている。 同社は、2026年10月までの6カ月間に完了した約300件の導入で保証を満たしたと主張している。 同社CEOによると、人間の担当者が1件の解決に20～30のツールを使い、手順が文書化されていない場合がある。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-24",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-36210bfef4e1-2026-11-24.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/2df67b1b-d1c4-4fb5-9034-72f112cd1bc2"
+          }
+        ],
+        "summary": "Richpanelは、顧客企業のカスタマーサービス業務の50%を30日以内に自動化できなければ返金するとしている。 同社は、2026年10月までの6カ月間に完了した約300件の導入で保証を満たしたと主張している。 同社CEOによると、人間の担当者が1件の解決に20～30のツールを使い、手順が文書化されていない場合がある。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Richpanelは、顧客企業のカスタマーサービス業務の50%を30日以内に自動化できなければ返金するとしている。",
+            "同社は、2026年10月までの6カ月間に完了した約300件の導入で保証を満たしたと主張している。",
+            "同社CEOによると、人間の担当者が1件の解決に20～30のツールを使い、手順が文書化されていない場合がある。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Richpanelは、顧客企業のカスタマーサービス業務の50%を30日以内に自動化できなければ返金するとしている。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/2df67b1b-d1c4-4fb5-9034-72f112cd1bc2"
+              ]
+            },
+            {
+              "fact": "同社は、2026年10月までの6カ月間に完了した約300件の導入で保証を満たしたと主張している。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/2df67b1b-d1c4-4fb5-9034-72f112cd1bc2"
+              ]
+            },
+            {
+              "fact": "同社CEOによると、人間の担当者が1件の解決に20～30のツールを使い、手順が文書化されていない場合がある。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/2df67b1b-d1c4-4fb5-9034-72f112cd1bc2"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-24"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "product_release",
+      "title": "Cohesity、OpenAIのCyberモデルでITDR製品の脆弱性試験へ",
+      "summary": "Cohesityは、隔離された管理環境でOpenAIのGPT Cyber Modelsを使い、製品の潜在的なセキュリティ弱点を試験する計画を発表した。 同社はITDRソフトウェアの管理された試験を速やかに始め、結果を既存の開発・セキュリティ工程で評価して修正する計画だ。 Cohesity Data Cloudは140超の国の顧客に利用され、Global 500の3分の2を含むと同社は説明している。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-24",
+      "topic_value_class": "risk_or_safety_signal",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-0cec0ca4508b-2026-11-24.html",
+        "sources": [
+          {
+            "label": "macaubusiness.com",
+            "url": "https://macaubusiness.com/cohesity-joins-openai-daybreak-defense-network-to-strengthen-product-security/"
+          }
+        ],
+        "summary": "Cohesityは、隔離された管理環境でOpenAIのGPT Cyber Modelsを使い、製品の潜在的なセキュリティ弱点を試験する計画を発表した。 同社はITDRソフトウェアの管理された試験を速やかに始め、結果を既存の開発・セキュリティ工程で評価して修正する計画だ。 Cohesity Data Cloudは140超の国の顧客に利用され、Global 500の3分の2を含むと同社は説明している。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Cohesityは、隔離された管理環境でOpenAIのGPT Cyber Modelsを使い、製品の潜在的なセキュリティ弱点を試験する計画を発表した。",
+            "同社はITDRソフトウェアの管理された試験を速やかに始め、結果を既存の開発・セキュリティ工程で評価して修正する計画だ。",
+            "Cohesity Data Cloudは140超の国の顧客に利用され、Global 500の3分の2を含むと同社は説明している。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Cohesityは、隔離された管理環境でOpenAIのGPT Cyber Modelsを使い、製品の潜在的なセキュリティ弱点を試験する計画を発表した。",
+              "source_urls": [
+                "https://macaubusiness.com/cohesity-joins-openai-daybreak-defense-network-to-strengthen-product-security/"
+              ]
+            },
+            {
+              "fact": "同社はITDRソフトウェアの管理された試験を速やかに始め、結果を既存の開発・セキュリティ工程で評価して修正する計画だ。",
+              "source_urls": [
+                "https://macaubusiness.com/cohesity-joins-openai-daybreak-defense-network-to-strengthen-product-security/"
+              ]
+            },
+            {
+              "fact": "Cohesity Data Cloudは140超の国の顧客に利用され、Global 500の3分の2を含むと同社は説明している。",
+              "source_urls": [
+                "https://macaubusiness.com/cohesity-joins-openai-daybreak-defense-network-to-strengthen-product-security/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-24"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "ipo_financing",
+      "title": "OpenAIとCisco、未修正Linuxを稼働中に守るOSS「Shirudo」を公開",
+      "summary": "Shirudoは、恒久パッチの準備中にeBPFでエクスプロイト経路を遮断するオープンソースのランタイムだ。 両社は、恒久的な修正プログラムの作成・試験中もセキュリティチームがLinuxマシンを保護できるようにする目的で公開した。 プロジェクトは2026年11月23日に発表され、コードはBSD 2条項、BPFプログラムはBSDとGPLのデュアルライセンスで提供される。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-24",
+      "topic_value_class": "risk_or_safety_signal",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-47f11337dbc5-2026-11-24.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/d9069fbf-18f9-4c44-82e9-234293eda2a1"
+          }
+        ],
+        "summary": "Shirudoは、恒久パッチの準備中にeBPFでエクスプロイト経路を遮断するオープンソースのランタイムだ。 両社は、恒久的な修正プログラムの作成・試験中もセキュリティチームがLinuxマシンを保護できるようにする目的で公開した。 プロジェクトは2026年11月23日に発表され、コードはBSD 2条項、BPFプログラムはBSDとGPLのデュアルライセンスで提供される。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Shirudoは、恒久パッチの準備中にeBPFでエクスプロイト経路を遮断するオープンソースのランタイムだ。",
+            "両社は、恒久的な修正プログラムの作成・試験中もセキュリティチームがLinuxマシンを保護できるようにする目的で公開した。",
+            "プロジェクトは2026年11月23日に発表され、コードはBSD 2条項、BPFプログラムはBSDとGPLのデュアルライセンスで提供される。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Shirudoは、恒久パッチの準備中にeBPFでエクスプロイト経路を遮断するオープンソースのランタイムだ。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/d9069fbf-18f9-4c44-82e9-234293eda2a1"
+              ]
+            },
+            {
+              "fact": "両社は、恒久的な修正プログラムの作成・試験中もセキュリティチームがLinuxマシンを保護できるようにする目的で公開した。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/d9069fbf-18f9-4c44-82e9-234293eda2a1"
+              ]
+            },
+            {
+              "fact": "プロジェクトは2026年11月23日に発表され、コードはBSD 2条項、BPFプログラムはBSDとGPLのデュアルライセンスで提供される。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/d9069fbf-18f9-4c44-82e9-234293eda2a1"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-24"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "ipo_financing",
+      "title": "OpenAI、米国の小規模事業者へ無料AI支援「OpenWorks」を開始",
+      "summary": "OpenAIは2026年11月23日、OpenWorksを発表した。 地域のAI専門家が米国の独立系小規模事業者を支援し、事業者は費用を負担しない。 参加事業者にはChatGPT Businessを3カ月無料で提供する。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-24",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-e754025b6d80-2026-11-24.html",
+        "sources": [
+          {
+            "label": "cryptobriefing.com",
+            "url": "https://cryptobriefing.com/openai-launches-openworks-small-businesses/"
+          }
+        ],
+        "summary": "OpenAIは2026年11月23日、OpenWorksを発表した。 地域のAI専門家が米国の独立系小規模事業者を支援し、事業者は費用を負担しない。 参加事業者にはChatGPT Businessを3カ月無料で提供する。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "地域のAI専門家が米国の独立系小規模事業者を支援し、事業者は費用を負担しない。",
+            "参加事業者にはChatGPT Businessを3カ月無料で提供する。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "地域のAI専門家が米国の独立系小規模事業者を支援し、事業者は費用を負担しない。",
+              "source_urls": [
+                "https://cryptobriefing.com/openai-launches-openworks-small-businesses/"
+              ]
+            },
+            {
+              "fact": "参加事業者にはChatGPT Businessを3カ月無料で提供する。",
+              "source_urls": [
+                "https://cryptobriefing.com/openai-launches-openworks-small-businesses/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-24"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "enterprise_infrastructure",
+      "title": "Airwallex、ChatGPT内で財務基盤を操作するプラグインを公開",
+      "summary": "新プラグインは、AIエージェントにAirwallexの金融インフラへのアクセスを提供する。 利用者は自然言語で、資金繰り管理、カード発行、仕入先登録、財務ワークフロー構築を指示できる。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-23",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-1232ff00212d-2026-11-24.html",
+        "sources": [
+          {
+            "label": "thepaypers.com",
+            "url": "https://thepaypers.com/fintech/news/airwallex-launches-plugin-in-chatgpt-for-agent-led-finance-workflows"
+          },
+          {
+            "label": "wisevoter.com",
+            "url": "https://wisevoter.com/world/2026/11/23/airwallex-chatgpt-plugin-ai-finance-agents"
+          }
+        ],
+        "summary": "新プラグインは、AIエージェントにAirwallexの金融インフラへのアクセスを提供する。 利用者は自然言語で、資金繰り管理、カード発行、仕入先登録、財務ワークフロー構築を指示できる。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "新プラグインは、AIエージェントにAirwallexの金融インフラへのアクセスを提供する。",
+            "利用者は自然言語で、資金繰り管理、カード発行、仕入先登録、財務ワークフロー構築を指示できる。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "新プラグインは、AIエージェントにAirwallexの金融インフラへのアクセスを提供する。",
+              "source_urls": [
+                "https://thepaypers.com/fintech/news/airwallex-launches-plugin-in-chatgpt-for-agent-led-finance-workflows",
+                "https://wisevoter.com/world/2026/11/23/airwallex-chatgpt-plugin-ai-finance-agents"
+              ]
+            },
+            {
+              "fact": "利用者は自然言語で、資金繰り管理、カード発行、仕入先登録、財務ワークフロー構築を指示できる。",
+              "source_urls": [
+                "https://thepaypers.com/fintech/news/airwallex-launches-plugin-in-chatgpt-for-agent-led-finance-workflows",
+                "https://wisevoter.com/world/2026/11/23/airwallex-chatgpt-plugin-ai-finance-agents"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-23"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "enterprise_infrastructure",
+      "title": "OpenAI、AlephをChatGPT Adsの地域独占販売代理店に指定",
+      "summary": "Alephは対象市場で独占販売代理店となり、広告主は現地チームを通じて契約、支払い、キャンペーン支援を受けられる。 対象は中南米14カ国、欧州・中央アジア16カ国、中東・アフリカ10カ国、アジア太平洋4カ国だ。 今回の発表は、広告キャンペーンで国をターゲットにする機能を変更しない。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-24",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-6df013021d88-2026-11-24.html",
+        "sources": [
+          {
+            "label": "daily-sun.com",
+            "url": "https://www.daily-sun.com/world/910998/openai-expands-chatgpt-ads-to-44-countries-through-aleph-partnership"
+          }
+        ],
+        "summary": "Alephは対象市場で独占販売代理店となり、広告主は現地チームを通じて契約、支払い、キャンペーン支援を受けられる。 対象は中南米14カ国、欧州・中央アジア16カ国、中東・アフリカ10カ国、アジア太平洋4カ国だ。 今回の発表は、広告キャンペーンで国をターゲットにする機能を変更しない。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Alephは対象市場で独占販売代理店となり、広告主は現地チームを通じて契約、支払い、キャンペーン支援を受けられる。",
+            "対象は中南米14カ国、欧州・中央アジア16カ国、中東・アフリカ10カ国、アジア太平洋4カ国だ。",
+            "今回の発表は、広告キャンペーンで国をターゲットにする機能を変更しない。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Alephは対象市場で独占販売代理店となり、広告主は現地チームを通じて契約、支払い、キャンペーン支援を受けられる。",
+              "source_urls": [
+                "https://www.daily-sun.com/world/910998/openai-expands-chatgpt-ads-to-44-countries-through-aleph-partnership"
+              ]
+            },
+            {
+              "fact": "対象は中南米14カ国、欧州・中央アジア16カ国、中東・アフリカ10カ国、アジア太平洋4カ国だ。",
+              "source_urls": [
+                "https://www.daily-sun.com/world/910998/openai-expands-chatgpt-ads-to-44-countries-through-aleph-partnership"
+              ]
+            },
+            {
+              "fact": "今回の発表は、広告キャンペーンで国をターゲットにする機能を変更しない。",
+              "source_urls": [
+                "https://www.daily-sun.com/world/910998/openai-expands-chatgpt-ads-to-44-countries-through-aleph-partnership"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-24"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "ipo_financing",
+      "title": "カリフォルニア大学、OpenAIと120万ドルの1年契約",
+      "summary": "契約は12月に始まる1年間の提携で、総額は120万ドルだ。 契約は従来のOpenAIとの合意を延長するもので、大学側は春から協議していたとしている。 最終合意を事前に十分相談されなかったとして、カリフォルニア大学Academic Senateのメンバーが懸念を示した。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-24",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-112389740426-2026-11-24.html",
+        "sources": [
+          {
+            "label": "kalw.org",
+            "url": "https://www.kalw.org/bay-area-news/2026-11-23/ucs-agreement-with-openai-prompts-faculty-concerns-over-chatgpt"
+          }
+        ],
+        "summary": "契約は12月に始まる1年間の提携で、総額は120万ドルだ。 契約は従来のOpenAIとの合意を延長するもので、大学側は春から協議していたとしている。 最終合意を事前に十分相談されなかったとして、カリフォルニア大学Academic Senateのメンバーが懸念を示した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "契約は12月に始まる1年間の提携で、総額は120万ドルだ。",
+            "契約は従来のOpenAIとの合意を延長するもので、大学側は春から協議していたとしている。",
+            "最終合意を事前に十分相談されなかったとして、カリフォルニア大学Academic Senateのメンバーが懸念を示した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "契約は12月に始まる1年間の提携で、総額は120万ドルだ。",
+              "source_urls": [
+                "https://www.kalw.org/bay-area-news/2026-11-23/ucs-agreement-with-openai-prompts-faculty-concerns-over-chatgpt"
+              ]
+            },
+            {
+              "fact": "契約は従来のOpenAIとの合意を延長するもので、大学側は春から協議していたとしている。",
+              "source_urls": [
+                "https://www.kalw.org/bay-area-news/2026-11-23/ucs-agreement-with-openai-prompts-faculty-concerns-over-chatgpt"
+              ]
+            },
+            {
+              "fact": "最終合意を事前に十分相談されなかったとして、カリフォルニア大学Academic Senateのメンバーが懸念を示した。",
+              "source_urls": [
+                "https://www.kalw.org/bay-area-news/2026-11-23/ucs-agreement-with-openai-prompts-faculty-concerns-over-chatgpt"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-24"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "race_schedule_results",
+      "title": "ペレス、ラスベガスGP接触でカタールGP5グリッド降格",
+      "summary": "ラスベガスGPではGaslyが5位、チームメイトのColapintoが6位となり、Alpineが得点を重ねた。 次戦カタールGPは11月29日に開催される。 通常の10秒加算に相当する処分は、Perezが接触でリタイアしたため、カタールGPの5グリッド降格へ変換された。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-11-23",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-817983c78459-2026-11-24.html",
+        "sources": [
+          {
+            "label": "gpfans.com",
+            "url": "https://www.gpfans.com/en/f1-news/1093250/f1-las-vegas-grand-prix-2026-results-final-classification-all-penalties-applied/"
+          },
+          {
+            "label": "planetf1.com",
+            "url": "https://www.planetf1.com/news/fia-reveals-punishment-las-vegas-grand-prix-collision"
+          }
+        ],
+        "summary": "ラスベガスGPではGaslyが5位、チームメイトのColapintoが6位となり、Alpineが得点を重ねた。 次戦カタールGPは11月29日に開催される。 通常の10秒加算に相当する処分は、Perezが接触でリタイアしたため、カタールGPの5グリッド降格へ変換された。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "ラスベガスGPではGaslyが5位、チームメイトのColapintoが6位となり、Alpineが得点を重ねた。",
+            "次戦カタールGPは11月29日に開催される。",
+            "通常の10秒加算に相当する処分は、Perezが接触でリタイアしたため、カタールGPの5グリッド降格へ変換された。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "ラスベガスGPではGaslyが5位、チームメイトのColapintoが6位となり、Alpineが得点を重ねた。",
+              "source_urls": [
+                "https://www.gpfans.com/en/f1-news/1093250/f1-las-vegas-grand-prix-2026-results-final-classification-all-penalties-applied/"
+              ]
+            },
+            {
+              "fact": "次戦カタールGPは11月29日に開催される。",
+              "source_urls": [
+                "https://www.gpfans.com/en/f1-news/1093250/f1-las-vegas-grand-prix-2026-results-final-classification-all-penalties-applied/"
+              ]
+            },
+            {
+              "fact": "通常の10秒加算に相当する処分は、Perezが接触でリタイアしたため、カタールGPの5グリッド降格へ変換された。",
+              "source_urls": [
+                "https://www.planetf1.com/news/fia-reveals-punishment-las-vegas-grand-prix-collision"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-22",
+            "2026-11-23"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "race_schedule_results",
+      "title": "Ferrari、ラスベガスGPでHamiltonとLeclercが再接触",
+      "summary": "38周目、Leclercが7コーナーでHamiltonの内側へ仕掛け、両車が接触してHamiltonがスピンした。 接触は、Mexicoで勝利を逃した1周目の争いを受けてVasseur代表が両者と非公開協議を行った2週間後に起きた。 Vasseur代表は初めて両者の組み合わせの適性に疑問を示し、今季の複数の争いが協力関係を損ねたと認めた。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-11-23",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-454d1dca6fff-2026-11-24.html",
+        "sources": [
+          {
+            "label": "planetf1.com",
+            "url": "https://www.planetf1.com/news/lewis-hamilton-charles-leclerc-ferrari-unmanageable-fred-vasseur"
+          }
+        ],
+        "summary": "38周目、Leclercが7コーナーでHamiltonの内側へ仕掛け、両車が接触してHamiltonがスピンした。 接触は、Mexicoで勝利を逃した1周目の争いを受けてVasseur代表が両者と非公開協議を行った2週間後に起きた。 Vasseur代表は初めて両者の組み合わせの適性に疑問を示し、今季の複数の争いが協力関係を損ねたと認めた。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "38周目、Leclercが7コーナーでHamiltonの内側へ仕掛け、両車が接触してHamiltonがスピンした。",
+            "接触は、Mexicoで勝利を逃した1周目の争いを受けてVasseur代表が両者と非公開協議を行った2週間後に起きた。",
+            "Vasseur代表は初めて両者の組み合わせの適性に疑問を示し、今季の複数の争いが協力関係を損ねたと認めた。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "38周目、Leclercが7コーナーでHamiltonの内側へ仕掛け、両車が接触してHamiltonがスピンした。",
+              "source_urls": [
+                "https://www.planetf1.com/news/lewis-hamilton-charles-leclerc-ferrari-unmanageable-fred-vasseur"
+              ]
+            },
+            {
+              "fact": "接触は、Mexicoで勝利を逃した1周目の争いを受けてVasseur代表が両者と非公開協議を行った2週間後に起きた。",
+              "source_urls": [
+                "https://www.planetf1.com/news/lewis-hamilton-charles-leclerc-ferrari-unmanageable-fred-vasseur"
+              ]
+            },
+            {
+              "fact": "Vasseur代表は初めて両者の組み合わせの適性に疑問を示し、今季の複数の争いが協力関係を損ねたと認めた。",
+              "source_urls": [
+                "https://www.planetf1.com/news/lewis-hamilton-charles-leclerc-ferrari-unmanageable-fred-vasseur"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-23"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "fia_regulation_development",
+      "title": "FIA、2027年からF1へ常勤スチュワードを導入",
+      "summary": "FIAは2030年パワーユニット技術枠組みへの全会一致に加え、2027年シーズンに向けて常勤スチュワードの採用を開始した。 常勤化は、現在の持ち回り・非常勤制からF1の競技運営構造を変える。 2030年枠組みは長期の技術規則を定め、常勤スチュワード制度は2027年から週末ごとの裁定の一貫性を高める狙いだ。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-11-24",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-efb5bf780189-2026-11-24.html",
+        "sources": [
+          {
+            "label": "ministryofsport.com",
+            "url": "https://ministryofsport.com/fia-confirms-unanimous-2030-power-unit-framework-agreement-and-full-time-stewards-from-2027/"
+          }
+        ],
+        "summary": "FIAは2030年パワーユニット技術枠組みへの全会一致に加え、2027年シーズンに向けて常勤スチュワードの採用を開始した。 常勤化は、現在の持ち回り・非常勤制からF1の競技運営構造を変える。 2030年枠組みは長期の技術規則を定め、常勤スチュワード制度は2027年から週末ごとの裁定の一貫性を高める狙いだ。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "FIAは2030年パワーユニット技術枠組みへの全会一致に加え、2027年シーズンに向けて常勤スチュワードの採用を開始した。",
+            "常勤化は、現在の持ち回り・非常勤制からF1の競技運営構造を変える。",
+            "2030年枠組みは長期の技術規則を定め、常勤スチュワード制度は2027年から週末ごとの裁定の一貫性を高める狙いだ。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "FIAは2030年パワーユニット技術枠組みへの全会一致に加え、2027年シーズンに向けて常勤スチュワードの採用を開始した。",
+              "source_urls": [
+                "https://ministryofsport.com/fia-confirms-unanimous-2030-power-unit-framework-agreement-and-full-time-stewards-from-2027/"
+              ]
+            },
+            {
+              "fact": "常勤化は、現在の持ち回り・非常勤制からF1の競技運営構造を変える。",
+              "source_urls": [
+                "https://ministryofsport.com/fia-confirms-unanimous-2030-power-unit-framework-agreement-and-full-time-stewards-from-2027/"
+              ]
+            },
+            {
+              "fact": "2030年枠組みは長期の技術規則を定め、常勤スチュワード制度は2027年から週末ごとの裁定の一貫性を高める狙いだ。",
+              "source_urls": [
+                "https://ministryofsport.com/fia-confirms-unanimous-2030-power-unit-framework-agreement-and-full-time-stewards-from-2027/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-24"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "starship_status",
+      "title": "SpaceX、USSF-266打ち上げを4時間枠で予定",
+      "summary": "4時間の打ち上げ時間帯は午前7時55分に始まる予定だ。 ロケットはUSSF 266ミッションを搭載する予定だ。 第1段ブースターは29回目の飛行となる。 段分離後、第1段は太平洋上のドローン船Of Course I Still Love Youへ着艦する予定だ。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-11-23",
+      "topic_value_class": "material_schedule_change",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-b755f1bbf6c3-2026-11-24.html",
+        "sources": [
+          {
+            "label": "ksby.com",
+            "url": "https://www.ksby.com/news/launch-tracker/spacex-launch-planned-for-tuesday-from-vandenberg-space-force-base"
+          }
+        ],
+        "summary": "4時間の打ち上げ時間帯は午前7時55分に始まる予定だ。 ロケットはUSSF 266ミッションを搭載する予定だ。 第1段ブースターは29回目の飛行となる。 段分離後、第1段は太平洋上のドローン船Of Course I Still Love Youへ着艦する予定だ。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "4時間の打ち上げ時間帯は午前7時55分に始まる予定だ。",
+            "ロケットはUSSF 266ミッションを搭載する予定だ。",
+            "第1段ブースターは29回目の飛行となる。",
+            "段分離後、第1段は太平洋上のドローン船Of Course I Still Love Youへ着艦する予定だ。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "4時間の打ち上げ時間帯は午前7時55分に始まる予定だ。",
+              "source_urls": [
+                "https://www.ksby.com/news/launch-tracker/spacex-launch-planned-for-tuesday-from-vandenberg-space-force-base"
+              ]
+            },
+            {
+              "fact": "ロケットはUSSF 266ミッションを搭載する予定だ。",
+              "source_urls": [
+                "https://www.ksby.com/news/launch-tracker/spacex-launch-planned-for-tuesday-from-vandenberg-space-force-base"
+              ]
+            },
+            {
+              "fact": "第1段ブースターは29回目の飛行となる。",
+              "source_urls": [
+                "https://www.ksby.com/news/launch-tracker/spacex-launch-planned-for-tuesday-from-vandenberg-space-force-base"
+              ]
+            },
+            {
+              "fact": "段分離後、第1段は太平洋上のドローン船Of Course I Still Love Youへ着艦する予定だ。",
+              "source_urls": [
+                "https://www.ksby.com/news/launch-tracker/spacex-launch-planned-for-tuesday-from-vandenberg-space-force-base"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-23"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "investment_policy_markets",
+      "title": "日経平均、前週末比約2,600円高の5万9,000円前後",
+      "summary": "24日前場中ごろの日経平均は、前週末比約2,600円高の5万9,000円前後で推移した。 取引時間中に5万9,000円を上回るのは19日以来、2営業日ぶりだった。 10時時点の東証プライム売買代金は概算2兆4,315億円、売買高は8億567万株だった。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-11-24",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-aaab6dc4cc38-2026-11-24.html",
+        "sources": [
+          {
+            "label": "nikkei.com",
+            "url": "https://www.nikkei.com/article/DGXZQOFL2410J0U6A121C2000000/"
+          }
+        ],
+        "summary": "24日前場中ごろの日経平均は、前週末比約2,600円高の5万9,000円前後で推移した。 取引時間中に5万9,000円を上回るのは19日以来、2営業日ぶりだった。 10時時点の東証プライム売買代金は概算2兆4,315億円、売買高は8億567万株だった。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "24日前場中ごろの日経平均は、前週末比約2,600円高の5万9,000円前後で推移した。",
+            "取引時間中に5万9,000円を上回るのは19日以来、2営業日ぶりだった。",
+            "10時時点の東証プライム売買代金は概算2兆4,315億円、売買高は8億567万株だった。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "24日前場中ごろの日経平均は、前週末比約2,600円高の5万9,000円前後で推移した。",
+              "source_urls": [
+                "https://www.nikkei.com/article/DGXZQOFL2410J0U6A121C2000000/"
+              ]
+            },
+            {
+              "fact": "取引時間中に5万9,000円を上回るのは19日以来、2営業日ぶりだった。",
+              "source_urls": [
+                "https://www.nikkei.com/article/DGXZQOFL2410J0U6A121C2000000/"
+              ]
+            },
+            {
+              "fact": "10時時点の東証プライム売買代金は概算2兆4,315億円、売買高は8億567万株だった。",
+              "source_urls": [
+                "https://www.nikkei.com/article/DGXZQOFL2410J0U6A121C2000000/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-24"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "employment_consumption",
+      "title": "マイナビ調査、事務・管理系の新卒採用を減らす企業が19.6%",
+      "summary": "AI普及を受け、事務職の新卒採用を減らすとした企業が約2割に上ったとマイナビ調査はまとめた。 事務・管理系を採用する企業の19.6%が採用を減らすと答え、増やすとの回答は1.2%だった。 三菱電機はAI活用などを考慮し、2026年度の新卒採用を前年度見込みから約2割減らす計画を2026年3月に発表した。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-11-24",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-c1241963ec9f-2026-11-24.html",
+        "sources": [
+          {
+            "label": "news.yahoo.co.jp",
+            "url": "https://news.yahoo.co.jp/expert/articles/523c7b912b4af74cb0ed8dc66790c619aad3b3db"
+          }
+        ],
+        "summary": "AI普及を受け、事務職の新卒採用を減らすとした企業が約2割に上ったとマイナビ調査はまとめた。 事務・管理系を採用する企業の19.6%が採用を減らすと答え、増やすとの回答は1.2%だった。 三菱電機はAI活用などを考慮し、2026年度の新卒採用を前年度見込みから約2割減らす計画を2026年3月に発表した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "AI普及を受け、事務職の新卒採用を減らすとした企業が約2割に上ったとマイナビ調査はまとめた。",
+            "事務・管理系を採用する企業の19.6%が採用を減らすと答え、増やすとの回答は1.2%だった。",
+            "三菱電機はAI活用などを考慮し、2026年度の新卒採用を前年度見込みから約2割減らす計画を2026年3月に発表した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "AI普及を受け、事務職の新卒採用を減らすとした企業が約2割に上ったとマイナビ調査はまとめた。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/expert/articles/523c7b912b4af74cb0ed8dc66790c619aad3b3db"
+              ]
+            },
+            {
+              "fact": "事務・管理系を採用する企業の19.6%が採用を減らすと答え、増やすとの回答は1.2%だった。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/expert/articles/523c7b912b4af74cb0ed8dc66790c619aad3b3db"
+              ]
+            },
+            {
+              "fact": "三菱電機はAI活用などを考慮し、2026年度の新卒採用を前年度見込みから約2割減らす計画を2026年3月に発表した。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/expert/articles/523c7b912b4af74cb0ed8dc66790c619aad3b3db"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-24"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "investment_policy_markets",
+      "title": "東京国税局、暗号資産の追徴税額約12億円 調査体制を強化へ",
+      "summary": "東京国税局の管轄は東京都、千葉県、神奈川県、山梨県の1都3県だ。 暗号資産を巡る追徴税額は約12億円で、無申告が判明する事例が多かったという。 国税当局は調査体制を強化し、申告漏れの把握を進める方針だ。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-11-23",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-474f3f6a1cdf-2026-11-24.html",
+        "sources": [
+          {
+            "label": "iolite.net",
+            "url": "https://iolite.net/news/coinpost-749085"
+          }
+        ],
+        "summary": "東京国税局の管轄は東京都、千葉県、神奈川県、山梨県の1都3県だ。 暗号資産を巡る追徴税額は約12億円で、無申告が判明する事例が多かったという。 国税当局は調査体制を強化し、申告漏れの把握を進める方針だ。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "東京国税局の管轄は東京都、千葉県、神奈川県、山梨県の1都3県だ。",
+            "暗号資産を巡る追徴税額は約12億円で、無申告が判明する事例が多かったという。",
+            "国税当局は調査体制を強化し、申告漏れの把握を進める方針だ。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "東京国税局の管轄は東京都、千葉県、神奈川県、山梨県の1都3県だ。",
+              "source_urls": [
+                "https://iolite.net/news/coinpost-749085"
+              ]
+            },
+            {
+              "fact": "暗号資産を巡る追徴税額は約12億円で、無申告が判明する事例が多かったという。",
+              "source_urls": [
+                "https://iolite.net/news/coinpost-749085"
+              ]
+            },
+            {
+              "fact": "国税当局は調査体制を強化し、申告漏れの把握を進める方針だ。",
+              "source_urls": [
+                "https://iolite.net/news/coinpost-749085"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-23"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_macro_policy",
+      "title": "ASEAN、デジタル経済枠組み協定DEFAを11カ国で署名",
+      "summary": "シンガポール当局は、DEFAをASEAN初の独立した法的拘束力のあるデジタル経済協定と説明している。 ASEANは2023年9月に交渉を開始し、2026年5月に妥結した。 ASEAN全11加盟国が2026年11月14日に署名し、署名後180日で発効する日程では2027年5月13日となる。",
+      "section_id": "asia",
+      "category": "アジア経済",
+      "source_published_date": "2026-11-23",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-22a442ebe5e9-2026-11-24.html",
+        "sources": [
+          {
+            "label": "vietnam-briefing.com",
+            "url": "https://www.vietnam-briefing.com/news/how-aseans-digital-economy-framework-agreement-defa-creates-opportunities-for-businesses-in-vietnam.html/"
+          }
+        ],
+        "summary": "シンガポール当局は、DEFAをASEAN初の独立した法的拘束力のあるデジタル経済協定と説明している。 ASEANは2023年9月に交渉を開始し、2026年5月に妥結した。 ASEAN全11加盟国が2026年11月14日に署名し、署名後180日で発効する日程では2027年5月13日となる。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "シンガポール当局は、DEFAをASEAN初の独立した法的拘束力のあるデジタル経済協定と説明している。",
+            "ASEANは2023年9月に交渉を開始し、2026年5月に妥結した。",
+            "ASEAN全11加盟国が2026年11月14日に署名し、署名後180日で発効する日程では2027年5月13日となる。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "シンガポール当局は、DEFAをASEAN初の独立した法的拘束力のあるデジタル経済協定と説明している。",
+              "source_urls": [
+                "https://www.vietnam-briefing.com/news/how-aseans-digital-economy-framework-agreement-defa-creates-opportunities-for-businesses-in-vietnam.html/"
+              ]
+            },
+            {
+              "fact": "ASEANは2023年9月に交渉を開始し、2026年5月に妥結した。",
+              "source_urls": [
+                "https://www.vietnam-briefing.com/news/how-aseans-digital-economy-framework-agreement-defa-creates-opportunities-for-businesses-in-vietnam.html/"
+              ]
+            },
+            {
+              "fact": "ASEAN全11加盟国が2026年11月14日に署名し、署名後180日で発効する日程では2027年5月13日となる。",
+              "source_urls": [
+                "https://www.vietnam-briefing.com/news/how-aseans-digital-economy-framework-agreement-defa-creates-opportunities-for-businesses-in-vietnam.html/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-23"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_macro_policy",
+      "title": "GRT、中国Zhenguan New Materialと最大3億元のフィルム供給基本契約",
+      "summary": "GRTは、出資取得を進めるZhenguan New Materialと最大3億元規模の機能性フィルム供給基本契約を結んだ。 3億元は供給上限で、実際の売上高は個別発注によって確定する。 契約は2027年6月30日までで、MLCC用離型フィルム、PET、TPUなどを供給し、2027年には揚州と欽天の新工場稼働を予定する。",
+      "section_id": "asia",
+      "category": "アジア経済",
+      "source_published_date": "2026-11-24",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-02a3674981af-2026-11-24.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/35c24401-d9a5-4079-a697-e93b4504e803"
+          }
+        ],
+        "summary": "GRTは、出資取得を進めるZhenguan New Materialと最大3億元規模の機能性フィルム供給基本契約を結んだ。 3億元は供給上限で、実際の売上高は個別発注によって確定する。 契約は2027年6月30日までで、MLCC用離型フィルム、PET、TPUなどを供給し、2027年には揚州と欽天の新工場稼働を予定する。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "GRTは、出資取得を進めるZhenguan New Materialと最大3億元規模の機能性フィルム供給基本契約を結んだ。",
+            "3億元は供給上限で、実際の売上高は個別発注によって確定する。",
+            "契約は2027年6月30日までで、MLCC用離型フィルム、PET、TPUなどを供給し、2027年には揚州と欽天の新工場稼働を予定する。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "GRTは、出資取得を進めるZhenguan New Materialと最大3億元規模の機能性フィルム供給基本契約を結んだ。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/35c24401-d9a5-4079-a697-e93b4504e803"
+              ]
+            },
+            {
+              "fact": "3億元は供給上限で、実際の売上高は個別発注によって確定する。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/35c24401-d9a5-4079-a697-e93b4504e803"
+              ]
+            },
+            {
+              "fact": "契約は2027年6月30日までで、MLCC用離型フィルム、PET、TPUなどを供給し、2027年には揚州と欽天の新工場稼働を予定する。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/35c24401-d9a5-4079-a697-e93b4504e803"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-24"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "us_prices_jobs_fed",
+      "title": "S&P 500、週初の取引で4%超反発 12月利上げ観測は95%超",
+      "summary": "最初の取引だけで指数は4.0%超回復し、直前には7営業日連続で下落していた。 記事は、NvidiaのCEO復帰がAI拡張計画と半導体供給の継続性を示すとの受け止めが市場にあると分析した。 12月9日の会合では、政策金利を4.25%付近へ引き上げる確率を市場が95%超織り込んでいる。",
+      "section_id": "north_america",
+      "category": "北米経済",
+      "source_published_date": "2026-11-24",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-9c8967d3ccf4-2026-11-24.html",
+        "sources": [
+          {
+            "label": "forex.com",
+            "url": "https://www.forex.com/en-us/news-and-analysis/sandp-500-update-nvidia-fuels-spx-recovery-but-fed-risks-remain/?amp=true"
+          }
+        ],
+        "summary": "最初の取引だけで指数は4.0%超回復し、直前には7営業日連続で下落していた。 記事は、NvidiaのCEO復帰がAI拡張計画と半導体供給の継続性を示すとの受け止めが市場にあると分析した。 12月9日の会合では、政策金利を4.25%付近へ引き上げる確率を市場が95%超織り込んでいる。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "最初の取引だけで指数は4.0%超回復し、直前には7営業日連続で下落していた。",
+            "記事は、NvidiaのCEO復帰がAI拡張計画と半導体供給の継続性を示すとの受け止めが市場にあると分析した。",
+            "12月9日の会合では、政策金利を4.25%付近へ引き上げる確率を市場が95%超織り込んでいる。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "最初の取引だけで指数は4.0%超回復し、直前には7営業日連続で下落していた。",
+              "source_urls": [
+                "https://www.forex.com/en-us/news-and-analysis/sandp-500-update-nvidia-fuels-spx-recovery-but-fed-risks-remain/?amp=true"
+              ]
+            },
+            {
+              "fact": "記事は、NvidiaのCEO復帰がAI拡張計画と半導体供給の継続性を示すとの受け止めが市場にあると分析した。",
+              "source_urls": [
+                "https://www.forex.com/en-us/news-and-analysis/sandp-500-update-nvidia-fuels-spx-recovery-but-fed-risks-remain/?amp=true"
+              ]
+            },
+            {
+              "fact": "12月9日の会合では、政策金利を4.25%付近へ引き上げる確率を市場が95%超織り込んでいる。",
+              "source_urls": [
+                "https://www.forex.com/en-us/news-and-analysis/sandp-500-update-nvidia-fuels-spx-recovery-but-fed-risks-remain/?amp=true"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-24"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "us_markets_fund_flows_rates",
+      "title": "米住宅、売り出し1件当たり高意向買い手が3.5人で過去最低",
+      "summary": "Zillowによると、2026年第3四半期の全米の売り出し物件1件当たり高意向買い手は平均3.5人で、前年同期比4.8%減り、2023年下半期の集計開始以来最低となった。 Freddie Macの調査では、30年固定住宅ローン金利が2026年7月2日の週の6.43%から10月1日に7.28%へ上昇した。 Zillowは、住宅ローン金利上昇で比較検討する買い手が減る一方、在庫が積み上がり需要が分散したと指摘した。",
+      "section_id": "north_america",
+      "category": "北米経済",
+      "source_published_date": "2026-11-23",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-403b575ed3b7-2026-11-24.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/cf42b76f-49eb-46db-b1c1-d93ac714c7cb"
+          }
+        ],
+        "summary": "Zillowによると、2026年第3四半期の全米の売り出し物件1件当たり高意向買い手は平均3.5人で、前年同期比4.8%減り、2023年下半期の集計開始以来最低となった。 Freddie Macの調査では、30年固定住宅ローン金利が2026年7月2日の週の6.43%から10月1日に7.28%へ上昇した。 Zillowは、住宅ローン金利上昇で比較検討する買い手が減る一方、在庫が積み上がり需要が分散したと指摘した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Zillowによると、2026年第3四半期の全米の売り出し物件1件当たり高意向買い手は平均3.5人で、前年同期比4.8%減り、2023年下半期の集計開始以来最低となった。",
+            "Freddie Macの調査では、30年固定住宅ローン金利が2026年7月2日の週の6.43%から10月1日に7.28%へ上昇した。",
+            "Zillowは、住宅ローン金利上昇で比較検討する買い手が減る一方、在庫が積み上がり需要が分散したと指摘した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Zillowによると、2026年第3四半期の全米の売り出し物件1件当たり高意向買い手は平均3.5人で、前年同期比4.8%減り、2023年下半期の集計開始以来最低となった。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/cf42b76f-49eb-46db-b1c1-d93ac714c7cb"
+              ]
+            },
+            {
+              "fact": "Freddie Macの調査では、30年固定住宅ローン金利が2026年7月2日の週の6.43%から10月1日に7.28%へ上昇した。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/cf42b76f-49eb-46db-b1c1-d93ac714c7cb"
+              ]
+            },
+            {
+              "fact": "Zillowは、住宅ローン金利上昇で比較検討する買い手が減る一方、在庫が積み上がり需要が分散したと指摘した。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/cf42b76f-49eb-46db-b1c1-d93ac714c7cb"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-23"
+          ]
+        }
+      }
+    }
+  ],
+  "coverage_manifest": {
+    "contract_version": "2026-07-11.02",
+    "date": "2026-11-24",
+    "collection_completed_at_jst": "2026-11-24T15:58:06+09:00",
+    "collection_mode": "web_evidence_plus_review",
+    "evidence_sha256": "124fb548bc466507dbf45069a216ca26ed9070be733bb45ead3e3a35038486bb",
+    "editor_contract_sha256": "d6c3ebf3edf97dd3dff4a22b78881bb748af6ce2d29e7417f703b37f53bce819"
+  }
+}

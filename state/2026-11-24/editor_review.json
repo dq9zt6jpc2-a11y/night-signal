@@ -1,0 +1,1211 @@
+{
+  "contract": "codex-plus-editor-v2",
+  "issue_date": "2026-11-24",
+  "evidence_sha256": "124fb548bc466507dbf45069a216ca26ed9070be733bb45ead3e3a35038486bb",
+  "cloud_handoff": {
+    "execution_surface": "chatgpt-web-scheduled-task",
+    "reviewed_at": "2026-11-24T17:01:48+09:00",
+    "corrected_at": "2026-11-24T17:03:47+09:00",
+    "correction_attempt": 1
+  },
+  "responses": [
+    {
+      "request_id": "openai-01-21db1cabf2c28f7c",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "duplicate_previous_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-02-e59507be71e649d2",
+      "response": {
+        "events": [
+          {
+            "event_id": "g007",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g012",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "GPT-6.2 Sol、ChatGPTのChatタブへ展開　GPT-5.6 Solは12月23日終了",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "OpenAIは23日（現地時間）、ChatGPTのChatタブでGPT-6.2 Solの提供を開始した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f01"
+                    ]
+                  },
+                  {
+                    "text": "GPT-5.6 Solは12月23日にChat、Work、Codexで提供を終了する。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f03"
+                    ]
+                  },
+                  {
+                    "text": "GPT-6.2 SolはWorkとCodexへの先行投入後、数日でChatタブにも展開された。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f06"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g013",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g010",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g011",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Richpanel、30日以内のサポート業務50%自動化に返金保証",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Richpanelは、顧客企業のカスタマーサービス業務の50%を30日以内に自動化できなければ返金するとしている。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f01"
+                    ]
+                  },
+                  {
+                    "text": "同社は、2026年10月までの6カ月間に完了した約300件の導入で保証を満たしたと主張している。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f07"
+                    ]
+                  },
+                  {
+                    "text": "同社CEOによると、人間の担当者が1件の解決に20～30のツールを使い、手順が文書化されていない場合がある。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f08"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g008",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g014",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-03-1bb8b46b135b4a5f",
+      "response": {
+        "events": [
+          {
+            "event_id": "g017",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g018",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g015",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Cohesity、OpenAIのCyberモデルでITDR製品の脆弱性試験へ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Cohesityは、隔離された管理環境でOpenAIのGPT Cyber Modelsを使い、製品の潜在的なセキュリティ弱点を試験する計画を発表した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f01"
+                    ]
+                  },
+                  {
+                    "text": "同社はITDRソフトウェアの管理された試験を速やかに始め、結果を既存の開発・セキュリティ工程で評価して修正する計画だ。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f10"
+                    ]
+                  },
+                  {
+                    "text": "Cohesity Data Cloudは140超の国の顧客に利用され、Global 500の3分の2を含むと同社は説明している。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f14"
+                    ]
+                  }
+                ],
+                "topic_value_class": "risk_or_safety_signal",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g016",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAIとCisco、未修正Linuxを稼働中に守るOSS「Shirudo」を公開",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Shirudoは、恒久パッチの準備中にeBPFでエクスプロイト経路を遮断するオープンソースのランタイムだ。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f01"
+                    ]
+                  },
+                  {
+                    "text": "両社は、恒久的な修正プログラムの作成・試験中もセキュリティチームがLinuxマシンを保護できるようにする目的で公開した。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f05"
+                    ]
+                  },
+                  {
+                    "text": "プロジェクトは2026年11月23日に発表され、コードはBSD 2条項、BPFプログラムはBSDとGPLのデュアルライセンスで提供される。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f06"
+                    ]
+                  }
+                ],
+                "topic_value_class": "risk_or_safety_signal",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g019",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-04-5bfeda1ac5e3fefc",
+      "response": {
+        "events": [
+          {
+            "event_id": "g023",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g027",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、米国の小規模事業者へ無料AI支援「OpenWorks」を開始",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "OpenAIは2026年11月23日、OpenWorksを発表した。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f02"
+                    ]
+                  },
+                  {
+                    "text": "地域のAI専門家が米国の独立系小規模事業者を支援し、事業者は費用を負担しない。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f03"
+                    ]
+                  },
+                  {
+                    "text": "参加事業者にはChatGPT Businessを3カ月無料で提供する。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f09"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g026",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g025",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Airwallex、ChatGPT内で財務基盤を操作するプラグインを公開",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "新プラグインは、AIエージェントにAirwallexの金融インフラへのアクセスを提供する。",
+                    "evidence_ids": [
+                      "e004",
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f02",
+                      "e005:f01"
+                    ]
+                  },
+                  {
+                    "text": "利用者は自然言語で、資金繰り管理、カード発行、仕入先登録、財務ワークフロー構築を指示できる。",
+                    "evidence_ids": [
+                      "e004",
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f01",
+                      "e005:f02"
+                    ]
+                  }
+                ],
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g021",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g020",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g022",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g024",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "openai-05-6597fd5b0caa7bc8",
+      "response": {
+        "events": [
+          {
+            "event_id": "g031",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g032",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、AlephをChatGPT Adsの地域独占販売代理店に指定",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Alephは対象市場で独占販売代理店となり、広告主は現地チームを通じて契約、支払い、キャンペーン支援を受けられる。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01"
+                    ]
+                  },
+                  {
+                    "text": "対象は中南米14カ国、欧州・中央アジア16カ国、中東・アフリカ10カ国、アジア太平洋4カ国だ。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f02"
+                    ]
+                  },
+                  {
+                    "text": "今回の発表は、広告キャンペーンで国をターゲットにする機能を変更しない。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f06"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g033",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g029",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "カリフォルニア大学、OpenAIと120万ドルの1年契約",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "契約は12月に始まる1年間の提携で、総額は120万ドルだ。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f01"
+                    ]
+                  },
+                  {
+                    "text": "契約は従来のOpenAIとの合意を延長するもので、大学側は春から協議していたとしている。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f02"
+                    ]
+                  },
+                  {
+                    "text": "最終合意を事前に十分相談されなかったとして、カリフォルニア大学Academic Senateのメンバーが懸念を示した。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f03"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g030",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g028",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "honda-01-29dd21576b80ba7d",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-01-cab9ee32b4a9c873",
+      "response": {
+        "events": [
+          {
+            "event_id": "g006",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "ペレス、ラスベガスGP接触でカタールGP5グリッド降格",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "ラスベガスGPではGaslyが5位、チームメイトのColapintoが6位となり、Alpineが得点を重ねた。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f02"
+                    ]
+                  },
+                  {
+                    "text": "次戦カタールGPは11月29日に開催される。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f08"
+                    ]
+                  },
+                  {
+                    "text": "通常の10秒加算に相当する処分は、Perezが接触でリタイアしたため、カタールGPの5グリッド降格へ変換された。",
+                    "evidence_ids": [
+                      "e004"
+                    ],
+                    "source_fact_ids": [
+                      "e004:f04"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g004",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-02-27b78b8d395c1354",
+      "response": {
+        "events": [
+          {
+            "event_id": "g010",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g011",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Ferrari、ラスベガスGPでHamiltonとLeclercが再接触",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "38周目、Leclercが7コーナーでHamiltonの内側へ仕掛け、両車が接触してHamiltonがスピンした。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01"
+                    ]
+                  },
+                  {
+                    "text": "接触は、Mexicoで勝利を逃した1周目の争いを受けてVasseur代表が両者と非公開協議を行った2週間後に起きた。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f02"
+                    ]
+                  },
+                  {
+                    "text": "Vasseur代表は初めて両者の組み合わせの適性に疑問を示し、今季の複数の争いが協力関係を損ねたと認めた。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f12"
+                    ]
+                  }
+                ],
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "FIA、2027年からF1へ常勤スチュワードを導入",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "FIAは2030年パワーユニット技術枠組みへの全会一致に加え、2027年シーズンに向けて常勤スチュワードの採用を開始した。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f06"
+                    ]
+                  },
+                  {
+                    "text": "常勤化は、現在の持ち回り・非常勤制からF1の競技運営構造を変える。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f09"
+                    ]
+                  },
+                  {
+                    "text": "2030年枠組みは長期の技術規則を定め、常勤スチュワード制度は2027年から週末ごとの裁定の一貫性を高める狙いだ。",
+                    "evidence_ids": [
+                      "e003"
+                    ],
+                    "source_fact_ids": [
+                      "e003:f10"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g012",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "spacex-01-cac5c0e91b475748",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g007",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "SpaceX、USSF-266打ち上げを4時間枠で予定",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "4時間の打ち上げ時間帯は午前7時55分に始まる予定だ。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f01"
+                    ]
+                  },
+                  {
+                    "text": "ロケットはUSSF 266ミッションを搭載する予定だ。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f02"
+                    ]
+                  },
+                  {
+                    "text": "第1段ブースターは29回目の飛行となる。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f03"
+                    ]
+                  },
+                  {
+                    "text": "段分離後、第1段は太平洋上のドローン船Of Course I Still Love Youへ着艦する予定だ。",
+                    "evidence_ids": [
+                      "e006"
+                    ],
+                    "source_fact_ids": [
+                      "e006:f04"
+                    ]
+                  }
+                ],
+                "topic_value_class": "material_schedule_change",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g008",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "spacex-02-d134af70b10f7f82",
+      "response": {
+        "events": [
+          {
+            "event_id": "g009",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "japan_economy-01-b63660bd6be12f4d",
+      "response": {
+        "events": [
+          {
+            "event_id": "g004",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "日経平均、前週末比約2,600円高の5万9,000円前後",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "24日前場中ごろの日経平均は、前週末比約2,600円高の5万9,000円前後で推移した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f02"
+                    ]
+                  },
+                  {
+                    "text": "取引時間中に5万9,000円を上回るのは19日以来、2営業日ぶりだった。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f03"
+                    ]
+                  },
+                  {
+                    "text": "10時時点の東証プライム売買代金は概算2兆4,315億円、売買高は8億567万株だった。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f09"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "マイナビ調査、事務・管理系の新卒採用を減らす企業が19.6%",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "AI普及を受け、事務職の新卒採用を減らすとした企業が約2割に上ったとマイナビ調査はまとめた。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e005:f04"
+                    ]
+                  },
+                  {
+                    "text": "事務・管理系を採用する企業の19.6%が採用を減らすと答え、増やすとの回答は1.2%だった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f02"
+                    ]
+                  },
+                  {
+                    "text": "三菱電機はAI活用などを考慮し、2026年度の新卒採用を前年度見込みから約2割減らす計画を2026年3月に発表した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f10"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g005",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "東京国税局、暗号資産の追徴税額約12億円　調査体制を強化へ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "東京国税局の管轄は東京都、千葉県、神奈川県、山梨県の1都3県だ。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f01"
+                    ]
+                  },
+                  {
+                    "text": "暗号資産を巡る追徴税額は約12億円で、無申告が判明する事例が多かったという。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f02"
+                    ]
+                  },
+                  {
+                    "text": "国税当局は調査体制を強化し、申告漏れの把握を進める方針だ。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f03"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "yoasobi_ikuta-01-62f8b5ad4cd063cf",
+      "response": {
+        "events": [
+          {
+            "event_id": "g002",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "asia-01-78d489928910c0f6",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "ASEAN、デジタル経済枠組み協定DEFAを11カ国で署名",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "シンガポール当局は、DEFAをASEAN初の独立した法的拘束力のあるデジタル経済協定と説明している。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01"
+                    ]
+                  },
+                  {
+                    "text": "ASEANは2023年9月に交渉を開始し、2026年5月に妥結した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f04"
+                    ]
+                  },
+                  {
+                    "text": "ASEAN全11加盟国が2026年11月14日に署名し、署名後180日で発効する日程では2027年5月13日となる。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f07"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "GRT、中国Zhenguan New Materialと最大3億元のフィルム供給基本契約",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "GRTは、出資取得を進めるZhenguan New Materialと最大3億元規模の機能性フィルム供給基本契約を結んだ。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01",
+                      "e002:f04"
+                    ]
+                  },
+                  {
+                    "text": "3億元は供給上限で、実際の売上高は個別発注によって確定する。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f02"
+                    ]
+                  },
+                  {
+                    "text": "契約は2027年6月30日までで、MLCC用離型フィルム、PET、TPUなどを供給し、2027年には揚州と欽天の新工場稼働を予定する。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f11"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g004",
+            "decision": "background_or_navigation",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "background_or_navigation",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "north_america-01-fedd3eb5d2000494",
+      "response": {
+        "events": [
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "S&P 500、週初の取引で4%超反発　12月利上げ観測は95%超",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "最初の取引だけで指数は4.0%超回復し、直前には7営業日連続で下落していた。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01"
+                    ]
+                  },
+                  {
+                    "text": "記事は、NvidiaのCEO復帰がAI拡張計画と半導体供給の継続性を示すとの受け止めが市場にあると分析した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f09"
+                    ]
+                  },
+                  {
+                    "text": "12月9日の会合では、政策金利を4.25%付近へ引き上げる確率を市場が95%超織り込んでいる。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f13"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "米住宅、売り出し1件当たり高意向買い手が3.5人で過去最低",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Zillowによると、2026年第3四半期の全米の売り出し物件1件当たり高意向買い手は平均3.5人で、前年同期比4.8%減り、2023年下半期の集計開始以来最低となった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e005:f04"
+                    ]
+                  },
+                  {
+                    "text": "Freddie Macの調査では、30年固定住宅ローン金利が2026年7月2日の週の6.43%から10月1日に7.28%へ上昇した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f07"
+                    ]
+                  },
+                  {
+                    "text": "Zillowは、住宅ローン金利上昇で比較検討する買い手が減る一方、在庫が積み上がり需要が分散したと指摘した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f05"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g005",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    }
+  ]
+}
