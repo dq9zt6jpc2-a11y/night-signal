@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-[[ "$STATIC_REDEPLOY" == "true" && -n "$EXPECTED_SITE_TREE" ]]
+[[ -n "$EXPECTED_SITE_TREE" ]]
+[[ "$STATIC_REDEPLOY" == "true" || "$REVIEWED_DEPLOY" == "true" ]]
 [[ "$ARTIFACT_ID" =~ ^[0-9]+$ ]]
 endpoint="repos/$GITHUB_REPOSITORY/pages/deployments"
 oidc_token="$(curl -fsS --max-time 15 -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
