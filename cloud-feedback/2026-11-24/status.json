@@ -1,0 +1,175 @@
+{
+  "contract": "night-signal-cloud-feedback-v1",
+  "issue_date": "2026-11-24",
+  "recorded_at": "2026-11-24T08:03:06.704324+00:00",
+  "workflow_run_id": "45352604978",
+  "workflow_run_url": "https://github.com/dq9zt6jpc2-a11y/night-signal/actions/runs/45352604978",
+  "recovery_attempt": 0,
+  "status": "failed",
+  "failed_stage": "apply",
+  "first_reader_verification": null,
+  "step_outcomes": {
+    "apply": "failure",
+    "restore": "success",
+    "gates": "skipped",
+    "base_guard": "skipped",
+    "commit": "skipped",
+    "push": "skipped",
+    "pages": "skipped",
+    "pages_retry": "skipped",
+    "pages_watch": "skipped",
+    "verify": "skipped"
+  },
+  "validator_log_tail": "{\"issue_date\": \"2026-11-24\", \"review_ref\": \"night-signal-review-2026-11-24\", \"installed_review\": \"/home/runner/work/night-signal/night-signal/state/2026-11-24/editor_review.json\", \"additional_paid_api_requests\": 0}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"OpenAI\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 49, \"grouped_events\": 48, \"publishable_source_events\": 48, \"novel_events\": 43, \"semantic_dedup_pool\": 43, \"model_candidates\": 33}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"SoftBank\", \"expanded_input_records\": 10, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 0, \"grouped_events\": 0, \"publishable_source_events\": 0, \"novel_events\": 0, \"semantic_dedup_pool\": 0, \"model_candidates\": 0}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"Honda\", \"expanded_input_records\": 20, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 2, \"grouped_events\": 2, \"publishable_source_events\": 2, \"novel_events\": 2, \"semantic_dedup_pool\": 2, \"model_candidates\": 2}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"F1\", \"expanded_input_records\": 2, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 21, \"grouped_events\": 20, \"publishable_source_events\": 20, \"novel_events\": 19, \"semantic_dedup_pool\": 19, \"model_candidates\": 12}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"SpaceX\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 14, \"grouped_events\": 14, \"publishable_source_events\": 14, \"novel_events\": 13, \"semantic_dedup_pool\": 13, \"model_candidates\": 9}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"日本経済\", \"expanded_input_records\": 6, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 9, \"grouped_events\": 9, \"publishable_source_events\": 7, \"novel_events\": 7, \"semantic_dedup_pool\": 7, \"model_candidates\": 6}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"YOASOBI / 幾田りら\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 5, \"grouped_events\": 5, \"publishable_source_events\": 5, \"novel_events\": 5, \"semantic_dedup_pool\": 5, \"model_candidates\": 4}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"アジア経済\", \"expanded_input_records\": 3, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 5, \"grouped_events\": 5, \"publishable_source_events\": 5, \"novel_events\": 5, \"semantic_dedup_pool\": 5, \"model_candidates\": 5}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"北米経済\", \"expanded_input_records\": 48, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 8, \"grouped_events\": 8, \"publishable_source_events\": 8, \"novel_events\": 7, \"semantic_dedup_pool\": 7, \"model_candidates\": 7}\n{\"phase\": \"deterministic_candidate_filter\", \"category\": \"宇都宮ブレックス\", \"expanded_input_records\": 0, \"expanded_evidence_records\": 0, \"expanded_grouped_events\": 0, \"expanded_novel_events\": 0, \"expanded_model_candidates\": 0, \"evidence_records\": 0, \"grouped_events\": 0, \"publishable_source_events\": 0, \"novel_events\": 0, \"semantic_dedup_pool\": 0, \"model_candidates\": 0}\nNIGHT SIGNAL PLUS REVIEW FAILED: review responses failed deterministic validation: {\"rejected_requests\":[{\"request_id\":\"openai-03-1bb8b46b135b4a5f\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{\"g018\":\"body_evidence_cannot_be_insufficient\"},\"malformed_event_results\":0},\"missing_event_ids\":[\"g018\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{},\"rejected_items\":[],\"unpublishable_items\":[]},{\"request_id\":\"f1-02-27b78b8d395c1354\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{\"g009\":\"body_evidence_cannot_be_insufficient\",\"g008\":\"body_evidence_cannot_be_insufficient\"},\"malformed_event_results\":0},\"missing_event_ids\":[\"g008\",\"g009\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{},\"rejected_items\":[],\"unpublishable_items\":[]},{\"request_id\":\"spacex-01-cac5c0e91b475748\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{\"g003\":\"body_evidence_cannot_be_insufficient\",\"g006\":\"body_evidence_cannot_be_insufficient\"},\"malformed_event_results\":0},\"missing_event_ids\":[\"g003\",\"g006\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{\"g001\":[\"e006:f02\"]},\"rejected_items\":[],\"unpublishable_items\":[]},{\"request_id\":\"yoasobi_ikuta-01-62f8b5ad4cd063cf\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{\"g003\":\"body_evidence_cannot_be_insufficient\"},\"malformed_event_results\":0},\"missing_event_ids\":[\"g003\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{},\"rejected_items\":[],\"unpublishable_items\":[]},{\"request_id\":\"asia-01-78d489928910c0f6\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{\"g004\":\"body_evidence_cannot_be_insufficient\",\"g001\":\"body_evidence_cannot_be_insufficient\"},\"malformed_event_results\":0},\"missing_event_ids\":[\"g001\",\"g004\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{},\"rejected_items\":[],\"unpublishable_items\":[]},{\"request_id\":\"north_america-01-fedd3eb5d2000494\",\"event_response\":{\"missing_event_ids\":[],\"duplicate_event_ids\":[],\"unknown_event_ids\":[],\"cross_event_evidence_ids\":[],\"cross_event_source_fact_ids\":[],\"unknown_source_fact_ids\":[],\"invalid_event_decisions\":{\"g001\":\"body_evidence_cannot_be_insufficient\"},\"malformed_event_results\":0},\"missing_event_ids\":[\"g001\"],\"conflicting_event_ids\":[],\"missing_source_fact_ids_by_event\":{\"g007\":[\"e001:f01\"]},\"rejected_items\":[],\"unpublishable_items\":[]}]}\n",
+  "rejected_requests": [
+    {
+      "request_id": "openai-03-1bb8b46b135b4a5f",
+      "event_response": {
+        "missing_event_ids": [],
+        "duplicate_event_ids": [],
+        "unknown_event_ids": [],
+        "cross_event_evidence_ids": [],
+        "cross_event_source_fact_ids": [],
+        "unknown_source_fact_ids": [],
+        "invalid_event_decisions": {
+          "g018": "body_evidence_cannot_be_insufficient"
+        },
+        "malformed_event_results": 0
+      },
+      "missing_event_ids": [
+        "g018"
+      ],
+      "conflicting_event_ids": [],
+      "missing_source_fact_ids_by_event": {},
+      "rejected_items": [],
+      "unpublishable_items": []
+    },
+    {
+      "request_id": "f1-02-27b78b8d395c1354",
+      "event_response": {
+        "missing_event_ids": [],
+        "duplicate_event_ids": [],
+        "unknown_event_ids": [],
+        "cross_event_evidence_ids": [],
+        "cross_event_source_fact_ids": [],
+        "unknown_source_fact_ids": [],
+        "invalid_event_decisions": {
+          "g009": "body_evidence_cannot_be_insufficient",
+          "g008": "body_evidence_cannot_be_insufficient"
+        },
+        "malformed_event_results": 0
+      },
+      "missing_event_ids": [
+        "g008",
+        "g009"
+      ],
+      "conflicting_event_ids": [],
+      "missing_source_fact_ids_by_event": {},
+      "rejected_items": [],
+      "unpublishable_items": []
+    },
+    {
+      "request_id": "spacex-01-cac5c0e91b475748",
+      "event_response": {
+        "missing_event_ids": [],
+        "duplicate_event_ids": [],
+        "unknown_event_ids": [],
+        "cross_event_evidence_ids": [],
+        "cross_event_source_fact_ids": [],
+        "unknown_source_fact_ids": [],
+        "invalid_event_decisions": {
+          "g003": "body_evidence_cannot_be_insufficient",
+          "g006": "body_evidence_cannot_be_insufficient"
+        },
+        "malformed_event_results": 0
+      },
+      "missing_event_ids": [
+        "g003",
+        "g006"
+      ],
+      "conflicting_event_ids": [],
+      "missing_source_fact_ids_by_event": {
+        "g001": [
+          "e006:f02"
+        ]
+      },
+      "rejected_items": [],
+      "unpublishable_items": []
+    },
+    {
+      "request_id": "yoasobi_ikuta-01-62f8b5ad4cd063cf",
+      "event_response": {
+        "missing_event_ids": [],
+        "duplicate_event_ids": [],
+        "unknown_event_ids": [],
+        "cross_event_evidence_ids": [],
+        "cross_event_source_fact_ids": [],
+        "unknown_source_fact_ids": [],
+        "invalid_event_decisions": {
+          "g003": "body_evidence_cannot_be_insufficient"
+        },
+        "malformed_event_results": 0
+      },
+      "missing_event_ids": [
+        "g003"
+      ],
+      "conflicting_event_ids": [],
+      "missing_source_fact_ids_by_event": {},
+      "rejected_items": [],
+      "unpublishable_items": []
+    },
+    {
+      "request_id": "asia-01-78d489928910c0f6",
+      "event_response": {
+        "missing_event_ids": [],
+        "duplicate_event_ids": [],
+        "unknown_event_ids": [],
+        "cross_event_evidence_ids": [],
+        "cross_event_source_fact_ids": [],
+        "unknown_source_fact_ids": [],
+        "invalid_event_decisions": {
+          "g004": "body_evidence_cannot_be_insufficient",
+          "g001": "body_evidence_cannot_be_insufficient"
+        },
+        "malformed_event_results": 0
+      },
+      "missing_event_ids": [
+        "g001",
+        "g004"
+      ],
+      "conflicting_event_ids": [],
+      "missing_source_fact_ids_by_event": {},
+      "rejected_items": [],
+      "unpublishable_items": []
+    },
+    {
+      "request_id": "north_america-01-fedd3eb5d2000494",
+      "event_response": {
+        "missing_event_ids": [],
+        "duplicate_event_ids": [],
+        "unknown_event_ids": [],
+        "cross_event_evidence_ids": [],
+        "cross_event_source_fact_ids": [],
+        "unknown_source_fact_ids": [],
+        "invalid_event_decisions": {
+          "g001": "body_evidence_cannot_be_insufficient"
+        },
+        "malformed_event_results": 0
+      },
+      "missing_event_ids": [
+        "g001"
+      ],
+      "conflicting_event_ids": [],
+      "missing_source_fact_ids_by_event": {
+        "g007": [
+          "e001:f01"
+        ]
+      },
+      "rejected_items": [],
+      "unpublishable_items": []
+    }
+  ],
+  "summary_diagnostics": [],
+  "recall_risk_categories": [],
+  "recovery_contract": "reuse the same Evidence; change only named rejected request/event entries"
+}
