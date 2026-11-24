@@ -216,7 +216,7 @@ Pages job alone: `publication_audit.py` must prove that origin `main`, the root
 URL, and the dated URL all agree on the same issue date.
 
 `Audit and recover NIGHT SIGNAL publication` first checks owner activation at
-17:45, 18:45, and 19:15 JST, after the Web owner and recovery heartbeat.
+17:20, 18:45, and 19:15 JST, after the Web owner and recovery heartbeat.
 It can replay a completed review once after an event-trigger, restore,
 commit, push, Pages, or live-reflection failure. It cannot honestly replace a
 missing editorial review without another paid model path, so it reports the
