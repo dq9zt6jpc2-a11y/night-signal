@@ -1,0 +1,410 @@
+{
+  "contract": "night-signal-cloud-review-checkpoint-v1",
+  "issue_date": "2026-11-24",
+  "evidence_sha256": "124fb548bc466507dbf45069a216ca26ed9070be733bb45ead3e3a35038486bb",
+  "manifest_commit_sha": "9f724426590a77dd7e21af9176781b4245f578fa",
+  "runbook_blob_sha": "d64b7bf4c422fd21a49ac7ffff7af21d2fdd1c9a",
+  "part_path": "cloud-evidence/2026-11-24/requests/003.json",
+  "responses": [
+    {
+      "request_id": "japan_economy-01-b63660bd6be12f4d",
+      "response": {
+        "events": [
+          {
+            "event_id": "g004",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "日経平均、前週末比約2,600円高の5万9,000円前後",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "24日前場中ごろの日経平均は、前週末比約2,600円高の5万9,000円前後で推移した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f02"
+                    ]
+                  },
+                  {
+                    "text": "取引時間中に5万9,000円を上回るのは19日以来、2営業日ぶりだった。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f03"
+                    ]
+                  },
+                  {
+                    "text": "10時時点の東証プライム売買代金は概算2兆4,315億円、売買高は8億567万株だった。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f09"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "duplicate_current_issue_event",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "マイナビ調査、事務・管理系の新卒採用を減らす企業が19.6%",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "AI普及を受け、事務職の新卒採用を減らすとした企業が約2割に上ったとマイナビ調査はまとめた。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e005:f04"
+                    ]
+                  },
+                  {
+                    "text": "事務・管理系を採用する企業の19.6%が採用を減らすと答え、増やすとの回答は1.2%だった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f02"
+                    ]
+                  },
+                  {
+                    "text": "三菱電機はAI活用などを考慮し、2026年度の新卒採用を前年度見込みから約2割減らす計画を2026年3月に発表した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f10"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g005",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g006",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "東京国税局、暗号資産の追徴税額約12億円　調査体制を強化へ",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "東京国税局の管轄は東京都、千葉県、神奈川県、山梨県の1都3県だ。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f01"
+                    ]
+                  },
+                  {
+                    "text": "暗号資産を巡る追徴税額は約12億円で、無申告が判明する事例が多かったという。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f02"
+                    ]
+                  },
+                  {
+                    "text": "国税当局は調査体制を強化し、申告漏れの把握を進める方針だ。",
+                    "evidence_ids": [
+                      "e007"
+                    ],
+                    "source_fact_ids": [
+                      "e007:f03"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "yoasobi_ikuta-01-62f8b5ad4cd063cf",
+      "response": {
+        "events": [
+          {
+            "event_id": "g002",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "wrong_entity_or_category",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "no_material_update",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "asia-01-78d489928910c0f6",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "ASEAN、デジタル経済枠組み協定DEFAを11カ国で署名",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "シンガポール当局は、DEFAをASEAN初の独立した法的拘束力のあるデジタル経済協定と説明している。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01"
+                    ]
+                  },
+                  {
+                    "text": "ASEANは2023年9月に交渉を開始し、2026年5月に妥結した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f04"
+                    ]
+                  },
+                  {
+                    "text": "ASEAN全11加盟国が2026年11月14日に署名し、署名後180日で発効する日程では2027年5月13日となる。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f07"
+                    ]
+                  }
+                ],
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "GRT、中国Zhenguan New Materialと最大3億元のフィルム供給基本契約",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "GRTは、出資取得を進めるZhenguan New Materialと最大3億元規模の機能性フィルム供給基本契約を結んだ。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f01",
+                      "e002:f04"
+                    ]
+                  },
+                  {
+                    "text": "3億元は供給上限で、実際の売上高は個別発注によって確定する。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f02"
+                    ]
+                  },
+                  {
+                    "text": "契約は2027年6月30日までで、MLCC用離型フィルム、PET、TPUなどを供給し、2027年には揚州と欽天の新工場稼働を予定する。",
+                    "evidence_ids": [
+                      "e002"
+                    ],
+                    "source_fact_ids": [
+                      "e002:f11"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g004",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g005",
+            "decision": "background_or_navigation",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "north_america-01-fedd3eb5d2000494",
+      "response": {
+        "events": [
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "S&P 500、週初の取引で4%超反発　12月利上げ観測は95%超",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "S&P 500は週初の取引だけで4.0%超回復し、7営業日連続下落を含む直前数週間の損失の一部を取り戻した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f01"
+                    ]
+                  },
+                  {
+                    "text": "記事は、NvidiaのCEO復帰がAI拡張計画と半導体供給の継続性を示すとの受け止めが市場にあると分析した。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f09"
+                    ]
+                  },
+                  {
+                    "text": "12月9日の会合では、政策金利を4.25%付近へ引き上げる確率を市場が95%超織り込んでいる。",
+                    "evidence_ids": [
+                      "e001"
+                    ],
+                    "source_fact_ids": [
+                      "e001:f13"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g006",
+            "decision": "no_material_update",
+            "items": []
+          },
+          {
+            "event_id": "g003",
+            "decision": "duplicate_previous_event",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "米住宅、売り出し1件当たり高意向買い手が3.5人で過去最低",
+                "information_complete": true,
+                "summary_points": [
+                  {
+                    "text": "Zillowによると、2026年第3四半期の全米の売り出し物件1件当たり高意向買い手は平均3.5人で、前年同期比4.8%減り、2023年下半期の集計開始以来最低となった。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f01",
+                      "e005:f04"
+                    ]
+                  },
+                  {
+                    "text": "Freddie Macの調査では、30年固定住宅ローン金利が2026年7月2日の週の6.43%から10月1日に7.28%へ上昇した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f07"
+                    ]
+                  },
+                  {
+                    "text": "Zillowは、住宅ローン金利上昇で比較検討する買い手が減る一方、在庫が積み上がり需要が分散したと指摘した。",
+                    "evidence_ids": [
+                      "e005"
+                    ],
+                    "source_fact_ids": [
+                      "e005:f05"
+                    ]
+                  }
+                ],
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g005",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    }
+  ]
+}
