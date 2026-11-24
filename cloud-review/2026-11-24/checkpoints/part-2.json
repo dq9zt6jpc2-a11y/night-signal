@@ -340,7 +340,7 @@
           },
           {
             "event_id": "g006",
-            "decision": "no_material_update",
+            "decision": "insufficient_evidence",
             "items": []
           },
           {
