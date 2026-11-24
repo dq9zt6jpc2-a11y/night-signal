@@ -327,6 +327,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          FIRST_RUN_ID="${{ steps.pages.outputs.run_id }}"
+          DEPLOY_STEP="$(gh run view "$FIRST_RUN_ID" --json jobs --jq             '[.jobs[].steps[] | select(.name == "Deploy to GitHub Pages") | .conclusion] | if length == 1 then .[0] else "" end')"
+          if [[ "$DEPLOY_STEP" != "skipped" ]]; then
+            echo "The first run may have submitted a Pages deployment. Refusing a second submission." >&2
+            exit 1
+          fi
           RUN_ID="$(bash scripts/dispatch_reviewed_pages.sh "$ISSUE_DATE" retry)"
           gh run watch "$RUN_ID" --exit-status
 
