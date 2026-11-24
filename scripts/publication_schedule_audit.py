@@ -7,8 +7,11 @@ import json
 import re
 import sys
 from pathlib import Path
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import publication_timing as timing
+from night_signal_editor_recovery_decision import assess
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -219,13 +222,27 @@ def main() -> int:
     if operations.get("reliability_report_retention_days") != 30:
         fail("operational reliability history must be retained for 30 days")
     watchdog_heartbeats = operations.get("publication_watchdog_heartbeats_jst")
-    if watchdog_heartbeats != ["13:23", "16:30", "17:45", "18:45", "19:15"]:
+    if watchdog_heartbeats != ["13:23", "16:30", "17:20", "18:45", "19:15"]:
         fail("publication watchdog policy drifted from the bounded recovery window")
     expected_watchdog_minutes = sorted(
         timing.minutes(timing.parse_clock(value)) for value in watchdog_heartbeats
     )
     if cron_minutes(publication_watchdog) != expected_watchdog_minutes:
         fail("publication watchdog cron does not match the operations policy")
+    probe_date = "2099-01-01"
+    ready_report = {"issue_date": probe_date, "evidence_ready": True, "needs_editor_action": True}
+    owner_slots = [timing.parse_clock(value) for value in owner_heartbeats]
+    if not any(
+        assess(
+            ready_report,
+            datetime.fromisoformat(f"{probe_date}T{slot}").replace(tzinfo=ZoneInfo(policy.timezone)),
+            policy,
+            owner_slots,
+            operations["independent_editor_trial_budget_minutes"],
+        )["reason"] == "eligible_for_independent_editor"
+        for slot in watchdog_heartbeats
+    ):
+        fail("no scheduled watchdog checkpoint fits the independent editor handoff window")
     for required in (
         "night_signal_operational_audit.py",
         "workflow_run:",

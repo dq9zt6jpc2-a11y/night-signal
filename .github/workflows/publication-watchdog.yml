@@ -12,7 +12,7 @@ on:
     # Check the primary editor before the 17:00 JST recovery editor.
     - cron: "23 04 * * *"
     - cron: "30 07 * * *"
-    - cron: "45 08 * * *"
+    - cron: "20 08 * * *"
     - cron: "45 09 * * *"
     - cron: "15 10 * * *"
   workflow_dispatch:
@@ -236,7 +236,7 @@ jobs:
             echo "No Evidence recollection or model review was repeated." >&2
             exit 1
           fi
-          if [[ "$STAGE" == "review_missing_after_owner_heartbeat" && "$NOW_JST" -ge 1730 ]]; then
+          if [[ "$STAGE" == "review_missing_after_owner_heartbeat" && "$NOW_JST" -ge 1720 ]]; then
             echo "NIGHT SIGNAL Web owner started but did not submit a review by the recovery checkpoint." >&2
             echo "stage=$STAGE" >&2
             echo "No Evidence recollection or model review was repeated." >&2
