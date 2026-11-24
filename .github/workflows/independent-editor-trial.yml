@@ -30,6 +30,8 @@ jobs:
   trial:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    outputs:
+      resume: ${{ steps.resume.outputs.eligible }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -52,6 +54,7 @@ jobs:
           [[ "$(gh run view "$RESUME_RUN_ID" --json workflowName,status --jq '.workflowName + ":" + .status')" == "NIGHT SIGNAL Independent Editor Trial:completed" ]]
           gh run download "$RESUME_RUN_ID" --name independent-editor-trial --dir "$RUNNER_TEMP/independent-editor-resume"
       - name: Generate and validate the independent review
+        id: generate
         timeout-minutes: 16
         if: vars.NIGHT_SIGNAL_WORKERS_AI_FREE_VERIFIED == 'true'
         env:
@@ -81,9 +84,43 @@ jobs:
           echo "Workers AI Free plan has not been verified for this repository." >&2
           exit 1
       - uses: actions/upload-artifact@v7.0.1
+        id: save
         if: always()
         with:
           name: independent-editor-trial
           path: ${{ runner.temp }}/independent-editor
           if-no-files-found: ignore
           retention-days: 3
+      - name: Identify an interrupted full trial with reusable work
+        id: resume
+        if: >-
+          ${{ always() && github.ref == 'refs/heads/main' && !inputs.sample &&
+              inputs.resume_run_id == '' && steps.generate.outcome == 'failure' &&
+              steps.save.outcome == 'success' }}
+        run: |
+          directory="$RUNNER_TEMP/independent-editor"
+          if [[ ! -f "$directory/candidate_review.json" ]] &&
+             compgen -G "$directory/responses/*.json" > /dev/null; then
+            echo "eligible=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  resume_once:
+    needs: trial
+    if: ${{ always() && needs.trial.outputs.resume == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions:
+      actions: write
+    steps:
+      - name: Dispatch one continuation after checkpoints have been saved
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          ISSUE_DATE: ${{ inputs.issue_date }}
+          HISTORY_COMMIT: ${{ inputs.history_commit }}
+        run: |
+          # Workflow-level concurrency lets the continuation start after this run ends.
+          gh workflow run independent-editor-trial.yml --ref main \
+            -f "issue_date=$ISSUE_DATE" \
+            -f "history_commit=$HISTORY_COMMIT" \
+            -f "resume_run_id=$GITHUB_RUN_ID"
