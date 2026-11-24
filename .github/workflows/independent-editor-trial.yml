@@ -1,4 +1,5 @@
 name: NIGHT SIGNAL Independent Editor Trial
+run-name: ${{ inputs.watchdog_probe && format('Independent editor watchdog probe {0}', inputs.issue_date) || format('Independent editor trial {0}', inputs.issue_date) }}
 
 on:
   workflow_dispatch:
@@ -9,6 +10,10 @@ on:
         type: string
       sample:
         description: Test a small group of real events to diagnose inference and output limits
+        type: boolean
+        default: false
+      watchdog_probe:
+        description: Read-only deadline-bound trial requested by the scheduled watchdog
         type: boolean
         default: false
       resume_run_id:
@@ -94,7 +99,7 @@ jobs:
       - name: Identify an interrupted full trial with reusable work
         id: resume
         if: >-
-          ${{ always() && github.ref == 'refs/heads/main' && !inputs.sample &&
+          ${{ always() && github.ref == 'refs/heads/main' && !inputs.sample && !inputs.watchdog_probe &&
               inputs.resume_run_id == '' && steps.generate.outcome == 'failure' &&
               steps.save.outcome == 'success' }}
         run: |
