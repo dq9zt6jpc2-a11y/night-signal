@@ -197,6 +197,28 @@ def run_gh(arguments: list[str], *, check: bool = True) -> subprocess.CompletedP
     return result
 
 
+def retain_reader_verifications(payload: dict[str, Any], previous: dict[str, Any]) -> None:
+    """Keep the first observation of each distinct reader-visible version."""
+    candidates = [
+        *previous.get("reader_verifications", []),
+        previous.get("first_reader_verification"),
+        payload.get("first_reader_verification"),
+    ]
+    versions = []
+    for entry in sorted(
+        (entry for entry in candidates if entry),
+        key=lambda entry: datetime.fromisoformat(entry["confirmed_at"]),
+    ):
+        if not any(
+            saved["verified_files_sha256"] == entry["verified_files_sha256"]
+            for saved in versions
+        ):
+            versions.append(entry)
+    if versions:
+        payload["first_reader_verification"] = versions[0]
+        payload["reader_verifications"] = versions
+
+
 def publish_feedback(
     issue_date: str, feedback: dict[str, Any], preflight_sha: str = ""
 ) -> dict[str, Any]:
@@ -238,14 +260,14 @@ def publish_feedback(
         existing = run_gh(["api", f"{contents_path}?ref={branch}"], check=False)
         previous_sha = None
         payload = dict(feedback)
+        previous = {}
         if existing.returncode == 0:
             envelope = json.loads(existing.stdout)
             previous_sha = envelope["sha"]
             previous = json.loads(base64.b64decode(envelope["content"]))
-            if previous.get("first_reader_verification"):
-                payload["first_reader_verification"] = previous["first_reader_verification"]
         elif "HTTP 404" not in existing.stderr:
             fail("could not read prior cloud feedback")
+        retain_reader_verifications(payload, previous)
         encoded = base64.b64encode(
             (json.dumps(payload, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
         ).decode("ascii")
@@ -313,6 +335,16 @@ def self_test() -> None:
             fail("complete rejection details were lost after log truncation")
         if feedback["recall_risk_categories"] != ["OpenAI", "北米経済"]:
             fail("recall-risk categories were not preserved")
+    first = {"confirmed_at": "2099-01-02T18:59:00+09:00", "verified_files_sha256": {"index.html": "original"}}
+    correction = {"confirmed_at": "2099-01-02T19:12:00+09:00", "verified_files_sha256": {"index.html": "corrected"}}
+    corrected = {"first_reader_verification": correction}
+    retain_reader_verifications(corrected, {"first_reader_verification": first})
+    repeated = {"first_reader_verification": {**correction, "confirmed_at": "2099-01-02T19:27:00+09:00"}}
+    retain_reader_verifications(repeated, corrected)
+    failure = {"first_reader_verification": None}
+    retain_reader_verifications(failure, repeated)
+    if failure["first_reader_verification"] != first or failure["reader_verifications"] != [first, correction]:
+        fail("correction history or first reader verification was lost")
     print("NIGHT SIGNAL CLOUD FEEDBACK SELF-TEST PASSED")
 
 
