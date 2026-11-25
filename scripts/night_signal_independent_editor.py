@@ -129,7 +129,12 @@ Before choosing publish, compare the concrete decision, actor, scope and timing
 against every previous_updates entry. If it is the same change with no new material
 fact, return decision duplicate_previous_event with an empty items array. A
 guide published after the original announcement does not establish a new change.
-Use a decision permitted by the packet. Do not add a review or response envelope.
+Allowed exclusions: duplicate_previous_event, duplicate_current_issue_event,
+background_or_navigation, wrong_entity_or_category, no_material_update, insufficient_evidence.
+For headline-only material use insufficient_evidence unless a distinct supported exclusion applies.
+Check the actual entity; similar names across industries are not evidence of relevance.
+Reader-facing titles and every summary point must be in Japanese, including for English sources.
+For a published item, information_complete is Boolean true. Do not add a review or response envelope.
 """
     tasks = [
         (req["request_id"], event, json.dumps({
@@ -173,7 +178,13 @@ Use a decision permitted by the packet. Do not add a review or response envelope
                 destination.write_bytes(prior_issue.read_bytes())
     evidence = editor.read_json(evidence_path)
     editor.evidence_store.validate_bundle(evidence, issue_date)
-    editor.bind_immutable_packet_requests(packet, editor.review_requests(issue_date, evidence, state_root))
+    bound = editor.bind_immutable_packet_requests(packet, editor.review_requests(issue_date, evidence, state_root))
+    validation_inputs = {}
+    for request in bound:
+        # Keep the original request-local evidence IDs when checking a single event.
+        for eid, record in editor.core.editor_evidence_records(request["_category_contract"], issue_date, request["_records"]):
+            key = (request["request_id"], record["_editor_event_id"])
+            validation_inputs.setdefault(key, (request, []))[1].append((eid, record))
     (issue_dir / "editor_packet.json").write_bytes(packet_path.read_bytes())
     retry_lock = Lock()
     retries_left = 8
@@ -194,15 +205,43 @@ Use a decision permitted by the packet. Do not add a review or response envelope
         event_id = source_event["id"]
         name = hashlib.sha256(f"{request_id}/{event_id}".encode()).hexdigest()
         destination = trial / "responses" / f"{name}.json"
+        def validate(response):
+            request, entries = validation_inputs[(request_id, event_id)]
+            events = response.get("events", [])
+            if not isinstance(events, list) or len(events) != 1 or not isinstance(events[0], dict):
+                raise RecoverableReviewError("expected exactly one event object")
+            items = events[0].get("items", [])
+            if not isinstance(items, list) or any(not isinstance(item, dict) for item in items):
+                raise RecoverableReviewError("items must be an array of objects")
+            for item in items:
+                points = item.get("summary_points", [])
+                if not isinstance(points, list) or any(
+                    not isinstance(point, dict) or any(
+                        not isinstance(point.get(field), list) or
+                        any(not isinstance(value, str) for value in point[field])
+                        for field in ("evidence_ids", "source_fact_ids")
+                    ) for point in points
+                ):
+                    raise RecoverableReviewError("summary_points must cite arrays of string IDs")
+            try:
+                editor.cards_from_response(response, request, issue_date, evidence_entries=entries)
+            except editor.ReviewResponseValidationError as exc:
+                raise RecoverableReviewError(json.dumps(exc.details, ensure_ascii=False)[:2400]) from exc
+
         if resume is not None:
             try:
                 cached = json.loads((resume / "responses" / f"{name}.json").read_text(encoding="utf-8"))
             except (OSError, ValueError):
                 cached = {}
             if checkpoint_matches(cached, checkpoint_id, request_id, event_id):
-                editor.write_json_atomic(destination, cached)
-                print(f"Reused {request_id}/{event_id} from a matching checkpoint", flush=True)
-                return cached
+                try:
+                    validate(cached["response"])
+                except RecoverableReviewError:
+                    pass
+                else:
+                    editor.write_json_atomic(destination, cached)
+                    print(f"Reused {request_id}/{event_id} from a validated checkpoint", flush=True)
+                    return cached
         started = monotonic()
         print(f"Starting {request_id}/{event_id}", flush=True)
 
@@ -213,6 +252,7 @@ Use a decision permitted by the packet. Do not add a review or response envelope
                 raise RecoverableReviewError("response must contain exactly one event")
             if events[0].get("event_id") != event_id:
                 raise RecoverableReviewError("response identified the wrong event")
+            validate(response)
             if repeats_previous_issue(events[0], source_event.get("previous_updates", [])):
                 used = sorted({
                     source_id
@@ -243,7 +283,7 @@ Use a decision permitted by the packet. Do not add a review or response envelope
                 "Review evidence facts outside the already considered IDs. "
                 "Prioritize concrete changes in deadlines, scope, eligibility, and operating rules. "
                 "Publish if the evidence establishes a material change and cite the exact source fact IDs. "
-                "If the article adds no material change, emit duplicate_previous_event with items set to []. "
+                "Use duplicate_previous_event only for a supported match to previous_updates. "
                 "Never infer a new event solely from a newer article date."
             )
         entry = {"request_id": request_id, "response": response, "checkpoint_id": checkpoint_id}

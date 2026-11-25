@@ -233,8 +233,10 @@ def flatten_event_response(
     category: dict[str, Any],
     issue_date: str,
     records: list[dict[str, Any]],
+    *, evidence_entries=None,
 ) -> tuple[dict[str, Any], bool, dict[str, Any]]:
-    evidence_entries = core.editor_evidence_records(category, issue_date, records)
+    if evidence_entries is None:
+        evidence_entries = core.editor_evidence_records(category, issue_date, records)
     event_evidence_ids: dict[str, set[str]] = {}
     event_evidence_depths: dict[str, set[str]] = {}
     event_source_fact_ids: dict[str, set[str]] = {}

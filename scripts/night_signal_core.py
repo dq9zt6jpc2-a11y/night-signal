@@ -5175,6 +5175,7 @@ def normalize_result(
     records: list[dict[str, Any]],
     *,
     require_source_fact_coverage: bool = False,
+    evidence_entries=None,
 ) -> dict[str, Any]:
     valid_topic_order = [
         str(topic["id"])
@@ -5182,7 +5183,8 @@ def normalize_result(
         if isinstance(topic, dict)
     ]
     valid_topics = set(valid_topic_order)
-    evidence_entries = editor_evidence_records(category, issue_date, records)
+    if evidence_entries is None:
+        evidence_entries = editor_evidence_records(category, issue_date, records)
     records_by_id = dict(evidence_entries)
     required_facts_by_event = editor_required_source_facts(evidence_entries)
     source_facts_by_id = {
