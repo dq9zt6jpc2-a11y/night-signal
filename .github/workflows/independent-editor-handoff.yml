@@ -31,5 +31,11 @@ jobs:
           ISSUE_DATE="${RUN_TITLE#Independent editor watchdog probe }"
           [[ "$ISSUE_DATE" =~ ^20[0-9]{2}-[0-9]{2}-[0-9]{2}$ ]]
           [[ "$RUN_ID" =~ ^[0-9]+$ ]]
+          # A delayed probe can finish successfully after skipping the editor.
+          artifacts="$(gh api "repos/$GH_REPO/actions/runs/$RUN_ID/artifacts")"
+          if ! jq -e 'any(.artifacts[]; .name == "independent-editor-trial" and (.expired | not))' <<< "$artifacts" >/dev/null; then
+            echo "No saved review from this probe; publication handoff skipped."
+            exit 0
+          fi
           gh workflow run cloud-review-publish.yml --ref main \
             -f "issue_date=$ISSUE_DATE" -f "independent_run_id=$RUN_ID"
