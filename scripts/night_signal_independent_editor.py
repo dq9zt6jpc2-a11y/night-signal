@@ -118,7 +118,13 @@ Return one JSON object with exactly this outer structure:
 {"events":[{"event_id":"copy payload.events[0].id","decision":"publish","items":[]}]}
 For publish, supply one or more items with title, information_complete,
 summary_points (text, evidence_ids, source_fact_ids), topic_value_class,
-priority_class, and change_class. For exclusions, return no items.
+priority_class, and change_class. Every summary point must cite exact evidence_ids and source_fact_ids from this
+event. Cover each required source fact once. Omit repetition, optional analysis
+and any claims not supported by the supplied source text.
+Use change_class exactly new_event, material_update, or new_analysis_of_existing_fact.
+Use priority_class exactly top, priority, or standard.
+Use topic_value_class from policy.allowed_topic_value_classes.
+For exclusions, return no items.
 Before choosing publish, compare the concrete decision, actor, scope and timing
 against every previous_updates entry. If it is the same change with no new material
 fact, return decision duplicate_previous_event with an empty items array. A
@@ -232,7 +238,9 @@ Use a decision permitted by the packet. Do not add a review or response envelope
             print(f"Retrying {request_id}/{event_id}: {reason}", flush=True)
             response = checked_response(
                 f"\nThe previous attempt failed: {reason}. Re-read the original evidence. "
-                "Return compact JSON only. Review evidence facts outside the already considered IDs. "
+                "Return compact JSON only, using a single summary point per distinct fact. "
+                "Preserve coverage of all required source fact IDs. "
+                "Review evidence facts outside the already considered IDs. "
                 "Prioritize concrete changes in deadlines, scope, eligibility, and operating rules. "
                 "Publish if the evidence establishes a material change and cite the exact source fact IDs. "
                 "If the article adds no material change, emit duplicate_previous_event with items set to []. "
