@@ -31,6 +31,27 @@ class RecoverableReviewError(ValueError):
     """A response can be retried once without changing the source material."""
 
 
+def bounded_editor_attempt(call, reserve_retry):
+    """A transport error and a rejected draft need different recovery actions."""
+    seen = set()
+    extra = ""
+    while True:
+        try:
+            return call(extra)
+        except (RecoverableReviewError, TimeoutError, json.JSONDecodeError) as exc:
+            kind = "timeout" if isinstance(exc, TimeoutError) else "draft"
+            if kind in seen or not reserve_retry():
+                raise
+            seen.add(kind)
+            if kind == "draft":
+                # Keep the correction context through a subsequent transport timeout.
+                extra = (
+                    "\nCorrect this validation error using the original article facts: "
+                    + str(exc)[:2400]
+                    + ". Return concise Japanese. Cover all required source fact IDs."
+                )
+
+
 def repeats_previous_issue(result: dict, previous_updates: list[dict]) -> bool:
     """Flag all-old submitted facts while preserving candidates with a new fact."""
     if result.get("decision") != "publish":
@@ -200,7 +221,6 @@ For a published item, information_complete is Boolean true. Do not add a review 
     checkpoint_id = identity.hexdigest()
 
     def review_one(task):
-        nonlocal retries_left
         request_id, source_event, message = task
         event_id = source_event["id"]
         name = hashlib.sha256(f"{request_id}/{event_id}".encode()).hexdigest()
@@ -276,33 +296,22 @@ For a published item, information_complete is Boolean true. Do not add a review 
                 )
             return response
 
-        try:
-            response = checked_response("")
-        except (RecoverableReviewError, TimeoutError, json.JSONDecodeError) as exc:
+        def reserve_retry():
+            nonlocal retries_left
             with retry_lock:
-                if not retries_left:
-                    raise
+                if retries_left == 0:
+                    return False
                 retries_left -= 1
-            reason = str(exc) if isinstance(exc, RecoverableReviewError) else type(exc).__name__
-            print(f"Retrying {request_id}/{event_id}: {reason}", flush=True)
-            response = checked_response(
-                f"\nThe previous attempt failed: {reason}. Re-read the original evidence. "
-                "Return compact JSON only, using a single summary point per distinct fact. "
-                "Preserve coverage of all required source fact IDs. "
-                "Review evidence facts outside the already considered IDs. "
-                "Prioritize concrete changes in deadlines, scope, eligibility, and operating rules. "
-                "Publish if the evidence establishes a material change and cite the exact source fact IDs. "
-                "Use duplicate_previous_event only for a supported match to previous_updates. "
-                "Never infer a new event solely from a newer article date."
-            )
+                return True
+
+        response = bounded_editor_attempt(checked_response, reserve_retry)
         entry = {"request_id": request_id, "response": response, "checkpoint_id": checkpoint_id}
         editor.write_json_atomic(destination, entry)
         print(f"Completed {request_id}/{event_id} in {monotonic() - started:.1f}s", flush=True)
         return entry
 
     if sample:
-        with ThreadPoolExecutor(max_workers=3) as pool:
-            entries = list(pool.map(review_one, tasks))
+        entries = review_all_candidates(tasks, review_one, trial)
         return {
             "sample_events": [entry["response"]["events"][0]["event_id"] for entry in entries],
             "full_issue_validated": False,
