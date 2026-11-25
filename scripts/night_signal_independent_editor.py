@@ -228,6 +228,15 @@ For a published item, information_complete is Boolean true. Do not add a review 
             except editor.ReviewResponseValidationError as exc:
                 raise RecoverableReviewError(json.dumps(exc.details, ensure_ascii=False)[:2400]) from exc
 
+        evidence_rows = source_event.get("evidence", [])
+        if evidence_rows and all(row.get("evidence_depth") == "headline" for row in evidence_rows):
+            response = {"events": [{"event_id": event_id, "decision": "insufficient_evidence", "items": []}]}
+            validate(response)
+            entry = {"request_id": request_id, "response": response, "checkpoint_id": checkpoint_id}
+            editor.write_json_atomic(destination, entry)
+            print(f"Verified headline-only evidence for {request_id}/{event_id}", flush=True)
+            return entry
+
         if resume is not None:
             try:
                 cached = json.loads((resume / "responses" / f"{name}.json").read_text(encoding="utf-8"))
