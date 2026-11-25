@@ -113,7 +113,7 @@ jobs:
       - name: Identify an interrupted full trial with reusable work
         id: resume
         if: >-
-          ${{ always() && github.ref == 'refs/heads/main' && !inputs.sample && !inputs.watchdog_probe &&
+          ${{ always() && github.ref == 'refs/heads/main' && !inputs.sample &&
               inputs.resume_run_id == '' && steps.generate.outcome == 'failure' &&
               steps.save.outcome == 'success' }}
         run: |
@@ -137,9 +137,11 @@ jobs:
           GH_REPO: ${{ github.repository }}
           ISSUE_DATE: ${{ inputs.issue_date }}
           HISTORY_COMMIT: ${{ inputs.history_commit }}
+          WATCHDOG_PROBE: ${{ inputs.watchdog_probe }}
         run: |
           # Workflow-level concurrency lets the continuation start after this run ends.
           gh workflow run independent-editor-trial.yml --ref main \
             -f "issue_date=$ISSUE_DATE" \
             -f "history_commit=$HISTORY_COMMIT" \
-            -f "resume_run_id=$GITHUB_RUN_ID"
+            -f "resume_run_id=$GITHUB_RUN_ID" \
+            -f "watchdog_probe=$WATCHDOG_PROBE"
