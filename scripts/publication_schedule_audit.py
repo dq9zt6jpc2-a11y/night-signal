@@ -243,6 +243,15 @@ def main() -> int:
         for slot in watchdog_heartbeats
     ):
         fail("no scheduled watchdog checkpoint fits the independent editor handoff window")
+    early_check = datetime.fromisoformat(f"{probe_date}T16:30").replace(
+        tzinfo=ZoneInfo(policy.timezone)
+    )
+    missing_owner = {**ready_report, "stage": "review_missing_owner_heartbeat_missing"}
+    trial_budget = operations["independent_editor_trial_budget_minutes"]
+    if not assess(missing_owner, early_check, policy, owner_slots, trial_budget)["retry_fits"]:
+        fail("missing primary owner must leave enough time for an independent retry")
+    if assess(ready_report, early_check, policy, owner_slots, trial_budget)["reason"] != "waiting_for_web_recovery_window":
+        fail("an active Web owner should retain its normal recovery window")
     for required in (
         "night_signal_operational_audit.py",
         "workflow_run:",

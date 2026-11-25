@@ -15,9 +15,14 @@ def assess(report, now, policy, owner_slots, trial_minutes):
     now = now.astimezone(zone)
     issue = date.fromisoformat(report["issue_date"])
     deadline = datetime.combine(issue, policy.publication_deadline, zone)
-    last_owner_slot = datetime.combine(issue, max(owner_slots), zone)
     owner_grace = timedelta(minutes=policy.workflow_overhead_budget_minutes)
-    ready_after = last_owner_slot + owner_grace
+    if report.get("stage") == "review_missing_owner_heartbeat_missing":
+        # Once the first owner has missed its heartbeat, let the independent
+        # editor use the existing early watchdog and preserve time for a retry.
+        handoff_slot = min(owner_slots)
+    else:
+        handoff_slot = max(owner_slots)
+    ready_after = datetime.combine(issue, handoff_slot, zone) + owner_grace
     # Evidence is already sealed. Reserve time for Pages, orchestration, and safety.
     downstream = policy.pages_timeout_minutes + policy.workflow_overhead_budget_minutes + policy.deadline_safety_margin_minutes
     latest_single = deadline - timedelta(minutes=downstream + trial_minutes)
