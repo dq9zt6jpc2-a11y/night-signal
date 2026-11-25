@@ -208,7 +208,11 @@ jobs:
 
       - name: Start at most one deadline-bound independent editor probe
         if: >-
-          ${{ github.event_name == 'schedule' && steps.final.outcome == 'success' &&
+          ${{ (github.event_name == 'schedule' ||
+               (github.event_name == 'workflow_run' &&
+                github.event.workflow_run.name == 'NIGHT SIGNAL Evidence Collection' &&
+                github.event.workflow_run.head_branch == 'main')) &&
+              steps.final.outcome == 'success' &&
               steps.final.outputs.published != 'true' &&
               vars.NIGHT_SIGNAL_EDITOR_WATCHDOG_PROBE == 'true' &&
               vars.NIGHT_SIGNAL_WORKERS_AI_FREE_VERIFIED == 'true' }}
