@@ -467,6 +467,7 @@ def cards_from_response(
     raw: dict[str, Any],
     request: dict[str, Any],
     issue_date: str,
+    *, evidence_entries=None,
 ) -> list[dict[str, Any]]:
     category = request["_category_contract"]
     records = request["_records"]
@@ -474,7 +475,7 @@ def cards_from_response(
         raw,
         category,
         issue_date,
-        records,
+        records, evidence_entries=evidence_entries,
     )
     flattened = editor.sanitize_model_result(flattened)
     normalized = core.normalize_result(
@@ -482,7 +483,7 @@ def cards_from_response(
         category,
         issue_date,
         records,
-        require_source_fact_coverage=True,
+        require_source_fact_coverage=True, evidence_entries=evidence_entries,
     )
     failures: list[str] = []
     cards: list[dict[str, Any]] = []
