@@ -1,0 +1,35 @@
+name: Hand off a successful independent NIGHT SIGNAL review
+
+on:
+  workflow_run:
+    workflows: ["NIGHT SIGNAL Independent Editor Trial"]
+    branches: [main]
+    types: [completed]
+
+permissions:
+  actions: write
+
+jobs:
+  handoff:
+    if: >-
+      ${{ vars.NIGHT_SIGNAL_EDITOR_AUTO_PUBLISH == 'true' &&
+          github.event.workflow_run.conclusion == 'success' &&
+          github.event.workflow_run.event == 'workflow_dispatch' &&
+          github.event.workflow_run.head_repository.full_name == github.repository &&
+          startsWith(github.event.workflow_run.display_title, 'Independent editor watchdog probe ') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Dispatch existing publication checks from trusted main
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          RUN_TITLE: ${{ github.event.workflow_run.display_title }}
+        run: |
+          set -euo pipefail
+          ISSUE_DATE="${RUN_TITLE#Independent editor watchdog probe }"
+          [[ "$ISSUE_DATE" =~ ^20[0-9]{2}-[0-9]{2}-[0-9]{2}$ ]]
+          [[ "$RUN_ID" =~ ^[0-9]+$ ]]
+          gh workflow run cloud-review-publish.yml --ref main \
+            -f "issue_date=$ISSUE_DATE" -f "independent_run_id=$RUN_ID"

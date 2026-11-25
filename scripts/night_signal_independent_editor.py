@@ -21,7 +21,7 @@ MODEL = "@cf/zai-org/glm-4.7-flash"
 MAX_INPUT_BYTES = 1_300_000
 MAX_REQUESTS = 36
 MAX_OUTPUT_TOKENS = 4096
-MAX_EVENTS = 75
+MAX_EVENTS = 96
 ROOT = Path(__file__).resolve().parents[1]
 RULES = ROOT / "docs/night_signal_plus_runbook.md"
 
@@ -132,10 +132,16 @@ Use a decision permitted by the packet. Do not add a review or response envelope
         }, ensure_ascii=False, separators=(",", ":")))
         for req in requests for event in req["payload"]["events"]
     ]
-    if not 0 < len(tasks) <= MAX_EVENTS:
-        raise ValueError("Event count exceeds the trial budget")
-    if sum(len((instructions + message).encode()) for _, _, message in tasks) > MAX_INPUT_BYTES:
-        raise ValueError("Full packet exceeds the trial budget")
+    if sample:
+        tasks = tasks[:3]
+    event_count = len(tasks)
+    input_bytes = sum(len((instructions + message).encode()) for _, _, message in tasks)
+    print(f"Independent editor workload: {event_count}/{MAX_EVENTS} events, "
+          f"{input_bytes}/{MAX_INPUT_BYTES} input bytes", flush=True)
+    if not 0 < event_count <= MAX_EVENTS:
+        raise ValueError(f"Event count {event_count} exceeds the trial budget ({MAX_EVENTS})")
+    if input_bytes > MAX_INPUT_BYTES:
+        raise ValueError(f"Input size {input_bytes} exceeds the trial budget ({MAX_INPUT_BYTES} bytes)")
     trial.mkdir(parents=True, exist_ok=True)
     state_root = trial / "state"
     issue_dir = state_root / issue_date
@@ -239,7 +245,7 @@ Use a decision permitted by the packet. Do not add a review or response envelope
 
     if sample:
         with ThreadPoolExecutor(max_workers=3) as pool:
-            entries = list(pool.map(review_one, tasks[:3]))
+            entries = list(pool.map(review_one, tasks))
         return {
             "sample_events": [entry["response"]["events"][0]["event_id"] for entry in entries],
             "full_issue_validated": False,

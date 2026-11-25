@@ -16,9 +16,13 @@ on:
         description: "JST issue date to recover."
         required: true
         type: string
+      independent_run_id:
+        description: "Successful independent editor run to import instead of the Web review branch."
+        required: false
+        type: string
       review_ref:
-        description: "Review branch named night-signal-review-YYYY-MM-DD."
-        required: true
+        description: "Review branch named night-signal-review-YYYY-MM-DD for a Web review."
+        required: false
         type: string
       validation_only:
         description: "Run the editorial and release checks without publishing."
@@ -56,6 +60,8 @@ jobs:
         env:
           REQUESTED_ISSUE_DATE: ${{ inputs.issue_date || '' }}
           REQUESTED_REVIEW_REF: ${{ inputs.review_ref || '' }}
+          INDEPENDENT_RUN_ID: ${{ inputs.independent_run_id || '' }}
+          GH_TOKEN: ${{ github.token }}
           RECOVERY_ATTEMPT: ${{ inputs.recovery_attempt || '0' }}
         run: |
           DRAFT_REF=""
@@ -74,11 +80,44 @@ jobs:
             echo "Invalid issue date: $ISSUE_DATE" >&2
             exit 1
           fi
-          if [[ "$REVIEW_REF" != "night-signal-review-$ISSUE_DATE" ]]; then
+          if [[ -n "$INDEPENDENT_RUN_ID" ]]; then
+            if [[ "$GITHUB_EVENT_NAME" != "workflow_dispatch" || "$GITHUB_REF_NAME" != "main" ||
+                  -n "$REVIEW_REF" ||
+                  ! "$INDEPENDENT_RUN_ID" =~ ^[0-9]+$ ]]; then
+              echo "Independent review recovery requires an opted-in run ID on trusted main." >&2
+              exit 1
+            fi
+            if [[ "$ISSUE_DATE" != "$(TZ=Asia/Tokyo date +%F)" ]] &&
+               [[ "$ISSUE_DATE" != "$(TZ=Asia/Tokyo date -d yesterday +%F)" ||
+                  "$(TZ=Asia/Tokyo date +%H)" -ge 6 ]]; then
+              echo "Independent review recovery is outside the publication recovery window." >&2
+              exit 1
+            fi
+            if [[ -f .night-signal-issue-date && "$ISSUE_DATE" < "$(<.night-signal-issue-date)" ]]; then
+              echo "A newer issue is already committed; refusing an older replacement." >&2
+              exit 1
+            fi
+            run="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$INDEPENDENT_RUN_ID")"
+            sha="$(jq -er '.head_sha | select(test("^[0-9a-f]{40}$"))' <<< "$run")"
+            jq -e --arg repo "$GITHUB_REPOSITORY" '
+              .path == ".github/workflows/independent-editor-trial.yml" and
+              .event == "workflow_dispatch" and .conclusion == "success" and
+              .head_repository.full_name == $repo
+            ' <<< "$run" >/dev/null
+            git merge-base --is-ancestor "$sha" HEAD
+            gh run download "$INDEPENDENT_RUN_ID" --name independent-editor-trial \
+              --dir "$RUNNER_TEMP/independent-review"
+            test -f "$RUNNER_TEMP/independent-review/candidate_review.json"
+            cp "$RUNNER_TEMP/independent-review/candidate_review.json" "$RUNNER_TEMP/editor_review.json"
+            echo "INDEPENDENT_RUN_ID=$INDEPENDENT_RUN_ID" >> "$GITHUB_ENV"
+            echo "CORRECTION_PATH=" >> "$GITHUB_ENV"
+          elif [[ "$REVIEW_REF" != "night-signal-review-$ISSUE_DATE" ]]; then
             echo "Review ref is not bound to issue date: $REVIEW_REF" >&2
             exit 1
           fi
-          if [[ -n "$DRAFT_REF" ]]; then
+          if [[ -n "$INDEPENDENT_RUN_ID" ]]; then
+            echo "Using validated independent review artifact $INDEPENDENT_RUN_ID."
+          elif [[ -n "$DRAFT_REF" ]]; then
             git fetch --no-tags origin "$GITHUB_SHA"
             git show "$GITHUB_SHA:cloud-preflight/$ISSUE_DATE/editor_draft.json" \
               > "$RUNNER_TEMP/editor_review.json"
@@ -141,12 +180,20 @@ jobs:
             CORRECTION_ARGS+=(--correction-path "$CORRECTION_PATH")
           fi
           {
-            python3 scripts/night_signal_cloud_review.py "$ISSUE_DATE" \
-              --review-ref "$REVIEW_REF" \
-              --review-path "$RUNNER_TEMP/editor_review.json" \
-              "${CORRECTION_ARGS[@]}"
-            python3 scripts/night_signal_plus_editor.py "$ISSUE_DATE" \
-              --apply-review "state/$ISSUE_DATE/editor_review.json"
+            if [[ -n "$INDEPENDENT_RUN_ID" ]]; then
+              jq -e --arg issue "$ISSUE_DATE" '
+                .issue_date == $issue and .evaluation.provider == "cloudflare-workers-ai"
+              ' "$RUNNER_TEMP/editor_review.json" >/dev/null
+              python3 scripts/night_signal_plus_editor.py "$ISSUE_DATE" \
+                --apply-review "$RUNNER_TEMP/editor_review.json"
+            else
+              python3 scripts/night_signal_cloud_review.py "$ISSUE_DATE" \
+                --review-ref "$REVIEW_REF" \
+                --review-path "$RUNNER_TEMP/editor_review.json" \
+                "${CORRECTION_ARGS[@]}"
+              python3 scripts/night_signal_plus_editor.py "$ISSUE_DATE" \
+                --apply-review "state/$ISSUE_DATE/editor_review.json"
+            fi
           } 2>&1 | tee "$RUNNER_TEMP/apply.log"
 
       - name: Render and run deterministic publication gates
@@ -246,6 +293,7 @@ jobs:
           gh workflow run cloud-review-publish.yml --ref main \
             -f "issue_date=$ISSUE_DATE" \
             -f "review_ref=$REVIEW_REF" \
+            -f "independent_run_id=${INDEPENDENT_RUN_ID:-}" \
             -f "recovery_attempt=1"
           echo "proceed=false" >> "$GITHUB_OUTPUT"
           echo "Trusted main moved; queued one deterministic rebuild from the same review."
@@ -289,6 +337,7 @@ jobs:
           gh workflow run cloud-review-publish.yml --ref main \
             -f "issue_date=$ISSUE_DATE" \
             -f "review_ref=$REVIEW_REF" \
+            -f "independent_run_id=${INDEPENDENT_RUN_ID:-}" \
             -f "recovery_attempt=1"
           echo "proceed=false" >> "$GITHUB_OUTPUT"
           echo "Push raced with main; queued one deterministic rebuild."
