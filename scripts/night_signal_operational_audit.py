@@ -333,16 +333,15 @@ def write_github_output(path: Path, result: dict[str, Any]) -> None:
 def audit(issue_date: str, repository: str) -> dict[str, Any]:
     publication_verified, publication_output = publication_audit(issue_date)
     owner_heartbeats: dict[str, dict[str, Any]] = {}
+    last_owner_dates = {}
     for role in ("primary", "recovery"):
-        heartbeat = valid_owner_heartbeat(
-            remote_json(
-                repository,
-                OWNER_STATUS_BRANCH,
-                f"cloud-owner/{role}.json",
-            ),
-            issue_date=issue_date,
-            role=role,
-        )
+        record = remote_json(repository, OWNER_STATUS_BRANCH, f"cloud-owner/{role}.json")
+        recorded_date = str((record or {}).get("issue_date", ""))
+        if re.fullmatch(r"20\d{2}-\d{2}-\d{2}", recorded_date) and valid_owner_heartbeat(
+            record, issue_date=recorded_date, role=role
+        ):
+            last_owner_dates[role] = recorded_date
+        heartbeat = valid_owner_heartbeat(record, issue_date=issue_date, role=role)
         if heartbeat is not None:
             owner_heartbeats[role] = heartbeat
     if publication_verified:
@@ -397,6 +396,7 @@ def audit(issue_date: str, repository: str) -> dict[str, Any]:
             "publication_audit_tail": publication_output,
         }
     )
+    result["last_owner_issue_dates"] = last_owner_dates
     return result
 
 

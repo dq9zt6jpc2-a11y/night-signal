@@ -23,6 +23,14 @@ def assess(report, now, policy, owner_slots, trial_minutes):
     else:
         handoff_slot = max(owner_slots)
     ready_after = datetime.combine(issue, handoff_slot, zone) + owner_grace
+    # If neither owner recorded even yesterday, waiting for a second clock
+    # trigger after the Evidence collector finishes can lose the whole window.
+    last_dates = report.get("last_owner_issue_dates", {})
+    yesterday = (issue - timedelta(days=1)).isoformat()
+    if (report.get("stage") == "review_missing_owner_heartbeat_missing"
+            and all(last_dates.get(role) and last_dates[role] < yesterday
+                    for role in ("primary", "recovery"))):
+        ready_after = datetime.combine(issue, policy.final_collection_not_before, zone)
     # Evidence is already sealed. Reserve time for Pages, orchestration, and safety.
     downstream = policy.pages_timeout_minutes + policy.workflow_overhead_budget_minutes + policy.deadline_safety_margin_minutes
     latest_single = deadline - timedelta(minutes=downstream + trial_minutes)
