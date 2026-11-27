@@ -84,8 +84,7 @@ correction. For technical failures, report the failed stage and stop. The GitHub
 
 If no review exists, fetch
 cloud-evidence/ISSUE_DATE/manifest.json from branch
-night-signal-evidence-ISSUE_DATE. If it is absent, record the liveness outcome
-without creating a review branch; report the missing handoff with the actual JST check time. Read every request part listed by
+night-signal-evidence-ISSUE_DATE. If the manifest returns 404 and this scheduled invocation started before 16:00 JST, wait until 16:00 JST and read that manifest once more. Use no model research while waiting. Never classify a permission or network error as missing evidence. If still absent, record evidence_missing and the actual check time; create no review branch. Read every request part listed by
 the manifest exactly once. Follow the manifest policy and the editorial rules
 in docs/night_signal_plus_runbook.md. Account for every request and every event.
 Publish every material new delta without a count target. Exclude current-issue
