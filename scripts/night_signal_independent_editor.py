@@ -62,7 +62,7 @@ def expand_compact_review(raw, event):
     return {"events": [{"event_id": event["id"], "decision": raw.get("decision"), "items": items}]}
 
 
-def staged_review(infer, message, event, reserve):
+def staged_review(infer, message, event, reserve, feedback=""):
     """After truncation, select facts once, then write bounded groups of Japanese points."""
     plan = infer(
         "Read the evidence and editorial policy. Select the decision and every material fact. "
@@ -70,7 +70,7 @@ def staged_review(infer, message, event, reserve):
         "Each group is one distinct assertion. Include all required facts if publishing. "
         "Write titles in Japanese. Do not write summary text yet. For exclusions use items: []. "
         "Use the exact policy topic classes; priority top/priority/standard; "
-        "change new_event/material_update/new_analysis_of_existing_fact.",
+        "change new_event/material_update/new_analysis_of_existing_fact." + feedback,
         message,
     )
     if not isinstance(plan, dict) or not isinstance(plan.get("items"), list):
@@ -389,7 +389,7 @@ Do not repeat the input, include analysis, or add an events envelope.
         def checked_response(extra):
             nonlocal was_truncated
             try:
-                raw = (staged_review(infer, message, source_event, reserve_segment) if was_truncated
+                raw = (staged_review(infer, message, source_event, reserve_segment, extra) if was_truncated
                        else infer(instructions + extra, message))
             except OutputLimitError:
                 was_truncated = True
