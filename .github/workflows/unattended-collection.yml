@@ -1,6 +1,8 @@
 name: NIGHT SIGNAL Evidence Collection
 
 on:
+  schedule:
+    - cron: "17 04 * * *"
   workflow_dispatch:
     inputs:
       issue_date:
