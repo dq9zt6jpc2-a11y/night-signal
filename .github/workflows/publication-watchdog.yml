@@ -8,13 +8,6 @@ on:
       - NIGHT SIGNAL Evidence Collection
     types:
       - completed
-  schedule:
-    # Check the primary editor before the 17:00 JST recovery editor.
-    - cron: "23 04 * * *"
-    - cron: "30 07 * * *"
-    - cron: "20 08 * * *"
-    - cron: "45 09 * * *"
-    - cron: "15 10 * * *"
   workflow_dispatch:
     inputs:
       issue_date:
