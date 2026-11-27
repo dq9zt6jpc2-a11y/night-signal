@@ -11,15 +11,12 @@
   "schedule_heartbeats_jst": [
     "07:57",
     "10:57",
-    "11:57",
-    "12:47",
     "13:17",
     "13:47"
   ],
   "independent_editor_trial_budget_minutes": 20,
   "editor_owner_heartbeats_jst": [
-    "16:00",
-    "17:00"
+    "16:00"
   ],
   "editor_owner_activation": {
     "persistent_github_write_permission": true,
@@ -28,10 +25,6 @@
   },
   "reliability_report_retention_days": 30,
   "publication_watchdog_heartbeats_jst": [
-    "13:23",
-    "16:30",
-    "17:20",
-    "18:45",
     "19:15"
   ]
 }

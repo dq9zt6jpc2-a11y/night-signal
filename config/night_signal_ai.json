@@ -5,10 +5,9 @@
   "included_subscription": "ChatGPT Plus",
   "production_editor": {
     "surface": "chatgpt-web-scheduled-task",
-    "model": "gpt-5.6-terra",
-    "reasoning_effort": "low",
     "local_pc_required": false,
-    "activation_must_be_proven_by_remote_heartbeat": true
+    "activation_must_be_proven_by_remote_heartbeat": true,
+    "model_selection": "runtime_assigned"
   },
   "quality_order": [
     "coverage",
@@ -35,6 +34,7 @@
     "cadence": "weekly",
     "source": "official OpenAI documentation",
     "automatic_production_promotion": false,
-    "promotion_requires_representative_evidence_evaluation": true
+    "promotion_requires_representative_evidence_evaluation": true,
+    "owner": "Future View weekly review"
   }
 }

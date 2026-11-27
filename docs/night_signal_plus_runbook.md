@@ -332,13 +332,7 @@ dated public URLs show the same current date.
   reuse a SHA from an earlier run. On a SHA or ref conflict, refetch and retry
   only that heartbeat once. Neither task may pause, delete, or edit its own
   recurring schedule.
-- The 16:00 Work-mode Web task is the cloud owner and the 17:00 Work-mode Web task is an audit-first
-  recovery heartbeat. A successful earlier review/publication must not be
-  repeated. Immediately after its write-permission canary, either task must stop
-  with `feedback_success` when both `.night-signal-issue-date` and
-  `site/index.html` on main already show the issue date; it must not read
-  Evidence or create or resave a review. The recovery task otherwise reads the
-  compact feedback branch and patches only the rejected request/event entries.
+- The 16:00 Work-mode Web task is the sole scheduled editor. Reuse completed reviews. Record missing evidence immediately. Inspect compact feedback before reading any correction inputs. GitHub owns technical recovery.
 
 CLI network or authentication commands may be retried once. Model turns, full
 collection, full review, commits, and workflow dispatches must never be blindly
@@ -366,12 +360,7 @@ efficiency improvement.
 
 ## Model review
 
-The configured Web task uses the evaluated `gpt-5.6-terra` quality/efficiency
-route at low reasoning when that model is available in the subscribed ChatGPT
-surface. On Mondays only, check official OpenAI model documentation for a newer
-Codex-capable model. Do not change production automatically. Promote only after
-representative NIGHT SIGNAL Evidence shows no coverage or quality regression and
-lower or equal total token use. Report nothing when there is no candidate.
+The scheduled execution surface assigns the model. Future View handles the weekly official OpenAI change check for both tasks. Promote only after evaluating representative evidence, quality, timing and available usage measurements.
 
 ## Operational proof
 

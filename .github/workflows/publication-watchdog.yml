@@ -2,6 +2,8 @@ name: Audit and recover NIGHT SIGNAL publication
 run-name: Audit NIGHT SIGNAL publication ${{ inputs.issue_date || github.run_id }}
 
 on:
+  schedule:
+    - cron: "15 10 * * *"
   workflow_run:
     workflows:
       - Publish reviewed NIGHT SIGNAL

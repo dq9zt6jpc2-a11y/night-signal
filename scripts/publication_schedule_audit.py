@@ -7,11 +7,8 @@ import json
 import re
 import sys
 from pathlib import Path
-from datetime import datetime
-from zoneinfo import ZoneInfo
 
 import publication_timing as timing
-from night_signal_editor_recovery_decision import assess
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -159,10 +156,11 @@ def main() -> int:
     production_editor = ai_policy.get("production_editor", {})
     if ai_policy.get("additional_paid_services_allowed") is not False:
         fail("additional paid AI services must be disabled")
-    if production_editor.get("model") != "gpt-5.6-terra":
-        fail("production Plus review must use the evaluated quality/efficiency route")
-    if production_editor.get("reasoning_effort") != "low":
-        fail("routine evidence review must use bounded reasoning")
+    if production_editor.get("model_selection") != "runtime_assigned":
+        fail("scheduled model selection must reflect the Work execution surface")
+    model_review = ai_policy.get("latest_model_review", {})
+    if model_review.get("automatic_production_promotion") is not False or model_review.get("promotion_requires_representative_evidence_evaluation") is not True:
+        fail("model promotion must preserve the representative evidence evaluation")
     if production_editor.get("surface") != "chatgpt-web-scheduled-task":
         fail("production editor surface drifted back to a local owner")
     if production_editor.get("local_pc_required") is not False:
@@ -176,7 +174,6 @@ def main() -> int:
         "do not recollect or re-review",
         "topic_value_class` must be one of",
         "16:00 Work-mode Web task",
-        "17:00 Work-mode Web task",
         "official OpenAI",
     ):
         if required.casefold() not in runbook.casefold():
@@ -200,7 +197,7 @@ def main() -> int:
         "spend review tokens",
         "current blob SHA",
         "retry only that same liveness write once",
-        "must never pause",
+        "never pause",
         "missing explicit",
         "event date must never suppress",
         "recall_risk_categories",
@@ -210,8 +207,8 @@ def main() -> int:
 
     operations = json.loads(OPERATIONS_POLICY.read_text(encoding="utf-8"))
     owner_heartbeats = operations.get("editor_owner_heartbeats_jst")
-    if owner_heartbeats != ["16:00", "17:00"]:
-        fail("Web-owner heartbeat policy must contain only 16:00 and 17:00 JST")
+    if owner_heartbeats != ["16:00"]:
+        fail("Web-owner heartbeat policy must contain the sole 16:00 JST primary")
     owner_activation = operations.get("editor_owner_activation", {})
     if owner_activation != {
         "persistent_github_write_permission": True,
@@ -222,36 +219,18 @@ def main() -> int:
     if operations.get("reliability_report_retention_days") != 30:
         fail("operational reliability history must be retained for 30 days")
     watchdog_heartbeats = operations.get("publication_watchdog_heartbeats_jst")
-    if watchdog_heartbeats != ["13:23", "16:30", "17:20", "18:45", "19:15"]:
+    if watchdog_heartbeats != ["19:15"]:
         fail("publication watchdog policy drifted from the bounded recovery window")
     expected_watchdog_minutes = sorted(
         timing.minutes(timing.parse_clock(value)) for value in watchdog_heartbeats
     )
     if cron_minutes(publication_watchdog) != expected_watchdog_minutes:
         fail("publication watchdog cron does not match the operations policy")
-    probe_date = "2099-01-01"
-    ready_report = {"issue_date": probe_date, "evidence_ready": True, "needs_editor_action": True}
-    owner_slots = [timing.parse_clock(value) for value in owner_heartbeats]
-    if not any(
-        assess(
-            ready_report,
-            datetime.fromisoformat(f"{probe_date}T{slot}").replace(tzinfo=ZoneInfo(policy.timezone)),
-            policy,
-            owner_slots,
-            operations["independent_editor_trial_budget_minutes"],
-        )["reason"] == "eligible_for_independent_editor"
-        for slot in watchdog_heartbeats
-    ):
-        fail("no scheduled watchdog checkpoint fits the independent editor handoff window")
-    early_check = datetime.fromisoformat(f"{probe_date}T16:30").replace(
-        tzinfo=ZoneInfo(policy.timezone)
-    )
-    missing_owner = {**ready_report, "stage": "review_missing_owner_heartbeat_missing"}
-    trial_budget = operations["independent_editor_trial_budget_minutes"]
-    if not assess(missing_owner, early_check, policy, owner_slots, trial_budget)["retry_fits"]:
-        fail("missing primary owner must leave enough time for an independent retry")
-    if assess(ready_report, early_check, policy, owner_slots, trial_budget)["reason"] != "waiting_for_web_recovery_window":
-        fail("an active Web owner should retain its normal recovery window")
+    for event in ("NIGHT SIGNAL Evidence Collection", "Publish reviewed NIGHT SIGNAL", "completed"):
+        if event not in publication_watchdog.split("workflow_dispatch:", 1)[0]:
+            fail(f"missing completion trigger: {event}")
+    if re.search(r"gh workflow run [^\s]*(?:independent|editor)", publication_watchdog):
+        fail("watchdog must not dispatch an independent editor")
     for required in (
         "night_signal_operational_audit.py",
         "workflow_run:",
