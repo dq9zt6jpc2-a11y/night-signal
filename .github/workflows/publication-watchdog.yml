@@ -199,22 +199,6 @@ jobs:
             "$RUNNER_TEMP/final-operational-audit.json" \
             | tee "$RUNNER_TEMP/editor-recovery-operational-audit.json"
 
-      - name: Start at most one deadline-bound independent editor probe
-        if: >-
-          ${{ (github.event_name == 'schedule' ||
-               (github.event_name == 'workflow_run' &&
-                github.event.workflow_run.name == 'NIGHT SIGNAL Evidence Collection' &&
-                github.event.workflow_run.head_branch == 'main')) &&
-              steps.final.outcome == 'success' &&
-              steps.final.outputs.published != 'true' &&
-              vars.NIGHT_SIGNAL_EDITOR_WATCHDOG_PROBE == 'true' &&
-              vars.NIGHT_SIGNAL_WORKERS_AI_FREE_VERIFIED == 'true' }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          bash scripts/dispatch_editor_watchdog_probe.sh \
-            "$RUNNER_TEMP/final-operational-audit.json"
-
       - name: Preserve the deterministic reliability report for 30 days
         if: ${{ always() }}
         uses: actions/upload-artifact@v7.0.1
