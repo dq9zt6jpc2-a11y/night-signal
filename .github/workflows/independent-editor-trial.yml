@@ -37,6 +37,7 @@ jobs:
     timeout-minutes: 20
     outputs:
       resume: ${{ steps.resume.outputs.eligible }}
+      retry_at: ${{ steps.resume.outputs.retry_at }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -118,10 +119,27 @@ jobs:
               steps.save.outcome == 'success' }}
         run: |
           directory="$RUNNER_TEMP/independent-editor"
+          if [[ -f "$directory/provider_backoff.json" ]]; then
+            retry_at="$(jq -er '.retry_at | select(type == "number" and . == floor)' "$directory/provider_backoff.json")"
+            if (( retry_at > $(date +%s) + 60 )); then
+              echo "deferred=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "retry_at=$retry_at" >> "$GITHUB_OUTPUT"
+            echo "eligible=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           if [[ ! -f "$directory/candidate_review.json" ]] &&
              compgen -G "$directory/responses/*.json" > /dev/null; then
             echo "eligible=true" >> "$GITHUB_OUTPUT"
           fi
+      - uses: actions/upload-artifact@v7.0.1
+        if: always() && inputs.watchdog_probe && steps.resume.outputs.deferred == 'true'
+        with:
+          name: independent-editor-backoff
+          path: ${{ runner.temp }}/independent-editor/provider_backoff.json
+          if-no-files-found: error
+          retention-days: 3
 
   resume_once:
     needs: trial
@@ -138,7 +156,12 @@ jobs:
           ISSUE_DATE: ${{ inputs.issue_date }}
           HISTORY_COMMIT: ${{ inputs.history_commit }}
           WATCHDOG_PROBE: ${{ inputs.watchdog_probe }}
+          RETRY_AT: ${{ needs.trial.outputs.retry_at }}
         run: |
+          if [[ -n "$RETRY_AT" ]]; then
+            delay=$(( RETRY_AT - $(date +%s) ))
+            if (( delay > 0 )); then sleep "$delay"; fi
+          fi
           # Workflow-level concurrency lets the continuation start after this run ends.
           gh workflow run independent-editor-trial.yml --ref main \
             -f "issue_date=$ISSUE_DATE" \
