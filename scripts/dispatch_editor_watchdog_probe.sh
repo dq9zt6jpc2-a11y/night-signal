@@ -16,7 +16,7 @@ if jq -e --arg title "$title" \
   exit 0
 fi
 
-resume_args=()
+dispatch_args=(-f "issue_date=$issue_date" -f watchdog_probe=true)
 previous="$(jq --arg title "$title" '[.[] | select(.displayTitle == $title)]' <<< "$runs")"
 if [[ "$previous" != '[]' ]]; then
   # Only a first attempt explicitly deferred by the provider can be resumed here.
@@ -29,7 +29,7 @@ if [[ "$previous" != '[]' ]]; then
   gh run download "$run_id" --name independent-editor-backoff --dir "$marker_dir"
   retry_at="$(jq -er 'select(.status == 429) | .retry_at | select(type == "number" and . == floor)' "$marker_dir/provider_backoff.json")"
   (( $(date +%s) >= retry_at )) || exit 0
-  resume_args=(-f "resume_run_id=$run_id")
+  dispatch_args+=(-f "resume_run_id=$run_id")
 fi
 
 fresh_audit="$(mktemp)"
@@ -40,5 +40,5 @@ if [[ "$(jq -er .reason <<< "$decision")" == "eligible_for_independent_editor" ]
   # The watchdog is serialized. Do not repeat a failed dispatch here, since the
   # server may have accepted the first request before the response was lost.
   gh workflow run independent-editor-trial.yml --ref main \
-    -f "issue_date=$issue_date" -f watchdog_probe=true "${resume_args[@]}"
+    "${dispatch_args[@]}"
 fi
