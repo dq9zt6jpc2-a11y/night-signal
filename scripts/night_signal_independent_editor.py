@@ -116,7 +116,7 @@ def staged_review(infer, message, event, reserve, feedback=""):
     return plan
 
 
-def bounded_editor_attempt(call, reserve_retry):
+def bounded_editor_attempt(call, reserve_retry, reserve_length=None):
     """A transport error and a rejected draft need different recovery actions."""
     seen = set()
     extra = ""
@@ -127,7 +127,8 @@ def bounded_editor_attempt(call, reserve_retry):
             kind = "timeout" if isinstance(exc, TimeoutError) else "draft"
             if isinstance(exc, OutputLimitError):
                 kind = "length"
-            if kind in seen or not reserve_retry():
+            reserve = reserve_length if kind == "length" and reserve_length else reserve_retry
+            if kind in seen or not reserve():
                 raise
             seen.add(kind)
             if kind == "length":
@@ -328,6 +329,24 @@ Do not repeat the input, include analysis, or add an events envelope.
         identity.update(component)
     checkpoint_id = identity.hexdigest()
 
+    # Reuse only the failure classification, never an unchecked draft. The
+    # archived packet must exactly match the issue before using even this hint.
+    split_on_resume = set()
+    if resume is not None:
+        try:
+            previous_packet = resume / "state" / issue_date / "editor_packet.json"
+            if previous_packet.read_bytes() == packet_path.read_bytes():
+                failures = json.loads((resume / "failed_candidates.json").read_text())
+                split_on_resume = {
+                    (f["request_id"], f["event_id"]) for f in failures if isinstance(f, dict)
+                    and isinstance(f.get("request_id"), str) and isinstance(f.get("event_id"), str)
+                    and (f.get("reason") in {"Workers AI did not finish the response ('length')",
+                                             "output exceeded the completion limit"}
+                         or str(f.get("reason", "")).startswith("segmented review: "))
+                }
+        except (OSError, ValueError, TypeError):
+            pass
+
     def review_one(task):
         request_id, source_event, message = task
         event_id = source_event["id"]
@@ -384,7 +403,7 @@ Do not repeat the input, include analysis, or add an events envelope.
         started = monotonic()
         print(f"Starting {request_id}/{event_id}", flush=True)
 
-        was_truncated = False
+        was_truncated = (request_id, event_id) in split_on_resume
 
         def checked_response(extra):
             nonlocal was_truncated
@@ -423,7 +442,12 @@ Do not repeat the input, include analysis, or add an events envelope.
                 retries_left -= 1
                 return True
 
-        response = bounded_editor_attempt(checked_response, reserve_retry)
+        try:
+            response = bounded_editor_attempt(checked_response, reserve_retry, reserve_segment)
+        except RecoverableReviewError as exc:
+            if was_truncated:
+                raise RecoverableReviewError(f"segmented review: {exc}") from exc
+            raise
         entry = {"request_id": request_id, "response": response, "checkpoint_id": checkpoint_id}
         editor.write_json_atomic(destination, entry)
         print(f"Completed {request_id}/{event_id} in {monotonic() - started:.1f}s", flush=True)
