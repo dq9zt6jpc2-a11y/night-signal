@@ -326,7 +326,7 @@ Do not repeat the input, include analysis, or add an events envelope.
     identity = hashlib.sha256()
     for component in (
         packet_path.read_bytes(), digest.encode(), MODEL.encode(),
-        instructions.encode(), Path(__file__).read_bytes(),
+        instructions.encode(), b"validated-editor-response-v1",
         (ROOT / "config/night_signal_ai.json").read_bytes(), history_commit.encode(),
     ):
         identity.update(len(component).to_bytes(8, "big"))
@@ -403,6 +403,8 @@ Do not repeat the input, include analysis, or add an events envelope.
             if checkpoint_matches(cached, checkpoint_id, request_id, event_id):
                 try:
                     validate(cached["response"])
+                    if repeats_previous_issue(cached["response"]["events"][0], source_event.get("previous_updates", [])):
+                        raise RecoverableReviewError("cached content repeats a previous issue")
                 except RecoverableReviewError:
                     pass
                 else:
@@ -433,7 +435,43 @@ Do not repeat the input, include analysis, or add an events envelope.
                 raise RecoverableReviewError("response must contain exactly one event")
             if events[0].get("event_id") != event_id:
                 raise RecoverableReviewError("response identified the wrong event")
-            validate(response)
+            try:
+                validate(response)
+            except RecoverableReviewError as exc:
+                # Repair a headline alone when the validator accepted its supporting points.
+                details = getattr(exc.__cause__, "details", {})
+                rejected = details.get("rejected_items", [])
+                items = events[0].get("items", [])
+                if (len(items) != 1 or len(rejected) != 1
+                        or rejected[0].get("reasons") != ["unsupported_title"]):
+                    raise
+                points = items[0]["summary_points"]
+                cited = {ref for point in points for ref in point["evidence_ids"]}
+                titles = [row["title"] for row in source_event["evidence"] if row["id"] in cited]
+                # Try the original Japanese headline first without spending an inference call.
+                for title in dict.fromkeys(titles):
+                    if not re.search(r"[ぁ-んァ-ヶ一-龯]", title):
+                        continue
+                    items[0]["title"] = title
+                    try:
+                        validate(response)
+                    except RecoverableReviewError:
+                        continue
+                    break
+                else:
+                    if not reserve_segment():
+                        raise
+                    repair = infer(
+                        'Return {"title":"..."} only. Write a concise natural Japanese headline '
+                        'supported by the source headline and the verified points. Preserve the '
+                        'original spelling of named entities or an exact material numeric anchor.',
+                        json.dumps({"source_titles": titles, "points": [p["text"] for p in points]},
+                                   ensure_ascii=False),
+                    )
+                    if not isinstance(repair, dict) or not isinstance(repair.get("title"), str):
+                        raise RecoverableReviewError("headline repair returned no title")
+                    items[0]["title"] = repair["title"]
+                    validate(response)
             if repeats_previous_issue(events[0], source_event.get("previous_updates", [])):
                 used = sorted({
                     source_id
