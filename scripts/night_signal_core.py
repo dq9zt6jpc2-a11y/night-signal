@@ -4691,19 +4691,29 @@ def finalize_discovery_checks(
     return checks
 
 
+def discovery_gaps(specs, results):
+    """Retry one query per uncovered topic and channel, sharing overlapping retries."""
+    def slots(spec):
+        return {(topic, spec.get("channel") or "web") for topic in spec.get("watch_topic_ids", [])}
+
+    covered = set()
+    for index, _, check in results:
+        if check["slot_state"] != "search_unavailable":
+            covered.update(slots(specs[index]))
+    retry = []
+    for index, _, check in results:
+        needed = slots(specs[index]) - covered
+        if check["slot_state"] == "search_unavailable" and needed:
+            retry.append(index)
+            covered.update(needed)
+    return retry
+
+
 def fetch_news(category: dict[str, Any], issue_date: str) -> dict[str, Any]:
     records_by_url: dict[str, dict[str, Any]] = {}
     specs = discovery_queries(category, issue_date)
     results = execute_discovery_specs(category, issue_date, specs)
-    completed_topics = {
-        topic for _, _, check in results if check["slot_state"] != "search_unavailable"
-        for topic in check.get("watch_topic_ids", [])
-    }
-    failed_indices = [
-        index for index, _, check in results
-        if check["slot_state"] == "search_unavailable"
-        and set(specs[index].get("watch_topic_ids", [])) - completed_topics
-    ]
+    failed_indices = discovery_gaps(specs, results)
     if failed_indices:
         retries = execute_discovery_specs(category, issue_date, [specs[index] for index in failed_indices])
         recovered = {
