@@ -90,7 +90,13 @@ jobs:
             | tee "$RUNNER_TEMP/initial-operational-audit.json"
 
       - name: Recover a missing collection within the full collection window
-        if: ${{ github.event_name == 'schedule' && steps.initial.outputs.stage == 'evidence_missing' }}
+        if: >-
+          ${{ steps.initial.outputs.stage == 'evidence_missing' &&
+              (github.event_name == 'schedule' ||
+               (github.event_name == 'workflow_run' &&
+                github.event.workflow_run.name == 'NIGHT SIGNAL Evidence Collection' &&
+                github.event.workflow_run.head_branch == 'main' &&
+                github.event.workflow_run.conclusion == 'failure')) }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -98,9 +104,11 @@ jobs:
           if [[ "$NOW_JST" -lt 1315 || "$NOW_JST" -gt 1345 ]]; then
             exit 0
           fi
-          ACTIVE="$(gh run list --workflow unattended-collection.yml --limit 30 \
-            --json status --jq '[.[] | select(.status != "completed")] | length')"
-          if [[ "$ACTIVE" != "0" ]]; then
+          [[ "$ISSUE_DATE" == "$(TZ=Asia/Tokyo date +%F)" ]] || exit 0
+          JST_MIDNIGHT="${ISSUE_DATE}T00:00:00+09:00"
+          RUNS="$(gh run list --workflow unattended-collection.yml --branch main \
+            --created ">=$JST_MIDNIGHT" --limit 30 --json status,event)"
+          if jq -e 'length >= 30 or any(.[]; .status != "completed" or .event == "workflow_dispatch")' <<< "$RUNS" >/dev/null; then
             exit 0
           fi
           # Collection may have finished between the initial audit and the run lookup.
