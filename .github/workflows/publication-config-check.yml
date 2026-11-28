@@ -1,6 +1,14 @@
 name: Check NIGHT SIGNAL publication configuration
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/**'
+      - 'config/night_signal_operations.json'
+      - 'scripts/publication_*.py'
+      - 'scripts/night_signal_editor_recovery_decision.py'
+      - 'scripts/dispatch_editor_watchdog_probe.sh'
   pull_request:
     paths:
       - '.github/workflows/**'

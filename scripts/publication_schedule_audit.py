@@ -6,6 +6,10 @@ from __future__ import annotations
 import json
 import re
 import sys
+from datetime import datetime, time
+from zoneinfo import ZoneInfo
+
+from night_signal_editor_recovery_decision import assess
 from pathlib import Path
 
 import publication_timing as timing
@@ -206,6 +210,23 @@ def main() -> int:
             fail(f"Web owner runbook is missing: {required}")
 
     operations = json.loads(OPERATIONS_POLICY.read_text(encoding="utf-8"))
+    day = "2026-11-28"
+    report = dict(issue_date=day, needs_editor_action=True, evidence_ready=True)
+    for clock, override, reason in [
+        ("16:17", {}, "eligible_for_independent_editor"),
+        ("18:59", {}, "insufficient_deadline_budget"),
+        ("19:15", {}, "eligible_for_late_recovery"),
+        ("19:15", {"published": True}, "existing_publication_or_review"),
+        ("19:15", {"evidence_ready": False}, "final_evidence_missing"),
+        ("22:30", {}, "insufficient_deadline_budget"),
+    ]:
+        now = datetime.fromisoformat(f"{day}T{clock}").replace(tzinfo=ZoneInfo(operations["timezone"]))
+        decision = assess({**report, **override}, now, timing.load_policy(),
+                          [time.fromisoformat(t) for t in operations["editor_owner_heartbeats_jst"]],
+                          operations["independent_editor_trial_budget_minutes"],
+                          time.fromisoformat(operations["late_recovery_cutoff_jst"]))
+        if decision["reason"] != reason:
+            fail(f"{clock}: expected {reason}, got {decision['reason']}")
     owner_heartbeats = operations.get("editor_owner_heartbeats_jst")
     if owner_heartbeats != ["16:00"]:
         fail("Web-owner heartbeat policy must contain the sole 16:00 JST primary")
