@@ -4693,14 +4693,25 @@ def finalize_discovery_checks(
 
 def fetch_news(category: dict[str, Any], issue_date: str) -> dict[str, Any]:
     records_by_url: dict[str, dict[str, Any]] = {}
-    checks = merge_discovery_results(
-        records_by_url,
-        execute_discovery_specs(
-            category,
-            issue_date,
-            discovery_queries(category, issue_date),
-        ),
-    )
+    specs = discovery_queries(category, issue_date)
+    results = execute_discovery_specs(category, issue_date, specs)
+    completed_topics = {
+        topic for _, _, check in results if check["slot_state"] != "search_unavailable"
+        for topic in check.get("watch_topic_ids", [])
+    }
+    failed_indices = [
+        index for index, _, check in results
+        if check["slot_state"] == "search_unavailable"
+        and set(specs[index].get("watch_topic_ids", [])) - completed_topics
+    ]
+    if failed_indices:
+        retries = execute_discovery_specs(category, issue_date, [specs[index] for index in failed_indices])
+        recovered = {
+            failed_indices[index]: (records, check)
+            for index, records, check in retries if check["slot_state"] != "search_unavailable"
+        }
+        results = [(index, *recovered.get(index, (records, check))) for index, records, check in results]
+    checks = merge_discovery_results(records_by_url, results)
     records = enrich_discovered_records(
         category, issue_date, list(records_by_url.values())
     )
