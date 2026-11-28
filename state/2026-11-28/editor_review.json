@@ -2,20 +2,180 @@
   "contract": "codex-plus-editor-v2",
   "issue_date": "2026-11-28",
   "evidence_sha256": "ccad9bf287dde47d743828fe16c7ca30378f4bf8ea365b3f86c22dd8961e3ccc",
+  "evaluation": {
+    "provider": "cloudflare-workers-ai",
+    "model": "@cf/zai-org/glm-4.7-flash"
+  },
   "responses": [
+    {
+      "request_id": "openai-01-08450c49e1f679b9",
+      "response": {
+        "events": [
+          {
+            "event_id": "g007",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、コードックスとアストラを用いた2つのエキゾチック・プラネット探索で信号を報告",
+                "summary_points": [
+                  {
+                    "text": "OpenAIは2026年11月24日、コードックスとアストラを用いた2つの別々のエキゾチック・プラネット探索の結果を報告した。",
+                    "source_fact_ids": [
+                      "e001:f10",
+                      "e001:f11"
+                    ],
+                    "evidence_ids": [
+                      "e001"
+                    ]
+                  },
+                  {
+                    "text": "Kevin Bond氏はコードックスを用いてケプラー観測データを分析し、約10万個の恒星を対象に200件以上の信号を検出した。",
+                    "source_fact_ids": [
+                      "e001:f12",
+                      "e001:f13"
+                    ],
+                    "evidence_ids": [
+                      "e001"
+                    ]
+                  },
+                  {
+                    "text": "Ethan Byrd氏はアストラを用いてTESSデータに関連する探索を行い、約1,900万個の恒星を対象に49件の候補を発見した。",
+                    "source_fact_ids": [
+                      "e001:f11",
+                      "e001:f07"
+                    ],
+                    "evidence_ids": [
+                      "e001"
+                    ]
+                  },
+                  {
+                    "text": "SETI研究所のVishal Gajjar氏は、Bond氏のケプラーデータの中で2つの一致する信号を発見した。",
+                    "source_fact_ids": [
+                      "e001:f09"
+                    ],
+                    "evidence_ids": [
+                      "e001"
+                    ]
+                  }
+                ],
+                "information_complete": true,
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g005",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g004",
+            "decision": "pending_validation",
+            "items": [],
+            "reason": "The read operation timed out"
+          },
+          {
+            "event_id": "g006",
+            "decision": "pending_validation",
+            "items": [],
+            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g006\": [\"e003:f01\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+          },
+          {
+            "event_id": "g003",
+            "decision": "pending_validation",
+            "items": [],
+            "reason": "The read operation timed out"
+          },
+          {
+            "event_id": "g002",
+            "decision": "pending_validation",
+            "items": [],
+            "reason": "each point needs Japanese text and exact source fact IDs"
+          }
+        ]
+      }
+    },
     {
       "request_id": "openai-02-a63231eb3d5131fc",
       "response": {
         "events": [
           {
-            "event_id": "g009",
-            "decision": "insufficient_evidence",
-            "items": []
+            "event_id": "g012",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAI、米Androidユーザー向けにウェアラブル連携の健康機能「ChatGPT Health」を開始",
+                "summary_points": [
+                  {
+                    "text": "米Androidユーザー向けにウェアラブルデータと連携した健康機能「ChatGPT Health」を開始。対象は米国のFree、Go、Plus、Proプランの18歳以上のログインユーザー。",
+                    "source_fact_ids": [
+                      "e001:f01"
+                    ],
+                    "evidence_ids": [
+                      "e001"
+                    ]
+                  },
+                  {
+                    "text": "機能は睡眠、ワークアウト、日々の習慣に関するパーソナライズされたアドバイスを提供し、DotsというAIアシスタントが忙しさに応じたワークアウトの提案を行う。",
+                    "source_fact_ids": [
+                      "e001:f02"
+                    ],
+                    "evidence_ids": [
+                      "e001"
+                    ]
+                  }
+                ],
+                "information_complete": true,
+                "topic_value_class": "technical_or_product_shift",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
           },
           {
-            "event_id": "g010",
-            "decision": "insufficient_evidence",
-            "items": []
+            "event_id": "g013",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "OpenAIが投資家に競合企業への出資を控えるよう要請",
+                "summary_points": [
+                  {
+                    "text": "2024年10月の66億ドルの資金調達ラウンドにおいて、OpenAIは投資家に対し、Anthropic、xAI、Safe Superintelligence (SSI)、Perplexity、Gleanの5社への出資を控えるよう要請した。",
+                    "source_fact_ids": [
+                      "e002:f01",
+                      "e002:f03",
+                      "e002:f04",
+                      "e002:f05",
+                      "e002:f06",
+                      "e002:f07",
+                      "e002:f08",
+                      "e002:f09",
+                      "e002:f10",
+                      "e002:f11",
+                      "e002:f12",
+                      "e002:f13",
+                      "e002:f14",
+                      "e002:f15",
+                      "e002:f16"
+                    ],
+                    "evidence_ids": [
+                      "e002"
+                    ]
+                  }
+                ],
+                "information_complete": true,
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
           },
           {
             "event_id": "g015",
@@ -67,106 +227,6 @@
                 "change_class": "new_event"
               }
             ]
-          },
-          {
-            "event_id": "g013",
-            "decision": "publish",
-            "items": [
-              {
-                "title": "OpenAIが投資家に競合企業への出資を控えるよう要請",
-                "summary_points": [
-                  {
-                    "text": "2024年10月の66億ドルの資金調達ラウンドにおいて、OpenAIは投資家に対し、Anthropic、xAI、Safe Superintelligence (SSI)、Perplexity、Gleanの5社への出資を控えるよう要請した。",
-                    "source_fact_ids": [
-                      "e002:f01",
-                      "e002:f03",
-                      "e002:f04",
-                      "e002:f05",
-                      "e002:f06",
-                      "e002:f07",
-                      "e002:f08",
-                      "e002:f09",
-                      "e002:f10",
-                      "e002:f11",
-                      "e002:f12",
-                      "e002:f13",
-                      "e002:f14",
-                      "e002:f15",
-                      "e002:f16"
-                    ],
-                    "evidence_ids": [
-                      "e002"
-                    ]
-                  }
-                ],
-                "information_complete": true,
-                "topic_value_class": "decision_or_policy",
-                "priority_class": "standard",
-                "change_class": "new_event"
-              }
-            ]
-          },
-          {
-            "event_id": "g016",
-            "decision": "publish",
-            "items": [
-              {
-                "title": "富士通、OpenAIのサイバー防御パートナープログラム「Daybreak Defense Network」に参画",
-                "summary_points": [
-                  {
-                    "text": "富士通は11月25日、OpenAIとの連携を拡大し、サイバー防御パートナープログラム「Daybreak Defense Network」に参画した。",
-                    "source_fact_ids": [
-                      "e005:f01"
-                    ],
-                    "evidence_ids": [
-                      "e005"
-                    ]
-                  }
-                ],
-                "information_complete": true,
-                "topic_value_class": "decision_or_policy",
-                "priority_class": "standard",
-                "change_class": "new_event"
-              }
-            ]
-          },
-          {
-            "event_id": "g012",
-            "decision": "publish",
-            "items": [
-              {
-                "title": "OpenAI、米Androidユーザー向けにウェアラブル連携の健康機能「ChatGPT Health」を開始",
-                "summary_points": [
-                  {
-                    "text": "米Androidユーザー向けにウェアラブルデータと連携した健康機能「ChatGPT Health」を開始。対象は米国のFree、Go、Plus、Proプランの18歳以上のログインユーザー。",
-                    "source_fact_ids": [
-                      "e001:f01"
-                    ],
-                    "evidence_ids": [
-                      "e001"
-                    ]
-                  },
-                  {
-                    "text": "機能は睡眠、ワークアウト、日々の習慣に関するパーソナライズされたアドバイスを提供し、DotsというAIアシスタントが忙しさに応じたワークアウトの提案を行う。",
-                    "source_fact_ids": [
-                      "e001:f02"
-                    ],
-                    "evidence_ids": [
-                      "e001"
-                    ]
-                  }
-                ],
-                "information_complete": true,
-                "topic_value_class": "technical_or_product_shift",
-                "priority_class": "standard",
-                "change_class": "new_event"
-              }
-            ]
-          },
-          {
-            "event_id": "g011",
-            "decision": "insufficient_evidence",
-            "items": []
           },
           {
             "event_id": "g008",
@@ -242,10 +302,575 @@
             ]
           },
           {
+            "event_id": "g016",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "富士通、OpenAIのサイバー防御パートナープログラム「Daybreak Defense Network」に参画",
+                "summary_points": [
+                  {
+                    "text": "富士通は11月25日、OpenAIとの連携を拡大し、サイバー防御パートナープログラム「Daybreak Defense Network」に参画した。",
+                    "source_fact_ids": [
+                      "e005:f01"
+                    ],
+                    "evidence_ids": [
+                      "e005"
+                    ]
+                  }
+                ],
+                "information_complete": true,
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g011",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g009",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
+            "event_id": "g010",
+            "decision": "insufficient_evidence",
+            "items": []
+          },
+          {
             "event_id": "g014",
             "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g014\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g014\", \"title\": \"SoCal Digital Marketing、ChatGPT広告管理サービスを開始\", \"reasons\": [\"summary_repetition\", \"insufficient_facts\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}",
+            "items": [],
+            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g014\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g014\", \"title\": \"SoCal Digital Marketing、ChatGPT広告管理サービスを開始\", \"reasons\": [\"insufficient_facts\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "softbank-01-c41f921c42c48155",
+      "response": {
+        "events": [
+          {
+            "event_id": "g002",
+            "decision": "pending_validation",
+            "items": [],
+            "reason": "The read operation timed out"
+          },
+          {
+            "event_id": "g001",
+            "decision": "pending_validation",
+            "items": [],
+            "reason": "The read operation timed out"
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "honda-01-a07bbf3a3025b6c1",
+      "response": {
+        "events": [
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Honda、FIA Road Safety Indexで世界初の5スターを獲得",
+                "summary_points": [
+                  {
+                    "text": "Hondaは、FIA Road Safety Indexの評価において、2025年に最高評価の3スターを獲得した後、新たな評価項目への対応を含め、17カ国への審査対象拡大を達成し、世界で初めて5スターを獲得しました。",
+                    "source_fact_ids": [
+                      "e001:f05",
+                      "e001:f07",
+                      "e001:f09"
+                    ],
+                    "evidence_ids": [
+                      "e001"
+                    ]
+                  }
+                ],
+                "information_complete": true,
+                "topic_value_class": "risk_or_safety_signal",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g001",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "Acura INTEGRA Type Sを2026年12月に発売、250台限定",
+                "summary_points": [
+                  {
+                    "text": "Acura INTEGRA Type Sは6速マニュアルトランスミッションと2.0L VTEC TURBOエンジンを搭載するプレミアムパフォーマンスモデルとして2026年12月に発売される。",
+                    "source_fact_ids": [
+                      "e002:f01",
+                      "e002:f15"
+                    ],
+                    "evidence_ids": [
+                      "e002"
+                    ]
+                  },
+                  {
+                    "text": "今回の導入は、国土交通省が2026年2月に創設した米国製乗用車に関する認定制度を活用したものであり、米国で生産される魅力的なモデルを日本のお客様にお届けする。",
+                    "source_fact_ids": [
+                      "e002:f04"
+                    ],
+                    "evidence_ids": [
+                      "e002"
+                    ]
+                  }
+                ],
+                "information_complete": true,
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g005",
+            "decision": "pending_validation",
+            "items": [],
+            "reason": "segmented review: incomplete segmented summary"
+          },
+          {
+            "event_id": "g002",
+            "decision": "pending_validation",
+            "items": [],
+            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g002\": [\"e004:f11\", \"e004:f13\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+          },
+          {
+            "event_id": "g004",
+            "decision": "pending_validation",
+            "items": [],
+            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g004\": [\"e005:f13\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "honda-02-2e3f4e4597defc24",
+      "response": {
+        "events": [
+          {
+            "event_id": "g006",
+            "decision": "pending_validation",
+            "items": [],
+            "reason": "The read operation timed out"
+          },
+          {
+            "event_id": "g007",
+            "decision": "pending_validation",
+            "items": [],
+            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g007\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g007\", \"title\": \"ホンダ・MotoGPのジョアン・ミルが健康回復の好報を発表\", \"reasons\": [\"summary_repetition\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-01-b833b2951a49db70",
+      "response": {
+        "events": [
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "ホンダ、FIA道路安全指数で初の5スター評価を獲得",
+                "summary_points": [
+                  {
+                    "text": "ホンダは、FIA Road Safety Indexの評価において、2025年当時の最高評価であった3スターから、新たな評価項目を含む審査対象を17カ国へ拡大した結果、初の5スターを獲得しました。",
+                    "source_fact_ids": [
+                      "e002:f05",
+                      "e002:f07",
+                      "e002:f09"
+                    ],
+                    "evidence_ids": [
+                      "e002"
+                    ]
+                  }
+                ],
+                "information_complete": true,
+                "topic_value_class": "risk_or_safety_signal",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "ルクレール、フェラーリとの契約にナンバー1条項はないと否定",
+                "summary_points": [
+                  {
+                    "text": "シャルル・ルクレールはFIAドライバー会見で、フェラーリとの契約にナンバー1条項が含まれていないと否定した",
+                    "source_fact_ids": [
+                      "e004:f11",
+                      "e004:f13"
+                    ],
+                    "evidence_ids": [
+                      "e004"
+                    ]
+                  }
+                ],
+                "information_complete": true,
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g006",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "F1カタールGP、タイヤ1セットの使用を最大27周に制限",
+                "summary_points": [
+                  {
+                    "text": "2026年F1第22戦カタールGPのフリー走行2回目が11月28日に実施され、アンドレア・キミ・アントネッリがトップタイムをマークした。",
+                    "source_fact_ids": [
+                      "e008:f01"
+                    ],
+                    "evidence_ids": [
+                      "e008"
+                    ]
+                  },
+                  {
+                    "text": "2番手はジョージ・ラッセル、3番手はランド・ノリスとなっている。",
+                    "source_fact_ids": [
+                      "e008:f02"
+                    ],
+                    "evidence_ids": [
+                      "e008"
+                    ]
+                  }
+                ],
+                "information_complete": true,
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g004",
+            "decision": "insufficient_evidence",
             "items": []
+          },
+          {
+            "event_id": "g001",
+            "decision": "pending_validation",
+            "items": [],
+            "reason": "The read operation timed out"
+          },
+          {
+            "event_id": "g005",
+            "decision": "pending_validation",
+            "items": [],
+            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g005\": [\"e006:f01\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "f1-02-40967466b7e78b8c",
+      "response": {
+        "events": [
+          {
+            "event_id": "g007",
+            "decision": "insufficient_evidence",
+            "items": []
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "spacex-01-1abcf29db4cd5926",
+      "response": {
+        "events": [
+          {
+            "event_id": "g002",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "米連邦通信委員会、SpaceXの軌道AIデータセンター計画「スターマインド」に100万基の衛星配備を承認",
+                "summary_points": [
+                  {
+                    "text": "米連邦通信委員会（FCC）はSpaceXに対し、最大100万基の衛星を配備する「スターマインド」というコンステレーションを条件付きで承認した。",
+                    "source_fact_ids": [
+                      "e003:f01"
+                    ],
+                    "evidence_ids": [
+                      "e003"
+                    ]
+                  },
+                  {
+                    "text": "SpaceXは7年以内に運用可能な衛星1基を投入し、2035年11月までに10万基、2040年11月までに全コンステレーションを完成させる期限を設けた。",
+                    "source_fact_ids": [
+                      "e003:f02",
+                      "e003:f07"
+                    ],
+                    "evidence_ids": [
+                      "e003"
+                    ]
+                  },
+                  {
+                    "text": "SpaceXは高度550キロから約1,000キロの間の6つの軌道シェルにまたがる運用を提案し、高度600キロ超の衛星は寿命終了時に地球大気圏で燃え尽きることを求めた。",
+                    "source_fact_ids": [
+                      "e003:f10"
+                    ],
+                    "evidence_ids": [
+                      "e003"
+                    ]
+                  },
+                  {
+                    "text": "各衛星は最大250キロワットの演算能力を持ち、210キロワットの太陽電池アレイで駆動し、処理結果はスターリンク網に中継される。",
+                    "source_fact_ids": [
+                      "e003:f04",
+                      "e003:f12"
+                    ],
+                    "evidence_ids": [
+                      "e003"
+                    ]
+                  },
+                  {
+                    "text": "SpaceXはこの計画を大型ロケット「スターシップ」に大きく依存している。",
+                    "source_fact_ids": [
+                      "e003:f13"
+                    ],
+                    "evidence_ids": [
+                      "e003"
+                    ]
+                  }
+                ],
+                "information_complete": true,
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "priority",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g003",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "SpaceXのADRが4営業日連続で公開価格を下回る",
+                "summary_points": [
+                  {
+                    "text": "SpaceXの米国預託証券（ADR）は4営業日連続で公開価格を下回っている",
+                    "source_fact_ids": [
+                      "e006:f02",
+                      "e006:f10"
+                    ],
+                    "evidence_ids": [
+                      "e006"
+                    ]
+                  },
+                  {
+                    "text": "SpaceXはこの日127.4ドル（約2万円）で取引を終え、公開価格の135ドルを下回った",
+                    "source_fact_ids": [
+                      "e006:f10"
+                    ],
+                    "evidence_ids": [
+                      "e006"
+                    ]
+                  }
+                ],
+                "information_complete": true,
+                "topic_value_class": "market_or_financial_impact",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g005",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "ウクライナ政府支配地域でStarlinkの運用が正常化",
+                "summary_points": [
+                  {
+                    "text": "ウクライナ政府の支配地域ではStarlinkの通信速度が正常化しており、迎撃ドローンの追跡が可能になっている",
+                    "source_fact_ids": [
+                      "e007:f02",
+                      "e007:f05"
+                    ],
+                    "evidence_ids": [
+                      "e007"
+                    ]
+                  },
+                  {
+                    "text": "ゼレンスキー大統領は11月27日、米国がキーウに「前向きなシグナル」を送ったと明らかにした",
+                    "source_fact_ids": [
+                      "e007:f02"
+                    ],
+                    "evidence_ids": [
+                      "e007"
+                    ]
+                  },
+                  {
+                    "text": "ゼレンスキー大統領は、Starlinkの運用はSpaceXが担う技術面の問題であり、政治的な決定の問題であると述べた",
+                    "source_fact_ids": [
+                      "e007:f06",
+                      "e007:f08"
+                    ],
+                    "evidence_ids": [
+                      "e007"
+                    ]
+                  },
+                  {
+                    "text": "ゼレンスキー大統領は10月半ばに同様の問題が起きた後、ウクライナは再びStarshieldの運用制限に直面したと明らかにした",
+                    "source_fact_ids": [
+                      "e007:f09"
+                    ],
+                    "evidence_ids": [
+                      "e007"
+                    ]
+                  },
+                  {
+                    "text": "安全審査の完了後、各社は周波数の申請が可能になる",
+                    "source_fact_ids": [
+                      "e007:f12"
+                    ],
+                    "evidence_ids": [
+                      "e007"
+                    ]
+                  }
+                ],
+                "information_complete": true,
+                "topic_value_class": "event_result_or_outcome",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g001",
+            "decision": "pending_validation",
+            "items": [],
+            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g001\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g001\", \"title\": \"ベトナムのViettel TelecomがStarlink衛星インターネットサービスを開始\", \"reasons\": [\"unsupported_summary_point\"], \"unsupported_facts\": [\"月額1,590,000ベトナムドン（約60米ドル）から提供するパッケージを開始した\"], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
+          },
+          {
+            "event_id": "g004",
+            "decision": "pending_validation",
+            "items": [],
+            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g004\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g004\", \"title\": \"Amazon、36機の衛星を打ち上げるがStarlinkとの競争に苦戦\", \"reasons\": [\"insufficient_facts\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": [\"e005:f01\"]}], \"unpublishable_items\": []}"
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "japan_economy-01-de245f9c15df35fd",
+      "response": {
+        "events": [
+          {
+            "event_id": "g005",
+            "decision": "publish",
+            "items": [
+              {
+                "title": "消費税減税の対象外となる食料品の恩恵は月5110円程度に留まる",
+                "summary_points": [
+                  {
+                    "text": "消費税減税が2027年4月から始まっても、65歳以上の世帯では貯蓄1000万円以下が約4割存在し、年金だけでは生活が困難な状況にある。",
+                    "source_fact_ids": [
+                      "e004:f01",
+                      "e004:f04"
+                    ],
+                    "evidence_ids": [
+                      "e004"
+                    ]
+                  },
+                  {
+                    "text": "参議院で審議中の「消費税減税」が2027年4月から始まれば、スーパーで買う飲食料品の消費税は8％から1％に減る。",
+                    "source_fact_ids": [
+                      "e004:f06"
+                    ],
+                    "evidence_ids": [
+                      "e004"
+                    ]
+                  },
+                  {
+                    "text": "5kg3000円の米は税込み3240円から3030円に減り、65歳の夫婦2人暮らしの食費は月平均7万9000円弱から7万3730円に減る。",
+                    "source_fact_ids": [
+                      "e004:f07",
+                      "e004:f08"
+                    ],
+                    "evidence_ids": [
+                      "e004"
+                    ]
+                  },
+                  {
+                    "text": "この減税措置による月5110円、年間6万円ほどの節約にしかならない。",
+                    "source_fact_ids": [
+                      "e004:f09"
+                    ],
+                    "evidence_ids": [
+                      "e004"
+                    ]
+                  },
+                  {
+                    "text": "高市内閣は「働く人の手取りを増やす」政策に力を入れているが、年金生活者は「現役世代=弱者、高齢者=裕福」と決めつけられているように感じている。",
+                    "source_fact_ids": [
+                      "e004:f10"
+                    ],
+                    "evidence_ids": [
+                      "e004"
+                    ]
+                  }
+                ],
+                "information_complete": true,
+                "topic_value_class": "decision_or_policy",
+                "priority_class": "standard",
+                "change_class": "new_event"
+              }
+            ]
+          },
+          {
+            "event_id": "g001",
+            "decision": "pending_validation",
+            "items": [],
+            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g001\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g001\", \"title\": \"電気・ガス補助終了でエネルギー価格9.5%上昇、物価上昇率は3カ月連続で2%超\", \"reasons\": [\"invalid_summary_point\", \"category_identity\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": [\"e001:f16\"]}], \"unpublishable_items\": []}"
+          },
+          {
+            "event_id": "g003",
+            "decision": "pending_validation",
+            "items": [],
+            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g003\": [\"e002:f07\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+          },
+          {
+            "event_id": "g002",
+            "decision": "pending_validation",
+            "items": [],
+            "reason": "The read operation timed out"
+          },
+          {
+            "event_id": "g004",
+            "decision": "pending_validation",
+            "items": [],
+            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g004\": [\"e005:f02\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+          }
+        ]
+      }
+    },
+    {
+      "request_id": "yoasobi_ikuta-01-32a6729fd84d95dd",
+      "response": {
+        "events": [
+          {
+            "event_id": "g001",
+            "decision": "pending_validation",
+            "items": [],
+            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g001\": [\"e001:f16\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
           }
         ]
       }
@@ -347,194 +972,14 @@
           {
             "event_id": "g004",
             "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g004\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g004\", \"title\": \"中国の工業用ロボット普及が農産物サプライチェーンの安全性を高める\", \"reasons\": [\"unsupported_title\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}",
-            "items": []
+            "items": [],
+            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g004\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g004\", \"title\": \"中国の工業用ロボット普及が農産物サプライチェーンの安定性とセキュリティを強化\", \"reasons\": [\"unsupported_title\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
           },
           {
             "event_id": "g002",
             "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g002\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g002\", \"title\": \"日中韓とASEAN10カ国、AMROのデジタル決済プログラムの下にデジタル資産規制を議論するワーキンググループを設立\", \"reasons\": [\"unsupported_summary_point\"], \"unsupported_facts\": [\"日中韓とASEAN10カ国は2026年11月26日、ASEAN+3マクロ経済研究オフィス（AMRO）のデジタル決済プログラムの下にデジタル資産規制を議論するワーキンググループを設立することで合意した\"], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": [\"e004:f01\"]}], \"unpublishable_items\": []}",
-            "items": []
-          }
-        ]
-      }
-    },
-    {
-      "request_id": "openai-01-08450c49e1f679b9",
-      "response": {
-        "events": [
-          {
-            "event_id": "g007",
-            "decision": "publish",
-            "items": [
-              {
-                "title": "OpenAI、コードックスとアストラを用いた2つのエキゾチック・プラネット探索で信号を報告",
-                "summary_points": [
-                  {
-                    "text": "OpenAIは2026年11月24日、コードックスとアストラを用いた2つの別々のエキゾチック・プラネット探索の結果を報告した。",
-                    "source_fact_ids": [
-                      "e001:f10",
-                      "e001:f11"
-                    ],
-                    "evidence_ids": [
-                      "e001"
-                    ]
-                  },
-                  {
-                    "text": "Kevin Bond氏はコードックスを用いてケプラー観測データを分析し、約10万個の恒星を対象に200件以上の信号を検出した。",
-                    "source_fact_ids": [
-                      "e001:f12",
-                      "e001:f13"
-                    ],
-                    "evidence_ids": [
-                      "e001"
-                    ]
-                  },
-                  {
-                    "text": "Ethan Byrd氏はアストラを用いてTESSデータに関連する探索を行い、約1,900万個の恒星を対象に49件の候補を発見した。",
-                    "source_fact_ids": [
-                      "e001:f11",
-                      "e001:f07"
-                    ],
-                    "evidence_ids": [
-                      "e001"
-                    ]
-                  },
-                  {
-                    "text": "SETI研究所のVishal Gajjar氏は、Bond氏のケプラーデータの中で2つの一致する信号を発見した。",
-                    "source_fact_ids": [
-                      "e001:f09"
-                    ],
-                    "evidence_ids": [
-                      "e001"
-                    ]
-                  }
-                ],
-                "information_complete": true,
-                "topic_value_class": "event_result_or_outcome",
-                "priority_class": "standard",
-                "change_class": "new_event"
-              }
-            ]
-          },
-          {
-            "event_id": "g001",
-            "decision": "insufficient_evidence",
-            "items": []
-          },
-          {
-            "event_id": "g005",
-            "decision": "insufficient_evidence",
-            "items": []
-          },
-          {
-            "event_id": "g004",
-            "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g004\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g004\", \"title\": \"オーストラリアAI議会委員会が著作権所有者への支払いメカニズムを推奨\", \"reasons\": [\"unsupported_title\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}",
-            "items": []
-          },
-          {
-            "event_id": "g006",
-            "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g006\": [\"e003:f01\"]}, \"rejected_items\": [], \"unpublishable_items\": []}",
-            "items": []
-          },
-          {
-            "event_id": "g003",
-            "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g003\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g003\", \"title\": \"OpenAI、日常業務向けAI「GPT-6.2 Sol」を公開\", \"reasons\": [\"summary_repetition\", \"insufficient_facts\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}",
-            "items": []
-          },
-          {
-            "event_id": "g002",
-            "decision": "pending_validation",
-            "reason": "each point needs Japanese text and exact source fact IDs",
-            "items": []
-          }
-        ]
-      }
-    },
-    {
-      "request_id": "honda-01-a07bbf3a3025b6c1",
-      "response": {
-        "events": [
-          {
-            "event_id": "g001",
-            "decision": "publish",
-            "items": [
-              {
-                "title": "Acura INTEGRA Type Sを2026年12月に発売、250台限定",
-                "summary_points": [
-                  {
-                    "text": "Acura INTEGRA Type Sは6速マニュアルトランスミッションと2.0L VTEC TURBOエンジンを搭載するプレミアムパフォーマンスモデルとして2026年12月に発売される。",
-                    "source_fact_ids": [
-                      "e002:f01",
-                      "e002:f15"
-                    ],
-                    "evidence_ids": [
-                      "e002"
-                    ]
-                  },
-                  {
-                    "text": "今回の導入は、国土交通省が2026年2月に創設した米国製乗用車に関する認定制度を活用したものであり、米国で生産される魅力的なモデルを日本のお客様にお届けする。",
-                    "source_fact_ids": [
-                      "e002:f04"
-                    ],
-                    "evidence_ids": [
-                      "e002"
-                    ]
-                  }
-                ],
-                "information_complete": true,
-                "topic_value_class": "event_result_or_outcome",
-                "priority_class": "standard",
-                "change_class": "new_event"
-              }
-            ]
-          },
-          {
-            "event_id": "g003",
-            "decision": "publish",
-            "items": [
-              {
-                "title": "Honda、FIA Road Safety Indexで世界初の5スターを獲得",
-                "summary_points": [
-                  {
-                    "text": "Hondaは、FIA Road Safety Indexの評価において、2025年に最高評価の3スターを獲得した後、新たな評価項目への対応を含め、17カ国への審査対象拡大を達成し、世界で初めて5スターを獲得しました。",
-                    "source_fact_ids": [
-                      "e001:f05",
-                      "e001:f07",
-                      "e001:f09"
-                    ],
-                    "evidence_ids": [
-                      "e001"
-                    ]
-                  }
-                ],
-                "information_complete": true,
-                "topic_value_class": "risk_or_safety_signal",
-                "priority_class": "standard",
-                "change_class": "new_event"
-              }
-            ]
-          },
-          {
-            "event_id": "g005",
-            "decision": "pending_validation",
-            "reason": "segmented review: incomplete segmented summary",
-            "items": []
-          },
-          {
-            "event_id": "g002",
-            "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g002\": [\"e004:f11\", \"e004:f13\"]}, \"rejected_items\": [], \"unpublishable_items\": []}",
-            "items": []
-          },
-          {
-            "event_id": "g004",
-            "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g004\": [\"e005:f13\"]}, \"rejected_items\": [], \"unpublishable_items\": []}",
-            "items": []
+            "items": [],
+            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g002\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g002\", \"title\": \"日中韓とASEAN10カ国、AMROのデジタル決済プログラムの下にデジタル資産規制を議論するワーキンググループを設立\", \"reasons\": [\"unsupported_summary_point\"], \"unsupported_facts\": [\"日中韓とASEAN10カ国は2026年11月26日、ASEAN+3マクロ経済研究オフィス（AMRO）のデジタル決済プログラムの下にデジタル資産規制を議論するワーキンググループを設立することで合意した\"], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": [\"e004:f01\"]}], \"unpublishable_items\": []}"
           }
         ]
       }
@@ -672,440 +1117,26 @@
           {
             "event_id": "g002",
             "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g002\": [\"e001:f01\"]}, \"rejected_items\": [], \"unpublishable_items\": []}",
-            "items": []
+            "items": [],
+            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g002\": [\"e001:f01\", \"e001:f10\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
           },
           {
             "event_id": "g005",
             "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g005\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g005\", \"title\": \"米国の自動車・鉄鋼関税の変更に伴い、カナダが含まれる可能性を示唆\", \"reasons\": [\"unsupported_title\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}",
-            "items": []
+            "items": [],
+            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g005\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g005\", \"title\": \"米国の自動車・鉄鋼関税変更にカナダ含む可能性、グリーア氏示唆\", \"reasons\": [\"unsupported_title\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": [\"e002:f05\"]}], \"unpublishable_items\": []}"
           },
           {
             "event_id": "g004",
             "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g004\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g004\", \"title\": \"Amazon、メキシコでの投資と雇用を拡大\", \"reasons\": [\"unsupported_summary_point\", \"missing_evidence_id\", \"empty_summary\", \"summary_copy\", \"category_identity\", \"insufficient_facts\", \"missing_source\", \"invalid_source_date\"], \"unsupported_facts\": [\"2025年、Amazonはメキシコに40億ペソ（約20.3億ドル）を超える投資を行い、同国のGDPに34億ペソ（約17.2億ドル）以上の貢献を果たした\", \"AWSは2025年1月にメキシコのAWSデータセンター地域を開設し、同地域の建設と運用はメキシコのGDPに100億ドルを追加し、外部ビジネスに年間平均7,000人のフルタイム相当の雇用を創出すると発表した\"], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}",
-            "items": []
+            "items": [],
+            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g004\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g004\", \"title\": \"Amazon、メキシコでの投資と雇用を拡大\", \"reasons\": [\"unsupported_summary_point\", \"missing_evidence_id\", \"empty_summary\", \"summary_copy\", \"category_identity\", \"insufficient_facts\", \"missing_source\", \"invalid_source_date\"], \"unsupported_facts\": [\"2025年、Amazonはメキシコに40億ペソ（約20.3億ドル）を超える投資を行い、同国のGDPに34億ペソ（約17.2億ドル）以上の貢献を果たした\", \"AWSは2025年1月にメキシコのAWSデータセンター地域を開設し、同地域の建設と運用はメキシコのGDPに100億ドルを追加し、外部ビジネスに年間平均7,000人のフルタイム相当の雇用を創出すると発表した\"], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
           },
           {
             "event_id": "g003",
             "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g003\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g003\", \"title\": \"NVIDIA株価、AIセラーの主導で8.3%下落\", \"reasons\": [\"invalid_summary_point\", \"missing_evidence_id\", \"empty_summary\", \"summary_copy\", \"category_identity\", \"insufficient_facts\", \"missing_source\", \"invalid_source_date\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}",
-            "items": []
-          }
-        ]
-      }
-    },
-    {
-      "request_id": "f1-01-b833b2951a49db70",
-      "response": {
-        "events": [
-          {
-            "event_id": "g003",
-            "decision": "publish",
-            "items": [
-              {
-                "title": "ルクレール、フェラーリとの契約にナンバー1条項はないと否定",
-                "summary_points": [
-                  {
-                    "text": "シャルル・ルクレールはFIAドライバー会見で、フェラーリとの契約にナンバー1条項が含まれていないと否定した",
-                    "source_fact_ids": [
-                      "e004:f11",
-                      "e004:f13"
-                    ],
-                    "evidence_ids": [
-                      "e004"
-                    ]
-                  }
-                ],
-                "information_complete": true,
-                "topic_value_class": "decision_or_policy",
-                "priority_class": "standard",
-                "change_class": "new_event"
-              }
-            ]
-          },
-          {
-            "event_id": "g002",
-            "decision": "publish",
-            "items": [
-              {
-                "title": "ホンダ、FIA道路安全指数で初の5スター評価を獲得",
-                "summary_points": [
-                  {
-                    "text": "ホンダは、FIA Road Safety Indexの評価において、2025年当時の最高評価であった3スターから、新たな評価項目を含む審査対象を17カ国へ拡大した結果、初の5スターを獲得しました。",
-                    "source_fact_ids": [
-                      "e002:f05",
-                      "e002:f07",
-                      "e002:f09"
-                    ],
-                    "evidence_ids": [
-                      "e002"
-                    ]
-                  }
-                ],
-                "information_complete": true,
-                "topic_value_class": "risk_or_safety_signal",
-                "priority_class": "standard",
-                "change_class": "new_event"
-              }
-            ]
-          },
-          {
-            "event_id": "g004",
-            "decision": "insufficient_evidence",
-            "items": []
-          },
-          {
-            "event_id": "g001",
-            "decision": "pending_validation",
-            "reason": "each point needs Japanese text and exact source fact IDs",
-            "items": []
-          },
-          {
-            "event_id": "g005",
-            "decision": "pending_validation",
-            "reason": "Unterminated string starting at: line 1 column 573 (char 572)",
-            "items": []
-          },
-          {
-            "event_id": "g006",
-            "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g006\": [\"e008:f01\", \"e008:f02\"]}, \"rejected_items\": [], \"unpublishable_items\": []}",
-            "items": []
-          }
-        ]
-      }
-    },
-    {
-      "request_id": "japan_economy-01-de245f9c15df35fd",
-      "response": {
-        "events": [
-          {
-            "event_id": "g005",
-            "decision": "publish",
-            "items": [
-              {
-                "title": "消費税減税の対象外となる食料品の恩恵は月5110円程度に留まる",
-                "summary_points": [
-                  {
-                    "text": "消費税減税が2027年4月から始まっても、65歳以上の世帯では貯蓄1000万円以下が約4割存在し、年金だけでは生活が困難な状況にある。",
-                    "source_fact_ids": [
-                      "e004:f01",
-                      "e004:f04"
-                    ],
-                    "evidence_ids": [
-                      "e004"
-                    ]
-                  },
-                  {
-                    "text": "参議院で審議中の「消費税減税」が2027年4月から始まれば、スーパーで買う飲食料品の消費税は8％から1％に減る。",
-                    "source_fact_ids": [
-                      "e004:f06"
-                    ],
-                    "evidence_ids": [
-                      "e004"
-                    ]
-                  },
-                  {
-                    "text": "5kg3000円の米は税込み3240円から3030円に減り、65歳の夫婦2人暮らしの食費は月平均7万9000円弱から7万3730円に減る。",
-                    "source_fact_ids": [
-                      "e004:f07",
-                      "e004:f08"
-                    ],
-                    "evidence_ids": [
-                      "e004"
-                    ]
-                  },
-                  {
-                    "text": "この減税措置による月5110円、年間6万円ほどの節約にしかならない。",
-                    "source_fact_ids": [
-                      "e004:f09"
-                    ],
-                    "evidence_ids": [
-                      "e004"
-                    ]
-                  },
-                  {
-                    "text": "高市内閣は「働く人の手取りを増やす」政策に力を入れているが、年金生活者は「現役世代=弱者、高齢者=裕福」と決めつけられているように感じている。",
-                    "source_fact_ids": [
-                      "e004:f10"
-                    ],
-                    "evidence_ids": [
-                      "e004"
-                    ]
-                  }
-                ],
-                "information_complete": true,
-                "topic_value_class": "decision_or_policy",
-                "priority_class": "standard",
-                "change_class": "new_event"
-              }
-            ]
-          },
-          {
-            "event_id": "g001",
-            "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g001\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g001\", \"title\": \"電気・ガス補助終了でエネルギー価格9.5%上昇、物価上昇率は3カ月連続で2%超\", \"reasons\": [\"invalid_summary_point\", \"category_identity\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": [\"e001:f16\"]}], \"unpublishable_items\": []}",
-            "items": []
-          },
-          {
-            "event_id": "g003",
-            "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g003\": [\"e002:f07\"]}, \"rejected_items\": [], \"unpublishable_items\": []}",
-            "items": []
-          },
-          {
-            "event_id": "g002",
-            "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g002\": [\"e003:f12\"]}, \"rejected_items\": [], \"unpublishable_items\": []}",
-            "items": []
-          },
-          {
-            "event_id": "g004",
-            "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g004\": [\"e005:f02\"]}, \"rejected_items\": [], \"unpublishable_items\": []}",
-            "items": []
-          }
-        ]
-      }
-    },
-    {
-      "request_id": "f1-02-40967466b7e78b8c",
-      "response": {
-        "events": [
-          {
-            "event_id": "g007",
-            "decision": "insufficient_evidence",
-            "items": []
-          }
-        ]
-      }
-    },
-    {
-      "request_id": "spacex-01-1abcf29db4cd5926",
-      "response": {
-        "events": [
-          {
-            "event_id": "g005",
-            "decision": "publish",
-            "items": [
-              {
-                "title": "ウクライナ政府支配地域でStarlinkの運用が正常化",
-                "summary_points": [
-                  {
-                    "text": "ウクライナ政府の支配地域ではStarlinkの通信速度が正常化しており、迎撃ドローンの追跡が可能になっている",
-                    "source_fact_ids": [
-                      "e007:f02",
-                      "e007:f05"
-                    ],
-                    "evidence_ids": [
-                      "e007"
-                    ]
-                  },
-                  {
-                    "text": "ゼレンスキー大統領は11月27日、米国がキーウに「前向きなシグナル」を送ったと明らかにした",
-                    "source_fact_ids": [
-                      "e007:f02"
-                    ],
-                    "evidence_ids": [
-                      "e007"
-                    ]
-                  },
-                  {
-                    "text": "ゼレンスキー大統領は、Starlinkの運用はSpaceXが担う技術面の問題であり、政治的な決定の問題であると述べた",
-                    "source_fact_ids": [
-                      "e007:f06",
-                      "e007:f08"
-                    ],
-                    "evidence_ids": [
-                      "e007"
-                    ]
-                  },
-                  {
-                    "text": "ゼレンスキー大統領は10月半ばに同様の問題が起きた後、ウクライナは再びStarshieldの運用制限に直面したと明らかにした",
-                    "source_fact_ids": [
-                      "e007:f09"
-                    ],
-                    "evidence_ids": [
-                      "e007"
-                    ]
-                  },
-                  {
-                    "text": "安全審査の完了後、各社は周波数の申請が可能になる",
-                    "source_fact_ids": [
-                      "e007:f12"
-                    ],
-                    "evidence_ids": [
-                      "e007"
-                    ]
-                  }
-                ],
-                "information_complete": true,
-                "topic_value_class": "event_result_or_outcome",
-                "priority_class": "standard",
-                "change_class": "new_event"
-              }
-            ]
-          },
-          {
-            "event_id": "g002",
-            "decision": "publish",
-            "items": [
-              {
-                "title": "米連邦通信委員会、SpaceXの軌道AIデータセンター計画「スターマインド」に100万基の衛星配備を承認",
-                "summary_points": [
-                  {
-                    "text": "米連邦通信委員会（FCC）はSpaceXに対し、最大100万基の衛星を配備する「スターマインド」というコンステレーションを条件付きで承認した。",
-                    "source_fact_ids": [
-                      "e003:f01"
-                    ],
-                    "evidence_ids": [
-                      "e003"
-                    ]
-                  },
-                  {
-                    "text": "SpaceXは7年以内に運用可能な衛星1基を投入し、2035年11月までに10万基、2040年11月までに全コンステレーションを完成させる期限を設けた。",
-                    "source_fact_ids": [
-                      "e003:f02",
-                      "e003:f07"
-                    ],
-                    "evidence_ids": [
-                      "e003"
-                    ]
-                  },
-                  {
-                    "text": "SpaceXは高度550キロから約1,000キロの間の6つの軌道シェルにまたがる運用を提案し、高度600キロ超の衛星は寿命終了時に地球大気圏で燃え尽きることを求めた。",
-                    "source_fact_ids": [
-                      "e003:f10"
-                    ],
-                    "evidence_ids": [
-                      "e003"
-                    ]
-                  },
-                  {
-                    "text": "各衛星は最大250キロワットの演算能力を持ち、210キロワットの太陽電池アレイで駆動し、処理結果はスターリンク網に中継される。",
-                    "source_fact_ids": [
-                      "e003:f04",
-                      "e003:f12"
-                    ],
-                    "evidence_ids": [
-                      "e003"
-                    ]
-                  },
-                  {
-                    "text": "SpaceXはこの計画を大型ロケット「スターシップ」に大きく依存している。",
-                    "source_fact_ids": [
-                      "e003:f13"
-                    ],
-                    "evidence_ids": [
-                      "e003"
-                    ]
-                  }
-                ],
-                "information_complete": true,
-                "topic_value_class": "decision_or_policy",
-                "priority_class": "priority",
-                "change_class": "new_event"
-              }
-            ]
-          },
-          {
-            "event_id": "g003",
-            "decision": "publish",
-            "items": [
-              {
-                "title": "SpaceXのADRが4営業日連続で公開価格を下回る",
-                "summary_points": [
-                  {
-                    "text": "SpaceXの米国預託証券（ADR）は4営業日連続で公開価格を下回っている",
-                    "source_fact_ids": [
-                      "e006:f02",
-                      "e006:f10"
-                    ],
-                    "evidence_ids": [
-                      "e006"
-                    ]
-                  },
-                  {
-                    "text": "SpaceXはこの日127.4ドル（約2万円）で取引を終え、公開価格の135ドルを下回った",
-                    "source_fact_ids": [
-                      "e006:f10"
-                    ],
-                    "evidence_ids": [
-                      "e006"
-                    ]
-                  }
-                ],
-                "information_complete": true,
-                "topic_value_class": "market_or_financial_impact",
-                "priority_class": "standard",
-                "change_class": "new_event"
-              }
-            ]
-          },
-          {
-            "event_id": "g001",
-            "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g001\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g001\", \"title\": \"ベトナムのViettel TelecomがStarlink衛星インターネットサービスを開始\", \"reasons\": [\"unsupported_summary_point\"], \"unsupported_facts\": [\"月額1,590,000ベトナムドン（約60米ドル）から提供するパッケージを開始した\"], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": [\"e002:f10\"]}], \"unpublishable_items\": []}",
-            "items": []
-          },
-          {
-            "event_id": "g004",
-            "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g004\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g004\", \"title\": \"Amazon、36機の衛星を打ち上げるがStarlinkとの競争に苦戦\", \"reasons\": [\"insufficient_facts\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": [\"e005:f01\"]}], \"unpublishable_items\": []}",
-            "items": []
-          }
-        ]
-      }
-    },
-    {
-      "request_id": "softbank-01-c41f921c42c48155",
-      "response": {
-        "events": [
-          {
-            "event_id": "g002",
-            "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g002\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g002\", \"title\": \"ソフトバンク、新端末「シンプルスマホ8」を12月4日に発売\", \"reasons\": [\"unsupported_summary_point\"], \"unsupported_facts\": [\"「シンプルスマホ8」はシャープ製で、シャンパンゴールド、ブルー、レッドの3色を展開する\"], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": [\"e001:f01\"]}], \"unpublishable_items\": []}",
-            "items": []
-          },
-          {
-            "event_id": "g001",
-            "decision": "pending_validation",
-            "reason": "each point needs Japanese text and exact source fact IDs",
-            "items": []
-          }
-        ]
-      }
-    },
-    {
-      "request_id": "honda-02-2e3f4e4597defc24",
-      "response": {
-        "events": [
-          {
-            "event_id": "g006",
-            "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g006\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g006\", \"title\": \"アストンマーティン、ホンダエンジンの性能不足を認め\", \"reasons\": [\"unsupported_title\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}",
-            "items": []
-          },
-          {
-            "event_id": "g007",
-            "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g007\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g007\", \"title\": \"ホンダ・MotoGPのジョアン・ミルが健康回復の好報を発表\", \"reasons\": [\"summary_repetition\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}",
-            "items": []
-          }
-        ]
-      }
-    },
-    {
-      "request_id": "yoasobi_ikuta-01-32a6729fd84d95dd",
-      "response": {
-        "events": [
-          {
-            "event_id": "g001",
-            "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g001\": [\"e001:f04\", \"e001:f16\"]}, \"rejected_items\": [], \"unpublishable_items\": []}",
-            "items": []
+            "items": [],
+            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g003\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g003\", \"title\": \"NVIDIA株価、AIセラーの主導で8.3%下落\", \"reasons\": [\"invalid_summary_point\", \"missing_evidence_id\", \"empty_summary\", \"summary_copy\", \"category_identity\", \"insufficient_facts\", \"missing_source\", \"invalid_source_date\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
           }
         ]
       }
@@ -1117,20 +1148,20 @@
           {
             "event_id": "g003",
             "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g003\": [\"e001:f01\"]}, \"rejected_items\": [], \"unpublishable_items\": []}",
-            "items": []
+            "items": [],
+            "reason": "each point needs Japanese text and exact source fact IDs"
           },
           {
             "event_id": "g001",
             "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g001\": [\"e002:f11\"]}, \"rejected_items\": [], \"unpublishable_items\": []}",
-            "items": []
+            "items": [],
+            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g001\": [\"e002:f11\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
           },
           {
             "event_id": "g002",
             "decision": "pending_validation",
-            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g002\": [\"e004:f01\", \"e004:f06\"]}, \"rejected_items\": [], \"unpublishable_items\": []}",
-            "items": []
+            "items": [],
+            "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g002\": [\"e004:f01\", \"e004:f05\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
           }
         ]
       }

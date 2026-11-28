@@ -61,53 +61,46 @@
     },
     {
       "watch_topic_id": "enterprise_infrastructure",
-      "title": "OpenAI、エピックゲームズ元弁護士を雇用、マスク氏の独占禁止法訴訟を担当",
-      "summary": "OpenAIはCravath, Swaine & Mooreの litigation co-headであるGary Bornsteinを雇用し、2027年3月にテキサス州フォートワースで予定されているエリオン・マスク氏のxAIに対する独占禁止法訴訟を担当する Bornsteinはかつてエピックゲームズの反トラスト訴訟において、Googleに対する全員一致の陪審評決を勝ち取り、Appleの代替決済手段への顧客誘導を制限する永久禁令を勝ち取った AppleとGoogleは2026年1月12日に、Appleの次世代AIモデルをGemini技術で開発するための複数年契約を発表した Graphiteによると、2026年9月の6つのサービスのセッションの89%がモバイルアプリまたはモバイルブラウザを通じて記録され、デスクトップブラウザは11%であった",
+      "title": "OpenAI、米Androidユーザー向けにウェアラブル連携の健康機能「ChatGPT Health」を開始",
+      "summary": "米Androidユーザー向けにウェアラブルデータと連携した健康機能「ChatGPT Health」を開始。 対象は米国のFree、Go、Plus、Proプランの18歳以上のログインユーザー。 機能は睡眠、ワークアウト、日々の習慣に関するパーソナライズされたアドバイスを提供し、DotsというAIアシスタントが忙しさに応じたワークアウトの提案を行う。",
       "section_id": "openai",
       "category": "OpenAI",
       "source_published_date": "2026-11-26",
-      "topic_value_class": "decision_or_policy",
+      "topic_value_class": "technical_or_product_shift",
       "priority_class": "standard",
       "change_class": "new_event",
       "detail": {
-        "slug": "auto-0341395bf8a3-2026-11-28.html",
+        "slug": "auto-f2e20ce4d81a-2026-11-28.html",
         "sources": [
           {
-            "label": "dataconomy.com",
-            "url": "https://dataconomy.com/2026/11/26/openai-hires-epic-games-lawyer-for-musk-antitrust-trial/"
+            "label": "newsbytesapp.com",
+            "url": "https://www.newsbytesapp.com/news/science/openai-launches-chatgpt-health-for-us-android-users-syncing-wearables/tldr"
           }
         ],
-        "summary": "OpenAIはCravath, Swaine & Mooreの litigation co-headであるGary Bornsteinを雇用し、2027年3月にテキサス州フォートワースで予定されているエリオン・マスク氏のxAIに対する独占禁止法訴訟を担当する Bornsteinはかつてエピックゲームズの反トラスト訴訟において、Googleに対する全員一致の陪審評決を勝ち取り、Appleの代替決済手段への顧客誘導を制限する永久禁令を勝ち取った AppleとGoogleは2026年1月12日に、Appleの次世代AIモデルをGemini技術で開発するための複数年契約を発表した Graphiteによると、2026年9月の6つのサービスのセッションの89%がモバイルアプリまたはモバイルブラウザを通じて記録され、デスクトップブラウザは11%であった",
+        "summary": "米Androidユーザー向けにウェアラブルデータと連携した健康機能「ChatGPT Health」を開始。 対象は米国のFree、Go、Plus、Proプランの18歳以上のログインユーザー。 機能は睡眠、ワークアウト、日々の習慣に関するパーソナライズされたアドバイスを提供し、DotsというAIアシスタントが忙しさに応じたワークアウトの提案を行う。",
         "summary_basis": {
           "confirmed_facts": [
-            "OpenAIはCravath, Swaine & Mooreの litigation co-headであるGary Bornsteinを雇用し、2027年3月にテキサス州フォートワースで予定されているエリオン・マスク氏のxAIに対する独占禁止法訴訟を担当する",
-            "Bornsteinはかつてエピックゲームズの反トラスト訴訟において、Googleに対する全員一致の陪審評決を勝ち取り、Appleの代替決済手段への顧客誘導を制限する永久禁令を勝ち取った",
-            "AppleとGoogleは2026年1月12日に、Appleの次世代AIモデルをGemini技術で開発するための複数年契約を発表した",
-            "Graphiteによると、2026年9月の6つのサービスのセッションの89%がモバイルアプリまたはモバイルブラウザを通じて記録され、デスクトップブラウザは11%であった"
+            "米Androidユーザー向けにウェアラブルデータと連携した健康機能「ChatGPT Health」を開始。",
+            "対象は米国のFree、Go、Plus、Proプランの18歳以上のログインユーザー。",
+            "機能は睡眠、ワークアウト、日々の習慣に関するパーソナライズされたアドバイスを提供し、DotsというAIアシスタントが忙しさに応じたワークアウトの提案を行う。"
           ],
           "fact_sources": [
             {
-              "fact": "OpenAIはCravath, Swaine & Mooreの litigation co-headであるGary Bornsteinを雇用し、2027年3月にテキサス州フォートワースで予定されているエリオン・マスク氏のxAIに対する独占禁止法訴訟を担当する",
+              "fact": "米Androidユーザー向けにウェアラブルデータと連携した健康機能「ChatGPT Health」を開始。",
               "source_urls": [
-                "https://dataconomy.com/2026/11/26/openai-hires-epic-games-lawyer-for-musk-antitrust-trial/"
+                "https://www.newsbytesapp.com/news/science/openai-launches-chatgpt-health-for-us-android-users-syncing-wearables/tldr"
               ]
             },
             {
-              "fact": "Bornsteinはかつてエピックゲームズの反トラスト訴訟において、Googleに対する全員一致の陪審評決を勝ち取り、Appleの代替決済手段への顧客誘導を制限する永久禁令を勝ち取った",
+              "fact": "対象は米国のFree、Go、Plus、Proプランの18歳以上のログインユーザー。",
               "source_urls": [
-                "https://dataconomy.com/2026/11/26/openai-hires-epic-games-lawyer-for-musk-antitrust-trial/"
+                "https://www.newsbytesapp.com/news/science/openai-launches-chatgpt-health-for-us-android-users-syncing-wearables/tldr"
               ]
             },
             {
-              "fact": "AppleとGoogleは2026年1月12日に、Appleの次世代AIモデルをGemini技術で開発するための複数年契約を発表した",
+              "fact": "機能は睡眠、ワークアウト、日々の習慣に関するパーソナライズされたアドバイスを提供し、DotsというAIアシスタントが忙しさに応じたワークアウトの提案を行う。",
               "source_urls": [
-                "https://dataconomy.com/2026/11/26/openai-hires-epic-games-lawyer-for-musk-antitrust-trial/"
-              ]
-            },
-            {
-              "fact": "Graphiteによると、2026年9月の6つのサービスのセッションの89%がモバイルアプリまたはモバイルブラウザを通じて記録され、デスクトップブラウザは11%であった",
-              "source_urls": [
-                "https://dataconomy.com/2026/11/26/openai-hires-epic-games-lawyer-for-musk-antitrust-trial/"
+                "https://www.newsbytesapp.com/news/science/openai-launches-chatgpt-health-for-us-android-users-syncing-wearables/tldr"
               ]
             }
           ],
@@ -155,9 +148,9 @@
       }
     },
     {
-      "watch_topic_id": "safety_security_regulation",
-      "title": "富士通、OpenAIのサイバー防御パートナープログラム「Daybreak Defense Network」に参画",
-      "summary": "富士通は11月25日、OpenAIとの連携を拡大し、サイバー防御パートナープログラム「Daybreak Defense Network」に参画した。",
+      "watch_topic_id": "enterprise_infrastructure",
+      "title": "OpenAI、エピックゲームズ元弁護士を雇用、マスク氏の独占禁止法訴訟を担当",
+      "summary": "OpenAIはCravath, Swaine & Mooreの litigation co-headであるGary Bornsteinを雇用し、2027年3月にテキサス州フォートワースで予定されているエリオン・マスク氏のxAIに対する独占禁止法訴訟を担当する Bornsteinはかつてエピックゲームズの反トラスト訴訟において、Googleに対する全員一致の陪審評決を勝ち取り、Appleの代替決済手段への顧客誘導を制限する永久禁令を勝ち取った AppleとGoogleは2026年1月12日に、Appleの次世代AIモデルをGemini技術で開発するための複数年契約を発表した Graphiteによると、2026年9月の6つのサービスのセッションの89%がモバイルアプリまたはモバイルブラウザを通じて記録され、デスクトップブラウザは11%であった",
       "section_id": "openai",
       "category": "OpenAI",
       "source_published_date": "2026-11-26",
@@ -165,74 +158,44 @@
       "priority_class": "standard",
       "change_class": "new_event",
       "detail": {
-        "slug": "auto-ff391e3ce057-2026-11-28.html",
+        "slug": "auto-0341395bf8a3-2026-11-28.html",
         "sources": [
           {
-            "label": "japan.zdnet.com",
-            "url": "https://japan.zdnet.com/article/35255427/"
+            "label": "dataconomy.com",
+            "url": "https://dataconomy.com/2026/11/26/openai-hires-epic-games-lawyer-for-musk-antitrust-trial/"
           }
         ],
-        "summary": "富士通は11月25日、OpenAIとの連携を拡大し、サイバー防御パートナープログラム「Daybreak Defense Network」に参画した。",
+        "summary": "OpenAIはCravath, Swaine & Mooreの litigation co-headであるGary Bornsteinを雇用し、2027年3月にテキサス州フォートワースで予定されているエリオン・マスク氏のxAIに対する独占禁止法訴訟を担当する Bornsteinはかつてエピックゲームズの反トラスト訴訟において、Googleに対する全員一致の陪審評決を勝ち取り、Appleの代替決済手段への顧客誘導を制限する永久禁令を勝ち取った AppleとGoogleは2026年1月12日に、Appleの次世代AIモデルをGemini技術で開発するための複数年契約を発表した Graphiteによると、2026年9月の6つのサービスのセッションの89%がモバイルアプリまたはモバイルブラウザを通じて記録され、デスクトップブラウザは11%であった",
         "summary_basis": {
           "confirmed_facts": [
-            "富士通は11月25日、OpenAIとの連携を拡大し、サイバー防御パートナープログラム「Daybreak Defense Network」に参画した。"
+            "OpenAIはCravath, Swaine & Mooreの litigation co-headであるGary Bornsteinを雇用し、2027年3月にテキサス州フォートワースで予定されているエリオン・マスク氏のxAIに対する独占禁止法訴訟を担当する",
+            "Bornsteinはかつてエピックゲームズの反トラスト訴訟において、Googleに対する全員一致の陪審評決を勝ち取り、Appleの代替決済手段への顧客誘導を制限する永久禁令を勝ち取った",
+            "AppleとGoogleは2026年1月12日に、Appleの次世代AIモデルをGemini技術で開発するための複数年契約を発表した",
+            "Graphiteによると、2026年9月の6つのサービスのセッションの89%がモバイルアプリまたはモバイルブラウザを通じて記録され、デスクトップブラウザは11%であった"
           ],
           "fact_sources": [
             {
-              "fact": "富士通は11月25日、OpenAIとの連携を拡大し、サイバー防御パートナープログラム「Daybreak Defense Network」に参画した。",
+              "fact": "OpenAIはCravath, Swaine & Mooreの litigation co-headであるGary Bornsteinを雇用し、2027年3月にテキサス州フォートワースで予定されているエリオン・マスク氏のxAIに対する独占禁止法訴訟を担当する",
               "source_urls": [
-                "https://japan.zdnet.com/article/35255427/"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-11-26"
-          ]
-        }
-      }
-    },
-    {
-      "watch_topic_id": "enterprise_infrastructure",
-      "title": "OpenAI、米Androidユーザー向けにウェアラブル連携の健康機能「ChatGPT Health」を開始",
-      "summary": "米Androidユーザー向けにウェアラブルデータと連携した健康機能「ChatGPT Health」を開始。 対象は米国のFree、Go、Plus、Proプランの18歳以上のログインユーザー。 機能は睡眠、ワークアウト、日々の習慣に関するパーソナライズされたアドバイスを提供し、DotsというAIアシスタントが忙しさに応じたワークアウトの提案を行う。",
-      "section_id": "openai",
-      "category": "OpenAI",
-      "source_published_date": "2026-11-26",
-      "topic_value_class": "technical_or_product_shift",
-      "priority_class": "standard",
-      "change_class": "new_event",
-      "detail": {
-        "slug": "auto-f2e20ce4d81a-2026-11-28.html",
-        "sources": [
-          {
-            "label": "newsbytesapp.com",
-            "url": "https://www.newsbytesapp.com/news/science/openai-launches-chatgpt-health-for-us-android-users-syncing-wearables/tldr"
-          }
-        ],
-        "summary": "米Androidユーザー向けにウェアラブルデータと連携した健康機能「ChatGPT Health」を開始。 対象は米国のFree、Go、Plus、Proプランの18歳以上のログインユーザー。 機能は睡眠、ワークアウト、日々の習慣に関するパーソナライズされたアドバイスを提供し、DotsというAIアシスタントが忙しさに応じたワークアウトの提案を行う。",
-        "summary_basis": {
-          "confirmed_facts": [
-            "米Androidユーザー向けにウェアラブルデータと連携した健康機能「ChatGPT Health」を開始。",
-            "対象は米国のFree、Go、Plus、Proプランの18歳以上のログインユーザー。",
-            "機能は睡眠、ワークアウト、日々の習慣に関するパーソナライズされたアドバイスを提供し、DotsというAIアシスタントが忙しさに応じたワークアウトの提案を行う。"
-          ],
-          "fact_sources": [
-            {
-              "fact": "米Androidユーザー向けにウェアラブルデータと連携した健康機能「ChatGPT Health」を開始。",
-              "source_urls": [
-                "https://www.newsbytesapp.com/news/science/openai-launches-chatgpt-health-for-us-android-users-syncing-wearables/tldr"
+                "https://dataconomy.com/2026/11/26/openai-hires-epic-games-lawyer-for-musk-antitrust-trial/"
               ]
             },
             {
-              "fact": "対象は米国のFree、Go、Plus、Proプランの18歳以上のログインユーザー。",
+              "fact": "Bornsteinはかつてエピックゲームズの反トラスト訴訟において、Googleに対する全員一致の陪審評決を勝ち取り、Appleの代替決済手段への顧客誘導を制限する永久禁令を勝ち取った",
               "source_urls": [
-                "https://www.newsbytesapp.com/news/science/openai-launches-chatgpt-health-for-us-android-users-syncing-wearables/tldr"
+                "https://dataconomy.com/2026/11/26/openai-hires-epic-games-lawyer-for-musk-antitrust-trial/"
               ]
             },
             {
-              "fact": "機能は睡眠、ワークアウト、日々の習慣に関するパーソナライズされたアドバイスを提供し、DotsというAIアシスタントが忙しさに応じたワークアウトの提案を行う。",
+              "fact": "AppleとGoogleは2026年1月12日に、Appleの次世代AIモデルをGemini技術で開発するための複数年契約を発表した",
               "source_urls": [
-                "https://www.newsbytesapp.com/news/science/openai-launches-chatgpt-health-for-us-android-users-syncing-wearables/tldr"
+                "https://dataconomy.com/2026/11/26/openai-hires-epic-games-lawyer-for-musk-antitrust-trial/"
+              ]
+            },
+            {
+              "fact": "Graphiteによると、2026年9月の6つのサービスのセッションの89%がモバイルアプリまたはモバイルブラウザを通じて記録され、デスクトップブラウザは11%であった",
+              "source_urls": [
+                "https://dataconomy.com/2026/11/26/openai-hires-epic-games-lawyer-for-musk-antitrust-trial/"
               ]
             }
           ],
@@ -315,6 +278,80 @@
       }
     },
     {
+      "watch_topic_id": "safety_security_regulation",
+      "title": "富士通、OpenAIのサイバー防御パートナープログラム「Daybreak Defense Network」に参画",
+      "summary": "富士通は11月25日、OpenAIとの連携を拡大し、サイバー防御パートナープログラム「Daybreak Defense Network」に参画した。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-26",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-ff391e3ce057-2026-11-28.html",
+        "sources": [
+          {
+            "label": "japan.zdnet.com",
+            "url": "https://japan.zdnet.com/article/35255427/"
+          }
+        ],
+        "summary": "富士通は11月25日、OpenAIとの連携を拡大し、サイバー防御パートナープログラム「Daybreak Defense Network」に参画した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "富士通は11月25日、OpenAIとの連携を拡大し、サイバー防御パートナープログラム「Daybreak Defense Network」に参画した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "富士通は11月25日、OpenAIとの連携を拡大し、サイバー防御パートナープログラム「Daybreak Defense Network」に参画した。",
+              "source_urls": [
+                "https://japan.zdnet.com/article/35255427/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-26"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_sales",
+      "title": "Honda、FIA Road Safety Indexで世界初の5スターを獲得",
+      "summary": "Hondaは、FIA Road Safety Indexの評価において、2025年に最高評価の3スターを獲得した後、新たな評価項目への対応を含め、17カ国への審査対象拡大を達成し、世界で初めて5スターを獲得しました。",
+      "section_id": "honda",
+      "category": "Honda",
+      "source_published_date": "2026-11-27",
+      "topic_value_class": "risk_or_safety_signal",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-ea76a747c10e-2026-11-28.html",
+        "sources": [
+          {
+            "label": "global.honda",
+            "url": "https://global.honda/jp/stories/208-2611-FIA-Road-Safety-Index.html?from=RSS"
+          }
+        ],
+        "summary": "Hondaは、FIA Road Safety Indexの評価において、2025年に最高評価の3スターを獲得した後、新たな評価項目への対応を含め、17カ国への審査対象拡大を達成し、世界で初めて5スターを獲得しました。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Hondaは、FIA Road Safety Indexの評価において、2025年に最高評価の3スターを獲得した後、新たな評価項目への対応を含め、17カ国への審査対象拡大を達成し、世界で初めて5スターを獲得しました。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Hondaは、FIA Road Safety Indexの評価において、2025年に最高評価の3スターを獲得した後、新たな評価項目への対応を含め、17カ国への審査対象拡大を達成し、世界で初めて5スターを獲得しました。",
+              "source_urls": [
+                "https://global.honda/jp/stories/208-2611-FIA-Road-Safety-Index.html?from=RSS"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-27"
+          ]
+        }
+      }
+    },
+    {
       "watch_topic_id": "china_sales",
       "title": "Acura INTEGRA Type Sを2026年12月に発売、250台限定",
       "summary": "Acura INTEGRA Type Sは6速マニュアルトランスミッションと2.0L VTEC TURBOエンジンを搭載するプレミアムパフォーマンスモデルとして2026年12月に発売される。 今回の導入は、国土交通省が2026年2月に創設した米国製乗用車に関する認定制度を活用したものであり、米国で生産される魅力的なモデルを日本のお客様にお届けする。",
@@ -359,31 +396,31 @@
       }
     },
     {
-      "watch_topic_id": "china_sales",
-      "title": "Honda、FIA Road Safety Indexで世界初の5スターを獲得",
-      "summary": "Hondaは、FIA Road Safety Indexの評価において、2025年に最高評価の3スターを獲得した後、新たな評価項目への対応を含め、17カ国への審査対象拡大を達成し、世界で初めて5スターを獲得しました。",
-      "section_id": "honda",
-      "category": "Honda",
+      "watch_topic_id": "fia_regulation_development",
+      "title": "ホンダ、FIA道路安全指数で初の5スター評価を獲得",
+      "summary": "ホンダは、FIA Road Safety Indexの評価において、2025年当時の最高評価であった3スターから、新たな評価項目を含む審査対象を17カ国へ拡大した結果、初の5スターを獲得しました。",
+      "section_id": "f1",
+      "category": "F1",
       "source_published_date": "2026-11-27",
       "topic_value_class": "risk_or_safety_signal",
       "priority_class": "standard",
       "change_class": "new_event",
       "detail": {
-        "slug": "auto-ea76a747c10e-2026-11-28.html",
+        "slug": "auto-48a4702963a3-2026-11-28.html",
         "sources": [
           {
             "label": "global.honda",
             "url": "https://global.honda/jp/stories/208-2611-FIA-Road-Safety-Index.html?from=RSS"
           }
         ],
-        "summary": "Hondaは、FIA Road Safety Indexの評価において、2025年に最高評価の3スターを獲得した後、新たな評価項目への対応を含め、17カ国への審査対象拡大を達成し、世界で初めて5スターを獲得しました。",
+        "summary": "ホンダは、FIA Road Safety Indexの評価において、2025年当時の最高評価であった3スターから、新たな評価項目を含む審査対象を17カ国へ拡大した結果、初の5スターを獲得しました。",
         "summary_basis": {
           "confirmed_facts": [
-            "Hondaは、FIA Road Safety Indexの評価において、2025年に最高評価の3スターを獲得した後、新たな評価項目への対応を含め、17カ国への審査対象拡大を達成し、世界で初めて5スターを獲得しました。"
+            "ホンダは、FIA Road Safety Indexの評価において、2025年当時の最高評価であった3スターから、新たな評価項目を含む審査対象を17カ国へ拡大した結果、初の5スターを獲得しました。"
           ],
           "fact_sources": [
             {
-              "fact": "Hondaは、FIA Road Safety Indexの評価において、2025年に最高評価の3スターを獲得した後、新たな評価項目への対応を含め、17カ国への審査対象拡大を達成し、世界で初めて5スターを獲得しました。",
+              "fact": "ホンダは、FIA Road Safety Indexの評価において、2025年当時の最高評価であった3スターから、新たな評価項目を含む審査対象を17カ国へ拡大した結果、初の5スターを獲得しました。",
               "source_urls": [
                 "https://global.honda/jp/stories/208-2611-FIA-Road-Safety-Index.html?from=RSS"
               ]
@@ -433,103 +470,45 @@
       }
     },
     {
-      "watch_topic_id": "fia_regulation_development",
-      "title": "ホンダ、FIA道路安全指数で初の5スター評価を獲得",
-      "summary": "ホンダは、FIA Road Safety Indexの評価において、2025年当時の最高評価であった3スターから、新たな評価項目を含む審査対象を17カ国へ拡大した結果、初の5スターを獲得しました。",
+      "watch_topic_id": "race_schedule_results",
+      "title": "F1カタールGP、タイヤ1セットの使用を最大27周に制限",
+      "summary": "2026年F1第22戦カタールGPのフリー走行2回目が11月28日に実施され、アンドレア・キミ・アントネッリがトップタイムをマークした。 2番手はジョージ・ラッセル、3番手はランド・ノリスとなっている。",
       "section_id": "f1",
       "category": "F1",
-      "source_published_date": "2026-11-27",
-      "topic_value_class": "risk_or_safety_signal",
+      "source_published_date": "2026-11-28",
+      "topic_value_class": "decision_or_policy",
       "priority_class": "standard",
       "change_class": "new_event",
       "detail": {
-        "slug": "auto-48a4702963a3-2026-11-28.html",
+        "slug": "auto-a802016cdf15-2026-11-28.html",
         "sources": [
           {
-            "label": "global.honda",
-            "url": "https://global.honda/jp/stories/208-2611-FIA-Road-Safety-Index.html?from=RSS"
+            "label": "news.yahoo.co.jp",
+            "url": "https://news.yahoo.co.jp/articles/22ef5c4672be937dd4b96decec4470aec7e7d1a9?source=rss"
           }
         ],
-        "summary": "ホンダは、FIA Road Safety Indexの評価において、2025年当時の最高評価であった3スターから、新たな評価項目を含む審査対象を17カ国へ拡大した結果、初の5スターを獲得しました。",
+        "summary": "2026年F1第22戦カタールGPのフリー走行2回目が11月28日に実施され、アンドレア・キミ・アントネッリがトップタイムをマークした。 2番手はジョージ・ラッセル、3番手はランド・ノリスとなっている。",
         "summary_basis": {
           "confirmed_facts": [
-            "ホンダは、FIA Road Safety Indexの評価において、2025年当時の最高評価であった3スターから、新たな評価項目を含む審査対象を17カ国へ拡大した結果、初の5スターを獲得しました。"
+            "2026年F1第22戦カタールGPのフリー走行2回目が11月28日に実施され、アンドレア・キミ・アントネッリがトップタイムをマークした。",
+            "2番手はジョージ・ラッセル、3番手はランド・ノリスとなっている。"
           ],
           "fact_sources": [
             {
-              "fact": "ホンダは、FIA Road Safety Indexの評価において、2025年当時の最高評価であった3スターから、新たな評価項目を含む審査対象を17カ国へ拡大した結果、初の5スターを獲得しました。",
+              "fact": "2026年F1第22戦カタールGPのフリー走行2回目が11月28日に実施され、アンドレア・キミ・アントネッリがトップタイムをマークした。",
               "source_urls": [
-                "https://global.honda/jp/stories/208-2611-FIA-Road-Safety-Index.html?from=RSS"
+                "https://news.yahoo.co.jp/articles/22ef5c4672be937dd4b96decec4470aec7e7d1a9?source=rss"
+              ]
+            },
+            {
+              "fact": "2番手はジョージ・ラッセル、3番手はランド・ノリスとなっている。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/22ef5c4672be937dd4b96decec4470aec7e7d1a9?source=rss"
               ]
             }
           ],
           "source_dates": [
-            "2026-11-27"
-          ]
-        }
-      }
-    },
-    {
-      "watch_topic_id": "business_contracts",
-      "title": "ウクライナ政府支配地域でStarlinkの運用が正常化",
-      "summary": "ウクライナ政府の支配地域ではStarlinkの通信速度が正常化しており、迎撃ドローンの追跡が可能になっている ゼレンスキー大統領は11月27日、米国がキーウに「前向きなシグナル」を送ったと明らかにした ゼレンスキー大統領は、Starlinkの運用はSpaceXが担う技術面の問題であり、政治的な決定の問題であると述べた ゼレンスキー大統領は10月半ばに同様の問題が起きた後、ウクライナは再びStarshieldの運用制限に直面したと明らかにした 安全審査の完了後、各社は周波数の申請が可能になる",
-      "section_id": "spacex",
-      "category": "SpaceX",
-      "source_published_date": "2026-11-27",
-      "topic_value_class": "event_result_or_outcome",
-      "priority_class": "standard",
-      "change_class": "new_event",
-      "detail": {
-        "slug": "auto-acdfa778c9bb-2026-11-28.html",
-        "sources": [
-          {
-            "label": "mezha.net",
-            "url": "https://mezha.net/jp/news/mezha-b44f9f2a88d15fa011ab94f1_zelensky-says-starlink-service-has-returned/"
-          }
-        ],
-        "summary": "ウクライナ政府の支配地域ではStarlinkの通信速度が正常化しており、迎撃ドローンの追跡が可能になっている ゼレンスキー大統領は11月27日、米国がキーウに「前向きなシグナル」を送ったと明らかにした ゼレンスキー大統領は、Starlinkの運用はSpaceXが担う技術面の問題であり、政治的な決定の問題であると述べた ゼレンスキー大統領は10月半ばに同様の問題が起きた後、ウクライナは再びStarshieldの運用制限に直面したと明らかにした 安全審査の完了後、各社は周波数の申請が可能になる",
-        "summary_basis": {
-          "confirmed_facts": [
-            "ウクライナ政府の支配地域ではStarlinkの通信速度が正常化しており、迎撃ドローンの追跡が可能になっている",
-            "ゼレンスキー大統領は11月27日、米国がキーウに「前向きなシグナル」を送ったと明らかにした",
-            "ゼレンスキー大統領は、Starlinkの運用はSpaceXが担う技術面の問題であり、政治的な決定の問題であると述べた",
-            "ゼレンスキー大統領は10月半ばに同様の問題が起きた後、ウクライナは再びStarshieldの運用制限に直面したと明らかにした",
-            "安全審査の完了後、各社は周波数の申請が可能になる"
-          ],
-          "fact_sources": [
-            {
-              "fact": "ウクライナ政府の支配地域ではStarlinkの通信速度が正常化しており、迎撃ドローンの追跡が可能になっている",
-              "source_urls": [
-                "https://mezha.net/jp/news/mezha-b44f9f2a88d15fa011ab94f1_zelensky-says-starlink-service-has-returned/"
-              ]
-            },
-            {
-              "fact": "ゼレンスキー大統領は11月27日、米国がキーウに「前向きなシグナル」を送ったと明らかにした",
-              "source_urls": [
-                "https://mezha.net/jp/news/mezha-b44f9f2a88d15fa011ab94f1_zelensky-says-starlink-service-has-returned/"
-              ]
-            },
-            {
-              "fact": "ゼレンスキー大統領は、Starlinkの運用はSpaceXが担う技術面の問題であり、政治的な決定の問題であると述べた",
-              "source_urls": [
-                "https://mezha.net/jp/news/mezha-b44f9f2a88d15fa011ab94f1_zelensky-says-starlink-service-has-returned/"
-              ]
-            },
-            {
-              "fact": "ゼレンスキー大統領は10月半ばに同様の問題が起きた後、ウクライナは再びStarshieldの運用制限に直面したと明らかにした",
-              "source_urls": [
-                "https://mezha.net/jp/news/mezha-b44f9f2a88d15fa011ab94f1_zelensky-says-starlink-service-has-returned/"
-              ]
-            },
-            {
-              "fact": "安全審査の完了後、各社は周波数の申請が可能になる",
-              "source_urls": [
-                "https://mezha.net/jp/news/mezha-b44f9f2a88d15fa011ab94f1_zelensky-says-starlink-service-has-returned/"
-              ]
-            }
-          ],
-          "source_dates": [
-            "2026-11-27"
+            "2026-11-28"
           ]
         }
       }
@@ -639,6 +618,71 @@
           ],
           "source_dates": [
             "2026-11-26"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "business_contracts",
+      "title": "ウクライナ政府支配地域でStarlinkの運用が正常化",
+      "summary": "ウクライナ政府の支配地域ではStarlinkの通信速度が正常化しており、迎撃ドローンの追跡が可能になっている ゼレンスキー大統領は11月27日、米国がキーウに「前向きなシグナル」を送ったと明らかにした ゼレンスキー大統領は、Starlinkの運用はSpaceXが担う技術面の問題であり、政治的な決定の問題であると述べた ゼレンスキー大統領は10月半ばに同様の問題が起きた後、ウクライナは再びStarshieldの運用制限に直面したと明らかにした 安全審査の完了後、各社は周波数の申請が可能になる",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-11-27",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-acdfa778c9bb-2026-11-28.html",
+        "sources": [
+          {
+            "label": "mezha.net",
+            "url": "https://mezha.net/jp/news/mezha-b44f9f2a88d15fa011ab94f1_zelensky-says-starlink-service-has-returned/"
+          }
+        ],
+        "summary": "ウクライナ政府の支配地域ではStarlinkの通信速度が正常化しており、迎撃ドローンの追跡が可能になっている ゼレンスキー大統領は11月27日、米国がキーウに「前向きなシグナル」を送ったと明らかにした ゼレンスキー大統領は、Starlinkの運用はSpaceXが担う技術面の問題であり、政治的な決定の問題であると述べた ゼレンスキー大統領は10月半ばに同様の問題が起きた後、ウクライナは再びStarshieldの運用制限に直面したと明らかにした 安全審査の完了後、各社は周波数の申請が可能になる",
+        "summary_basis": {
+          "confirmed_facts": [
+            "ウクライナ政府の支配地域ではStarlinkの通信速度が正常化しており、迎撃ドローンの追跡が可能になっている",
+            "ゼレンスキー大統領は11月27日、米国がキーウに「前向きなシグナル」を送ったと明らかにした",
+            "ゼレンスキー大統領は、Starlinkの運用はSpaceXが担う技術面の問題であり、政治的な決定の問題であると述べた",
+            "ゼレンスキー大統領は10月半ばに同様の問題が起きた後、ウクライナは再びStarshieldの運用制限に直面したと明らかにした",
+            "安全審査の完了後、各社は周波数の申請が可能になる"
+          ],
+          "fact_sources": [
+            {
+              "fact": "ウクライナ政府の支配地域ではStarlinkの通信速度が正常化しており、迎撃ドローンの追跡が可能になっている",
+              "source_urls": [
+                "https://mezha.net/jp/news/mezha-b44f9f2a88d15fa011ab94f1_zelensky-says-starlink-service-has-returned/"
+              ]
+            },
+            {
+              "fact": "ゼレンスキー大統領は11月27日、米国がキーウに「前向きなシグナル」を送ったと明らかにした",
+              "source_urls": [
+                "https://mezha.net/jp/news/mezha-b44f9f2a88d15fa011ab94f1_zelensky-says-starlink-service-has-returned/"
+              ]
+            },
+            {
+              "fact": "ゼレンスキー大統領は、Starlinkの運用はSpaceXが担う技術面の問題であり、政治的な決定の問題であると述べた",
+              "source_urls": [
+                "https://mezha.net/jp/news/mezha-b44f9f2a88d15fa011ab94f1_zelensky-says-starlink-service-has-returned/"
+              ]
+            },
+            {
+              "fact": "ゼレンスキー大統領は10月半ばに同様の問題が起きた後、ウクライナは再びStarshieldの運用制限に直面したと明らかにした",
+              "source_urls": [
+                "https://mezha.net/jp/news/mezha-b44f9f2a88d15fa011ab94f1_zelensky-says-starlink-service-has-returned/"
+              ]
+            },
+            {
+              "fact": "安全審査の完了後、各社は周波数の申請が可能になる",
+              "source_urls": [
+                "https://mezha.net/jp/news/mezha-b44f9f2a88d15fa011ab94f1_zelensky-says-starlink-service-has-returned/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-27"
           ]
         }
       }
@@ -954,7 +998,7 @@
       "category": "OpenAI",
       "request_id": "openai-01-08450c49e1f679b9",
       "event_id": "g004",
-      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g004\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g004\", \"title\": \"オーストラリアAI議会委員会が著作権所有者への支払いメカニズムを推奨\", \"reasons\": [\"unsupported_title\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
+      "reason": "The read operation timed out"
     },
     {
       "category": "OpenAI",
@@ -966,7 +1010,7 @@
       "category": "OpenAI",
       "request_id": "openai-01-08450c49e1f679b9",
       "event_id": "g003",
-      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g003\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g003\", \"title\": \"OpenAI、日常業務向けAI「GPT-6.2 Sol」を公開\", \"reasons\": [\"summary_repetition\", \"insufficient_facts\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
+      "reason": "The read operation timed out"
     },
     {
       "category": "OpenAI",
@@ -978,19 +1022,19 @@
       "category": "OpenAI",
       "request_id": "openai-02-a63231eb3d5131fc",
       "event_id": "g014",
-      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g014\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g014\", \"title\": \"SoCal Digital Marketing、ChatGPT広告管理サービスを開始\", \"reasons\": [\"summary_repetition\", \"insufficient_facts\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g014\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g014\", \"title\": \"SoCal Digital Marketing、ChatGPT広告管理サービスを開始\", \"reasons\": [\"insufficient_facts\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
     },
     {
       "category": "SoftBank",
       "request_id": "softbank-01-c41f921c42c48155",
       "event_id": "g002",
-      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g002\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g002\", \"title\": \"ソフトバンク、新端末「シンプルスマホ8」を12月4日に発売\", \"reasons\": [\"unsupported_summary_point\"], \"unsupported_facts\": [\"「シンプルスマホ8」はシャープ製で、シャンパンゴールド、ブルー、レッドの3色を展開する\"], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": [\"e001:f01\"]}], \"unpublishable_items\": []}"
+      "reason": "The read operation timed out"
     },
     {
       "category": "SoftBank",
       "request_id": "softbank-01-c41f921c42c48155",
       "event_id": "g001",
-      "reason": "each point needs Japanese text and exact source fact IDs"
+      "reason": "The read operation timed out"
     },
     {
       "category": "Honda",
@@ -1014,7 +1058,7 @@
       "category": "Honda",
       "request_id": "honda-02-2e3f4e4597defc24",
       "event_id": "g006",
-      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g006\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g006\", \"title\": \"アストンマーティン、ホンダエンジンの性能不足を認め\", \"reasons\": [\"unsupported_title\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
+      "reason": "The read operation timed out"
     },
     {
       "category": "Honda",
@@ -1026,25 +1070,19 @@
       "category": "F1",
       "request_id": "f1-01-b833b2951a49db70",
       "event_id": "g001",
-      "reason": "each point needs Japanese text and exact source fact IDs"
+      "reason": "The read operation timed out"
     },
     {
       "category": "F1",
       "request_id": "f1-01-b833b2951a49db70",
       "event_id": "g005",
-      "reason": "Unterminated string starting at: line 1 column 573 (char 572)"
-    },
-    {
-      "category": "F1",
-      "request_id": "f1-01-b833b2951a49db70",
-      "event_id": "g006",
-      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g006\": [\"e008:f01\", \"e008:f02\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g005\": [\"e006:f01\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
     },
     {
       "category": "SpaceX",
       "request_id": "spacex-01-1abcf29db4cd5926",
       "event_id": "g001",
-      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g001\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g001\", \"title\": \"ベトナムのViettel TelecomがStarlink衛星インターネットサービスを開始\", \"reasons\": [\"unsupported_summary_point\"], \"unsupported_facts\": [\"月額1,590,000ベトナムドン（約60米ドル）から提供するパッケージを開始した\"], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": [\"e002:f10\"]}], \"unpublishable_items\": []}"
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g001\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g001\", \"title\": \"ベトナムのViettel TelecomがStarlink衛星インターネットサービスを開始\", \"reasons\": [\"unsupported_summary_point\"], \"unsupported_facts\": [\"月額1,590,000ベトナムドン（約60米ドル）から提供するパッケージを開始した\"], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
     },
     {
       "category": "SpaceX",
@@ -1068,7 +1106,7 @@
       "category": "日本経済",
       "request_id": "japan_economy-01-de245f9c15df35fd",
       "event_id": "g002",
-      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g002\": [\"e003:f12\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+      "reason": "The read operation timed out"
     },
     {
       "category": "日本経済",
@@ -1080,13 +1118,13 @@
       "category": "YOASOBI / 幾田りら",
       "request_id": "yoasobi_ikuta-01-32a6729fd84d95dd",
       "event_id": "g001",
-      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g001\": [\"e001:f04\", \"e001:f16\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g001\": [\"e001:f16\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
     },
     {
       "category": "アジア経済",
       "request_id": "asia-01-bb8b1b4e00356e3f",
       "event_id": "g004",
-      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g004\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g004\", \"title\": \"中国の工業用ロボット普及が農産物サプライチェーンの安全性を高める\", \"reasons\": [\"unsupported_title\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g004\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g004\", \"title\": \"中国の工業用ロボット普及が農産物サプライチェーンの安定性とセキュリティを強化\", \"reasons\": [\"unsupported_title\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
     },
     {
       "category": "アジア経済",
@@ -1098,13 +1136,13 @@
       "category": "北米経済",
       "request_id": "north_america-01-4bf9a67c155b23e2",
       "event_id": "g002",
-      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g002\": [\"e001:f01\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g002\": [\"e001:f01\", \"e001:f10\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
     },
     {
       "category": "北米経済",
       "request_id": "north_america-01-4bf9a67c155b23e2",
       "event_id": "g005",
-      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g005\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g005\", \"title\": \"米国の自動車・鉄鋼関税の変更に伴い、カナダが含まれる可能性を示唆\", \"reasons\": [\"unsupported_title\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g005\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g005\", \"title\": \"米国の自動車・鉄鋼関税変更にカナダ含む可能性、グリーア氏示唆\", \"reasons\": [\"unsupported_title\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": [\"e002:f05\"]}], \"unpublishable_items\": []}"
     },
     {
       "category": "北米経済",
@@ -1122,7 +1160,7 @@
       "category": "宇都宮ブレックス",
       "request_id": "brex-01-b52a17ab6de13c54",
       "event_id": "g003",
-      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g003\": [\"e001:f01\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+      "reason": "each point needs Japanese text and exact source fact IDs"
     },
     {
       "category": "宇都宮ブレックス",
@@ -1134,8 +1172,8 @@
       "category": "宇都宮ブレックス",
       "request_id": "brex-01-b52a17ab6de13c54",
       "event_id": "g002",
-      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g002\": [\"e004:f01\", \"e004:f06\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g002\": [\"e004:f01\", \"e004:f05\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
     }
   ],
-  "hero_copy": "眠りにつく前に、世界の輪郭を整える。次の朝に見落としたくない変化だけを、出典と日付を残して読む。 速報版。原典照合を通過した記事を掲載しています。編集確認中 OpenAI 5件、SoftBank 2件、Honda 5件、F1 3件、SpaceX 2件、日本経済 4件、YOASOBI / 幾田りら 1件、アジア経済 2件、北米経済 4件、宇都宮ブレックス 3件。"
+  "hero_copy": "眠りにつく前に、世界の輪郭を整える。次の朝に見落としたくない変化だけを、出典と日付を残して読む。 速報版。原典照合を通過した記事を掲載しています。編集確認中 OpenAI 5件、SoftBank 2件、Honda 5件、F1 2件、SpaceX 2件、日本経済 4件、YOASOBI / 幾田りら 1件、アジア経済 2件、北米経済 4件、宇都宮ブレックス 3件。"
 }
