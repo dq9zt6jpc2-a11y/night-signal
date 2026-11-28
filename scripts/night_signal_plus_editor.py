@@ -820,12 +820,32 @@ def apply_review(
             )
         )
     cards_by_category: dict[str, list[dict[str, Any]]] = {}
+    pending = []
     rejected_requests: list[dict[str, Any]] = []
     for request in requests:
         try:
-            request_cards = cards_from_response(
-                response_by_id[str(request["request_id"])], request, issue_date
-            )
+            response = response_by_id[str(request["request_id"])]
+            events = response.get("events", [])
+            if any(isinstance(e, dict) and e.get("decision") == "pending_validation" for e in events):
+                expected = sorted(e["id"] for e in request["payload"]["events"])
+                if sorted(e["event_id"] for e in events) != expected:
+                    fail("partial review must account for every event exactly once")
+                groups = {}
+                for eid, record in core.editor_evidence_records(request["_category_contract"], issue_date, request["_records"]):
+                    groups.setdefault(record["_editor_event_id"], []).append((eid, record))
+                request_cards = []
+                for event in events:
+                    event_id = event["event_id"]
+                    if event.get("decision") == "pending_validation":
+                        if event.get("items") != [] or not event.get("reason"):
+                            fail("pending review requires a reason and no published items")
+                        pending.append({"category": request["category"], "request_id": request["request_id"],
+                                        "event_id": event_id, "reason": event["reason"]})
+                    else:
+                        request_cards.extend(cards_from_response({"events": [event]}, request,
+                            issue_date, evidence_entries=groups[event_id]))
+            else:
+                request_cards = cards_from_response(response, request, issue_date)
         except ReviewResponseValidationError as exc:
             rejected_requests.append(
                 {"request_id": exc.request_id, **exc.details}
@@ -869,6 +889,14 @@ def apply_review(
         "cards": cards,
         "coverage_manifest": manifest,
     }
+    if pending:
+        issue["pending_editorial_events"] = pending
+        counts = {}
+        for entry in pending:
+            category = entry["category"]
+            counts[category] = counts.get(category, 0) + 1
+        issue["hero_copy"] = "眠りにつく前に、世界の輪郭を整える。次の朝に見落としたくない変化だけを、出典と日付を残して読む。 速報版。原典照合を通過した記事を掲載しています。編集確認中 " + "、".join(
+            f"{category} {count}件" for category, count in counts.items()) + "。"
     issue_path = state_root / issue_date / "issue.json"
     state.validate_issue_state(issue, issue_path, evidence)
     write_json_atomic(issue_path, issue)
@@ -881,11 +909,12 @@ def apply_review(
             len(request["payload"].get("events", [])) for request in requests
         ),
         "published_cards": len(cards),
+        "pending_events": len(pending),
         "excluded_events": sum(
             1
             for response in response_by_id.values()
             for event in response.get("events", [])
-            if isinstance(event, dict) and event.get("decision") != "publish"
+            if isinstance(event, dict) and event.get("decision") not in {"publish", "pending_validation"}
         ),
         "model_requests_from_repository": 0,
         "additional_paid_api_requests": 0,

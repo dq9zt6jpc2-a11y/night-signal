@@ -187,7 +187,7 @@ def checkpoint_matches(cached: object, checkpoint_id: str, request_id: str, even
     )
 
 
-def review_all_candidates(tasks, review_one, trial):
+def review_all_candidates(tasks, review_one, trial, *, allow_pending=False):
     """Keep processing other candidates when a bounded candidate attempt fails."""
     results = []
     failures = []
@@ -211,8 +211,13 @@ def review_all_candidates(tasks, review_one, trial):
                 editor.write_json_atomic(trial / "failed_candidates.json", failures)
             else:
                 results.append(result)
-    if failures:
+    if failures and not allow_pending:
         raise RecoverableReviewError(f"{len(failures)} candidates need another attempt; completed responses retained")
+    for failure in failures:
+        results.append({"request_id": failure["request_id"], "response": {"events": [{
+            "event_id": failure["event_id"], "decision": "pending_validation", "items": [],
+            "reason": failure["reason"][:2400],
+        }]}})
     return results
 
 
@@ -513,7 +518,7 @@ Do not repeat the input, include analysis, or add an events envelope.
         }
 
     by_request = {req["request_id"]: [] for req in requests}
-    for entry in review_all_candidates(tasks, review_one, trial):
+    for entry in review_all_candidates(tasks, review_one, trial, allow_pending=resume is not None):
         by_request[entry["request_id"]].extend(entry["response"]["events"])
     responses = [
         {"request_id": request_id, "response": {"events": events}}
