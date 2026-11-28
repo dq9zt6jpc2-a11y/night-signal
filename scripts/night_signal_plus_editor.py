@@ -701,7 +701,7 @@ def category_review_audit(
             and final_cards * 5 <= candidate_events
         )
         needs_follow_up = bool(
-            recall_risk
+            recall_risk or decisions.get("pending_validation", 0)
             or (
                 low_count
                 and (
@@ -740,9 +740,11 @@ def category_review_audit(
                     depth_specialist_resolved
                 ),
                 "depth_recovery_fallback_queries": depth_fallbacks,
+                "pending_validation": decisions.get("pending_validation", 0),
                 "low_count_status": (
                     "recall_risk"
                     if recall_risk
+                    else "pending_validation" if decisions.get("pending_validation", 0)
                     else "limited_evidence"
                     if needs_follow_up
                     else "supported"

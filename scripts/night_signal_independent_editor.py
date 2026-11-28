@@ -8,7 +8,7 @@ import json
 import os
 import re
 import subprocess
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from email.utils import parsedate_to_datetime
 from pathlib import Path
 from threading import Event, Lock
@@ -208,9 +208,25 @@ def checkpoint_matches(cached: object, checkpoint_id: str, request_id: str, even
     )
 
 
+def category_rounds(tasks):
+    """Start one body candidate from each category before spending a second turn there."""
+    groups = {}
+    for index, (_, event, message) in enumerate(tasks):
+        category = json.loads(message)["payload"]["category"]
+        groups.setdefault(category, []).append(index)
+
+    def priority(index):
+        rows = tasks[index][1]["evidence"]
+        body = [r for r in rows if r.get("evidence_depth") == "body"]
+        return (not body, not any(r.get("source_class") == "official" for r in body), index)
+
+    ordered = [sorted(group, key=priority) for group in groups.values()]
+    return [group[n] for n in range(max(map(len, ordered), default=0)) for group in ordered if n < len(group)]
+
+
 def review_all_candidates(tasks, review_one, trial, *, allow_pending=False):
     """Keep processing other candidates when a bounded candidate attempt fails."""
-    results = []
+    results = {}
     failures = []
 
     def attempt(task):
@@ -224,16 +240,17 @@ def review_all_candidates(tasks, review_one, trial, *, allow_pending=False):
             }
 
     with ThreadPoolExecutor(max_workers=3) as pool:
-        # Workers pull the next candidate as soon as they are free. map still
-        # returns in input order so the review contract stays deterministic.
-        for result, failure in pool.map(attempt, tasks):
+        futures = {pool.submit(attempt, tasks[i]): i for i in category_rounds(tasks)}
+        for future in as_completed(futures):
+            result, failure = future.result()
             if failure is not None:
                 failures.append(failure)
                 editor.write_json_atomic(trial / "failed_candidates.json", failures)
             else:
-                results.append(result)
+                results[futures[future]] = result
     if failures and not allow_pending:
         raise RecoverableReviewError(f"{len(failures)} candidates need another attempt; completed responses retained")
+    results = [results[i] for i in sorted(results)]
     for failure in failures:
         results.append({"request_id": failure["request_id"], "response": {"events": [{
             "event_id": failure["event_id"], "decision": "pending_validation", "items": [],
