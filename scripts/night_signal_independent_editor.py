@@ -50,6 +50,9 @@ def expand_compact_review(raw, event):
             raise RecoverableReviewError("each item needs points")
         points = []
         for point in item["points"]:
+            # Both encodings carry the same explicit references. Validate every ID below.
+            if isinstance(point, list) and len(point) == 2 and isinstance(point[1], list):
+                point = [point[0], *point[1]]
             if (not isinstance(point, list) or len(point) < 2 or
                     not isinstance(point[0], str) or
                     any(not isinstance(ref, str) or ref not in inventory for ref in point[1:])):
@@ -333,11 +336,17 @@ Do not repeat the input, include analysis, or add an events envelope.
     # Reuse only the failure classification, never an unchecked draft. The
     # archived packet must exactly match the issue before using even this hint.
     split_on_resume = set()
+    prior_errors = {}
     if resume is not None:
         try:
             previous_packet = resume / "state" / issue_date / "editor_packet.json"
             if previous_packet.read_bytes() == packet_path.read_bytes():
                 failures = json.loads((resume / "failed_candidates.json").read_text())
+                prior_errors = {
+                    (f["request_id"], f["event_id"]): f["reason"][:2400]
+                    for f in failures if isinstance(f, dict)
+                    and all(isinstance(f.get(k), str) for k in ("request_id", "event_id", "reason"))
+                }
                 split_on_resume = {
                     (f["request_id"], f["event_id"]) for f in failures if isinstance(f, dict)
                     and isinstance(f.get("request_id"), str) and isinstance(f.get("event_id"), str)
@@ -408,6 +417,10 @@ Do not repeat the input, include analysis, or add an events envelope.
 
         def checked_response(extra):
             nonlocal was_truncated
+            if not extra and not was_truncated:
+                prior = prior_errors.get((request_id, event_id))
+                if prior:
+                    extra = "\nPrevious attempt failed validation. Correct the following issue using only the supplied evidence: " + prior
             try:
                 raw = (staged_review(infer, message, source_event, reserve_segment, extra) if was_truncated
                        else infer(instructions + extra, message))
