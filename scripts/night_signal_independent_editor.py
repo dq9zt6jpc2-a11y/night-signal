@@ -242,6 +242,31 @@ def review_all_candidates(tasks, review_one, trial, *, allow_pending=False):
     return results
 
 
+def inference_policy(policy):
+    """Compact the reviewed policy revision only. Future revisions travel verbatim."""
+    clauses = {k: v for k, v in policy.items() if k != "allowed_topic_value_classes"}
+    digest = hashlib.sha256(json.dumps(clauses, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
+    if digest != "7eaa486abbecb69f9fe0e86eeb859c178ef235fbe7f6c0fdc3e58c029cfb18bc":
+        return policy
+    return {
+        "allowed_topic_value_classes": policy["allowed_topic_value_classes"],
+        "rules": (
+            "Review every event without a quota. Prioritize verified news including earnings and market moves. "
+            "Prefer primary and specialist bodies. Keep all distinct material facts across sources and enough "
+            "context for a self-contained Japanese account. Past articles, effective dates and related links "
+            "alone do not establish news. Use concrete new body facts even without an explicit event date. "
+            "For body evidence with no substantive change use no_material_update. For each assertion cite "
+            "only its supporting sentence IDs in the requested compact array. Retain original entity spelling "
+            "or exact numeric anchors, dates, units, time zones, comparisons, scope, reasons and conditions. "
+            "Distinguish plans, reports, approvals and outcomes. No invented arithmetic, causal links or records. "
+            "Remove navigation, quotes widgets and headline repetition. Check required facts and overflow "
+            "qualifiers against available text. Fix faulty clauses without discarding supported facts. "
+            "Optional analysis requires two independent body sources; distinguish inference, counterargument "
+            "and uncertainty without repeating the reporting."
+        ),
+    }
+
+
 def run_review(packet_path: Path, evidence_path: Path, trial: Path, infer, *, sample: bool = False, history_commit: str = "", resume: Path | None = None) -> dict:
     packet = editor.read_json(packet_path)
     digest = hashlib.sha256(evidence_path.read_bytes()).hexdigest()
@@ -277,9 +302,10 @@ Check the actual entity; similar names across industries are not evidence of rel
 Reader-facing titles and every summary point must be in Japanese, including for English sources.
 Do not repeat the input, include analysis, or add an events envelope.
 """
+    compact_policy = inference_policy(packet["policy"])
     tasks = [
         (req["request_id"], event, json.dumps({
-            "policy": packet["policy"],
+            "policy": compact_policy,
             "payload": {**req["payload"], "events": [event]},
         }, ensure_ascii=False, separators=(",", ":")))
         for req in requests for event in req["payload"]["events"]
