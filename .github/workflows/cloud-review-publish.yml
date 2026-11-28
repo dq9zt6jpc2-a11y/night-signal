@@ -192,6 +192,7 @@ jobs:
               ' "$RUNNER_TEMP/editor_review.json" >/dev/null
               python3 scripts/night_signal_plus_editor.py "$ISSUE_DATE" \
                 --apply-review "$RUNNER_TEMP/editor_review.json"
+              cp "$RUNNER_TEMP/editor_review.json" "state/$ISSUE_DATE/editor_review.json"
             else
               python3 scripts/night_signal_cloud_review.py "$ISSUE_DATE" \
                 --review-ref "$REVIEW_REF" \
