@@ -66,6 +66,27 @@ def expand_compact_review(raw, event):
     return {"events": [{"event_id": event["id"], "decision": raw.get("decision"), "items": items}]}
 
 
+def repair_missing_facts(event, missing, infer, reserve):
+    """Translate just the omitted evidence, keeping source IDs assigned by the validator."""
+    facts = {}
+    for row in event["evidence"]:
+        for ref, sentence in re.findall(r"\[(e\d+:f\d+)\]\s*(.*?)(?=\[e\d+:f\d+\]|$)", row.get("body", ""), re.S):
+            if ref in missing and ref.partition(":")[0] == row["id"]:
+                facts[ref] = {"title": row["title"], "source": row.get("source"), "fact": sentence.strip()}
+    if set(facts) != set(missing) or not reserve():
+        raise RecoverableReviewError("missing fact repair unavailable")
+    draft = infer('Return {"sentences":[...]} with exactly one faithful Japanese sentence per '
+                  'source fact in order. Retain names, attribution, numbers and qualifications. '
+                  'Use the title only for context. Never invent a detail.',
+                  json.dumps([facts[ref] for ref in missing], ensure_ascii=False))
+    sentences = draft.get("sentences") if isinstance(draft, dict) else None
+    if (not isinstance(sentences, list) or len(sentences) != len(missing)
+            or any(not isinstance(t, str) or not t.strip() for t in sentences)):
+        raise RecoverableReviewError("incomplete missing fact repair")
+    return [{"text": sentence, "source_fact_ids": [ref], "evidence_ids": [ref.partition(":")[0]]}
+            for sentence, ref in zip(sentences, missing)]
+
+
 def staged_review(infer, message, event, reserve, feedback=""):
     """After truncation, select facts once, then write bounded groups of Japanese points."""
     plan = infer(
@@ -464,36 +485,42 @@ Do not repeat the input, include analysis, or add an events envelope.
                 details = getattr(exc.__cause__, "details", {})
                 rejected = details.get("rejected_items", [])
                 items = events[0].get("items", [])
-                if (len(items) != 1 or len(rejected) != 1
-                        or rejected[0].get("reasons") != ["unsupported_title"]):
-                    raise
-                points = items[0]["summary_points"]
-                cited = {ref for point in points for ref in point["evidence_ids"]}
-                titles = [row["title"] for row in source_event["evidence"] if row["id"] in cited]
-                # Try the original Japanese headline first without spending an inference call.
-                for title in dict.fromkeys(titles):
-                    if not re.search(r"[ぁ-んァ-ヶ一-龯]", title):
-                        continue
-                    items[0]["title"] = title
-                    try:
-                        validate(response)
-                    except RecoverableReviewError:
-                        continue
-                    break
-                else:
-                    if not reserve_segment():
-                        raise
-                    repair = infer(
-                        'Return {"title":"..."} only. Write a concise natural Japanese headline '
-                        'supported by the source headline and the verified points. Preserve the '
-                        'original spelling of named entities or an exact material numeric anchor.',
-                        json.dumps({"source_titles": titles, "points": [p["text"] for p in points]},
-                                   ensure_ascii=False),
-                    )
-                    if not isinstance(repair, dict) or not isinstance(repair.get("title"), str):
-                        raise RecoverableReviewError("headline repair returned no title")
-                    items[0]["title"] = repair["title"]
+                missing = details.get("missing_source_fact_ids_by_event", {}).get(event_id, [])
+                if missing and not rejected and len(items) == 1 and len(missing) <= 4:
+                    extra_points = repair_missing_facts(source_event, missing, infer, reserve_segment)
+                    items[0]["summary_points"].extend(extra_points)
                     validate(response)
+                else:
+                    if (len(items) != 1 or len(rejected) != 1
+                            or rejected[0].get("reasons") != ["unsupported_title"]):
+                        raise
+                    points = items[0]["summary_points"]
+                    cited = {ref for point in points for ref in point["evidence_ids"]}
+                    titles = [row["title"] for row in source_event["evidence"] if row["id"] in cited]
+                    # Try the original Japanese headline first without spending an inference call.
+                    for title in dict.fromkeys(titles):
+                        if not re.search(r"[ぁ-んァ-ヶ一-龯]", title):
+                            continue
+                        items[0]["title"] = title
+                        try:
+                            validate(response)
+                        except RecoverableReviewError:
+                            continue
+                        break
+                    else:
+                        if not reserve_segment():
+                            raise
+                        repair = infer(
+                            'Return {"title":"..."} only. Write a concise natural Japanese headline '
+                            'supported by the source headline and the verified points. Preserve the '
+                            'original spelling of named entities or an exact material numeric anchor.',
+                            json.dumps({"source_titles": titles, "points": [p["text"] for p in points]},
+                                       ensure_ascii=False),
+                        )
+                        if not isinstance(repair, dict) or not isinstance(repair.get("title"), str):
+                            raise RecoverableReviewError("headline repair returned no title")
+                        items[0]["title"] = repair["title"]
+                        validate(response)
             if repeats_previous_issue(events[0], source_event.get("previous_updates", [])):
                 used = sorted({
                     source_id
