@@ -1,5 +1,5 @@
 name: NIGHT SIGNAL Independent Editor Trial
-run-name: ${{ inputs.watchdog_probe && format('Independent editor watchdog probe {0}', inputs.issue_date) || format('Independent editor trial {0}', inputs.issue_date) }}
+run-name: ${{ inputs.supplement && format('Independent editor supplement {0}', inputs.issue_date) || inputs.watchdog_probe && format('Independent editor watchdog probe {0}', inputs.issue_date) || format('Independent editor trial {0}', inputs.issue_date) }}
 
 on:
   workflow_dispatch:
@@ -14,6 +14,10 @@ on:
         default: false
       watchdog_probe:
         description: Read-only deadline-bound trial requested by the scheduled watchdog
+        type: boolean
+        default: false
+      supplement:
+        description: One follow-up of a published provisional issue using its checkpoints
         type: boolean
         default: false
       resume_run_id:

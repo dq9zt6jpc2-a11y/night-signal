@@ -154,6 +154,12 @@ jobs:
             echo "Correction overlay requires a same-day rebuild."
             exit 0
           fi
+          if [[ -n "$INDEPENDENT_RUN_ID" && -f "state/$ISSUE_DATE/issue.json" ]] &&
+             jq -e '.pending_editorial_events | length > 0' "state/$ISSUE_DATE/issue.json" >/dev/null; then
+            cp "state/$ISSUE_DATE/issue.json" "$RUNNER_TEMP/previous-edition.json"
+            echo "published=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           if python3 scripts/publication_audit.py "$ISSUE_DATE"; then
             echo "published=true" >> "$GITHUB_OUTPUT"
             echo "The committed issue and both public URLs are already verified."
@@ -281,6 +287,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          if [[ -f "$RUNNER_TEMP/previous-edition.json" ]]; then
+            if ! python3 scripts/night_signal_edition_progress.py "$RUNNER_TEMP/previous-edition.json" "state/$ISSUE_DATE/issue.json"; then
+              echo "Keeping the verified edition; no additive improvement."
+              echo "proceed=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
           git fetch origin main
           if [[ "$(git rev-parse origin/main)" == "$BASE_SHA" ]]; then
             echo "proceed=true" >> "$GITHUB_OUTPUT"
@@ -395,6 +408,17 @@ jobs:
             git checkout --detach origin/main
             python3 scripts/publication_audit.py "$ISSUE_DATE"
           } 2>&1 | tee "$RUNNER_TEMP/verify.log"
+
+      - name: Resolve remaining candidates once after confirming provisional publication
+        if: ${{ steps.verify.outcome == 'success' && env.INDEPENDENT_RUN_ID != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if jq -e '.pending_editorial_events | length > 0' "state/$ISSUE_DATE/issue.json" >/dev/null &&
+             [[ "$(gh run view "$INDEPENDENT_RUN_ID" --json displayTitle --jq .displayTitle)" == "Independent editor watchdog probe $ISSUE_DATE" ]]; then
+            gh workflow run independent-editor-trial.yml --ref main -f "issue_date=$ISSUE_DATE" \
+              -f "resume_run_id=$INDEPENDENT_RUN_ID" -f "supplement=true"
+          fi
 
       - name: Preserve reader-side verification evidence
         if: ${{ always() && steps.verify.outcome != 'skipped' }}

@@ -16,7 +16,8 @@ jobs:
           github.event.workflow_run.conclusion == 'success' &&
           github.event.workflow_run.event == 'workflow_dispatch' &&
           github.event.workflow_run.head_repository.full_name == github.repository &&
-          startsWith(github.event.workflow_run.display_title, 'Independent editor watchdog probe ') }}
+          (startsWith(github.event.workflow_run.display_title, 'Independent editor watchdog probe ') ||
+           startsWith(github.event.workflow_run.display_title, 'Independent editor supplement ')) }}
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
@@ -29,6 +30,7 @@ jobs:
         run: |
           set -euo pipefail
           ISSUE_DATE="${RUN_TITLE#Independent editor watchdog probe }"
+          ISSUE_DATE="${ISSUE_DATE#Independent editor supplement }"
           [[ "$ISSUE_DATE" =~ ^20[0-9]{2}-[0-9]{2}-[0-9]{2}$ ]]
           [[ "$RUN_ID" =~ ^[0-9]+$ ]]
           # A delayed probe can finish successfully after skipping the editor.

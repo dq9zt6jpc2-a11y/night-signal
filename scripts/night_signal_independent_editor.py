@@ -362,6 +362,19 @@ Do not repeat the input, include analysis, or add an events envelope.
         except (OSError, ValueError, TypeError):
             pass
 
+    published_events = {}
+    published_dir = ROOT / "state" / issue_date
+    if resume is not None and (published_dir / "editor_review.json").is_file():
+        published_review = editor.read_json(published_dir / "editor_review.json")
+        if (published_review.get("evidence_sha256") == digest
+                and published_review.get("contract") == packet["contract"]
+                and (published_dir / "editor_packet.json").is_file()
+                and (published_dir / "editor_packet.json").read_bytes() == packet_path.read_bytes()):
+            for part in published_review["responses"]:
+                for event in part["response"]["events"]:
+                    if event.get("decision") != "pending_validation":
+                        published_events[part["request_id"], event["event_id"]] = event
+
     def review_one(task):
         request_id, source_event, message = task
         event_id = source_event["id"]
@@ -405,6 +418,10 @@ Do not repeat the input, include analysis, or add an events envelope.
                 cached = json.loads((resume / "responses" / f"{name}.json").read_text(encoding="utf-8"))
             except (OSError, ValueError):
                 cached = {}
+            committed = published_events.get((request_id, event_id))
+            if committed is not None:
+                cached = {"request_id": request_id, "checkpoint_id": checkpoint_id,
+                          "response": {"events": [committed]}}
             if checkpoint_matches(cached, checkpoint_id, request_id, event_id):
                 try:
                     validate(cached["response"])
