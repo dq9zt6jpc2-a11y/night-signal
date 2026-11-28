@@ -486,19 +486,39 @@ Do not repeat the input, include analysis, or add an events envelope.
 
         was_truncated = (request_id, event_id) in split_on_resume
 
-        def checked_response(extra):
-            nonlocal was_truncated
-            if not extra and not was_truncated:
-                prior = prior_errors.get((request_id, event_id))
-                if prior:
-                    extra = "\nPrevious attempt failed validation. Correct the following issue using only the supplied evidence: " + prior
+        # Store only narrowly repairable drafts, separately from accepted checkpoints.
+        draft_path = trial / "repair_drafts" / f"{name}.json"
+        saved_draft = None
+        if resume is not None:
             try:
-                raw = (staged_review(infer, message, source_event, reserve_segment, extra) if was_truncated
-                       else infer(instructions + extra, message))
-            except OutputLimitError:
-                was_truncated = True
-                raise
-            response = expand_compact_review(raw, source_event)
+                draft = json.loads((resume / "repair_drafts" / draft_path.name).read_text())
+                if checkpoint_matches(draft, checkpoint_id, request_id, event_id):
+                    saved_draft = draft["response"]
+            except (OSError, ValueError):
+                pass
+
+        def save_for_repair(response):
+            editor.write_json_atomic(draft_path, {"checkpoint_id": checkpoint_id,
+                                     "request_id": request_id, "response": response})
+
+        def checked_response(extra):
+            nonlocal was_truncated, saved_draft
+            if saved_draft is not None:
+                response, saved_draft = saved_draft, None
+                # The draft took the normal inference slot. Spend it on targeted repair.
+                release_slot()
+            else:
+                if not extra and not was_truncated:
+                    prior = prior_errors.get((request_id, event_id))
+                    if prior:
+                        extra = "\nPrevious attempt failed validation. Correct the following issue using only the supplied evidence: " + prior
+                try:
+                    raw = (staged_review(infer, message, source_event, reserve_segment, extra) if was_truncated
+                           else infer(instructions + extra, message))
+                except OutputLimitError:
+                    was_truncated = True
+                    raise
+                response = expand_compact_review(raw, source_event)
             events = response.get("events") if isinstance(response, dict) else None
             if not isinstance(events, list) or len(events) != 1 or not isinstance(events[0], dict):
                 raise RecoverableReviewError("response must contain exactly one event")
@@ -513,6 +533,7 @@ Do not repeat the input, include analysis, or add an events envelope.
                 items = events[0].get("items", [])
                 missing = details.get("missing_source_fact_ids_by_event", {}).get(event_id, [])
                 if missing and not rejected and len(items) == 1 and len(missing) <= 4:
+                    save_for_repair(response)
                     extra_points = repair_missing_facts(source_event, missing, infer, reserve_segment)
                     items[0]["summary_points"].extend(extra_points)
                     validate(response)
@@ -520,6 +541,7 @@ Do not repeat the input, include analysis, or add an events envelope.
                     if (len(items) != 1 or len(rejected) != 1
                             or rejected[0].get("reasons") != ["unsupported_title"]):
                         raise
+                    save_for_repair(response)
                     points = items[0]["summary_points"]
                     cited = {ref for point in points for ref in point["evidence_ids"]}
                     titles = [row["title"] for row in source_event["evidence"] if row["id"] in cited]
@@ -577,6 +599,7 @@ Do not repeat the input, include analysis, or add an events envelope.
             raise
         entry = {"request_id": request_id, "response": response, "checkpoint_id": checkpoint_id}
         editor.write_json_atomic(destination, entry)
+        draft_path.unlink(missing_ok=True)
         print(f"Completed {request_id}/{event_id} in {monotonic() - started:.1f}s", flush=True)
         return entry
 

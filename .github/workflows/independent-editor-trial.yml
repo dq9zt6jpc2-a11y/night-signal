@@ -74,7 +74,7 @@ jobs:
           python3 scripts/night_signal_operational_audit.py "$ISSUE_DATE" --report-only > "$audit"
           decision="$(python3 scripts/night_signal_editor_recovery_decision.py "$audit")"
           echo "$decision"
-          if [[ "$(jq -er .reason <<< "$decision")" == "eligible_for_independent_editor" ]]; then
+          if jq -e '.reason == "eligible_for_independent_editor" or .reason == "eligible_for_late_recovery"' <<< "$decision" >/dev/null; then
             echo "eligible=true" >> "$GITHUB_OUTPUT"
           fi
       - name: Generate and validate the independent review

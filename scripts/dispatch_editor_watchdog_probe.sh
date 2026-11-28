@@ -2,7 +2,8 @@
 set -euo pipefail
 audit="${1:?Missing operational audit}"
 decision="$(python3 scripts/night_signal_editor_recovery_decision.py "$audit")"
-if [[ "$(jq -er .reason <<< "$decision")" != "eligible_for_independent_editor" ]]; then
+eligible() { jq -e '.reason == "eligible_for_independent_editor" or .reason == "eligible_for_late_recovery"' >/dev/null; }
+if ! eligible <<< "$decision"; then
   exit 0
 fi
 
@@ -36,7 +37,7 @@ fresh_audit="$(mktemp)"
 trap 'unlink "$fresh_audit"' EXIT
 python3 scripts/night_signal_operational_audit.py "$issue_date" --report-only > "$fresh_audit"
 decision="$(python3 scripts/night_signal_editor_recovery_decision.py "$fresh_audit")"
-if [[ "$(jq -er .reason <<< "$decision")" == "eligible_for_independent_editor" ]]; then
+if eligible <<< "$decision"; then
   # The watchdog is serialized. Do not repeat a failed dispatch here, since the
   # server may have accepted the first request before the response was lost.
   gh workflow run independent-editor-trial.yml --ref main \

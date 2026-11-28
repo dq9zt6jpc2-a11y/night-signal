@@ -10,7 +10,7 @@ from zoneinfo import ZoneInfo
 from publication_timing import CONFIG_PATH, load_policy
 
 
-def assess(report, now, policy, owner_slots, trial_minutes):
+def assess(report, now, policy, owner_slots, trial_minutes, recovery_cutoff=time(22, 30)):
     zone = ZoneInfo(policy.timezone)
     now = now.astimezone(zone)
     issue = date.fromisoformat(report["issue_date"])
@@ -46,6 +46,8 @@ def assess(report, now, policy, owner_slots, trial_minutes):
         reason = "no_editor_action_requested"
     elif now < ready_after:
         reason = "waiting_for_web_recovery_window"
+    elif deadline <= now and now + timedelta(minutes=2 * trial_minutes + downstream) <= datetime.combine(issue, recovery_cutoff, zone):
+        reason = "eligible_for_late_recovery"
     elif now > latest_single:
         reason = "insufficient_deadline_budget"
     else:
@@ -58,6 +60,7 @@ def assess(report, now, policy, owner_slots, trial_minutes):
         "latest_single_trial": latest_single.isoformat(),
         "latest_trial_with_retry": latest_with_retry.isoformat(),
         "retry_fits": reason == "eligible_for_independent_editor" and now <= latest_with_retry,
+        "deadline_missed": now > deadline and not report.get("published"),
         "dispatched": False,
     }
 
@@ -67,5 +70,5 @@ if __name__ == "__main__":
     config = json.loads(CONFIG_PATH.read_text())
     slots = [time.fromisoformat(slot) for slot in config["editor_owner_heartbeats_jst"]]
     result = assess(report, datetime.now(ZoneInfo(config["timezone"])), load_policy(), slots,
-                    config["independent_editor_trial_budget_minutes"])
+                    config["independent_editor_trial_budget_minutes"], time.fromisoformat(config["late_recovery_cutoff_jst"]))
     print(json.dumps(result))

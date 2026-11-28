@@ -218,22 +218,12 @@ JSON responseは`night_signal_plus_editor.py`が全request、全event、Evidence
   より前に限り、同じ前日Evidenceと前日の日付表示のまま復旧公開できる。当日号の収集開始後
   は前日号をrootへ出さず、それ以前の日付は受け付けない。
 
-公開時刻は`config/night_signal_operations.json`だけが所有する。16:45以降のGitHub Actions
-heartbeatはWeb Evidenceとcompact packetだけを収集し、既存artifactがあれば再収集せず、
-AI、commit、Pages処理を行わない。GitHub pluginを明示したChatGPT Web Work modeの
-primary ownerは19:30、recovery ownerは20:30にaudit-firstで起動し、最新の有効packetを
-一度だけreviewする。各ownerは最初に`started` heartbeatを書き、GitHub writeが失敗した場合は
-review tokenを使わず停止する。review branchのpushを
-受けたGitHub Actionsが検証・commit・Pages公開を行う。後続回は先行回が成功済みなら
-小さいstatusだけを確認して即終了する。
-未公開の場合も、active collectorを重複dispatchせず、Evidence、review、Issue、commit、Pagesの
-完了済み段階を順に再利用する。22:30以降は通常の日次処理を新規開始しない。
-
-21:15、22:15、22:45のGitHub Actions watchdogは、ownerの到達とreview後のevent trigger欠落、restore、
-commit、push、Pages、公開反映だけを同じreviewから一度復旧する。review自体がない場合は
-AIの代替生成をせず、Evidence欠落、Web owner heartbeat欠落、task停止・権限不足を区別して
-失敗を明示する。Web taskの当日heartbeat、review、最終publication auditは別の証拠とし、
-repositoryの静的テストだけで本番稼働済みと判定しない。
+公開期限は日本時間19:00。時刻は `config/night_signal_operations.json` に集約する。
+収集完了時と期限前の監視で、確定Evidence、編集担当の記録、review、公開状態を確認する。
+独立編集は無料枠と自動公開が有効で、reviewがなく、実行時間を確保できる場合に起動する。
+進行中・実施済みの同日試行を照合し、再開には保存済みチェックポイントを使う。
+19時以降の監視では、22:30までに再試行と公開の時間を確保できる場合に遅配復旧を認める。
+後から読者向け公開を確認しても、19時の未達は監査記録に残す。
 
 review validatorは全requestを一度走査して全不合格request/eventを一括報告する。
 Web recovery ownerは大きい`editor_review.json`を書き直さず、不合格requestの完全なresponseだけを

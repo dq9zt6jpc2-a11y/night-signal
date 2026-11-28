@@ -1,6 +1,7 @@
 {
   "timezone": "Asia/Tokyo",
   "publication_deadline": "19:00",
+  "late_recovery_cutoff_jst": "22:30",
   "collection_window_anchor": "15:30",
   "build_timeout_minutes": 70,
   "pages_timeout_minutes": 20,
