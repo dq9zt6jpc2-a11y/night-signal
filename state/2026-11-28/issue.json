@@ -1,0 +1,1141 @@
+{
+  "issue_date": "2026-11-28",
+  "cards": [
+    {
+      "watch_topic_id": "enterprise_infrastructure",
+      "title": "OpenAI、コードックスとアストラを用いた2つのエキゾチック・プラネット探索で信号を報告",
+      "summary": "OpenAIは2026年11月24日、コードックスとアストラを用いた2つの別々のエキゾチック・プラネット探索の結果を報告した。 Kevin Bond氏はコードックスを用いてケプラー観測データを分析し、約10万個の恒星を対象に200件以上の信号を検出した。 Ethan Byrd氏はアストラを用いてTESSデータに関連する探索を行い、約1,900万個の恒星を対象に49件の候補を発見した。 SETI研究所のVishal Gajjar氏は、Bond氏のケプラーデータの中で2つの一致する信号を発見した。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-28",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-a0b618896dfe-2026-11-28.html",
+        "sources": [
+          {
+            "label": "neoteo.com",
+            "url": "https://www.neoteo.com/en/openai-reports-possible-signals-from-two-exoplanet-searches"
+          }
+        ],
+        "summary": "OpenAIは2026年11月24日、コードックスとアストラを用いた2つの別々のエキゾチック・プラネット探索の結果を報告した。 Kevin Bond氏はコードックスを用いてケプラー観測データを分析し、約10万個の恒星を対象に200件以上の信号を検出した。 Ethan Byrd氏はアストラを用いてTESSデータに関連する探索を行い、約1,900万個の恒星を対象に49件の候補を発見した。 SETI研究所のVishal Gajjar氏は、Bond氏のケプラーデータの中で2つの一致する信号を発見した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "OpenAIは2026年11月24日、コードックスとアストラを用いた2つの別々のエキゾチック・プラネット探索の結果を報告した。",
+            "Kevin Bond氏はコードックスを用いてケプラー観測データを分析し、約10万個の恒星を対象に200件以上の信号を検出した。",
+            "Ethan Byrd氏はアストラを用いてTESSデータに関連する探索を行い、約1,900万個の恒星を対象に49件の候補を発見した。",
+            "SETI研究所のVishal Gajjar氏は、Bond氏のケプラーデータの中で2つの一致する信号を発見した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "OpenAIは2026年11月24日、コードックスとアストラを用いた2つの別々のエキゾチック・プラネット探索の結果を報告した。",
+              "source_urls": [
+                "https://www.neoteo.com/en/openai-reports-possible-signals-from-two-exoplanet-searches"
+              ]
+            },
+            {
+              "fact": "Kevin Bond氏はコードックスを用いてケプラー観測データを分析し、約10万個の恒星を対象に200件以上の信号を検出した。",
+              "source_urls": [
+                "https://www.neoteo.com/en/openai-reports-possible-signals-from-two-exoplanet-searches"
+              ]
+            },
+            {
+              "fact": "Ethan Byrd氏はアストラを用いてTESSデータに関連する探索を行い、約1,900万個の恒星を対象に49件の候補を発見した。",
+              "source_urls": [
+                "https://www.neoteo.com/en/openai-reports-possible-signals-from-two-exoplanet-searches"
+              ]
+            },
+            {
+              "fact": "SETI研究所のVishal Gajjar氏は、Bond氏のケプラーデータの中で2つの一致する信号を発見した。",
+              "source_urls": [
+                "https://www.neoteo.com/en/openai-reports-possible-signals-from-two-exoplanet-searches"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-28"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "enterprise_infrastructure",
+      "title": "OpenAI、エピックゲームズ元弁護士を雇用、マスク氏の独占禁止法訴訟を担当",
+      "summary": "OpenAIはCravath, Swaine & Mooreの litigation co-headであるGary Bornsteinを雇用し、2027年3月にテキサス州フォートワースで予定されているエリオン・マスク氏のxAIに対する独占禁止法訴訟を担当する Bornsteinはかつてエピックゲームズの反トラスト訴訟において、Googleに対する全員一致の陪審評決を勝ち取り、Appleの代替決済手段への顧客誘導を制限する永久禁令を勝ち取った AppleとGoogleは2026年1月12日に、Appleの次世代AIモデルをGemini技術で開発するための複数年契約を発表した Graphiteによると、2026年9月の6つのサービスのセッションの89%がモバイルアプリまたはモバイルブラウザを通じて記録され、デスクトップブラウザは11%であった",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-26",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-0341395bf8a3-2026-11-28.html",
+        "sources": [
+          {
+            "label": "dataconomy.com",
+            "url": "https://dataconomy.com/2026/11/26/openai-hires-epic-games-lawyer-for-musk-antitrust-trial/"
+          }
+        ],
+        "summary": "OpenAIはCravath, Swaine & Mooreの litigation co-headであるGary Bornsteinを雇用し、2027年3月にテキサス州フォートワースで予定されているエリオン・マスク氏のxAIに対する独占禁止法訴訟を担当する Bornsteinはかつてエピックゲームズの反トラスト訴訟において、Googleに対する全員一致の陪審評決を勝ち取り、Appleの代替決済手段への顧客誘導を制限する永久禁令を勝ち取った AppleとGoogleは2026年1月12日に、Appleの次世代AIモデルをGemini技術で開発するための複数年契約を発表した Graphiteによると、2026年9月の6つのサービスのセッションの89%がモバイルアプリまたはモバイルブラウザを通じて記録され、デスクトップブラウザは11%であった",
+        "summary_basis": {
+          "confirmed_facts": [
+            "OpenAIはCravath, Swaine & Mooreの litigation co-headであるGary Bornsteinを雇用し、2027年3月にテキサス州フォートワースで予定されているエリオン・マスク氏のxAIに対する独占禁止法訴訟を担当する",
+            "Bornsteinはかつてエピックゲームズの反トラスト訴訟において、Googleに対する全員一致の陪審評決を勝ち取り、Appleの代替決済手段への顧客誘導を制限する永久禁令を勝ち取った",
+            "AppleとGoogleは2026年1月12日に、Appleの次世代AIモデルをGemini技術で開発するための複数年契約を発表した",
+            "Graphiteによると、2026年9月の6つのサービスのセッションの89%がモバイルアプリまたはモバイルブラウザを通じて記録され、デスクトップブラウザは11%であった"
+          ],
+          "fact_sources": [
+            {
+              "fact": "OpenAIはCravath, Swaine & Mooreの litigation co-headであるGary Bornsteinを雇用し、2027年3月にテキサス州フォートワースで予定されているエリオン・マスク氏のxAIに対する独占禁止法訴訟を担当する",
+              "source_urls": [
+                "https://dataconomy.com/2026/11/26/openai-hires-epic-games-lawyer-for-musk-antitrust-trial/"
+              ]
+            },
+            {
+              "fact": "Bornsteinはかつてエピックゲームズの反トラスト訴訟において、Googleに対する全員一致の陪審評決を勝ち取り、Appleの代替決済手段への顧客誘導を制限する永久禁令を勝ち取った",
+              "source_urls": [
+                "https://dataconomy.com/2026/11/26/openai-hires-epic-games-lawyer-for-musk-antitrust-trial/"
+              ]
+            },
+            {
+              "fact": "AppleとGoogleは2026年1月12日に、Appleの次世代AIモデルをGemini技術で開発するための複数年契約を発表した",
+              "source_urls": [
+                "https://dataconomy.com/2026/11/26/openai-hires-epic-games-lawyer-for-musk-antitrust-trial/"
+              ]
+            },
+            {
+              "fact": "Graphiteによると、2026年9月の6つのサービスのセッションの89%がモバイルアプリまたはモバイルブラウザを通じて記録され、デスクトップブラウザは11%であった",
+              "source_urls": [
+                "https://dataconomy.com/2026/11/26/openai-hires-epic-games-lawyer-for-musk-antitrust-trial/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-26"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "ipo_financing",
+      "title": "OpenAIが投資家に競合企業への出資を控えるよう要請",
+      "summary": "2024年10月の66億ドルの資金調達ラウンドにおいて、OpenAIは投資家に対し、Anthropic、xAI、Safe Superintelligence (SSI)、Perplexity、Gleanの5社への出資を控えるよう要請した。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-28",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-f986ba756590-2026-11-28.html",
+        "sources": [
+          {
+            "label": "cryptobriefing.com",
+            "url": "https://cryptobriefing.com/openai-asked-investors-avoid-funding-rivals/"
+          }
+        ],
+        "summary": "2024年10月の66億ドルの資金調達ラウンドにおいて、OpenAIは投資家に対し、Anthropic、xAI、Safe Superintelligence (SSI)、Perplexity、Gleanの5社への出資を控えるよう要請した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "2024年10月の66億ドルの資金調達ラウンドにおいて、OpenAIは投資家に対し、Anthropic、xAI、Safe Superintelligence (SSI)、Perplexity、Gleanの5社への出資を控えるよう要請した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "2024年10月の66億ドルの資金調達ラウンドにおいて、OpenAIは投資家に対し、Anthropic、xAI、Safe Superintelligence (SSI)、Perplexity、Gleanの5社への出資を控えるよう要請した。",
+              "source_urls": [
+                "https://cryptobriefing.com/openai-asked-investors-avoid-funding-rivals/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-28"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "safety_security_regulation",
+      "title": "富士通、OpenAIのサイバー防御パートナープログラム「Daybreak Defense Network」に参画",
+      "summary": "富士通は11月25日、OpenAIとの連携を拡大し、サイバー防御パートナープログラム「Daybreak Defense Network」に参画した。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-26",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-ff391e3ce057-2026-11-28.html",
+        "sources": [
+          {
+            "label": "japan.zdnet.com",
+            "url": "https://japan.zdnet.com/article/35255427/"
+          }
+        ],
+        "summary": "富士通は11月25日、OpenAIとの連携を拡大し、サイバー防御パートナープログラム「Daybreak Defense Network」に参画した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "富士通は11月25日、OpenAIとの連携を拡大し、サイバー防御パートナープログラム「Daybreak Defense Network」に参画した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "富士通は11月25日、OpenAIとの連携を拡大し、サイバー防御パートナープログラム「Daybreak Defense Network」に参画した。",
+              "source_urls": [
+                "https://japan.zdnet.com/article/35255427/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-26"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "enterprise_infrastructure",
+      "title": "OpenAI、米Androidユーザー向けにウェアラブル連携の健康機能「ChatGPT Health」を開始",
+      "summary": "米Androidユーザー向けにウェアラブルデータと連携した健康機能「ChatGPT Health」を開始。 対象は米国のFree、Go、Plus、Proプランの18歳以上のログインユーザー。 機能は睡眠、ワークアウト、日々の習慣に関するパーソナライズされたアドバイスを提供し、DotsというAIアシスタントが忙しさに応じたワークアウトの提案を行う。",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-26",
+      "topic_value_class": "technical_or_product_shift",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-f2e20ce4d81a-2026-11-28.html",
+        "sources": [
+          {
+            "label": "newsbytesapp.com",
+            "url": "https://www.newsbytesapp.com/news/science/openai-launches-chatgpt-health-for-us-android-users-syncing-wearables/tldr"
+          }
+        ],
+        "summary": "米Androidユーザー向けにウェアラブルデータと連携した健康機能「ChatGPT Health」を開始。 対象は米国のFree、Go、Plus、Proプランの18歳以上のログインユーザー。 機能は睡眠、ワークアウト、日々の習慣に関するパーソナライズされたアドバイスを提供し、DotsというAIアシスタントが忙しさに応じたワークアウトの提案を行う。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "米Androidユーザー向けにウェアラブルデータと連携した健康機能「ChatGPT Health」を開始。",
+            "対象は米国のFree、Go、Plus、Proプランの18歳以上のログインユーザー。",
+            "機能は睡眠、ワークアウト、日々の習慣に関するパーソナライズされたアドバイスを提供し、DotsというAIアシスタントが忙しさに応じたワークアウトの提案を行う。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "米Androidユーザー向けにウェアラブルデータと連携した健康機能「ChatGPT Health」を開始。",
+              "source_urls": [
+                "https://www.newsbytesapp.com/news/science/openai-launches-chatgpt-health-for-us-android-users-syncing-wearables/tldr"
+              ]
+            },
+            {
+              "fact": "対象は米国のFree、Go、Plus、Proプランの18歳以上のログインユーザー。",
+              "source_urls": [
+                "https://www.newsbytesapp.com/news/science/openai-launches-chatgpt-health-for-us-android-users-syncing-wearables/tldr"
+              ]
+            },
+            {
+              "fact": "機能は睡眠、ワークアウト、日々の習慣に関するパーソナライズされたアドバイスを提供し、DotsというAIアシスタントが忙しさに応じたワークアウトの提案を行う。",
+              "source_urls": [
+                "https://www.newsbytesapp.com/news/science/openai-launches-chatgpt-health-for-us-android-users-syncing-wearables/tldr"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-26"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "ipo_financing",
+      "title": "トニー・ファデル氏、OpenAIのハードウェア参入は「実質データ獲得策」と指摘",
+      "summary": "元アップル幹部のトニー・ファデル氏は、OpenAIの消費者向けハードウェア参入は、アップルのプライバシー制限によってiPhoneから実世界のセンサーデータを取得できないことが動機だと述べた 同氏は、OpenAIがGPS、マイク、カメラ、温度センサーを自社デバイスで再現し、画面を持たないコンパニオンデバイスでデータをスマートフォン経由でクラウド上のAIエージェントに送るとの見方を示した OpenAIは2025年5月にジョニー・アイブ氏のIO Productsを65億ドル（約1兆円）で買収し、製造をフォックスコンに移管した アップルは営業秘密の窃取を巡りOpenAIを提訴しており、OpenAIはこれを否定している ファデル氏は、スマートフォン、ペンダント、ペン、スピーカーといった噂を耳にしたと述べ、共通する狙いは単にコンテキストの獲得にあると指摘した ファデル氏は、iOSとmacOSデバイスの膨大な既存ユーザーベースにOpenAIのワークロードを実行させるようアップルを説得することは別のハードルであり、同社がこれをクリアできるとは考えていない示唆した",
+      "section_id": "openai",
+      "category": "OpenAI",
+      "source_published_date": "2026-11-27",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-87d807e9031b-2026-11-28.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/566a8861-8861-467d-9618-8ff8a66723aa"
+          }
+        ],
+        "summary": "元アップル幹部のトニー・ファデル氏は、OpenAIの消費者向けハードウェア参入は、アップルのプライバシー制限によってiPhoneから実世界のセンサーデータを取得できないことが動機だと述べた 同氏は、OpenAIがGPS、マイク、カメラ、温度センサーを自社デバイスで再現し、画面を持たないコンパニオンデバイスでデータをスマートフォン経由でクラウド上のAIエージェントに送るとの見方を示した OpenAIは2025年5月にジョニー・アイブ氏のIO Productsを65億ドル（約1兆円）で買収し、製造をフォックスコンに移管した アップルは営業秘密の窃取を巡りOpenAIを提訴しており、OpenAIはこれを否定している ファデル氏は、スマートフォン、ペンダント、ペン、スピーカーといった噂を耳にしたと述べ、共通する狙いは単にコンテキストの獲得にあると指摘した ファデル氏は、iOSとmacOSデバイスの膨大な既存ユーザーベースにOpenAIのワークロードを実行させるようアップルを説得することは別のハードルであり、同社がこれをクリアできるとは考えていない示唆した",
+        "summary_basis": {
+          "confirmed_facts": [
+            "元アップル幹部のトニー・ファデル氏は、OpenAIの消費者向けハードウェア参入は、アップルのプライバシー制限によってiPhoneから実世界のセンサーデータを取得できないことが動機だと述べた",
+            "同氏は、OpenAIがGPS、マイク、カメラ、温度センサーを自社デバイスで再現し、画面を持たないコンパニオンデバイスでデータをスマートフォン経由でクラウド上のAIエージェントに送るとの見方を示した",
+            "OpenAIは2025年5月にジョニー・アイブ氏のIO Productsを65億ドル（約1兆円）で買収し、製造をフォックスコンに移管した",
+            "アップルは営業秘密の窃取を巡りOpenAIを提訴しており、OpenAIはこれを否定している",
+            "ファデル氏は、スマートフォン、ペンダント、ペン、スピーカーといった噂を耳にしたと述べ、共通する狙いは単にコンテキストの獲得にあると指摘した",
+            "ファデル氏は、iOSとmacOSデバイスの膨大な既存ユーザーベースにOpenAIのワークロードを実行させるようアップルを説得することは別のハードルであり、同社がこれをクリアできるとは考えていない示唆した"
+          ],
+          "fact_sources": [
+            {
+              "fact": "元アップル幹部のトニー・ファデル氏は、OpenAIの消費者向けハードウェア参入は、アップルのプライバシー制限によってiPhoneから実世界のセンサーデータを取得できないことが動機だと述べた",
+              "source_urls": [
+                "https://finance.biggo.jp/news/566a8861-8861-467d-9618-8ff8a66723aa"
+              ]
+            },
+            {
+              "fact": "同氏は、OpenAIがGPS、マイク、カメラ、温度センサーを自社デバイスで再現し、画面を持たないコンパニオンデバイスでデータをスマートフォン経由でクラウド上のAIエージェントに送るとの見方を示した",
+              "source_urls": [
+                "https://finance.biggo.jp/news/566a8861-8861-467d-9618-8ff8a66723aa"
+              ]
+            },
+            {
+              "fact": "OpenAIは2025年5月にジョニー・アイブ氏のIO Productsを65億ドル（約1兆円）で買収し、製造をフォックスコンに移管した",
+              "source_urls": [
+                "https://finance.biggo.jp/news/566a8861-8861-467d-9618-8ff8a66723aa"
+              ]
+            },
+            {
+              "fact": "アップルは営業秘密の窃取を巡りOpenAIを提訴しており、OpenAIはこれを否定している",
+              "source_urls": [
+                "https://finance.biggo.jp/news/566a8861-8861-467d-9618-8ff8a66723aa"
+              ]
+            },
+            {
+              "fact": "ファデル氏は、スマートフォン、ペンダント、ペン、スピーカーといった噂を耳にしたと述べ、共通する狙いは単にコンテキストの獲得にあると指摘した",
+              "source_urls": [
+                "https://finance.biggo.jp/news/566a8861-8861-467d-9618-8ff8a66723aa"
+              ]
+            },
+            {
+              "fact": "ファデル氏は、iOSとmacOSデバイスの膨大な既存ユーザーベースにOpenAIのワークロードを実行させるようアップルを説得することは別のハードルであり、同社がこれをクリアできるとは考えていない示唆した",
+              "source_urls": [
+                "https://finance.biggo.jp/news/566a8861-8861-467d-9618-8ff8a66723aa"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-27"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_sales",
+      "title": "Acura INTEGRA Type Sを2026年12月に発売、250台限定",
+      "summary": "Acura INTEGRA Type Sは6速マニュアルトランスミッションと2.0L VTEC TURBOエンジンを搭載するプレミアムパフォーマンスモデルとして2026年12月に発売される。 今回の導入は、国土交通省が2026年2月に創設した米国製乗用車に関する認定制度を活用したものであり、米国で生産される魅力的なモデルを日本のお客様にお届けする。",
+      "section_id": "honda",
+      "category": "Honda",
+      "source_published_date": "2026-11-26",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-6ce15a558ea4-2026-11-28.html",
+        "sources": [
+          {
+            "label": "global.honda",
+            "url": "https://global.honda/jp/news/2026/4261126-integra.html"
+          }
+        ],
+        "summary": "Acura INTEGRA Type Sは6速マニュアルトランスミッションと2.0L VTEC TURBOエンジンを搭載するプレミアムパフォーマンスモデルとして2026年12月に発売される。 今回の導入は、国土交通省が2026年2月に創設した米国製乗用車に関する認定制度を活用したものであり、米国で生産される魅力的なモデルを日本のお客様にお届けする。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Acura INTEGRA Type Sは6速マニュアルトランスミッションと2.0L VTEC TURBOエンジンを搭載するプレミアムパフォーマンスモデルとして2026年12月に発売される。",
+            "今回の導入は、国土交通省が2026年2月に創設した米国製乗用車に関する認定制度を活用したものであり、米国で生産される魅力的なモデルを日本のお客様にお届けする。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Acura INTEGRA Type Sは6速マニュアルトランスミッションと2.0L VTEC TURBOエンジンを搭載するプレミアムパフォーマンスモデルとして2026年12月に発売される。",
+              "source_urls": [
+                "https://global.honda/jp/news/2026/4261126-integra.html"
+              ]
+            },
+            {
+              "fact": "今回の導入は、国土交通省が2026年2月に創設した米国製乗用車に関する認定制度を活用したものであり、米国で生産される魅力的なモデルを日本のお客様にお届けする。",
+              "source_urls": [
+                "https://global.honda/jp/news/2026/4261126-integra.html"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-26"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "china_sales",
+      "title": "Honda、FIA Road Safety Indexで世界初の5スターを獲得",
+      "summary": "Hondaは、FIA Road Safety Indexの評価において、2025年に最高評価の3スターを獲得した後、新たな評価項目への対応を含め、17カ国への審査対象拡大を達成し、世界で初めて5スターを獲得しました。",
+      "section_id": "honda",
+      "category": "Honda",
+      "source_published_date": "2026-11-27",
+      "topic_value_class": "risk_or_safety_signal",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-ea76a747c10e-2026-11-28.html",
+        "sources": [
+          {
+            "label": "global.honda",
+            "url": "https://global.honda/jp/stories/208-2611-FIA-Road-Safety-Index.html?from=RSS"
+          }
+        ],
+        "summary": "Hondaは、FIA Road Safety Indexの評価において、2025年に最高評価の3スターを獲得した後、新たな評価項目への対応を含め、17カ国への審査対象拡大を達成し、世界で初めて5スターを獲得しました。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "Hondaは、FIA Road Safety Indexの評価において、2025年に最高評価の3スターを獲得した後、新たな評価項目への対応を含め、17カ国への審査対象拡大を達成し、世界で初めて5スターを獲得しました。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "Hondaは、FIA Road Safety Indexの評価において、2025年に最高評価の3スターを獲得した後、新たな評価項目への対応を含め、17カ国への審査対象拡大を達成し、世界で初めて5スターを獲得しました。",
+              "source_urls": [
+                "https://global.honda/jp/stories/208-2611-FIA-Road-Safety-Index.html?from=RSS"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-27"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "fia_regulation_development",
+      "title": "ルクレール、フェラーリとの契約にナンバー1条項はないと否定",
+      "summary": "シャルル・ルクレールはFIAドライバー会見で、フェラーリとの契約にナンバー1条項が含まれていないと否定した",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-11-27",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-15edaf0a5149-2026-11-28.html",
+        "sources": [
+          {
+            "label": "news.yahoo.co.jp",
+            "url": "https://news.yahoo.co.jp/articles/e7d935646f34e6cb952bf90c569e04372ef96a43"
+          }
+        ],
+        "summary": "シャルル・ルクレールはFIAドライバー会見で、フェラーリとの契約にナンバー1条項が含まれていないと否定した",
+        "summary_basis": {
+          "confirmed_facts": [
+            "シャルル・ルクレールはFIAドライバー会見で、フェラーリとの契約にナンバー1条項が含まれていないと否定した"
+          ],
+          "fact_sources": [
+            {
+              "fact": "シャルル・ルクレールはFIAドライバー会見で、フェラーリとの契約にナンバー1条項が含まれていないと否定した",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/e7d935646f34e6cb952bf90c569e04372ef96a43"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-27"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "fia_regulation_development",
+      "title": "ホンダ、FIA道路安全指数で初の5スター評価を獲得",
+      "summary": "ホンダは、FIA Road Safety Indexの評価において、2025年当時の最高評価であった3スターから、新たな評価項目を含む審査対象を17カ国へ拡大した結果、初の5スターを獲得しました。",
+      "section_id": "f1",
+      "category": "F1",
+      "source_published_date": "2026-11-27",
+      "topic_value_class": "risk_or_safety_signal",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-48a4702963a3-2026-11-28.html",
+        "sources": [
+          {
+            "label": "global.honda",
+            "url": "https://global.honda/jp/stories/208-2611-FIA-Road-Safety-Index.html?from=RSS"
+          }
+        ],
+        "summary": "ホンダは、FIA Road Safety Indexの評価において、2025年当時の最高評価であった3スターから、新たな評価項目を含む審査対象を17カ国へ拡大した結果、初の5スターを獲得しました。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "ホンダは、FIA Road Safety Indexの評価において、2025年当時の最高評価であった3スターから、新たな評価項目を含む審査対象を17カ国へ拡大した結果、初の5スターを獲得しました。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "ホンダは、FIA Road Safety Indexの評価において、2025年当時の最高評価であった3スターから、新たな評価項目を含む審査対象を17カ国へ拡大した結果、初の5スターを獲得しました。",
+              "source_urls": [
+                "https://global.honda/jp/stories/208-2611-FIA-Road-Safety-Index.html?from=RSS"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-27"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "business_contracts",
+      "title": "ウクライナ政府支配地域でStarlinkの運用が正常化",
+      "summary": "ウクライナ政府の支配地域ではStarlinkの通信速度が正常化しており、迎撃ドローンの追跡が可能になっている ゼレンスキー大統領は11月27日、米国がキーウに「前向きなシグナル」を送ったと明らかにした ゼレンスキー大統領は、Starlinkの運用はSpaceXが担う技術面の問題であり、政治的な決定の問題であると述べた ゼレンスキー大統領は10月半ばに同様の問題が起きた後、ウクライナは再びStarshieldの運用制限に直面したと明らかにした 安全審査の完了後、各社は周波数の申請が可能になる",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-11-27",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-acdfa778c9bb-2026-11-28.html",
+        "sources": [
+          {
+            "label": "mezha.net",
+            "url": "https://mezha.net/jp/news/mezha-b44f9f2a88d15fa011ab94f1_zelensky-says-starlink-service-has-returned/"
+          }
+        ],
+        "summary": "ウクライナ政府の支配地域ではStarlinkの通信速度が正常化しており、迎撃ドローンの追跡が可能になっている ゼレンスキー大統領は11月27日、米国がキーウに「前向きなシグナル」を送ったと明らかにした ゼレンスキー大統領は、Starlinkの運用はSpaceXが担う技術面の問題であり、政治的な決定の問題であると述べた ゼレンスキー大統領は10月半ばに同様の問題が起きた後、ウクライナは再びStarshieldの運用制限に直面したと明らかにした 安全審査の完了後、各社は周波数の申請が可能になる",
+        "summary_basis": {
+          "confirmed_facts": [
+            "ウクライナ政府の支配地域ではStarlinkの通信速度が正常化しており、迎撃ドローンの追跡が可能になっている",
+            "ゼレンスキー大統領は11月27日、米国がキーウに「前向きなシグナル」を送ったと明らかにした",
+            "ゼレンスキー大統領は、Starlinkの運用はSpaceXが担う技術面の問題であり、政治的な決定の問題であると述べた",
+            "ゼレンスキー大統領は10月半ばに同様の問題が起きた後、ウクライナは再びStarshieldの運用制限に直面したと明らかにした",
+            "安全審査の完了後、各社は周波数の申請が可能になる"
+          ],
+          "fact_sources": [
+            {
+              "fact": "ウクライナ政府の支配地域ではStarlinkの通信速度が正常化しており、迎撃ドローンの追跡が可能になっている",
+              "source_urls": [
+                "https://mezha.net/jp/news/mezha-b44f9f2a88d15fa011ab94f1_zelensky-says-starlink-service-has-returned/"
+              ]
+            },
+            {
+              "fact": "ゼレンスキー大統領は11月27日、米国がキーウに「前向きなシグナル」を送ったと明らかにした",
+              "source_urls": [
+                "https://mezha.net/jp/news/mezha-b44f9f2a88d15fa011ab94f1_zelensky-says-starlink-service-has-returned/"
+              ]
+            },
+            {
+              "fact": "ゼレンスキー大統領は、Starlinkの運用はSpaceXが担う技術面の問題であり、政治的な決定の問題であると述べた",
+              "source_urls": [
+                "https://mezha.net/jp/news/mezha-b44f9f2a88d15fa011ab94f1_zelensky-says-starlink-service-has-returned/"
+              ]
+            },
+            {
+              "fact": "ゼレンスキー大統領は10月半ばに同様の問題が起きた後、ウクライナは再びStarshieldの運用制限に直面したと明らかにした",
+              "source_urls": [
+                "https://mezha.net/jp/news/mezha-b44f9f2a88d15fa011ab94f1_zelensky-says-starlink-service-has-returned/"
+              ]
+            },
+            {
+              "fact": "安全審査の完了後、各社は周波数の申請が可能になる",
+              "source_urls": [
+                "https://mezha.net/jp/news/mezha-b44f9f2a88d15fa011ab94f1_zelensky-says-starlink-service-has-returned/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-27"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "official_launch_manifest",
+      "title": "米連邦通信委員会、SpaceXの軌道AIデータセンター計画「スターマインド」に100万基の衛星配備を承認",
+      "summary": "米連邦通信委員会（FCC）はSpaceXに対し、最大100万基の衛星を配備する「スターマインド」というコンステレーションを条件付きで承認した。 SpaceXは7年以内に運用可能な衛星1基を投入し、2035年11月までに10万基、2040年11月までに全コンステレーションを完成させる期限を設けた。 SpaceXは高度550キロから約1,000キロの間の6つの軌道シェルにまたがる運用を提案し、高度600キロ超の衛星は寿命終了時に地球大気圏で燃え尽きることを求めた。 各衛星は最大250キロワットの演算能力を持ち、210キロワットの太陽電池アレイで駆動し、処理結果はスターリンク網に中継される。 SpaceXはこの計画を大型ロケット「スターシップ」に大きく依存している。",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-11-26",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-8b506037f20d-2026-11-28.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/67338e7e-cc8c-4cd2-bce4-229f83d8076c"
+          }
+        ],
+        "summary": "米連邦通信委員会（FCC）はSpaceXに対し、最大100万基の衛星を配備する「スターマインド」というコンステレーションを条件付きで承認した。 SpaceXは7年以内に運用可能な衛星1基を投入し、2035年11月までに10万基、2040年11月までに全コンステレーションを完成させる期限を設けた。 SpaceXは高度550キロから約1,000キロの間の6つの軌道シェルにまたがる運用を提案し、高度600キロ超の衛星は寿命終了時に地球大気圏で燃え尽きることを求めた。 各衛星は最大250キロワットの演算能力を持ち、210キロワットの太陽電池アレイで駆動し、処理結果はスターリンク網に中継される。 SpaceXはこの計画を大型ロケット「スターシップ」に大きく依存している。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "米連邦通信委員会（FCC）はSpaceXに対し、最大100万基の衛星を配備する「スターマインド」というコンステレーションを条件付きで承認した。",
+            "SpaceXは7年以内に運用可能な衛星1基を投入し、2035年11月までに10万基、2040年11月までに全コンステレーションを完成させる期限を設けた。",
+            "SpaceXは高度550キロから約1,000キロの間の6つの軌道シェルにまたがる運用を提案し、高度600キロ超の衛星は寿命終了時に地球大気圏で燃え尽きることを求めた。",
+            "各衛星は最大250キロワットの演算能力を持ち、210キロワットの太陽電池アレイで駆動し、処理結果はスターリンク網に中継される。",
+            "SpaceXはこの計画を大型ロケット「スターシップ」に大きく依存している。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "米連邦通信委員会（FCC）はSpaceXに対し、最大100万基の衛星を配備する「スターマインド」というコンステレーションを条件付きで承認した。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/67338e7e-cc8c-4cd2-bce4-229f83d8076c"
+              ]
+            },
+            {
+              "fact": "SpaceXは7年以内に運用可能な衛星1基を投入し、2035年11月までに10万基、2040年11月までに全コンステレーションを完成させる期限を設けた。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/67338e7e-cc8c-4cd2-bce4-229f83d8076c"
+              ]
+            },
+            {
+              "fact": "SpaceXは高度550キロから約1,000キロの間の6つの軌道シェルにまたがる運用を提案し、高度600キロ超の衛星は寿命終了時に地球大気圏で燃え尽きることを求めた。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/67338e7e-cc8c-4cd2-bce4-229f83d8076c"
+              ]
+            },
+            {
+              "fact": "各衛星は最大250キロワットの演算能力を持ち、210キロワットの太陽電池アレイで駆動し、処理結果はスターリンク網に中継される。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/67338e7e-cc8c-4cd2-bce4-229f83d8076c"
+              ]
+            },
+            {
+              "fact": "SpaceXはこの計画を大型ロケット「スターシップ」に大きく依存している。",
+              "source_urls": [
+                "https://finance.biggo.jp/news/67338e7e-cc8c-4cd2-bce4-229f83d8076c"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-26"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "business_contracts",
+      "title": "SpaceXのADRが4営業日連続で公開価格を下回る",
+      "summary": "SpaceXの米国預託証券（ADR）は4営業日連続で公開価格を下回っている SpaceXはこの日127.4ドル（約2万円）で取引を終え、公開価格の135ドルを下回った",
+      "section_id": "spacex",
+      "category": "SpaceX",
+      "source_published_date": "2026-11-26",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-502e33da4016-2026-11-28.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/ba478c89-8525-4651-b57b-bd9fda674a88"
+          }
+        ],
+        "summary": "SpaceXの米国預託証券（ADR）は4営業日連続で公開価格を下回っている SpaceXはこの日127.4ドル（約2万円）で取引を終え、公開価格の135ドルを下回った",
+        "summary_basis": {
+          "confirmed_facts": [
+            "SpaceXの米国預託証券（ADR）は4営業日連続で公開価格を下回っている",
+            "SpaceXはこの日127.4ドル（約2万円）で取引を終え、公開価格の135ドルを下回った"
+          ],
+          "fact_sources": [
+            {
+              "fact": "SpaceXの米国預託証券（ADR）は4営業日連続で公開価格を下回っている",
+              "source_urls": [
+                "https://finance.biggo.jp/news/ba478c89-8525-4651-b57b-bd9fda674a88"
+              ]
+            },
+            {
+              "fact": "SpaceXはこの日127.4ドル（約2万円）で取引を終え、公開価格の135ドルを下回った",
+              "source_urls": [
+                "https://finance.biggo.jp/news/ba478c89-8525-4651-b57b-bd9fda674a88"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-26"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "investment_policy_markets",
+      "title": "消費税減税の対象外となる食料品の恩恵は月5110円程度に留まる",
+      "summary": "消費税減税が2027年4月から始まっても、65歳以上の世帯では貯蓄1000万円以下が約4割存在し、年金だけでは生活が困難な状況にある。 参議院で審議中の「消費税減税」が2027年4月から始まれば、スーパーで買う飲食料品の消費税は8％から1％に減る。 5kg3000円の米は税込み3240円から3030円に減り、65歳の夫婦2人暮らしの食費は月平均7万9000円弱から7万3730円に減る。 この減税措置による月5110円、年間6万円ほどの節約にしかならない。 高市内閣は「働く人の手取りを増やす」政策に力を入れているが、年金生活者は「現役世代=弱者、高齢者=裕福」と決めつけられているように感じている。",
+      "section_id": "japan_economy",
+      "category": "日本経済",
+      "source_published_date": "2026-11-28",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-063fb78d38c5-2026-11-28.html",
+        "sources": [
+          {
+            "label": "news.yahoo.co.jp",
+            "url": "https://news.yahoo.co.jp/articles/823814169a6c21a8ee0e0679b389828338533b6b"
+          }
+        ],
+        "summary": "消費税減税が2027年4月から始まっても、65歳以上の世帯では貯蓄1000万円以下が約4割存在し、年金だけでは生活が困難な状況にある。 参議院で審議中の「消費税減税」が2027年4月から始まれば、スーパーで買う飲食料品の消費税は8％から1％に減る。 5kg3000円の米は税込み3240円から3030円に減り、65歳の夫婦2人暮らしの食費は月平均7万9000円弱から7万3730円に減る。 この減税措置による月5110円、年間6万円ほどの節約にしかならない。 高市内閣は「働く人の手取りを増やす」政策に力を入れているが、年金生活者は「現役世代=弱者、高齢者=裕福」と決めつけられているように感じている。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "消費税減税が2027年4月から始まっても、65歳以上の世帯では貯蓄1000万円以下が約4割存在し、年金だけでは生活が困難な状況にある。",
+            "参議院で審議中の「消費税減税」が2027年4月から始まれば、スーパーで買う飲食料品の消費税は8％から1％に減る。",
+            "5kg3000円の米は税込み3240円から3030円に減り、65歳の夫婦2人暮らしの食費は月平均7万9000円弱から7万3730円に減る。",
+            "この減税措置による月5110円、年間6万円ほどの節約にしかならない。",
+            "高市内閣は「働く人の手取りを増やす」政策に力を入れているが、年金生活者は「現役世代=弱者、高齢者=裕福」と決めつけられているように感じている。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "消費税減税が2027年4月から始まっても、65歳以上の世帯では貯蓄1000万円以下が約4割存在し、年金だけでは生活が困難な状況にある。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/823814169a6c21a8ee0e0679b389828338533b6b"
+              ]
+            },
+            {
+              "fact": "参議院で審議中の「消費税減税」が2027年4月から始まれば、スーパーで買う飲食料品の消費税は8％から1％に減る。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/823814169a6c21a8ee0e0679b389828338533b6b"
+              ]
+            },
+            {
+              "fact": "5kg3000円の米は税込み3240円から3030円に減り、65歳の夫婦2人暮らしの食費は月平均7万9000円弱から7万3730円に減る。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/823814169a6c21a8ee0e0679b389828338533b6b"
+              ]
+            },
+            {
+              "fact": "この減税措置による月5110円、年間6万円ほどの節約にしかならない。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/823814169a6c21a8ee0e0679b389828338533b6b"
+              ]
+            },
+            {
+              "fact": "高市内閣は「働く人の手取りを増やす」政策に力を入れているが、年金生活者は「現役世代=弱者、高齢者=裕福」と決めつけられているように感じている。",
+              "source_urls": [
+                "https://news.yahoo.co.jp/articles/823814169a6c21a8ee0e0679b389828338533b6b"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-28"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "vietnam_macro_investment",
+      "title": "ASEANと中国が電力網協力パートナーシップを設立",
+      "summary": "ASEANと中国は2026年11月27日、ASEAN電力網の支援を約束し、ASEAN-中国エネルギー協力パートナーシップを設立した。",
+      "section_id": "asia",
+      "category": "アジア経済",
+      "source_published_date": "2026-11-27",
+      "topic_value_class": "event_result_or_outcome",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-bc5cba478f8f-2026-11-28.html",
+        "sources": [
+          {
+            "label": "greencentralbanking.com",
+            "url": "https://greencentralbanking.com/2026/11/27/asean-signs-power-grid-pact-with-china-pledging-support/"
+          }
+        ],
+        "summary": "ASEANと中国は2026年11月27日、ASEAN電力網の支援を約束し、ASEAN-中国エネルギー協力パートナーシップを設立した。",
+        "summary_basis": {
+          "confirmed_facts": [
+            "ASEANと中国は2026年11月27日、ASEAN電力網の支援を約束し、ASEAN-中国エネルギー協力パートナーシップを設立した。"
+          ],
+          "fact_sources": [
+            {
+              "fact": "ASEANと中国は2026年11月27日、ASEAN電力網の支援を約束し、ASEAN-中国エネルギー協力パートナーシップを設立した。",
+              "source_urls": [
+                "https://greencentralbanking.com/2026/11/27/asean-signs-power-grid-pact-with-china-pledging-support/"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-27"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "vietnam_macro_investment",
+      "title": "韓国、半導体関連工事受注残高が建設部門全体を上回る",
+      "summary": "SKエコプラントのハイテク部門は6カ月で43%増の1624人となり、期間制労働者は70%以上増加して契約職比率が41.7%に達した Samsung C&Tも建設部門の契約職比率が27.2%に上昇した SKエコプラントとSamsung C&Tの2社が確保した建設受注残高は66兆ウォン（約7.8兆円）を超え、このうち相当部分が半導体・データセンタープロジェクトだ Samsung C&Tは第3四半期にSamsung Electronicsの米国テイラー工場や平沢工場などで4兆ウォン（約4,700億円）規模の半導体工事を獲得し、今年のハイテク部門の受注額は11兆2000億ウォン（約1.3兆円）で全体の58%に達する SKエコプラントはSKハイニックスの龍仁・清州半導体工事で7兆3000億ウォン（約8,700億円）の契約残高を確保し、第3四半期の営業利益は7946億ウォン（約940億円）と1年前の5倍を超えた",
+      "section_id": "asia",
+      "category": "アジア経済",
+      "source_published_date": "2026-11-27",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-acfacbc366db-2026-11-28.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/5d2f10e2-2dbe-4551-811e-974937f0e914"
+          }
+        ],
+        "summary": "SKエコプラントのハイテク部門は6カ月で43%増の1624人となり、期間制労働者は70%以上増加して契約職比率が41.7%に達した Samsung C&Tも建設部門の契約職比率が27.2%に上昇した SKエコプラントとSamsung C&Tの2社が確保した建設受注残高は66兆ウォン（約7.8兆円）を超え、このうち相当部分が半導体・データセンタープロジェクトだ Samsung C&Tは第3四半期にSamsung Electronicsの米国テイラー工場や平沢工場などで4兆ウォン（約4,700億円）規模の半導体工事を獲得し、今年のハイテク部門の受注額は11兆2000億ウォン（約1.3兆円）で全体の58%に達する SKエコプラントはSKハイニックスの龍仁・清州半導体工事で7兆3000億ウォン（約8,700億円）の契約残高を確保し、第3四半期の営業利益は7946億ウォン（約940億円）と1年前の5倍を超えた",
+        "summary_basis": {
+          "confirmed_facts": [
+            "SKエコプラントのハイテク部門は6カ月で43%増の1624人となり、期間制労働者は70%以上増加して契約職比率が41.7%に達した",
+            "Samsung C&Tも建設部門の契約職比率が27.2%に上昇した",
+            "SKエコプラントとSamsung C&Tの2社が確保した建設受注残高は66兆ウォン（約7.8兆円）を超え、このうち相当部分が半導体・データセンタープロジェクトだ",
+            "Samsung C&Tは第3四半期にSamsung Electronicsの米国テイラー工場や平沢工場などで4兆ウォン（約4,700億円）規模の半導体工事を獲得し、今年のハイテク部門の受注額は11兆2000億ウォン（約1.3兆円）で全体の58%に達する",
+            "SKエコプラントはSKハイニックスの龍仁・清州半導体工事で7兆3000億ウォン（約8,700億円）の契約残高を確保し、第3四半期の営業利益は7946億ウォン（約940億円）と1年前の5倍を超えた"
+          ],
+          "fact_sources": [
+            {
+              "fact": "SKエコプラントのハイテク部門は6カ月で43%増の1624人となり、期間制労働者は70%以上増加して契約職比率が41.7%に達した",
+              "source_urls": [
+                "https://finance.biggo.jp/news/5d2f10e2-2dbe-4551-811e-974937f0e914"
+              ]
+            },
+            {
+              "fact": "Samsung C&Tも建設部門の契約職比率が27.2%に上昇した",
+              "source_urls": [
+                "https://finance.biggo.jp/news/5d2f10e2-2dbe-4551-811e-974937f0e914"
+              ]
+            },
+            {
+              "fact": "SKエコプラントとSamsung C&Tの2社が確保した建設受注残高は66兆ウォン（約7.8兆円）を超え、このうち相当部分が半導体・データセンタープロジェクトだ",
+              "source_urls": [
+                "https://finance.biggo.jp/news/5d2f10e2-2dbe-4551-811e-974937f0e914"
+              ]
+            },
+            {
+              "fact": "Samsung C&Tは第3四半期にSamsung Electronicsの米国テイラー工場や平沢工場などで4兆ウォン（約4,700億円）規模の半導体工事を獲得し、今年のハイテク部門の受注額は11兆2000億ウォン（約1.3兆円）で全体の58%に達する",
+              "source_urls": [
+                "https://finance.biggo.jp/news/5d2f10e2-2dbe-4551-811e-974937f0e914"
+              ]
+            },
+            {
+              "fact": "SKエコプラントはSKハイニックスの龍仁・清州半導体工事で7兆3000億ウォン（約8,700億円）の契約残高を確保し、第3四半期の営業利益は7946億ウォン（約940億円）と1年前の5倍を超えた",
+              "source_urls": [
+                "https://finance.biggo.jp/news/5d2f10e2-2dbe-4551-811e-974937f0e914"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-27"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "us_prices_jobs_fed",
+      "title": "米国第3四半期GDPが4.3%に上方修正、FRBの12月利上げ確率は99%に上昇",
+      "summary": "米国商務省は第3四半期のGDP年率換算成長率を3.4%から4.3%へ上方修正した 10月のPCE価格指数は前年同月比3.8%上昇、コアPCEは同3.3%上昇し、FRBの2%目標を著しく上回っている 力強い成長と粘着性の高いインフレが併存する中、市場の利上げ懸念が金融緩和への転換期待に取って代わり、12月の25ベーシスポイント（bp）利上げ確率は99%に上昇した",
+      "section_id": "north_america",
+      "category": "北米経済",
+      "source_published_date": "2026-11-28",
+      "topic_value_class": "market_or_financial_impact",
+      "priority_class": "priority",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-4675652b6052-2026-11-28.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/c913bd25-f712-4e11-bbb3-4375fb9a3692"
+          }
+        ],
+        "summary": "米国商務省は第3四半期のGDP年率換算成長率を3.4%から4.3%へ上方修正した 10月のPCE価格指数は前年同月比3.8%上昇、コアPCEは同3.3%上昇し、FRBの2%目標を著しく上回っている 力強い成長と粘着性の高いインフレが併存する中、市場の利上げ懸念が金融緩和への転換期待に取って代わり、12月の25ベーシスポイント（bp）利上げ確率は99%に上昇した",
+        "summary_basis": {
+          "confirmed_facts": [
+            "米国商務省は第3四半期のGDP年率換算成長率を3.4%から4.3%へ上方修正した",
+            "10月のPCE価格指数は前年同月比3.8%上昇、コアPCEは同3.3%上昇し、FRBの2%目標を著しく上回っている",
+            "力強い成長と粘着性の高いインフレが併存する中、市場の利上げ懸念が金融緩和への転換期待に取って代わり、12月の25ベーシスポイント（bp）利上げ確率は99%に上昇した"
+          ],
+          "fact_sources": [
+            {
+              "fact": "米国商務省は第3四半期のGDP年率換算成長率を3.4%から4.3%へ上方修正した",
+              "source_urls": [
+                "https://finance.biggo.jp/news/c913bd25-f712-4e11-bbb3-4375fb9a3692"
+              ]
+            },
+            {
+              "fact": "10月のPCE価格指数は前年同月比3.8%上昇、コアPCEは同3.3%上昇し、FRBの2%目標を著しく上回っている",
+              "source_urls": [
+                "https://finance.biggo.jp/news/c913bd25-f712-4e11-bbb3-4375fb9a3692"
+              ]
+            },
+            {
+              "fact": "力強い成長と粘着性の高いインフレが併存する中、市場の利上げ懸念が金融緩和への転換期待に取って代わり、12月の25ベーシスポイント（bp）利上げ確率は99%に上昇した",
+              "source_urls": [
+                "https://finance.biggo.jp/news/c913bd25-f712-4e11-bbb3-4375fb9a3692"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-28"
+          ]
+        }
+      }
+    },
+    {
+      "watch_topic_id": "us_prices_jobs_fed",
+      "title": "FRBベージュブック、景気拡大と物価高の両立課題が示される",
+      "summary": "FRBが25日、全米12地区の連邦準備銀行がまとめた景況報告（ベージュブック）を公表した 景気は8地区で「小幅から緩やかな拡大」となり、4地区は横ばいだった 物価上昇圧力は幅広い業種に及び、家計の支出はほぼ横ばいにとどまっている エネルギーや輸送、関税関連費用、保険料といったコストの増加が続いている 原材料高もコストを押し上げているが、消費者の価格への警戒が強く、企業は十分な値上げに踏み切れていない 先行きについても、今後数カ月にわたり支出と物価が上昇を続けるとの見方が示された 調査は16日までの情報を集約したもので、12月8、9両日に開く連邦公開市場委員会（FOMC）の討議資料として使われる",
+      "section_id": "north_america",
+      "category": "北米経済",
+      "source_published_date": "2026-11-26",
+      "topic_value_class": "decision_or_policy",
+      "priority_class": "standard",
+      "change_class": "new_event",
+      "detail": {
+        "slug": "auto-9ca1576eedfb-2026-11-28.html",
+        "sources": [
+          {
+            "label": "finance.biggo.jp",
+            "url": "https://finance.biggo.jp/news/6c71d5ab-4e38-4f3b-91d9-6948ead9c1a1"
+          }
+        ],
+        "summary": "FRBが25日、全米12地区の連邦準備銀行がまとめた景況報告（ベージュブック）を公表した 景気は8地区で「小幅から緩やかな拡大」となり、4地区は横ばいだった 物価上昇圧力は幅広い業種に及び、家計の支出はほぼ横ばいにとどまっている エネルギーや輸送、関税関連費用、保険料といったコストの増加が続いている 原材料高もコストを押し上げているが、消費者の価格への警戒が強く、企業は十分な値上げに踏み切れていない 先行きについても、今後数カ月にわたり支出と物価が上昇を続けるとの見方が示された 調査は16日までの情報を集約したもので、12月8、9両日に開く連邦公開市場委員会（FOMC）の討議資料として使われる",
+        "summary_basis": {
+          "confirmed_facts": [
+            "FRBが25日、全米12地区の連邦準備銀行がまとめた景況報告（ベージュブック）を公表した",
+            "景気は8地区で「小幅から緩やかな拡大」となり、4地区は横ばいだった",
+            "物価上昇圧力は幅広い業種に及び、家計の支出はほぼ横ばいにとどまっている",
+            "エネルギーや輸送、関税関連費用、保険料といったコストの増加が続いている",
+            "原材料高もコストを押し上げているが、消費者の価格への警戒が強く、企業は十分な値上げに踏み切れていない",
+            "先行きについても、今後数カ月にわたり支出と物価が上昇を続けるとの見方が示された",
+            "調査は16日までの情報を集約したもので、12月8、9両日に開く連邦公開市場委員会（FOMC）の討議資料として使われる"
+          ],
+          "fact_sources": [
+            {
+              "fact": "FRBが25日、全米12地区の連邦準備銀行がまとめた景況報告（ベージュブック）を公表した",
+              "source_urls": [
+                "https://finance.biggo.jp/news/6c71d5ab-4e38-4f3b-91d9-6948ead9c1a1"
+              ]
+            },
+            {
+              "fact": "景気は8地区で「小幅から緩やかな拡大」となり、4地区は横ばいだった",
+              "source_urls": [
+                "https://finance.biggo.jp/news/6c71d5ab-4e38-4f3b-91d9-6948ead9c1a1"
+              ]
+            },
+            {
+              "fact": "物価上昇圧力は幅広い業種に及び、家計の支出はほぼ横ばいにとどまっている",
+              "source_urls": [
+                "https://finance.biggo.jp/news/6c71d5ab-4e38-4f3b-91d9-6948ead9c1a1"
+              ]
+            },
+            {
+              "fact": "エネルギーや輸送、関税関連費用、保険料といったコストの増加が続いている",
+              "source_urls": [
+                "https://finance.biggo.jp/news/6c71d5ab-4e38-4f3b-91d9-6948ead9c1a1"
+              ]
+            },
+            {
+              "fact": "原材料高もコストを押し上げているが、消費者の価格への警戒が強く、企業は十分な値上げに踏み切れていない",
+              "source_urls": [
+                "https://finance.biggo.jp/news/6c71d5ab-4e38-4f3b-91d9-6948ead9c1a1"
+              ]
+            },
+            {
+              "fact": "先行きについても、今後数カ月にわたり支出と物価が上昇を続けるとの見方が示された",
+              "source_urls": [
+                "https://finance.biggo.jp/news/6c71d5ab-4e38-4f3b-91d9-6948ead9c1a1"
+              ]
+            },
+            {
+              "fact": "調査は16日までの情報を集約したもので、12月8、9両日に開く連邦公開市場委員会（FOMC）の討議資料として使われる",
+              "source_urls": [
+                "https://finance.biggo.jp/news/6c71d5ab-4e38-4f3b-91d9-6948ead9c1a1"
+              ]
+            }
+          ],
+          "source_dates": [
+            "2026-11-26"
+          ]
+        }
+      }
+    }
+  ],
+  "coverage_manifest": {
+    "contract_version": "2026-07-11.02",
+    "date": "2026-11-28",
+    "collection_completed_at_jst": "2026-11-28T18:53:43+09:00",
+    "collection_mode": "web_evidence_plus_review",
+    "evidence_sha256": "ccad9bf287dde47d743828fe16c7ca30378f4bf8ea365b3f86c22dd8961e3ccc",
+    "editor_contract_sha256": "d6c3ebf3edf97dd3dff4a22b78881bb748af6ce2d29e7417f703b37f53bce819"
+  },
+  "pending_editorial_events": [
+    {
+      "category": "OpenAI",
+      "request_id": "openai-01-08450c49e1f679b9",
+      "event_id": "g004",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g004\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g004\", \"title\": \"オーストラリアAI議会委員会が著作権所有者への支払いメカニズムを推奨\", \"reasons\": [\"unsupported_title\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "OpenAI",
+      "request_id": "openai-01-08450c49e1f679b9",
+      "event_id": "g006",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g006\": [\"e003:f01\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "OpenAI",
+      "request_id": "openai-01-08450c49e1f679b9",
+      "event_id": "g003",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g003\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g003\", \"title\": \"OpenAI、日常業務向けAI「GPT-6.2 Sol」を公開\", \"reasons\": [\"summary_repetition\", \"insufficient_facts\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "OpenAI",
+      "request_id": "openai-01-08450c49e1f679b9",
+      "event_id": "g002",
+      "reason": "each point needs Japanese text and exact source fact IDs"
+    },
+    {
+      "category": "OpenAI",
+      "request_id": "openai-02-a63231eb3d5131fc",
+      "event_id": "g014",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g014\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g014\", \"title\": \"SoCal Digital Marketing、ChatGPT広告管理サービスを開始\", \"reasons\": [\"summary_repetition\", \"insufficient_facts\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "SoftBank",
+      "request_id": "softbank-01-c41f921c42c48155",
+      "event_id": "g002",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g002\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g002\", \"title\": \"ソフトバンク、新端末「シンプルスマホ8」を12月4日に発売\", \"reasons\": [\"unsupported_summary_point\"], \"unsupported_facts\": [\"「シンプルスマホ8」はシャープ製で、シャンパンゴールド、ブルー、レッドの3色を展開する\"], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": [\"e001:f01\"]}], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "SoftBank",
+      "request_id": "softbank-01-c41f921c42c48155",
+      "event_id": "g001",
+      "reason": "each point needs Japanese text and exact source fact IDs"
+    },
+    {
+      "category": "Honda",
+      "request_id": "honda-01-a07bbf3a3025b6c1",
+      "event_id": "g005",
+      "reason": "segmented review: incomplete segmented summary"
+    },
+    {
+      "category": "Honda",
+      "request_id": "honda-01-a07bbf3a3025b6c1",
+      "event_id": "g002",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g002\": [\"e004:f11\", \"e004:f13\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "Honda",
+      "request_id": "honda-01-a07bbf3a3025b6c1",
+      "event_id": "g004",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g004\": [\"e005:f13\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "Honda",
+      "request_id": "honda-02-2e3f4e4597defc24",
+      "event_id": "g006",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g006\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g006\", \"title\": \"アストンマーティン、ホンダエンジンの性能不足を認め\", \"reasons\": [\"unsupported_title\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "Honda",
+      "request_id": "honda-02-2e3f4e4597defc24",
+      "event_id": "g007",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g007\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g007\", \"title\": \"ホンダ・MotoGPのジョアン・ミルが健康回復の好報を発表\", \"reasons\": [\"summary_repetition\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "F1",
+      "request_id": "f1-01-b833b2951a49db70",
+      "event_id": "g001",
+      "reason": "each point needs Japanese text and exact source fact IDs"
+    },
+    {
+      "category": "F1",
+      "request_id": "f1-01-b833b2951a49db70",
+      "event_id": "g005",
+      "reason": "Unterminated string starting at: line 1 column 573 (char 572)"
+    },
+    {
+      "category": "F1",
+      "request_id": "f1-01-b833b2951a49db70",
+      "event_id": "g006",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g006\": [\"e008:f01\", \"e008:f02\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "SpaceX",
+      "request_id": "spacex-01-1abcf29db4cd5926",
+      "event_id": "g001",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g001\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g001\", \"title\": \"ベトナムのViettel TelecomがStarlink衛星インターネットサービスを開始\", \"reasons\": [\"unsupported_summary_point\"], \"unsupported_facts\": [\"月額1,590,000ベトナムドン（約60米ドル）から提供するパッケージを開始した\"], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": [\"e002:f10\"]}], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "SpaceX",
+      "request_id": "spacex-01-1abcf29db4cd5926",
+      "event_id": "g004",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g004\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g004\", \"title\": \"Amazon、36機の衛星を打ち上げるがStarlinkとの競争に苦戦\", \"reasons\": [\"insufficient_facts\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": [\"e005:f01\"]}], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "日本経済",
+      "request_id": "japan_economy-01-de245f9c15df35fd",
+      "event_id": "g001",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g001\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g001\", \"title\": \"電気・ガス補助終了でエネルギー価格9.5%上昇、物価上昇率は3カ月連続で2%超\", \"reasons\": [\"invalid_summary_point\", \"category_identity\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": [\"e001:f16\"]}], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "日本経済",
+      "request_id": "japan_economy-01-de245f9c15df35fd",
+      "event_id": "g003",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g003\": [\"e002:f07\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "日本経済",
+      "request_id": "japan_economy-01-de245f9c15df35fd",
+      "event_id": "g002",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g002\": [\"e003:f12\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "日本経済",
+      "request_id": "japan_economy-01-de245f9c15df35fd",
+      "event_id": "g004",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g004\": [\"e005:f02\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "YOASOBI / 幾田りら",
+      "request_id": "yoasobi_ikuta-01-32a6729fd84d95dd",
+      "event_id": "g001",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g001\": [\"e001:f04\", \"e001:f16\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "アジア経済",
+      "request_id": "asia-01-bb8b1b4e00356e3f",
+      "event_id": "g004",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g004\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g004\", \"title\": \"中国の工業用ロボット普及が農産物サプライチェーンの安全性を高める\", \"reasons\": [\"unsupported_title\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "アジア経済",
+      "request_id": "asia-01-bb8b1b4e00356e3f",
+      "event_id": "g002",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g002\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g002\", \"title\": \"日中韓とASEAN10カ国、AMROのデジタル決済プログラムの下にデジタル資産規制を議論するワーキンググループを設立\", \"reasons\": [\"unsupported_summary_point\"], \"unsupported_facts\": [\"日中韓とASEAN10カ国は2026年11月26日、ASEAN+3マクロ経済研究オフィス（AMRO）のデジタル決済プログラムの下にデジタル資産規制を議論するワーキンググループを設立することで合意した\"], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": [\"e004:f01\"]}], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "北米経済",
+      "request_id": "north_america-01-4bf9a67c155b23e2",
+      "event_id": "g002",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g002\": [\"e001:f01\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "北米経済",
+      "request_id": "north_america-01-4bf9a67c155b23e2",
+      "event_id": "g005",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g005\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g005\", \"title\": \"米国の自動車・鉄鋼関税の変更に伴い、カナダが含まれる可能性を示唆\", \"reasons\": [\"unsupported_title\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "北米経済",
+      "request_id": "north_america-01-4bf9a67c155b23e2",
+      "event_id": "g004",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g004\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g004\", \"title\": \"Amazon、メキシコでの投資と雇用を拡大\", \"reasons\": [\"unsupported_summary_point\", \"missing_evidence_id\", \"empty_summary\", \"summary_copy\", \"category_identity\", \"insufficient_facts\", \"missing_source\", \"invalid_source_date\"], \"unsupported_facts\": [\"2025年、Amazonはメキシコに40億ペソ（約20.3億ドル）を超える投資を行い、同国のGDPに34億ペソ（約17.2億ドル）以上の貢献を果たした\", \"AWSは2025年1月にメキシコのAWSデータセンター地域を開設し、同地域の建設と運用はメキシコのGDPに100億ドルを追加し、外部ビジネスに年間平均7,000人のフルタイム相当の雇用を創出すると発表した\"], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "北米経済",
+      "request_id": "north_america-01-4bf9a67c155b23e2",
+      "event_id": "g003",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [\"g003\"], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {}, \"rejected_items\": [{\"event_id\": \"g003\", \"title\": \"NVIDIA株価、AIセラーの主導で8.3%下落\", \"reasons\": [\"invalid_summary_point\", \"missing_evidence_id\", \"empty_summary\", \"summary_copy\", \"category_identity\", \"insufficient_facts\", \"missing_source\", \"invalid_source_date\"], \"unsupported_facts\": [], \"invalid_source_fact_ids\": [], \"uncovered_source_fact_ids\": []}], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "宇都宮ブレックス",
+      "request_id": "brex-01-b52a17ab6de13c54",
+      "event_id": "g003",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g003\": [\"e001:f01\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "宇都宮ブレックス",
+      "request_id": "brex-01-b52a17ab6de13c54",
+      "event_id": "g001",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g001\": [\"e002:f11\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+    },
+    {
+      "category": "宇都宮ブレックス",
+      "request_id": "brex-01-b52a17ab6de13c54",
+      "event_id": "g002",
+      "reason": "{\"event_response\": {\"missing_event_ids\": [], \"duplicate_event_ids\": [], \"unknown_event_ids\": [], \"cross_event_evidence_ids\": [], \"cross_event_source_fact_ids\": [], \"unknown_source_fact_ids\": [], \"invalid_event_decisions\": {}, \"malformed_event_results\": 0}, \"missing_event_ids\": [], \"conflicting_event_ids\": [], \"missing_source_fact_ids_by_event\": {\"g002\": [\"e004:f01\", \"e004:f06\"]}, \"rejected_items\": [], \"unpublishable_items\": []}"
+    }
+  ],
+  "hero_copy": "眠りにつく前に、世界の輪郭を整える。次の朝に見落としたくない変化だけを、出典と日付を残して読む。 速報版。原典照合を通過した記事を掲載しています。編集確認中 OpenAI 5件、SoftBank 2件、Honda 5件、F1 3件、SpaceX 2件、日本経済 4件、YOASOBI / 幾田りら 1件、アジア経済 2件、北米経済 4件、宇都宮ブレックス 3件。"
+}
