@@ -878,6 +878,10 @@ def apply_review(
         response_by_id,
         cards_by_category,
     )
+    if pending:
+        risk_categories = [row["category"] for row in category_audit if row["recall_risk"]]
+        if risk_categories:
+            fail("provisional edition would omit important coverage: " + ", ".join(risk_categories))
     manifest = state.build_coverage_manifest(
         issue_date,
         collection_mode=str(evidence.get("collection_mode")),
