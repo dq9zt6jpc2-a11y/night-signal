@@ -219,7 +219,7 @@ def main() -> int:
     if operations.get("reliability_report_retention_days") != 30:
         fail("operational reliability history must be retained for 30 days")
     watchdog_heartbeats = operations.get("publication_watchdog_heartbeats_jst")
-    if watchdog_heartbeats != ["13:30", "19:15"]:
+    if watchdog_heartbeats != ["13:30", "16:17", "19:15"]:
         fail("publication watchdog policy drifted from the bounded recovery window")
     expected_watchdog_minutes = sorted(
         timing.minutes(timing.parse_clock(value)) for value in watchdog_heartbeats
@@ -230,12 +230,13 @@ def main() -> int:
         if event not in publication_watchdog.split("workflow_dispatch:", 1)[0]:
             fail(f"missing completion trigger: {event}")
     if re.search(r"gh workflow run [^\s]*(?:independent|editor)", publication_watchdog):
-        fail("watchdog must not dispatch an independent editor")
+        fail("use the bounded editor dispatcher for deduplication and deadline checks")
     for required in (
         "night_signal_operational_audit.py",
         "workflow_run:",
         "Publish reviewed NIGHT SIGNAL",
         "recovery_attempt=1",
+        'bash scripts/dispatch_editor_watchdog_probe.sh "$RUNNER_TEMP/final-operational-audit.json"',
         "No Evidence recollection or model review was repeated",
         "retention-days: 30",
         "timeout-minutes: 120",

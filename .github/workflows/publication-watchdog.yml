@@ -4,6 +4,7 @@ run-name: Audit NIGHT SIGNAL publication ${{ inputs.issue_date || github.run_id 
 on:
   schedule:
     - cron: "30 04 * * *"
+    - cron: "17 07 * * *"
     - cron: "15 10 * * *"
   workflow_run:
     workflows:
@@ -209,6 +210,12 @@ jobs:
           python3 scripts/night_signal_editor_recovery_decision.py \
             "$RUNNER_TEMP/final-operational-audit.json" \
             | tee "$RUNNER_TEMP/editor-recovery-operational-audit.json"
+
+      - name: Start bounded independent recovery when the owner misses the deadline window
+        if: ${{ success() && steps.initial.outputs.published != 'true' && vars.NIGHT_SIGNAL_WORKERS_AI_FREE_VERIFIED == 'true' && vars.NIGHT_SIGNAL_EDITOR_AUTO_PUBLISH == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/dispatch_editor_watchdog_probe.sh "$RUNNER_TEMP/final-operational-audit.json"
 
       - name: Preserve the deterministic reliability report for 30 days
         if: ${{ always() }}
